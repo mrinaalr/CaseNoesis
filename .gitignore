@@ -55,7 +55,8 @@ case_data/
 *.log
 
 # Database files
-caselinker.db
+# Note: caselinker.db is encrypted with SQLCipher, safe to push
+# caselinker.db  # Uncommented - encrypted database can be pushed
 caselinker_graph.db
 demo_*.db
 

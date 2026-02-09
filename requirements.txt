@@ -14,9 +14,14 @@ pdfplumber>=0.10.0
 # pymongo>=4.5.0  # MongoDB
 # neo4j>=5.0.0  # Neo4j
 
-# API (if needed)
-# fastapi>=0.100.0
-# uvicorn>=0.23.0
+# API
+fastapi>=0.100.0
+uvicorn>=0.23.0
+
+# Database Encryption (optional - falls back to regular SQLite if not available)
+# Note: pysqlcipher3 requires SQLCipher system library
+# If SQLCipher is not available, the system will use regular SQLite
+# pysqlcipher3>=1.1.0  # Uncomment if you have SQLCipher installed
 
 # Visualization (if needed)
 # matplotlib>=3.7.0

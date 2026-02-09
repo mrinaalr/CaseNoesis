@@ -14,10 +14,15 @@ Design Ideas from Architecture:
 import pandas as pd
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+import warnings
+import logging
+import sys
 
 try:
     import pdfplumber
     PDFPLUMBER_AVAILABLE = True
+    logging.getLogger("pdfplumber").setLevel(logging.ERROR)
+    warnings.filterwarnings("ignore", category=UserWarning)
 except ImportError:
     PDFPLUMBER_AVAILABLE = False
 
@@ -38,11 +43,13 @@ def extract_pdf_text(pdf_path: str) -> str:
     text_content = []
     
     try:
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text_content.append(page_text)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            with pdfplumber.open(pdf_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text_content.append(page_text)
         
         return "\n".join(text_content)
     except Exception as e:
@@ -95,6 +102,34 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
     
     else:
         raise ValueError(f"Unsupported file type: {file_type}")
+
+
+def ingest_pdf_from_user() -> pd.DataFrame:
+    """
+    Prompt user for PDF file path and extract all text.
+    
+    Returns:
+        DataFrame with extracted text
+    """
+    file_path = input("Enter PDF file path: ").strip()
+    
+    if not file_path:
+        raise ValueError("No file path provided")
+    
+    path = Path(file_path)
+    
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+    
+    text = extract_pdf_text(str(path))
+    
+    df = pd.DataFrame({
+        'source_file': [path.name],
+        'extracted_text': [text],
+        'source': ['AZICAC'],
+    })
+    
+    return df
 
 
 def validate_data(df: pd.DataFrame) -> bool:

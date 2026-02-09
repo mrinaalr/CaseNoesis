@@ -4,6 +4,7 @@ Extracts features, assigns comparison values, and fills case schema
 """
 
 from .processing import (
+    case_batching,
     process_cases,
     extract_features,
     assign_comparison_values,
@@ -24,6 +25,7 @@ from .processing import (
 )
 
 __all__ = [
+    'case_batching',
     'process_cases',
     'extract_features',
     'assign_comparison_values',

@@ -11,11 +11,25 @@ Design Ideas from Architecture:
 - Quick relationship queries (e.g., "show all cases connected to case X")
 """
 
-import sqlite3
 import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
+
+try:
+    from pysqlcipher3 import dbapi2 as sqlite3
+    SQLCIPHER_AVAILABLE = True
+except ImportError:
+    import sqlite3
+    SQLCIPHER_AVAILABLE = False
+
+
+def get_connection(db_path: str, encryption_key: Optional[str] = None):
+    """Get database connection with optional encryption"""
+    conn = sqlite3.connect(db_path)
+    if SQLCIPHER_AVAILABLE and encryption_key:
+        conn.execute(f"PRAGMA key='{encryption_key}'")
+    return conn
 
 
 class CaseStorage:
@@ -27,22 +41,25 @@ class CaseStorage:
     Similar cases stored close together for efficient access.
     """
     
-    def __init__(self, db_path: str = "caselinker.db"):
+    def __init__(self, db_path: str = "caselinker.db", encryption_key: Optional[str] = None):
         """
         Initialize case storage.
         
         Args:
             db_path: Path to SQLite database file
+            encryption_key: Optional encryption key for SQLCipher
         """
         self.db_path = db_path
+        self.encryption_key = encryption_key
         self.init_database()
     
     def init_database(self):
         """
         Initialize database tables.
         Creates tables for storing case data in rawish format.
+        Supports SQLCipher encryption if available.
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path, self.encryption_key)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -98,8 +115,8 @@ class CaseStorage:
             CREATE TABLE IF NOT EXISTS prosecution_outcomes (
                 case_id TEXT,
                 status TEXT,
-                charges TEXT,      -- JSON array
-                sentences TEXT,    -- JSON array
+                charges TEXT,
+                sentences TEXT,
                 FOREIGN KEY (case_id) REFERENCES cases(id)
             )
         ''')
@@ -119,7 +136,7 @@ class CaseStorage:
             True if successful, False otherwise
         """
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path, self.encryption_key)
             cursor = conn.cursor()
             
             date_range = case.get('date_range', {})
@@ -162,9 +179,9 @@ class CaseStorage:
                     VALUES (?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    victim_demo.get('age_range'),
-                    victim_demo.get('region'),
-                    victim_demo.get('anonymized_id')
+                    victim_demo.get('age_range') if isinstance(victim_demo, dict) else None,
+                    victim_demo.get('region') if isinstance(victim_demo, dict) else None,
+                    victim_demo.get('anonymized_id') if isinstance(victim_demo, dict) else None,
                 ))
             
             perp_demo = case.get('perpetrator_demographics')
@@ -175,10 +192,10 @@ class CaseStorage:
                     VALUES (?, ?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    perp_demo.get('age_range'),
-                    perp_demo.get('region'),
-                    perp_demo.get('anonymized_id'),
-                    json.dumps(case.get('previous_conviction', {}))
+                    perp_demo.get('age_range') if isinstance(perp_demo, dict) else None,
+                    perp_demo.get('region') if isinstance(perp_demo, dict) else None,
+                    perp_demo.get('anonymized_id') if isinstance(perp_demo, dict) else None,
+                    json.dumps(perp_demo.get('previous_conviction', {})) if isinstance(perp_demo, dict) else None,
                 ))
             
             prosecution = case.get('prosecution_outcome')
@@ -189,19 +206,20 @@ class CaseStorage:
                     VALUES (?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    prosecution.get('status'),
-                    json.dumps(prosecution.get('charges', [])),
-                    json.dumps(prosecution.get('sentences', []))
+                    prosecution.get('status') if isinstance(prosecution, dict) else None,
+                    json.dumps(prosecution.get('charges', [])) if isinstance(prosecution, dict) else None,
+                    json.dumps(prosecution.get('sentences', [])) if isinstance(prosecution, dict) else None,
                 ))
             
             conn.commit()
             conn.close()
             return True
+            
         except Exception as e:
             print(f"Error storing case: {e}")
             return False
     
-    def store_cases(self, cases: List[Dict[str, Any]]) -> bool:
+    def store_cases(self, cases: List[Dict[str, Any]]) -> int:
         """
         Store multiple cases in the database.
         
@@ -209,28 +227,26 @@ class CaseStorage:
             cases: List of case dictionaries
             
         Returns:
-            True if successful, False otherwise
+            Number of successfully stored cases
         """
-        success_count = 0
+        stored_count = 0
         for case in cases:
             if self.store_case(case):
-                success_count += 1
-        
-        return success_count == len(cases)
+                stored_count += 1
+        return stored_count
     
     def get_case(self, case_id: str) -> Optional[Dict[str, Any]]:
         """
-        Retrieve a case by ID.
+        Retrieve a single case by ID.
         
         Args:
-            case_id: Unique case identifier
+            case_id: Case identifier
             
         Returns:
             Case dictionary or None if not found
         """
         try:
-            conn = sqlite3.connect(self.db_path)
-            conn.row_factory = sqlite3.Row
+            conn = get_connection(self.db_path, self.encryption_key)
             cursor = conn.cursor()
             
             cursor.execute('SELECT * FROM cases WHERE id = ?', (case_id,))
@@ -240,39 +256,48 @@ class CaseStorage:
                 conn.close()
                 return None
             
-            case = dict(row)
+            columns = [desc[0] for desc in cursor.description]
+            case_dict = dict(zip(columns, row))
             
+            # Parse JSON fields
             for json_field in ['platforms_used', 'technologies', 'communication_methods',
                              'investigation_methods', 'severity_indicators', 'case_topics',
                              'tags', 'raw_data', 'extracted_features']:
-                if case.get(json_field):
-                    case[json_field] = json.loads(case[json_field])
+                if case_dict.get(json_field):
+                    try:
+                        case_dict[json_field] = json.loads(case_dict[json_field])
+                    except:
+                        pass
             
+            # Get related data
             cursor.execute('SELECT * FROM victim_demographics WHERE case_id = ?', (case_id,))
-            victim_row = cursor.fetchone()
-            if victim_row:
-                case['victim_demographics'] = dict(victim_row)
+            victim_rows = cursor.fetchall()
+            if victim_rows:
+                victim_cols = [desc[0] for desc in cursor.description]
+                case_dict['victim_demographics'] = [dict(zip(victim_cols, row)) for row in victim_rows]
             
             cursor.execute('SELECT * FROM perpetrator_demographics WHERE case_id = ?', (case_id,))
-            perp_row = cursor.fetchone()
-            if perp_row:
-                perp_dict = dict(perp_row)
-                if perp_dict.get('previous_conviction'):
-                    perp_dict['previous_conviction'] = json.loads(perp_dict['previous_conviction'])
-                case['perpetrator_demographics'] = perp_dict
+            perp_rows = cursor.fetchall()
+            if perp_rows:
+                perp_cols = [desc[0] for desc in cursor.description]
+                case_dict['perpetrator_demographics'] = [dict(zip(perp_cols, row)) for row in perp_rows]
             
             cursor.execute('SELECT * FROM prosecution_outcomes WHERE case_id = ?', (case_id,))
-            pros_row = cursor.fetchone()
-            if pros_row:
-                pros_dict = dict(pros_row)
-                if pros_dict.get('charges'):
-                    pros_dict['charges'] = json.loads(pros_dict['charges'])
-                if pros_dict.get('sentences'):
-                    pros_dict['sentences'] = json.loads(pros_dict['sentences'])
-                case['prosecution_outcome'] = pros_dict
+            prosecution_rows = cursor.fetchall()
+            if prosecution_rows:
+                prosecution_cols = [desc[0] for desc in cursor.description]
+                case_dict['prosecution_outcomes'] = [dict(zip(prosecution_cols, row)) for row in prosecution_rows]
+            
+            # Reconstruct date_range
+            if case_dict.get('date_start') or case_dict.get('date_end'):
+                case_dict['date_range'] = {
+                    'start': case_dict.get('date_start'),
+                    'end': case_dict.get('date_end')
+                }
             
             conn.close()
-            return case
+            return case_dict
+            
         except Exception as e:
             print(f"Error retrieving case: {e}")
             return None
@@ -282,63 +307,73 @@ class CaseStorage:
         Retrieve all cases from the database.
         
         Returns:
-            List of all case dictionaries
+            List of case dictionaries
         """
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path, self.encryption_key)
             cursor = conn.cursor()
             
-            cursor.execute('SELECT id FROM cases')
+            cursor.execute('SELECT id FROM cases ORDER BY date_start, id')
             case_ids = [row[0] for row in cursor.fetchall()]
             
             conn.close()
             
-            return [self.get_case(cid) for cid in case_ids if self.get_case(cid)]
+            cases = []
+            for case_id in case_ids:
+                case = self.get_case(case_id)
+                if case:
+                    cases.append(case)
+            
+            return cases
+            
         except Exception as e:
             print(f"Error retrieving all cases: {e}")
             return []
     
-    def search_cases(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def search_cases(self, query: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Search cases based on filter criteria.
-        Fast lookup using indexed fields.
+        Search cases based on criteria.
         
         Args:
-            filters: Dictionary with search criteria (source, date_range, platforms, etc.)
+            query: Dictionary with search criteria (source, date_range, etc.)
             
         Returns:
             List of matching case dictionaries
         """
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path, self.encryption_key)
             cursor = conn.cursor()
             
-            query = "SELECT id FROM cases WHERE 1=1"
+            conditions = []
             params = []
             
-            if 'source' in filters:
-                query += " AND source = ?"
-                params.append(filters['source'])
+            if query.get('source'):
+                conditions.append('source = ?')
+                params.append(query['source'])
             
-            if 'date_start' in filters:
-                query += " AND date_start >= ?"
-                params.append(filters['date_start'])
+            if query.get('date_start'):
+                conditions.append('date_start >= ?')
+                params.append(query['date_start'])
             
-            if 'date_end' in filters:
-                query += " AND date_end <= ?"
-                params.append(filters['date_end'])
+            if query.get('date_end'):
+                conditions.append('date_start <= ?')
+                params.append(query['date_end'])
             
-            if 'platforms' in filters:
-                platform_filter = " OR ".join(["platforms_used LIKE ?" for _ in filters['platforms']])
-                query += f" AND ({platform_filter})"
-                params.extend([f"%{p}%" for p in filters['platforms']])
+            where_clause = ' AND '.join(conditions) if conditions else '1=1'
             
-            cursor.execute(query, params)
+            cursor.execute(f'SELECT id FROM cases WHERE {where_clause} ORDER BY date_start', params)
             case_ids = [row[0] for row in cursor.fetchall()]
             
             conn.close()
             
-            return [self.get_case(cid) for cid in case_ids if self.get_case(cid)]
+            cases = []
+            for case_id in case_ids:
+                case = self.get_case(case_id)
+                if case:
+                    cases.append(case)
+            
+            return cases
+            
         except Exception as e:
             print(f"Error searching cases: {e}")
             return []
@@ -348,152 +383,139 @@ class GraphStorage:
     """
     Graph Database Storage
     
-    Stores case relationships with weighted edges based on similarity strength.
+    Stores case relationships and connections with weighted edges.
     Designed for efficient traversal and link analysis.
-    Quick relationship queries (e.g., "show all cases connected to case X").
     """
     
-    def __init__(self, db_path: str = "caselinker_graph.db"):
+    def __init__(self, db_path: str = "caselinker_graph.db", encryption_key: Optional[str] = None):
         """
         Initialize graph storage.
         
         Args:
-            db_path: Path to graph database file
+            db_path: Path to SQLite database file
+            encryption_key: Optional encryption key for SQLCipher
         """
         self.db_path = db_path
+        self.encryption_key = encryption_key
         self.init_graph_database()
     
     def init_graph_database(self):
         """
         Initialize graph database tables.
-        Stores nodes (cases) and edges (relationships) with weights.
+        Creates nodes and edges tables for relationship storage.
         """
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path, self.encryption_key)
         cursor = conn.cursor()
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS nodes (
-                case_id TEXT PRIMARY KEY,
-                properties TEXT  -- JSON for additional node properties
+                id TEXT PRIMARY KEY,
+                type TEXT,
+                properties TEXT,  -- JSON
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS edges (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                source_case_id TEXT,
-                target_case_id TEXT,
-                weight REAL,  -- Similarity score (0.0 to 1.0)
-                relationship_type TEXT,  -- e.g., 'similar', 'linked', 'cluster'
-                properties TEXT,  -- JSON for additional edge properties
+                source_id TEXT,
+                target_id TEXT,
+                relationship_type TEXT,
+                weight REAL,
+                properties TEXT,  -- JSON
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (source_case_id) REFERENCES nodes(case_id),
-                FOREIGN KEY (target_case_id) REFERENCES nodes(case_id),
-                UNIQUE(source_case_id, target_case_id)
+                FOREIGN KEY (source_id) REFERENCES nodes(id),
+                FOREIGN KEY (target_id) REFERENCES nodes(id)
             )
         ''')
         
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON edges(source_case_id)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_target ON edges(target_case_id)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weight ON edges(weight)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON edges(source_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_target ON edges(target_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_relationship ON edges(relationship_type)')
         
         conn.commit()
         conn.close()
     
-    def add_case_node(self, case_id: str, properties: Optional[Dict[str, Any]] = None):
-        """
-        Add a case node to the graph.
-        
-        Args:
-            case_id: Unique case identifier
-            properties: Optional additional node properties
-        """
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            INSERT OR REPLACE INTO nodes (case_id, properties)
-            VALUES (?, ?)
-        ''', (case_id, json.dumps(properties or {})))
-        
-        conn.commit()
-        conn.close()
-    
-    def add_relationship(self, source_case_id: str, target_case_id: str, 
-                        weight: float, relationship_type: str = 'similar',
-                        properties: Optional[Dict[str, Any]] = None):
-        """
-        Add a weighted relationship between two cases.
-        
-        Args:
-            source_case_id: Source case ID
-            target_case_id: Target case ID
-            weight: Similarity score (0.0 to 1.0)
-            relationship_type: Type of relationship
-            properties: Optional additional edge properties
-        """
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            INSERT OR REPLACE INTO edges 
-            (source_case_id, target_case_id, weight, relationship_type, properties)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (source_case_id, target_case_id, weight, relationship_type, 
-              json.dumps(properties or {})))
-        
-        conn.commit()
-        conn.close()
-    
-    def get_connected_cases(self, case_id: str, min_weight: float = 0.0) -> List[Tuple[str, float]]:
-        """
-        Get all cases connected to a given case.
-        Quick relationship query as specified in architecture.
-        
-        Args:
-            case_id: Case ID to find connections for
-            min_weight: Minimum similarity weight threshold
+    def add_case_node(self, case_id: str, properties: Dict[str, Any]):
+        """Add a case node to the graph"""
+        try:
+            conn = get_connection(self.db_path, self.encryption_key)
+            cursor = conn.cursor()
             
-        Returns:
-            List of (connected_case_id, weight) tuples
-        """
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT target_case_id, weight FROM edges
-            WHERE source_case_id = ? AND weight >= ?
-            UNION
-            SELECT source_case_id, weight FROM edges
-            WHERE target_case_id = ? AND weight >= ?
-            ORDER BY weight DESC
-        ''', (case_id, min_weight, case_id, min_weight))
-        
-        results = cursor.fetchall()
-        conn.close()
-        
-        return [(row[0], row[1]) for row in results]
-    
-    def get_all_relationships(self, min_weight: float = 0.0) -> List[Tuple[str, str, float]]:
-        """
-        Get all relationships in the graph.
-        
-        Args:
-            min_weight: Minimum similarity weight threshold
+            cursor.execute('''
+                INSERT OR REPLACE INTO nodes (id, type, properties)
+                VALUES (?, 'case', ?)
+            ''', (case_id, json.dumps(properties)))
             
-        Returns:
-            List of (source_case_id, target_case_id, weight) tuples
-        """
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT source_case_id, target_case_id, weight FROM edges
-            WHERE weight >= ?
-            ORDER BY weight DESC
-        ''', (min_weight,))
-        
-        results = cursor.fetchall()
-        conn.close()
-        
-        return [(row[0], row[1], row[2]) for row in results]
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error adding node: {e}")
+            return False
+    
+    def add_relationship(self, source_id: str, target_id: str, 
+                       relationship_type: str, weight: float = 1.0,
+                       properties: Optional[Dict[str, Any]] = None):
+        """Add a relationship edge between two nodes"""
+        try:
+            conn = get_connection(self.db_path, self.encryption_key)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT INTO edges (source_id, target_id, relationship_type, weight, properties)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (source_id, target_id, relationship_type, weight, 
+                  json.dumps(properties or {})))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error adding relationship: {e}")
+            return False
+    
+    def get_connected_cases(self, case_id: str, max_depth: int = 1) -> List[Dict[str, Any]]:
+        """Get all cases connected to a given case"""
+        try:
+            conn = get_connection(self.db_path, self.encryption_key)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT DISTINCT target_id, relationship_type, weight
+                FROM edges
+                WHERE source_id = ?
+                UNION
+                SELECT DISTINCT source_id, relationship_type, weight
+                FROM edges
+                WHERE target_id = ?
+            ''', (case_id, case_id))
+            
+            results = cursor.fetchall()
+            conn.close()
+            
+            return [{'case_id': row[0], 'relationship': row[1], 'weight': row[2]} 
+                   for row in results]
+        except Exception as e:
+            print(f"Error getting connected cases: {e}")
+            return []
+    
+    def get_all_relationships(self) -> List[Tuple[str, str, str, float]]:
+        """Get all relationships in the graph"""
+        try:
+            conn = get_connection(self.db_path, self.encryption_key)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT source_id, target_id, relationship_type, weight
+                FROM edges
+            ''')
+            
+            results = cursor.fetchall()
+            conn.close()
+            
+            return results
+        except Exception as e:
+            print(f"Error getting relationships: {e}")
+            return []

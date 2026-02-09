@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - Advanced Analysis</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            margin: -20px -20px 20px -20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .analysis-controls {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .topic-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .topic-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+        .topic-checkbox:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .topic-checkbox input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        .topic-checkbox.selected {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+        .analyze-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .analyze-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+        }
+        .results-section {
+            margin-top: 30px;
+        }
+        .cluster-visualization {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        .cluster-network {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        .analysis-result {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+        }
+        .analysis-result h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.4em;
+        }
+        .pattern-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        .pattern-item strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+           <div class="nav">
+               <a href="/">Home</a>
+               <a href="/visualization">Visualization</a>
+               <a href="/analysis">Analysis</a>
+               <a href="/sources">Sources</a>
+           </div>
+    
+    <div class="container">
+        <h1>🔍 Advanced Case Analysis</h1>
+        <p class="subtitle">Batman-level clustering and pattern detection</p>
+        
+        <div class="analysis-controls">
+            <div class="control-group">
+                <label>Select Case Topics for Analysis:</label>
+                <div class="topic-selector" id="topic-selector">
+                    <!-- Topics loaded dynamically -->
+                </div>
+            </div>
+            <div class="control-group" style="margin-top: 20px;">
+                <label>Add Custom Topics:</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="custom-topic-input" placeholder="Enter custom topic (e.g., 'Social Media', 'Gaming')" 
+                           onkeypress="if(event.key === 'Enter') addCustomTopic()"
+                           style="flex: 1; padding: 10px; border: 2px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.2); color: white; font-size: 14px;">
+                    <button onclick="addCustomTopic()" style="padding: 10px 20px; background: rgba(255,255,255,0.3); border: 2px solid rgba(255,255,255,0.5); border-radius: 6px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">Add</button>
+                </div>
+                <div id="custom-topics" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
+            </div>
+            <button class="analyze-button" onclick="runAdvancedAnalysis()">🚀 Run Advanced Analysis</button>
+        </div>
+        
+        <div class="results-section" id="results-section" style="display: none;">
+            <div class="stat-grid" id="stat-grid"></div>
+            
+            <div class="cluster-visualization">
+                <h2>Cluster Network Visualization</h2>
+                <svg class="cluster-network" id="cluster-network"></svg>
+            </div>
+            
+            <div id="analysis-results"></div>
+        </div>
+    </div>
+
+    <script>
+        let allCases = [];
+        let availableTopics = new Set();
+        let customTopics = new Set();
+
+        async function loadCases() {
+            try {
+                const response = await fetch('/api/cases');
+                allCases = await response.json();
+                
+                // Extract unique topics
+                allCases.forEach(caseData => {
+                    const topics = caseData.case_topics || [];
+                    topics.forEach(topic => availableTopics.add(topic));
+                });
+                
+                // Default topics if none found
+                if (availableTopics.size === 0) {
+                    availableTopics = new Set(['Child Exploitation', 'Online Grooming', 'CSAM Distribution', 
+                                             'Social Media', 'Gaming Platforms', 'Messaging Apps']);
+                }
+                
+                renderTopicSelector();
+            } catch (error) {
+                console.error('Error loading cases:', error);
+            }
+        }
+
+        function renderTopicSelector() {
+            const selector = document.getElementById('topic-selector');
+            selector.innerHTML = '';
+            
+            // Render available topics
+            Array.from(availableTopics).forEach(topic => {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'topic-checkbox';
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="topic-${topic}" value="${topic}" onchange="toggleTopic(this)">
+                    <label for="topic-${topic}">${topic}</label>
+                `;
+                selector.appendChild(checkbox);
+            });
+            
+            // Render custom topics
+            Array.from(customTopics).forEach(topic => {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'topic-checkbox';
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="topic-${topic}" value="${topic}" onchange="toggleTopic(this)">
+                    <label for="topic-${topic}">${topic}</label>
+                `;
+                selector.appendChild(checkbox);
+            });
+        }
+
+        function addCustomTopic() {
+            const input = document.getElementById('custom-topic-input');
+            const topic = input.value.trim();
+            
+            if (!topic) {
+                alert('Please enter a topic name');
+                return;
+            }
+            
+            if (availableTopics.has(topic) || customTopics.has(topic)) {
+                alert('This topic already exists');
+                return;
+            }
+            
+            customTopics.add(topic);
+            input.value = '';
+            renderTopicSelector();
+            updateCustomTopicsDisplay();
+        }
+
+        function updateCustomTopicsDisplay() {
+            const customDisplay = document.getElementById('custom-topics');
+            customDisplay.innerHTML = '';
+            
+            Array.from(customTopics).forEach(topic => {
+                const topicBadge = document.createElement('div');
+                topicBadge.className = 'topic-checkbox';
+                topicBadge.style.background = 'rgba(255,255,255,0.3)';
+                topicBadge.style.display = 'inline-flex';
+                topicBadge.style.alignItems = 'center';
+                topicBadge.innerHTML = `
+                    <span>${topic}</span>
+                    <button onclick="removeCustomTopic('${topic}')" style="margin-left: 10px; background: rgba(255,0,0,0.3); border: none; color: white; border-radius: 3px; padding: 2px 8px; cursor: pointer; font-size: 16px;">×</button>
+                `;
+                customDisplay.appendChild(topicBadge);
+            });
+        }
+
+        function removeCustomTopic(topic) {
+            customTopics.delete(topic);
+            renderTopicSelector();
+            updateCustomTopicsDisplay();
+        }
+
+        function toggleTopic(checkbox) {
+            const container = checkbox.closest('.topic-checkbox');
+            if (checkbox.checked) {
+                container.classList.add('selected');
+            } else {
+                container.classList.remove('selected');
+            }
+        }
+
+        async function runAdvancedAnalysis() {
+            const selectedStandardTopics = Array.from(document.querySelectorAll('.topic-selector input:checked'))
+                .map(cb => cb.value);
+            
+            // Get selected custom topics (check if they're checked)
+            const selectedCustomTopics = Array.from(customTopics).filter(topic => {
+                const checkbox = document.getElementById(`topic-${topic}`);
+                return checkbox && checkbox.checked;
+            });
+            
+            // Combine all selected topics
+            const allSelectedTopics = [...selectedStandardTopics, ...selectedCustomTopics];
+            
+            if (allSelectedTopics.length === 0) {
+                alert('Please select at least one topic to analyze');
+                return;
+            }
+            
+            // Filter cases - match against both extracted topics and custom topics
+            const relevantCases = allCases.filter(caseData => {
+                const caseTopics = caseData.case_topics || [];
+                const caseText = (caseData.raw_data?.case_text || caseData.case_text || '').toLowerCase();
+                
+                return allSelectedTopics.some(topic => {
+                    // Check if topic is in extracted topics
+                    if (caseTopics.includes(topic)) return true;
+                    // Check if custom topic appears in case text (case-insensitive)
+                    if (customTopics.has(topic) && caseText.includes(topic.toLowerCase())) return true;
+                    return false;
+                });
+            });
+            
+            if (relevantCases.length === 0) {
+                alert('No cases found for selected topics');
+                return;
+            }
+            
+            // Perform advanced analysis
+            const results = await performAdvancedAnalysis(relevantCases, allSelectedTopics);
+            displayAdvancedResults(results, relevantCases);
+        }
+
+        async function performAdvancedAnalysis(cases, topics) {
+            // Calculate similarity matrix
+            const similarityMatrix = calculateSimilarityMatrix(cases);
+            
+            // Perform clustering
+            const clusters = performClustering(cases, similarityMatrix);
+            
+            // Identify patterns
+            const patterns = identifyAdvancedPatterns(cases);
+            
+            // Trend analysis
+            const trends = analyzeTrends(cases);
+            
+            // Network analysis
+            const network = buildNetwork(cases, similarityMatrix);
+            
+            return {
+                totalCases: cases.length,
+                topics: topics,
+                clusters: clusters,
+                patterns: patterns,
+                trends: trends,
+                network: network,
+                similarityMatrix: similarityMatrix
+            };
+        }
+
+        function calculateSimilarityMatrix(cases) {
+            const matrix = {};
+            for (let i = 0; i < cases.length; i++) {
+                matrix[i] = {};
+                for (let j = 0; j < cases.length; j++) {
+                    if (i === j) {
+                        matrix[i][j] = 1.0;
+                    } else {
+                        matrix[i][j] = calculateSimilarity(cases[i], cases[j]);
+                    }
+                }
+            }
+            return matrix;
+        }
+
+        function calculateSimilarity(case1, case2) {
+            let score = 0;
+            let factors = 0;
+            
+            // Platform similarity
+            const p1 = new Set(case1.platforms_used || []);
+            const p2 = new Set(case2.platforms_used || []);
+            if (p1.size > 0 || p2.size > 0) {
+                const intersection = [...p1].filter(x => p2.has(x)).length;
+                const union = new Set([...p1, ...p2]).size;
+                score += (intersection / union) * 0.3;
+                factors += 0.3;
+            }
+            
+            // Date similarity
+            const d1 = case1.date_range?.start;
+            const d2 = case2.date_range?.start;
+            if (d1 && d2) {
+                const daysDiff = Math.abs((new Date(d1) - new Date(d2)) / (1000 * 60 * 60 * 24));
+                const timeSim = Math.max(0, 1 - (daysDiff / 365)); // Decay over 1 year
+                score += timeSim * 0.2;
+                factors += 0.2;
+            }
+            
+            // Topic similarity
+            const t1 = new Set(case1.case_topics || []);
+            const t2 = new Set(case2.case_topics || []);
+            if (t1.size > 0 || t2.size > 0) {
+                const intersection = [...t1].filter(x => t2.has(x)).length;
+                const union = new Set([...t1, ...t2]).size;
+                score += (intersection / union) * 0.3;
+                factors += 0.3;
+            }
+            
+            // Technology similarity
+            const tech1 = new Set(case1.technologies || []);
+            const tech2 = new Set(case2.technologies || []);
+            if (tech1.size > 0 || tech2.size > 0) {
+                const intersection = [...tech1].filter(x => tech2.has(x)).length;
+                const union = new Set([...tech1, ...tech2]).size;
+                score += (intersection / union) * 0.2;
+                factors += 0.2;
+            }
+            
+            return factors > 0 ? score / factors : 0;
+        }
+
+        function performClustering(cases, similarityMatrix) {
+            const threshold = 0.4;
+            const clusters = [];
+            const assigned = new Set();
+            
+            for (let i = 0; i < cases.length; i++) {
+                if (assigned.has(i)) continue;
+                
+                const cluster = [i];
+                assigned.add(i);
+                
+                for (let j = i + 1; j < cases.length; j++) {
+                    if (assigned.has(j)) continue;
+                    if (similarityMatrix[i][j] >= threshold) {
+                        cluster.push(j);
+                        assigned.add(j);
+                    }
+                }
+                
+                if (cluster.length > 1) {
+                    clusters.push(cluster.map(idx => ({
+                        case: cases[idx],
+                        index: idx
+                    })));
+                }
+            }
+            
+            return clusters;
+        }
+
+        function identifyAdvancedPatterns(cases) {
+            const patterns = [];
+            
+            // Platform concentration
+            const platformCounts = {};
+            cases.forEach(c => {
+                (c.platforms_used || []).forEach(p => {
+                    platformCounts[p] = (platformCounts[p] || 0) + 1;
+                });
+            });
+            const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0];
+            if (topPlatform && topPlatform[1] > cases.length * 0.3) {
+                patterns.push({
+                    type: 'Platform Concentration',
+                    description: `${topPlatform[0]} appears in ${((topPlatform[1] / cases.length) * 100).toFixed(1)}% of cases`,
+                    severity: 'high'
+                });
+            }
+            
+            // Temporal clustering
+            const monthlyCounts = {};
+            cases.forEach(c => {
+                const date = c.date_range?.start;
+                if (date) {
+                    const month = date.substring(0, 7);
+                    monthlyCounts[month] = (monthlyCounts[month] || 0) + 1;
+                }
+            });
+            const maxMonth = Object.entries(monthlyCounts).sort((a, b) => b[1] - a[1])[0];
+            if (maxMonth && maxMonth[1] > 3) {
+                patterns.push({
+                    type: 'Temporal Clustering',
+                    description: `${maxMonth[0]} had ${maxMonth[1]} cases (potential spike)`,
+                    severity: 'medium'
+                });
+            }
+            
+            return patterns;
+        }
+
+        function analyzeTrends(cases) {
+            const monthlyData = {};
+            cases.forEach(c => {
+                const date = c.date_range?.start;
+                if (date) {
+                    const month = date.substring(0, 7);
+                    if (!monthlyData[month]) {
+                        monthlyData[month] = { count: 0, platforms: new Set(), topics: new Set() };
+                    }
+                    monthlyData[month].count++;
+                    (c.platforms_used || []).forEach(p => monthlyData[month].platforms.add(p));
+                    (c.case_topics || []).forEach(t => monthlyData[month].topics.add(t));
+                }
+            });
+            
+            return Object.entries(monthlyData)
+                .sort()
+                .map(([month, data]) => ({
+                    month,
+                    count: data.count,
+                    platforms: data.platforms.size,
+                    topics: data.topics.size
+                }));
+        }
+
+        function buildNetwork(cases, similarityMatrix) {
+            const nodes = cases.map((c, i) => ({
+                id: i,
+                case: c,
+                label: c.id || `Case ${i + 1}`
+            }));
+            
+            const links = [];
+            for (let i = 0; i < cases.length; i++) {
+                for (let j = i + 1; j < cases.length; j++) {
+                    if (similarityMatrix[i][j] > 0.3) {
+                        links.push({
+                            source: i,
+                            target: j,
+                            strength: similarityMatrix[i][j]
+                        });
+                    }
+                }
+            }
+            
+            return { nodes, links };
+        }
+
+        function displayAdvancedResults(results, cases) {
+            const section = document.getElementById('results-section');
+            section.style.display = 'block';
+            
+            // Display stats
+            const statGrid = document.getElementById('stat-grid');
+            statGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${results.totalCases}</div>
+                    <div class="stat-label">Cases Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${results.clusters.length}</div>
+                    <div class="stat-label">Clusters Found</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${results.network.links.length}</div>
+                    <div class="stat-label">Connections</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${results.patterns.length}</div>
+                    <div class="stat-label">Patterns Identified</div>
+                </div>
+            `;
+            
+            // Render cluster network
+            renderClusterNetwork(results.network);
+            
+            // Display patterns
+            const resultsDiv = document.getElementById('analysis-results');
+            let html = `
+                <div class="analysis-result">
+                    <h3>🔗 Identified Clusters</h3>
+                    ${results.clusters.map((cluster, idx) => `
+                        <div class="pattern-item">
+                            <strong>Cluster ${idx + 1}:</strong> ${cluster.length} cases
+                            <br>Cases: ${cluster.map(c => c.case.id || 'Unknown').join(', ')}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="analysis-result">
+                    <h3>📊 Detected Patterns</h3>
+                    ${results.patterns.map(p => `
+                        <div class="pattern-item">
+                            <strong>${p.type}:</strong> ${p.description}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function renderClusterNetwork(network) {
+            const svg = d3.select("#cluster-network");
+            svg.selectAll("*").remove();
+            
+            const width = svg.node().clientWidth;
+            const height = svg.node().clientHeight;
+            
+            const simulation = d3.forceSimulation(network.nodes)
+                .force("link", d3.forceLink(network.links).id(d => d.id).distance(d => 100 - d.strength * 80))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2));
+            
+            const link = svg.append("g")
+                .selectAll("line")
+                .data(network.links)
+                .enter().append("line")
+                .attr("stroke", "#999")
+                .attr("stroke-opacity", d => d.strength)
+                .attr("stroke-width", d => d.strength * 3);
+            
+            const node = svg.append("g")
+                .selectAll("circle")
+                .data(network.nodes)
+                .enter().append("circle")
+                .attr("r", 8)
+                .attr("fill", "#4CAF50")
+                .call(drag(simulation));
+            
+            node.append("title")
+                .text(d => d.label);
+            
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+                
+                node
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+            });
+        }
+
+        function drag(simulation) {
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+            
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+            
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+
+        loadCases();
+    </script>
+</body>
+</html>
