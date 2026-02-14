@@ -26,39 +26,55 @@ def main():
     print("\n" + "="*60)
     print("CaseLinker Pipeline: Ingest → Process → Store → Output")
     print("="*60)
-    print("\nEnter PDF file path (or press Enter to use default test file)")
-    print("Default: ../2014 Cases and Arrests – AZICAC.ORG.pdf")
+    print("\nEnter PDF file path(s) - separate multiple files with spaces")
+    print("Or press Enter to use default test file")
+    print("Default: 2014 Cases and Arrests – AZICAC.ORG.pdf")
     
     try:
         import sys
         if len(sys.argv) > 1:
-            file_path = sys.argv[1]
-            print(f"Using provided file: {file_path}")
+            # Multiple files provided as command line arguments
+            file_paths = sys.argv[1:]
+            print(f"\nUsing {len(file_paths)} provided file(s):")
+            for fp in file_paths:
+                print(f"  - {fp}")
         else:
-            file_path = input("\nPDF file path: ").strip()
+            user_input = input("\nPDF file path(s): ").strip()
             
-            if not file_path:
-                file_path = "2014 Cases and Arrests – AZICAC.ORG.pdf"
-                print(f"Using default: {file_path}")
+            if not user_input:
+                file_paths = ["2014 Cases and Arrests – AZICAC.ORG.pdf"]
+                print(f"Using default: {file_paths[0]}")
+            else:
+                # Split by spaces to handle multiple files
+                file_paths = user_input.split()
+                print(f"\nProcessing {len(file_paths)} file(s)...")
         
         print("\n" + "="*60)
-        print("Step 1: Ingesting PDF...")
+        print("Step 1: Ingesting PDF(s)...")
         print("="*60)
-        from ingestion import extract_pdf_text
-        text = extract_pdf_text(file_path)
-        print(f"✓ Extracted {len(text):,} characters")
+        from ingestion import ingest_multiple_pdfs
         
-        df = pd.DataFrame({
-            'source_file': [file_path.split('/')[-1]],
-            'extracted_text': [text],
-            'source': ['AZICAC'],
-        })
+        if len(file_paths) == 1:
+            # Single file - use simpler approach
+            from ingestion import extract_pdf_text
+            text = extract_pdf_text(file_paths[0])
+            print(f"✓ Extracted {len(text):,} characters from {file_paths[0]}")
+            
+            df = pd.DataFrame({
+                'source_file': [file_paths[0].split('/')[-1]],
+                'extracted_text': [text],
+                'source': ['AZICAC'],
+            })
+        else:
+            # Multiple files
+            df = ingest_multiple_pdfs(file_paths)
+            print(f"\n✓ Successfully ingested {len(df)} PDF file(s)")
         
         print("\n" + "="*60)
         print("Step 2: Processing cases (splitting by month)...")
         print("="*60)
         cases = process_cases(df)
-        print(f"✓ Found {len(cases)} cases")
+        print(f"✓ Found {len(cases)} cases across all PDFs")
         
         print("\n" + "="*60)
         print("Step 3: Storing cases in database...")
@@ -77,19 +93,20 @@ def main():
         print(f"✓ Stored {stored_count}/{len(cases)} cases in database")
         
         print("\n" + "="*60)
-        print("Step 4: Cases in Database")
+        print("Step 4: Summary")
         print("="*60)
         all_stored_cases = storage.get_all_cases()
         print(f"✓ Total cases in database: {len(all_stored_cases)}")
         
-        for i, case in enumerate(all_stored_cases, 1):
-            print(f"\n--- Case {i} ---")
-            print(f"ID: {case.get('id')}")
-            print(f"Month/Year: {case.get('raw_data', {}).get('month_year', 'Unknown')}")
-            print(f"Date Range: {case.get('date_range')}")
-            case_text = case.get('raw_data', {}).get('case_text', '')
-            if case_text:
-                print(f"Text Preview: {case_text[:150]}...")
+        # Show breakdown by source
+        sources = {}
+        for case in all_stored_cases:
+            source = case.get('source', 'Unknown')
+            sources[source] = sources.get(source, 0) + 1
+        
+        print("\nCases by source:")
+        for source, count in sorted(sources.items()):
+            print(f"  - {source}: {count} cases")
         
     except Exception as e:
         print(f"\n❌ Error: {e}")

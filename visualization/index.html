@@ -10,7 +10,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e8ba3 50%, #9bb5d1 75%, #c4d4e8 100%);
+            background: linear-gradient(135deg, #f5e6d3 0%, #f4d03f 25%, #d4af37 50%, #b8941f 75%, #9a7a1a 100%);
             background-attachment: fixed;
             min-height: 100vh;
         }
@@ -27,10 +27,9 @@
             text-decoration: none;
             margin-right: 20px;
             font-weight: 500;
-            transition: color 0.3s;
         }
         .nav a:hover {
-            color: #45a049;
+            text-decoration: underline;
         }
         .nav select {
             padding: 8px 15px;
@@ -64,10 +63,22 @@
             backdrop-filter: blur(10px);
         }
         h1 {
-            color: #1e3c72;
             margin-bottom: 10px;
             font-size: 2.5em;
             font-weight: 700;
+        }
+        h1 .case-part {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+        h1 .linker-part {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .subtitle {
             color: #555;
@@ -129,7 +140,10 @@
         }
         .severity-cases-panel h3 {
             margin-top: 0;
-            color: #1e3c72;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 20px;
             font-size: 1.5em;
             font-weight: 700;
@@ -168,7 +182,10 @@
         }
         .case-detail h3 {
             margin-top: 0;
-            color: #1e3c72;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 1.5em;
             font-weight: 700;
             margin-bottom: 20px;
@@ -267,7 +284,7 @@
            </div>
     
     <div class="container">
-        <h1>CaseLinker</h1>
+        <h1><span class="case-part">Case</span><span class="linker-part">Linker</span></h1>
         <p class="subtitle" id="viz-subtitle">Case Timeline Visualization</p>
         
         <div class="stats" id="stats">
@@ -1551,7 +1568,7 @@
                 .nice()
                 .range([height, 0]);
 
-            // Bars - blue color scheme
+            // Bars - golden color scheme
             svg.selectAll(".outcome-bar")
                 .data(data)
                 .enter()
@@ -1561,7 +1578,7 @@
                 .attr("y", d => yScale(d.count))
                 .attr("width", xScale.bandwidth())
                 .attr("height", d => height - yScale(d.count))
-                .attr("fill", "#2196F3")
+                .attr("fill", "#d4af37")
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 2)
                 .on("mouseover", function(event, d) {

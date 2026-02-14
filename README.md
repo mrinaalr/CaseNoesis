@@ -2,6 +2,12 @@
 
 **CaseLinker** is a project designed to group and visualize **statistical** and **contextual** information from cases involving crimes against children and child sexual exploitation & abuse (CSEA).
 
+## 🌐 Live Demo
+
+**Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
+
+The live deployment includes all features and 25 processed cases from AZICAC reports (2013-2014). No installation required—just open the link in your browser.
+
 ## Motivation
 
 This project was motivated by challenges I encountered with understanding child exploitation cases, including:
@@ -31,7 +37,14 @@ CaseLinker follows a modular, layered architecture:
 
 ## Installation
 
-### Quick Setup (Works Out of the Box)
+### Option 1: Use Live Demo (Recommended for Quick Testing)
+
+**No installation required.** Visit the live deployment:
+- **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
+
+The live version includes all features and 25 processed cases. Perfect for quick testing and demonstrations.
+
+### Option 2: Local Setup (Works Out of the Box)
 
 ```bash
 # Clone the repository
@@ -86,25 +99,38 @@ pip install -r requirements.txt
 
 ### Process Your Own PDF Files
 
-To process additional case PDFs:
+To process case PDFs (single or multiple files):
 
+**Single PDF:**
 ```bash
 source venv/bin/activate
-python3 -m src.main
-```
-
-When prompted, enter the path to your PDF file (e.g., `2014 Cases and Arrests – AZICAC.ORG.pdf`).
-
-Or provide the file path directly:
-```bash
 python3 -m src.main "path/to/your/file.pdf"
 ```
 
+**Multiple PDFs:**
+```bash
+python3 -m src.main "file1.pdf" "file2.pdf" "file3.pdf"
+```
+
+**Example - Process 2013 and 2014 cases:**
+```bash
+python3 -m src.main "2013 Cases and Arrests – AZICAC.ORG.pdf" "2014 Cases and Arrests – AZICAC.ORG.pdf"
+```
+
+Or run interactively:
+```bash
+python3 -m src.main
+```
+
+When prompted, enter one or more PDF file paths separated by spaces (e.g., `2013 Cases.pdf 2014 Cases.pdf 2015 Cases.pdf`).
+
 The system will:
-1. Extract text from the PDF
-2. Split cases by month patterns ("In [Month] of [Year]")
-3. Store cases in the encrypted database
-4. Display processed cases
+1. Extract text from each PDF
+2. Identify organization name from filename (AZICAC, FBI, NCMEC, etc.)
+3. Split cases by month patterns ("In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
+4. Extract features and assign case IDs (format: `org_name_year_month_number`)
+5. Store all cases in the encrypted database
+6. Display summary with cases broken down by source
 
 **Note:** The database file (`caselinker.db`) is encrypted with SQLCipher and included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, and prosecution outcomes.
 
@@ -145,9 +171,6 @@ CaseLinker/
 ├── caselinker.db                # Encrypted database (SQLCipher) with 25 processed cases
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
-├── FEATURE_EXTRACTION_ASSESSMENT.md  # Feature extraction quality assessment
-├── RAILWAY_DEPLOY.md            # Step-by-step Railway deployment guide
-└── HOSTING.md                   # Hosting options and deployment guide
 ```
 
 ## Case Schema & Feature Extraction

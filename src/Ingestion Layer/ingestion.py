@@ -19,7 +19,7 @@ import logging
 import sys
 
 try:
-import pdfplumber
+    import pdfplumber
     PDFPLUMBER_AVAILABLE = True
     logging.getLogger("pdfplumber").setLevel(logging.ERROR)
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -129,6 +129,70 @@ def ingest_pdf_from_user() -> pd.DataFrame:
         'source': ['AZICAC'],
     })
     
+    return df
+
+
+def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
+    """
+    Ingest multiple PDF files and return a combined DataFrame.
+    Each PDF is processed separately and combined into a single DataFrame.
+    
+    Args:
+        pdf_paths: List of paths to PDF files
+        
+    Returns:
+        DataFrame with ingested data from all PDFs
+    """
+    if not pdf_paths:
+        raise ValueError("No PDF paths provided")
+    
+    all_data = []
+    
+    for pdf_path in pdf_paths:
+        path = Path(pdf_path)
+        
+        if not path.exists():
+            print(f"⚠️  Warning: File not found, skipping: {pdf_path}")
+            continue
+        
+        if not path.suffix.lower() == '.pdf':
+            print(f"⚠️  Warning: Not a PDF file, skipping: {pdf_path}")
+            continue
+        
+        try:
+            text = extract_pdf_text(str(path))
+            
+            # Try to extract organization name from filename
+            # Common patterns: "AZICAC", "2013 Cases", etc.
+            org_name = 'AZICAC'  # default
+            filename_lower = path.stem.lower()
+            if 'azicac' in filename_lower:
+                org_name = 'AZICAC'
+            elif 'fbi' in filename_lower:
+                org_name = 'FBI'
+            elif 'ncmec' in filename_lower:
+                org_name = 'NCMEC'
+            else:
+                # Try to extract from first part of filename
+                parts = path.stem.split()
+                if parts:
+                    org_name = parts[0].upper()
+            
+            all_data.append({
+                'source_file': path.name,
+                'extracted_text': text,
+                'source': org_name,
+            })
+            print(f"✓ Ingested: {path.name} ({len(text):,} characters)")
+            
+        except Exception as e:
+            print(f"❌ Error processing {path.name}: {e}")
+            continue
+    
+    if not all_data:
+        raise ValueError("No PDFs were successfully ingested")
+    
+    df = pd.DataFrame(all_data)
     return df
 
 
