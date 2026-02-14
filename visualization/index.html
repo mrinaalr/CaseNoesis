@@ -1568,7 +1568,14 @@
                 .nice()
                 .range([height, 0]);
 
-            // Bars - golden color scheme
+            // Bars - blue color scheme
+            const outcomeColors = {
+                'No Charges Listed': '#90CAF9',      // Light blue
+                'Sexual Exploitation of a Minor': '#42A5F5',  // Medium blue
+                'Booked': '#1E88E5',                 // Darker blue
+                'Arrested': '#1565C0'               // Darkest blue
+            };
+            
             svg.selectAll(".outcome-bar")
                 .data(data)
                 .enter()
@@ -1578,7 +1585,7 @@
                 .attr("y", d => yScale(d.count))
                 .attr("width", xScale.bandwidth())
                 .attr("height", d => height - yScale(d.count))
-                .attr("fill", "#d4af37")
+                .attr("fill", d => outcomeColors[d.category] || '#42A5F5')
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 2)
                 .on("mouseover", function(event, d) {

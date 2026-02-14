@@ -417,7 +417,53 @@
                 The advanced clustering and pattern detection features are currently under development. 
             </p>
         </div>
+        
+        <div id="tag-threader-section" class="analysis-controls" style="display: none; margin-top: 40px;">
+            <div id="tag-threader-content"></div>
+        </div>
     </div>
+    
+    <style>
+        .tag-threader-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            user-select: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tag-threader-item:hover {
+            background: rgba(255, 193, 7, 0.15);
+            border-color: rgba(255, 193, 7, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.4),
+                0 0 15px rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+        .tag-threader-label {
+            font-weight: 700;
+        }
+        .tag-threader-count {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 4px 12px;
+            border-radius: 0;
+            color: #ffc107;
+            font-weight: 700;
+            font-size: 16px;
+            min-width: 40px;
+            text-align: center;
+        }
+    </style>
 
     <script>
         let allCases = [];
@@ -557,7 +603,7 @@
             updateCaseCount();
         }
         
-        function updateCaseCount() {
+        async function updateCaseCount() {
             const countBox = document.getElementById('case-count-box');
             const countNote = document.getElementById('case-count-note');
             const countNumber = document.getElementById('case-count-number');
@@ -565,61 +611,167 @@
             if (selectedTopics.size === 0) {
                 countBox.classList.remove('visible');
                 countNote.classList.remove('visible');
+                document.getElementById('tag-threader-section').style.display = 'none';
                 return;
             }
             
-            // Find cases that match ALL selected tags (intersection)
-            let matchingCases = allCases.filter(caseData => {
-                // Case must match ALL selected tags
-                for (let [topic, info] of selectedTopics.entries()) {
-                    const categoryType = info.category;
-                    let matches = false;
-                    
-                    switch(categoryType) {
-                        case 'case_topics':
-                            const topics = caseData.case_topics || [];
-                            matches = Array.isArray(topics) && topics.includes(topic);
-                            break;
-                        case 'severity_indicators':
-                            const severity = caseData.severity_indicators || [];
-                            matches = Array.isArray(severity) && severity.includes(topic);
-                            break;
-                        case 'platforms_used':
-                            const platforms = caseData.platforms_used || [];
-                            matches = Array.isArray(platforms) && platforms.some(p => 
-                                p && p.toLowerCase() === topic.toLowerCase()
-                            );
-                            break;
-                        case 'investigation_type':
-                            matches = caseData.investigation_type && 
-                                     caseData.investigation_type.toLowerCase() === topic.toLowerCase();
-                            break;
-                        case 'relationship_to_victim':
-                            matches = caseData.relationship_to_victim && 
-                                     caseData.relationship_to_victim.toLowerCase() === topic.toLowerCase();
-                            break;
-                        case 'registered_sex_offender':
-                            matches = topic === 'registered_sex_offender' && 
-                                     caseData.perpetrator_registered_sex_offender === true;
-                            break;
-                        case 'custom':
-                            // Search in case text for custom topics
-                            const caseText = (caseData.raw_data?.case_text || caseData.case_text || '').toLowerCase();
-                            matches = caseText.includes(topic.toLowerCase());
-                            break;
-                    }
-                    
-                    if (!matches) {
-                        return false; // This case doesn't match this tag, so it's out
-                    }
-                }
-                return true; // Case matches all selected tags
-            });
+            // Prepare selected tags for API call
+            const selectedTagsArray = Array.from(selectedTopics.entries()).map(([tag, info]) => ({
+                tag: tag,
+                category: info.category
+            }));
             
-            countNumber.textContent = matchingCases.length;
-            countBox.classList.add('visible');
-            countNote.classList.add('visible');
+            // Call tag_threader API
+            try {
+                const response = await fetch('/api/tag-threader', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(selectedTagsArray)
+                });
+                
+                const result = await response.json();
+                
+                // Update case count
+                countNumber.textContent = result.intersection_cases.length;
+                countBox.classList.add('visible');
+                countNote.classList.add('visible');
+            } catch (error) {
+                console.error('Error calling tag_threader:', error);
+                // Fallback to local calculation
+                let matchingCases = allCases.filter(caseData => {
+                    for (let [topic, info] of selectedTopics.entries()) {
+                        const categoryType = info.category;
+                        let matches = false;
+                        
+                        switch(categoryType) {
+                            case 'case_topics':
+                                const topics = caseData.case_topics || [];
+                                matches = Array.isArray(topics) && topics.includes(topic);
+                                break;
+                            case 'severity_indicators':
+                                const severity = caseData.severity_indicators || [];
+                                matches = Array.isArray(severity) && severity.includes(topic);
+                                break;
+                            case 'platforms_used':
+                                const platforms = caseData.platforms_used || [];
+                                matches = Array.isArray(platforms) && platforms.some(p => 
+                                    p && p.toLowerCase() === topic.toLowerCase()
+                                );
+                                break;
+                            case 'investigation_type':
+                                matches = caseData.investigation_type && 
+                                         caseData.investigation_type.toLowerCase() === topic.toLowerCase();
+                                break;
+                            case 'relationship_to_victim':
+                                matches = caseData.relationship_to_victim && 
+                                         caseData.relationship_to_victim.toLowerCase() === topic.toLowerCase();
+                                break;
+                            case 'registered_sex_offender':
+                                matches = topic === 'registered_sex_offender' && 
+                                         caseData.perpetrator_registered_sex_offender === true;
+                                break;
+                            case 'custom':
+                                const caseText = (caseData.raw_data?.case_text || caseData.case_text || '').toLowerCase();
+                                matches = caseText.includes(topic.toLowerCase());
+                                break;
+                        }
+                        
+                        if (!matches) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+                
+                countNumber.textContent = matchingCases.length;
+                countBox.classList.add('visible');
+                countNote.classList.add('visible');
+            }
         }
+        
+        
+        async function showIntersectionCases() {
+            if (!window.tagThreaderResult) {
+                // Re-fetch if needed
+                const selectedTagsArray = Array.from(selectedTopics.entries()).map(([tag, info]) => ({
+                    tag: tag,
+                    category: info.category
+                }));
+                
+                try {
+                    const response = await fetch('/api/tag-threader', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(selectedTagsArray)
+                    });
+                    window.tagThreaderResult = await response.json();
+                } catch (error) {
+                    console.error('Error fetching tag threader:', error);
+                    return;
+                }
+            }
+            
+            const intersectionCaseIds = window.tagThreaderResult.intersection_cases;
+            const matchingCases = allCases.filter(c => intersectionCaseIds.includes(c.id));
+            
+            // Hide coming soon
+            document.getElementById('coming-soon').style.display = 'none';
+            
+            // Show results section
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.style.display = 'block';
+            
+            // Get selected tag names
+            const selectedTagNames = Array.from(selectedTopics.keys())
+                .map(tag => tag.replace(/_/g, ' ').toUpperCase())
+                .join(' + ');
+            
+            // Display intersection cases
+            const resultsDiv = document.getElementById('analysis-results');
+            resultsDiv.innerHTML = `
+                <div class="analysis-result">
+                    <h3>🔗 Intersection Cases: ${selectedTagNames}</h3>
+                    <p style="color: #b0b0b0; margin-bottom: 20px;">
+                        ${matchingCases.length} case(s) matching ALL selected tags
+                    </p>
+                    <div style="display: grid; gap: 15px;">
+                        ${matchingCases.map(caseData => {
+                            const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                            const date = caseData.date_range?.start || caseData.raw_data?.month_year || 'Unknown date';
+                            
+                            // Highlight selected tags in the text
+                            let highlightedText = caseText;
+                            selectedTopics.forEach((info, tag) => {
+                                const tagPattern = new RegExp(`\\b${tag.replace(/_/g, '\\s+')}\\b`, 'gi');
+                                highlightedText = highlightedText.replace(tagPattern, (match) => {
+                                    return `<span style="background: rgba(255,193,7,0.3); color: #ffc107; font-weight: 700; padding: 2px 4px;">${match}</span>`;
+                                });
+                            });
+                            
+                            return `
+                                <div class="pattern-item" style="margin-bottom: 15px; background: rgba(30,30,30,0.6); border-left: 3px solid #ffc107;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <strong style="color: #ffc107; font-size: 1.1em;">${caseData.id}</strong>
+                                        <span style="color: #888; font-size: 0.9em;">${date}</span>
+                                    </div>
+                                    <div style="margin-top: 10px; color: #e0e0e0; line-height: 1.7; max-height: 300px; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 4px;">
+                                        ${highlightedText.substring(0, 800)}${highlightedText.length > 800 ? '...' : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
         
         // Legacy function for backward compatibility
         function showCaseCount(topic, categoryType) {
@@ -685,54 +837,415 @@
         }
 
         async function runAdvancedAnalysis() {
-            // Show coming soon message
-            document.getElementById('coming-soon').style.display = 'block';
-            document.getElementById('results-section').style.display = 'none';
-            
-            // Scroll to coming soon message
-            document.getElementById('coming-soon').scrollIntoView({ behavior: 'smooth' });
-            
-            return;
-            
-            const selectedStandardTopics = Array.from(document.querySelectorAll('.topic-selector input:checked'))
-                .map(cb => cb.value);
-            
-            // Get selected custom topics (check if they're checked)
-            const selectedCustomTopics = Array.from(customTopics).filter(topic => {
-                const checkbox = document.getElementById(`topic-${topic}`);
-                return checkbox && checkbox.checked;
-            });
-            
-            // Combine all selected topics
-            const allSelectedTopics = [...selectedStandardTopics, ...selectedCustomTopics];
-            
-            if (allSelectedTopics.length === 0) {
-                alert('Please select at least one topic to analyze');
+            if (selectedTopics.size === 0) {
+                alert('Please select at least one tag to analyze');
                 return;
             }
             
-            // Filter cases - match against both extracted topics and custom topics
-            const relevantCases = allCases.filter(caseData => {
-                const caseTopics = caseData.case_topics || [];
-                const caseText = (caseData.raw_data?.case_text || caseData.case_text || '').toLowerCase();
+            // Hide coming soon message
+            document.getElementById('coming-soon').style.display = 'none';
+            
+            // Prepare selected tags for API call
+            const selectedTagsArray = Array.from(selectedTopics.entries()).map(([tag, info]) => ({
+                tag: tag,
+                category: info.category
+            }));
+            
+            // Get tagged cases from analysis.py
+            let matchingCases = [];
+            try {
+                const response = await fetch('/api/return-tagged-cases', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(selectedTagsArray)
+                });
+                const result = await response.json();
+                matchingCases = result.cases || [];
+            } catch (error) {
+                console.error('Error fetching tagged cases:', error);
+                alert('Error loading cases');
+                return;
+            }
+            
+            // Count cases for each individual tag (use already loaded allCases)
+            const casesForCounting = allCases && allCases.length > 0 ? allCases : [];
+            
+            // Count cases for each individual tag
+            const tagCounts = {};
+            selectedTopics.forEach((info, tag) => {
+                const category = info.category;
+                let count = 0;
                 
-                return allSelectedTopics.some(topic => {
-                    // Check if topic is in extracted topics
-                    if (caseTopics.includes(topic)) return true;
-                    // Check if custom topic appears in case text (case-insensitive)
-                    if (customTopics.has(topic) && caseText.includes(topic.toLowerCase())) return true;
-                    return false;
+                for (const caseItem of casesForCounting) {
+                    let matches = false;
+                    
+                    if (category === 'case_topics') {
+                        const topics = caseItem.case_topics || [];
+                        matches = Array.isArray(topics) && topics.includes(tag);
+                    } else if (category === 'severity_indicators') {
+                        const severity = caseItem.severity_indicators || [];
+                        matches = Array.isArray(severity) && severity.includes(tag);
+                    } else if (category === 'platforms_used') {
+                        const platforms = caseItem.platforms_used || [];
+                        matches = Array.isArray(platforms) && platforms.some(p => p && p.toLowerCase() === tag.toLowerCase());
+                    } else if (category === 'investigation_type') {
+                        matches = caseItem.investigation_type && caseItem.investigation_type.toLowerCase() === tag.toLowerCase();
+                    } else if (category === 'relationship_to_victim') {
+                        matches = caseItem.relationship_to_victim && caseItem.relationship_to_victim.toLowerCase() === tag.toLowerCase();
+                    } else if (category === 'registered_sex_offender') {
+                        matches = tag === 'registered_sex_offender' && caseItem.perpetrator_registered_sex_offender === true;
+                    } else if (category === 'custom') {
+                        const caseText = (caseItem.raw_data?.case_text || caseItem.case_text || '').toLowerCase();
+                        matches = caseText.includes(tag.toLowerCase());
+                    }
+                    
+                    if (matches) count++;
+                }
+                
+                tagCounts[tag] = count;
+            });
+            
+            // Get selected tag names for display with counts
+            const selectedTagNames = Array.from(selectedTopics.keys())
+                .map(tag => {
+                    const tagName = tag.replace(/_/g, ' ').toUpperCase();
+                    const count = tagCounts[tag] || 0;
+                    return { name: tagName, count: count };
+                });
+            
+            // Show tag threader section
+            const tagThreaderSection = document.getElementById('tag-threader-section');
+            tagThreaderSection.style.display = 'block';
+            
+            // Display matching cases with their raw text
+            const container = document.getElementById('tag-threader-content');
+            container.innerHTML = `
+                <div style="width: 100%;">
+                    <div style="margin-bottom: 25px;">
+                        <div style="color: #ffc107; font-weight: 700; margin-bottom: 15px; font-size: 1.1em;">
+                            Selected Tags (${selectedTagNames.length}):
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                            ${selectedTagNames.map(tagInfo => `
+                                <span style="padding: 8px 16px; background: rgba(255,193,7,0.15); 
+                                            border: 1px solid rgba(255,193,7,0.4); color: #ffc107; 
+                                            font-weight: 600; font-size: 13px; text-transform: uppercase;">
+                                    ${tagInfo.name} (${tagInfo.count})
+                                </span>
+                            `).join('')}
+                        </div>
+                        <div style="color: #b0b0b0; font-size: 1em;">
+                            ${matchingCases.length} case(s) found matching all selected tags
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <div style="color: #ffc107; font-weight: 700; margin-bottom: 15px; font-size: 1.1em;">
+                            Cases (click to select):
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 30px;">
+                            ${matchingCases.map(caseData => {
+                                const date = caseData.date_range?.start || (caseData.raw_data && typeof caseData.raw_data === 'object' && caseData.raw_data.month_year) || 'Unknown date';
+                                return `
+                                    <div class="case-id-card" data-case-id="${caseData.id}" onclick="toggleCaseSelection('${caseData.id}')"
+                                         style="padding: 12px; background: rgba(30,30,30,0.6); 
+                                                border: 1px solid rgba(255,193,7,0.3); cursor: pointer;
+                                                transition: all 0.3s; border-radius: 4px;">
+                                        <div style="color: #ffc107; font-weight: 700; font-size: 0.9em; margin-bottom: 4px; word-break: break-word;">
+                                            ${caseData.id}
+                                        </div>
+                                        <div style="color: #888; font-size: 0.75em;">
+                                            ${date}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                    
+                    <div id="selected-cases-view" style="display: none; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255,193,7,0.2);">
+                    </div>
+                </div>
+            `;
+            
+            // Store matching cases globally for selection
+            window.matchingCases = matchingCases;
+            
+            // Initialize selected cases set
+            if (!window.selectedCases) {
+                window.selectedCases = new Set();
+            } else {
+                window.selectedCases.clear();
+            }
+            
+            // Add hover effect styles if not already added
+            if (!document.getElementById('case-card-styles')) {
+                const style = document.createElement('style');
+                style.id = 'case-card-styles';
+                style.textContent = `
+                    .case-id-card:hover {
+                        background: rgba(255,193,7,0.15) !important;
+                        border-color: rgba(255,193,7,0.6) !important;
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 15px rgba(255,193,7,0.2);
+                    }
+                    .case-id-card.selected {
+                        background: rgba(255,193,7,0.25) !important;
+                        border-color: rgba(255,193,7,0.8) !important;
+                        box-shadow: 0 0 20px rgba(255,193,7,0.4);
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Scroll to tag threader section
+            tagThreaderSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function toggleCaseSelection(caseId) {
+            if (!window.selectedCases) {
+                window.selectedCases = new Set();
+            }
+            
+            if (window.selectedCases.has(caseId)) {
+                window.selectedCases.delete(caseId);
+            } else {
+                window.selectedCases.add(caseId);
+            }
+            
+            // Update card appearance
+            const card = document.querySelector(`[data-case-id="${caseId}"]`);
+            if (card) {
+                if (window.selectedCases.has(caseId)) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            }
+            
+            // Update selected cases view
+            updateSelectedCasesView();
+        }
+        
+        function updateSelectedCasesView() {
+            const view = document.getElementById('selected-cases-view');
+            if (!view || !window.matchingCases) return;
+            
+            if (!window.selectedCases || window.selectedCases.size === 0) {
+                view.style.display = 'none';
+                return;
+            }
+            
+            view.style.display = 'block';
+            
+            // Get selected cases data
+            const selectedCasesData = window.matchingCases.filter(c => window.selectedCases.has(c.id));
+            
+            view.innerHTML = `
+                <div style="color: #ffc107; font-weight: 700; margin-bottom: 10px; font-size: 1em;">
+                    Selected Cases (${window.selectedCases.size}):
+                </div>
+                <div style="display: grid; gap: 12px;">
+                    ${selectedCasesData.map(caseData => {
+                        // Get case text
+                        let caseText = 'No case text available';
+                        if (caseData.raw_data) {
+                            if (typeof caseData.raw_data === 'object' && caseData.raw_data.case_text) {
+                                caseText = caseData.raw_data.case_text;
+                            } else if (typeof caseData.raw_data === 'string') {
+                                try {
+                                    const parsed = JSON.parse(caseData.raw_data);
+                                    caseText = parsed.case_text || caseText;
+                                } catch (e) {
+                                    caseText = caseData.raw_data;
+                                }
+                            }
+                        } else if (caseData.case_text) {
+                            caseText = caseData.case_text;
+                        }
+                        
+                        // Clean up formatting: remove tabs, normalize whitespace, preserve line breaks
+                        caseText = caseText.replace(/\t/g, ' ')  // Replace tabs with spaces
+                                           .replace(/[ \t]+/g, ' ')  // Collapse multiple spaces/tabs
+                                           .replace(/\n\s*\n\s*\n/g, '\n\n')  // Collapse multiple blank lines
+                                           .trim();
+                        
+                        const date = caseData.date_range?.start || (caseData.raw_data && typeof caseData.raw_data === 'object' && caseData.raw_data.month_year) || 'Unknown date';
+                        
+                        // Highlight matching tag features
+                        let highlightedText = caseText;
+                        selectedTopics.forEach((info, tag) => {
+                            const category = info.category;
+                            let patterns = [];
+                            
+                            if (category === 'case_topics') {
+                                if (tag === 'possession') {
+                                    patterns = [/\btrading\b/gi, /\bdownloading\b/gi, /\bpossessing\b/gi, /\bcollecting\b/gi];
+                                } else if (tag === 'production') {
+                                    patterns = [/\bproduced\b/gi, /\bcreated\b/gi, /\bmade\b/gi, /\bmolest\w*\b/gi];
+                                } else if (tag === 'international') {
+                                    patterns = [/\bAustralia\b/gi, /\bPhilippines\b/gi, /\bJapan\b/gi, /\binternational\b/gi, /\boverseas\b/gi];
+                                } else if (tag === 'multi_state') {
+                                    patterns = [/\bColorado\b/gi, /\bTexas\b/gi, /\bCalifornia\b/gi, /\bLas\s+Vegas\b/gi, /\bArizona\b/gi];
+                                } else if (tag === 'hands_on') {
+                                    patterns = [/\bmolest\w*\b/gi, /\bhands?\s+on\b/gi, /\bsexually\s+abused\b/gi, /\bsexually\s+assaulted\b/gi];
+                                } else if (tag === 'online_only') {
+                                    patterns = [/\bonline\b/gi, /\bchat\b/gi, /\btrading\s+images?\b/gi];
+                                } else if (tag === 'family') {
+                                    patterns = [/\bfather\b/gi, /\bmother\b/gi, /\bparent\b/gi, /\bbrother\b/gi, /\bsister\b/gi, /\buncle\b/gi, /\baunt\b/gi, /\bcousin\b/gi, /\bbiological\b/gi];
+                                } else if (tag === 'stranger') {
+                                    patterns = [/\bstranger\b/gi];
+                                }
+                            } else if (category === 'severity_indicators') {
+                                if (tag === 'infant') {
+                                    patterns = [/\binfants?\b/gi];
+                                } else if (tag === 'very_young') {
+                                    patterns = [/\bvery\s+young\s+children\b/gi];
+                                } else if (tag === 'under_5') {
+                                    patterns = [/\bunder\s+5\b/gi, /\bages?\s+[0-4]\b/gi, /\b[0-4]\s+year\w*\b/gi];
+                                } else if (tag === 'under_9') {
+                                    patterns = [/\bunder\s+9\b/gi, /\bages?\s+[0-8]\b/gi, /\b[0-8]\s+year\w*\b/gi, /\b9\s+year\s+old\b/gi];
+                                } else if (tag === 'production') {
+                                    patterns = [/\bproduced\b/gi, /\bcreated\b/gi, /\bmade\s+movies?\b/gi];
+                                }
+                            } else if (category === 'platforms_used') {
+                                const platformName = tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase();
+                                patterns = [new RegExp(`\\b${platformName}\\b`, 'gi')];
+                            } else if (category === 'investigation_type') {
+                                patterns = [new RegExp(`\\b${tag}\\b`, 'gi')];
+                            } else if (category === 'relationship_to_victim') {
+                                patterns = [new RegExp(`\\b${tag}\\b`, 'gi')];
+                            } else if (category === 'registered_sex_offender') {
+                                patterns = [/\bregistered\s+sex\s+offender\b/gi, /\bsex\s+offender\b/gi, /\bRSO\b/gi];
+                            } else if (category === 'custom') {
+                                patterns = [new RegExp(`\\b${tag.replace(/_/g, '\\s+')}\\b`, 'gi')];
+                            }
+                            
+                            patterns.forEach(pattern => {
+                                highlightedText = highlightedText.replace(pattern, (match) => {
+                                    return `<span style="background: rgba(255,193,7,0.4); color: #ffc107; font-weight: 700; padding: 2px 4px; border-radius: 2px;">${match}</span>`;
+                                });
+                            });
+                        });
+                        
+                        return `
+                            <div style="background: rgba(30,30,30,0.6); border: 1px solid rgba(255,193,7,0.3); padding: 12px; border-radius: 4px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; padding-bottom: 6px; border-bottom: 1px solid rgba(255,193,7,0.2);">
+                                    <div style="color: #ffc107; font-weight: 700; font-size: 0.95em;">
+                                        ${caseData.id}
+                                    </div>
+                                    <div style="color: #888; font-size: 0.8em;">
+                                        ${date}
+                                    </div>
+                                </div>
+                                <div style="color: #e0e0e0; line-height: 1.5; font-size: 0.85em; padding: 0; margin-top: 0; background: rgba(0,0,0,0.2); border-radius: 4px; white-space: pre-line; word-break: break-word; overflow-wrap: break-word; max-height: 300px; overflow-y: auto;">
+                                    ${highlightedText}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function showCaseDetails(caseId) {
+            const caseData = allCases.find(c => c.id === caseId);
+            if (!caseData) return;
+            
+            const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+            const date = caseData.date_range?.start || caseData.raw_data?.month_year || 'Unknown date';
+            
+            // Get selected tags
+            const selectedTags = Array.from(selectedTopics.keys());
+            
+            // Highlight tags and relevant details in the text
+            let highlightedText = caseText;
+            
+            // Highlight selected tags
+            selectedTags.forEach(tag => {
+                const tagPattern = new RegExp(`\\b${tag.replace(/_/g, '\\s+')}\\b`, 'gi');
+                highlightedText = highlightedText.replace(tagPattern, (match) => {
+                    return `<span style="background: rgba(255,193,7,0.4); color: #ffc107; font-weight: 700; padding: 2px 4px; border-radius: 2px;">${match}</span>`;
                 });
             });
             
-            if (relevantCases.length === 0) {
-                alert('No cases found for selected topics');
-                return;
-            }
+            // Highlight other relevant details
+            const relevantPatterns = [
+                { pattern: /\b(arrested|arrest|booked|booking)\b/gi, color: '#ff6b6b', label: 'Arrest Info' },
+                { pattern: /\b(charge|charges|charged)\b/gi, color: '#4ecdc4', label: 'Charges' },
+                { pattern: /\b(sexual\s+exploitation|exploitation)\b/gi, color: '#ffd93d', label: 'Exploitation' },
+                { pattern: /\b(minor|child|children|victim)\b/gi, color: '#95e1d3', label: 'Victim Info' },
+                { pattern: /\b(facebook|instagram|snapchat|discord|whatsapp|online|chat)\b/gi, color: '#a8e6cf', label: 'Platform' },
+                { pattern: /\b(production|possession|distribution)\b/gi, color: '#ffaaa5', label: 'Case Type' },
+                { pattern: /\b(infant|very\s+young|under\s+\d+)\b/gi, color: '#ffd3a5', label: 'Severity' },
+                { pattern: /\b(azicac|fbi|police|icac|hsi)\b/gi, color: '#caf0f8', label: 'Agency' }
+            ];
             
-            // Perform advanced analysis
-            const results = await performAdvancedAnalysis(relevantCases, allSelectedTopics);
-            displayAdvancedResults(results, relevantCases);
+            relevantPatterns.forEach(({ pattern, color, label }) => {
+                highlightedText = highlightedText.replace(pattern, (match) => {
+                    return `<span style="background: ${color}40; color: ${color}; font-weight: 600; padding: 2px 4px; border-radius: 2px;" title="${label}">${match}</span>`;
+                });
+            });
+            
+            // Get case metadata
+            const platforms = caseData.platforms_used || [];
+            const severity = caseData.severity_indicators || [];
+            const topics = caseData.case_topics || [];
+            const agencies = caseData.agencies_involved || [];
+            const outcome = caseData.prosecution_outcome || {};
+            
+            // Display case details
+            const detailView = document.getElementById('case-detail-view');
+            detailView.style.display = 'block';
+            detailView.innerHTML = `
+                <div class="analysis-result" style="background: rgba(20,20,20,0.8); border: 2px solid rgba(255,193,7,0.4);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,193,7,0.2);">
+                        <h3 style="color: #ffc107; margin: 0;">📋 Case Details: ${caseId}</h3>
+                        <button onclick="document.getElementById('case-detail-view').style.display='none'" 
+                                style="padding: 8px 16px; background: rgba(200,0,0,0.3); border: 1px solid rgba(200,0,0,0.5); 
+                                       color: #ff6b6b; cursor: pointer; border-radius: 0; font-weight: 600;">
+                            Close
+                        </button>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: #888; font-size: 0.9em; margin-bottom: 10px;">Date: ${date}</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                            ${platforms.length > 0 ? `<span style="padding: 4px 10px; background: rgba(168,230,207,0.2); color: #a8e6cf; font-size: 0.85em;">Platforms: ${platforms.join(', ')}</span>` : ''}
+                            ${severity.length > 0 ? `<span style="padding: 4px 10px; background: rgba(255,217,61,0.2); color: #ffd93d; font-size: 0.85em;">Severity: ${severity.join(', ')}</span>` : ''}
+                            ${topics.length > 0 ? `<span style="padding: 4px 10px; background: rgba(255,170,165,0.2); color: #ffaaa5; font-size: 0.85em;">Topics: ${topics.join(', ')}</span>` : ''}
+                            ${agencies.length > 0 ? `<span style="padding: 4px 10px; background: rgba(202,240,248,0.2); color: #caf0f8; font-size: 0.85em;">Agencies: ${agencies.join(', ')}</span>` : ''}
+                        </div>
+                        ${outcome.booking_status || outcome.charges ? `
+                            <div style="padding: 10px; background: rgba(78,205,196,0.1); border-left: 3px solid #4ecdc4; margin-bottom: 15px;">
+                                <div style="color: #4ecdc4; font-weight: 600; margin-bottom: 5px;">Prosecution Outcome:</div>
+                                ${outcome.booking_status ? `<div style="color: #e0e0e0; font-size: 0.9em;">Status: ${outcome.booking_status}</div>` : ''}
+                                ${outcome.charges && outcome.charges.length > 0 ? `
+                                    <div style="color: #e0e0e0; font-size: 0.9em; margin-top: 5px;">
+                                        Charges: ${outcome.charges.map(c => c.charge || c).join(', ')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="color: #ffc107; font-weight: 700; margin-bottom: 10px; font-size: 1em;">
+                            Case Text (highlighted tags and relevant details):
+                        </div>
+                        <div style="color: #e0e0e0; line-height: 1.8; max-height: 500px; overflow-y: auto; 
+                                    padding: 20px; background: rgba(0,0,0,0.3); border-radius: 4px; 
+                                    border: 1px solid rgba(255,193,7,0.2); font-size: 0.95em;">
+                            ${highlightedText}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Scroll to detail view
+            detailView.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         async function performAdvancedAnalysis(cases, topics) {

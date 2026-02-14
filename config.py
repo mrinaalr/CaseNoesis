@@ -7,13 +7,10 @@ Store settings and constants
 DATABASE_PATH = "caselinker.db"
 GRAPH_DATABASE_PATH = "caselinker_graph.db"
 
-# SQLCipher Encryption
-# Set a strong password for production - this is for demo/research purposes
-# If SQLCipher is not available, encryption will be disabled automatically
-import os
-DB_ENCRYPTION_KEY = "caselinker_research_key_2024"  # Change this in production!
-# On Railway, disable encryption since SQLCipher isn't available
-ENABLE_ENCRYPTION = True if not os.environ.get("RAILWAY_ENVIRONMENT") else False
+# Database Encryption (deprecated - using plain SQLite for MVP)
+# Encryption removed for MVP to ensure compatibility across all platforms
+DB_ENCRYPTION_KEY = None
+ENABLE_ENCRYPTION = False
 
 # Clustering
 SIMILARITY_THRESHOLD = 0.5

@@ -80,12 +80,10 @@ def main():
         print("Step 3: Storing cases in database...")
         print("="*60)
         try:
-            from config import DATABASE_PATH, DB_ENCRYPTION_KEY, ENABLE_ENCRYPTION
-            encryption_key = DB_ENCRYPTION_KEY if ENABLE_ENCRYPTION else None
+            from config import DATABASE_PATH
         except ImportError:
             DATABASE_PATH = "caselinker.db"
-            encryption_key = None
-        storage = CaseStorage(DATABASE_PATH, encryption_key=encryption_key)
+        storage = CaseStorage(DATABASE_PATH)
         stored_count = 0
         for case in cases:
             if storage.store_case(case):

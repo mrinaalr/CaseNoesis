@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Anal
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
 
 from storage import CaseStorage
-from analysis import cluster_cases, find_similar_cases
+from analysis import cluster_cases, find_similar_cases, tag_threader, return_tagged_cases
 from visualization import create_timeline_visualization, filter_cases
 
 app = FastAPI(title="CaseLinker API")
@@ -28,40 +28,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize storage with encryption key from config
-import os
+# Initialize storage
 try:
-    from config import DATABASE_PATH, DB_ENCRYPTION_KEY, ENABLE_ENCRYPTION
-    # Only use encryption if enabled AND SQLCipher is available
-    from storage import SQLCIPHER_AVAILABLE
-    
-    # On Railway, check if we should disable encryption (if SQLCipher not available)
-    # Railway environment variable can override
-    if os.environ.get("RAILWAY_ENVIRONMENT"):
-        # On Railway, only use encryption if SQLCipher is actually available
-        encryption_key = DB_ENCRYPTION_KEY if (ENABLE_ENCRYPTION and SQLCIPHER_AVAILABLE) else None
-        if ENABLE_ENCRYPTION and not SQLCIPHER_AVAILABLE:
-            print("⚠️  WARNING: SQLCipher not available on Railway. Database will be unencrypted.")
-    else:
-        encryption_key = DB_ENCRYPTION_KEY if (ENABLE_ENCRYPTION and SQLCIPHER_AVAILABLE) else None
+    from config import DATABASE_PATH
 except ImportError:
     DATABASE_PATH = "caselinker.db"
-    encryption_key = None
-    try:
-        from storage import SQLCIPHER_AVAILABLE
-    except:
-        SQLCIPHER_AVAILABLE = False
 
 # Initialize storage - will create database if it doesn't exist
-storage = CaseStorage(DATABASE_PATH, encryption_key=encryption_key)
+storage = CaseStorage(DATABASE_PATH)
 
 # Log database status on startup
 try:
-    from storage import SQLCIPHER_AVAILABLE
-    print(f"📊 Database: {DATABASE_PATH}")
-    print(f"🔐 SQLCipher available: {SQLCIPHER_AVAILABLE}")
-    print(f"🔑 Encryption enabled: {encryption_key is not None}")
     test_cases = storage.get_all_cases()
+    print(f"📊 Database: {DATABASE_PATH}")
     print(f"📁 Cases in database: {len(test_cases)}")
 except Exception as e:
     print(f"⚠️  Database initialization warning: {e}")
@@ -211,6 +190,42 @@ def get_clusters(threshold: float = 0.5):
     cases = storage.get_all_cases()
     clusters = cluster_cases(cases, threshold=threshold)
     return {"clusters": clusters, "count": len(clusters)}
+
+
+@app.post("/api/tag-threader")
+def get_tag_threader(selected_tags: List[Dict[str, str]]):
+    """
+    Query cases matching selected tags and create threaded tag links.
+    
+    Args:
+        selected_tags: List of dictionaries with 'tag' and 'category' keys
+            Example: [{"tag": "production", "category": "case_topics"}]
+    
+    Returns:
+        Dictionary with intersection cases and tag results
+    """
+    cases = storage.get_all_cases()
+    result = tag_threader(cases, selected_tags)
+    return result
+
+
+@app.post("/api/return-tagged-cases")
+def get_tagged_cases(selected_tags: List[Dict[str, str]]):
+    """
+    Return all cases matching the selected tags.
+    
+    Args:
+        selected_tags: List of dictionaries with 'tag' and 'category' keys
+            Example: [{"tag": "production", "category": "case_topics"}]
+    
+    Returns:
+        List of case dictionaries matching ALL selected tags
+    """
+    cases = storage.get_all_cases()
+    matching_cases = return_tagged_cases(cases, selected_tags)
+    return {"cases": matching_cases}
+
+
 
 
 @app.get("/api")

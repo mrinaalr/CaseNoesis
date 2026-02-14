@@ -69,12 +69,7 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes an encrypted database (`caselinker.db`) with processed cases from AZICAC reports (2013-2014). 
-
-- **If SQLCipher is installed**: The encrypted database will work immediately
-- **If SQLCipher is NOT installed**: The system will create a new unencrypted database. You can either:
-  - Process your own PDFs using `python3 -m src.main`
-  - Install SQLCipher to use the included encrypted database
+**Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2013-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
 
 You can process additional PDFs to add more cases to the database.
 
@@ -132,7 +127,7 @@ The system will:
 5. Store all cases in the encrypted database
 6. Display summary with cases broken down by source
 
-**Note:** The database file (`caselinker.db`) is encrypted with SQLCipher and included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, and prosecution outcomes.
+**Note:** The database file (`caselinker.db`) is included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, and prosecution outcomes.
 
 ### Using the Visualization
 
@@ -211,7 +206,7 @@ Each case includes structured features extracted from case narratives:
 - **Backend**: Python 3, FastAPI, Uvicorn
 - **Data Processing**: Pandas, NumPy
 - **PDF Processing**: pdfplumber
-- **Database**: SQLite with SQLCipher encryption (optional, falls back to regular SQLite)
+- **Database**: SQLite (plain database for maximum compatibility)
 - **Visualization**: D3.js, HTML/CSS/JavaScript
 - **Architecture**: Modular 5-layer design
 
@@ -223,18 +218,11 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 **Live Demo:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-**Important Note for Railway:**
-- Railway doesn't have SQLCipher installed, so it cannot read encrypted databases
-- The code automatically detects Railway and disables encryption
-- If the encrypted database is pushed, Railway will create a new empty database
-- **To populate Railway with cases:** Process PDFs directly on Railway after deployment, or create an unencrypted database locally (requires SQLCipher) and push that instead
-
-The system gracefully handles this by creating a new unencrypted database when SQLCipher is unavailable.
+The database uses plain SQLite (no encryption) for maximum compatibility. The database file is included in the repository and will work immediately on Railway.
 
 ## Security
 
-- **Database Encryption**: Case data is encrypted using SQLCipher (256-bit AES) when available
-- **Graceful Fallback**: If SQLCipher is not installed, the system uses regular SQLite
+- **Database**: Plain SQLite database for maximum compatibility across platforms
 - **No Sensitive Data**: Only publicly available case information is processed
 - **Disclaimer**: See `/sources` page for full disclaimer regarding data usage
 
@@ -243,7 +231,7 @@ The system gracefully handles this by creating a new unencrypted database when S
  **Implemented:**
 - PDF ingestion and case batching (splits cases by month patterns: "In [Month] of [Year]")
 - Feature extraction (regex-based for structured data, pattern-based for semantic features)
-- Database storage with SQLCipher encryption support (25 processed cases from 2013-2014 AZICAC reports)
+- Database storage (25 processed cases from 2013-2014 AZICAC reports)
 - 6 interactive visualizations with click-to-view case details and text highlighting:
   - Timeline (bottom-up chronological view)
   - Severity Indicators (color-coded by severity level)

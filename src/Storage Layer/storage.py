@@ -12,52 +12,15 @@ Design Ideas from Architecture:
 """
 
 import json
+import sqlite3
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
-try:
-    from pysqlcipher3 import dbapi2 as sqlite3
-    SQLCIPHER_AVAILABLE = True
-except ImportError:
-    import sqlite3
-    SQLCIPHER_AVAILABLE = False
-
 
 def get_connection(db_path: str, encryption_key: Optional[str] = None):
-    """Get database connection with optional encryption"""
-    import os
-    
-    # Check if database file exists and has content
-    db_file = Path(db_path)
-    if db_file.exists() and db_file.stat().st_size > 10000:
-        # Database exists and has content - check if we can read it
-        if encryption_key and not SQLCIPHER_AVAILABLE:
-            # Try to open with regular SQLite first to see if it's encrypted
-            try:
-                test_conn = sqlite3.connect(db_path)
-                test_cursor = test_conn.cursor()
-                test_cursor.execute("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1")
-                test_conn.close()
-                # If we get here, database is NOT encrypted
-                return sqlite3.connect(db_path)
-            except:
-                # Database appears to be encrypted but SQLCipher not available
-                print(f"⚠️  WARNING: Database appears encrypted but SQLCipher not available.")
-                print(f"   Railway cannot read encrypted databases. Creating new unencrypted database.")
-                # Rename encrypted database and create new one
-                backup_path = f"{db_path}.encrypted_backup"
-                if not Path(backup_path).exists():
-                    import shutil
-                    shutil.copy2(db_path, backup_path)
-                    print(f"   Encrypted database backed up to: {backup_path}")
-                # Return connection to new (empty) database
-                return sqlite3.connect(db_path)
-    
-    conn = sqlite3.connect(db_path)
-    if SQLCIPHER_AVAILABLE and encryption_key:
-        conn.execute(f"PRAGMA key='{encryption_key}'")
-    return conn
+    """Get database connection"""
+    return sqlite3.connect(db_path)
 
 
 class CaseStorage:
@@ -75,19 +38,17 @@ class CaseStorage:
         
         Args:
             db_path: Path to SQLite database file
-            encryption_key: Optional encryption key for SQLCipher
+            encryption_key: Deprecated (kept for backward compatibility)
         """
         self.db_path = db_path
-        self.encryption_key = encryption_key
         self.init_database()
     
     def init_database(self):
         """
         Initialize database tables.
         Creates tables for storing case data in rawish format.
-        Supports SQLCipher encryption if available.
         """
-        conn = get_connection(self.db_path, self.encryption_key)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -164,7 +125,7 @@ class CaseStorage:
             True if successful, False otherwise
         """
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             date_range = case.get('date_range', {})
@@ -314,7 +275,7 @@ class CaseStorage:
             Case dictionary or None if not found
         """
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cursor.execute('SELECT * FROM cases WHERE id = ?', (case_id,))
@@ -410,20 +371,13 @@ class CaseStorage:
             if file_size < 1000:  # Less than 1KB is suspicious
                 print(f"⚠️  Database file is very small ({file_size} bytes) - might be empty")
             
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
-            # Try to query - if database is encrypted but SQLCipher not available, this will fail
             cursor.execute('SELECT id FROM cases ORDER BY date_start, id')
             case_ids = [row[0] for row in cursor.fetchall()]
             
             conn.close()
-            
-            if len(case_ids) == 0 and file_size > 10000:
-                # Database exists and has size but no cases - might be encryption issue
-                print(f"⚠️  Database file exists ({file_size} bytes) but contains 0 cases.")
-                print(f"   This might indicate an encryption mismatch. SQLCipher available: {SQLCIPHER_AVAILABLE}")
-                print(f"   Encryption key provided: {self.encryption_key is not None}")
             
             cases = []
             for case_id in case_ids:
@@ -450,7 +404,7 @@ class CaseStorage:
             List of matching case dictionaries
         """
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             conditions = []
@@ -502,10 +456,9 @@ class GraphStorage:
         
         Args:
             db_path: Path to SQLite database file
-            encryption_key: Optional encryption key for SQLCipher
+            encryption_key: Deprecated (kept for backward compatibility)
         """
         self.db_path = db_path
-        self.encryption_key = encryption_key
         self.init_graph_database()
     
     def init_graph_database(self):
@@ -513,7 +466,7 @@ class GraphStorage:
         Initialize graph database tables.
         Creates nodes and edges tables for relationship storage.
         """
-        conn = get_connection(self.db_path, self.encryption_key)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -549,7 +502,7 @@ class GraphStorage:
     def add_case_node(self, case_id: str, properties: Dict[str, Any]):
         """Add a case node to the graph"""
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
@@ -569,7 +522,7 @@ class GraphStorage:
                        properties: Optional[Dict[str, Any]] = None):
         """Add a relationship edge between two nodes"""
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
@@ -588,7 +541,7 @@ class GraphStorage:
     def get_connected_cases(self, case_id: str, max_depth: int = 1) -> List[Dict[str, Any]]:
         """Get all cases connected to a given case"""
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
@@ -613,7 +566,7 @@ class GraphStorage:
     def get_all_relationships(self) -> List[Tuple[str, str, str, float]]:
         """Get all relationships in the graph"""
         try:
-            conn = get_connection(self.db_path, self.encryption_key)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
