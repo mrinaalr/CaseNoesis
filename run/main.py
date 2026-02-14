@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Anal
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
 
 from storage import CaseStorage
-from analysis import cluster_cases, find_similar_cases, tag_threader, return_tagged_cases
+from analysis import tag_threader, return_tagged_cases
 from visualization import create_timeline_visualization, filter_cases
 
 app = FastAPI(title="CaseLinker API")
@@ -182,14 +182,6 @@ def get_stats():
             "end": max((c.get('date_range', {}).get('end') for c in cases if c.get('date_range', {}).get('end')), default=None)
         }
     }
-
-
-@app.get("/api/clusters")
-def get_clusters(threshold: float = 0.5):
-    """Get case clusters"""
-    cases = storage.get_all_cases()
-    clusters = cluster_cases(cases, threshold=threshold)
-    return {"clusters": clusters, "count": len(clusters)}
 
 
 @app.post("/api/tag-threader")
