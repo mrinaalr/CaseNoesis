@@ -269,7 +269,7 @@ The database uses plain SQLite (no encryption) for maximum compatibility. The da
 - Database storage (47 processed cases from 2011-2014 AZICAC reports)
 - 6 interactive visualizations with click-to-view case details and text highlighting:
   - Timeline (bottom-up chronological view with color-coded severity)
-  - Severity Indicators (color-coded by severity level, "Rape" added)
+  - Severity Indicators (color-coded by severity level)
   - Prosecution Outcomes (booking status and charges)
   - Previous Perpetrator (registered sex offender status)
   - Environment (platforms and online methods)

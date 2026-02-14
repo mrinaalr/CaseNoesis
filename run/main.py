@@ -304,6 +304,18 @@ async def serve_audit():
         return HTMLResponse(content="<h1>Audit page not found</h1>", status_code=404)
 
 
+@app.get("/under-the-hood", response_class=HTMLResponse)
+async def serve_under_the_hood():
+    """Serve the HTML under-the-hood architecture page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "under-the-hood.html"
+    if True:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Under the Hood</h1><p>Page not found</p>", status_code=404)
+
+
 
 if __name__ == "__main__":
     import uvicorn

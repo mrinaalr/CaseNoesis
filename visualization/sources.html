@@ -145,6 +145,24 @@
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { 
+                opacity: 0.75;
+            }
+            50% { 
+                opacity: 0.90;
+            }
+        }
     </style>
 </head>
 <body>
@@ -154,7 +172,8 @@
         <a href="/analysis">Analysis</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
-           </div>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
     
     <div class="container">
         <h1>Data Sources</h1>

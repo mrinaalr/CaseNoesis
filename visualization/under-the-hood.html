@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav a:hover {
+            color: #45a049;
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 0.90; }
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        .flow-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 40px 0;
+        }
+        .flow-item {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pdf-source {
+            width: 200px;
+            height: 260px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .pdf-source:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            border-color: #4CAF50;
+        }
+        .pdf-source.active {
+            border-color: #4CAF50;
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.3);
+        }
+        .pdf-icon {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+            border-radius: 4px;
+            position: relative;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(229, 57, 53, 0.3);
+        }
+        .pdf-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 1px;
+        }
+        .pdf-icon::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 1px;
+        }
+        .pdf-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .layer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            width: 100%;
+        }
+        .layer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-color: #4CAF50;
+        }
+        .layer-card.active {
+            border-color: #4CAF50;
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.25);
+        }
+        .layer-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .layer-subtitle {
+            font-size: 14px;
+            color: #888;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .detail-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            animation: slideDown 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .detail-panel.active {
+            display: block;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .detail-content {
+            color: #444;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        .detail-content strong {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        .detail-list {
+            margin-top: 20px;
+            list-style: none;
+        }
+        .detail-list li {
+            padding: 8px 0;
+            color: #555;
+            font-size: 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+        .detail-list li::before {
+            content: '→';
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        .chain-connector {
+            position: relative;
+            width: 4px;
+            height: 50px;
+            margin: 0 auto;
+        }
+        .chain-link {
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);
+            border-radius: 2px;
+            margin-bottom: 4px;
+            box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+            position: relative;
+        }
+        .chain-link::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #4CAF50;
+            top: 100%;
+        }
+        .visual-preview {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        .code-snippet .keyword {
+            color: #569cd6;
+        }
+        .code-snippet .string {
+            color: #ce9178;
+        }
+        .code-snippet .comment {
+            color: #6a9955;
+        }
+        .schema-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .schema-box {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+        .schema-box-title {
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .schema-box-content {
+            color: #666;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div>
+            <a href="/">Home</a>
+            <a href="/visualization">Visualization</a>
+            <a href="/analysis">Analysis</a>
+            <a href="/sources">Sources</a>
+            <a href="/audit">Audit</a>
+        </div>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+
+    <div class="container">
+        <div class="flow-container">
+            <!-- PDF Source -->
+            <div class="flow-item">
+                <div class="pdf-source" id="pdf-source">
+                    <div class="pdf-icon"></div>
+                    <div class="pdf-label">Case Reports</div>
+        </div>
+                <div class="detail-panel" id="pdf-detail">
+                    <div class="detail-content">
+                        <strong>Structured Case Reports / Case Related Data</strong>
+                        <p style="margin-top: 15px; color: #666;">
+                            Input documents containing case narratives, investigation reports, and case-related data as PDFs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Connector 1 -->
+            <div class="chain-connector">
+                <div class="chain-link"></div>
+                </div>
+
+            <!-- Ingestion Layer -->
+            <div class="flow-item">
+                <div class="layer-card" id="ingestion-layer">
+                    <div class="layer-subtitle">Layer 1</div>
+                    <div class="layer-title">Ingestion</div>
+                </div>
+                <div class="detail-panel" id="ingestion-detail">
+                    <div class="detail-content">
+                        <strong>Text Extraction & Normalization</strong>
+                        <div class="visual-preview">
+                            <div class="code-snippet">
+<span class="comment"># Extract text from PDF</span><br>
+<span class="keyword">text</span> = extract_pdf_text(<span class="string">"case_report.pdf"</span>)<br>
+<span class="comment"># Normalize format</span><br>
+<span class="keyword">normalized</span> = normalize_text(<span class="keyword">text</span>)<br>
+<span class="comment"># Returns: Clean, structured text ready for processing</span>
+                            </div>
+                        </div>
+                        <ul class="detail-list">
+                            <li>PDF text extraction using pdfplumber</li>
+                            <li>Organization detection from filenames</li>
+                            <li>Batch processing support</li>
+                            <li>Input validation and error handling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Connector 2 -->
+            <div class="chain-connector">
+                <div class="chain-link"></div>
+                    </div>
+
+            <!-- Processing Layer -->
+            <div class="flow-item">
+                <div class="layer-card" id="processing-layer">
+                    <div class="layer-subtitle">Layer 2</div>
+                    <div class="layer-title">Processing</div>
+                </div>
+                <div class="detail-panel" id="processing-detail">
+                    <div class="detail-content">
+                        <strong>Feature Extraction & Case Schema</strong>
+                        <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                            <strong>How it's done:</strong> Hybrid approach using regex patterns for structured data (demographics, platforms, evidence, prosecution) and pattern-based matching for semantic features (severity indicators, case topics, severity phrases). Text is cleaned (URL removal, artifact normalization), cases are batched by temporal patterns, and unique case IDs are generated.
+                        </p>
+                        <div class="visual-preview">
+                            <div class="code-snippet">
+<span class="comment"># 1. Clean URLs and artifacts</span><br>
+<span class="keyword">cleaned_text</span> = clean_urls_from_text(<span class="keyword">raw_text</span>)<br><br>
+<span class="comment"># 2. Batch cases by month patterns</span><br>
+<span class="keyword">cases</span> = case_batching(<span class="keyword">cleaned_text</span>, org_name=<span class="string">"azicac"</span>)<br><br>
+<span class="comment"># 3. Extract features (regex + patterns)</span><br>
+<span class="keyword">features</span> = extract_features(<span class="keyword">case</span>)<br>
+<span class="comment"># Regex: Demographics, platforms, evidence, prosecution</span><br>
+<span class="comment"># Patterns: Severity indicators, case topics, phrases</span>
+                </div>
+                        </div>
+                        <div class="schema-visual">
+                            <div class="schema-box">
+                                <div class="schema-box-title">Demographics</div>
+                                <div class="schema-box-content">Victim age, count, gender<br>Perpetrator age, RSO status</div>
+                            </div>
+                            <div class="schema-box">
+                                <div class="schema-box-title">Platforms</div>
+                                <div class="schema-box-content">Social media, online methods, communication channels</div>
+                            </div>
+                            <div class="schema-box">
+                                <div class="schema-box-title">Severity</div>
+                                <div class="schema-box-content">Infant, very young, rape, production indicators</div>
+                            </div>
+                            <div class="schema-box">
+                                <div class="schema-box-title">Topics</div>
+                                <div class="schema-box-content">Hands-on, possession, online-only, family, stranger</div>
+                            </div>
+                            <div class="schema-box">
+                                <div class="schema-box-title">Prosecution</div>
+                                <div class="schema-box-content">Charges, booking status, outcomes</div>
+                            </div>
+                            <div class="schema-box">
+                                <div class="schema-box-title">Evidence</div>
+                                <div class="schema-box-content">Images, videos, storage volume, messages</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Connector 3 -->
+            <div class="chain-connector">
+                <div class="chain-link"></div>
+                    </div>
+
+            <!-- Storage Layer -->
+            <div class="flow-item">
+                <div class="layer-card" id="storage-layer">
+                    <div class="layer-subtitle">Layer 3</div>
+                    <div class="layer-title">Storage</div>
+                </div>
+                <div class="detail-panel" id="storage-detail">
+                    <div class="detail-content">
+                        <strong>Case Schema & Database Storage</strong>
+                        <div class="visual-preview">
+                            <div class="code-snippet">
+<span class="comment"># Store case with schema</span><br>
+<span class="keyword">storage</span> = CaseStorage(<span class="string">"caselinker.db"</span>)<br>
+<span class="keyword">storage</span>.store_case(<span class="keyword">case</span>)<br><br>
+<span class="comment"># Normalized tables:</span><br>
+<span class="comment"># - cases (main table)</span><br>
+<span class="comment"># - victim_demographics</span><br>
+<span class="comment"># - perpetrator_demographics</span><br>
+<span class="comment"># - prosecution_outcomes</span><br>
+<span class="comment"># - Raw data preserved in JSON</span>
+                            </div>
+                        </div>
+                        <ul class="detail-list">
+                            <li>SQLite database with normalized schema</li>
+                            <li>Raw data preservation in JSON format</li>
+                            <li>Indexed fields for fast queries</li>
+                            <li>Modular interface for database swapping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Connector 4 -->
+            <div class="chain-connector">
+                <div class="chain-link"></div>
+                    </div>
+
+            <!-- Analysis Layer -->
+            <div class="flow-item">
+                <div class="layer-card" id="analysis-layer">
+                    <div class="layer-subtitle">Layer 4</div>
+                    <div class="layer-title">Analysis</div>
+                </div>
+                <div class="detail-panel" id="analysis-detail">
+                    <div class="detail-content">
+                        <strong>Tag-Based Filtering & Triage</strong>
+                        <div class="visual-preview">
+                            <div class="code-snippet">
+<span class="comment"># Tag-based filtering (intersection logic)</span><br>
+<span class="comment"># Select case features to analzye across categories:</span><br>
+<span class="comment"># - Case Topics</span><br>
+<span class="comment"># - Severity Indicators</span><br>
+<span class="comment"># - Platforms & Environments</span><br>
+<span class="comment"># - Investigation Types</span><br>
+<span class="comment"># - Perpetrator Relationships</span><br>
+<span class="comment"># - Custom topics</span><br>
+<span class="keyword">cases</span> = return_tagged_cases(<span class="keyword">all_cases</span>, [<br>
+&nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'production'</span>, <span class="string">'category'</span>: <span class="string">'case_topics'</span>},<br>
+&nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'infant'</span>, <span class="string">'category'</span>: <span class="string">'severity_indicators'</span>},<br>
+&nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'facebook'</span>, <span class="string">'category'</span>: <span class="string">'platforms_used'</span>},<br>
+])<br>
+<span class="comment"># Returns: Cases matching ALL selected tags</span><br><br>
+<span class="comment"># Priority triage scoring</span><br>
+<span class="keyword">triaged</span> = triage_cases(<span class="keyword">cases</span>)<br>
+<span class="comment"># Multi-factor scoring (5-10 scale):</span><br>
+<span class="comment"># - Severity (35%), Victim count (30%)</span><br>
+<span class="comment"># - Case type (25%), Evidence (10%), RSO (10%)</span>
+                            </div>
+                        </div>
+                        <ul class="detail-list">
+                            <li>Tag-based filtering with intersection logic</li>
+                            <li>Select cases by common features/tags</li>
+                            <li>Multi-factor priority triage (5-10 scale)</li>
+                            <li>Automated pattern detection and insights</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Connector 5 -->
+            <div class="chain-connector">
+                <div class="chain-link"></div>
+                    </div>
+
+            <!-- Visualization Layer -->
+            <div class="flow-item">
+                <div class="layer-card" id="visualization-layer">
+                    <div class="layer-subtitle">Layer 5</div>
+                    <div class="layer-title">Visualization</div>
+                </div>
+                <div class="detail-panel" id="visualization-detail">
+                    <div class="detail-content">
+                        <strong>Interactive Visualizations & Analyst Interface</strong>
+                        <div class="visual-preview">
+                            <div class="code-snippet">
+<span class="comment"># D3.js visualizations</span><br>
+renderTimeline(<span class="keyword">cases</span>)<br>
+renderSeverityViz(<span class="keyword">cases</span>)<br>
+renderOutcomesViz(<span class="keyword">cases</span>)<br>
+renderAutomatedAnalysis(<span class="keyword">results</span>)<br><br>
+<span class="comment"># Interactive features:</span><br>
+<span class="comment"># - Click to view case details</span><br>
+<span class="comment"># - Text highlighting for verification</span><br>
+<span class="comment"># - Temporal filtering</span><br>
+<span class="comment"># - Case grouping visualization</span>
+                            </div>
+                        </div>
+                        <ul class="detail-list">
+                            <li>Timeline visualization (chronological view)</li>
+                            <li>Severity indicators (color-coded analysis)</li>
+                            <li>Prosecution outcomes (categorized display)</li>
+                            <li>Perpetrator demographics (pie charts)</li>
+                            <li>Platform/environment distribution</li>
+                            <li>Organizations involved (agency analysis)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PDF Source interaction
+        const pdfSource = document.getElementById('pdf-source');
+        const pdfDetail = document.getElementById('pdf-detail');
+        
+        pdfSource.addEventListener('click', function() {
+            this.classList.toggle('active');
+            pdfDetail.classList.toggle('active');
+            closeOtherPanels('pdf');
+        });
+
+        // Layer interactions
+        const layers = [
+            { card: 'ingestion-layer', detail: 'ingestion-detail', name: 'ingestion' },
+            { card: 'processing-layer', detail: 'processing-detail', name: 'processing' },
+            { card: 'storage-layer', detail: 'storage-detail', name: 'storage' },
+            { card: 'analysis-layer', detail: 'analysis-detail', name: 'analysis' },
+            { card: 'visualization-layer', detail: 'visualization-detail', name: 'visualization' }
+        ];
+
+        layers.forEach(layer => {
+            const card = document.getElementById(layer.card);
+            const detail = document.getElementById(layer.detail);
+            
+            card.addEventListener('click', function() {
+                this.classList.toggle('active');
+                detail.classList.toggle('active');
+                closeOtherPanels(layer.name);
+            });
+        });
+
+        function closeOtherPanels(activeName) {
+            // Close PDF detail if not active
+            if (activeName !== 'pdf') {
+                pdfSource.classList.remove('active');
+                pdfDetail.classList.remove('active');
+            }
+            
+            // Close other layer details
+            layers.forEach(layer => {
+                if (layer.name !== activeName) {
+                    const card = document.getElementById(layer.card);
+                    const detail = document.getElementById(layer.detail);
+                    card.classList.remove('active');
+                    detail.classList.remove('active');
+                }
+            });
+        }
+
+        // Smooth scroll to expanded panel
+        document.querySelectorAll('.layer-card, .pdf-source').forEach(element => {
+            element.addEventListener('click', function() {
+                setTimeout(() => {
+                    const detail = this.nextElementSibling;
+                    if (detail && detail.classList.contains('active')) {
+                        detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
