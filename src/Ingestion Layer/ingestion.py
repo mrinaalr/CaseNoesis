@@ -104,34 +104,6 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
         raise ValueError(f"Unsupported file type: {file_type}")
 
 
-def ingest_pdf_from_user() -> pd.DataFrame:
-    """
-    Prompt user for PDF file path and extract all text.
-    
-    Returns:
-        DataFrame with extracted text
-    """
-    file_path = input("Enter PDF file path: ").strip()
-    
-    if not file_path:
-        raise ValueError("No file path provided")
-    
-    path = Path(file_path)
-    
-    if not path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
-    
-    text = extract_pdf_text(str(path))
-    
-    df = pd.DataFrame({
-        'source_file': [path.name],
-        'extracted_text': [text],
-        'source': ['AZICAC'],
-    })
-    
-    return df
-
-
 def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
     """
     Ingest multiple PDF files and return a combined DataFrame.
@@ -196,18 +168,4 @@ def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
     return df
 
 
-def validate_data(df: pd.DataFrame) -> bool:
-    """
-    Basic data validation.
-    
-    Args:
-        df: DataFrame to validate
-        
-    Returns:
-        True if valid, False otherwise
-    """
-    if df.empty:
-        return False
-    
-    return True
 

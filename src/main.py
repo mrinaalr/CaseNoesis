@@ -13,7 +13,6 @@ sys.path.insert(0, str(src_path / "Storage Layer"))
 sys.path.insert(0, str(src_path / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(src_path / "Visualization Layer"))
 
-from ingestion import ingest_pdf_from_user
 from processing import process_cases
 from storage import CaseStorage
 import pandas as pd

@@ -61,8 +61,6 @@ class CaseStorage:
                 perpetrator_count INTEGER,
                 relationship_to_victim TEXT,
                 platforms_used TEXT,  -- JSON array
-                technologies TEXT,    -- JSON array
-                communication_methods TEXT,  -- JSON array
                 investigation_methods TEXT,   -- JSON array
                 severity_indicators TEXT,     -- JSON array
                 case_topics TEXT,             -- JSON array
@@ -145,10 +143,10 @@ class CaseStorage:
             cursor.execute('''
                 INSERT OR REPLACE INTO cases (
                     id, source, date_start, date_end, victim_count, perpetrator_count,
-                    relationship_to_victim, platforms_used, technologies, communication_methods,
+                    relationship_to_victim, platforms_used,
                     investigation_methods, severity_indicators, case_topics, tags, notes,
                     raw_data, extracted_features, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 case.get('id'),
                 case.get('source', 'unknown'),
@@ -158,8 +156,6 @@ class CaseStorage:
                 None,  # perpetrator_count (deprecated, use perpetrator_age instead)
                 case.get('relationship_to_victim'),
                 json.dumps(case.get('platforms_used', [])),
-                json.dumps([]),  # technologies (deprecated)
-                json.dumps([]),  # communication_methods (deprecated)
                 json.dumps(investigation_methods),
                 json.dumps(case.get('severity_indicators', [])),
                 json.dumps(case.get('case_topics', [])),
@@ -289,7 +285,7 @@ class CaseStorage:
             case_dict = dict(zip(columns, row))
             
             # Parse JSON fields
-            for json_field in ['platforms_used', 'technologies', 'communication_methods',
+            for json_field in ['platforms_used',
                              'investigation_methods', 'severity_indicators', 'case_topics',
                              'tags', 'raw_data', 'extracted_features']:
                 if case_dict.get(json_field):
@@ -442,142 +438,3 @@ class CaseStorage:
             return []
 
 
-class GraphStorage:
-    """
-    Graph Database Storage
-    
-    Stores case relationships and connections with weighted edges.
-    Designed for efficient traversal and link analysis.
-    """
-    
-    def __init__(self, db_path: str = "caselinker_graph.db", encryption_key: Optional[str] = None):
-        """
-        Initialize graph storage.
-        
-        Args:
-            db_path: Path to SQLite database file
-            encryption_key: Deprecated (kept for backward compatibility)
-        """
-        self.db_path = db_path
-        self.init_graph_database()
-    
-    def init_graph_database(self):
-        """
-        Initialize graph database tables.
-        Creates nodes and edges tables for relationship storage.
-        """
-        conn = get_connection(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS nodes (
-                id TEXT PRIMARY KEY,
-                type TEXT,
-                properties TEXT,  -- JSON
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS edges (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                source_id TEXT,
-                target_id TEXT,
-                relationship_type TEXT,
-                weight REAL,
-                properties TEXT,  -- JSON
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (source_id) REFERENCES nodes(id),
-                FOREIGN KEY (target_id) REFERENCES nodes(id)
-            )
-        ''')
-        
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON edges(source_id)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_target ON edges(target_id)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_relationship ON edges(relationship_type)')
-        
-        conn.commit()
-        conn.close()
-    
-    def add_case_node(self, case_id: str, properties: Dict[str, Any]):
-        """Add a case node to the graph"""
-        try:
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute('''
-                INSERT OR REPLACE INTO nodes (id, type, properties)
-                VALUES (?, 'case', ?)
-            ''', (case_id, json.dumps(properties)))
-            
-            conn.commit()
-            conn.close()
-            return True
-        except Exception as e:
-            print(f"Error adding node: {e}")
-            return False
-    
-    def add_relationship(self, source_id: str, target_id: str, 
-                       relationship_type: str, weight: float = 1.0,
-                       properties: Optional[Dict[str, Any]] = None):
-        """Add a relationship edge between two nodes"""
-        try:
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute('''
-                INSERT INTO edges (source_id, target_id, relationship_type, weight, properties)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (source_id, target_id, relationship_type, weight, 
-                  json.dumps(properties or {})))
-            
-            conn.commit()
-            conn.close()
-            return True
-        except Exception as e:
-            print(f"Error adding relationship: {e}")
-            return False
-    
-    def get_connected_cases(self, case_id: str, max_depth: int = 1) -> List[Dict[str, Any]]:
-        """Get all cases connected to a given case"""
-        try:
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute('''
-                SELECT DISTINCT target_id, relationship_type, weight
-                FROM edges
-                WHERE source_id = ?
-                UNION
-                SELECT DISTINCT source_id, relationship_type, weight
-                FROM edges
-                WHERE target_id = ?
-            ''', (case_id, case_id))
-            
-            results = cursor.fetchall()
-            conn.close()
-            
-            return [{'case_id': row[0], 'relationship': row[1], 'weight': row[2]} 
-                   for row in results]
-        except Exception as e:
-            print(f"Error getting connected cases: {e}")
-            return []
-    
-    def get_all_relationships(self) -> List[Tuple[str, str, str, float]]:
-        """Get all relationships in the graph"""
-        try:
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute('''
-                SELECT source_id, target_id, relationship_type, weight
-                FROM edges
-            ''')
-            
-            results = cursor.fetchall()
-            conn.close()
-            
-            return results
-        except Exception as e:
-            print(f"Error getting relationships: {e}")
-            return []

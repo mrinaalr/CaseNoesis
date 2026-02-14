@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Anal
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
 
 from storage import CaseStorage
-from analysis import tag_threader, return_tagged_cases
+from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 from visualization import create_timeline_visualization, filter_cases
 
 app = FastAPI(title="CaseLinker API")
@@ -229,6 +229,27 @@ def get_tagged_cases(selected_tags: List[Dict[str, str]]):
     cases = storage.get_all_cases()
     matching_cases = return_tagged_cases(cases, selected_tags)
     return {"cases": matching_cases}
+
+
+@app.get("/api/automated-analysis")
+async def automated_analysis_endpoint():
+    """
+    Run automated analysis on all cases.
+    Returns case groups, triaged cases, and insights.
+    """
+    try:
+        cases = storage.get_all_cases()
+        
+        # Run automated analysis
+        analysis_results = run_automated_analysis(cases)
+        
+        return {
+            "success": True,
+            "analysis": analysis_results
+        }
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
 
 
 

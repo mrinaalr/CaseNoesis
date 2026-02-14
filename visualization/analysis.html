@@ -249,6 +249,50 @@
         .analyze-button:active {
             transform: translateY(-1px);
         }
+        .analyze-button-automated {
+            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+            color: #000;
+            border: 2px solid #ffc107;
+            padding: 18px 50px;
+            border-radius: 0;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                0 0 30px rgba(255, 193, 7, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .analyze-button-automated::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .analyze-button-automated:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .analyze-button-automated:hover {
+            background: linear-gradient(135deg, #ffd54f 0%, #ffc107 100%);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 40px rgba(255, 193, 7, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.15);
+            border-color: #ffd54f;
+        }
+        .analyze-button-automated:active {
+            transform: translateY(-1px);
+        }
         .results-section {
             margin-top: 30px;
         }
@@ -396,7 +440,12 @@
                 </div>
                 <div id="custom-topics" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
             </div>
-            <button class="analyze-button" onclick="runAdvancedAnalysis()">🔬 Run Advanced Analysis</button>
+            <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: space-between;">
+                <button class="analyze-button" onclick="runAdvancedAnalysis()">🔬 Run Advanced Analysis</button>
+                <button class="analyze-button-automated" onclick="runAutomatedAnalysis()">
+                    ⚡ Run Automated Analysis
+                </button>
+            </div>
         </div>
         
         <div class="results-section" id="results-section" style="display: none;">
@@ -408,14 +457,6 @@
             </div>
             
             <div id="analysis-results"></div>
-        </div>
-        
-        <div class="coming-soon" id="coming-soon" style="text-align: center; padding: 80px 40px; color: #b0b0b0; background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); border: 1px solid rgba(255,193,7,0.2); box-shadow: 0 0 30px rgba(0,0,0,0.5);">
-            <div style="font-size: 64px; margin-bottom: 25px; filter: drop-shadow(0 0 20px rgba(255,193,7,0.3));">🚧</div>
-            <h2 style="color: #ffc107; margin-bottom: 15px; font-size: 2em; font-weight: 700;">Advanced Analysis Coming Soon</h2>
-            <p style="font-size: 1.2em; max-width: 700px; margin: 0 auto; line-height: 1.8; color: #b0b0b0; letter-spacing: 0.5px;">
-                The advanced clustering and pattern detection features are currently under development. 
-            </p>
         </div>
         
         <div id="tag-threader-section" class="analysis-controls" style="display: none; margin-top: 40px;">
@@ -528,7 +569,7 @@
             // Define all possible topics (from extraction functions)
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_only', 'family', 'stranger'];
             const allSeverity = ['infant', 'very_young', 'under_5', 'under_9', 'production'];
-            const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat'];
+            const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
             const allStatus = ['registered_sex_offender'];
@@ -718,8 +759,11 @@
             const intersectionCaseIds = window.tagThreaderResult.intersection_cases;
             const matchingCases = allCases.filter(c => intersectionCaseIds.includes(c.id));
             
-            // Hide coming soon
-            document.getElementById('coming-soon').style.display = 'none';
+            // Hide automated analysis section if visible
+            const automatedSection = document.getElementById('automated-analysis-section');
+            if (automatedSection) {
+                automatedSection.style.display = 'none';
+            }
             
             // Show results section
             const resultsSection = document.getElementById('results-section');
@@ -836,14 +880,458 @@
             // No longer used, but kept for compatibility
         }
 
+        async function runAutomatedAnalysis() {
+            // Hide tag threader section
+            document.getElementById('tag-threader-section').style.display = 'none';
+            
+            // Hide results section if visible
+            const resultsSection = document.getElementById('results-section');
+            if (resultsSection) {
+                resultsSection.style.display = 'none';
+            }
+            
+            // Toggle automated analysis section
+            let automatedSection = document.getElementById('automated-analysis-section');
+            
+            // If section exists and is visible, hide it
+            if (automatedSection && automatedSection.style.display !== 'none') {
+                automatedSection.style.display = 'none';
+                return;
+            }
+            
+            // Show loading state
+            if (!automatedSection) {
+                const container = document.querySelector('.analysis-controls');
+                automatedSection = document.createElement('div');
+                automatedSection.id = 'automated-analysis-section';
+                automatedSection.className = 'analysis-controls';
+                automatedSection.style.marginTop = '40px';
+                container.parentNode.insertBefore(automatedSection, container.nextSibling);
+            }
+            
+            automatedSection.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 50px rgba(255, 193, 7, 0.05);">
+                    <div style="font-size: 48px; margin-bottom: 20px;">⚡</div>
+                    <h2 style="color: #ffc107; margin-bottom: 15px; font-size: 1.8em; font-weight: 700;">Running Automated Analysis...</h2>
+                    <p style="color: #888; font-size: 1em;">Analyzing all cases...</p>
+                </div>
+            `;
+            automatedSection.style.display = 'block';
+            automatedSection.scrollIntoView({ behavior: 'smooth' });
+            
+            try {
+                // Call API
+                const response = await fetch('/api/automated-analysis');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                const analysis = data.analysis;
+                
+                // Render results
+                automatedSection.innerHTML = renderAutomatedAnalysisResults(analysis);
+                
+            } catch (error) {
+                automatedSection.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 0, 0, 0.3);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">❌</div>
+                        <h2 style="color: #ff4444; margin-bottom: 15px; font-size: 1.8em; font-weight: 700;">Analysis Error</h2>
+                        <p style="color: #888; font-size: 1em;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Store analysis data globally for detail views
+        window.currentAnalysisData = null;
+        
+        function renderAutomatedAnalysisResults(analysis) {
+            // Store for detail views
+            window.currentAnalysisData = analysis;
+            
+            const summary = analysis.summary || {};
+            const groups = analysis.case_groups || [];
+            const triaged = analysis.triaged_cases || [];
+            const insights = analysis.insights || {};
+            const keywords = analysis.semantic_keywords || [];
+            
+            let html = `
+                <div style="padding: 30px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 0 30px rgba(0,0,0,0.8);">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 48px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255, 193, 7, 0.5));">⚡</div>
+                        <h2 style="color: #ffc107; margin-bottom: 10px; font-size: 2em; font-weight: 700; text-shadow: 0 0 20px rgba(255, 193, 7, 0.5);">Automated Analysis Results</h2>
+                        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                            <div style="background: rgba(20, 20, 20, 0.8); padding: 15px 25px; border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                                <div style="color: #ffc107; font-size: 1.5em; font-weight: 700;">${summary.total_cases || 0}</div>
+                                <div style="color: #888; font-size: 0.9em;">Total Cases</div>
+                            </div>
+                            <div style="background: rgba(20, 20, 20, 0.8); padding: 15px 25px; border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                                <div style="color: #ffc107; font-size: 1.5em; font-weight: 700;">${summary.total_groups || 0}</div>
+                                <div style="color: #888; font-size: 0.9em;">Case Groups</div>
+                            </div>
+                            <div style="background: rgba(20, 20, 20, 0.8); padding: 15px 25px; border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                                <div style="color: #ffc107; font-size: 1.5em; font-weight: 700;">${summary.high_priority_cases || 0}</div>
+                                <div style="color: #888; font-size: 0.9em;">High Priority</div>
+                            </div>
+                        </div>
+                    </div>
+            `;
+            
+            // Case Groups
+            if (groups.length > 0) {
+                html += `
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🎯 Case Groups (${groups.length})</h3>
+                        <div style="display: grid; gap: 15px;">
+                `;
+                
+                groups.slice(0, 5).forEach((group, groupIdx) => {
+                    const caseIds = group.cases.map(c => c.id || c).join(', ');
+                    html += `
+                        <div class="expandable-box" onclick="showGroupDetail(${groupIdx})" style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderColor='rgba(255, 193, 7, 0.5)'; this.style.transform='translateX(5px)';" onmouseout="this.style.borderColor='rgba(255, 193, 7, 0.2)'; this.style.transform='translateX(0)';">
+                            <div style="color: #ffc107; font-weight: 700; margin-bottom: 10px;">${group.group_id} (${group.size} cases) <span style="color: #888; font-size: 0.8em;">→ Click to expand</span></div>
+                            <div style="color: #b0b0b0; font-size: 0.9em;">Cases: ${caseIds}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            // Top Priority Cases
+            if (triaged.length > 0) {
+                html += `
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">⚡ Top Priority Cases</h3>
+                        <div style="display: grid; gap: 15px;">
+                `;
+                
+                triaged.slice(0, 10).forEach((caseItem, caseIdx) => {
+                    const priority = (caseItem.priority_score || 0).toFixed(2);
+                    html += `
+                        <div class="expandable-box" onclick="showCaseDetail(${caseIdx}, 'priority')" style="background: rgba(20, 20, 20, 0.8); padding: 15px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderColor='rgba(255, 193, 7, 0.5)'; this.style.transform='translateX(5px)';" onmouseout="this.style.borderColor='rgba(255, 193, 7, 0.2)'; this.style.transform='translateX(0)';">
+                            <div>
+                                <div style="color: #ffc107; font-weight: 700;">${caseItem.id || 'Unknown'} <span style="color: #888; font-size: 0.7em;">→ Click</span></div>
+                                <div style="color: #888; font-size: 0.85em;">${caseItem.date_start || 'No date'}</div>
+                            </div>
+                            <div style="color: #ffc107; font-weight: 700; font-size: 1.2em;">${priority}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            // Insights
+            if (insights.insights && insights.insights.length > 0) {
+                html += `
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">📈 Automated Insights</h3>
+                        <div style="display: grid; gap: 15px;">
+                `;
+                
+                insights.insights.forEach((insight, idx) => {
+                    const severityColor = insight.severity === 'warning' ? '#ff6b6b' : '#4ecdc4';
+                    html += `
+                        <div class="expandable-box" onclick="showInsightDetail(${idx})" style="background: rgba(20, 20, 20, 0.8); padding: 20px; border-left: 4px solid ${severityColor}; border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderLeftWidth='6px'; this.style.transform='translateX(5px)';" onmouseout="this.style.borderLeftWidth='4px'; this.style.transform='translateX(0)';">
+                            <div style="color: ${severityColor}; font-weight: 700; margin-bottom: 8px;">${insight.title} <span style="color: #888; font-size: 0.7em;">→ Click</span></div>
+                            <div style="color: #b0b0b0; font-size: 0.95em;">${insight.description}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            // Patterns
+            if (insights.patterns && insights.patterns.length > 0) {
+                html += `
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🔍 Patterns Detected</h3>
+                        <div style="display: grid; gap: 15px;">
+                `;
+                
+                insights.patterns.forEach((pattern, idx) => {
+                    html += `
+                        <div class="expandable-box" onclick="showPatternDetail(${idx})" style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderColor='rgba(255, 193, 7, 0.5)'; this.style.transform='translateX(5px)';" onmouseout="this.style.borderColor='rgba(255, 193, 7, 0.2)'; this.style.transform='translateX(0)';">
+                            <div style="color: #ffc107; font-weight: 700; margin-bottom: 8px;">${pattern.pattern.replace(/_/g, ' ').toUpperCase()} <span style="color: #888; font-size: 0.7em;">→ Click</span></div>
+                            <div style="color: #b0b0b0; font-size: 0.95em;">${pattern.description}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            // Semantic Keywords
+            if (keywords.length > 0) {
+                html += `
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🔍 Top Keywords</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                `;
+                
+                keywords.forEach(kw => {
+                    html += `
+                        <span style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); color: #ffc107; padding: 8px 15px; border-radius: 4px; font-size: 0.9em;">
+                            ${kw.keyword} (${kw.frequency})
+                        </span>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+        
+        function showCaseDetail(caseIdx, type) {
+            if (!window.currentAnalysisData) return;
+            
+            const caseItem = window.currentAnalysisData.triaged_cases[caseIdx];
+            if (!caseItem) return;
+            
+            // Get raw case text
+            let caseText = '';
+            const rawData = caseItem.raw_data;
+            if (typeof rawData === 'object' && rawData) {
+                caseText = rawData.case_text || '';
+            } else if (typeof rawData === 'string') {
+                try {
+                    const parsed = JSON.parse(rawData);
+                    caseText = parsed.case_text || '';
+                } catch {
+                    caseText = rawData;
+                }
+            }
+            
+            // Highlight priority indicators
+            const priorityIndicators = [];
+            if (caseItem.severity_indicators && Array.isArray(caseItem.severity_indicators)) {
+                priorityIndicators.push(...caseItem.severity_indicators);
+            }
+            if (caseItem.evidence_volume) {
+                const ev = caseItem.evidence_volume;
+                if (ev.images) priorityIndicators.push(`${ev.images} images`);
+                if (ev.videos) priorityIndicators.push(`${ev.videos} videos`);
+                if (ev.storage_size) priorityIndicators.push(ev.storage_size);
+            }
+            if (caseItem.victim_count) priorityIndicators.push(`${caseItem.victim_count} victims`);
+            if (caseItem.perpetrator_registered_sex_offender) priorityIndicators.push('registered sex offender');
+            
+            // Highlight text
+            let highlightedText = caseText;
+            priorityIndicators.forEach(indicator => {
+                if (typeof indicator === 'string') {
+                    const regex = new RegExp(`(${indicator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                    highlightedText = highlightedText.replace(regex, '<mark style="background: rgba(255, 193, 7, 0.4); color: #ffc107; font-weight: 700;">$1</mark>');
+                }
+            });
+            
+            // Generate explanation
+            const explanation = generatePriorityExplanation(caseItem);
+            
+            // Show modal
+            showDetailModal(caseItem.id, highlightedText, explanation, 'Priority Case');
+        }
+        
+        function generatePriorityExplanation(caseItem) {
+            let explanation = '<div style="line-height: 1.8;">';
+            explanation += '<h3 style="color: #ffc107; margin-bottom: 15px;">Why This Case Was Prioritized:</h3>';
+            
+            const reasons = [];
+            const priority = caseItem.priority_score || 0;
+            
+            // Severity indicators
+            const severity = caseItem.severity_indicators || [];
+            if (severity.length > 0) {
+                const severityNames = severity.map(s => s.replace(/_/g, ' ')).join(', ');
+                reasons.push(`<strong>Severity Indicators (40% weight):</strong> This case involves ${severityNames}, which significantly increases priority.`);
+            }
+            
+            // Evidence volume
+            const evidence = caseItem.evidence_volume || {};
+            if (evidence.images || evidence.videos || evidence.storage_size) {
+                const evidenceParts = [];
+                if (evidence.images) evidenceParts.push(`${evidence.images} images`);
+                if (evidence.videos) evidenceParts.push(`${evidence.videos} videos`);
+                if (evidence.storage_size) evidenceParts.push(evidence.storage_size);
+                reasons.push(`<strong>Evidence Volume (25% weight):</strong> Large evidence volume (${evidenceParts.join(', ')}) indicates significant case complexity.`);
+            }
+            
+            // Victim count
+            if (caseItem.victim_count) {
+                reasons.push(`<strong>Victim Count (15% weight):</strong> ${caseItem.victim_count} victim(s) involved, requiring immediate attention.`);
+            }
+            
+            // Registered sex offender
+            if (caseItem.perpetrator_registered_sex_offender) {
+                reasons.push(`<strong>Repeat Offender (10% weight):</strong> Perpetrator is a registered sex offender, indicating higher risk.`);
+            }
+            
+            // Case type (production/hands-on vs possession/online-only)
+            const caseTopics = caseItem.case_topics || [];
+            if (Array.isArray(caseTopics) && caseTopics.length > 0) {
+                if (caseTopics.includes('production')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Production case - highest priority as it involves creation of material, requiring immediate intervention.`);
+                } else if (caseTopics.includes('hands_on')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Hands-on abuse case - high priority as it involves physical contact with victims.`);
+                } else if (caseTopics.includes('possession')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Possession case - moderate priority for evidence collection and prosecution.`);
+                } else if (caseTopics.includes('online_only')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Online-only case - lower priority but still requires investigation.`);
+                }
+            }
+            
+            if (reasons.length === 0) {
+                reasons.push('This case was prioritized based on overall case characteristics and extracted features.');
+            }
+            
+            explanation += '<ul style="margin: 0; padding-left: 20px;">';
+            reasons.forEach(reason => {
+                explanation += `<li style="margin-bottom: 10px; color: #b0b0b0;">${reason}</li>`;
+            });
+            explanation += '</ul>';
+            
+            explanation += `<div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">`;
+            explanation += `<strong style="color: #ffc107;">Priority Score: ${(priority).toFixed(2)}</strong><br>`;
+            explanation += `<span style="color: #888; font-size: 0.9em;">Higher scores indicate cases requiring immediate attention based on severity, evidence, and risk factors.</span>`;
+            explanation += `</div>`;
+            explanation += '</div>';
+            
+            return explanation;
+        }
+        
+        function showGroupDetail(groupIdx) {
+            if (!window.currentAnalysisData) return;
+            const group = window.currentAnalysisData.case_groups[groupIdx];
+            if (!group) return;
+            
+            const caseIds = group.cases.map(c => c.id || c).join(', ');
+            const explanation = `
+                <div style="line-height: 1.8;">
+                    <h3 style="color: #ffc107; margin-bottom: 15px;">Why These Cases Were Grouped:</h3>
+                    <p style="color: #b0b0b0; margin-bottom: 15px;">
+                        These ${group.size} cases were grouped together because they share significant similarities across multiple dimensions:
+                    </p>
+                    <ul style="margin: 0; padding-left: 20px; color: #b0b0b0;">
+                        <li style="margin-bottom: 10px;"><strong>Platform Similarity (15%):</strong> Cases share similar platforms or online methods used.</li>
+                        <li style="margin-bottom: 10px;"><strong>Demographic Similarity (20%):</strong> Similar victim/perpetrator demographics and characteristics.</li>
+                        <li style="margin-bottom: 10px;"><strong>Topic Similarity (25%):</strong> Cases involve similar topics (production, possession, international, etc.).</li>
+                        <li style="margin-bottom: 10px;"><strong>Severity Similarity (15%):</strong> Cases share similar severity indicators.</li>
+                        <li style="margin-bottom: 10px;"><strong>Investigation Similarity (15%):</strong> Similar investigation types and agencies involved.</li>
+                    </ul>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <strong style="color: #ffc107;">Group ID:</strong> ${group.group_id}<br>
+                        <strong style="color: #ffc107;">Cases:</strong> ${caseIds}
+                    </div>
+                </div>
+            `;
+            
+            showDetailModal(`Group: ${group.group_id}`, `Cases in this group: ${caseIds}`, explanation, 'Case Group');
+        }
+        
+        function showInsightDetail(insightIdx) {
+            if (!window.currentAnalysisData) return;
+            const insight = window.currentAnalysisData.insights.insights[insightIdx];
+            if (!insight) return;
+            
+            const explanation = `
+                <div style="line-height: 1.8;">
+                    <h3 style="color: #ffc107; margin-bottom: 15px;">Insight Analysis:</h3>
+                    <p style="color: #b0b0b0; margin-bottom: 15px;">
+                        ${insight.description}
+                    </p>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <strong style="color: #ffc107;">Type:</strong> ${insight.type}<br>
+                        <strong style="color: #ffc107;">Severity:</strong> ${insight.severity}
+                    </div>
+                </div>
+            `;
+            
+            showDetailModal(insight.title, insight.description, explanation, 'Automated Insight');
+        }
+        
+        function showPatternDetail(patternIdx) {
+            if (!window.currentAnalysisData) return;
+            const pattern = window.currentAnalysisData.insights.patterns[patternIdx];
+            if (!pattern) return;
+            
+            const explanation = `
+                <div style="line-height: 1.8;">
+                    <h3 style="color: #ffc107; margin-bottom: 15px;">Pattern Analysis:</h3>
+                    <p style="color: #b0b0b0; margin-bottom: 15px;">
+                        ${pattern.description}
+                    </p>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <strong style="color: #ffc107;">Pattern Type:</strong> ${pattern.pattern.replace(/_/g, ' ')}<br>
+                        <strong style="color: #ffc107;">Count:</strong> ${pattern.count} cases
+                    </div>
+                </div>
+            `;
+            
+            showDetailModal(pattern.pattern.replace(/_/g, ' ').toUpperCase(), pattern.description, explanation, 'Detected Pattern');
+        }
+        
+        function showDetailModal(title, content, explanation, type) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('analysis-detail-modal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            const modal = document.createElement('div');
+            modal.id = 'analysis-detail-modal';
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;';
+            
+            modal.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 2px solid rgba(255, 193, 7, 0.5); border-radius: 8px; max-width: 1400px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(255, 193, 7, 0.3);">
+                    <div style="padding: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="color: #ffc107; margin: 0; font-size: 1.5em;">${title}</h2>
+                            <div style="color: #888; font-size: 0.9em; margin-top: 5px;">${type}</div>
+                        </div>
+                        <button onclick="document.getElementById('analysis-detail-modal').remove()" style="background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.5); color: #ffc107; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: 700;">✕ Close</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 400px; gap: 20px; padding: 20px; overflow-y: auto; flex: 1;">
+                        <div style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; overflow-y: auto; max-height: calc(90vh - 120px);">
+                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">Raw Case Data</h3>
+                            <div style="color: #b0b0b0; white-space: pre-wrap; word-break: break-word; font-family: monospace; font-size: 0.9em; line-height: 1.6;">${content}</div>
+                        </div>
+                        <div style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; overflow-y: auto; max-height: calc(90vh - 120px);">
+                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">⚡ Analysis Explanation</h3>
+                            <div style="color: #b0b0b0; font-size: 0.95em;">${explanation}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close on escape key
+            const closeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', closeHandler);
+                }
+            };
+            document.addEventListener('keydown', closeHandler);
+        }
+
         async function runAdvancedAnalysis() {
             if (selectedTopics.size === 0) {
                 alert('Please select at least one tag to analyze');
                 return;
             }
             
-            // Hide coming soon message
-            document.getElementById('coming-soon').style.display = 'none';
+            // Hide automated analysis section if visible
+            const automatedSection = document.getElementById('automated-analysis-section');
+            if (automatedSection) {
+                automatedSection.style.display = 'none';
+            }
             
             // Prepare selected tags for API call
             const selectedTagsArray = Array.from(selectedTopics.entries()).map(([tag, info]) => ({

@@ -31,8 +31,8 @@ CaseLinker follows a modular, layered architecture:
 
 1. **Ingestion Layer**: Handles PDF data sources with text extraction and validation
 2. **Processing Layer**: Extracts features, assigns comparison values, and fills case schema
-3. **Storage Layer**: SQLite database with SQLCipher encryption support for secure case storage
-4. **Clustering & Analysis Layer**: Case comparison, similarity detection, and clustering (basic implementation)
+3. **Storage Layer**: SQLite database (plain SQLite for maximum compatibility)
+4. **Clustering & Analysis Layer**: Case comparison, similarity detection, automated grouping, triage, and insights generation
 5. **Visualization Layer**: Interactive web-based dashboards with D3.js visualizations
 
 ## Installation
@@ -124,10 +124,10 @@ The system will:
 2. Identify organization name from filename (AZICAC, FBI, NCMEC, etc.)
 3. Split cases by month patterns ("In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
 4. Extract features and assign case IDs (format: `org_name_year_month_number`)
-5. Store all cases in the encrypted database
+5. Store all cases in the database
 6. Display summary with cases broken down by source
 
-**Note:** The database file (`caselinker.db`) is included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, and prosecution outcomes.
+**Note:** The database file (`caselinker.db`) is included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, prosecution outcomes, victim/perpetrator demographics, and evidence volume.
 
 ### Using the Visualization
 
@@ -137,8 +137,28 @@ The system will:
 4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.
 5. **Environment**: Bar chart showing distribution of platforms and environments used (Facebook, online, chat, etc.). Click bars to view cases with highlighted platform text.
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
-7. **Sources Tab**: View data sources and access original case reports
-8. **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
+
+### Using Advanced Case Analysis
+
+1. **Tag-Based Analysis (🔬 Run Advanced Analysis)**:
+   - Select one or more tags from categories: Case Topics, Severity Indicators, Platforms & Environments, Investigation Types, Perpetrator Relationships, Perpetrator Status
+   - Click "Run Advanced Analysis" to find all cases matching ALL selected tags (intersection logic)
+   - View matching cases with highlighted text showing where tags were found in the raw case data
+   - See case counts for each selected tag
+
+2. **Automated Analysis (⚡ Run Automated Analysis)**:
+   - Click "Run Automated Analysis" to run the full automated analysis pipeline
+   - **Case Groups**: View cases grouped by similarity (platforms, demographics, topics, severity, investigation)
+   - **Top Priority Cases**: See cases sorted by priority score based on severity (40%), evidence volume (25%), victim count (15%), case type (10%), repeat offender status (10%)
+   - **Automated Insights**: View insights about most common platforms, severity distribution, and case topics
+   - **Patterns Detected**: See patterns like repeat offenders, relationship patterns, and investigation focus
+   - **Top Keywords**: View most frequent keywords extracted from case text
+   - **Expandable Details**: Click any box to view raw case data with highlighted priority indicators and detailed explanations of why the analysis prioritized/grouped the case
+
+### Other Features
+
+- **Sources Tab**: View data sources and access original case reports
+- **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 
 ## Project Structure
@@ -163,7 +183,7 @@ CaseLinker/
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
-├── caselinker.db                # Encrypted database (SQLCipher) with 25 processed cases
+├── caselinker.db                # SQLite database with 25 processed cases
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -194,10 +214,13 @@ Each case includes structured features extracted from case narratives:
 
 - `GET /` - Home page
 - `GET /visualization` - Interactive visualization page with multiple chart types (Timeline, Severity Indicators, Prosecution Outcomes, Previous Perpetrator, Environment, Organizations Involved)
+- `GET /analysis` - Advanced case analysis page with tag-based filtering and automated analysis
 - `GET /sources` - Data sources page
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
 - `GET /api/cases` - Get all cases
 - `GET /api/cases/{case_id}` - Get specific case
+- `GET /api/automated-analysis` - Run automated analysis (case grouping, triage, insights)
+- `POST /api/return-tagged-cases` - Get cases matching selected tags (intersection logic)
 - `GET /api/stats` - Get case statistics (total cases, total victims, extracted features count, sources)
 - `GET /docs` - Interactive API documentation
 
@@ -229,7 +252,7 @@ The database uses plain SQLite (no encryption) for maximum compatibility. The da
 ## Current Status
 
  **Implemented:**
-- PDF ingestion and case batching (splits cases by month patterns: "In [Month] of [Year]")
+- PDF ingestion and case batching (splits cases by month patterns: "In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
 - Feature extraction (regex-based for structured data, pattern-based for semantic features)
 - Database storage (25 processed cases from 2013-2014 AZICAC reports)
 - 6 interactive visualizations with click-to-view case details and text highlighting:
@@ -239,6 +262,15 @@ The database uses plain SQLite (no encryption) for maximum compatibility. The da
   - Previous Perpetrator (registered sex offender status)
   - Environment (platforms and online methods)
   - Organizations Involved (law enforcement agencies)
+- **Advanced Case Analysis** with two modes:
+  - **Tag-Based Analysis**: Select multiple tags (case topics, severity indicators, platforms, etc.) to find cases matching all selected tags, with highlighted matching features
+  - **Automated Analysis**: AI-powered case grouping, triage, and insights generation:
+    - Case grouping by similarity (platforms, demographics, topics, severity, investigation)
+    - Priority triage based on severity (40%), evidence volume (25%), victim count (15%), case type (10%), repeat offender status (10%)
+    - Automated insights (platform analysis, severity distribution, case topics)
+    - Pattern detection (repeat offenders, relationship patterns, investigation focus)
+    - Semantic keyword extraction (frequency-based from case text)
+    - Expandable detail views with raw case data and analysis explanations
 - Web interface with navigation, filtering, and year range selection
 - Data audit page for reviewing extracted features with interactive source text highlighting
 
