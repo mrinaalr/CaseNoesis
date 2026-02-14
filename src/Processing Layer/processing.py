@@ -458,6 +458,7 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
         'WhatsApp': r'\bWhatsApp\b',
         'online': r'\bonline\b',
         'chat': r'\bchat(ting|ted|s)?\b',
+        'social media': r'\bsocial\s+media\b',
     }
     
     for platform, pattern in platform_patterns.items():

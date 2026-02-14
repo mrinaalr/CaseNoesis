@@ -1047,7 +1047,8 @@
                 <div style="color: #ffc107; font-weight: 700; margin-bottom: 10px; font-size: 1em;">
                     Selected Cases (${window.selectedCases.size}):
                 </div>
-                <div style="display: grid; gap: 12px;">
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 20px;">
+                    <div style="display: grid; gap: 12px;">
                     ${selectedCasesData.map(caseData => {
                         // Get case text
                         let caseText = 'No case text available';
@@ -1131,7 +1132,10 @@
                         });
                         
                         return `
-                            <div style="background: rgba(30,30,30,0.6); border: 1px solid rgba(255,193,7,0.3); padding: 12px; border-radius: 4px;">
+                            <div data-case-id="${caseData.id}" style="background: rgba(30,30,30,0.6); border: 1px solid rgba(255,193,7,0.3); padding: 12px; border-radius: 4px; cursor: pointer; transition: all 0.2s;" 
+                                 onmouseover="this.style.borderColor='rgba(255,193,7,0.6)'; this.style.background='rgba(30,30,30,0.8)';"
+                                 onmouseout="this.style.borderColor='rgba(255,193,7,0.3)'; this.style.background='rgba(30,30,30,0.6)';"
+                                 onclick="updateCaseTagsPanel(window.matchingCases.find(c => c.id === '${caseData.id}'))">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; padding-bottom: 6px; border-bottom: 1px solid rgba(255,193,7,0.2);">
                                     <div style="color: #ffc107; font-weight: 700; font-size: 0.95em;">
                                         ${caseData.id}
@@ -1146,8 +1150,106 @@
                             </div>
                         `;
                     }).join('')}
+                    </div>
+                    <div id="case-tags-panel" style="background: rgba(30,30,30,0.6); border: 1px solid rgba(255,193,7,0.3); padding: 15px; border-radius: 4px; height: fit-content; position: sticky; top: 20px; max-height: 80vh; overflow-y: auto;">
+                        <div style="color: #ffc107; font-weight: 700; margin-bottom: 15px; font-size: 1em; border-bottom: 1px solid rgba(255,193,7,0.2); padding-bottom: 10px;">
+                            Case Tags
+                        </div>
+                        <div id="case-tags-content" style="color: #b0b0b0; font-size: 0.9em;">
+                            ${selectedCasesData.map(caseData => {
+                                const allTags = extractAllTagsFromCase(caseData);
+                                return `
+                                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,193,7,0.1);">
+                                        <div style="color: #ffc107; font-weight: 600; font-size: 0.85em; margin-bottom: 10px;">
+                                            ${caseData.id}
+                                        </div>
+                                        ${allTags.length > 0 ? allTags.map(category => `
+                                            <div style="margin-bottom: 10px;">
+                                                <div style="color: #ffc107; font-weight: 600; font-size: 0.75em; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">
+                                                    ${category.category}:
+                                                </div>
+                                                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                                    ${category.tags.map(tag => `
+                                                        <span style="padding: 3px 8px; background: rgba(255,193,7,0.15); border: 1px solid rgba(255,193,7,0.3); color: #ffc107; font-size: 0.75em; border-radius: 2px; font-weight: 600;">
+                                                            ${tag}
+                                                        </span>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        `).join('') : '<div style="color: #888; font-style: italic; font-size: 0.8em;">No tags extracted</div>'}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
                 </div>
             `;
+        }
+        
+        function extractAllTagsFromCase(caseData) {
+            const allTags = [];
+            
+            // Case Topics
+            const topics = caseData.case_topics || [];
+            if (Array.isArray(topics) && topics.length > 0) {
+                allTags.push({
+                    category: 'Case Topics',
+                    tags: topics.map(t => t.replace(/_/g, ' ').toUpperCase())
+                });
+            }
+            
+            // Severity Indicators
+            const severity = caseData.severity_indicators || [];
+            if (Array.isArray(severity) && severity.length > 0) {
+                allTags.push({
+                    category: 'Severity Indicators',
+                    tags: severity.map(s => s.replace(/_/g, ' ').toUpperCase())
+                });
+            }
+            
+            // Platforms
+            const platforms = caseData.platforms_used || [];
+            if (Array.isArray(platforms) && platforms.length > 0) {
+                allTags.push({
+                    category: 'Platforms & Environments',
+                    tags: platforms.map(p => p.charAt(0).toUpperCase() + p.slice(1))
+                });
+            }
+            
+            // Investigation Type
+            if (caseData.investigation_type) {
+                allTags.push({
+                    category: 'Investigation Type',
+                    tags: [caseData.investigation_type.toUpperCase()]
+                });
+            }
+            
+            // Relationship
+            if (caseData.relationship_to_victim) {
+                allTags.push({
+                    category: 'Relationship',
+                    tags: [caseData.relationship_to_victim.toUpperCase()]
+                });
+            }
+            
+            // Registered Sex Offender
+            if (caseData.perpetrator_registered_sex_offender) {
+                allTags.push({
+                    category: 'Perpetrator Status',
+                    tags: ['REGISTERED SEX OFFENDER']
+                });
+            }
+            
+            // Agencies
+            const agencies = caseData.agencies_involved || [];
+            if (Array.isArray(agencies) && agencies.length > 0) {
+                allTags.push({
+                    category: 'Agencies Involved',
+                    tags: agencies
+                });
+            }
+            
+            return allTags;
         }
         
         function showCaseDetails(caseId) {
