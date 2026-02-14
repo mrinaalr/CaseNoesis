@@ -26,6 +26,34 @@ except ImportError:
 
 def get_connection(db_path: str, encryption_key: Optional[str] = None):
     """Get database connection with optional encryption"""
+    import os
+    
+    # Check if database file exists and has content
+    db_file = Path(db_path)
+    if db_file.exists() and db_file.stat().st_size > 10000:
+        # Database exists and has content - check if we can read it
+        if encryption_key and not SQLCIPHER_AVAILABLE:
+            # Try to open with regular SQLite first to see if it's encrypted
+            try:
+                test_conn = sqlite3.connect(db_path)
+                test_cursor = test_conn.cursor()
+                test_cursor.execute("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1")
+                test_conn.close()
+                # If we get here, database is NOT encrypted
+                return sqlite3.connect(db_path)
+            except:
+                # Database appears to be encrypted but SQLCipher not available
+                print(f"⚠️  WARNING: Database appears encrypted but SQLCipher not available.")
+                print(f"   Railway cannot read encrypted databases. Creating new unencrypted database.")
+                # Rename encrypted database and create new one
+                backup_path = f"{db_path}.encrypted_backup"
+                if not Path(backup_path).exists():
+                    import shutil
+                    shutil.copy2(db_path, backup_path)
+                    print(f"   Encrypted database backed up to: {backup_path}")
+                # Return connection to new (empty) database
+                return sqlite3.connect(db_path)
+    
     conn = sqlite3.connect(db_path)
     if SQLCIPHER_AVAILABLE and encryption_key:
         conn.execute(f"PRAGMA key='{encryption_key}'")
@@ -371,13 +399,31 @@ class CaseStorage:
             List of case dictionaries
         """
         try:
+            # Check if database file exists
+            db_path_obj = Path(self.db_path)
+            if not db_path_obj.exists():
+                print(f"⚠️  Database file not found: {self.db_path}")
+                return []
+            
+            # Check file size - if it's very small, might be empty or corrupted
+            file_size = db_path_obj.stat().st_size
+            if file_size < 1000:  # Less than 1KB is suspicious
+                print(f"⚠️  Database file is very small ({file_size} bytes) - might be empty")
+            
             conn = get_connection(self.db_path, self.encryption_key)
             cursor = conn.cursor()
             
+            # Try to query - if database is encrypted but SQLCipher not available, this will fail
             cursor.execute('SELECT id FROM cases ORDER BY date_start, id')
             case_ids = [row[0] for row in cursor.fetchall()]
             
             conn.close()
+            
+            if len(case_ids) == 0 and file_size > 10000:
+                # Database exists and has size but no cases - might be encryption issue
+                print(f"⚠️  Database file exists ({file_size} bytes) but contains 0 cases.")
+                print(f"   This might indicate an encryption mismatch. SQLCipher available: {SQLCIPHER_AVAILABLE}")
+                print(f"   Encryption key provided: {self.encryption_key is not None}")
             
             cases = []
             for case_id in case_ids:
@@ -388,7 +434,9 @@ class CaseStorage:
             return cases
             
         except Exception as e:
-            print(f"Error retrieving all cases: {e}")
+            print(f"❌ Error retrieving all cases: {e}")
+            import traceback
+            traceback.print_exc()
             return []
     
     def search_cases(self, query: Dict[str, Any]) -> List[Dict[str, Any]]:

@@ -29,11 +29,21 @@ app.add_middleware(
 )
 
 # Initialize storage with encryption key from config
+import os
 try:
     from config import DATABASE_PATH, DB_ENCRYPTION_KEY, ENABLE_ENCRYPTION
     # Only use encryption if enabled AND SQLCipher is available
     from storage import SQLCIPHER_AVAILABLE
-    encryption_key = DB_ENCRYPTION_KEY if (ENABLE_ENCRYPTION and SQLCIPHER_AVAILABLE) else None
+    
+    # On Railway, check if we should disable encryption (if SQLCipher not available)
+    # Railway environment variable can override
+    if os.environ.get("RAILWAY_ENVIRONMENT"):
+        # On Railway, only use encryption if SQLCipher is actually available
+        encryption_key = DB_ENCRYPTION_KEY if (ENABLE_ENCRYPTION and SQLCIPHER_AVAILABLE) else None
+        if ENABLE_ENCRYPTION and not SQLCIPHER_AVAILABLE:
+            print("⚠️  WARNING: SQLCipher not available on Railway. Database will be unencrypted.")
+    else:
+        encryption_key = DB_ENCRYPTION_KEY if (ENABLE_ENCRYPTION and SQLCIPHER_AVAILABLE) else None
 except ImportError:
     DATABASE_PATH = "caselinker.db"
     encryption_key = None
@@ -44,6 +54,17 @@ except ImportError:
 
 # Initialize storage - will create database if it doesn't exist
 storage = CaseStorage(DATABASE_PATH, encryption_key=encryption_key)
+
+# Log database status on startup
+try:
+    from storage import SQLCIPHER_AVAILABLE
+    print(f"📊 Database: {DATABASE_PATH}")
+    print(f"🔐 SQLCipher available: {SQLCIPHER_AVAILABLE}")
+    print(f"🔑 Encryption enabled: {encryption_key is not None}")
+    test_cases = storage.get_all_cases()
+    print(f"📁 Cases in database: {len(test_cases)}")
+except Exception as e:
+    print(f"⚠️  Database initialization warning: {e}")
 
 
 @app.get("/", response_class=HTMLResponse)

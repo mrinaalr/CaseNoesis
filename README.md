@@ -217,7 +217,19 @@ Each case includes structured features extracted from case narratives:
 
 ## Deployment
 
-CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, Render, and similar platforms. See `HOSTING.md` for deployment options and instructions.
+CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, Render, and similar platforms.
+
+### Railway Deployment
+
+**Live Demo:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
+
+**Important Note for Railway:**
+- Railway doesn't have SQLCipher installed, so it cannot read encrypted databases
+- The code automatically detects Railway and disables encryption
+- If the encrypted database is pushed, Railway will create a new empty database
+- **To populate Railway with cases:** Process PDFs directly on Railway after deployment, or create an unencrypted database locally (requires SQLCipher) and push that instead
+
+The system gracefully handles this by creating a new unencrypted database when SQLCipher is unavailable.
 
 ## Security
 
