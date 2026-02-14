@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 25 processed cases from AZICAC reports (2013-2014). No installation required—just open the link in your browser.
+The live deployment includes all features and 47 processed cases from AZICAC reports (2011-2014). No installation required—just open the link in your browser.
 
 ## Motivation
 
@@ -42,7 +42,7 @@ CaseLinker follows a modular, layered architecture:
 **No installation required.** Visit the live deployment:
 - **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live version includes all features and 25 processed cases. Perfect for quick testing and demonstrations.
+The live version includes all features and 47 processed cases. Perfect for quick testing and demonstrations.
 
 ### Option 2: Local Setup (Works Out of the Box)
 
@@ -69,7 +69,7 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2013-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
+**Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2011-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
 
 You can process additional PDFs to add more cases to the database.
 
@@ -107,9 +107,9 @@ python3 -m src.main "path/to/your/file.pdf"
 python3 -m src.main "file1.pdf" "file2.pdf" "file3.pdf"
 ```
 
-**Example - Process 2013 and 2014 cases:**
+**Example - Process all 4 years (2011-2014):**
 ```bash
-python3 -m src.main "2013 Cases and Arrests – AZICAC.ORG.pdf" "2014 Cases and Arrests – AZICAC.ORG.pdf"
+python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2012 Cases and Arrests – AZICAC.ORG.pdf" "2013 Cases and Arrests – AZICAC.ORG.pdf" "2014 Cases and Arrests – AZICAC.ORG.pdf"
 ```
 
 Or run interactively:
@@ -127,7 +127,7 @@ The system will:
 5. Store all cases in the database
 6. Display summary with cases broken down by source
 
-**Note:** The database file (`caselinker.db`) is included in the repository. It contains 25 processed cases from publicly available AZICAC case reports (2013-2014) with extracted features including platforms, agencies, severity indicators, case topics, prosecution outcomes, victim/perpetrator demographics, and evidence volume.
+**Note:** The database file (`caselinker.db`) is included in the repository. It contains 47 processed cases from publicly available AZICAC case reports (2011-2014) with extracted features including platforms, agencies, severity indicators, case topics, prosecution outcomes, victim/perpetrator demographics, and evidence volume.
 
 ### Using the Visualization
 
@@ -149,7 +149,13 @@ The system will:
 2. **Automated Analysis (⚡ Run Automated Analysis)**:
    - Click "Run Automated Analysis" to run the full automated analysis pipeline
    - **Case Groups**: View cases grouped by similarity (platforms, demographics, topics, severity, investigation)
-   - **Top Priority Cases**: See cases sorted by priority score based on severity (40%), evidence volume (25%), victim count (15%), case type (10%), repeat offender status (10%)
+   - **Top Priority Cases**: See cases sorted by priority score (normalized to 5-10 scale) based on:
+     - Severity indicators (35%): infant, rape, very_young, production
+     - Victim count (30%): Higher scores for multiple victims
+     - Case type (25%): production, hands_on, possession, online_only
+     - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
+     - Evidence volume (10%): images, videos, storage size
+     - Registered sex offender (10%): Repeat offender status
    - **Automated Insights**: View insights about most common platforms, severity distribution, and case topics
    - **Patterns Detected**: See patterns like repeat offenders, relationship patterns, and investigation focus
    - **Top Keywords**: View most frequent keywords extracted from case text
@@ -183,7 +189,7 @@ CaseLinker/
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
-├── caselinker.db                # SQLite database with 25 processed cases
+├── caselinker.db                # SQLite database with 47 processed cases (2011-2014)
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -203,8 +209,9 @@ Each case includes structured features extracted from case narratives:
 - **Agencies**: Law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.)
 
 ### **Semantic Features (Pattern-based)**
-- **Case Topics**: Themes such as production vs. possession, international cooperation, multi-state cases, hands-on vs. online-only, family vs. stranger
-- **Severity Indicators**: Age-based severity (infant, very young, under 5, under 9) and production indicators
+- **Case Topics**: Themes such as production vs. possession, international cooperation, multi-state cases, hands-on vs. online-only, family vs. stranger, pornography
+- **Severity Indicators**: Age-based severity (infant, rape, very_young, under_10) and production indicators
+- **Severity Phrases**: Non-traditional indicators extracted from case text (dangerous, stated, told, continue, attacked, out_of_control) - used for priority scoring
 
 ### **Preserved Data**
 - **Raw Case Text**: Original case narrative preserved for reference
@@ -252,21 +259,32 @@ The database uses plain SQLite (no encryption) for maximum compatibility. The da
 ## Current Status
 
  **Implemented:**
-- PDF ingestion and case batching (splits cases by month patterns: "In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
-- Feature extraction (regex-based for structured data, pattern-based for semantic features)
-- Database storage (25 processed cases from 2013-2014 AZICAC reports)
+- PDF ingestion and case batching (splits cases by month patterns: "In [Month]" and "[Month] [Year],")
+- Multi-PDF processing support (process multiple PDFs in a single run)
+- Text cleanup: Comprehensive URL removal and artifact cleanup
+- Feature extraction (regex-based for structured data, pattern-based for semantic features):
+  - **Structured features**: Demographics, platforms, evidence, prosecution, investigation (95%+ coverage for critical fields)
+  - **Semantic features**: Severity indicators (infant, rape, very_young, under_10, production), case topics (production, possession, hands_on, online_only, family, stranger, international, multi_state, pornography)
+  - **Severity phrases**: Non-traditional indicators (dangerous, stated, told, continue, attacked, out_of_control)
+- Database storage (47 processed cases from 2011-2014 AZICAC reports)
 - 6 interactive visualizations with click-to-view case details and text highlighting:
-  - Timeline (bottom-up chronological view)
-  - Severity Indicators (color-coded by severity level)
+  - Timeline (bottom-up chronological view with color-coded severity)
+  - Severity Indicators (color-coded by severity level, "Rape" added)
   - Prosecution Outcomes (booking status and charges)
   - Previous Perpetrator (registered sex offender status)
   - Environment (platforms and online methods)
   - Organizations Involved (law enforcement agencies)
 - **Advanced Case Analysis** with two modes:
   - **Tag-Based Analysis**: Select multiple tags (case topics, severity indicators, platforms, etc.) to find cases matching all selected tags, with highlighted matching features
-  - **Automated Analysis**: AI-powered case grouping, triage, and insights generation:
+  - **Automated Analysis**: Case grouping, triage, and insights generation:
     - Case grouping by similarity (platforms, demographics, topics, severity, investigation)
-    - Priority triage based on severity (40%), evidence volume (25%), victim count (15%), case type (10%), repeat offender status (10%)
+    - Priority triage with normalized scores (5-10 scale) based on:
+      - Severity indicators (35%): infant, rape, very_young, production
+      - Victim count (30%): Aggressive scoring for multiple victims
+      - Case type (25%): production, hands_on, possession, online_only
+      - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
+      - Evidence volume (10%): images, videos, storage size
+      - Registered sex offender (10%): Repeat offender status
     - Automated insights (platform analysis, severity distribution, case topics)
     - Pattern detection (repeat offenders, relationship patterns, investigation focus)
     - Semantic keyword extraction (frequency-based from case text)

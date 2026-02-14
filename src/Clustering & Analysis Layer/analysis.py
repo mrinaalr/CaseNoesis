@@ -407,7 +407,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     def calculate_priority_score(case: Dict[str, Any]) -> float:
         score = 0.0
         
-        # Severity indicators (weight: 0.40)
+        # Severity indicators (weight: 0.35) - Increased to better reflect severity
         severity = case.get('severity_indicators') or []
         if isinstance(severity, str):
             try:
@@ -417,20 +417,40 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not isinstance(severity, (list, tuple)):
             severity = []
         
+        # Infant cases should be highest priority - but not so high that they override multi-victim cases
+        has_infant = 'infant' in severity or any('infant' in str(s).lower() for s in severity)
+        has_production_severity = 'production' in severity
+        has_very_young = 'very_young' in severity
+        
         severity_weights = {
-            'infant': 10.0,
-            'very_young': 8.0,
-            'under_5': 7.0,
-            'under_9': 5.0,
-            'production': 9.0,
+            'infant': 15.0,  # High weight but not excessive
+            'rape': 18.0,  # Very high weight - rape is extremely severe
+            'very_young': 10.0,  # Increased - very young is also critical
+            'under_10': 7.0,  # Increased
+            'under_5': 8.0,  # Keep for backward compatibility
+            'under_9': 6.0,  # Keep for backward compatibility
+            'under_7': 6.0,  # Keep for backward compatibility
+            'production': 12.0,  # Increased - production severity is very serious
         }
         
+        # Calculate base severity score
+        severity_base = 0.0
         for sev in severity:
-            score += severity_weights.get(sev, 3.0)
+            severity_base += severity_weights.get(sev, 3.0)
         
-        score *= 0.40
+        # Bonus for multiple severity indicators (compound severity)
+        if len(severity) >= 2:
+            severity_base += 5.0  # Bonus for multiple indicators
+        if len(severity) >= 3:
+            severity_base += 3.0  # Additional bonus for 3+ indicators
         
-        # Evidence volume (weight: 0.25)
+        # Special boost for infant cases (but not excessive)
+        if has_infant:
+            severity_base += 8.0  # Reduced from 15.0 - still high but not excessive
+        
+        score += severity_base * 0.35  # Increased weight from 0.30
+        
+        # Evidence volume (weight: 0.10) - Reduced further
         evidence = case.get('evidence_volume') or {}
         if isinstance(evidence, str):
             try:
@@ -452,18 +472,30 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             elif storage and ('GB' in storage or 'gigabyte' in storage.lower()):
                 evidence_score += 2.0
             
-            score += evidence_score * 0.25
+            score += evidence_score * 0.10  # Reduced from 0.15
         
-        # Victim count (weight: 0.15)
+        # Victim count (weight: 0.30) - Increased significantly - multiple victims is critical
         victim_count = case.get('victim_count')
         if victim_count:
-            score += min(victim_count / 10.0, 1.0) * 5.0 * 0.15
+            # Much more aggressive scoring for multiple victims
+            if victim_count >= 10:
+                score += 15.0 * 0.30  # Extremely high priority for 10+ victims
+            elif victim_count >= 7:
+                score += 12.0 * 0.30  # Very high priority for 7-9 victims
+            elif victim_count >= 5:
+                score += 10.0 * 0.30  # High priority for 5-6 victims (increased from 8.0)
+            elif victim_count >= 3:
+                score += 7.0 * 0.30  # Medium-high for 3-4 victims (increased from 6.0)
+            elif victim_count >= 2:
+                score += 4.0 * 0.30  # Medium for 2 victims
+            else:
+                score += 2.0 * 0.30  # Lower for single victim
         
         # Registered sex offender (weight: 0.10)
         if case.get('perpetrator_registered_sex_offender'):
-            score += 3.0 * 0.10
+            score += 4.0 * 0.10  # Increased from 3.0
         
-        # Case type severity (weight: 0.10) - production and hands-on are higher priority
+        # Case type severity (weight: 0.25) - Increased - production and hands-on are critical
         case_topics = case.get('case_topics') or []
         if isinstance(case_topics, str):
             try:
@@ -474,16 +506,49 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             case_topics = []
         
         case_type_score = 0.0
+        # Allow multiple case types to compound
         if 'production' in case_topics:
-            case_type_score += 5.0  # Production is highest priority
-        elif 'hands_on' in case_topics:
-            case_type_score += 3.0  # Hands-on abuse is high priority
-        elif 'possession' in case_topics:
-            case_type_score += 1.0  # Possession is lower priority
-        elif 'online_only' in case_topics:
-            case_type_score += 0.5  # Online-only is lowest priority
+            case_type_score += 10.0  # Increased from 8.0
+        if 'hands_on' in case_topics:
+            case_type_score += 8.0  # Increased from 6.0, and can stack with production
+        if 'possession' in case_topics:
+            case_type_score += 2.0  # Lower priority
+        if 'online_only' in case_topics:
+            case_type_score += 1.0  # Lowest priority
         
-        score += case_type_score * 0.10
+        score += case_type_score * 0.25  # Increased weight from 0.20
+        
+        # Severity phrases (weight: 0.15) - Non-traditional indicators of high severity
+        severity_phrases = case.get('severity_phrases') or []
+        if isinstance(severity_phrases, str):
+            try:
+                severity_phrases = json.loads(severity_phrases)
+            except:
+                severity_phrases = []
+        if not isinstance(severity_phrases, (list, tuple)):
+            severity_phrases = []
+        
+        # Weight different phrases based on severity indication
+        phrase_weights = {
+            'dangerous': 4.0,  # High - indicates dangerous behavior
+            'out_of_control': 4.0,  # High - escalation indicator
+            'attacked': 5.0,  # Very high - physical violence
+            'continue': 3.0,  # Medium-high - ongoing abuse
+            'stated': 2.0,  # Medium - victim disclosure
+            'told': 2.0,  # Medium - victim disclosure
+        }
+        
+        phrase_score = 0.0
+        for phrase in severity_phrases:
+            phrase_score += phrase_weights.get(phrase, 1.0)
+        
+        # Bonus for multiple phrases (compound severity)
+        if len(severity_phrases) >= 2:
+            phrase_score += 2.0  # Bonus for multiple indicators
+        if len(severity_phrases) >= 3:
+            phrase_score += 3.0  # Additional bonus for 3+ phrases
+        
+        score += phrase_score * 0.15  # Weight: 15% of total score
         
         return score
     
@@ -495,6 +560,26 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             **case,
             'priority_score': priority
         })
+    
+    # Normalize scores to 5-10 scale
+    if cases_with_priority:
+        scores = [c['priority_score'] for c in cases_with_priority]
+        min_score = min(scores)
+        max_score = max(scores)
+        
+        # Scale to 5-10 range: min_score -> 5, max_score -> 10
+        if max_score > min_score:  # Avoid division by zero
+            for case in cases_with_priority:
+                raw_score = case['priority_score']
+                # Linear scaling: (score - min) / (max - min) maps to 0-1, then scale to 5-10
+                normalized = 5.0 + (raw_score - min_score) * 5.0 / (max_score - min_score)
+                case['priority_score'] = round(normalized, 2)
+                case['priority_score_raw'] = raw_score  # Keep raw score for reference
+        else:
+            # All scores are the same, set all to 7.5 (middle of 5-10)
+            for case in cases_with_priority:
+                case['priority_score'] = 7.5
+                case['priority_score_raw'] = case['priority_score']
     
     # Sort by priority (highest first)
     return sorted(cases_with_priority, key=lambda c: c['priority_score'], reverse=True)

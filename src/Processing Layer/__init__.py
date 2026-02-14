@@ -20,6 +20,7 @@ from .processing import (
     extract_prosecution_outcome,
     extract_severity,
     extract_topics,
+    extract_severity_phrases,
 )
 
 __all__ = [
@@ -39,4 +40,5 @@ __all__ = [
     'extract_prosecution_outcome',
     'extract_severity',
     'extract_topics',
+    'extract_severity_phrases',
 ]

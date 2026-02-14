@@ -78,9 +78,15 @@ CaseLinker is designed as a system for ingesting, processing, clustering, and vi
 **Purpose**: Extract features, assign comparison values, fill in basic schema, and prepare cases for clustering and analysis.
 
 **Components**:
-- **Case Batching**: Splits large text blocks into individual cases using regex patterns ("In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
-- **Feature Extraction**: Hybrid approach using regex for structured data and pattern-based matching for semantic features
+- **Text Cleanup**: Removes URLs, URL fragments, and formatting artifacts from extracted PDF text
+- **Case Batching**: Splits large text blocks into individual cases using regex patterns:
+  - Primary: "In [Month]" (e.g., "In January", "In February") - case-sensitive for "In"
+  - Secondary: "[Month] [Year]," (e.g., "July 2012,", "September 2012,")
+- **Feature Extraction**: Hybrid approach:
+  - **Regex-based** (high accuracy): Demographics, platforms, evidence, prosecution, investigation
+  - **Pattern-based** (semantic): Severity indicators, case topics, severity phrases
 - **Case ID Generation**: Creates unique case IDs in format `org_name_year_month_number` (e.g., `azicac_2013_january_001`)
+- **Comparison Values**: Assigns normalized feature vectors for similarity calculation
 
 
 **Case Entity Schema**:
@@ -116,8 +122,9 @@ Case:
   - evidence_volume: {images: int, videos: int, storage_size: str, messages: int}
   
   # Content Classification
-  - severity_indicators: [str] (infant, very_young, under_5, under_9, production, created)
-  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_only, family, stranger)
+  - severity_indicators: [str] (infant, rape, very_young, under_10, production)
+  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography)
+  - severity_phrases: [str] (dangerous, stated, told, continue, attacked, out_of_control)  # Non-traditional severity indicators
   
   # Raw/Original Data
   - raw_data: original case data (preserved for reference)
@@ -136,12 +143,22 @@ Case:
 **Purpose**: Store cases and relationships with fast retrieval and lookup capabilities.
 
 **Components**:
-- **Case Database** (PostgreSQL/MySQL):
-  - keep it simple, store case data tables, ideally similar close together
-  - ideally also store case entities in "rawish" format (preserve original structure + normalized fields)
-  - encrypt db - use SQLCipher to start (prev exp) and improve as needed
+- **Case Database** (SQLite):
+  - Simple, efficient storage with normalized tables
+  - Stores case entities in "rawish" format (preserves original structure + normalized fields)
+  - Uses plain SQLite for maximum compatibility across platforms (Railway, local, etc.)
+  - Proper indexing for fast queries (source, date_start, case_topics)
+  - JSON storage for complex fields (platforms, topics, severity indicators, etc.)
 
-- **Graph Database**: Not yet implemented (future enhancement for relationship mapping)
+**Current Implementation**:
+- SQLite database (`caselinker.db`) with 47 processed cases (2011-2014)
+- Tables: `cases`, `victim_demographics`, `perpetrator_demographics`, `prosecution_outcomes`
+- Full raw data preservation in `raw_data` and `extracted_features` fields
+- Fast retrieval with proper indexing
+
+**Future Enhancements**:
+- Graph Database: Not yet implemented (future enhancement for relationship mapping)
+- Database encryption: Considered but deferred for MVP to ensure cross-platform compatibility
 
 
 
@@ -150,24 +167,36 @@ Case:
 **Purpose**: Compare cases, detect clusters, identify trends, and select cases to display together.
 
 **Components**:
+- **Tag-Based Filtering**:
+  - Filter cases by multiple tags (intersection logic)
+  - Categories: Case Topics, Severity Indicators, Platforms, Investigation Types, Relationships, RSO Status
+  - Returns cases matching ALL selected tags with highlighted matching text
 - **Case Comparison**:
-  - Compare cases against each other in database
-  - Calculate similarity scores using assigned values
-  - Identify potential links and relationships
-  - Support multiple compare metrics 
-- **Clustering**:
-  - Group cases based on shared characteristics
+  - Weighted Jaccard similarity using comparison values
+  - Multi-dimensional comparison (platforms, demographics, topics, severity, investigation)
+  - Similarity threshold: 0.35 for grouping
+- **Case Grouping**:
+  - Groups similar cases based on shared characteristics
   - Multi-dimensional clustering (by platform, method, victim, perpetrator, region, time, etc.)
-- **Link Detection**:
-  - Entity matching: organizations involved, victims demographics, platforms across cases
-  - Pattern-based linking: deeper patterns in cases
+- **Priority Triage**:
+  - Multi-factor priority scoring (normalized to 5-10 scale):
+    - Severity indicators (35%): infant, rape, very_young, production, etc.
+    - Victim count (30%): Aggressive scoring for multiple victims
+    - Case type (25%): production, hands_on, possession, online_only
+    - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
+    - Evidence volume (10%): images, videos, storage size
+    - Registered sex offender (10%): Repeat offender status
+  - Scores normalized: lowest case → 5.0, highest case → 10.0
+- **Automated Insights**:
+  - Platform analysis: Most common platforms used
+  - Severity distribution: Distribution of severity indicators
+  - Case topic analysis: Most common case topics
+  - Pattern detection: Repeat offenders, relationship patterns, investigation focus
+  - Keyword extraction: Frequency-based semantic keywords from case text
 - **Trend Detection**:
   - Analyze evolution of exploitation methods over time
-  - Recurring case topics 
-- **Case Selection**:
-  - Select cases to display together based on clustering
-  - Filter and group cases for visualization
-  - Support user-defined grouping criteria
+  - Recurring case topics
+  - Investigation type distribution
 
 
 ### 5. Visualization Layer

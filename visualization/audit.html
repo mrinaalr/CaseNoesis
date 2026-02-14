@@ -264,7 +264,7 @@
     </style>
 </head>
 <body>
-    <div class="nav">
+           <div class="nav">
         <a href="/">Home</a>
         <a href="/visualization">Visualization</a>
         <a href="/analysis">Analysis</a>
@@ -274,7 +274,7 @@
 
     <div class="container">
         <div class="cases-panel">
-            <h2>Cases (25)</h2>
+            <h2 id="cases-count">Cases (0)</h2>
             <div class="cases-list" id="cases-list">
                 <div style="text-align: center; padding: 20px; color: #999;">
                     Loading cases...
@@ -327,6 +327,13 @@
 
         function renderCasesList() {
             const listContainer = document.getElementById('cases-list');
+            const casesCountElement = document.getElementById('cases-count');
+            
+            // Update case count
+            if (casesCountElement) {
+                casesCountElement.textContent = `Cases (${allCases.length})`;
+            }
+            
             listContainer.innerHTML = '';
 
             allCases.forEach((caseData, index) => {

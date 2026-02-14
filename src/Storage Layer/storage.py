@@ -326,7 +326,8 @@ class CaseStorage:
                 # Merge new schema fields from extracted_features
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                            'agencies_involved', 'investigation_type', 'evidence_volume',
-                           'prosecution_outcome', 'victim_demographics', 'relationship_to_victim']:
+                           'prosecution_outcome', 'victim_demographics', 'relationship_to_victim',
+                           'severity_phrases']:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
             

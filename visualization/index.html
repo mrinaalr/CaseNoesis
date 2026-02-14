@@ -306,7 +306,7 @@
         </div>
         
         <div class="timeline-container">
-            <svg id="timeline" width="100%" height="400"></svg>
+            <svg id="timeline" width="100%" height="500"></svg>
         </div>
         
         <div class="case-detail" id="case-detail">
@@ -333,9 +333,9 @@
 
     <script>
         // Timeline visualization using D3.js
-        const margin = {top: 40, right: 40, bottom: 100, left: 80};
+        const margin = {top: 40, right: 40, bottom: 120, left: 80};  // Increased bottom margin
         const width = document.getElementById('timeline').clientWidth - margin.left - margin.right;
-        const height = 400 - margin.top - margin.bottom;
+        const height = 500 - margin.top - margin.bottom;  // Increased height for more vertical space
 
         const svg = d3.select("#timeline")
             .attr("width", width + margin.left + margin.right)
@@ -630,7 +630,7 @@
             const yScale = d3.scaleBand()
                 .domain(validCases.map((d, i) => i))
                 .range([height, 0])
-                .padding(0.3);
+                .padding(0.5);  // Increased padding from 0.3 to 0.5 for more space between points
 
             // Add axes - dynamically adjusts for multiple years
             const xAxis = d3.axisBottom(xScale)
@@ -646,7 +646,31 @@
                 .attr("dy", ".15em")
                 .attr("transform", "rotate(-45)");
 
-            // Add case points
+            // Color code by severity - infant cases get special color
+            const getCaseColor = (caseData) => {
+                const severity = caseData.severity_indicators || [];
+                if (Array.isArray(severity) && severity.some(s => String(s).toLowerCase().includes('infant'))) {
+                    return '#DC143C'; // Crimson for infant cases
+                } else if (Array.isArray(severity) && severity.length > 0) {
+                    return '#FF6347'; // Tomato for other severity cases
+                }
+                return '#4CAF50'; // Green for standard cases
+            };
+            
+            // Add connecting lines for visual flow
+            svg.append("path")
+                .datum(validCases)
+                .attr("fill", "none")
+                .attr("stroke", "#4CAF50")
+                .attr("stroke-width", 1.5)
+                .attr("stroke-opacity", 0.3)
+                .attr("d", d3.line()
+                    .x(d => xScale(d.date))
+                    .y((d, i) => yScale(i))
+                    .curve(d3.curveMonotoneX)
+                );
+            
+            // Add case points with color coding
             const points = svg.selectAll(".case-point")
                 .data(validCases)
                 .enter()
@@ -654,30 +678,77 @@
                 .attr("class", "case-point")
                 .attr("cx", d => xScale(d.date))
                 .attr("cy", (d, i) => yScale(i))
-                .attr("r", 6)
-                .attr("fill", "#4CAF50")
+                .attr("r", 7)
+                .attr("fill", d => getCaseColor(d))
                 .attr("stroke", "#fff")
-                .attr("stroke-width", 2)
-                .on("mouseover", function() {
-                    d3.select(this).attr("r", 8);
+                .attr("stroke-width", 2.5)
+                .attr("opacity", 0.9)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                        .attr("r", 10)
+                        .attr("opacity", 1)
+                        .attr("stroke-width", 3);
+                    
+                    // Show tooltip
+                    const tooltip = d3.select("body").append("div")
+                        .attr("class", "timeline-tooltip")
+                        .style("opacity", 0)
+                        .style("position", "absolute")
+                        .style("background", "rgba(0, 0, 0, 0.85)")
+                        .style("color", "white")
+                        .style("padding", "10px 15px")
+                        .style("border-radius", "6px")
+                        .style("font-size", "13px")
+                        .style("pointer-events", "none")
+                        .style("z-index", "1000")
+                        .style("box-shadow", "0 4px 12px rgba(0,0,0,0.3)");
+                    
+                    const severity = d.severity_indicators || [];
+                    const severityText = Array.isArray(severity) && severity.length > 0 
+                        ? severity.join(", ").replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())
+                        : "No severity indicators";
+                    
+                    tooltip.html(`
+                        <strong>${d.id}</strong><br/>
+                        ${d.raw_data?.month_year || 'Unknown date'}<br/>
+                        <small>Severity: ${severityText}</small>
+                    `)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+                    
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
                 })
                 .on("mouseout", function() {
-                    d3.select(this).attr("r", 6);
+                    d3.select(this)
+                        .attr("r", 7)
+                        .attr("opacity", 0.9)
+                        .attr("stroke-width", 2.5);
+                    
+                    d3.selectAll(".timeline-tooltip").remove();
                 })
                 .on("click", function(event, d) {
                     showCaseDetail(d);
                 });
 
-            // Add labels
+            // Add labels with better styling
             svg.selectAll(".case-label")
                 .data(validCases)
                 .enter()
                 .append("text")
                 .attr("class", "case-label")
-                .attr("x", d => xScale(d.date) + 10)
+                .attr("x", d => xScale(d.date) + 12)
                 .attr("y", (d, i) => yScale(i))
                 .attr("dy", "0.35em")
-                .text(d => d.raw_data?.month_year || d.id || `Case ${i+1}`);
+                .attr("font-size", "12px")
+                .attr("fill", "#333")
+                .attr("font-weight", "500")
+                .text(d => {
+                    const monthYear = d.raw_data?.month_year || '';
+                    return monthYear || d.id || 'Unknown';
+                });
 
             // Stats are updated by updateStats() function
         }
@@ -1258,14 +1329,26 @@
                     severityCounts['None'] = (severityCounts['None'] || 0) + 1;
                 } else {
                     indicators.forEach(ind => {
-                        const label = ind.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        // Normalize all "under_X" where X < 10 to "Under 10"
+                        let normalized = ind.toLowerCase();
+                        if (normalized.startsWith('under_')) {
+                            const ageMatch = normalized.match(/^under_(\d+)$/);
+                            if (ageMatch) {
+                                const age = parseInt(ageMatch[1]);
+                                if (age < 10) {
+                                    normalized = 'under_10';
+                                }
+                            }
+                        }
+                        // Convert to display label
+                        const label = normalized.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
                         severityCounts[label] = (severityCounts[label] || 0) + 1;
                     });
                 }
             });
 
             // Define severity order (None goes to the end)
-            const severityOrder = ['Infant', 'Very Young', 'Under 5', 'Under 9', 'Production', 'None'];
+            const severityOrder = ['Infant', 'Rape', 'Very Young', 'Under 10', 'Production', 'None'];
             
             // Create data array and sort by severity order (None last)
             const data = Object.entries(severityCounts).map(([severity, count]) => ({
@@ -1306,9 +1389,9 @@
             // Custom color scale: Infant = darkest red, None = lightest
             const severityColors = {
                 'Infant': '#8B0000',        // Dark red
+                'Rape': '#A00000',          // Very dark red (second darkest)
                 'Very Young': '#B22222',    // Firebrick
-                'Under 5': '#DC143C',      // Crimson
-                'Under 9': '#FF6347',      // Tomato
+                'Under 10': '#DC143C',      // Crimson
                 'Production': '#FF7F50',   // Coral
                 'None': '#FFB6C1'          // Light pink (lightest)
             };
@@ -1409,6 +1492,19 @@
                     const indicators = c.severity_indicators || [];
                     return indicators.some(ind => {
                         const normalized = ind.toLowerCase().replace(/\s+/g, '_');
+                        
+                        // Special handling for "Under 10" - match under_10 or any under_X where X < 10
+                        if (severityLabel === 'Under 10' || severityKey === 'under_10') {
+                            if (normalized === 'under_10') return true;
+                            // Match any "under_X" where X is a single digit (1-9)
+                            const underMatch = normalized.match(/^under_(\d+)$/);
+                            if (underMatch) {
+                                const age = parseInt(underMatch[1]);
+                                if (age < 10) return true;
+                            }
+                            return false;
+                        }
+                        
                         return normalized === severityKey || 
                                normalized === severityLabel.toLowerCase() ||
                                ind.toLowerCase() === severityLabel.toLowerCase();
@@ -1436,25 +1532,33 @@
                 // Create regex patterns for all severity indicators
                 const severityPatterns = {
                     'infant': /\binfants?\b/gi,
+                    'rape': /\b(rape|raped|raping)\b/gi,
                     'very_young': /\bvery\s+young\b/gi,
-                    'under_5': /\bunder\s+5\b/gi,
-                    'under_9': /\bunder\s+9\b/gi,
+                    'under_10': /\bunder\s+([1-9])\b/gi,  // Matches under 1-9
                     'production': /\b(produced|created|made\s+movies?)\b/gi
                 };
                 
                 // Highlight the specific severity that matches
                 if (severityLabel !== 'None') {
-                    const pattern = severityPatterns[severityKey];
-                    if (pattern) {
-                        highlightedText = highlightedText.replace(pattern, (match) => {
+                    // Special handling for "Under 10" - highlight all "under X" where X < 10
+                    if (severityLabel === 'Under 10' || severityKey === 'under_10') {
+                        // Match "under" followed by a number 1-9
+                        highlightedText = highlightedText.replace(/\bunder\s+([1-9])\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    } else {
+                        const pattern = severityPatterns[severityKey];
+                        if (pattern) {
+                            highlightedText = highlightedText.replace(pattern, (match) => {
+                                return `<span class="severity-highlight">${match}</span>`;
+                            });
+                        }
+                        // Also try direct match
+                        const directPattern = new RegExp(`\\b${severityLabel.replace(/\s+/g, '\\s+')}\\b`, 'gi');
+                        highlightedText = highlightedText.replace(directPattern, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
                     }
-                    // Also try direct match
-                    const directPattern = new RegExp(`\\b${severityLabel.replace(/\s+/g, '\\s+')}\\b`, 'gi');
-                    highlightedText = highlightedText.replace(directPattern, (match) => {
-                        return `<span class="severity-highlight">${match}</span>`;
-                    });
                 }
                 
                 caseItem.innerHTML = `

@@ -22,10 +22,66 @@ import re
 from typing import Dict, List, Any, Optional
 
 
+def clean_urls_from_text(text: str) -> str:
+    """
+    Remove URLs from case text, specifically patterns like:
+    - "https://www.azicac.org/2012-cases-and-arrests/ 7/8 2/14/26, 10:32 AM 2012 Cases and Arrests - AZICAC.ORG"
+    - "5/12 2/14/26, 10:37 AM 2011 Cases and Arrests – AZICAC.ORG"
+    - "/2011-cases-and-arrests/" (URL path fragments in middle of text)
+    
+    Removes all text from "http" (or page numbers before it) up to and including "AZICAC.ORG"
+    Also removes URL path fragments like "/2011-cases-and-arrests/"
+    Preserves the rest of the case text.
+    
+    Args:
+        text: Case text that may contain URLs
+        
+    Returns:
+        Cleaned text with URLs removed
+    """
+    if not text:
+        return text
+    
+    # Pattern 1: Match from http/https to AZICAC.ORG (case-insensitive)
+    # Matches: "https://www.azicac.org/... AZICAC.ORG"
+    pattern1 = r'https?://.*?azicac\.org'
+    
+    # Pattern 2: Match page numbers/date patterns that lead to AZICAC.ORG
+    # Matches: "5/12 2/14/26, 10:37 AM 2011 Cases and Arrests – AZICAC.ORG"
+    # This matches from page numbers/date all the way to AZICAC.ORG
+    pattern2 = r'\d+/\d+\s+\d+/\d+/\d+.*?azicac\.org'
+    
+    # Pattern 3: Match URL path fragments like "/2011-cases-and-arrests/" or "/2012-cases-and-arrests/"
+    # These appear in the middle of case text without http:// prefix
+    pattern3 = r'/\d{4}-cases-and-arrests/'
+    
+    # Pattern 4: Match standalone "azicac.org" or "AZICAC.ORG" (without http://)
+    # Matches: "azicac.org" or "AZICAC.ORG" anywhere in text
+    pattern4 = r'\bazicac\.org\b'
+    
+    # Pattern 5: Match any remaining http/https URLs (catch-all cleanup)
+    pattern5 = r'https?://[^\s]+'
+    
+    # Remove patterns in order (most specific first), case-insensitive
+    cleaned_text = re.sub(pattern1, '', text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(pattern2, '', cleaned_text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(pattern3, '', cleaned_text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(pattern4, '', cleaned_text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(pattern5, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Clean up any double spaces or trailing whitespace that might result
+    cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+    cleaned_text = cleaned_text.strip()
+    
+    return cleaned_text
+
+
 def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
     """
-    Split text corpus into individual cases by "In [Month]" patterns.
-    Looks for patterns like "In January", "In February", etc. to identify case boundaries.
+    Split text corpus into individual cases by multiple month/year patterns.
+    
+    Primary pattern: "In [Month]" (e.g., "In January", "In February")
+    Secondary pattern: "[Month] [Year]," (e.g., "July 2012,", "September 2012,")
     
     Args:
         text: Large text block from PDF ingestion
@@ -39,11 +95,73 @@ def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
     # Normalize org name (lowercase, remove spaces/special chars)
     org_name = org_name.lower().replace(" ", "_").replace("-", "_")
     
-    month_pattern = r'In (January|February|March|April|May|June|July|August|September|October|November|December)'
+    months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
     
-    matches = list(re.finditer(month_pattern, text, re.IGNORECASE))
+    # Primary pattern: "In [Month]" (official method) - "In" must be uppercase
+    pattern1 = rf'In {months}'
     
-    if not matches:
+    # Secondary pattern: "[Month] [Year]," (with comma)
+    pattern2 = rf'{months}\s+(\d{{4}}),'
+    
+    all_matches = []
+    
+    # Find all matches from primary pattern - case-sensitive for "In", case-insensitive for month
+    for match in re.finditer(pattern1, text, re.IGNORECASE):
+        # Check that "In" is actually uppercase (not "in")
+        match_text = text[match.start():match.start()+2]
+        if match_text != 'In':
+            continue  # Skip if lowercase "in"
+        all_matches.append({
+            'pos': match.start(),
+            'month': match.group(1),
+            'year': None,  # Will extract from case text
+            'pattern': 'primary'
+        })
+    
+    # Find all matches from secondary pattern (with comma)
+    for match in re.finditer(pattern2, text, re.IGNORECASE):
+        all_matches.append({
+            'pos': match.start(),
+            'month': match.group(1),
+            'year': match.group(2),
+            'pattern': 'secondary_comma'
+        })
+    
+    # Remove duplicates: if positions are close, keep the highest priority pattern
+    # Priority: primary > secondary_comma
+    # Sort by position first
+    all_matches.sort(key=lambda x: x['pos'])
+    
+    # Deduplicate: prefer higher priority patterns if positions are close
+    pattern_priority = {'primary': 2, 'secondary_comma': 1}
+    unique_matches = []
+    for match in all_matches:
+        is_duplicate = False
+        for i, existing in enumerate(unique_matches):
+            if abs(match['pos'] - existing['pos']) < 15:  # Within 15 chars
+                match_priority = pattern_priority.get(match['pattern'], 0)
+                existing_priority = pattern_priority.get(existing['pattern'], 0)
+                
+                # If existing has higher priority, skip this one
+                if existing_priority > match_priority:
+                    is_duplicate = True
+                    break
+                # If this has higher priority, replace existing
+                elif match_priority > existing_priority:
+                    unique_matches[i] = match
+                    is_duplicate = True  # Mark as handled
+                    break
+                # If same priority and same position, skip duplicate
+                elif match_priority == existing_priority and match['pos'] == existing['pos']:
+                    is_duplicate = True
+                    break
+        if not is_duplicate:
+            unique_matches.append(match)
+    
+    # Sort again after deduplication
+    unique_matches.sort(key=lambda x: x['pos'])
+    
+    if not unique_matches:
         from datetime import datetime
         year = str(datetime.now().year)
         return [{'case_text': text, 'month_year': None, 'case_id': f'{org_name}_{year}_unknown_001'}]
@@ -51,26 +169,35 @@ def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
     # Track cases per year for proper numbering (resets each year)
     year_case_counts = {}
     
-    for i, match in enumerate(matches):
-        month = match.group(1)
-        start_pos = match.start()
+    for i, match_info in enumerate(unique_matches):
+        month = match_info['month']
+        start_pos = match_info['pos']
         
-        if i + 1 < len(matches):
-            end_pos = matches[i + 1].start()
+        # Determine end position
+        if i + 1 < len(unique_matches):
+            end_pos = unique_matches[i + 1]['pos']
         else:
             end_pos = len(text)
         
         case_text = text[start_pos:end_pos].strip()
         
-        # Extract year from case text - supports any year (2013, 2014, etc.)
-        # Look for 4-digit year (1900-2099) in the case text
-        year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
-        if year_match:
-            year = year_match.group(0)
+        # Clean URLs from case text before processing
+        case_text = clean_urls_from_text(case_text)
+        
+        # Extract year
+        if match_info['year']:
+            # Year already extracted from pattern
+            year = match_info['year']
         else:
-            # Fallback: use current year if no year found
-            from datetime import datetime
-            year = str(datetime.now().year)
+            # Extract year from case text - supports any year (2013, 2014, etc.)
+            # Look for 4-digit year (1900-2099) in the case text
+            year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
+            if year_match:
+                year = year_match.group(0)
+            else:
+                # Fallback: use current year if no year found
+                from datetime import datetime
+                year = str(datetime.now().year)
         
         # Track case number per year (resets each year)
         if year not in year_case_counts:
@@ -194,6 +321,7 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         # Content classification
         'severity_indicators': extract_severity(raw_case),
         'case_topics': extract_topics(raw_case),
+        'severity_phrases': extract_severity_phrases(raw_case),  # Key severity phrases
         # Raw data
         'raw_data': raw_case,
         'case_text': case_text,
@@ -630,7 +758,7 @@ def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]
 def extract_severity(case: Dict[str, Any]) -> List[str]:
     """
     Extract severity indicators.
-    Patterns: "infant", "very young", "under 5", "under 9", "produced", "created"
+    Patterns: "infant", "very young", "under X" (where X < 10 merged to "under_10"), "produced", "created"
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -644,21 +772,33 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     if re.search(r'very\s+young\s+children', case_text, re.IGNORECASE):
         severity_indicators.append('very_young')
     
-    # Extract "under X" patterns
+    # Extract "under X" patterns - merge all under 10 into "under_10"
     under_pattern = r'under\s+(\d+)'
     under_matches = re.finditer(under_pattern, case_text, re.IGNORECASE)
+    has_under_10 = False
     for match in under_matches:
         try:
             age = int(match.group(1))
-            severity_indicators.append(f'under_{age}')
+            if age < 10:
+                has_under_10 = True
+            else:
+                # Keep ages 10 and above as separate indicators
+                severity_indicators.append(f'under_{age}')
         except (ValueError, IndexError):
             continue
+    
+    if has_under_10:
+        severity_indicators.append('under_10')
     
     # Production indicators
     if re.search(r'\b(produced|created|made\s+movies?)\b', case_text, re.IGNORECASE):
         severity_indicators.append('production')
     
-    return severity_indicators
+    # Rape indicators - severe sexual violence
+    if re.search(r'\b(rape|raped|raping)\b', case_text, re.IGNORECASE):
+        severity_indicators.append('rape')
+    
+    return list(set(severity_indicators))  # Remove duplicates
 
 
 def extract_topics(case: Dict[str, Any]) -> List[str]:
@@ -700,7 +840,48 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     elif re.search(r'\bstranger\b', case_text, re.IGNORECASE):
         topics.append('stranger')
     
-    return topics
+    # Pornography/material type indicators
+    if re.search(r'\b(porn|pornography|pornographic)\b', case_text, re.IGNORECASE):
+        topics.append('pornography')
+    
+    return list(set(topics))  # Remove duplicates
+
+
+def extract_severity_phrases(case: Dict[str, Any]) -> List[str]:
+    """
+    Extract key severity phrases from case text that indicate high severity.
+    These are non-traditional indicators that show escalation, ongoing abuse, or dangerous behavior.
+    
+    Phrases: "dangerous", "stated", "told", "continue", "attacked", "out of control"
+    
+    Args:
+        case: Case dictionary with 'case_text'
+        
+    Returns:
+        List of severity phrases found in the case text
+    """
+    case_text = case.get('case_text', '')
+    if not case_text:
+        return []
+    
+    severity_phrases = []
+    case_text_lower = case_text.lower()
+    
+    # Key severity phrases with context awareness
+    phrase_patterns = {
+        'dangerous': r'\bdangerous\b',
+        'stated': r'\b(stated|states|stating)\b',  # Victim statements/disclosures
+        'told': r'\b(told|tells|telling)\b',  # Victim disclosures
+        'continue': r'\b(continue|continued|continuing)\b',  # Ongoing abuse
+        'attacked': r'\b(attacked|attack|attacking)\b',  # Physical violence
+        'out_of_control': r'\bout\s+of\s+control\b',  # Escalation indicator
+    }
+    
+    for phrase_key, pattern in phrase_patterns.items():
+        if re.search(pattern, case_text_lower, re.IGNORECASE):
+            severity_phrases.append(phrase_key)
+    
+    return list(set(severity_phrases))  # Remove duplicates
 
 
 
