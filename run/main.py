@@ -34,16 +34,29 @@ try:
 except ImportError:
     DATABASE_PATH = "caselinker.db"
 
+# Fix path for Railway - Procfile runs from 'run/' directory, so go up one level
+# Check if we're in the 'run' directory and adjust path accordingly
+if Path(__file__).parent.name == 'run':
+    # We're in the run directory, database is one level up
+    db_path = Path(__file__).parent.parent / DATABASE_PATH
+else:
+    # We're in the root directory
+    db_path = Path(DATABASE_PATH)
+
 # Initialize storage - will create database if it doesn't exist
-storage = CaseStorage(DATABASE_PATH)
+storage = CaseStorage(str(db_path))
 
 # Log database status on startup
 try:
     test_cases = storage.get_all_cases()
-    print(f"📊 Database: {DATABASE_PATH}")
+    print(f"📊 Database: {db_path}")
     print(f"📁 Cases in database: {len(test_cases)}")
+    if len(test_cases) == 0:
+        print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
 except Exception as e:
     print(f"⚠️  Database initialization warning: {e}")
+    print(f"   Looking for database at: {db_path}")
+    print(f"   Database exists: {db_path.exists()}")
 
 
 @app.get("/", response_class=HTMLResponse)
