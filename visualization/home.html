@@ -12,7 +12,8 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e8ba3 50%, #9bb5d1 75%, #c4d4e8 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             color: #333;
         }
@@ -135,16 +136,23 @@
             letter-spacing: 1px;
         }
         .warning {
-            background: rgba(255, 193, 7, 0.25);
-            border-left: 5px solid #ffc107;
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.18) 0%, rgba(255, 235, 59, 0.12) 100%);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-left: 4px solid #ffc107;
+            padding: 20px 25px;
             margin: 40px 0;
-            border-radius: 8px;
-            color: #856404;
+            border-radius: 10px;
+            color: #e65100;
             font-size: 1.05em;
+            font-weight: 700;
+            font-style: italic;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+            line-height: 1.7;
         }
         .warning strong {
-            font-size: 1.1em;
+            font-size: 1.15em;
+            color: #f57f17;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -154,26 +162,27 @@
         <a href="/visualization">Visualization</a>
         <a href="/analysis">Analysis</a>
         <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
     </div>
     
     <div class="container">
         <div class="hero">
             <h1>CaseLinker</h1>
-            <p>Advanced case analysis and visualization system for research and investigation</p>
-            <a href="/visualization" class="cta-primary">Explore Cases →</a>
+            <p>Case analysis and visualization system for research and investigation</p>
+            <a href="/analysis" class="cta-primary">Explore Cases →</a>
         </div>
         
         <div class="warning">
-            <strong>⚠️ Important:</strong> This system processes sensitive case data. Ensure you are authorized to access this information.
+            <strong>⚠️ Important:</strong> This system processes sensitive case data related to child exploitation. Ensure you are authorized to access this information.
         </div>
         
         <div class="features">
             <div class="feature-card" onclick="window.location.href='/visualization'" style="cursor: pointer;">
-                <h3>📊 Timeline Analysis</h3>
-                <p>Interactive timeline showing case distribution over time. Click on cases to view detailed information and explore temporal patterns.</p>
+                <h3>📊 Case Visualizations</h3>
+                <p>Interactive visualizations including timeline, severity indicators, prosecution outcomes, and organizational entities. Explore case data through multiple visualizations and identify patterns across investigations.</p>
             </div>
             <div class="feature-card" onclick="window.location.href='/analysis'" style="cursor: pointer;">
-                <h3>🔍 Pattern Detection</h3>
+                <h3>🔍 Case Analysis</h3>
                 <p>Advanced clustering and similarity detection to identify connections between cases based on shared characteristics and relationships.</p>
             </div>
             <div class="feature-card">
@@ -181,16 +190,16 @@
                 <p>Encrypted database storage using SQLCipher to protect sensitive case data while enabling comprehensive analysis.</p>
             </div>
             <div class="feature-card">
-                <h3>📈 Platform Analysis</h3>
-                <p>Analyze cases by platforms used, technologies involved, and communication methods to identify trends and patterns.</p>
+                <h3>⚙️ Feature Extraction</h3>
+                <p>Automatically extract structured features from case narratives including demographics, platforms, evidence volumes, and prosecution outcomes. Verify extraction accuracy through the interactive audit interface.</p>
             </div>
             <div class="feature-card">
                 <h3>🎨 Tasteful Visualization</h3>
                 <p>Carefully designed visualizations with particular attention to tasteful presentation of sensitive case content and pattern analysis.</p>
             </div>
             <div class="feature-card">
-                <h3>📁 Multi-Format Support</h3>
-                <p>Process PDF files, extract case information, and automatically structure data for comprehensive analysis.</p>
+                <h3>📈 Multi Case Analysis</h3>
+                <p>Compare and analyze multiple cases simultaneously to identify common patterns, trends, and relationships. Discover insights that emerge when examining cases together rather than in isolation.</p>
             </div>
         </div>
         
@@ -199,9 +208,9 @@
                 <div class="stat-number" id="total-cases">-</div>
                 <div class="stat-label">Total Cases</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="victim-count">-</div>
-                <div class="stat-label">Victim Count</div>
+            <div class="stat-item" style="cursor: pointer;" onclick="window.location.href='/audit'">
+                <div class="stat-number" id="unique-features">-</div>
+                <div class="stat-label">Extracted Features</div>
             </div>
             <div class="stat-item" style="cursor: pointer;" onclick="window.location.href='/sources'">
                 <div class="stat-number" id="sources">-</div>
@@ -216,7 +225,7 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('total-cases').textContent = data.total_cases || 0;
-                document.getElementById('victim-count').textContent = data.total_victims > 0 ? data.total_victims : '-';
+                document.getElementById('unique-features').textContent = data.unique_features || 0;
                 document.getElementById('sources').textContent = data.source_count || (data.sources ? data.sources.length : 0);
             })
             .catch(error => {

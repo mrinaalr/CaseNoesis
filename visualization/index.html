@@ -9,59 +9,78 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e8ba3 50%, #9bb5d1 75%, #c4d4e8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
         }
         .nav {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 15px 20px;
-            margin: -20px -20px 20px -20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
+            backdrop-filter: blur(10px);
         }
         .nav a {
             color: #4CAF50;
             text-decoration: none;
             margin-right: 20px;
             font-weight: 500;
+            transition: color 0.3s;
         }
         .nav a:hover {
-            text-decoration: underline;
+            color: #45a049;
         }
         .nav select {
             padding: 8px 15px;
             border: 2px solid #4CAF50;
-            border-radius: 4px;
+            border-radius: 6px;
             background: white;
             color: #333;
             font-size: 14px;
             cursor: pointer;
             font-family: inherit;
             margin-right: 20px;
+            transition: all 0.3s;
         }
         .nav select:focus {
             outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .nav select:hover {
             border-color: #45a049;
         }
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
         h1 {
-            color: #333;
+            color: #1e3c72;
             margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
         }
         .subtitle {
-            color: #666;
+            color: #555;
             margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
         }
         .timeline-container {
             margin: 40px 0;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .case-point {
             cursor: pointer;
@@ -80,34 +99,100 @@
         }
         .case-detail {
             margin-top: 30px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 4px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: none;
         }
         .case-detail.active {
             display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .severity-cases-panel {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: none;
+        }
+        .severity-cases-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .severity-cases-panel h3 {
+            margin-top: 0;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        .severity-case-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+        }
+        .severity-case-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(4px);
+        }
+        .severity-case-item .case-header {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .severity-case-item .case-text {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .severity-highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: bold;
         }
         .case-detail h3 {
             margin-top: 0;
-            color: #333;
+            color: #1e3c72;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
         }
         .case-detail .info-row {
-            margin: 10px 0;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         .case-detail .label {
-            font-weight: bold;
+            font-weight: 600;
             color: #555;
         }
         .case-text {
             margin-top: 15px;
-            padding: 15px;
+            padding: 20px;
             background: white;
-            border-left: 3px solid #4CAF50;
+            border-left: 4px solid #4CAF50;
+            border-radius: 8px;
             max-height: 300px;
             overflow-y: auto;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .stats {
             display: flex;
@@ -116,35 +201,52 @@
         }
         .stat-box {
             flex: 1;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 4px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            border-color: rgba(76, 175, 80, 0.4);
         }
         .stat-box .number {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 700;
             color: #4CAF50;
+            margin-bottom: 5px;
         }
         .stat-box .label {
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
         .stat-box select {
             margin-top: 10px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
             width: 100%;
             cursor: pointer;
+            background: white;
+            transition: all 0.3s;
         }
         .stat-box select:focus {
             outline: none;
             border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .stat-box select:hover {
+            border-color: #4CAF50;
         }
         .stat-box[style*="cursor: pointer"]:hover {
-            background: #e8e8e8;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
         }
     </style>
 </head>
@@ -153,14 +255,15 @@
                <a href="/">Home</a>
                <select id="viz-selector" onchange="changeVisualization(this.value)" style="padding: 8px 15px; border: 2px solid #4CAF50; border-radius: 4px; background: white; color: #333; font-size: 14px; cursor: pointer; margin-right: 20px;">
                    <option value="timeline">Timeline</option>
-                   <option value="platform">Platform</option>
-                   <option value="perpetrator">Previous Perpetrator</option>
-                   <option value="geographic">Geographic Distribution</option>
                    <option value="severity">Severity Indicators</option>
                    <option value="outcomes">Prosecution Outcomes</option>
+                   <option value="perpetrator">Previous Perpetrator</option>
+                   <option value="platform">Environment</option>
+                    <option value="geographic">Organizations Involved</option>
                </select>
                <a href="/analysis">Analysis</a>
                <a href="/sources">Sources</a>
+               <a href="/audit">Audit</a>
            </div>
     
     <div class="container">
@@ -204,11 +307,16 @@
                 Click on a case point above to view details.
             </div>
         </div>
+        
+        <div class="severity-cases-panel" id="severity-cases-panel">
+            <h3 id="severity-cases-title">Cases</h3>
+            <div id="severity-cases-list"></div>
+        </div>
     </div>
 
     <script>
         // Timeline visualization using D3.js
-        const margin = {top: 40, right: 40, bottom: 60, left: 80};
+        const margin = {top: 40, right: 40, bottom: 100, left: 80};
         const width = document.getElementById('timeline').clientWidth - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
@@ -220,6 +328,7 @@
 
         let allCases = [];
         let filteredCases = [];
+        let geographicChartData = []; // Store chart data for stats calculation
 
         // Load cases from API
         function loadCases() {
@@ -344,18 +453,87 @@
             // Total cases
             document.getElementById('total-cases').textContent = filteredCases.length;
             
-            // Total victims
-            let totalVictims = 0;
-            filteredCases.forEach(c => {
-                const count = c.victim_count;
-                if (count && typeof count === 'number') {
-                    totalVictims += count;
-                } else if (c.raw_data?.victim_count) {
-                    const rawCount = parseInt(c.raw_data.victim_count);
-                    if (!isNaN(rawCount)) totalVictims += rawCount;
-                }
-            });
-            document.getElementById('victim-count').textContent = totalVictims > 0 ? totalVictims : '-';
+            // Check current visualization type
+            const currentViz = document.getElementById('viz-selector')?.value || 'timeline';
+            const victimLabel = document.querySelector('#victim-count').parentElement.querySelector('.label');
+            
+            if (currentViz === 'outcomes') {
+                // For prosecution outcomes, show cases with arrests
+                let casesWithArrests = 0;
+                filteredCases.forEach(c => {
+                    const caseText = (c.raw_data?.case_text || c.case_text || '').toLowerCase();
+                    if (caseText.includes('arrest') || caseText.includes('arrested')) {
+                        casesWithArrests++;
+                    }
+                });
+                document.getElementById('victim-count').textContent = casesWithArrests > 0 ? casesWithArrests : '-';
+                victimLabel.textContent = 'Cases with Arrests';
+                
+                // Remove click handler for outcomes visualization
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else if (currentViz === 'perpetrator') {
+                // For previous perpetrator, show registered sex offenders
+                let registeredCount = 0;
+                filteredCases.forEach(c => {
+                    if (c.perpetrator_registered_sex_offender === true) {
+                        registeredCount++;
+                    }
+                });
+                document.getElementById('victim-count').textContent = registeredCount > 0 ? registeredCount : '-';
+                victimLabel.textContent = 'Registered Sex Offenders';
+                
+                // Remove click handler for perpetrator visualization
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else if (currentViz === 'geographic') {
+                // For organizations involved, count organizations in chart (excluding Unknown)
+                const uniqueCount = geographicChartData.filter(d => d.organization !== 'Unknown').length;
+                document.getElementById('victim-count').textContent = uniqueCount > 0 ? uniqueCount : '-';
+                victimLabel.textContent = 'Unique Organizations';
+                
+                // Remove click handler
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else if (currentViz === 'platform') {
+                // For environment visualization, count cases with digital component
+                let casesWithDigital = 0;
+                filteredCases.forEach(c => {
+                    const platforms = c.platforms_used || [];
+                    if (platforms.length > 0) {
+                        casesWithDigital++;
+                    }
+                });
+                document.getElementById('victim-count').textContent = casesWithDigital > 0 ? casesWithDigital : '-';
+                victimLabel.textContent = 'Cases with Digital Component';
+                
+                // Remove click handler
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else {
+                // Total victims for other visualizations
+                let totalVictims = 0;
+                filteredCases.forEach(c => {
+                    const count = c.victim_count;
+                    if (count && typeof count === 'number') {
+                        totalVictims += count;
+                    } else if (c.raw_data?.victim_count) {
+                        const rawCount = parseInt(c.raw_data.victim_count);
+                        if (!isNaN(rawCount)) totalVictims += rawCount;
+                    }
+                });
+                document.getElementById('victim-count').textContent = totalVictims > 0 ? totalVictims : '-';
+                victimLabel.textContent = 'Total Victims';
+                
+                // Remove click handler for non-geographic visualizations
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            }
             
             // Data sources
             const sources = new Set();
@@ -463,14 +641,14 @@
                 .attr("fill", "#4CAF50")
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 2)
-                .on("click", function(event, d) {
-                    showCaseDetail(d);
-                })
                 .on("mouseover", function() {
                     d3.select(this).attr("r", 8);
                 })
                 .on("mouseout", function() {
                     d3.select(this).attr("r", 6);
+                })
+                .on("click", function(event, d) {
+                    showCaseDetail(d);
                 });
 
             // Add labels
@@ -500,14 +678,18 @@
 
         const vizTitles = {
             'timeline': 'Case Timeline Visualization',
-            'platform': 'Case Platform Visualization',
+            'platform': 'Case Environment Visualization',
             'perpetrator': 'Previous Perpetrator Visualization',
-            'geographic': 'Geographic Distribution Visualization',
+            'geographic': 'Organizations Involved Visualization',
             'severity': 'Severity Indicators Visualization',
             'outcomes': 'Prosecution Outcomes Visualization'
         };
 
         function changeVisualization(type) {
+            // Hide case detail panel and severity cases panel when switching visualizations
+            document.getElementById('case-detail').classList.remove('active');
+            document.getElementById('severity-cases-panel').classList.remove('active');
+            
             // Update subtitle
             const subtitle = document.getElementById('viz-subtitle');
             subtitle.textContent = vizTitles[type] || 'Case Visualization';
@@ -522,13 +704,1186 @@
             } else {
                 statBox.style.display = 'none';
                 svg.selectAll("*").remove();
+                
+                // Ensure filteredCases is current (use allCases if no filter is active)
+                if (filteredCases.length === 0 && allCases.length > 0) {
+                    filteredCases = allCases;
+                }
+                
+                // Load and render the selected visualization
+                if (allCases.length > 0) {
+                    renderVisualization(type, filteredCases);
+                } else {
+                    loadCases().then(() => {
+                        if (allCases.length > 0) {
+                            // Update filteredCases after loading
+                            if (filteredCases.length === 0) {
+                                filteredCases = allCases;
+                            }
+                            renderVisualization(type, filteredCases);
+                        }
+                    });
+                }
+            }
+        }
+
+        function renderVisualization(type, cases) {
+            svg.selectAll("*").remove();
+            
+            switch(type) {
+                case 'platform':
+                    renderPlatformViz(cases);
+                    updateStats(); // Update stats for environment visualization
+                    break;
+                case 'perpetrator':
+                    renderPerpetratorViz(cases);
+                    updateStats(); // Update stats for perpetrator visualization
+                    break;
+                case 'geographic':
+                    renderGeographicViz(cases);
+                    updateStats(); // Update stats for organizations visualization
+                    break;
+                case 'severity':
+                    renderSeverityViz(cases);
+                    updateStats(); // Update stats for severity visualization
+                    break;
+                case 'outcomes':
+                    renderOutcomesViz(cases);
+                    updateStats(); // Update stats for outcomes visualization
+                    break;
+                default:
+                    svg.append("text")
+                        .attr("x", width / 2)
+                        .attr("y", height / 2)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "#666")
+                        .text("Visualization not implemented");
+            }
+        }
+
+        function renderPlatformViz(cases) {
+            // Count platforms, grouping social media with online
+            const platformCounts = {};
+            const platformCases = {};
+            
+            cases.forEach(c => {
+                const platforms = c.platforms_used || [];
+                if (platforms.length === 0) {
+                    platformCounts['None/Unknown'] = (platformCounts['None/Unknown'] || 0) + 1;
+                    if (!platformCases['None/Unknown']) platformCases['None/Unknown'] = [];
+                    platformCases['None/Unknown'].push(c);
+                } else {
+                    platforms.forEach(p => {
+                        // Group social media platforms with "online"
+                        let platformKey = p;
+                        const platformLower = p.toLowerCase();
+                        if (platformLower.includes('social media') || 
+                            platformLower.includes('facebook') || 
+                            platformLower.includes('twitter') || 
+                            platformLower.includes('instagram') || 
+                            platformLower.includes('snapchat') ||
+                            platformLower === 'online') {
+                            platformKey = 'Online';
+                        }
+                        
+                        platformCounts[platformKey] = (platformCounts[platformKey] || 0) + 1;
+                        if (!platformCases[platformKey]) platformCases[platformKey] = [];
+                        platformCases[platformKey].push(c);
+                    });
+                }
+            });
+
+            // Sort data - move "None/Unknown" to the end
+            const data = Object.entries(platformCounts).map(([platform, count]) => ({
+                platform,
+                count,
+                cases: platformCases[platform] || []
+            })).sort((a, b) => {
+                // Put "None/Unknown" at the end
+                if (a.platform === 'None/Unknown') return 1;
+                if (b.platform === 'None/Unknown') return -1;
+                // Otherwise sort by count
+                return b.count - a.count;
+            });
+
+            if (data.length === 0) {
                 svg.append("text")
                     .attr("x", width / 2)
                     .attr("y", height / 2)
                     .attr("text-anchor", "middle")
                     .attr("fill", "#666")
-                    .text(`${vizTitles[type] || type.charAt(0).toUpperCase() + type.slice(1)} coming soon`);
+                    .text("No environment data available");
+                return;
             }
+
+            // Bar chart
+            const xScale = d3.scaleBand()
+                .domain(data.map(d => d.platform))
+                .range([0, width])
+                .padding(0.2);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)])
+                .nice()
+                .range([height, 0]);
+
+            const colorScale = d3.scaleOrdinal()
+                .domain(data.map(d => d.platform))
+                .range(d3.schemeCategory10);
+
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "white")
+                .style("padding", "8px 12px")
+                .style("border-radius", "4px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000");
+
+            // Bars
+            svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("x", d => xScale(d.platform))
+                .attr("y", d => yScale(d.count))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - yScale(d.count))
+                .attr("fill", d => colorScale(d.platform))
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("opacity", 0.7);
+                    // Show tooltip with count
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(`${d.count} cases - Click to view cases`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showPlatformCases(d.platform, cases);
+                });
+
+            // X axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-45)");
+
+            // Y axis
+            svg.append("g")
+                .call(d3.axisLeft(yScale).ticks(5));
+
+            // Labels
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Number of Cases");
+
+            svg.append("text")
+                .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 10})`)
+                .style("text-anchor", "middle")
+                .text("Environment");
+        }
+
+        function renderPerpetratorViz(cases) {
+            // Count registered vs non-registered
+            let registered = 0;
+            let nonRegistered = 0;
+            let unknown = 0;
+
+            cases.forEach(c => {
+                const isRegistered = c.perpetrator_registered_sex_offender;
+                if (isRegistered === true) {
+                    registered++;
+                } else if (isRegistered === false) {
+                    nonRegistered++;
+                } else {
+                    unknown++;
+                }
+            });
+
+            const data = [
+                {label: 'Registered Sex Offender', count: registered, color: '#d32f2f'},
+                {label: 'Not Registered', count: nonRegistered, color: '#4CAF50'},
+                {label: 'Unknown', count: unknown, color: '#9e9e9e'}
+            ].filter(d => d.count > 0);
+
+            if (data.length === 0) {
+                svg.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .text("No perpetrator registration data available");
+                return;
+            }
+
+            // Pie chart
+            const radius = Math.min(width, height) / 2 - 40;
+            const pie = d3.pie()
+                .value(d => d.count)
+                .sort(null);
+
+            const arc = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius);
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "white")
+                .style("padding", "8px 12px")
+                .style("border-radius", "4px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000");
+
+            const arcs = g.selectAll(".arc")
+                .data(pie(data))
+                .enter()
+                .append("g")
+                .attr("class", "arc");
+
+            arcs.append("path")
+                .attr("d", arc)
+                .attr("fill", d => d.data.color)
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("opacity", 0.7);
+                    // Show tooltip with count
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(`${d.data.count} cases - Click to view cases`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showPerpetratorCases(d.data.label, cases);
+                });
+
+            // Labels
+            arcs.append("text")
+                .attr("transform", d => `translate(${arc.centroid(d)})`)
+                .attr("text-anchor", "middle")
+                .style("font-size", "12px")
+                .style("font-weight", "bold")
+                .text(d => d.data.count);
+
+            // Legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 200}, 20)`);
+
+            data.forEach((d, i) => {
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 25})`);
+
+                legendRow.append("rect")
+                    .attr("width", 15)
+                    .attr("height", 15)
+                    .attr("fill", d.color);
+
+                legendRow.append("text")
+                    .attr("x", 20)
+                    .attr("y", 12)
+                    .style("font-size", "12px")
+                    .text(`${d.label}: ${d.count}`);
+            });
+        }
+
+        function renderGeographicViz(cases) {
+            // Count organizations/agencies
+            const organizationCounts = {};
+            const organizationCases = {};
+            
+            cases.forEach(c => {
+                const agencies = c.agencies_involved || [];
+                if (agencies.length === 0) {
+                    organizationCounts['Unknown'] = (organizationCounts['Unknown'] || 0) + 1;
+                    if (!organizationCases['Unknown']) organizationCases['Unknown'] = [];
+                    organizationCases['Unknown'].push(c);
+                } else {
+                    agencies.forEach(a => {
+                        organizationCounts[a] = (organizationCounts[a] || 0) + 1;
+                        if (!organizationCases[a]) organizationCases[a] = [];
+                        organizationCases[a].push(c);
+                    });
+                }
+            });
+
+            const data = Object.entries(organizationCounts).map(([org, count]) => ({
+                organization: org,
+                count,
+                cases: organizationCases[org] || []
+            })).sort((a, b) => b.count - a.count).slice(0, 10); // Top 10
+            
+            // Store chart data for stats calculation
+            geographicChartData = data;
+
+            if (data.length === 0) {
+                geographicChartData = []; // Reset chart data
+                svg.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .text("No organization data available");
+                return;
+            }
+
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "white")
+                .style("padding", "8px 12px")
+                .style("border-radius", "4px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000");
+
+            // Horizontal bar chart
+            const xScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)])
+                .nice()
+                .range([0, width - 150]);
+
+            const yScale = d3.scaleBand()
+                .domain(data.map(d => d.organization))
+                .range([0, height])
+                .padding(0.2);
+
+            const colorScale = d3.scaleOrdinal()
+                .domain(data.map(d => d.organization))
+                .range(d3.schemeSet3);
+
+            // Bars
+            svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("x", 150)
+                .attr("y", d => yScale(d.organization))
+                .attr("width", d => xScale(d.count))
+                .attr("height", yScale.bandwidth())
+                .attr("fill", d => colorScale(d.organization))
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("opacity", 0.7);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(`${d.count} cases - Click to view cases`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showOrganizationCases(d.organization, d.cases);
+                });
+
+            // Labels on bars
+            svg.selectAll(".bar-label")
+                .data(data)
+                .enter()
+                .append("text")
+                .attr("class", "bar-label")
+                .attr("x", d => 150 + xScale(d.count) + 5)
+                .attr("y", d => yScale(d.organization) + yScale.bandwidth() / 2)
+                .attr("dy", "0.35em")
+                .style("font-size", "11px")
+                .text(d => d.count);
+
+            // Y axis (organization names)
+            svg.append("g")
+                .attr("transform", `translate(150, 0)`)
+                .call(d3.axisLeft(yScale));
+
+            // X axis
+            svg.append("g")
+                .attr("transform", `translate(150, ${height})`)
+                .call(d3.axisBottom(xScale).ticks(5));
+
+            svg.append("text")
+                .attr("transform", `translate(${150 + (width - 150) / 2}, ${height + margin.bottom - 10})`)
+                .style("text-anchor", "middle")
+                .text("Number of Cases");
+        }
+
+        function showOrganizationCases(organizationLabel, allCases) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
+            
+            // Show severity cases panel (reuse it for organizations)
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            title.textContent = `Cases with Organization: "${organizationLabel}"`;
+            
+            // Filter cases based on organization
+            let filteredCases = [];
+            if (organizationLabel === 'Unknown') {
+                filteredCases = allCases.filter(c => {
+                    const agencies = c.agencies_involved || [];
+                    return agencies.length === 0;
+                });
+            } else {
+                filteredCases = allCases.filter(c => {
+                    const agencies = c.agencies_involved || [];
+                    return agencies.some(a => a === organizationLabel);
+                });
+            }
+            
+            // Render cases
+            if (filteredCases.length === 0) {
+                list.innerHTML = '<p>No cases found with this organization.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            filteredCases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                
+                // Highlight organization name in the text
+                let highlightedText = caseText;
+                if (organizationLabel !== 'Unknown') {
+                    // Highlight the organization name (case-insensitive)
+                    const orgPattern = new RegExp(`\\b${escapeRegex(organizationLabel)}\\b`, 'gi');
+                    highlightedText = highlightedText.replace(orgPattern, (match) => {
+                        return `<span class="severity-highlight">${match}</span>`;
+                    });
+                    
+                    // Also highlight common abbreviations/variations
+                    // For example, if organization is "FBI", also highlight "Federal Bureau of Investigation"
+                    if (organizationLabel.toUpperCase() === 'FBI') {
+                        highlightedText = highlightedText.replace(/\bfederal\s+bureau\s+of\s+investigation\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    // For AZICAC
+                    if (organizationLabel.toUpperCase().includes('AZICAC') || organizationLabel.toUpperCase().includes('Arizona Internet Crimes Against Children')) {
+                        highlightedText = highlightedText.replace(/\barizona\s+internet\s+crimes\s+against\s+children\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    // For police departments
+                    if (organizationLabel.toLowerCase().includes('police')) {
+                        highlightedText = highlightedText.replace(/\bpolice\s+(department|dept\.?|force)\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                }
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
+        }
+
+        function renderSeverityViz(cases) {
+            // Count severity indicators
+            const severityCounts = {};
+            cases.forEach(c => {
+                const indicators = c.severity_indicators || [];
+                if (indicators.length === 0) {
+                    severityCounts['None'] = (severityCounts['None'] || 0) + 1;
+                } else {
+                    indicators.forEach(ind => {
+                        const label = ind.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        severityCounts[label] = (severityCounts[label] || 0) + 1;
+                    });
+                }
+            });
+
+            // Define severity order (None goes to the end)
+            const severityOrder = ['Infant', 'Very Young', 'Under 5', 'Under 9', 'Production', 'None'];
+            
+            // Create data array and sort by severity order (None last)
+            const data = Object.entries(severityCounts).map(([severity, count]) => ({
+                severity,
+                count
+            })).sort((a, b) => {
+                const aIndex = severityOrder.indexOf(a.severity);
+                const bIndex = severityOrder.indexOf(b.severity);
+                // If both are in order, sort by order; otherwise put ordered ones first
+                if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+                if (aIndex !== -1) return -1;
+                if (bIndex !== -1) return 1;
+                // If neither in order, sort by count
+                return b.count - a.count;
+            });
+
+            if (data.length === 0) {
+                svg.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .text("No severity data available");
+                return;
+            }
+
+            // Bar chart
+            const xScale = d3.scaleBand()
+                .domain(data.map(d => d.severity))
+                .range([0, width])
+                .padding(0.2);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)])
+                .nice()
+                .range([height, 0]);
+
+            // Custom color scale: Infant = darkest red, None = lightest
+            const severityColors = {
+                'Infant': '#8B0000',        // Dark red
+                'Very Young': '#B22222',    // Firebrick
+                'Under 5': '#DC143C',      // Crimson
+                'Under 9': '#FF6347',      // Tomato
+                'Production': '#FF7F50',   // Coral
+                'None': '#FFB6C1'          // Light pink (lightest)
+            };
+
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "white")
+                .style("padding", "8px 12px")
+                .style("border-radius", "4px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000");
+
+            // Bars
+            svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("x", d => xScale(d.severity))
+                .attr("y", d => yScale(d.count))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - yScale(d.count))
+                .attr("fill", d => severityColors[d.severity] || '#FFB6C1')
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("opacity", 0.7);
+                    // Show tooltip with count and click instruction
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(`${d.count} cases - Click to view cases`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showSeverityCases(d.severity, cases);
+                });
+
+            // X axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-45)");
+
+            // Y axis
+            svg.append("g")
+                .call(d3.axisLeft(yScale).ticks(5));
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Number of Cases");
+        }
+
+        function showSeverityCases(severityLabel, allCases) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
+            
+            // Show severity cases panel
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            title.textContent = `Cases with "${severityLabel}" Severity Indicator`;
+            
+            // Convert severity label to match database format (e.g., "Very Young" -> "very_young")
+            const severityKey = severityLabel.toLowerCase().replace(/\s+/g, '_');
+            
+            // Filter cases that have this severity indicator
+            let filteredCases = [];
+            if (severityLabel === 'None') {
+                filteredCases = allCases.filter(c => {
+                    const indicators = c.severity_indicators || [];
+                    return indicators.length === 0;
+                });
+            } else {
+                filteredCases = allCases.filter(c => {
+                    const indicators = c.severity_indicators || [];
+                    return indicators.some(ind => {
+                        const normalized = ind.toLowerCase().replace(/\s+/g, '_');
+                        return normalized === severityKey || 
+                               normalized === severityLabel.toLowerCase() ||
+                               ind.toLowerCase() === severityLabel.toLowerCase();
+                    });
+                });
+            }
+            
+            // Render cases
+            if (filteredCases.length === 0) {
+                list.innerHTML = '<p>No cases found with this severity indicator.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            filteredCases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                
+                // Highlight severity indicators in the text
+                let highlightedText = caseText;
+                const indicators = caseData.severity_indicators || [];
+                
+                // Create regex patterns for all severity indicators
+                const severityPatterns = {
+                    'infant': /\binfants?\b/gi,
+                    'very_young': /\bvery\s+young\b/gi,
+                    'under_5': /\bunder\s+5\b/gi,
+                    'under_9': /\bunder\s+9\b/gi,
+                    'production': /\b(produced|created|made\s+movies?)\b/gi
+                };
+                
+                // Highlight the specific severity that matches
+                if (severityLabel !== 'None') {
+                    const pattern = severityPatterns[severityKey];
+                    if (pattern) {
+                        highlightedText = highlightedText.replace(pattern, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    // Also try direct match
+                    const directPattern = new RegExp(`\\b${severityLabel.replace(/\s+/g, '\\s+')}\\b`, 'gi');
+                    highlightedText = highlightedText.replace(directPattern, (match) => {
+                        return `<span class="severity-highlight">${match}</span>`;
+                    });
+                }
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
+        }
+
+        function renderOutcomesViz(cases) {
+            // Query database for four categories:
+            // a) No Charges Listed in saved db
+            // b) Include "sexual exploitation of a minor" in any capacity
+            // c) Have "booked" in the case file
+            // d) Have "arrest" in the case file
+            
+            const categoryCounts = {
+                'No Charges Listed': 0,
+                'Sexual Exploitation of a Minor': 0,
+                'Booked': 0,
+                'Arrested': 0
+            };
+            
+            const categoryCases = {
+                'No Charges Listed': [],
+                'Sexual Exploitation of a Minor': [],
+                'Booked': [],
+                'Arrested': []
+            };
+
+            cases.forEach(c => {
+                const outcome = c.prosecution_outcome || {};
+                const charges = outcome.charges || [];
+                const caseText = (c.raw_data?.case_text || c.case_text || '').toLowerCase();
+                
+                // a) No Charges Listed
+                if (charges.length === 0) {
+                    categoryCounts['No Charges Listed']++;
+                    categoryCases['No Charges Listed'].push(c);
+                }
+                
+                // b) Sexual exploitation of a minor (in charges or case text)
+                let hasSexualExploitation = false;
+                charges.forEach(ch => {
+                    const chargeName = (ch.charge || '').toLowerCase();
+                    if (chargeName.includes('sexual exploitation') || chargeName.includes('sexual exploitation of a minor')) {
+                        hasSexualExploitation = true;
+                    }
+                });
+                if (caseText.includes('sexual exploitation of a minor') || caseText.includes('sexual exploitation')) {
+                    hasSexualExploitation = true;
+                }
+                if (hasSexualExploitation) {
+                    categoryCounts['Sexual Exploitation of a Minor']++;
+                    categoryCases['Sexual Exploitation of a Minor'].push(c);
+                }
+                
+                // c) Have "booked" in case file
+                if (caseText.includes('booked')) {
+                    categoryCounts['Booked']++;
+                    categoryCases['Booked'].push(c);
+                }
+                
+                // d) Have "arrest" in case file
+                if (caseText.includes('arrest') || caseText.includes('arrested')) {
+                    categoryCounts['Arrested']++;
+                    categoryCases['Arrested'].push(c);
+                }
+            });
+
+            // Create data array
+            const data = Object.entries(categoryCounts).map(([category, count]) => ({
+                category,
+                count,
+                cases: categoryCases[category]
+            })).filter(d => d.count > 0);
+
+            if (data.length === 0) {
+                svg.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#666")
+                    .text("No prosecution outcome data available");
+                return;
+            }
+
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background", "rgba(0, 0, 0, 0.8)")
+                .style("color", "white")
+                .style("padding", "8px 12px")
+                .style("border-radius", "4px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000");
+
+            // Single bar chart for three categories
+            const xScale = d3.scaleBand()
+                .domain(data.map(d => d.category))
+                .range([0, width])
+                .padding(0.2);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)])
+                .nice()
+                .range([height, 0]);
+
+            // Bars - blue color scheme
+            svg.selectAll(".outcome-bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "outcome-bar")
+                .attr("x", d => xScale(d.category))
+                .attr("y", d => yScale(d.count))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - yScale(d.count))
+                .attr("fill", "#2196F3")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("opacity", 0.7);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(`${d.count} cases - Click to view cases`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showOutcomeCases('category', d.category, d.cases);
+                });
+
+            // X axis with more space for long labels like "No Charges Listed"
+            const xAxis = svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale));
+            
+            xAxis.selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", "1.5em")
+                .attr("transform", "rotate(-45)")
+                .style("font-size", "11px");
+
+            // Y axis
+            svg.append("g")
+                .call(d3.axisLeft(yScale).ticks(5));
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Number of Cases");
+        }
+
+        function showOutcomeCases(type, value, cases) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
+            
+            // Show severity cases panel (reuse it for outcomes)
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            
+            // If cases are already provided (from category), use them directly
+            let filteredCases = cases;
+            let titleText = '';
+            
+            if (type === 'category') {
+                titleText = `Cases: ${value}`;
+                // Cases are already filtered and passed in
+            } else {
+                // Legacy support for old charge/status types
+                if (type === 'charge') {
+                    titleText = `Cases with Charge: "${value}"`;
+                    filteredCases = allCases.filter(c => {
+                        const outcome = c.prosecution_outcome || {};
+                        const charges = outcome.charges || [];
+                        return charges.some(ch => {
+                            const chargeName = ch.charge || '';
+                            const shortName = chargeName.length > 30 ? chargeName.substring(0, 30) + '...' : chargeName;
+                            return shortName === value || chargeName === value;
+                        });
+                    });
+                } else if (type === 'status') {
+                    titleText = `Cases with Booking Status: "${value}"`;
+                    filteredCases = allCases.filter(c => {
+                        const outcome = c.prosecution_outcome || {};
+                        const status = outcome.booking_status || 'Unknown';
+                        return status === value;
+                    });
+                }
+            }
+            
+            title.textContent = titleText;
+            
+            // Render cases
+            if (filteredCases.length === 0) {
+                list.innerHTML = '<p>No cases found with this prosecution outcome.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            filteredCases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                const outcome = caseData.prosecution_outcome || {};
+                
+                // Highlight prosecution outcome text based on category
+                let highlightedText = caseText;
+                
+                if (type === 'category') {
+                    if (value === 'No Charges Listed') {
+                        // No specific highlighting needed
+                    } else if (value === 'Sexual Exploitation of a Minor') {
+                        // Highlight sexual exploitation text
+                        const exploitationPattern = /\bsexual\s+exploitation\s+of\s+a\s+minor\b/gi;
+                        highlightedText = highlightedText.replace(exploitationPattern, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                        // Also highlight just "sexual exploitation"
+                        const exploitationPattern2 = /\bsexual\s+exploitation\b/gi;
+                        highlightedText = highlightedText.replace(exploitationPattern2, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    } else if (value === 'Booked') {
+                        // Highlight booked text
+                        const bookedPattern = /\bbooked\b/gi;
+                        highlightedText = highlightedText.replace(bookedPattern, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    } else if (value === 'Arrested') {
+                        // Highlight arrest/arrested text
+                        const arrestPattern = /\b(arrest|arrested)\b/gi;
+                        highlightedText = highlightedText.replace(arrestPattern, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                } else if (type === 'charge') {
+                    // Legacy: Highlight charge-related text
+                    const charges = outcome.charges || [];
+                    charges.forEach(ch => {
+                        const chargeName = ch.charge || '';
+                        const shortName = chargeName.length > 30 ? chargeName.substring(0, 30) + '...' : chargeName;
+                        if (shortName === value || chargeName === value) {
+                            if (ch.count) {
+                                const chargePattern = new RegExp(`\\b${ch.count}\\s+counts?\\s+of\\s+${escapeRegex(chargeName)}\\b`, 'gi');
+                                highlightedText = highlightedText.replace(chargePattern, (match) => {
+                                    return `<span class="severity-highlight">${match}</span>`;
+                                });
+                            }
+                            const chargeNamePattern = new RegExp(`\\b${escapeRegex(chargeName)}\\b`, 'gi');
+                            highlightedText = highlightedText.replace(chargeNamePattern, (match) => {
+                                return `<span class="severity-highlight">${match}</span>`;
+                            });
+                        }
+                    });
+                } else if (type === 'status') {
+                    // Legacy: Highlight booking status
+                    const status = outcome.booking_status || '';
+                    if (status) {
+                        const statusPattern = new RegExp(`\\b${escapeRegex(status)}\\b`, 'gi');
+                        highlightedText = highlightedText.replace(statusPattern, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    if (outcome.jail) {
+                        const jailName = outcome.jail.replace(/\s*\(non-bondable\)\s*/i, '').trim();
+                        if (jailName) {
+                            const jailPattern = new RegExp(`\\b${escapeRegex(jailName)}\\b`, 'gi');
+                            highlightedText = highlightedText.replace(jailPattern, (match) => {
+                                return `<span class="severity-highlight">${match}</span>`;
+                            });
+                        }
+                    }
+                }
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
+        }
+
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function showPerpetratorCases(label, allCases) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
+            
+            // Show severity cases panel (reuse it for perpetrator)
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            title.textContent = `Cases: ${label}`;
+            
+            // Filter cases based on label
+            let filteredCases = [];
+            if (label === 'Registered Sex Offender') {
+                filteredCases = allCases.filter(c => c.perpetrator_registered_sex_offender === true);
+            } else if (label === 'Not Registered') {
+                filteredCases = allCases.filter(c => c.perpetrator_registered_sex_offender === false);
+            } else if (label === 'Unknown') {
+                filteredCases = allCases.filter(c => 
+                    c.perpetrator_registered_sex_offender !== true && 
+                    c.perpetrator_registered_sex_offender !== false
+                );
+            }
+            
+            // Render cases
+            if (filteredCases.length === 0) {
+                list.innerHTML = '<p>No cases found with this perpetrator registration status.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            filteredCases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                
+                // Highlight registration status text
+                let highlightedText = caseText;
+                if (label === 'Registered Sex Offender') {
+                    const registeredPattern = /\bregistered\s+sex\s+offender\b/gi;
+                    highlightedText = highlightedText.replace(registeredPattern, (match) => {
+                        return `<span class="severity-highlight">${match}</span>`;
+                    });
+                }
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
+        }
+
+        function showPlatformCases(platformLabel, allCases) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
+            
+            // Show severity cases panel (reuse it for platform)
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            title.textContent = `Cases with Environment: "${platformLabel}"`;
+            
+            // Filter cases based on environment
+            let filteredCases = [];
+            if (platformLabel === 'None/Unknown') {
+                filteredCases = allCases.filter(c => {
+                    const platforms = c.platforms_used || [];
+                    return platforms.length === 0;
+                });
+            } else if (platformLabel === 'Online') {
+                // Show all cases with online or social media platforms
+                filteredCases = allCases.filter(c => {
+                    const platforms = c.platforms_used || [];
+                    return platforms.some(p => {
+                        const pLower = p.toLowerCase();
+                        return pLower.includes('social media') || 
+                               pLower.includes('facebook') || 
+                               pLower.includes('twitter') || 
+                               pLower.includes('instagram') || 
+                               pLower.includes('snapchat') ||
+                               pLower === 'online';
+                    });
+                });
+            } else {
+                filteredCases = allCases.filter(c => {
+                    const platforms = c.platforms_used || [];
+                    return platforms.includes(platformLabel);
+                });
+            }
+            
+            // Render cases
+            if (filteredCases.length === 0) {
+                list.innerHTML = '<p>No cases found with this environment.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            filteredCases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                
+                // Highlight environment text
+                let highlightedText = caseText;
+                if (platformLabel === 'Online') {
+                    // Highlight online and social media terms
+                    highlightedText = highlightedText.replace(/\b(online|social media|facebook|twitter|instagram|snapchat)\b/gi, (match) => {
+                        return `<span class="severity-highlight">${match}</span>`;
+                    });
+                } else if (platformLabel !== 'None/Unknown') {
+                    // Highlight the environment name in the text
+                    const platformPattern = new RegExp(`\\b${escapeRegex(platformLabel)}\\b`, 'gi');
+                    highlightedText = highlightedText.replace(platformPattern, (match) => {
+                        return `<span class="severity-highlight">${match}</span>`;
+                    });
+                    // Also highlight common variations
+                    if (platformLabel.toLowerCase() === 'chat') {
+                        highlightedText = highlightedText.replace(/\bchat(ting|ted|s)?\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                }
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
         }
 
         // Initialize

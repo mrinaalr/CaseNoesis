@@ -19,7 +19,7 @@ import logging
 import sys
 
 try:
-    import pdfplumber
+import pdfplumber
     PDFPLUMBER_AVAILABLE = True
     logging.getLogger("pdfplumber").setLevel(logging.ERROR)
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -45,11 +45,11 @@ def extract_pdf_text(pdf_path: str) -> str:
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            with pdfplumber.open(pdf_path) as pdf:
-                for page in pdf.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text_content.append(page_text)
+        with pdfplumber.open(pdf_path) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text_content.append(page_text)
         
         return "\n".join(text_content)
     except Exception as e:

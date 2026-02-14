@@ -143,6 +143,16 @@ class CaseStorage:
             date_start = date_range.get('start') if isinstance(date_range, dict) else None
             date_end = date_range.get('end') if isinstance(date_range, dict) else None
             
+            # Map new schema to database format (backward compatible)
+            investigation_info = case.get('investigation_type') or case.get('investigation_methods_and_teams')
+            if isinstance(investigation_info, dict):
+                # New format: {type: str, agencies: [str]}
+                investigation_methods = [investigation_info.get('type')] + investigation_info.get('agencies', [])
+            elif isinstance(investigation_info, str):
+                investigation_methods = [investigation_info]
+            else:
+                investigation_methods = case.get('agencies_involved', [])
+            
             cursor.execute('''
                 INSERT OR REPLACE INTO cases (
                     id, source, date_start, date_end, victim_count, perpetrator_count,
@@ -156,59 +166,89 @@ class CaseStorage:
                 date_start,
                 date_end,
                 case.get('victim_count'),
-                case.get('perpetrator_count'),
+                None,  # perpetrator_count (deprecated, use perpetrator_age instead)
                 case.get('relationship_to_victim'),
                 json.dumps(case.get('platforms_used', [])),
-                json.dumps(case.get('technologies', [])),
-                json.dumps(case.get('communication_methods', [])),
-                json.dumps(case.get('investigation_methods_and_teams', [])),
+                json.dumps([]),  # technologies (deprecated)
+                json.dumps([]),  # communication_methods (deprecated)
+                json.dumps(investigation_methods),
                 json.dumps(case.get('severity_indicators', [])),
                 json.dumps(case.get('case_topics', [])),
                 json.dumps(case.get('tags', [])),
                 case.get('notes'),
                 json.dumps(case.get('raw_data', {})),
-                json.dumps(case.get('extracted_features', {})),
+                json.dumps(case),  # Store full case as extracted_features for new schema
                 datetime.now().isoformat()
             ))
             
             victim_demo = case.get('victim_demographics')
-            if victim_demo:
+            if victim_demo and isinstance(victim_demo, dict):
+                # Store age_range as JSON string (can be dict with min/max or list)
+                age_range_str = None
+                if victim_demo.get('age_range'):
+                    age_range_str = json.dumps(victim_demo.get('age_range'))
+                elif victim_demo.get('ages'):
+                    # Create age_range from ages list
+                    ages = victim_demo.get('ages', [])
+                    if ages:
+                        age_range_str = json.dumps({'min': min(ages), 'max': max(ages)})
+                
                 cursor.execute('''
                     INSERT OR REPLACE INTO victim_demographics 
                     (case_id, age_range, region, anonymized_id)
                     VALUES (?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    victim_demo.get('age_range') if isinstance(victim_demo, dict) else None,
-                    victim_demo.get('region') if isinstance(victim_demo, dict) else None,
-                    victim_demo.get('anonymized_id') if isinstance(victim_demo, dict) else None,
+                    age_range_str,
+                    victim_demo.get('region'),
+                    None,  # anonymized_id (not extracted)
                 ))
             
+            # Store perpetrator demographics (new format: age, is_registered)
+            perp_age = case.get('perpetrator_age')
+            perp_registered = case.get('perpetrator_registered_sex_offender', False)
             perp_demo = case.get('perpetrator_demographics')
-            if perp_demo:
+            
+            if perp_age is not None or perp_registered or perp_demo:
+                # Create age_range from age
+                age_range_str = None
+                if perp_age is not None:
+                    age_range_str = json.dumps({'min': perp_age, 'max': perp_age})
+                elif perp_demo and isinstance(perp_demo, dict) and perp_demo.get('age'):
+                    age = perp_demo.get('age')
+                    age_range_str = json.dumps({'min': age, 'max': age})
+                
+                prev_conviction = case.get('previous_conviction') or (perp_demo.get('previous_conviction') if isinstance(perp_demo, dict) else None)
+                
                 cursor.execute('''
                     INSERT OR REPLACE INTO perpetrator_demographics 
                     (case_id, age_range, region, anonymized_id, previous_conviction)
                     VALUES (?, ?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    perp_demo.get('age_range') if isinstance(perp_demo, dict) else None,
-                    perp_demo.get('region') if isinstance(perp_demo, dict) else None,
-                    perp_demo.get('anonymized_id') if isinstance(perp_demo, dict) else None,
-                    json.dumps(perp_demo.get('previous_conviction', {})) if isinstance(perp_demo, dict) else None,
+                    age_range_str,
+                    None,  # region (not extracted)
+                    None,  # anonymized_id (not extracted)
+                    json.dumps(prev_conviction) if prev_conviction else None,
                 ))
             
             prosecution = case.get('prosecution_outcome')
-            if prosecution:
+            if prosecution and isinstance(prosecution, dict):
+                # Map new format to old format for backward compatibility
+                status = prosecution.get('booking_status') or prosecution.get('status')
+                charges = prosecution.get('charges', [])
+                # Convert charges list to old format if needed
+                charges_str = json.dumps(charges)
+                
                 cursor.execute('''
                     INSERT OR REPLACE INTO prosecution_outcomes 
                     (case_id, status, charges, sentences)
                     VALUES (?, ?, ?, ?)
                 ''', (
                     case.get('id'),
-                    prosecution.get('status') if isinstance(prosecution, dict) else None,
-                    json.dumps(prosecution.get('charges', [])) if isinstance(prosecution, dict) else None,
-                    json.dumps(prosecution.get('sentences', [])) if isinstance(prosecution, dict) else None,
+                    status,
+                    charges_str,
+                    json.dumps([]),  # sentences (not extracted)
                 ))
             
             conn.commit()
@@ -294,6 +334,27 @@ class CaseStorage:
                     'start': case_dict.get('date_start'),
                     'end': case_dict.get('date_end')
                 }
+            
+            # Merge extracted_features back into case_dict (new schema fields)
+            extracted_features = case_dict.get('extracted_features', {})
+            if isinstance(extracted_features, dict):
+                # Merge new schema fields from extracted_features
+                for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
+                           'agencies_involved', 'investigation_type', 'evidence_volume',
+                           'prosecution_outcome', 'victim_demographics', 'relationship_to_victim']:
+                    if key in extracted_features:
+                        case_dict[key] = extracted_features[key]
+            
+            # Also merge prosecution_outcome from prosecution_outcomes table if not already merged
+            if not case_dict.get('prosecution_outcome') and case_dict.get('prosecution_outcomes'):
+                prosecution_rows = case_dict.get('prosecution_outcomes', [])
+                if prosecution_rows and len(prosecution_rows) > 0:
+                    prosecution = prosecution_rows[0]
+                    case_dict['prosecution_outcome'] = {
+                        'booking_status': prosecution.get('status'),
+                        'charges': json.loads(prosecution.get('charges', '[]')) if prosecution.get('charges') else [],
+                        'jail': None
+                    }
             
             conn.close()
             return case_dict

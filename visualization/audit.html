@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - Data Audit</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 60px);
+            gap: 20px;
+            padding: 20px;
+        }
+        .cases-panel {
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .cases-panel h2 {
+            padding: 20px;
+            margin: 0;
+            border-bottom: 2px solid #4CAF50;
+            color: #333;
+        }
+        .cases-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .case-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .case-item:hover {
+            border-color: #4CAF50;
+            background: #f9f9f9;
+        }
+        .case-item.active {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .case-item-id {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        .case-item-date {
+            font-size: 12px;
+            color: #666;
+        }
+        .case-item-preview {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .features-panel {
+            flex: 1;
+            min-width: 400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .raw-text-panel {
+            flex: 1;
+            min-width: 400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .raw-text-panel h2 {
+            padding: 20px;
+            margin: 0;
+            border-bottom: 2px solid #4CAF50;
+            color: #333;
+        }
+        .raw-text-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .features-panel h2 {
+            padding: 20px;
+            margin: 0;
+            border-bottom: 2px solid #4CAF50;
+            color: #333;
+        }
+        .features-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .no-selection {
+            text-align: center;
+            color: #999;
+            padding: 60px 20px;
+        }
+        .feature-section {
+            margin-bottom: 30px;
+        }
+        .feature-section h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .feature-section h3:hover {
+            color: #45a049;
+            background: #f0f7f0;
+            padding-left: 10px;
+            border-left: 3px solid #4CAF50;
+        }
+        .feature-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #4CAF50;
+            cursor: default;
+            transition: all 0.2s;
+        }
+        .feature-item:hover {
+            background: #e8f5e9;
+            border-left-color: #45a049;
+            padding-left: 15px;
+            transform: translateX(3px);
+        }
+        .feature-item.highlightable {
+            cursor: pointer;
+        }
+        .text-highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+        .feature-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+            cursor: default;
+            transition: all 0.2s;
+        }
+        .feature-label.highlightable {
+            cursor: pointer;
+        }
+        .feature-label.highlightable:hover {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+        .feature-value {
+            color: #333;
+            word-wrap: break-word;
+        }
+        .feature-value-null {
+            color: #999;
+            font-style: italic;
+        }
+        .feature-value-array {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .feature-value-array span {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .feature-value-array span.highlightable-item {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .feature-value-array span.highlightable-item:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+        .feature-value-object {
+            background: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            margin-top: 5px;
+            transition: all 0.2s;
+        }
+        .feature-value-object.highlightable:hover {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+            padding-left: 15px;
+            transform: translateX(3px);
+        }
+        .feature-value-object .nested-item {
+            margin: 5px 0;
+            padding-left: 15px;
+        }
+        .raw-text {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            border: 2px solid #4CAF50;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #333;
+        }
+        .raw-case-section {
+            background: #f0f7f0;
+            border-left: 4px solid #4CAF50;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .raw-case-section h3 {
+            color: #4CAF50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit" style="font-weight: bold; color: #45a049;">Audit</a>
+    </div>
+
+    <div class="container">
+        <div class="cases-panel">
+            <h2>Cases (25)</h2>
+            <div class="cases-list" id="cases-list">
+                <div style="text-align: center; padding: 20px; color: #999;">
+                    Loading cases...
+                </div>
+            </div>
+        </div>
+
+        <div class="features-panel">
+            <h2>Extracted Features 
+                <span style="font-size: 0.65em; font-weight: normal; color: #666; margin-left: 10px; white-space: nowrap;">
+                    <span style="cursor: help;" title="Hover over features or section titles to see where they were extracted from in the raw text">🔍 <strong>Hover to highlight source text</strong></span>
+                </span>
+            </h2>
+            <div class="features-content" id="features-content">
+                <div class="no-selection">
+                    <h3>Select a case to view extracted features</h3>
+                    <p>Click on a case from the left panel to see all extracted data</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="raw-text-panel">
+            <h2>📄 Raw Case Text</h2>
+            <div class="raw-text-content" id="raw-text-content">
+                <div class="no-selection">
+                    <h3>Select a case to view raw case text</h3>
+                    <p>Click on a case from the left panel to see the original case narrative</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allCases = [];
+        let selectedCaseId = null;
+        let currentCaseText = '';
+        let currentCaseData = null;
+
+        async function loadCases() {
+            try {
+                const response = await fetch('/api/cases');
+                allCases = await response.json();
+                renderCasesList();
+            } catch (error) {
+                console.error('Error loading cases:', error);
+                document.getElementById('cases-list').innerHTML = 
+                    '<div style="text-align: center; padding: 20px; color: #d32f2f;">Error loading cases</div>';
+            }
+        }
+
+        function renderCasesList() {
+            const listContainer = document.getElementById('cases-list');
+            listContainer.innerHTML = '';
+
+            allCases.forEach((caseData, index) => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'case-item';
+                caseItem.onclick = () => selectCase(caseData.id);
+
+                const dateRange = caseData.date_range || {};
+                const dateStr = dateRange.start || caseData.raw_data?.month_year || 'Unknown date';
+                const preview = (caseData.raw_data?.case_text || caseData.case_text || '').substring(0, 80);
+
+                caseItem.innerHTML = `
+                    <div class="case-item-id">${caseData.id}</div>
+                    <div class="case-item-date">${dateStr}</div>
+                    <div class="case-item-preview">${preview}...</div>
+                `;
+
+                listContainer.appendChild(caseItem);
+            });
+        }
+
+        function selectCase(caseId) {
+            selectedCaseId = caseId;
+            const caseData = allCases.find(c => c.id === caseId);
+            
+            if (!caseData) return;
+
+            // Store current case data for highlighting
+            currentCaseData = caseData;
+
+            // Update active state
+            document.querySelectorAll('.case-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.querySelector('.case-item-id').textContent === caseId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Render features
+            renderFeatures(caseData);
+        }
+
+        function renderFeatures(caseData) {
+            const content = document.getElementById('features-content');
+            
+            const sections = [
+                {
+                    title: 'Case Identification',
+                    features: {
+                        'ID': caseData.id,
+                        'Source': caseData.source,
+                        'Date Range': caseData.date_range,
+                        'Created At': caseData.created_at,
+                        'Updated At': caseData.updated_at
+                    }
+                },
+                {
+                    title: 'Perpetrator Context',
+                    features: {
+                        'Age': caseData.perpetrator_age,
+                        'Registered Sex Offender': caseData.perpetrator_registered_sex_offender,
+                        'Relationship to Victim': caseData.relationship_to_victim,
+                        'Previous Conviction': caseData.previous_conviction
+                    }
+                },
+                {
+                    title: 'Victim Context',
+                    features: {
+                        'Victim Count': caseData.victim_count,
+                        'Victim Demographics': caseData.victim_demographics
+                    }
+                },
+                {
+                    title: 'Technology & Platforms',
+                    features: {
+                        'Platforms Used': caseData.platforms_used
+                    }
+                },
+                {
+                    title: 'Law Enforcement',
+                    features: {
+                        'Investigation Type': caseData.investigation_type,
+                        'Agencies Involved': caseData.agencies_involved,
+                        'Prosecution Outcome': caseData.prosecution_outcome
+                    }
+                },
+                {
+                    title: 'Evidence & Content',
+                    features: {
+                        'Evidence Volume': caseData.evidence_volume
+                    }
+                },
+                {
+                    title: 'Content Classification',
+                    features: {
+                        'Severity Indicators': caseData.severity_indicators,
+                        'Case Topics': caseData.case_topics
+                    }
+                }
+            ];
+
+            let html = '';
+            
+            // Render all feature sections
+            sections.forEach(section => {
+                html += `<div class="feature-section">`;
+                html += `<h3 class="section-title" data-section="${escapeHtml(section.title)}">${section.title}</h3>`;
+                
+                Object.entries(section.features).forEach(([label, value]) => {
+                    html += renderFeatureItem(label, value, currentCaseText);
+                });
+                
+                html += `</div>`;
+            });
+            
+            content.innerHTML = html;
+            
+            // Add hover event listeners for highlighting
+            addHighlightListeners();
+            
+            // Render Raw Case Text in the separate right panel
+            renderRawCaseText(caseData);
+        }
+
+        function addHighlightListeners() {
+            // Add listeners to section titles
+            const sectionTitles = document.querySelectorAll('.section-title');
+            sectionTitles.forEach(title => {
+                const sectionName = title.getAttribute('data-section');
+                
+                title.addEventListener('mouseenter', () => {
+                    highlightSectionInRawCase(sectionName);
+                });
+                
+                title.addEventListener('mouseleave', () => {
+                    clearHighlight();
+                });
+            });
+            
+            // Add listeners to feature items (the whole box, but not the label)
+            // All highlightable items should have text highlighting
+            const highlightableItems = document.querySelectorAll('.feature-item.highlightable, .feature-value-object.highlightable');
+            highlightableItems.forEach(item => {
+                const label = item.getAttribute('data-label');
+                const value = item.getAttribute('data-value');
+                
+                if (!label || !value) return;
+                
+                item.addEventListener('mouseenter', () => {
+                    highlightTextInRawCase(value, label, currentCaseData);
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    clearHighlight();
+                });
+            });
+            
+            // Add listeners to array items (like platforms, agencies)
+            const highlightableArrayItems = document.querySelectorAll('.highlightable-item');
+            highlightableArrayItems.forEach(item => {
+                const itemValue = item.getAttribute('data-item-value');
+                const parentItem = item.closest('.feature-item');
+                const label = parentItem ? parentItem.getAttribute('data-label') : '';
+                
+                if (!itemValue || !label) return;
+                
+                item.addEventListener('mouseenter', () => {
+                    highlightTextInRawCase(itemValue, label, currentCaseData);
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    clearHighlight();
+                });
+            });
+        }
+
+        function highlightSectionInRawCase(sectionName) {
+            if (!currentCaseText) return;
+            
+            const rawTextDiv = document.querySelector('.raw-text');
+            if (!rawTextDiv) return;
+            
+            let searchPatterns = [];
+            
+            // Map section names to search patterns
+            const sectionPatterns = {
+                'Perpetrator Context': [
+                    /\b\d+\s+year\s+old\s+(man|woman|male|female)\b/gi,
+                    /\bregistered\s+sex\s+offender\b/gi,
+                    /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|stranger|teacher)\b/gi
+                ],
+                'Victim Context': [
+                    /\b\d+\s+year\s+old\s+(child|children|victim|victims|boy|girl|minor|minors)\b/gi,
+                    /\b\d+\s+(victim|victims|child|children|minor|minors)\b/gi,
+                    /\bat\s+least\s+\d+\s+(child|children)\b/gi
+                ],
+                'Technology & Platforms': [
+                    /\b(Facebook|Instagram|Snapchat|Discord|WhatsApp)\b/gi,
+                    /\bonline\b/gi,
+                    /\bchat(ting|ted|s)?\b/gi
+                ],
+                'Law Enforcement': [
+                    /\b(proactive|reactive|online|undercover)\s+investigation\b/gi,
+                    /\b(AZICAC|FBI|Phoenix\s+Police|ICAC|HSI|MCSO|DPS)\b/gi,
+                    /\b\d+\s+counts?\s+of\b/gi,
+                    /\b(booked|arrested|charged)\b/gi
+                ],
+                'Evidence & Content': [
+                    /\b\d+[,\.]?\d*\s+(images?|videos?|pictures?)\b/gi,
+                    /\b\d+\.?\d*\s*(TB|GB|MB)\b/gi,
+                    /\b\d+[,\.]?\d*\s+(chat\s+)?messages?\b/gi
+                ],
+                'Content Classification': [
+                    /\binfants?\b/gi,
+                    /\bvery\s+young\s+children\b/gi,
+                    /\bunder\s+\d+\b/gi,
+                    /\b(produced|created|made\s+movies?)\b/gi,
+                    /\b(trading|downloading|possessing|collecting)\b/gi
+                ]
+            };
+            
+            if (sectionPatterns[sectionName]) {
+                searchPatterns = sectionPatterns[sectionName];
+            }
+            
+            // If we have patterns, highlight them
+            if (searchPatterns.length > 0) {
+                let highlightedText = currentCaseText;
+                searchPatterns.forEach(pattern => {
+                    highlightedText = highlightedText.replace(pattern, (match) => {
+                        return `<span class="text-highlight">${match}</span>`;
+                    });
+                });
+                rawTextDiv.innerHTML = highlightedText;
+            }
+        }
+
+        function highlightTextInRawCase(searchValue, label, caseData = null) {
+            if (!currentCaseText) return;
+            
+            const rawTextDiv = document.querySelector('.raw-text');
+            if (!rawTextDiv) return;
+            
+            // Create search patterns based on the feature type
+            let searchPatterns = [];
+            
+            // Age patterns
+            if (label.includes('Age') && /^\d+$/.test(searchValue)) {
+                searchPatterns.push(new RegExp(`\\b${searchValue}\\s+year\\s+old\\b`, 'gi'));
+                searchPatterns.push(new RegExp(`\\b${searchValue}\\s+years?\\s+old\\b`, 'gi'));
+            }
+            
+            // Registered sex offender
+            if (label.includes('Registered') && searchValue === 'true') {
+                searchPatterns.push(/\bregistered\s+sex\s+offender\b/gi);
+            }
+            
+            // Relationship
+            if (label.includes('Relationship')) {
+                const relMap = {
+                    'biological_father': /\bbiological\s+father\b/gi,
+                    'father': /\bfather\b/gi,
+                    'mother': /\bmother\b/gi,
+                    'brother': /\bbrother\b/gi,
+                    'sister': /\bsister\b/gi,
+                    'uncle': /\buncle\b/gi,
+                    'aunt': /\baunt\b/gi,
+                    'stranger': /\bstranger\b/gi,
+                    'teacher': /\bteacher\b/gi
+                };
+                if (relMap[searchValue]) {
+                    searchPatterns.push(relMap[searchValue]);
+                }
+            }
+            
+            // Platforms
+            if (label.includes('Platform')) {
+                const platformMap = {
+                    'Facebook': /\bFacebook\b/gi,
+                    'Instagram': /\bInstagram\b/gi,
+                    'online': /\bonline\b/gi,
+                    'chat': /\bchat(ting|ted|s)?\b/gi
+                };
+                if (platformMap[searchValue]) {
+                    searchPatterns.push(platformMap[searchValue]);
+                }
+            }
+            
+            // Agencies
+            if (label.includes('Agencies')) {
+                searchPatterns.push(new RegExp(`\\b${escapeRegex(searchValue)}\\b`, 'gi'));
+            }
+            
+            // Investigation type
+            if (label.includes('Investigation Type')) {
+                searchPatterns.push(new RegExp(`\\b${escapeRegex(searchValue)}\\s+investigation\\b`, 'gi'));
+            }
+            
+            // Victim count
+            if (label.includes('Victim Count') && /^\d+$/.test(searchValue)) {
+                searchPatterns.push(new RegExp(`\\b${searchValue}\\s+(victim|victims|child|children)\\b`, 'gi'));
+                searchPatterns.push(new RegExp(`\\bat\\s+least\\s+${searchValue}\\s+(child|children)\\b`, 'gi'));
+            }
+            
+            // Severity indicators
+            if (label.includes('Severity')) {
+                const severityMap = {
+                    'infant': /\binfants?\b/gi,
+                    'very_young': /\bvery\s+young\s+children\b/gi,
+                    'under_5': /\bunder\s+5\b/gi,
+                    'under_9': /\bunder\s+9\b/gi,
+                    'production': /\b(produced|created|made\s+movies?)\b/gi
+                };
+                if (severityMap[searchValue]) {
+                    searchPatterns.push(severityMap[searchValue]);
+                }
+            }
+            
+            // Topics
+            if (label.includes('Topic')) {
+                const topicMap = {
+                    'production': /\b(produced|created|made|molest|molesting)\b/gi,
+                    'possession': /\b(trading|downloading|possessing|collecting)\b/gi,
+                    'international': /\b(Australia|Philippines|Japan|international|overseas)\b/gi,
+                    'family': /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|biological)\b/gi,
+                    'stranger': /\bstranger\b/gi,
+                    'hands_on': /\b(molest|molesting|hands?\s+on|sexually\s+abused)\b/gi
+                };
+                if (topicMap[searchValue]) {
+                    searchPatterns.push(topicMap[searchValue]);
+                }
+            }
+            
+            // Evidence volume - handle object structure
+            if (label.includes('Evidence')) {
+                // Try to parse as JSON object first
+                try {
+                    const evidence = JSON.parse(searchValue);
+                    if (typeof evidence === 'object' && evidence !== null) {
+                        // Highlight images count
+                        if (evidence.images) {
+                            const imageCount = String(evidence.images);
+                            // Match patterns like "600 images", "200,000 images", "over 600 images"
+                            searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${imageCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+images?\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\b${imageCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+pictures?\\b`, 'gi'));
+                        }
+                        // Highlight videos count
+                        if (evidence.videos) {
+                            const videoCount = String(evidence.videos);
+                            searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+videos?\\b`, 'gi'));
+                        }
+                        // Highlight storage size
+                        if (evidence.storage_size) {
+                            const storage = String(evidence.storage_size);
+                            if (storage.includes('TB') || storage.includes('GB') || storage.includes('MB')) {
+                                searchPatterns.push(new RegExp(`\\b${escapeRegex(storage)}\\b`, 'gi'));
+                            } else {
+                                // Just a number, try to match with TB/GB/MB
+                                searchPatterns.push(new RegExp(`\\b${escapeRegex(storage)}\\s*(TB|GB|MB)\\b`, 'gi'));
+                            }
+                        }
+                        // Highlight messages count
+                        if (evidence.messages) {
+                            const msgCount = String(evidence.messages);
+                            searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${msgCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+(chat\\s+)?messages?\\b`, 'gi'));
+                        }
+                    }
+                } catch (e) {
+                    // If not JSON, try string matching
+                    if (searchValue.includes('images')) {
+                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+images?\b/gi);
+                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+pictures?\b/gi);
+                    }
+                    if (searchValue.includes('videos')) {
+                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+videos?\b/gi);
+                    }
+                    if (searchValue.includes('TB') || searchValue.includes('GB') || searchValue.includes('MB')) {
+                        searchPatterns.push(/\b\d+\.?\d*\s*(TB|GB|MB)\b/gi);
+                    }
+                    if (searchValue.includes('messages')) {
+                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+(chat\s+)?messages?\b/gi);
+                    }
+                }
+            }
+            
+            // Charges
+            if (label.includes('Charge')) {
+                if (searchValue.includes('count')) {
+                    searchPatterns.push(/\b\d+\s+counts?\s+of\b/gi);
+                }
+                if (searchValue.includes('sexual exploitation')) {
+                    searchPatterns.push(/\bsexual\s+exploitation\s+of\s+a\s+minor\b/gi);
+                }
+            }
+            
+            // Prosecution Outcome - use EXACT SAME LOGIC as Date Range (get from caseData)
+            if (label === 'Prosecution Outcome') {
+                // Use caseData directly like Date Range does
+                if (caseData && caseData.prosecution_outcome) {
+                    const prosecution = caseData.prosecution_outcome;
+                    
+                    // Highlight booking status - match exactly like Date Range
+                    if (prosecution.booking_status) {
+                        const status = prosecution.booking_status;
+                        // Match the status word with word boundaries (case-insensitive)
+                        searchPatterns.push(new RegExp(`\\b${escapeRegex(status)}\\b`, 'gi'));
+                    }
+                    
+                    // Highlight jail - match exactly like Date Range
+                    if (prosecution.jail && prosecution.jail !== null && prosecution.jail !== 'null') {
+                        const jail = prosecution.jail;
+                        // Remove "(non-bondable)" suffix if present for matching
+                        const jailName = jail.replace(/\s*\(non-bondable\)\s*/i, '').trim();
+                        if (jailName && jailName.length > 0) {
+                            // Match the full jail name with word boundaries
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(jailName)}\\b`, 'gi'));
+                        }
+                        // Also match non-bondable separately
+                        if (jail.toLowerCase().includes('non-bondable')) {
+                            searchPatterns.push(/\bnon-bondable\b/gi);
+                            searchPatterns.push(/\bnon\s+bondable\b/gi);
+                        }
+                    }
+                    
+                    // Highlight charges - match exactly like Date Range
+                    if (prosecution.charges && Array.isArray(prosecution.charges) && prosecution.charges.length > 0) {
+                        prosecution.charges.forEach(chargeObj => {
+                            if (chargeObj && typeof chargeObj === 'object') {
+                                const count = chargeObj.count;
+                                const charge = chargeObj.charge;
+                                
+                                // Highlight "X counts of [charge]" - full pattern
+                                if (count && charge) {
+                                    searchPatterns.push(new RegExp(`\\b${count}\\s+counts?\\s+of\\s+${escapeRegex(charge)}\\b`, 'gi'));
+                                }
+                            }
+                        });
+                    }
+                }
+                
+                // Fallback: try to parse from JSON string if caseData not available
+                if (searchPatterns.length === 0) {
+                    try {
+                        const prosecution = JSON.parse(searchValue);
+                        
+                        if (prosecution.booking_status) {
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(prosecution.booking_status)}\\b`, 'gi'));
+                        }
+                        
+                        if (prosecution.jail && prosecution.jail !== null && prosecution.jail !== 'null') {
+                            const jailName = prosecution.jail.replace(/\s*\(non-bondable\)\s*/i, '').trim();
+                            if (jailName && jailName.length > 0) {
+                                searchPatterns.push(new RegExp(`\\b${escapeRegex(jailName)}\\b`, 'gi'));
+                            }
+                        }
+                        
+                        if (prosecution.charges && Array.isArray(prosecution.charges) && prosecution.charges.length > 0) {
+                            prosecution.charges.forEach(chargeObj => {
+                                if (chargeObj && typeof chargeObj === 'object' && chargeObj.count && chargeObj.charge) {
+                                    searchPatterns.push(new RegExp(`\\b${chargeObj.count}\\s+counts?\\s+of\\s+${escapeRegex(chargeObj.charge)}\\b`, 'gi'));
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        // If parsing fails, try to search for the value as-is
+                        if (searchValue && searchValue.length > 3) {
+                            const escapedValue = escapeRegex(searchValue);
+                            searchPatterns.push(new RegExp(`\\b${escapedValue}\\b`, 'gi'));
+                        }
+                    }
+                }
+            }
+            
+            // Date Range - highlight the exact date pattern from source text
+            if (label === 'Date Range') {
+                // Use raw_data to get the exact month and year that appears in the text
+                if (caseData && caseData.raw_data) {
+                    const month = caseData.raw_data.month; // e.g., "January"
+                    const year = caseData.raw_data.year;   // e.g., "2013"
+                    
+                    if (month && year) {
+                        // Find the exact pattern that appears in the text: "In January 2013"
+                        // This is the pattern used by case_batching to identify cases
+                        searchPatterns.push(new RegExp(`\\bIn\\s+${month}\\s+${year}\\b`, 'gi'));
+                        // Also try "In January of 2013" format
+                        searchPatterns.push(new RegExp(`\\bIn\\s+${month}\\s+of\\s+${year}\\b`, 'gi'));
+                    }
+                }
+                
+                // Fallback: try to extract from date_range if raw_data not available
+                if (searchPatterns.length === 0) {
+                    try {
+                        const dateRange = JSON.parse(searchValue);
+                        const dateStart = dateRange.start || '';
+                        
+                        if (dateStart) {
+                            const startDate = new Date(dateStart);
+                            const startYear = startDate.getFullYear();
+                            const startMonth = startDate.toLocaleString('en-US', { month: 'long' });
+                            
+                            // Highlight "In January 2013" format (most common in source text)
+                            searchPatterns.push(new RegExp(`\\bIn\\s+${startMonth}\\s+${startYear}\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\bIn\\s+${startMonth}\\s+of\\s+${startYear}\\b`, 'gi'));
+                        }
+                    } catch (e) {
+                        // If parsing fails, try to extract dates from string
+                        const yearMatch = searchValue.match(/\b(19|20)\d{2}\b/);
+                        if (yearMatch) {
+                            searchPatterns.push(new RegExp(`\\b${yearMatch[0]}\\b`, 'gi'));
+                        }
+                    }
+                }
+            }
+            
+            // Generic fallback: if no specific patterns found, try to search for the value directly
+            if (searchPatterns.length === 0 && searchValue && searchValue.length > 0) {
+                // Skip JSON strings and very long values (likely objects)
+                if (!searchValue.startsWith('{') && !searchValue.startsWith('[') && searchValue.length < 100) {
+                    const escapedValue = escapeRegex(searchValue);
+                    // Try to find the value as a word or phrase in the text
+                    searchPatterns.push(new RegExp(`\\b${escapedValue}\\b`, 'gi'));
+                }
+            }
+            
+            // If we have patterns, highlight them
+            if (searchPatterns.length > 0) {
+                let highlightedText = currentCaseText;
+                searchPatterns.forEach(pattern => {
+                    highlightedText = highlightedText.replace(pattern, (match) => {
+                        return `<span class="text-highlight">${match}</span>`;
+                    });
+                });
+                rawTextDiv.innerHTML = highlightedText;
+            }
+        }
+
+        function clearHighlight() {
+            const rawTextDiv = document.querySelector('.raw-text');
+            if (rawTextDiv && currentCaseText) {
+                rawTextDiv.innerHTML = escapeHtml(currentCaseText);
+            }
+        }
+
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function renderFeatureItem(label, value, caseText = '') {
+            // Skip highlighting for metadata fields
+            const isMetadata = ['Created At', 'Updated At', 'ID', 'Source'].includes(label);
+            
+            // Check if value is empty/null/not extracted
+            const isEmpty = value === null || 
+                           value === undefined || 
+                           (typeof value === 'string' && value === 'Not extracted') ||
+                           (Array.isArray(value) && value.length === 0) ||
+                           (typeof value === 'object' && Object.keys(value).length === 0);
+            
+            // Skip text highlighting only for metadata or empty values
+            const skipHighlight = isMetadata || isEmpty;
+            
+            // Box should be highlightable (for visual effect and text highlighting) if it has data and is not metadata
+            const isHighlightable = !isMetadata && !isEmpty;
+            
+            const highlightClass = isHighlightable ? 'highlightable' : '';
+            // Only add data attributes for text highlighting (not for skipTextHighlight fields)
+            const dataLabel = (!skipHighlight && isHighlightable) ? `data-label="${escapeHtml(label)}"` : '';
+            const dataValue = (!skipHighlight && isHighlightable) ? `data-value="${escapeHtml(String(value))}"` : '';
+            
+            let html = `<div class="feature-item ${highlightClass}" ${dataLabel} ${dataValue}>`;
+            html += `<div class="feature-label ${highlightClass}">${label}:</div>`;
+            html += `<div class="feature-value">`;
+
+            if (value === null || value === undefined) {
+                html += `<span class="feature-value-null">Not extracted</span>`;
+            } else if (Array.isArray(value)) {
+                if (value.length === 0) {
+                    html += `<span class="feature-value-null">Not extracted</span>`;
+                } else {
+                    html += `<div class="feature-value-array">`;
+                    value.forEach((item, idx) => {
+                        const itemValue = String(item);
+                        const itemDataValue = isHighlightable ? `data-item-value="${escapeHtml(itemValue)}"` : '';
+                        const itemClass = isHighlightable ? 'highlightable-item' : '';
+                        html += `<span class="${itemClass}" ${itemDataValue}>${escapeHtml(itemValue)}</span>`;
+                    });
+                    html += `</div>`;
+                }
+            } else if (typeof value === 'object') {
+                // All objects with data are highlightable (except metadata)
+                const objectStr = JSON.stringify(value);
+                const objectDataValue = isHighlightable ? `data-value="${escapeHtml(objectStr)}"` : '';
+                const objectClass = isHighlightable ? 'highlightable' : '';
+                html += `<div class="feature-value-object ${objectClass}" ${dataLabel} ${objectDataValue}>`;
+                Object.entries(value).forEach(([key, val]) => {
+                    html += `<div class="nested-item"><strong>${key}:</strong> ${formatValue(val)}</div>`;
+                });
+                html += `</div>`;
+            } else if (typeof value === 'boolean') {
+                html += value ? 'Yes' : 'No';
+            } else if (label === 'Full Case Narrative' && typeof value === 'string') {
+                html += `<div class="raw-text">${escapeHtml(value)}</div>`;
+            } else {
+                html += escapeHtml(String(value));
+            }
+
+            html += `</div></div>`;
+            return html;
+        }
+
+        function formatValue(value) {
+            if (value === null || value === undefined) return '<span class="feature-value-null">null</span>';
+            if (Array.isArray(value)) return `[${value.join(', ')}]`;
+            if (typeof value === 'object') return JSON.stringify(value, null, 2);
+            return escapeHtml(String(value));
+        }
+
+        function renderRawCaseText(caseData) {
+            const rawTextContent = document.getElementById('raw-text-content');
+            const rawData = caseData.raw_data || {};
+            const caseText = rawData.case_text || caseData.case_text || 'No case text available';
+            
+            // Store case text for highlighting (raw, unescaped)
+            currentCaseText = caseText;
+            
+            let html = '';
+            html += `<div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px; padding: 12px; margin-bottom: 15px; color: #856404;">`;
+            html += `<strong>⚠️ Warning:</strong> This section contains the original, unprocessed case narrative. The content may be disturbing and is intended for research and verification purposes only.`;
+            html += `</div>`;
+            html += `<div class="raw-text" style="max-height: none; overflow-y: auto; background: #fff; padding: 15px; border-radius: 4px; border: 2px solid #4CAF50; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; color: #333;">${escapeHtml(caseText)}</div>`;
+            
+            rawTextContent.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        loadCases();
+    </script>
+</body>
+</html>

@@ -6,16 +6,24 @@
     <title>CaseLinker - Advanced Analysis</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 0;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 193, 7, 0.03) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #e0e0e0;
         }
         .nav {
             background: white;
             padding: 15px 20px;
-            margin: -20px -20px 20px -20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
@@ -32,80 +40,214 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            padding: 40px;
+            border-radius: 0;
+            box-shadow: 
+                0 0 0 1px rgba(255, 193, 7, 0.1),
+                0 20px 60px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255, 193, 7, 0.05);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 193, 7, 0.15);
+        }
+        .header-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
         }
         h1 {
-            color: #333;
+            color: #ffc107;
             margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .subtitle {
-            color: #666;
-            margin-bottom: 30px;
+            color: #b0b0b0;
+            margin-bottom: 0;
+            font-size: 1.1em;
+            font-weight: 500;
         }
         .analysis-controls {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            padding: 40px;
+            border-radius: 0;
             margin-bottom: 30px;
-            color: white;
+            color: #e0e0e0;
+            box-shadow: 
+                0 0 0 1px rgba(255, 193, 7, 0.2),
+                inset 0 1px 0 rgba(255, 193, 7, 0.1),
+                0 10px 40px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 193, 7, 0.2);
         }
         .control-group {
-            margin-bottom: 20px;
+            margin-bottom: 35px;
         }
         .control-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #ffc107;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .case-count-display {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            min-width: 200px;
+        }
+        .case-count-box {
+            padding: 10px 20px;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            border-radius: 0;
+            color: #ffc107;
+            font-weight: 700;
             font-size: 1.1em;
+            display: none;
+            text-align: right;
+        }
+        .case-count-box.visible {
+            display: block;
+        }
+        .case-count-note {
+            font-size: 0.85em;
+            color: #888;
+            font-style: italic;
+            text-align: right;
+            display: none;
+        }
+        .case-count-note.visible {
+            display: block;
+        }
+        .topic-category {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.1);
+        }
+        .topic-category:last-child {
+            border-bottom: none;
+        }
+        .topic-category-title {
+            font-size: 0.9em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
         .topic-selector {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            margin-top: 10px;
         }
-        .topic-checkbox {
-            display: flex;
+        .topic-tag {
+            display: inline-flex;
             align-items: center;
-            padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: white;
-        }
-        .topic-checkbox:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .topic-checkbox input {
-            margin-right: 8px;
-            cursor: pointer;
-        }
-        .topic-checkbox.selected {
-            background: white;
-            color: #667eea;
-            border-color: white;
-        }
-        .analyze-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
+            padding: 8px 18px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 13px;
+            user-select: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .topic-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        .topic-tag:hover::before {
+            left: 100%;
+        }
+        .topic-tag:hover {
+            background: rgba(40, 40, 40, 0.9);
+            border-color: rgba(255, 193, 7, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.4),
+                0 0 15px rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        .topic-tag.selected {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            border-color: #ffc107;
+            font-weight: 700;
+            box-shadow: 
+                0 0 20px rgba(255, 193, 7, 0.3),
+                inset 0 0 20px rgba(255, 193, 7, 0.1);
+        }
+        .topic-tag.selected:hover {
+            background: rgba(255, 193, 7, 0.2);
+            box-shadow: 
+                0 0 25px rgba(255, 193, 7, 0.4),
+                inset 0 0 20px rgba(255, 193, 7, 0.15);
+        }
+        .analyze-button {
+            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+            color: #000;
+            border: 2px solid #ffc107;
+            padding: 18px 50px;
+            border-radius: 0;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                0 0 30px rgba(255, 193, 7, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            margin-top: 35px;
+            width: 100%;
+            max-width: 450px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .analyze-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .analyze-button:hover::before {
+            width: 300px;
+            height: 300px;
         }
         .analyze-button:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #ffd54f 0%, #ffc107 100%);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 40px rgba(255, 193, 7, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.15);
+            border-color: #ffd54f;
+        }
+        .analyze-button:active {
+            transform: translateY(-1px);
         }
         .results-section {
             margin-top: 30px;
@@ -172,34 +314,89 @@
 </head>
 <body>
            <div class="nav">
-               <a href="/">Home</a>
-               <a href="/visualization">Visualization</a>
-               <a href="/analysis">Analysis</a>
-               <a href="/sources">Sources</a>
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
            </div>
     
     <div class="container">
-        <h1>🔍 Advanced Case Analysis</h1>
-        <p class="subtitle">Batman-level clustering and pattern detection</p>
+        <div class="header-section">
+            <h1>🔍 Advanced Case Analysis</h1>
+            <p class="subtitle">Analysis tab - used for clustering, pattern detection, and case analysis. Use predefined topics or add custom topics to analyze cases.</p>
+        </div>
         
         <div class="analysis-controls">
             <div class="control-group">
-                <label>Select Case Topics for Analysis:</label>
-                <div class="topic-selector" id="topic-selector">
-                    <!-- Topics loaded dynamically -->
+                <label>
+                    <span>Select Case Topics for Analysis:</span>
+                    <div id="case-count-display" class="case-count-display">
+                        <div id="case-count-box" class="case-count-box">
+                            <span id="case-count-number">0</span> cases
+                        </div>
+                        <div id="case-count-note" class="case-count-note">
+                            Click "Run Advanced Analysis" to view specific cases
+                        </div>
+                    </div>
+                </label>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Case Topics</div>
+                    <div class="topic-selector" id="topic-selector-case-topics">
+                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_only, family, stranger -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Severity Indicators</div>
+                    <div class="topic-selector" id="topic-selector-severity">
+                        <!-- Severity: infant, very_young, under_5, under_9, production -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Platforms & Environments</div>
+                    <div class="topic-selector" id="topic-selector-platforms">
+                        <!-- Platforms: Facebook, Instagram, Snapchat, Discord, WhatsApp, online, chat -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Investigation Types</div>
+                    <div class="topic-selector" id="topic-selector-investigation">
+                        <!-- Investigation: proactive, reactive, online, undercover -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Perpetrator Relationships</div>
+                    <div class="topic-selector" id="topic-selector-relationships">
+                        <!-- Relationships: father, mother, parent, brother, sister, sibling, uncle, aunt, cousin, teacher, stranger -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
+                    <div class="topic-category-title">Perpetrator Status</div>
+                    <div class="topic-selector" id="topic-selector-status">
+                        <!-- Status: registered_sex_offender -->
+                    </div>
                 </div>
             </div>
-            <div class="control-group" style="margin-top: 20px;">
+            <div class="control-group" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,193,7,0.2);">
                 <label>Add Custom Topics:</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="text" id="custom-topic-input" placeholder="Enter custom topic (e.g., 'Social Media', 'Gaming')" 
+                <p style="font-size: 0.95em; color: #b0b0b0; margin-bottom: 20px; letter-spacing: 0.5px;">Add custom search terms (e.g., "girls", "international", "social media") to find cases matching your criteria</p>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <input type="text" id="custom-topic-input" placeholder="Enter custom topic..." 
                            onkeypress="if(event.key === 'Enter') addCustomTopic()"
-                           style="flex: 1; padding: 10px; border: 2px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.2); color: white; font-size: 14px;">
-                    <button onclick="addCustomTopic()" style="padding: 10px 20px; background: rgba(255,255,255,0.3); border: 2px solid rgba(255,255,255,0.5); border-radius: 6px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">Add</button>
+                           style="flex: 1; padding: 14px 20px; border: 1px solid rgba(255,193,7,0.3); border-radius: 0; background: rgba(20,20,20,0.8); color: #e0e0e0; font-size: 14px; transition: all 0.3s; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"
+                           onfocus="this.style.background='rgba(30,30,30,0.9)'; this.style.borderColor='rgba(255,193,7,0.6)'; this.style.boxShadow='0 0 15px rgba(255,193,7,0.2)';"
+                           onblur="this.style.background='rgba(20,20,20,0.8)'; this.style.borderColor='rgba(255,193,7,0.3)'; this.style.boxShadow='none';">
+                    <button onclick="addCustomTopic()" style="padding: 14px 30px; background: rgba(255,193,7,0.15); border: 1px solid rgba(255,193,7,0.5); border-radius: 0; color: #ffc107; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Add</button>
                 </div>
-                <div id="custom-topics" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                <div id="custom-topics" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
             </div>
-            <button class="analyze-button" onclick="runAdvancedAnalysis()">🚀 Run Advanced Analysis</button>
+            <button class="analyze-button" onclick="runAdvancedAnalysis()">🔬 Run Advanced Analysis</button>
         </div>
         
         <div class="results-section" id="results-section" style="display: none;">
@@ -211,6 +408,14 @@
             </div>
             
             <div id="analysis-results"></div>
+        </div>
+        
+        <div class="coming-soon" id="coming-soon" style="text-align: center; padding: 80px 40px; color: #b0b0b0; background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); border: 1px solid rgba(255,193,7,0.2); box-shadow: 0 0 30px rgba(0,0,0,0.5);">
+            <div style="font-size: 64px; margin-bottom: 25px; filter: drop-shadow(0 0 20px rgba(255,193,7,0.3));">🚧</div>
+            <h2 style="color: #ffc107; margin-bottom: 15px; font-size: 2em; font-weight: 700;">Advanced Analysis Coming Soon</h2>
+            <p style="font-size: 1.2em; max-width: 700px; margin: 0 auto; line-height: 1.8; color: #b0b0b0; letter-spacing: 0.5px;">
+                The advanced clustering and pattern detection features are currently under development. 
+            </p>
         </div>
     </div>
 
@@ -224,18 +429,6 @@
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
                 
-                // Extract unique topics
-                allCases.forEach(caseData => {
-                    const topics = caseData.case_topics || [];
-                    topics.forEach(topic => availableTopics.add(topic));
-                });
-                
-                // Default topics if none found
-                if (availableTopics.size === 0) {
-                    availableTopics = new Set(['Child Exploitation', 'Online Grooming', 'CSAM Distribution', 
-                                             'Social Media', 'Gaming Platforms', 'Messaging Apps']);
-                }
-                
                 renderTopicSelector();
             } catch (error) {
                 console.error('Error loading cases:', error);
@@ -243,30 +436,194 @@
         }
 
         function renderTopicSelector() {
-            const selector = document.getElementById('topic-selector');
-            selector.innerHTML = '';
+            // Extract all unique values from cases
+            const caseTopicsSet = new Set();
+            const severitySet = new Set();
+            const platformsSet = new Set();
+            const investigationSet = new Set();
+            const relationshipsSet = new Set();
+            const statusSet = new Set();
             
-            // Render available topics
-            Array.from(availableTopics).forEach(topic => {
-                const checkbox = document.createElement('div');
-                checkbox.className = 'topic-checkbox';
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="topic-${topic}" value="${topic}" onchange="toggleTopic(this)">
-                    <label for="topic-${topic}">${topic}</label>
-                `;
-                selector.appendChild(checkbox);
+            allCases.forEach(caseData => {
+                // Case Topics
+                const topics = caseData.case_topics || [];
+                if (Array.isArray(topics)) {
+                    topics.forEach(t => t && caseTopicsSet.add(t));
+                }
+                
+                // Severity Indicators
+                const severity = caseData.severity_indicators || [];
+                if (Array.isArray(severity)) {
+                    severity.forEach(s => s && severitySet.add(s));
+                }
+                
+                // Platforms
+                const platforms = caseData.platforms_used || [];
+                if (Array.isArray(platforms)) {
+                    platforms.forEach(p => p && platformsSet.add(p));
+                }
+                
+                // Investigation Type
+                if (caseData.investigation_type) {
+                    investigationSet.add(caseData.investigation_type);
+                }
+                
+                // Relationship
+                if (caseData.relationship_to_victim) {
+                    relationshipsSet.add(caseData.relationship_to_victim);
+                }
+                
+                // Registered Sex Offender
+                if (caseData.perpetrator_registered_sex_offender) {
+                    statusSet.add('registered_sex_offender');
+                }
             });
+            
+            // Define all possible topics (from extraction functions)
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_only', 'family', 'stranger'];
+            const allSeverity = ['infant', 'very_young', 'under_5', 'under_9', 'production'];
+            const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat'];
+            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
+            const allStatus = ['registered_sex_offender'];
+            
+            // Render each category
+            renderTopicCategory('topic-selector-case-topics', allCaseTopics, caseTopicsSet);
+            renderTopicCategory('topic-selector-severity', allSeverity, severitySet);
+            renderTopicCategory('topic-selector-platforms', allPlatforms, platformsSet);
+            renderTopicCategory('topic-selector-investigation', allInvestigation, investigationSet);
+            renderTopicCategory('topic-selector-relationships', allRelationships, relationshipsSet);
+            renderTopicCategory('topic-selector-status', allStatus, statusSet);
             
             // Render custom topics
-            Array.from(customTopics).forEach(topic => {
-                const checkbox = document.createElement('div');
-                checkbox.className = 'topic-checkbox';
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="topic-${topic}" value="${topic}" onchange="toggleTopic(this)">
-                    <label for="topic-${topic}">${topic}</label>
-                `;
-                selector.appendChild(checkbox);
+            const customSelector = document.getElementById('custom-topics');
+            if (customSelector) {
+                customSelector.innerHTML = '';
+                Array.from(customTopics).forEach(topic => {
+                    const tag = document.createElement('div');
+                    tag.className = 'topic-tag';
+                    tag.setAttribute('data-topic', topic);
+                    tag.setAttribute('data-category', 'custom');
+                    tag.textContent = topic;
+                    tag.onclick = () => {
+                        toggleTopicTag(tag, topic, 'custom');
+                    };
+                    customSelector.appendChild(tag);
+                });
+            }
+        }
+        
+        function renderTopicCategory(selectorId, allTopics, foundSet) {
+            const selector = document.getElementById(selectorId);
+            if (!selector) return;
+            
+            selector.innerHTML = '';
+            
+            // Determine category type for counting
+            const categoryType = selectorId.includes('case-topics') ? 'case_topics' :
+                               selectorId.includes('severity') ? 'severity_indicators' :
+                               selectorId.includes('platforms') ? 'platforms_used' :
+                               selectorId.includes('investigation') ? 'investigation_type' :
+                               selectorId.includes('relationships') ? 'relationship_to_victim' :
+                               selectorId.includes('status') ? 'registered_sex_offender' : null;
+            
+            // Only show topics that exist in the data or are in the predefined list
+            allTopics.forEach(topic => {
+                // Show if it's in found data OR if it's a standard topic we want to show
+                if (foundSet.has(topic) || allTopics.includes(topic)) {
+                    const tag = document.createElement('div');
+                    tag.className = 'topic-tag';
+                    tag.setAttribute('data-topic', topic);
+                    tag.setAttribute('data-category', categoryType);
+                    tag.textContent = topic.replace(/_/g, ' ');
+                    tag.onclick = () => {
+                        toggleTopicTag(tag, topic, categoryType);
+                    };
+                    selector.appendChild(tag);
+                }
             });
+        }
+        
+        let selectedTopics = new Map(); // Map of topic -> {category, tagElement}
+        
+        function toggleTopicTag(tag, topic, categoryType) {
+            if (selectedTopics.has(topic)) {
+                selectedTopics.delete(topic);
+                tag.classList.remove('selected');
+            } else {
+                selectedTopics.set(topic, {category: categoryType, element: tag});
+                tag.classList.add('selected');
+            }
+            updateCaseCount();
+        }
+        
+        function updateCaseCount() {
+            const countBox = document.getElementById('case-count-box');
+            const countNote = document.getElementById('case-count-note');
+            const countNumber = document.getElementById('case-count-number');
+            
+            if (selectedTopics.size === 0) {
+                countBox.classList.remove('visible');
+                countNote.classList.remove('visible');
+                return;
+            }
+            
+            // Find cases that match ALL selected tags (intersection)
+            let matchingCases = allCases.filter(caseData => {
+                // Case must match ALL selected tags
+                for (let [topic, info] of selectedTopics.entries()) {
+                    const categoryType = info.category;
+                    let matches = false;
+                    
+                    switch(categoryType) {
+                        case 'case_topics':
+                            const topics = caseData.case_topics || [];
+                            matches = Array.isArray(topics) && topics.includes(topic);
+                            break;
+                        case 'severity_indicators':
+                            const severity = caseData.severity_indicators || [];
+                            matches = Array.isArray(severity) && severity.includes(topic);
+                            break;
+                        case 'platforms_used':
+                            const platforms = caseData.platforms_used || [];
+                            matches = Array.isArray(platforms) && platforms.some(p => 
+                                p && p.toLowerCase() === topic.toLowerCase()
+                            );
+                            break;
+                        case 'investigation_type':
+                            matches = caseData.investigation_type && 
+                                     caseData.investigation_type.toLowerCase() === topic.toLowerCase();
+                            break;
+                        case 'relationship_to_victim':
+                            matches = caseData.relationship_to_victim && 
+                                     caseData.relationship_to_victim.toLowerCase() === topic.toLowerCase();
+                            break;
+                        case 'registered_sex_offender':
+                            matches = topic === 'registered_sex_offender' && 
+                                     caseData.perpetrator_registered_sex_offender === true;
+                            break;
+                        case 'custom':
+                            // Search in case text for custom topics
+                            const caseText = (caseData.raw_data?.case_text || caseData.case_text || '').toLowerCase();
+                            matches = caseText.includes(topic.toLowerCase());
+                            break;
+                    }
+                    
+                    if (!matches) {
+                        return false; // This case doesn't match this tag, so it's out
+                    }
+                }
+                return true; // Case matches all selected tags
+            });
+            
+            countNumber.textContent = matchingCases.length;
+            countBox.classList.add('visible');
+            countNote.classList.add('visible');
+        }
+        
+        // Legacy function for backward compatibility
+        function showCaseCount(topic, categoryType) {
+            // This is now handled by updateCaseCount()
         }
 
         function addCustomTopic() {
@@ -278,51 +635,65 @@
                 return;
             }
             
-            if (availableTopics.has(topic) || customTopics.has(topic)) {
+            if (customTopics.has(topic)) {
                 alert('This topic already exists');
                 return;
             }
             
             customTopics.add(topic);
             input.value = '';
-            renderTopicSelector();
             updateCustomTopicsDisplay();
         }
 
         function updateCustomTopicsDisplay() {
             const customDisplay = document.getElementById('custom-topics');
+            if (!customDisplay) return;
+            
             customDisplay.innerHTML = '';
+            
+            if (customTopics.size === 0) {
+                customDisplay.innerHTML = '<p style="opacity: 0.5; font-size: 0.9em; margin: 0; color: #888;">No custom topics added yet</p>';
+                return;
+            }
             
             Array.from(customTopics).forEach(topic => {
                 const topicBadge = document.createElement('div');
-                topicBadge.className = 'topic-checkbox';
-                topicBadge.style.background = 'rgba(255,255,255,0.3)';
+                topicBadge.className = 'topic-tag';
+                topicBadge.style.background = 'rgba(30,30,30,0.8)';
                 topicBadge.style.display = 'inline-flex';
                 topicBadge.style.alignItems = 'center';
                 topicBadge.innerHTML = `
                     <span>${topic}</span>
-                    <button onclick="removeCustomTopic('${topic}')" style="margin-left: 10px; background: rgba(255,0,0,0.3); border: none; color: white; border-radius: 3px; padding: 2px 8px; cursor: pointer; font-size: 16px;">×</button>
+                    <button onclick="removeCustomTopic('${topic}'); event.stopPropagation();" 
+                            style="margin-left: 10px; background: rgba(200,0,0,0.6); border: none; color: #fff; border-radius: 0; width: 22px; height: 22px; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-weight: 700;">×</button>
                 `;
+                topicBadge.onclick = () => toggleTopicTag(topicBadge, topic);
                 customDisplay.appendChild(topicBadge);
             });
         }
 
         function removeCustomTopic(topic) {
             customTopics.delete(topic);
-            renderTopicSelector();
+            selectedTopics.delete(topic);
             updateCustomTopicsDisplay();
+            updateCaseCount();
         }
 
+        // Legacy function for backward compatibility
         function toggleTopic(checkbox) {
-            const container = checkbox.closest('.topic-checkbox');
-            if (checkbox.checked) {
-                container.classList.add('selected');
-            } else {
-                container.classList.remove('selected');
-            }
+            // No longer used, but kept for compatibility
         }
 
         async function runAdvancedAnalysis() {
+            // Show coming soon message
+            document.getElementById('coming-soon').style.display = 'block';
+            document.getElementById('results-section').style.display = 'none';
+            
+            // Scroll to coming soon message
+            document.getElementById('coming-soon').scrollIntoView({ behavior: 'smooth' });
+            
+            return;
+            
             const selectedStandardTopics = Array.from(document.querySelectorAll('.topic-selector input:checked'))
                 .map(cb => cb.value);
             

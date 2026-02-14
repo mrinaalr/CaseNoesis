@@ -100,6 +100,7 @@ def get_stats():
             "total_victims": 0,
             "sources": [],
             "source_count": 0,
+            "unique_features": 0,
             "date_range": {"start": None, "end": None}
         }
     
@@ -122,11 +123,60 @@ def get_stats():
         if source:
             sources.add(source)
     
+    # Calculate total extracted features - DIRECT COUNT from actual database data
+    total_features = 0
+    for case in cases:
+        # Count array/list features - each item counts as 1 feature
+        platforms = case.get('platforms_used', [])
+        if isinstance(platforms, list) and platforms:
+            total_features += len([p for p in platforms if p])
+        
+        topics = case.get('case_topics', [])
+        if isinstance(topics, list) and topics:
+            total_features += len([t for t in topics if t])
+        
+        severity = case.get('severity_indicators', [])
+        if isinstance(severity, list) and severity:
+            total_features += len([s for s in severity if s])
+        
+        agencies = case.get('agencies_involved', [])
+        if isinstance(agencies, list) and agencies:
+            total_features += len([a for a in agencies if a])
+        
+        # Count single-value features (1 if exists)
+        if case.get('investigation_type'):
+            total_features += 1
+        if case.get('relationship_to_victim'):
+            total_features += 1
+        if case.get('perpetrator_registered_sex_offender') is True:
+            total_features += 1
+        if case.get('perpetrator_age') is not None:
+            total_features += 1
+        if case.get('victim_count') and isinstance(case.get('victim_count'), (int, float)) and case.get('victim_count') > 0:
+            total_features += 1
+        
+        # Count complex objects (1 if has any data)
+        evidence = case.get('evidence_volume')
+        if evidence and isinstance(evidence, dict):
+            if evidence.get('images') or evidence.get('videos') or evidence.get('storage_size'):
+                total_features += 1
+        
+        prosecution = case.get('prosecution_outcome')
+        if prosecution and isinstance(prosecution, dict):
+            if prosecution.get('booking_status') or prosecution.get('charges') or prosecution.get('jail'):
+                total_features += 1
+        
+        victim_demo = case.get('victim_demographics')
+        if victim_demo and isinstance(victim_demo, dict):
+            if victim_demo.get('ages') or victim_demo.get('age_range') or victim_demo.get('gender'):
+                total_features += 1
+    
     return {
         "total_cases": len(cases),
         "total_victims": total_victims,
         "sources": list(sources),
         "source_count": len(sources),
+        "unique_features": total_features,
         "date_range": {
             "start": min((c.get('date_range', {}).get('start') for c in cases if c.get('date_range', {}).get('start')), default=None),
             "end": max((c.get('date_range', {}).get('end') for c in cases if c.get('date_range', {}).get('end')), default=None)
@@ -180,11 +230,23 @@ async def serve_sources():
     else:
         return HTMLResponse(content="<h1>Sources page not found</h1>", status_code=404)
 
+@app.get("/audit", response_class=HTMLResponse)
+async def serve_audit():
+    """Serve the HTML audit page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "audit.html"
+    if html_path.exists():
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Audit page not found</h1>", status_code=404)
+
 
 
 if __name__ == "__main__":
     import uvicorn
     import sys
+    import os
     from pathlib import Path
     
     # Add project root to path for config import
@@ -199,6 +261,10 @@ if __name__ == "__main__":
         API_PORT = 8000
         API_RELOAD = False
     
+    # Use environment variables for production hosting (Railway, Render, etc.)
+    port = int(os.environ.get("PORT", API_PORT))
+    host = os.environ.get("HOST", API_HOST)
+    
     # Disable reload when running directly (causes warning)
-    # Use: uvicorn api.main:app --reload (from project root) for reload
-    uvicorn.run(app, host=API_HOST, port=API_PORT, reload=False)
+    # Use: uvicorn run.main:app --reload (from project root) for reload
+    uvicorn.run(app, host=host, port=port, reload=False)
