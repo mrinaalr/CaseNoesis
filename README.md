@@ -177,7 +177,7 @@ CaseLinker/
 ├── visualization/
 │   ├── home.html                # Home page
 │   ├── index.html               # Interactive visualizations (Timeline, Severity, Outcomes, Perpetrator, Environment, Organizations)
-│   ├── analysis.html            # Advanced analysis page (placeholder)
+│   ├── analysis.html            # Advanced case analysis page (tag-based filtering and automated analysis)
 │   ├── sources.html             # Data sources page
 │   └── audit.html               # Data audit page (case-by-case feature review)
 ├── setup.sh                     # Automated setup script
