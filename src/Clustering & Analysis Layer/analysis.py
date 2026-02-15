@@ -318,7 +318,7 @@ def calculate_case_similarity(case1: Dict[str, Any], case2: Dict[str, Any]) -> f
 def extract_keywords_semantic(case_text: str, top_n: int = 10) -> List[str]:
     """
     Extract keywords from case text using simple frequency-based approach.
-    (KeyBERT alternative - simple but effective for this use case)
+    (Pattern-based keyword extraction - robust and auditable)
     """
     if not case_text:
         return []
@@ -419,7 +419,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         
         # Infant cases should be highest priority - but not so high that they override multi-victim cases
         has_infant = 'infant' in severity or any('infant' in str(s).lower() for s in severity)
-        has_production_severity = 'production' in severity
+        has_physical_abuse_severity = 'physical_abuse' in severity
         has_very_young = 'very_young' in severity
         
         severity_weights = {
@@ -430,7 +430,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             'under_5': 8.0,  # Keep for backward compatibility
             'under_9': 6.0,  # Keep for backward compatibility
             'under_7': 6.0,  # Keep for backward compatibility
-            'production': 12.0,  # Increased - production severity is very serious
+            'physical_abuse': 10.0,  # Physical abuse severity
         }
         
         # Calculate base severity score
@@ -495,7 +495,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if case.get('perpetrator_registered_sex_offender'):
             score += 4.0 * 0.10  # Increased from 3.0
         
-        # Case type severity (weight: 0.25) - Increased - production and hands-on are critical
+        # Case type severity (weight: 0.25) - Increased - physical_abuse and hands-on are critical
         case_topics = case.get('case_topics') or []
         if isinstance(case_topics, str):
             try:

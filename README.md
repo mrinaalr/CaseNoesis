@@ -150,7 +150,7 @@ The system will:
    - Click "Run Automated Analysis" to run the full automated analysis pipeline
    - **Case Groups**: View cases grouped by similarity (platforms, demographics, topics, severity, investigation)
    - **Top Priority Cases**: See cases sorted by priority score (normalized to 5-10 scale) based on:
-     - Severity indicators (35%): infant, rape, very_young, production
+     - Severity indicators (35%): infant, rape, very_young, physical_abuse
      - Victim count (30%): Higher scores for multiple victims
      - Case type (25%): production, hands_on, possession, online_only
      - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
@@ -279,7 +279,7 @@ The database uses plain SQLite (no encryption) for maximum compatibility. The da
   - **Automated Analysis**: Case grouping, triage, and insights generation:
     - Case grouping by similarity (platforms, demographics, topics, severity, investigation)
     - Priority triage with normalized scores (5-10 scale) based on:
-      - Severity indicators (35%): infant, rape, very_young, production
+      - Severity indicators (35%): infant, rape, very_young, physical_abuse
       - Victim count (30%): Aggressive scoring for multiple victims
       - Case type (25%): production, hands_on, possession, online_only
       - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control

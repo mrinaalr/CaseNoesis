@@ -8,13 +8,13 @@ Design Ideas from Architecture:
 - Assign cases values (for compare)
 - Fill in case schema for each case according to Case Entity Schema:
   - id, source, date_range
-  - Victim Context (anonymized): victim_count, victim_demographics
+  - Case Context (anonymized): victim_count, case_demographics
   - Perpetrator Context (anonymized): perpetrator_count, perpetrator_demographics, relationship_to_victim, previous_conviction
   - Technology & Methods: platforms_used, technologies, communication_methods
   - Law Enforcement: investigation_methods_and_teams, prosecution_outcome
   - Content Classification: severity_indicators, case_topics
   - Raw/Original Data: raw_data, extracted_features
-  - Metadata: tags, notes, created_at, updated_at
+  - Metadata: created_at, updated_at
 """
 
 import pandas as pd
@@ -292,7 +292,7 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         date_range = extract_date_range(raw_case)
     
     # Extract all features
-    victim_demo = extract_victim_demographics(raw_case)
+    case_demo = extract_case_demographics(raw_case)
     perp_demo = extract_perpetrator_demographics(raw_case)
     evidence_vol = extract_evidence_volume(raw_case)
     prosecution = extract_prosecution_outcome(raw_case)
@@ -302,9 +302,9 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         'id': raw_case.get('case_id') or raw_case.get('id'),
         'source': raw_case.get('source', 'unknown'),
         'date_range': date_range,
-        # Victim context
+        # Case context
         'victim_count': extract_victim_count(raw_case),
-        'victim_demographics': victim_demo,
+        'case_demographics': case_demo,
         # Perpetrator context
         'perpetrator_age': perp_demo.get('age') if isinstance(perp_demo, dict) else None,
         'perpetrator_registered_sex_offender': perp_demo.get('is_registered') if isinstance(perp_demo, dict) else False,
@@ -341,23 +341,23 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Dictionary with comparison values/weights added to case_features
     """
-    victim_demo = case_features.get('victim_demographics') or {}
+    case_demo = case_features.get('case_demographics') or {}
     date_range = case_features.get('date_range') or {}
     evidence_vol = case_features.get('evidence_volume') or {}
     
-    # Calculate victim age range from ages list
-    victim_age_range = None
-    if isinstance(victim_demo, dict):
-        ages = victim_demo.get('ages', [])
+    # Calculate case age range from ages list
+    case_age_range = None
+    if isinstance(case_demo, dict):
+        ages = case_demo.get('ages', [])
         if ages:
-            victim_age_range = {'min': min(ages), 'max': max(ages)}
-        elif victim_demo.get('age_range'):
-            victim_age_range = victim_demo.get('age_range')
+            case_age_range = {'min': min(ages), 'max': max(ages)}
+        elif case_demo.get('age_range'):
+            case_age_range = case_demo.get('age_range')
     
     comparison_values = {
         'platform_vector': case_features.get('platforms_used', []),
         'demographic_vector': {
-            'victim_age_range': victim_age_range,
+            'case_age_range': case_age_range,
             'victim_count': case_features.get('victim_count'),
             'perpetrator_age': case_features.get('perpetrator_age'),
             'perpetrator_registered': case_features.get('perpetrator_registered_sex_offender', False),
@@ -425,9 +425,9 @@ def extract_victim_count(case: Dict[str, Any]) -> Optional[int]:
     return None
 
 
-def extract_victim_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
-    Extract victim demographics: ages, age ranges, gender.
+    Extract case demographics: ages, age ranges, gender (all ages from case, not just victim-specific).
     Patterns: "7 years old", "ages 4 thru 10", "13 year old female", "4 year old boy"
     """
     case_text = case.get('case_text', '')
@@ -758,7 +758,7 @@ def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]
 def extract_severity(case: Dict[str, Any]) -> List[str]:
     """
     Extract severity indicators.
-    Patterns: "infant", "very young", "under X" (where X < 10 merged to "under_10"), "produced", "created"
+    Patterns: "infant", "very young", "under X" (where X < 10 merged to "under_10"), "physical_abuse", "rape"
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -790,9 +790,9 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     if has_under_10:
         severity_indicators.append('under_10')
     
-    # Production indicators
-    if re.search(r'\b(produced|created|made\s+movies?)\b', case_text, re.IGNORECASE):
-        severity_indicators.append('production')
+    # Physical abuse indicators
+    if re.search(r'\b(physical\s+abuse|physically\s+abused|molest|molesting|sexually\s+abused|sexually\s+assaulted|hands?\s+on|physical\s+contact)\b', case_text, re.IGNORECASE):
+        severity_indicators.append('physical_abuse')
     
     # Rape indicators - severe sexual violence
     if re.search(r'\b(rape|raped|raping)\b', case_text, re.IGNORECASE):
@@ -803,8 +803,8 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
-    Extract case topics/themes (semantic extraction - placeholder for KeyBERT).
-    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger
+    Extract case topics/themes using pattern-based matching.
+    Topics: production, possession, physical_abuse, international, multi_state, hands_on, online_only, family, stranger
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -812,11 +812,13 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     
     topics = []
     
-    # Production vs possession
-    if re.search(r'\b(produced|created|made|molest|molesting)\b', case_text, re.IGNORECASE):
+    # Production vs possession vs physical abuse
+    if re.search(r'\b(produced|created|made\s+movies?|created\s+videos?)\b', case_text, re.IGNORECASE):
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting)\b', case_text, re.IGNORECASE):
         topics.append('possession')
+    if re.search(r'\b(physical\s+abuse|physically\s+abused|molest|molesting|sexually\s+abused|sexually\s+assaulted|hands?\s+on|physical\s+contact)\b', case_text, re.IGNORECASE):
+        topics.append('physical_abuse')
     
     # International cooperation
     if re.search(r'\b(Australia|Philippines|Japan|international|overseas)\b', case_text, re.IGNORECASE):

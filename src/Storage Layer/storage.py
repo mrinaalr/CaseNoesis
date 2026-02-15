@@ -64,8 +64,8 @@ class CaseStorage:
                 investigation_methods TEXT,   -- JSON array
                 severity_indicators TEXT,     -- JSON array
                 case_topics TEXT,             -- JSON array
-                tags TEXT,                    -- JSON array
-                notes TEXT,
+                tags TEXT,                    -- JSON array (reserved for future AI features)
+                notes TEXT,                    -- Reserved for future AI features
                 raw_data TEXT,                -- JSON - original case data
                 extracted_features TEXT,      -- JSON - structured features
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -166,15 +166,15 @@ class CaseStorage:
                 datetime.now().isoformat()
             ))
             
-            victim_demo = case.get('victim_demographics')
-            if victim_demo and isinstance(victim_demo, dict):
+            case_demo = case.get('case_demographics') or case.get('victim_demographics')  # Support both for backward compatibility
+            if case_demo and isinstance(case_demo, dict):
                 # Store age_range as JSON string (can be dict with min/max or list)
                 age_range_str = None
-                if victim_demo.get('age_range'):
-                    age_range_str = json.dumps(victim_demo.get('age_range'))
-                elif victim_demo.get('ages'):
+                if case_demo.get('age_range'):
+                    age_range_str = json.dumps(case_demo.get('age_range'))
+                elif case_demo.get('ages'):
                     # Create age_range from ages list
-                    ages = victim_demo.get('ages', [])
+                    ages = case_demo.get('ages', [])
                     if ages:
                         age_range_str = json.dumps({'min': min(ages), 'max': max(ages)})
                 
@@ -185,7 +185,7 @@ class CaseStorage:
                 ''', (
                     case.get('id'),
                     age_range_str,
-                    victim_demo.get('region'),
+                    case_demo.get('region'),
                     None,  # anonymized_id (not extracted)
                 ))
             
@@ -326,8 +326,8 @@ class CaseStorage:
                 # Merge new schema fields from extracted_features
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                            'agencies_involved', 'investigation_type', 'evidence_volume',
-                           'prosecution_outcome', 'victim_demographics', 'relationship_to_victim',
-                           'severity_phrases']:
+                           'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
+                           'severity_phrases', 'case_text']:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
             

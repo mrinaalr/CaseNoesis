@@ -1366,8 +1366,8 @@
                 }
             });
 
-            // Define severity order (None goes to the end)
-            const severityOrder = ['Infant', 'Rape', 'Very Young', 'Under 10', 'Production', 'None'];
+            // Define severity order (None before Physical Abuse)
+            const severityOrder = ['Infant', 'Rape', 'Very Young', 'Under 10', 'None', 'Physical Abuse'];
             
             // Create data array and sort by severity order (None last)
             const data = Object.entries(severityCounts).map(([severity, count]) => ({
@@ -1411,7 +1411,7 @@
                 'Rape': '#A00000',          // Very dark red (second darkest)
                 'Very Young': '#B22222',    // Firebrick
                 'Under 10': '#DC143C',      // Crimson
-                'Production': '#FF7F50',   // Coral
+                'Physical Abuse': '#FF7F50',   // Coral
                 'None': '#FFB6C1'          // Light pink (lightest)
             };
 

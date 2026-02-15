@@ -419,10 +419,10 @@
                     }
                 },
                 {
-                    title: 'Victim Context',
+                    title: 'Case Context',
                     features: {
                         'Victim Count': caseData.victim_count,
-                        'Victim Demographics': caseData.victim_demographics
+                        'Case Demographics': caseData.case_demographics || caseData.victim_demographics
                     }
                 },
                 {
@@ -544,7 +544,7 @@
                     /\bregistered\s+sex\s+offender\b/gi,
                     /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|stranger|teacher)\b/gi
                 ],
-                'Victim Context': [
+                'Case Context': [
                     /\b\d+\s+year\s+old\s+(child|children|victim|victims|boy|girl|minor|minors)\b/gi,
                     /\b\d+\s+(victim|victims|child|children|minor|minors)\b/gi,
                     /\bat\s+least\s+\d+\s+(child|children)\b/gi

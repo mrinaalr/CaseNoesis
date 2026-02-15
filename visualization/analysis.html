@@ -414,7 +414,7 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Severity Indicators</div>
                     <div class="topic-selector" id="topic-selector-severity">
-                        <!-- Severity: infant, very_young, under_5, under_9, production -->
+                        <!-- Severity: infant, very_young, under_5, under_9, physical_abuse -->
                     </div>
                 </div>
                 
@@ -587,7 +587,7 @@
             
             // Define all possible topics (from extraction functions)
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'under_5', 'under_9', 'production'];
+            const allSeverity = ['infant', 'very_young', 'under_5', 'under_9', 'physical_abuse'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
@@ -1615,8 +1615,8 @@
                                     patterns = [/\bunder\s+5\b/gi, /\bages?\s+[0-4]\b/gi, /\b[0-4]\s+year\w*\b/gi];
                                 } else if (tag === 'under_9') {
                                     patterns = [/\bunder\s+9\b/gi, /\bages?\s+[0-8]\b/gi, /\b[0-8]\s+year\w*\b/gi, /\b9\s+year\s+old\b/gi];
-                                } else if (tag === 'production') {
-                                    patterns = [/\bproduced\b/gi, /\bcreated\b/gi, /\bmade\s+movies?\b/gi];
+                                } else if (tag === 'physical_abuse') {
+                                    patterns = [/\bphysical\s+abuse\b/gi, /\bphysically\s+abused\b/gi, /\bmolest\w*\b/gi, /\bsexually\s+abused\b/gi, /\bsexually\s+assaulted\b/gi, /\bhands?\s+on\b/gi, /\bphysical\s+contact\b/gi];
                                 }
                             } else if (category === 'platforms_used') {
                                 const platformName = tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase();
