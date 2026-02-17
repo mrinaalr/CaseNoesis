@@ -315,6 +315,17 @@ async def serve_under_the_hood():
     else:
         return HTMLResponse(content="<h1>Under the Hood</h1><p>Page not found</p>", status_code=404)
 
+@app.get("/ml-experimental", response_class=HTMLResponse)
+async def serve_ml_experimental():
+    """Serve the HTML ML experimental page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "ml-experimental.html"
+    if html_path.exists():
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>ML Experimental page not found</h1>", status_code=404)
+
 
 
 if __name__ == "__main__":

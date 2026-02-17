@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimental ML - CaseLinker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .nav a.ml-experimental {
+            color: #dc2626;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulseRed 2s ease-in-out infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% { 
+                opacity: 1;
+            }
+            50% { 
+                opacity: 0.7;
+            }
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { 
+                opacity: 0.75;
+            }
+            50% { 
+                opacity: 0.90;
+            }
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            padding-left: 180px;
+        }
+        .header {
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .header .status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+        .header p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
+        }
+        .section-content {
+            font-size: 15px;
+            color: #374151;
+            line-height: 1.8;
+        }
+        .section-content p {
+            margin-bottom: 16px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+        .feature-desc {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .tech-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 12px;
+        }
+        .tech-list li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .tech-list li:last-child {
+            border-bottom: none;
+        }
+        .tech-list code {
+            background: #f9fafb;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 13px;
+            color: #1e3c72;
+        }
+        .status-box {
+            background: #f9fafb;
+            border-left: 3px solid #3b82f6;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .status-box-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .status-box-list {
+            list-style: none;
+            padding: 0;
+        }
+        .status-box-list li {
+            font-size: 14px;
+            color: #374151;
+            padding: 6px 0;
+            line-height: 1.6;
+        }
+        .status-box-list li:before {
+            content: "—";
+            color: #9ca3af;
+            margin-right: 8px;
+        }
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+           <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <span class="status">Experimental</span>
+            <h1>Machine Learning Research</h1>
+            <p>
+                Current research focuses on applying ML/NLP enhancements to improve case analysis capabilities. 
+                Specfically evaluating semantic similarity, named entity recognition, and content sanitization 
+                to complement existing pattern-based extraction, clustering, and visualations.
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Research Objectives</div>
+            <div class="section-content">
+                <p>
+                    The core system demonstrates pattern-based extraction works well for structured case data. 
+                    This phase explores where ML can add value: understanding semantic relationships, 
+                    extracting entities regex might miss, and generating case summaries that preserve 
+                    insights while reducing exposure to harmful content.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Active Development Areas</div>
+            <ul class="feature-list">
+                <li>
+                    <div class="feature-title">Semantic Similarity</div>
+                    <div class="feature-desc">
+                        Case comparison using transformer embeddings rather than keyword matching. 
+                        Enables finding similar cases when terminology differs, improving clustering 
+                        and relationship detection.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Named Entity Recognition</div>
+                    <div class="feature-desc">
+                        Contextual extraction of organizations, locations, and dates that complement 
+                        regex patterns. Evaluates whether NER catches edge cases regex misses.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Content Sanitization</div>
+                    <div class="feature-desc">
+                        Generating analytical summaries that preserve case facts and patterns while 
+                        removing explicit details. Supports safer case review and training without 
+                        losing analytical value.
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Technical Stack</div>
+            <div class="section-content">
+                <ul class="tech-list">
+                    <li><code>sentence-transformers</code> — Semantic embeddings (all-MiniLM-L6-v2)</li>
+                    <li><code>spaCy</code> — Named entity recognition (en_core_web_sm)</li>
+                    <li><code>transformers</code> — Summarization models (BART/T5)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Architecture</div>
+            <div class="section-content">
+                <p>
+                    ML components are optional enhancements, not replacements. Pattern-based extraction 
+                    remains primary; ML provides additional capabilities. System reverts gracefully 
+                    if ML models are unavailable or undesired .
+                </p>
+                <p>
+                    Processing flow: Case Text → Pattern extraction → ML enhancement (optional) → Storage. 
+                    Components are modular and can be evaluated independently.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Current Status</div>
+            <div class="status-box">
+                <div class="status-box-title">Q1 2025 Development</div>
+                <ul class="status-box-list">
+                    <li>ML Processing Layer components implemented</li>
+                    <li>Evaluating performance on case data</li>
+                    <li>Integration pending evaluation results</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">Planned Capabilities</div>
+            <ul class="feature-list">
+                <li>
+                    <div class="feature-title">Semantic Case Search</div>
+                    <div class="feature-desc">
+                        Find cases by meaning, not keywords. Discover relationships through semantic understanding.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Enhanced Clustering</div>
+                    <div class="feature-desc">
+                        Case grouping using semantic embeddings to reveal patterns traditional methods miss.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Entity Networks</div>
+                    <div class="feature-desc">
+                        Visualize relationships between organizations, platforms, and entities extracted via NER.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Clean Case Views</div>
+                    <div class="feature-desc">
+                        Sanitized summaries preserving analytical value without explicit details.
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

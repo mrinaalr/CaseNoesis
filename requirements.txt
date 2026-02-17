@@ -26,3 +26,9 @@ uvicorn>=0.23.0
 # Visualization (if needed)
 # matplotlib>=3.7.0
 # plotly>=5.15.0
+
+# ML/NLP Processing (optional - system works without these)
+sentence-transformers>=2.2.0
+spacy>=3.7.0
+transformers>=4.30.0
+torch>=2.0.0
