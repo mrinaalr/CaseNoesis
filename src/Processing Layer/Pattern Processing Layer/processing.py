@@ -479,7 +479,11 @@ def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
     Extract perpetrator demographics: age, registration status.
-    Pattern: "62 year old man", "30 year old man", "registered sex offender"
+    Patterns: 
+    - "25 year old Scottsdale man" (allows location between "old" and "man")
+    - "21 year old Goodyear, AZ resident" (supports "resident" as well as man/woman/male/female)
+    - "30 year old man" (simple case)
+    - "registered sex offender"
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -490,8 +494,9 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
         'is_registered': False
     }
     
-    # Extract age: "X year old man/woman"
-    age_pattern = r'(\d+)\s+year\s+old\s+(man|woman|male|female)'
+    # Extract age: "X year old [optional location] man/woman/male/female/resident"
+    # Allows for patterns like "25 year old Scottsdale man" or "21 year old Goodyear, AZ resident"
+    age_pattern = r'(\d+)\s+year\s+old\s+(?:\w+(?:\s*,\s*\w+)*\s+)?(man|woman|male|female|resident)'
     age_match = re.search(age_pattern, case_text, re.IGNORECASE)
     if age_match:
         try:
@@ -509,33 +514,50 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
 def extract_relationship(case: Dict[str, Any]) -> Optional[str]:
     """
     Extract relationship to victim.
-    Patterns: "biological father", "father", "mother", "brother", "sister", "uncle", "aunt", "cousin", "stranger", "teacher"
+    Patterns: "father", "mother", "brother", "sister", "uncle", "aunt", "cousin", "stranger", "teacher"
+    Defaults to "stranger" if no relationship is found (non-family, non-teacher cases).
+    Note: "biological father" is extracted as "father" (same as "mother").
     """
     case_text = case.get('case_text', '')
     if not case_text:
-        return None
+        return 'stranger'  # Default to stranger if no text
     
-    # Relationship patterns (in order of specificity)
-    relationships = [
-        (r'biological\s+(father|mother|parent)', ['biological_father', 'biological_mother', 'biological_parent']),
-        (r'\b(father|mother|parent)\b', ['father', 'mother', 'parent']),
-        (r'\b(brother|sister|sibling)\b', ['brother', 'sister', 'sibling']),
-        (r'\b(uncle|aunt|cousin)\b', ['uncle', 'aunt', 'cousin']),
-        (r'\b(teacher|stranger)\b', ['teacher', 'stranger']),
-    ]
+    # Check for family relationships (father, mother, parent)
+    # Note: "biological father" is extracted as "father" (removed biological prefix)
+    if re.search(r'\bfather\b', case_text, re.IGNORECASE):
+        return 'father'
+    if re.search(r'\bmother\b', case_text, re.IGNORECASE):
+        return 'mother'
+    if re.search(r'\bparent\b', case_text, re.IGNORECASE):
+        return 'parent'
     
-    for pattern, rel_list in relationships:
-        match = re.search(pattern, case_text, re.IGNORECASE)
-        if match:
-            matched_text = match.group(0).lower()
-            # Map to standardized relationship
-            for rel in rel_list:
-                if rel.replace('_', ' ') in matched_text or rel in matched_text:
-                    return rel
-            # Fallback: return the matched group
-            return match.group(1).lower() if match.lastindex else matched_text
+    # Check for siblings
+    if re.search(r'\bbrother\b', case_text, re.IGNORECASE):
+        return 'brother'
+    if re.search(r'\bsister\b', case_text, re.IGNORECASE):
+        return 'sister'
+    if re.search(r'\bsibling\b', case_text, re.IGNORECASE):
+        return 'sibling'
     
-    return None
+    # Check for extended family
+    if re.search(r'\buncle\b', case_text, re.IGNORECASE):
+        return 'uncle'
+    if re.search(r'\baunt\b', case_text, re.IGNORECASE):
+        return 'aunt'
+    if re.search(r'\bcousin\b', case_text, re.IGNORECASE):
+        return 'cousin'
+    
+    # Check for teacher
+    if re.search(r'\bteacher\b', case_text, re.IGNORECASE):
+        return 'teacher'
+    
+    # Check for stranger (explicit mention)
+    if re.search(r'\bstranger\b', case_text, re.IGNORECASE):
+        return 'stranger'
+    
+    # Default to stranger if no relationship found
+    # (If it's not family or teacher, it's likely a stranger)
+    return 'stranger'
 
 
 def extract_previous_conviction(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -683,17 +705,33 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
     }
     
     # Extract investigation type
+    # First check if "investigation" keyword appears in the text
+    has_investigation_keyword = re.search(r'\binvestigation\b', case_text, re.IGNORECASE)
+    
+    if not has_investigation_keyword:
+        # No "investigation" keyword found - return None (case won't be in Investigation cluster)
+        return None
+    
+    # "investigation" keyword found - now check for specific types
+    # IMPORTANT: Check "undercover" FIRST because it's more specific and might be missed
+    # if "proactive" is checked first (e.g., "proactive undercover investigation")
+    # Patterns allow optional words (including hyphens) between type and "investigation"
+    # e.g., "proactive joint investigation", "proactive Internet investigation", "proactive investigation", "reactive multi-agency investigation"
     type_patterns = {
-        'proactive': r'proactive\s+investigation',
-        'reactive': r'reactive\s+investigation',
-        'online': r'online\s+investigation',
-        'undercover': r'undercover\s+(operation|investigation)',
+        'undercover': r'undercover\s+(?:\S+\s+)*(?:operation|investigation)',
+        'proactive': r'proactive\s+(?:\S+\s+)*investigation',
+        'reactive': r'reactive\s+(?:\S+\s+)*investigation',
+        'online': r'online\s+(?:\S+\s+)*investigation',
     }
     
     for inv_type, pattern in type_patterns.items():
         if re.search(pattern, case_text, re.IGNORECASE):
             investigation['type'] = inv_type
             break
+    
+    # If "investigation" keyword found but no specific type matched, set to "unknown"
+    if not investigation['type']:
+        investigation['type'] = 'unknown'
     
     # Extract agencies
     agencies = [
@@ -706,7 +744,7 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
         if re.search(r'\b' + re.escape(agency) + r'\b', case_text, re.IGNORECASE):
             investigation['agencies'].append(agency)
     
-    return investigation if investigation['type'] or investigation['agencies'] else None
+    return investigation
 
 
 def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -790,13 +828,9 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     if has_under_10:
         severity_indicators.append('under_10')
     
-    # Physical abuse indicators
-    if re.search(r'\b(physical\s+abuse|physically\s+abused|molest|molesting|sexually\s+abused|sexually\s+assaulted|hands?\s+on|physical\s+contact)\b', case_text, re.IGNORECASE):
-        severity_indicators.append('physical_abuse')
-    
-    # Rape indicators - severe sexual violence
-    if re.search(r'\b(rape|raped|raping)\b', case_text, re.IGNORECASE):
-        severity_indicators.append('rape')
+    # Sexual assault indicators - severe sexual violence (includes rape, sexual abuse, etc.)
+    if re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE):
+        severity_indicators.append('sexual_assault')
     
     return list(set(severity_indicators))  # Remove duplicates
 
@@ -804,7 +838,9 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
-    Topics: production, possession, physical_abuse, international, multi_state, hands_on, online_only, family, stranger
+    Topics: production, possession, international, multi_state, hands_on, online_digital, family, stranger, pornography
+    
+    Note: physical_abuse is extracted as a severity indicator, not a topic, to avoid redundancy with hands_on.
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -812,13 +848,11 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     
     topics = []
     
-    # Production vs possession vs physical abuse
+    # Production vs possession
     if re.search(r'\b(produced|created|made\s+movies?|created\s+videos?)\b', case_text, re.IGNORECASE):
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting)\b', case_text, re.IGNORECASE):
         topics.append('possession')
-    if re.search(r'\b(physical\s+abuse|physically\s+abused|molest|molesting|sexually\s+abused|sexually\s+assaulted|hands?\s+on|physical\s+contact)\b', case_text, re.IGNORECASE):
-        topics.append('physical_abuse')
     
     # International cooperation
     if re.search(r'\b(Australia|Philippines|Japan|international|overseas)\b', case_text, re.IGNORECASE):
@@ -830,11 +864,11 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     if state_count > 1:
         topics.append('multi_state')
     
-    # Hands-on vs online-only
+    # Hands-on vs online-digital
     if re.search(r'\b(molest|molesting|hands?\s+on|sexually\s+abused|sexually\s+assaulted)\b', case_text, re.IGNORECASE):
         topics.append('hands_on')
     elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics:
-        topics.append('online_only')
+        topics.append('online_digital')
     
     # Family vs stranger
     if re.search(r'\b(father|mother|parent|brother|sister|uncle|aunt|cousin|biological)\b', case_text, re.IGNORECASE):

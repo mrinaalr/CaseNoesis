@@ -1,0 +1,271 @@
+{
+  "timestamp": "2026-02-22T00:55:39.632892",
+  "layers": {
+    "ingestion": {
+      "status": "complete",
+      "components": {
+        "pdf_extraction": {
+          "2011 Cases and Arrests \u2013 AZICAC.ORG.pdf": {
+            "success": true,
+            "text_length": 14118,
+            "has_content": true
+          },
+          "2012 Cases and Arrests \u2013 AZICAC.ORG.pdf": {
+            "success": true,
+            "text_length": 8822,
+            "has_content": true
+          },
+          "2013 Cases and Arrests \u2013 AZICAC.ORG.pdf": {
+            "success": true,
+            "text_length": 10096,
+            "has_content": true
+          },
+          "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf": {
+            "success": true,
+            "text_length": 14105,
+            "has_content": true
+          }
+        },
+        "ingest_file": {
+          "success": true,
+          "columns": [
+            "source_file",
+            "extracted_text",
+            "source"
+          ],
+          "rows": 1
+        }
+      },
+      "coverage": {
+        "total_text_extracted": 47141,
+        "pdfs_processed": 4
+      },
+      "issues": []
+    },
+    "processing": {
+      "status": "complete",
+      "feature_extraction": {
+        "success": true,
+        "coverage": {
+          "victim_count": {
+            "extracted": false,
+            "has_data": false
+          },
+          "victim_demographics": {
+            "extracted": false,
+            "has_data": false
+          },
+          "perpetrator_demographics": {
+            "extracted": false,
+            "has_data": false
+          },
+          "relationship_to_victim": {
+            "extracted": true,
+            "has_data": "stranger"
+          },
+          "platforms_used": {
+            "extracted": true,
+            "has_data": true
+          },
+          "case_topics": {
+            "extracted": true,
+            "has_data": true
+          },
+          "severity_indicators": {
+            "extracted": true,
+            "has_data": true
+          },
+          "investigation_type": {
+            "extracted": false,
+            "has_data": false
+          },
+          "prosecution_outcome": {
+            "extracted": true,
+            "has_data": true
+          },
+          "evidence_volume": {
+            "extracted": false,
+            "has_data": false
+          },
+          "severity_phrases": {
+            "extracted": true,
+            "has_data": false
+          }
+        },
+        "total_features": 19
+      },
+      "case_batching": {
+        "success": false,
+        "error": "expected string or bytes-like object, got 'DataFrame'"
+      },
+      "coverage": {},
+      "issues": [
+        "Case batching error: expected string or bytes-like object, got 'DataFrame'"
+      ]
+    },
+    "storage": {
+      "status": "complete",
+      "database_operations": {
+        "store": {
+          "success": true
+        },
+        "retrieve": {
+          "success": true,
+          "data_complete": true
+        },
+        "get_all": {
+          "success": true,
+          "count": 6
+        }
+      },
+      "schema": {
+        "fields_present": {
+          "id": true,
+          "source": true,
+          "case_text": true,
+          "relationship_to_victim": true,
+          "platforms_used": true,
+          "case_topics": true,
+          "severity_indicators": true,
+          "investigation_type": false,
+          "prosecution_outcome": false
+        },
+        "total_fields": 9,
+        "coverage": 0.7777777777777778
+      },
+      "performance": {},
+      "issues": []
+    },
+    "clustering_analysis": {
+      "status": "complete",
+      "clustering": {
+        "success": true,
+        "clusters_created": 5,
+        "total_cases_clustered": 128,
+        "cluster_types": [
+          "General Cluster",
+          "Severe Cluster",
+          "Investigation Cluster",
+          "Possession Cluster",
+          "Online-Digital Cluster"
+        ],
+        "performance_ms": 11.034011840820312,
+        "average_similarities": {
+          "General Cluster": 0.404,
+          "Severe Cluster": 0.522,
+          "Investigation Cluster": 0.4,
+          "Possession Cluster": 0.53,
+          "Online-Digital Cluster": 0.709
+        }
+      },
+      "similarity": {
+        "success": true,
+        "similarity_score": 0.21176470588235297,
+        "performance_ms": 0.0040531158447265625,
+        "valid_range": true
+      },
+      "triage": {
+        "success": true,
+        "cases_triaged": 47,
+        "score_range": {
+          "min": 5.0,
+          "max": 10.0,
+          "avg": 6.599148936170213
+        },
+        "performance_ms": 0.09083747863769531
+      },
+      "insights": {
+        "success": false,
+        "error": "generate_automated_insights() takes 1 positional argument but 2 were given"
+      },
+      "issues": []
+    }
+  },
+  "features": {
+    "coverage": {
+      "status": "complete",
+      "coverage": {
+        "relationship_to_victim": {
+          "extracted": 47,
+          "total": 47,
+          "percentage": 100.0
+        },
+        "platforms_used": {
+          "extracted": 13,
+          "total": 47,
+          "percentage": 27.659574468085108
+        },
+        "case_topics": {
+          "extracted": 42,
+          "total": 47,
+          "percentage": 89.36170212765957
+        },
+        "severity_indicators": {
+          "extracted": 31,
+          "total": 47,
+          "percentage": 65.95744680851064
+        },
+        "investigation_type": {
+          "extracted": 29,
+          "total": 47,
+          "percentage": 61.702127659574465
+        },
+        "prosecution_outcome": {
+          "extracted": 45,
+          "total": 47,
+          "percentage": 95.74468085106383
+        },
+        "victim_count": {
+          "extracted": 4,
+          "total": 47,
+          "percentage": 8.51063829787234
+        },
+        "perpetrator_demographics": {
+          "extracted": 17,
+          "total": 47,
+          "percentage": 36.17021276595745
+        }
+      },
+      "issues": [],
+      "average_coverage": 60.638297872340424
+    }
+  },
+  "performance": {
+    "pipeline": {
+      "status": "complete",
+      "pipeline_steps": {
+        "ingestion": {
+          "success": true,
+          "time_ms": 416.63098335266113
+        },
+        "processing": {
+          "success": true,
+          "time_ms": 11.889219284057617,
+          "cases_processed": 10
+        },
+        "storage": {
+          "success": true,
+          "time_ms": 2.5081634521484375
+        },
+        "analysis": {
+          "success": true,
+          "time_ms": 0.22411346435546875,
+          "clusters": 4
+        }
+      },
+      "data_flow": {
+        "total_time_ms": 431.25247955322266,
+        "throughput_cases_per_sec": 23.188272471754818
+      },
+      "issues": []
+    }
+  },
+  "quality": {},
+  "issues": [],
+  "recommendations": [],
+  "summary": {
+    "total_issues": 0,
+    "layers_evaluated": 4,
+    "overall_status": "pass"
+  }
+}

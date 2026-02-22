@@ -39,7 +39,15 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
             
             if category == 'case_topics':
                 topics = case.get('case_topics', [])
-                matches = isinstance(topics, list) and tag in topics
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    relationship = case.get('relationship_to_victim', '')
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = isinstance(topics, list) and tag in topics
                 
             elif category == 'severity_indicators':
                 severity = case.get('severity_indicators', [])
@@ -57,7 +65,15 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
                 
             elif category == 'relationship_to_victim':
                 relationship = case.get('relationship_to_victim', '')
-                matches = relationship and relationship.lower() == tag.lower()
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    topics = case.get('case_topics', [])
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = relationship and relationship.lower() == tag.lower()
                 
             elif category == 'registered_sex_offender':
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
@@ -108,7 +124,15 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
             matches = False
             if category == 'case_topics':
                 topics = case.get('case_topics', [])
-                matches = isinstance(topics, list) and tag in topics
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    relationship = case.get('relationship_to_victim', '')
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = isinstance(topics, list) and tag in topics
             elif category == 'severity_indicators':
                 severity = case.get('severity_indicators', [])
                 matches = isinstance(severity, list) and tag in severity
@@ -122,7 +146,15 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
                 matches = inv_type and inv_type.lower() == tag.lower()
             elif category == 'relationship_to_victim':
                 relationship = case.get('relationship_to_victim', '')
-                matches = relationship and relationship.lower() == tag.lower()
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    topics = case.get('case_topics', [])
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = relationship and relationship.lower() == tag.lower()
             elif category == 'registered_sex_offender':
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
             elif category == 'custom':
@@ -148,7 +180,15 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
             matches = False
             if category == 'case_topics':
                 topics = case.get('case_topics', [])
-                matches = isinstance(topics, list) and tag in topics
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    relationship = case.get('relationship_to_victim', '')
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = isinstance(topics, list) and tag in topics
             elif category == 'severity_indicators':
                 severity = case.get('severity_indicators', [])
                 matches = isinstance(severity, list) and tag in severity
@@ -162,7 +202,15 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
                 matches = inv_type and inv_type.lower() == tag.lower()
             elif category == 'relationship_to_victim':
                 relationship = case.get('relationship_to_victim', '')
-                matches = relationship and relationship.lower() == tag.lower()
+                # Special handling for "stranger": show all cases NOT family-tagged
+                if tag == 'stranger':
+                    topics = case.get('case_topics', [])
+                    has_family = isinstance(topics, list) and 'family' in topics
+                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+                    matches = not has_family and not has_family_rel
+                else:
+                    matches = relationship and relationship.lower() == tag.lower()
             elif category == 'registered_sex_offender':
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
             elif category == 'custom':
@@ -217,8 +265,8 @@ def calculate_case_similarity(case1: Dict[str, Any], case2: Dict[str, Any]) -> f
     demo_count = 0
     
     # Victim age range similarity
-    age_range1 = demo1.get('victim_age_range')
-    age_range2 = demo2.get('victim_age_range')
+    age_range1 = demo1.get('case_age_range')
+    age_range2 = demo2.get('case_age_range')
     if age_range1 and age_range2:
         overlap = min(age_range1.get('max', 0), age_range2.get('max', 0)) - max(age_range1.get('min', 0), age_range2.get('min', 0))
         range1_size = age_range1.get('max', 0) - age_range1.get('min', 0)
@@ -336,10 +384,395 @@ def extract_keywords_semantic(case_text: str, top_n: int = 10) -> List[str]:
     return [word for word, count in word_counts.most_common(top_n)]
 
 
-def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: float = 0.4) -> List[Dict[str, Any]]:
+def analyze_group_characteristics(group_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Group cases by similarity using comparison values.
-    Returns list of case groups, each containing similar cases.
+    Analyze common characteristics of a case group.
+    Returns dictionary with group name, description, and statistics.
+    """
+    if not group_cases:
+        return {}
+    
+    # Collect all features from cases in group
+    all_platforms = []
+    all_topics = []
+    all_severity = []
+    all_relationships = []
+    rso_count = 0
+    infant_count = 0
+    very_young_count = 0
+    hands_on_count = 0
+    online_digital_count = 0
+    possession_count = 0
+    production_count = 0
+    
+    for case in group_cases:
+        # Parse JSON strings
+        platforms = case.get('platforms_used', [])
+        if isinstance(platforms, str):
+            try:
+                platforms = json.loads(platforms)
+            except:
+                platforms = []
+        if isinstance(platforms, list):
+            all_platforms.extend(platforms)
+        
+        topics = case.get('case_topics', [])
+        if isinstance(topics, str):
+            try:
+                topics = json.loads(topics)
+            except:
+                topics = []
+        if isinstance(topics, list):
+            all_topics.extend(topics)
+            if 'hands_on' in topics:
+                hands_on_count += 1
+            if 'online_digital' in topics:
+                online_digital_count += 1
+            if 'possession' in topics:
+                possession_count += 1
+            if 'production' in topics:
+                production_count += 1
+        
+        severity = case.get('severity_indicators', [])
+        if isinstance(severity, str):
+            try:
+                severity = json.loads(severity)
+            except:
+                severity = []
+        if isinstance(severity, list):
+            all_severity.extend(severity)
+            if 'infant' in severity:
+                infant_count += 1
+            if 'very_young' in severity:
+                very_young_count += 1
+        
+        relationship = case.get('relationship_to_victim')
+        if relationship:
+            all_relationships.append(relationship)
+        
+        if case.get('perpetrator_registered_sex_offender'):
+            rso_count += 1
+    
+    # Calculate percentages
+    total = len(group_cases)
+    platform_counts = Counter(all_platforms)
+    topic_counts = Counter(all_topics)
+    severity_counts = Counter(all_severity)
+    relationship_counts = Counter(all_relationships)
+    
+    # Determine group name based on dominant characteristics
+    # Use stricter thresholds to ensure groups are actually about the named feature
+    group_name = "Case Cluster"
+    description_parts = []
+    
+    # Priority order: Most specific/important features first
+    # Use majority (>= 50%) or minimum count (>= 2) for important features
+    
+    # Hands-on cluster (requires ALL cases)
+    if hands_on_count == total:
+        group_name = "Hands-On Abuse Cluster"
+        description_parts.append(f"All {total} cases involve hands-on contact")
+    # Infant cluster (requires majority OR at least 2 cases)
+    elif infant_count >= max(2, total * 0.5):
+        group_name = "High-Severity Infant Cluster"
+        description_parts.append(f"{infant_count}/{total} cases ({infant_count/total*100:.0f}%) involve infant victims")
+    # Very young victims (requires majority OR at least 2 cases)
+    elif very_young_count >= max(2, total * 0.5):
+        group_name = "Very Young Victims Cluster"
+        description_parts.append(f"{very_young_count}/{total} cases ({very_young_count/total*100:.0f}%) involve very young victims")
+    # Production cluster (requires majority)
+    elif production_count >= max(2, total * 0.5):
+        group_name = "Production Cluster"
+        description_parts.append(f"{production_count}/{total} cases ({production_count/total*100:.0f}%) involve production")
+    # Registered sex offender (requires majority OR at least 2 cases)
+    elif rso_count >= max(2, total * 0.5):
+        group_name = "Registered Sex Offender Cluster"
+        description_parts.append(f"{rso_count}/{total} cases ({rso_count/total*100:.0f}%) involve registered sex offenders")
+    # Online-digital cluster (requires majority)
+    elif online_digital_count >= max(2, total * 0.5):
+        group_name = "Online-Digital Cluster"
+        description_parts.append(f"{online_digital_count}/{total} cases ({online_digital_count/total*100:.0f}%) are online-digital")
+    # Possession cluster (requires majority)
+    elif possession_count >= max(2, total * 0.5):
+        group_name = "Possession Cluster"
+        description_parts.append(f"{possession_count}/{total} cases ({possession_count/total*100:.0f}%) involve possession")
+    
+    # Add common characteristics
+    if platform_counts:
+        top_platform = platform_counts.most_common(1)[0]
+        if top_platform[1] >= total * 0.3:
+            description_parts.append(f"Most common platform: {top_platform[0]} ({top_platform[1]}/{total} cases)")
+    
+    if topic_counts:
+        top_topic = topic_counts.most_common(1)[0]
+        if top_topic[1] >= total * 0.3:
+            description_parts.append(f"Most common topic: {top_topic[0].replace('_', ' ').title()} ({top_topic[1]}/{total} cases)")
+    
+    if severity_counts:
+        top_severity = severity_counts.most_common(1)[0]
+        if top_severity[1] >= total * 0.3:
+            description_parts.append(f"Most common severity: {top_severity[0].replace('_', ' ').title()} ({top_severity[1]}/{total} cases)")
+    
+    return {
+        'group_name': group_name,
+        'description': ' | '.join(description_parts) if description_parts else f"Cluster of {total} similar cases",
+        'statistics': {
+            'total_cases': total,
+            'hands_on': f"{hands_on_count}/{total} ({hands_on_count/total*100:.1f}%)",
+            'online_digital': f"{online_digital_count}/{total} ({online_digital_count/total*100:.1f}%)",
+            'possession': f"{possession_count}/{total} ({possession_count/total*100:.1f}%)",
+            'production': f"{production_count}/{total} ({production_count/total*100:.1f}%)",
+            'infant_victims': f"{infant_count}/{total} ({infant_count/total*100:.1f}%)",
+            'very_young_victims': f"{very_young_count}/{total} ({very_young_count/total*100:.1f}%)",
+            'registered_sex_offenders': f"{rso_count}/{total} ({rso_count/total*100:.1f}%)",
+            'top_platforms': dict(platform_counts.most_common(3)),
+            'top_topics': dict(topic_counts.most_common(5)),
+            'top_severity': dict(severity_counts.most_common(5)),
+        }
+    }
+
+
+def find_physical_abuse_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Find cases that fit the Physical Abuse Cluster.
+    
+    Criteria: Cases must have BOTH:
+    - physical_abuse in severity_indicators
+    - hands_on in case_topics
+    
+    Args:
+        all_cases: List of all case dictionaries
+        
+    Returns:
+        List of cases matching Physical Abuse Cluster criteria
+    """
+    matching_cases = []
+    
+    for case in all_cases:
+        # Parse JSON strings
+        severity = case.get('severity_indicators', [])
+        if isinstance(severity, str):
+            try:
+                severity = json.loads(severity)
+            except:
+                severity = []
+        if not isinstance(severity, list):
+            severity = []
+        
+        topics = case.get('case_topics', [])
+        if isinstance(topics, str):
+            try:
+                topics = json.loads(topics)
+            except:
+                topics = []
+        if not isinstance(topics, list):
+            topics = []
+        
+        # Must have BOTH physical_abuse AND hands_on
+        has_physical_abuse = 'physical_abuse' in severity
+        has_hands_on = 'hands_on' in topics
+        
+        if has_physical_abuse and has_hands_on:
+            matching_cases.append(case)
+    
+    return matching_cases
+
+
+def find_online_digital_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Find cases that fit the Online-Digital Cluster.
+    
+    Criteria: Cases must have:
+    - online_digital in case_topics
+    
+    Args:
+        all_cases: List of all case dictionaries
+        
+    Returns:
+        List of cases matching Online-Digital Cluster criteria
+    """
+    matching_cases = []
+    
+    for case in all_cases:
+        topics = case.get('case_topics', [])
+        if isinstance(topics, str):
+            try:
+                topics = json.loads(topics)
+            except:
+                topics = []
+        if not isinstance(topics, list):
+            topics = []
+        
+        if 'online_digital' in topics:
+            matching_cases.append(case)
+    
+    return matching_cases
+
+
+def find_possession_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Find cases that fit the Possession Cluster.
+    
+    Criteria: Cases must have:
+    - possession in case_topics
+    
+    Args:
+        all_cases: List of all case dictionaries
+        
+    Returns:
+        List of cases matching Possession Cluster criteria
+    """
+    matching_cases = []
+    
+    for case in all_cases:
+        topics = case.get('case_topics', [])
+        if isinstance(topics, str):
+            try:
+                topics = json.loads(topics)
+            except:
+                topics = []
+        if not isinstance(topics, list):
+            topics = []
+        
+        if 'possession' in topics:
+            matching_cases.append(case)
+    
+    return matching_cases
+
+
+def find_investigation_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Find cases that fit the Investigation Cluster.
+    
+    Criteria: Cases must have:
+    - investigation_type set (proactive, reactive, online, undercover, or unknown)
+    - This means "investigation" keyword was found in the case text
+    
+    Args:
+        all_cases: List of all case dictionaries
+        
+    Returns:
+        List of cases matching Investigation Cluster criteria (cases with investigation_type)
+    """
+    matching_cases = []
+    
+    for case in all_cases:
+        inv_type = case.get('investigation_type')
+        
+        # Only include cases that have investigation_type set (meaning "investigation" keyword was found)
+        if inv_type:  # Not None, not empty
+            matching_cases.append(case)
+    
+    return matching_cases
+
+
+def calculate_group_similarity_metrics(group_cases: List[Dict[str, Any]]) -> Dict[str, float]:
+    """
+    Calculate similarity metrics for a group of cases.
+    
+    Computes average, minimum, and maximum pairwise similarities within the group.
+    
+    Args:
+        group_cases: List of case dictionaries in the group
+        
+    Returns:
+        Dictionary with 'average_similarity', 'min_similarity', 'max_similarity'
+    """
+    if len(group_cases) < 2:
+        return {
+            'average_similarity': 0.0,
+            'min_similarity': 0.0,
+            'max_similarity': 0.0
+        }
+    
+    # Parse comparison_values if needed
+    for case in group_cases:
+        if isinstance(case.get('comparison_values'), str):
+            try:
+                case['comparison_values'] = json.loads(case['comparison_values'])
+            except:
+                case['comparison_values'] = {}
+        elif not case.get('comparison_values'):
+            extracted = case.get('extracted_features', {})
+            if isinstance(extracted, str):
+                try:
+                    extracted = json.loads(extracted)
+                except:
+                    extracted = {}
+            case['comparison_values'] = {}
+    
+    # Calculate all pairwise similarities
+    similarities = []
+    for i in range(len(group_cases)):
+        for j in range(i+1, len(group_cases)):
+            sim = calculate_case_similarity(group_cases[i], group_cases[j])
+            similarities.append(sim)
+    
+    if not similarities:
+        return {
+            'average_similarity': 0.0,
+            'min_similarity': 0.0,
+            'max_similarity': 0.0
+        }
+    
+    return {
+        'average_similarity': round(sum(similarities) / len(similarities), 3),
+        'min_similarity': round(min(similarities), 3),
+        'max_similarity': round(max(similarities), 3)
+    }
+
+
+def find_severe_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Find cases that are considered "severe" based on severity indicators.
+    
+    Criteria: Cases with at least one of:
+    - infant in severity_indicators
+    - very_young in severity_indicators
+    - sexual_assault in severity_indicators
+    - under_10 in severity_indicators
+    
+    Args:
+        all_cases: List of case dictionaries
+        
+    Returns:
+        List of severe cases
+    """
+    severe_cases = []
+    
+    for case in all_cases:
+        severity = case.get('severity_indicators', [])
+        if isinstance(severity, str):
+            try:
+                severity = json.loads(severity)
+            except:
+                severity = []
+        if not isinstance(severity, list):
+            severity = []
+        
+        # Check for severe indicators
+        severe_indicators = ['infant', 'very_young', 'sexual_assault', 'under_10', 'under_5', 'under_7', 'under_9']
+        has_severe = any(indicator in severity for indicator in severe_indicators)
+        
+        if has_severe:
+            severe_cases.append(case)
+    
+    return severe_cases
+
+
+def find_similar_cases_general(all_cases: List[Dict[str, Any]], similarity_threshold: float = 0.45) -> List[Dict[str, Any]]:
+    """
+    Find cases for general Case Cluster using similarity-based clustering.
+    This is used for cases that don't fit into the predefined cluster types.
+    
+    Uses similarity-based clustering to group remaining cases.
+    
+    Args:
+        all_cases: List of case dictionaries (should be cases not in other clusters)
+        similarity_threshold: Minimum similarity (0.0-1.0) for grouping. Default 0.45.
+    
+    Returns:
+        List of case groups with similar cases
     """
     if not all_cases:
         return []
@@ -352,22 +785,47 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             except:
                 case['comparison_values'] = {}
         elif not case.get('comparison_values'):
-            # Try to reconstruct from extracted_features
             extracted = case.get('extracted_features', {})
             if isinstance(extracted, str):
                 try:
                     extracted = json.loads(extracted)
                 except:
                     extracted = {}
-            
-            # Reconstruct comparison_values from extracted features
-            # Note: comparison_values should ideally be stored in DB, but if missing, we'll use defaults
             case['comparison_values'] = {}
+    
+    # Build similarity matrix
+    similarity_matrix = {}
+    case_ids = [c.get('id') for c in all_cases if c.get('id')]
+    
+    for i, case1 in enumerate(all_cases):
+        case1_id = case1.get('id')
+        if not case1_id:
+            continue
+        for j, case2 in enumerate(all_cases[i+1:], start=i+1):
+            case2_id = case2.get('id')
+            if not case2_id:
+                continue
+            sim = calculate_case_similarity(case1, case2)
+            similarity_matrix[(case1_id, case2_id)] = sim
+            similarity_matrix[(case2_id, case1_id)] = sim
     
     groups = []
     used_cases = set()
     
-    for i, case1 in enumerate(all_cases):
+    # Sort by connectivity
+    case_connectivity = {}
+    for case in all_cases:
+        case_id = case.get('id')
+        if not case_id:
+            continue
+        similar_count = sum(1 for other_id in case_ids 
+                          if other_id != case_id and 
+                          similarity_matrix.get((case_id, other_id), 0) >= similarity_threshold)
+        case_connectivity[case_id] = similar_count
+    
+    sorted_cases = sorted(all_cases, key=lambda c: case_connectivity.get(c.get('id'), 0), reverse=True)
+    
+    for case1 in sorted_cases:
         case1_id = case1.get('id')
         if not case1_id or case1_id in used_cases:
             continue
@@ -375,23 +833,303 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         group = [case1]
         used_cases.add(case1_id)
         
-        for j, case2 in enumerate(all_cases[i+1:], start=i+1):
-            case2_id = case2.get('id')
-            if not case2_id or case2_id in used_cases:
-                continue
-            
-            similarity = calculate_case_similarity(case1, case2)
-            if similarity >= similarity_threshold:
-                group.append(case2)
-                used_cases.add(case2.get('id'))
+        # Find cases similar to ALL cases in group
+        changed = True
+        while changed:
+            changed = False
+            for case2 in all_cases:
+                case2_id = case2.get('id')
+                if not case2_id or case2_id in used_cases:
+                    continue
+                
+                similar_to_all = True
+                for group_case in group:
+                    group_case_id = group_case.get('id')
+                    sim = similarity_matrix.get((case2_id, group_case_id), 0)
+                    if sim < similarity_threshold:
+                        similar_to_all = False
+                        break
+                
+                if similar_to_all:
+                    group.append(case2)
+                    used_cases.add(case2_id)
+                    changed = True
         
-        if len(group) > 1:  # Only return groups with multiple cases
+        if len(group) > 1:
+            # Calculate similarities
+            similarities = []
+            for k in range(len(group)):
+                for l in range(k+1, len(group)):
+                    case_k_id = group[k].get('id')
+                    case_l_id = group[l].get('id')
+                    sim = similarity_matrix.get((case_k_id, case_l_id), 0)
+                    similarities.append(sim)
+            
+            avg_similarity = sum(similarities) / len(similarities) if similarities else 0.0
+            min_similarity = min(similarities) if similarities else 0.0
+            max_similarity = max(similarities) if similarities else 0.0
+            
+            characteristics = analyze_group_characteristics(group)
+            
             groups.append({
-                'group_id': f"group_{len(groups) + 1}",
+                'group_id': f"case_cluster_{len(groups) + 1}",
                 'cases': group,
                 'size': len(group),
-                'representative_case': group[0]  # First case as representative
+                'average_similarity': round(avg_similarity, 3),
+                'min_similarity': round(min_similarity, 3),
+                'max_similarity': round(max_similarity, 3),
+                'group_name': 'Case Cluster',
+                'description': characteristics.get('description', f"Cluster of {len(group)} similar cases"),
+                'statistics': characteristics.get('statistics', {})
             })
+    
+    return sorted(groups, key=lambda g: g['size'], reverse=True)
+
+
+def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: float = 0.45) -> List[Dict[str, Any]]:
+    """
+    Group cases into exactly 5 clusters by checking ALL cases against ALL cluster criteria.
+    
+    This is a targeted clustering approach that:
+    1. Checks ALL cases against ALL 5 cluster criteria
+    2. Cases can match MULTIPLE clusters if they meet multiple criteria
+    3. Severe cases can ALSO be in Possession or Investigation clusters (not mutually exclusive)
+    
+    Cluster Types (exactly 5):
+    1. Online-Digital Cluster: Cases with online_digital topic
+    2. Possession Cluster: Cases with possession topic
+    3. Investigation Cluster: Cases grouped by investigation_type (proactive, reactive, online, undercover, unknown)
+    4. Severe Cluster: Cases with severe indicators (infant, very_young, sexual_assault)
+    5. General Cluster: All cases grouped by Jaccard similarity
+    
+    Args:
+        all_cases: List of all case dictionaries
+        similarity_threshold: Minimum similarity for General Cluster grouping. Default 0.45.
+    
+    Returns:
+        List of exactly 5 case groups. Cases can appear in multiple groups.
+    """
+    if not all_cases:
+        return []
+    
+    groups = []
+    
+    # Step 1: Check ALL cases against ALL predefined cluster criteria
+    # Cases can be in multiple clusters
+    
+    # 1a. Online-Digital Cluster - Check ALL cases, then cluster internally
+    online_digital_cases = find_online_digital_cases(all_cases)
+    
+    if len(online_digital_cases) > 1:
+        # Cluster the matching cases internally using Jaccard similarity
+        internal_clusters = find_similar_cases_general(online_digital_cases, similarity_threshold=similarity_threshold)
+        
+        # Combine all internal clusters into one group (cases organized by similarity)
+        all_online_digital_cases = []
+        for cluster in internal_clusters:
+            all_online_digital_cases.extend(cluster['cases'])
+        
+        # Add any remaining unclustered cases
+        clustered_ids = {c.get('id') for c in all_online_digital_cases}
+        for case in online_digital_cases:
+            if case.get('id') not in clustered_ids:
+                all_online_digital_cases.append(case)
+        
+        # Calculate cluster-level metrics (across all cases)
+        similarity_metrics = calculate_group_similarity_metrics(all_online_digital_cases)
+        characteristics = analyze_group_characteristics(all_online_digital_cases)
+        
+        base_description = f"All {len(all_online_digital_cases)} cases are online-digital"
+        additional_info = []
+        if characteristics.get('statistics', {}).get('top_platforms'):
+            top_platform = list(characteristics['statistics']['top_platforms'].keys())[0]
+            additional_info.append(f"Most common platform: {top_platform} ({len(all_online_digital_cases)}/{len(all_online_digital_cases)} cases)")
+        if characteristics.get('statistics', {}).get('top_topics'):
+            top_topic = list(characteristics['statistics']['top_topics'].keys())[0]
+            additional_info.append(f"Most common topic: {top_topic.replace('_', ' ').title()} ({len(all_online_digital_cases)}/{len(all_online_digital_cases)} cases)")
+        
+        full_description = base_description
+        if additional_info:
+            full_description += " | " + " | ".join(additional_info)
+        
+        groups.append({
+            'group_id': 'online_digital_cluster',
+            'cases': all_online_digital_cases,
+            'size': len(all_online_digital_cases),
+            'average_similarity': similarity_metrics['average_similarity'],
+            'min_similarity': similarity_metrics['min_similarity'],
+            'max_similarity': similarity_metrics['max_similarity'],
+            'group_name': 'Online-Digital Cluster',
+            'description': full_description,
+            'statistics': characteristics.get('statistics', {}),
+            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        })
+    
+    # 1b. Possession Cluster - Check ALL cases, then cluster internally
+    possession_cases = find_possession_cases(all_cases)
+    
+    if len(possession_cases) > 1:
+        # Cluster the matching cases internally using Jaccard similarity
+        internal_clusters = find_similar_cases_general(possession_cases, similarity_threshold=similarity_threshold)
+        
+        # Combine all internal clusters into one group (cases organized by similarity)
+        all_possession_cases = []
+        for cluster in internal_clusters:
+            all_possession_cases.extend(cluster['cases'])
+        
+        # Add any remaining unclustered cases
+        clustered_ids = {c.get('id') for c in all_possession_cases}
+        for case in possession_cases:
+            if case.get('id') not in clustered_ids:
+                all_possession_cases.append(case)
+        
+        # Calculate cluster-level metrics (across all cases)
+        similarity_metrics = calculate_group_similarity_metrics(all_possession_cases)
+        characteristics = analyze_group_characteristics(all_possession_cases)
+        
+        base_description = f"All {len(all_possession_cases)} cases involve possession"
+        additional_info = []
+        if characteristics.get('statistics', {}).get('top_topics'):
+            top_topic = list(characteristics['statistics']['top_topics'].keys())[0]
+            additional_info.append(f"Most common topic: {top_topic.replace('_', ' ').title()} ({len(all_possession_cases)}/{len(all_possession_cases)} cases)")
+        if characteristics.get('statistics', {}).get('top_severity'):
+            top_severity = list(characteristics['statistics']['top_severity'].keys())[0]
+            severity_count = characteristics['statistics']['top_severity'][top_severity]
+            additional_info.append(f"Most common severity: {top_severity.replace('_', ' ').title()} ({severity_count}/{len(all_possession_cases)} cases)")
+        
+        full_description = base_description
+        if additional_info:
+            full_description += " | " + " | ".join(additional_info)
+        
+        groups.append({
+            'group_id': 'possession_cluster',
+            'cases': all_possession_cases,
+            'size': len(all_possession_cases),
+            'average_similarity': similarity_metrics['average_similarity'],
+            'min_similarity': similarity_metrics['min_similarity'],
+            'max_similarity': similarity_metrics['max_similarity'],
+            'group_name': 'Possession Cluster',
+            'description': full_description,
+            'statistics': characteristics.get('statistics', {}),
+            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        })
+    
+    # 1c. Investigation Cluster - Check ALL cases, then cluster internally by investigation type
+    # Group cases that have "investigation" keyword (have investigation_type set)
+    investigation_cases = find_investigation_cases(all_cases)
+    
+    if len(investigation_cases) > 1:
+        # Cluster the cases internally using Jaccard similarity
+        internal_clusters = find_similar_cases_general(investigation_cases, similarity_threshold=similarity_threshold)
+        
+        # Combine all internal clusters into one group (cases organized by similarity)
+        all_investigation_cases = []
+        for cluster in internal_clusters:
+            all_investigation_cases.extend(cluster['cases'])
+        
+        # Add any remaining unclustered cases
+        clustered_ids = {c.get('id') for c in all_investigation_cases}
+        for case in investigation_cases:
+            if case.get('id') not in clustered_ids:
+                all_investigation_cases.append(case)
+        
+        # Calculate cluster-level metrics (across all cases)
+        similarity_metrics = calculate_group_similarity_metrics(all_investigation_cases)
+        characteristics = analyze_group_characteristics(all_investigation_cases)
+        
+        # Count investigation types
+        inv_type_counts = {}
+        for case in all_investigation_cases:
+            inv_type = case.get('investigation_type') or 'unknown'
+            inv_type_counts[inv_type] = inv_type_counts.get(inv_type, 0) + 1
+        
+        inv_type_summary = ', '.join([f"{inv_type}: {count}" for inv_type, count in sorted(inv_type_counts.items())])
+        
+        groups.append({
+            'group_id': 'investigation_cluster',
+            'cases': all_investigation_cases,
+            'size': len(all_investigation_cases),
+            'average_similarity': similarity_metrics['average_similarity'],
+            'min_similarity': similarity_metrics['min_similarity'],
+            'max_similarity': similarity_metrics['max_similarity'],
+            'group_name': 'Investigation Cluster',
+            'description': f"All {len(all_investigation_cases)} cases involving investigation type ({inv_type_summary})",
+            'statistics': characteristics.get('statistics', {}),
+            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        })
+    
+    # 1d. Severe Cluster - Check ALL cases, then cluster internally
+    severe_cases = find_severe_cases(all_cases)
+    
+    if len(severe_cases) > 1:
+        # Cluster the matching cases internally using Jaccard similarity
+        internal_clusters = find_similar_cases_general(severe_cases, similarity_threshold=similarity_threshold)
+        
+        # Combine all internal clusters into one group (cases organized by similarity)
+        all_severe_cases = []
+        for cluster in internal_clusters:
+            all_severe_cases.extend(cluster['cases'])
+        
+        # Add any remaining unclustered cases
+        clustered_ids = {c.get('id') for c in all_severe_cases}
+        for case in severe_cases:
+            if case.get('id') not in clustered_ids:
+                all_severe_cases.append(case)
+        
+        # Calculate cluster-level metrics (across all cases)
+        if len(all_severe_cases) == 1:
+            similarity_metrics = {'average_similarity': 0.0, 'min_similarity': 0.0, 'max_similarity': 0.0}
+        else:
+            similarity_metrics = calculate_group_similarity_metrics(all_severe_cases)
+        
+        characteristics = analyze_group_characteristics(all_severe_cases)
+        
+        groups.append({
+            'group_id': 'severe_cluster',
+            'cases': all_severe_cases,
+            'size': len(all_severe_cases),
+            'average_similarity': similarity_metrics['average_similarity'],
+            'min_similarity': similarity_metrics['min_similarity'],
+            'max_similarity': similarity_metrics['max_similarity'],
+            'group_name': 'Severe Cluster',
+            'description': f"All {len(all_severe_cases)} cases involve severe indicators (infant, very_young, sexual_assault)",
+            'statistics': characteristics.get('statistics', {}),
+            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        })
+    
+    # 1e. General Cluster - Check ALL cases using Jaccard similarity, then cluster internally
+    general_clusters = find_similar_cases_general(all_cases, similarity_threshold=similarity_threshold)
+    
+    # Combine all general clusters into one group (cases organized by similarity)
+    all_general_cases = []
+    clustered_general_ids = set()
+    for cluster in general_clusters:
+        for case in cluster['cases']:
+            all_general_cases.append(case)
+            clustered_general_ids.add(case.get('id'))
+    
+    # Add any remaining unclustered cases (singletons that don't meet similarity threshold)
+    for case in all_cases:
+        if case.get('id') not in clustered_general_ids:
+            all_general_cases.append(case)
+    
+    if len(all_general_cases) > 1:
+        # Calculate cluster-level metrics (across all cases)
+        similarity_metrics = calculate_group_similarity_metrics(all_general_cases)
+        characteristics = analyze_group_characteristics(all_general_cases)
+        
+        groups.append({
+            'group_id': 'general_cluster',
+            'cases': all_general_cases,
+            'size': len(all_general_cases),
+            'average_similarity': similarity_metrics['average_similarity'],
+            'min_similarity': similarity_metrics['min_similarity'],
+            'max_similarity': similarity_metrics['max_similarity'],
+            'group_name': 'General Cluster',
+            'description': f"All {len(all_general_cases)} cases grouped by Jaccard similarity",
+            'statistics': characteristics.get('statistics', {}),
+            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in general_clusters]
+        })
     
     return sorted(groups, key=lambda g: g['size'], reverse=True)
 
@@ -419,18 +1157,16 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         
         # Infant cases should be highest priority - but not so high that they override multi-victim cases
         has_infant = 'infant' in severity or any('infant' in str(s).lower() for s in severity)
-        has_physical_abuse_severity = 'physical_abuse' in severity
         has_very_young = 'very_young' in severity
         
         severity_weights = {
             'infant': 15.0,  # High weight but not excessive
-            'rape': 18.0,  # Very high weight - rape is extremely severe
+            'sexual_assault': 18.0,  # Very high weight - sexual assault is extremely severe
             'very_young': 10.0,  # Increased - very young is also critical
             'under_10': 7.0,  # Increased
             'under_5': 8.0,  # Keep for backward compatibility
             'under_9': 6.0,  # Keep for backward compatibility
             'under_7': 6.0,  # Keep for backward compatibility
-            'physical_abuse': 10.0,  # Physical abuse severity
         }
         
         # Calculate base severity score
@@ -495,7 +1231,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if case.get('perpetrator_registered_sex_offender'):
             score += 4.0 * 0.10  # Increased from 3.0
         
-        # Case type severity (weight: 0.25) - Increased - physical_abuse and hands-on are critical
+        # Case type severity (weight: 0.25) - Increased - hands-on is critical
         case_topics = case.get('case_topics') or []
         if isinstance(case_topics, str):
             try:
@@ -513,7 +1249,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             case_type_score += 8.0  # Increased from 6.0, and can stack with production
         if 'possession' in case_topics:
             case_type_score += 2.0  # Lower priority
-        if 'online_only' in case_topics:
+        if 'online_digital' in case_topics:
             case_type_score += 1.0  # Lowest priority
         
         score += case_type_score * 0.25  # Increased weight from 0.20
@@ -631,13 +1367,13 @@ def generate_automated_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, An
     
     if all_severity:
         severity_counts = Counter(all_severity)
-        high_severity = ['infant', 'very_young', 'under_5', 'production']
+        high_severity = ['infant', 'very_young', 'under_5']
         high_sev_count = sum(severity_counts.get(sev, 0) for sev in high_severity)
         if high_sev_count > 0:
             insights.append({
                 'type': 'severity_analysis',
                 'title': 'High Severity Cases',
-                'description': f"{high_sev_count} cases involve high-severity indicators (infant, very young, under 5, or production)",
+                'description': f"{high_sev_count} cases involve high-severity indicators (infant, very young)",
                 'severity': 'warning'
             })
     
@@ -772,8 +1508,8 @@ def run_automated_analysis(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
             'summary': {'total_cases': 0}
         }
     
-    # 1. Group similar cases
-    case_groups = group_similar_cases(all_cases, similarity_threshold=0.35)
+    # 1. Group similar cases (using targeted clustering with predefined types)
+    case_groups = group_similar_cases(all_cases, similarity_threshold=0.45)
     
     # 2. Triage cases by priority
     triaged_cases = triage_cases(all_cases)

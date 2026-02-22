@@ -49,8 +49,8 @@ storage = CaseStorage(str(db_path))
 # Log database status on startup
 try:
     test_cases = storage.get_all_cases()
-    print(f"📊 Database: {db_path}")
-    print(f"📁 Cases in database: {len(test_cases)}")
+    print(f"Database active with path : {db_path}")
+    print(f"Cases in database: {len(test_cases)}")
     if len(test_cases) == 0:
         print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
 except Exception as e:

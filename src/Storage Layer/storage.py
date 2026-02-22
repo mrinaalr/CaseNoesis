@@ -327,7 +327,7 @@ class CaseStorage:
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                            'agencies_involved', 'investigation_type', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
-                           'severity_phrases', 'case_text']:
+                           'severity_phrases', 'case_text', 'comparison_values']:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
             

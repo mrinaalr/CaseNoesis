@@ -23,7 +23,7 @@ CaseLinker aims to address these challenges by serving as a tool for case analys
 
 - **Clustering and linking**: Cases based on shared characteristics such as victim context, platforms used, and law enforcement actions
 - **Visualization**: Cases with particular attention to tasteful presentation of case content, and pattern analysis across investigations
-- **Statistical analysis**: Cases and broader child exploitation trends over time
+- **Feature extraction**: Robust extraction of information from cases and explainability for clusters and analysis
 
 ## System Architecture
 
@@ -70,6 +70,13 @@ Then open your browser to:
 - **API Documentation**: http://localhost:8000/docs
 
 **Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2011-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
+
+**Database Encryption:** The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway. This is appropriate for:
+- **Research/Public Data:** The system processes only publicly available, already-redacted case reports with no PII
+- **Maximum Compatibility:** Plain SQLite works on all platforms (Railway, local, cloud) without additional dependencies
+- **Ease of Deployment:** No encryption key management or SQLCipher installation required
+
+For operational deployments with sensitive data, SQLCipher encryption can be added as needed. The architecture supports encryption through the `encrypt_database.py` script or implementing a custom database, but it is disabled by default for the research/demo use case.
 
 You can process additional PDFs to add more cases to the database.
 
@@ -152,7 +159,7 @@ The system will:
    - **Top Priority Cases**: See cases sorted by priority score (normalized to 5-10 scale) based on:
      - Severity indicators (35%): infant, rape, very_young, physical_abuse
      - Victim count (30%): Higher scores for multiple victims
-     - Case type (25%): production, hands_on, possession, online_only
+      - Case type (25%): production, hands_on, possession, online_digital
      - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
      - Evidence volume (10%): images, videos, storage size
      - Registered sex offender (10%): Repeat offender status
@@ -174,7 +181,7 @@ CaseLinker/
 ├── src/
 │   ├── Ingestion Layer/          # PDF extraction, file import
 │   ├── Processing Layer/         # Feature extraction, case batching
-│   ├── Storage Layer/            # Database storage with encryption
+│   ├── Storage Layer/            # Database storage
 │   ├── Clustering & Analysis Layer/  # Case comparison, clustering
 │   ├── Visualization Layer/      # Visualization data structures
 │   └── main.py                  # Main entry point
@@ -242,56 +249,16 @@ Each case includes structured features extracted from case narratives:
 
 ## Deployment
 
-CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, Render, and similar platforms.
+CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, and similar platforms.
 
-### Railway Deployment
-
-**Live Demo:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
-
-The database uses plain SQLite (no encryption) for maximum compatibility. The database file is included in the repository and will work immediately on Railway.
 
 ## Security
+
+The database uses plain SQLite (no encryption) for maximum compatibility. The database file is included in the repository and will work immediately on Railway.
 
 - **Database**: Plain SQLite database for maximum compatibility across platforms
 - **No Sensitive Data**: Only publicly available case information is processed
 - **Disclaimer**: See `/sources` page for full disclaimer regarding data usage
-
-## Current Status
-
- **Implemented:**
-- PDF ingestion and case batching (splits cases by month patterns: "In [Month]" and "[Month] [Year],")
-- Multi-PDF processing support (process multiple PDFs in a single run)
-- Text cleanup: Comprehensive URL removal and artifact cleanup
-- Feature extraction (regex-based for structured data, pattern-based for semantic features):
-  - **Structured features**: Demographics, platforms, evidence, prosecution, investigation (95%+ coverage for critical fields)
-  - **Semantic features**: Severity indicators (infant, rape, very_young, under_10, production), case topics (production, possession, hands_on, online_only, family, stranger, international, multi_state, pornography)
-  - **Severity phrases**: Non-traditional indicators (dangerous, stated, told, continue, attacked, out_of_control)
-- Database storage (47 processed cases from 2011-2014 AZICAC reports)
-- 6 interactive visualizations with click-to-view case details and text highlighting:
-  - Timeline (bottom-up chronological view with color-coded severity)
-  - Severity Indicators (color-coded by severity level)
-  - Prosecution Outcomes (booking status and charges)
-  - Previous Perpetrator (registered sex offender status)
-  - Environment (platforms and online methods)
-  - Organizations Involved (law enforcement agencies)
-- **Advanced Case Analysis** with two modes:
-  - **Tag-Based Analysis**: Select multiple tags (case topics, severity indicators, platforms, etc.) to find cases matching all selected tags, with highlighted matching features
-  - **Automated Analysis**: Case grouping, triage, and insights generation:
-    - Case grouping by similarity (platforms, demographics, topics, severity, investigation)
-    - Priority triage with normalized scores (5-10 scale) based on:
-      - Severity indicators (35%): infant, rape, very_young, physical_abuse
-      - Victim count (30%): Aggressive scoring for multiple victims
-      - Case type (25%): production, hands_on, possession, online_only
-      - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
-      - Evidence volume (10%): images, videos, storage size
-      - Registered sex offender (10%): Repeat offender status
-    - Automated insights (platform analysis, severity distribution, case topics)
-    - Pattern detection (repeat offenders, relationship patterns, investigation focus)
-    - Semantic keyword extraction (frequency-based from case text)
-    - Expandable detail views with raw case data and analysis explanations
-- Web interface with navigation, filtering, and year range selection
-- Data audit page for reviewing extracted features with interactive source text highlighting
-
 
 
 ## Contributing

@@ -423,14 +423,14 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Case Topics</div>
                     <div class="topic-selector" id="topic-selector-case-topics">
-                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_only, family, stranger -->
+                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_digital, family, stranger -->
                     </div>
                 </div>
                 
                 <div class="topic-category">
                     <div class="topic-category-title">Severity Indicators</div>
                     <div class="topic-selector" id="topic-selector-severity">
-                        <!-- Severity: infant, very_young, under_5, under_9, physical_abuse -->
+                        <!-- Severity: infant, very_young, sexual_assault -->
                     </div>
                 </div>
                 
@@ -602,8 +602,8 @@
             });
             
             // Define all possible topics (from extraction functions)
-            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'under_5', 'under_9', 'physical_abuse'];
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_digital', 'family', 'stranger'];
+            const allSeverity = ['infant', 'very_young', 'sexual_assault'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
@@ -657,7 +657,9 @@
                     tag.className = 'topic-tag';
                     tag.setAttribute('data-topic', topic);
                     tag.setAttribute('data-category', categoryType);
-                    tag.textContent = topic.replace(/_/g, ' ');
+                    // Normalize display: replace 'rape' with 'sexual_assault' for display
+                    const displayTopic = topic === 'rape' ? 'sexual_assault' : topic;
+                    tag.textContent = displayTopic.replace(/_/g, ' ');
                     tag.onclick = () => {
                         toggleTopicTag(tag, topic, categoryType);
                     };
@@ -724,7 +726,15 @@
                         switch(categoryType) {
                             case 'case_topics':
                                 const topics = caseData.case_topics || [];
-                                matches = Array.isArray(topics) && topics.includes(topic);
+                                // Special handling for "stranger": show all cases NOT family-tagged
+                                if (topic === 'stranger') {
+                                    const hasFamily = Array.isArray(topics) && topics.includes('family');
+                                    const relationship = caseData.relationship_to_victim || '';
+                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher'].some(fam => relationship.toLowerCase().includes(fam));
+                                    matches = !hasFamily && !hasFamilyRel;
+                                } else {
+                                    matches = Array.isArray(topics) && topics.includes(topic);
+                                }
                                 break;
                             case 'severity_indicators':
                                 const severity = caseData.severity_indicators || [];
@@ -741,8 +751,18 @@
                                          caseData.investigation_type.toLowerCase() === topic.toLowerCase();
                                 break;
                             case 'relationship_to_victim':
-                                matches = caseData.relationship_to_victim && 
-                                         caseData.relationship_to_victim.toLowerCase() === topic.toLowerCase();
+                                // Special handling for "stranger": show all cases NOT family-tagged
+                                if (topic === 'stranger') {
+                                    const topics = caseData.case_topics || [];
+                                    const hasFamily = Array.isArray(topics) && topics.includes('family');
+                                    const relationship = caseData.relationship_to_victim || '';
+                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher'].some(fam => relationship.toLowerCase().includes(fam));
+                                    matches = !hasFamily && !hasFamilyRel;
+                                } else {
+                                    // Simple exact match (no biological prefix anymore)
+                                    matches = caseData.relationship_to_victim && 
+                                             caseData.relationship_to_victim.toLowerCase() === topic.toLowerCase();
+                                }
                                 break;
                             case 'registered_sex_offender':
                                 matches = topic === 'registered_sex_offender' && 
@@ -1018,16 +1038,18 @@
             if (groups.length > 0) {
                 html += `
                     <div style="margin-top: 40px;">
-                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🎯 Case Groups (${groups.length})</h3>
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">Case Groups (${groups.length})</h3>
                         <div style="display: grid; gap: 15px;">
                 `;
                 
                 groups.slice(0, 5).forEach((group, groupIdx) => {
-                    const caseIds = group.cases.map(c => c.id || c).join(', ');
+                    const groupName = group.group_name || group.group_id;
+                    const groupDesc = group.description || `Cluster of ${group.size} similar cases`;
                     html += `
                         <div class="expandable-box" onclick="showGroupDetail(${groupIdx})" style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderColor='rgba(255, 193, 7, 0.5)'; this.style.transform='translateX(5px)';" onmouseout="this.style.borderColor='rgba(255, 193, 7, 0.2)'; this.style.transform='translateX(0)';">
-                            <div style="color: #ffc107; font-weight: 700; margin-bottom: 10px;">${group.group_id} (${group.size} cases) <span style="color: #888; font-size: 0.8em;">→ Click to expand</span></div>
-                            <div style="color: #b0b0b0; font-size: 0.9em;">Cases: ${caseIds}</div>
+                            <div style="color: #ffc107; font-weight: 700; margin-bottom: 8px; font-size: 1.1em;">${groupName} (${group.size} cases)</div>
+                            <div style="color: #b0b0b0; font-size: 0.9em; margin-bottom: 10px;">${groupDesc}</div>
+                            <div style="color: #888; font-size: 0.8em;">→ Click to view detailed cluster analysis</div>
                         </div>
                     `;
                 });
@@ -1039,7 +1061,7 @@
             if (triaged.length > 0) {
                 html += `
                     <div style="margin-top: 40px;">
-                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">⚡ Top Priority Cases</h3>
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;"> Top Priority Cases</h3>
                         <div style="display: grid; gap: 15px;">
                 `;
                 
@@ -1063,7 +1085,7 @@
             if (insights.insights && insights.insights.length > 0) {
                 html += `
                     <div style="margin-top: 40px;">
-                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">📈 Automated Insights</h3>
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">Automated Insights</h3>
                         <div style="display: grid; gap: 15px;">
                 `;
                 
@@ -1084,7 +1106,7 @@
             if (insights.patterns && insights.patterns.length > 0) {
                 html += `
                     <div style="margin-top: 40px;">
-                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🔍 Patterns Detected</h3>
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;"> Patterns Detected</h3>
                         <div style="display: grid; gap: 15px;">
                 `;
                 
@@ -1104,7 +1126,7 @@
             if (keywords.length > 0) {
                 html += `
                     <div style="margin-top: 40px;">
-                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;">🔍 Top Keywords</h3>
+                        <h3 style="color: #ffc107; font-size: 1.5em; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 10px;"> Top Keywords</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                 `;
                 
@@ -1216,8 +1238,8 @@
                     reasons.push(`<strong>Case Type (10% weight):</strong> Hands-on abuse case - high priority as it involves physical contact with victims.`);
                 } else if (caseTopics.includes('possession')) {
                     reasons.push(`<strong>Case Type (10% weight):</strong> Possession case - moderate priority for evidence collection and prosecution.`);
-                } else if (caseTopics.includes('online_only')) {
-                    reasons.push(`<strong>Case Type (10% weight):</strong> Online-only case - lower priority but still requires investigation.`);
+                } else if (caseTopics.includes('online_digital')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Online-Digital case - lower priority but still requires investigation.`);
                 }
             }
             
@@ -1245,28 +1267,124 @@
             const group = window.currentAnalysisData.case_groups[groupIdx];
             if (!group) return;
             
+            const groupName = group.group_name || group.group_id;
+            const groupDesc = group.description || `Cluster of ${group.size} similar cases`;
+            const stats = group.statistics || {};
+            const avgSimilarity = group.average_similarity || 0;
             const caseIds = group.cases.map(c => c.id || c).join(', ');
-            const explanation = `
+            
+            // Build Cluster Characteristics (LEFT SIDE - replaces "Raw Case Data")
+            let statsHTML = '';
+            if (stats.total_cases) {
+                statsHTML += `<div style="line-height: 1.8;">`;
+                statsHTML += `<h3 style="color: #ffc107; margin-bottom: 15px;">${groupName}</h3>`;
+                statsHTML += `<p style="color: #b0b0b0; margin-bottom: 20px;">${groupDesc}</p>`;
+                statsHTML += `<div style="padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">`;
+                statsHTML += `<h4 style="color: #ffc107; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 8px;">Cluster Characteristics</h4>`;
+                statsHTML += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; color: #b0b0b0; font-size: 0.9em;">`;
+                
+                if (stats.hands_on) statsHTML += `<div><strong style="color: #ffc107;">Hands-On:</strong> ${stats.hands_on}</div>`;
+                if (stats.online_digital) statsHTML += `<div><strong style="color: #ffc107;">Online-Digital:</strong> ${stats.online_digital}</div>`;
+                if (stats.possession) statsHTML += `<div><strong style="color: #ffc107;">Possession:</strong> ${stats.possession}</div>`;
+                if (stats.production) statsHTML += `<div><strong style="color: #ffc107;">Production:</strong> ${stats.production}</div>`;
+                if (stats.infant_victims) statsHTML += `<div><strong style="color: #ffc107;">Infant Victims:</strong> ${stats.infant_victims}</div>`;
+                if (stats.very_young_victims) statsHTML += `<div><strong style="color: #ffc107;">Very Young Victims:</strong> ${stats.very_young_victims}</div>`;
+                if (stats.registered_sex_offenders) statsHTML += `<div><strong style="color: #ffc107;">Registered Sex Offenders:</strong> ${stats.registered_sex_offenders}</div>`;
+                
+                statsHTML += `</div>`;
+                
+                if (stats.top_platforms && Object.keys(stats.top_platforms).length > 0) {
+                    statsHTML += `<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 193, 7, 0.2);">`;
+                    statsHTML += `<strong style="color: #ffc107;">Top Platforms:</strong> `;
+                    statsHTML += Object.entries(stats.top_platforms).map(([p, c]) => `${p} (${c})`).join(', ');
+                    statsHTML += `</div>`;
+                }
+                
+                if (stats.top_topics && Object.keys(stats.top_topics).length > 0) {
+                    statsHTML += `<div style="margin-top: 10px;">`;
+                    statsHTML += `<strong style="color: #ffc107;">Top Topics:</strong> `;
+                    statsHTML += Object.entries(stats.top_topics).map(([t, c]) => `${t.replace(/_/g, ' ')} (${c})`).join(', ');
+                    statsHTML += `</div>`;
+                }
+                
+                if (stats.top_severity && Object.keys(stats.top_severity).length > 0) {
+                    statsHTML += `<div style="margin-top: 10px;">`;
+                    statsHTML += `<strong style="color: #ffc107;">Top Severity Indicators:</strong> `;
+                    statsHTML += Object.entries(stats.top_severity).map(([s, c]) => `${s.replace(/_/g, ' ')} (${c})`).join(', ');
+                    statsHTML += `</div>`;
+                }
+                
+                statsHTML += `</div></div>`;
+            } else {
+                statsHTML = `<div style="line-height: 1.8;"><h3 style="color: #ffc107; margin-bottom: 15px;">${groupName}</h3><p style="color: #b0b0b0;">${groupDesc}</p></div>`;
+            }
+            
+            // LEFT SIDE: Cluster Characteristics (replaces "Raw Case Data")
+            const leftSide = statsHTML;
+            
+            // RIGHT SIDE: Metrics, Case IDs, and Why These Cases Were Grouped
+            const rightSide = `
                 <div style="line-height: 1.8;">
-                    <h3 style="color: #ffc107; margin-bottom: 15px;">Why These Cases Were Grouped:</h3>
-                    <p style="color: #b0b0b0; margin-bottom: 15px;">
-                        These ${group.size} cases were grouped together because they share significant similarities across multiple dimensions:
-                    </p>
-                    <ul style="margin: 0; padding-left: 20px; color: #b0b0b0;">
-                        <li style="margin-bottom: 10px;"><strong>Platform Similarity (15%):</strong> Cases share similar platforms or online methods used.</li>
-                        <li style="margin-bottom: 10px;"><strong>Demographic Similarity (20%):</strong> Similar victim/perpetrator demographics and characteristics.</li>
-                        <li style="margin-bottom: 10px;"><strong>Topic Similarity (25%):</strong> Cases involve similar topics (production, possession, international, etc.).</li>
-                        <li style="margin-bottom: 10px;"><strong>Severity Similarity (15%):</strong> Cases share similar severity indicators.</li>
-                        <li style="margin-bottom: 10px;"><strong>Investigation Similarity (15%):</strong> Similar investigation types and agencies involved.</li>
-                    </ul>
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
-                        <strong style="color: #ffc107;">Group ID:</strong> ${group.group_id}<br>
-                        <strong style="color: #ffc107;">Cases:</strong> ${caseIds}
+                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <h4 style="color: #ffc107; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 8px;">Group Metrics</h4>
+                        <div style="color: #b0b0b0; font-size: 0.95em;">
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: #ffc107;">Average Similarity:</strong><br>
+                                <span style="color: #b0b0b0; font-size: 1.1em; font-weight: 600;">${avgSimilarity.toFixed(3)}</span>
+                            </div>
+                            <div style="margin-bottom: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 193, 7, 0.2);">
+                                <strong style="color: #ffc107;">Group ID:</strong><br>
+                                <span style="color: #b0b0b0; font-family: monospace; font-size: 0.95em;">${group.group_id}</span>
+                            </div>
+                            <div style="margin-bottom: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 193, 7, 0.2);">
+                                <strong style="color: #ffc107;">Cases:</strong><br>
+                                <span style="color: #b0b0b0; font-size: 1.1em; font-weight: 600;">${group.size} cases</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <h4 style="color: #ffc107; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 8px;">Grouped Cases</h4>
+                        <div style="color: #888; font-size: 0.85em; margin-bottom: 10px;">(cases with similarity ≥ 0.45 are grouped)</div>
+                        <div style="color: #b0b0b0; font-size: 0.85em; font-family: monospace; line-height: 1.6; max-height: 300px; overflow-y: auto; word-break: break-all;">
+                            ${group.internal_groups && group.internal_groups.length > 0 
+                                ? group.internal_groups.map((internalGroup, idx) => {
+                                    // Handle both cases as objects and as IDs
+                                    const groupCaseIds = (internalGroup.cases || []).map(c => {
+                                        if (typeof c === 'string') return c;
+                                        if (typeof c === 'object' && c !== null) return c.id || c;
+                                        return String(c);
+                                    });
+                                    return `
+                                        <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 193, 7, 0.2);">
+                                            <div style="color: #ffc107; font-weight: 600; margin-bottom: 8px;">Group ${idx + 1}:</div>
+                                            ${groupCaseIds.map(id => `<div style="padding: 4px 0; padding-left: 20px; border-bottom: 1px solid rgba(255, 193, 7, 0.05);">${id}</div>`).join('')}
+                                        </div>
+                                    `;
+                                }).join('')
+                                : caseIds.split(', ').map(id => `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255, 193, 7, 0.1);">${id}</div>`).join('')
+                            }
+                        </div>
+                    </div>
+                    <div style="padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <h4 style="color: #ffc107; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 193, 7, 0.3); padding-bottom: 8px;">Why These Cases Were Grouped:</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 15px; font-size: 0.9em;">
+                            Cases are grouped using weighted Jaccard similarity across 6 dimensions:
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #b0b0b0; font-size: 0.9em;">
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Topic Similarity (25%):</strong> Cases involve similar topics (production, possession, hands_on, etc.)</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Demographic Similarity (20%):</strong> Similar victim/perpetrator demographics and characteristics</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Platform Similarity (15%):</strong> Cases share similar platforms or online methods used</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Severity Similarity (15%):</strong> Cases share similar severity indicators</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Investigation Similarity (15%):</strong> Similar investigation types and agencies involved</li>
+                            <li style="margin-bottom: 8px;"><strong style="color: #ffc107;">Relationship Similarity (10%):</strong> Similar perpetrator-victim relationships</li>
+                        </ul>
                     </div>
                 </div>
             `;
             
-            showDetailModal(`Group: ${group.group_id}`, `Cases in this group: ${caseIds}`, explanation, 'Case Group');
+            // showDetailModal(title, content, explanation, type)
+            // content goes in "Raw Case Data" (left), explanation goes in "Analysis Explanation" (right)
+            showDetailModal(groupName, leftSide, rightSide, 'Case Group');
         }
         
         function showInsightDetail(insightIdx) {
@@ -1333,11 +1451,11 @@
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 400px; gap: 20px; padding: 20px; overflow-y: auto; flex: 1;">
                         <div style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; overflow-y: auto; max-height: calc(90vh - 120px);">
-                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">Raw Case Data</h3>
+                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">Cluster information</h3>
                             <div style="color: #b0b0b0; white-space: pre-wrap; word-break: break-word; font-family: monospace; font-size: 0.9em; line-height: 1.6;">${content}</div>
                         </div>
                         <div style="background: rgba(20, 20, 20, 0.8); padding: 20px; border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px; overflow-y: auto; max-height: calc(90vh - 120px);">
-                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">⚡ Analysis Explanation</h3>
+                            <h3 style="color: #ffc107; margin-bottom: 15px; font-size: 1.2em;">Analysis Explanation</h3>
                             <div style="color: #b0b0b0; font-size: 0.95em;">${explanation}</div>
                         </div>
                     </div>
@@ -1416,6 +1534,7 @@
                     } else if (category === 'investigation_type') {
                         matches = caseItem.investigation_type && caseItem.investigation_type.toLowerCase() === tag.toLowerCase();
                     } else if (category === 'relationship_to_victim') {
+                        // Simple exact match (no biological prefix anymore)
                         matches = caseItem.relationship_to_victim && caseItem.relationship_to_victim.toLowerCase() === tag.toLowerCase();
                     } else if (category === 'registered_sex_offender') {
                         matches = tag === 'registered_sex_offender' && caseItem.perpetrator_registered_sex_offender === true;
@@ -1615,7 +1734,7 @@
                                     patterns = [/\bColorado\b/gi, /\bTexas\b/gi, /\bCalifornia\b/gi, /\bLas\s+Vegas\b/gi, /\bArizona\b/gi];
                                 } else if (tag === 'hands_on') {
                                     patterns = [/\bmolest\w*\b/gi, /\bhands?\s+on\b/gi, /\bsexually\s+abused\b/gi, /\bsexually\s+assaulted\b/gi];
-                                } else if (tag === 'online_only') {
+                                } else if (tag === 'online_digital') {
                                     patterns = [/\bonline\b/gi, /\bchat\b/gi, /\btrading\s+images?\b/gi];
                                 } else if (tag === 'family') {
                                     patterns = [/\bfather\b/gi, /\bmother\b/gi, /\bparent\b/gi, /\bbrother\b/gi, /\bsister\b/gi, /\buncle\b/gi, /\baunt\b/gi, /\bcousin\b/gi, /\bbiological\b/gi];
@@ -1627,18 +1746,28 @@
                                     patterns = [/\binfants?\b/gi];
                                 } else if (tag === 'very_young') {
                                     patterns = [/\bvery\s+young\s+children\b/gi];
-                                } else if (tag === 'under_5') {
-                                    patterns = [/\bunder\s+5\b/gi, /\bages?\s+[0-4]\b/gi, /\b[0-4]\s+year\w*\b/gi];
-                                } else if (tag === 'under_9') {
-                                    patterns = [/\bunder\s+9\b/gi, /\bages?\s+[0-8]\b/gi, /\b[0-8]\s+year\w*\b/gi, /\b9\s+year\s+old\b/gi];
-                                } else if (tag === 'physical_abuse') {
-                                    patterns = [/\bphysical\s+abuse\b/gi, /\bphysically\s+abused\b/gi, /\bmolest\w*\b/gi, /\bsexually\s+abused\b/gi, /\bsexually\s+assaulted\b/gi, /\bhands?\s+on\b/gi, /\bphysical\s+contact\b/gi];
+                                } else if (tag === 'sexual_assault') {
+                                    patterns = [/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi];
                                 }
                             } else if (category === 'platforms_used') {
                                 const platformName = tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase();
                                 patterns = [new RegExp(`\\b${platformName}\\b`, 'gi')];
                             } else if (category === 'investigation_type') {
-                                patterns = [new RegExp(`\\b${tag}\\b`, 'gi')];
+                                if (tag === 'unknown') {
+                                    // For "unknown" investigation type, highlight the "investigation" keyword
+                                    patterns = [/\binvestigation\b/gi];
+                                } else if (tag === 'undercover') {
+                                    // For undercover, match "undercover [optional words] (operation|investigation)"
+                                    patterns = [/\bundercover\s+(?:\S+\s+)*(?:operation|investigation)\b/gi];
+                                } else {
+                                    // For specific types (proactive, reactive, online), highlight the full phrase:
+                                    // Type + optional words (0-5 words max) + investigation (e.g., "proactive joint investigation")
+                                    // Only match word characters (letters, numbers, hyphens) - not punctuation
+                                    // This prevents matching across sentence boundaries
+                                    patterns = [
+                                        new RegExp(`\\b${tag}\\s+(?:[\\w-]+\\s+){0,5}investigation\\b`, 'gi')
+                                    ];
+                                }
                             } else if (category === 'relationship_to_victim') {
                                 patterns = [new RegExp(`\\b${tag}\\b`, 'gi')];
                             } else if (category === 'registered_sex_offender') {
@@ -1726,7 +1855,11 @@
             if (Array.isArray(severity) && severity.length > 0) {
                 allTags.push({
                     category: 'Severity Indicators',
-                    tags: severity.map(s => s.replace(/_/g, ' ').toUpperCase())
+                    tags: severity.map(s => {
+                        // Normalize: replace 'rape' with 'sexual_assault' for display
+                        const normalized = s === 'rape' ? 'sexual_assault' : s;
+                        return normalized.replace(/_/g, ' ').toUpperCase();
+                    })
                 });
             }
             
@@ -1804,7 +1937,7 @@
                 { pattern: /\b(minor|child|children|victim)\b/gi, color: '#95e1d3', label: 'Victim Info' },
                 { pattern: /\b(facebook|instagram|snapchat|discord|whatsapp|online|chat)\b/gi, color: '#a8e6cf', label: 'Platform' },
                 { pattern: /\b(production|possession|distribution)\b/gi, color: '#ffaaa5', label: 'Case Type' },
-                { pattern: /\b(infant|very\s+young|under\s+\d+)\b/gi, color: '#ffd3a5', label: 'Severity' },
+                { pattern: /\b(infant|very\s+young|under\s+\d+|physical\s+abuse|sexual\s+assault|sexually\s+assaulted|rape|raped|molest|molested)\b/gi, color: '#ffd3a5', label: 'Severity' },
                 { pattern: /\b(azicac|fbi|police|icac|hsi)\b/gi, color: '#caf0f8', label: 'Agency' }
             ];
             
