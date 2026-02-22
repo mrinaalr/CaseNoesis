@@ -54,7 +54,7 @@ else:
     extract_severity,
     extract_topics,
     extract_severity_phrases,
-)
+
 
 __all__ = [
     'case_batching',

@@ -269,11 +269,16 @@
                 <p>
                     ML components are optional enhancements, not replacements. Pattern-based extraction 
                     remains primary; ML provides additional capabilities. System reverts gracefully 
-                    if ML models are unavailable or undesired .
+                    if ML models are unavailable or undesired.
                 </p>
                 <p>
                     Processing flow: Case Text → Pattern extraction → ML enhancement (optional) → Storage. 
                     Components are modular and can be evaluated independently.
+                </p>
+                <p>
+                    <strong>Deployment:</strong> ML dependencies are available in <code>requirements-ml.txt</code> 
+                    for local development. Production builds use <code>requirements.txt</code> (ML deps commented) 
+                    for faster deployment; all ML code remains in the repository.
                 </p>
             </div>
         </div>

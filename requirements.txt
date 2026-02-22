@@ -28,7 +28,10 @@ uvicorn>=0.23.0
 # plotly>=5.15.0
 
 # ML/NLP Processing (optional - system works without these)
-sentence-transformers>=2.2.0
-spacy>=3.7.0
-transformers>=4.30.0
-torch>=2.0.0
+# These are LARGE packages (torch ~2GB, transformers ~500MB) and slow down builds
+# Uncomment only when you're ready to use ML features
+# See requirements-ml.txt for ML dependencies
+# sentence-transformers>=2.2.0
+# spacy>=3.7.0
+# transformers>=4.30.0
+# torch>=2.0.0
