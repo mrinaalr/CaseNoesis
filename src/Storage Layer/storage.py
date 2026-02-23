@@ -291,7 +291,8 @@ class CaseStorage:
                 if case_dict.get(json_field):
                     try:
                         case_dict[json_field] = json.loads(case_dict[json_field])
-                    except:
+                    except (json.JSONDecodeError, TypeError):
+                        # Keep original value if JSON parsing fails
                         pass
             
             # Get related data

@@ -30,7 +30,6 @@ def main():
     print("Default: 2014 Cases and Arrests – AZICAC.ORG.pdf")
     
     try:
-        import sys
         if len(sys.argv) > 1:
             # Multiple files provided as command line arguments
             file_paths = sys.argv[1:]

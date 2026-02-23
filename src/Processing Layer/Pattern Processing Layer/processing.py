@@ -392,7 +392,8 @@ def extract_date_range(case: Dict[str, Any]) -> Optional[Dict[str, str]]:
             month_num = datetime.strptime(month, '%B').month
             date_str = f"{year}-{month_num:02d}-01"
             return {'start': date_str, 'end': None}
-        except:
+        except (ValueError, AttributeError):
+            # Invalid month name or year format
             pass
     
     return None

@@ -12,9 +12,8 @@ CaseLinker is designed as a system for ingesting, processing, clustering, and vi
 ```
 ┌─────────────────────────────────────┐
 │      Data Sources                   │
-│ for now start with one source,      │  
-| azicac 2014 cases and arrests,      │
-| modular so can upload website / pdf │
+| azicac 2011-2014 cases and arrests  │
+| can ingest any structured report    │
 └────────┬────────────────────────────┘
          │
          ▼

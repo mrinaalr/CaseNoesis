@@ -1343,55 +1343,77 @@ def generate_automated_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, An
     
     # Insight 1: Most common platforms
     all_platforms = []
+    platform_to_cases = defaultdict(list)
     for case in all_cases:
         platforms = case.get('platforms_used') or []
         if isinstance(platforms, list):
             all_platforms.extend(platforms)
+            case_id = case.get('id', '')
+            for platform in platforms:
+                platform_to_cases[platform].append(case_id)
     
     if all_platforms:
         platform_counts = Counter(all_platforms)
         top_platform = platform_counts.most_common(1)[0]
+        platform_name = top_platform[0]
+        case_ids = platform_to_cases[platform_name]
         insights.append({
             'type': 'platform_analysis',
             'title': 'Most Common Platform',
-            'description': f"'{top_platform[0]}' appears in {top_platform[1]} cases ({top_platform[1]/len(all_cases)*100:.1f}% of all cases)",
-            'severity': 'info'
+            'description': f"'{platform_name}' appears in {top_platform[1]} cases ({top_platform[1]/len(all_cases)*100:.1f}% of all cases)",
+            'severity': 'info',
+            'cases': case_ids
         })
     
     # Insight 2: Severity distribution
     all_severity = []
+    high_severity_cases = []
+    high_severity_indicators = ['infant', 'very_young', 'under_5']
     for case in all_cases:
         severity = case.get('severity_indicators') or []
         if isinstance(severity, list):
             all_severity.extend(severity)
+            # Check if case has high severity indicators
+            has_high_severity = any(sev in severity for sev in high_severity_indicators)
+            if has_high_severity:
+                case_id = case.get('id', '')
+                if case_id:
+                    high_severity_cases.append(case_id)
     
     if all_severity:
         severity_counts = Counter(all_severity)
-        high_severity = ['infant', 'very_young', 'under_5']
-        high_sev_count = sum(severity_counts.get(sev, 0) for sev in high_severity)
+        high_sev_count = sum(severity_counts.get(sev, 0) for sev in high_severity_indicators)
         if high_sev_count > 0:
             insights.append({
                 'type': 'severity_analysis',
                 'title': 'High Severity Cases',
                 'description': f"{high_sev_count} cases involve high-severity indicators (infant, very young)",
-                'severity': 'warning'
+                'severity': 'warning',
+                'cases': high_severity_cases
             })
     
     # Insight 3: Case topics distribution
     all_topics = []
+    topic_to_cases = defaultdict(list)
     for case in all_cases:
         topics = case.get('case_topics') or []
         if isinstance(topics, list):
             all_topics.extend(topics)
+            case_id = case.get('id', '')
+            for topic in topics:
+                topic_to_cases[topic].append(case_id)
     
     if all_topics:
         topic_counts = Counter(all_topics)
         top_topic = topic_counts.most_common(1)[0]
+        topic_name = top_topic[0]
+        case_ids = topic_to_cases[topic_name]
         insights.append({
             'type': 'topic_analysis',
             'title': 'Most Common Case Topic',
-            'description': f"'{top_topic[0].replace('_', ' ').title()}' appears in {top_topic[1]} cases",
-            'severity': 'info'
+            'description': f"'{topic_name.replace('_', ' ').title()}' appears in {top_topic[1]} cases",
+            'severity': 'info',
+            'cases': case_ids
         })
     
     # Pattern: Registered sex offenders

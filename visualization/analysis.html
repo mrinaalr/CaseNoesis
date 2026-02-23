@@ -543,6 +543,7 @@
 
     <script>
         let allCases = [];
+        window.allCases = []; // Make globally accessible
         let availableTopics = new Set();
         let customTopics = new Set();
 
@@ -550,6 +551,7 @@
             try {
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
+                window.allCases = allCases; // Store globally
                 
                 renderTopicSelector();
             } catch (error) {
@@ -1392,6 +1394,22 @@
             const insight = window.currentAnalysisData.insights.insights[insightIdx];
             if (!insight) return;
             
+            // Build case listings if available - make them clickable
+            let casesSection = '';
+            if (insight.cases && Array.isArray(insight.cases) && insight.cases.length > 0) {
+                const caseList = insight.cases.map(caseId => 
+                    `<span onclick="showCaseFromInsight('${caseId}', '${insight.type}'); event.stopPropagation();" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); color: #ffc107; padding: 5px 10px; border-radius: 4px; font-size: 0.85em; margin: 3px; display: inline-block; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255, 193, 7, 0.2)'; this.style.borderColor='rgba(255, 193, 7, 0.6)';" onmouseout="this.style.background='rgba(255, 193, 7, 0.1)'; this.style.borderColor='rgba(255, 193, 7, 0.3)';">${caseId}</span>`
+                ).join('');
+                casesSection = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 4px;">
+                        <strong style="color: #ffc107; margin-bottom: 10px; display: block;">Cases (${insight.cases.length}):</strong>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            ${caseList}
+                        </div>
+                    </div>
+                `;
+            }
+            
             const explanation = `
                 <div style="line-height: 1.8;">
                     <h3 style="color: #ffc107; margin-bottom: 15px;">Insight Analysis:</h3>
@@ -1402,10 +1420,166 @@
                         <strong style="color: #ffc107;">Type:</strong> ${insight.type}<br>
                         <strong style="color: #ffc107;">Severity:</strong> ${insight.severity}
                     </div>
+                    ${casesSection}
                 </div>
             `;
             
             showDetailModal(insight.title, insight.description, explanation, 'Automated Insight');
+        }
+        
+        async function showCaseFromInsight(caseId, insightType) {
+            // Find the case in all available data
+            let caseItem = null;
+            
+            // Try to find in triaged cases first
+            if (window.currentAnalysisData && window.currentAnalysisData.triaged_cases) {
+                caseItem = window.currentAnalysisData.triaged_cases.find(c => c.id === caseId);
+            }
+            
+            // Try case_groups
+            if (!caseItem && window.currentAnalysisData && window.currentAnalysisData.case_groups) {
+                for (const group of window.currentAnalysisData.case_groups) {
+                    if (group.cases && Array.isArray(group.cases)) {
+                        caseItem = group.cases.find(c => c.id === caseId);
+                        if (caseItem) break;
+                    }
+                }
+            }
+            
+            // If still not found, try window.allCases
+            if (!caseItem && window.allCases && Array.isArray(window.allCases)) {
+                caseItem = window.allCases.find(c => c.id === caseId);
+            }
+            
+            // If still not found, try fetching from API
+            if (!caseItem) {
+                try {
+                    const response = await fetch('/api/cases');
+                    if (response.ok) {
+                        const allCasesFromAPI = await response.json();
+                        window.allCases = allCasesFromAPI;
+                        caseItem = allCasesFromAPI.find(c => c.id === caseId);
+                    }
+                } catch (error) {
+                    console.error('Error fetching cases:', error);
+                }
+            }
+            
+            if (!caseItem) {
+                alert(`Case ${caseId} not found`);
+                return;
+            }
+            
+            // Get raw case text
+            let caseText = '';
+            const rawData = caseItem.raw_data;
+            if (typeof rawData === 'object' && rawData) {
+                caseText = rawData.case_text || '';
+            } else if (typeof rawData === 'string') {
+                try {
+                    const parsed = JSON.parse(rawData);
+                    caseText = parsed.case_text || '';
+                } catch {
+                    caseText = rawData;
+                }
+            }
+            
+            // Parse JSON strings for arrays
+            let platforms = caseItem.platforms_used || [];
+            if (typeof platforms === 'string') {
+                try {
+                    platforms = JSON.parse(platforms);
+                } catch {
+                    platforms = [];
+                }
+            }
+            if (!Array.isArray(platforms)) platforms = [];
+            
+            let severity = caseItem.severity_indicators || [];
+            if (typeof severity === 'string') {
+                try {
+                    severity = JSON.parse(severity);
+                } catch {
+                    severity = [];
+                }
+            }
+            if (!Array.isArray(severity)) severity = [];
+            
+            let topics = caseItem.case_topics || [];
+            if (typeof topics === 'string') {
+                try {
+                    topics = JSON.parse(topics);
+                } catch {
+                    topics = [];
+                }
+            }
+            if (!Array.isArray(topics)) topics = [];
+            
+            // Highlight ONLY what's relevant to this specific insight
+            let highlightedText = caseText;
+            const highlightTerms = new Set();
+            
+            if (insightType === 'platform_analysis') {
+                // Only highlight the platform(s) used in this case
+                platforms.forEach(p => {
+                    if (p) {
+                        highlightTerms.add(p.toLowerCase());
+                        highlightTerms.add(p);
+                    }
+                });
+            } else if (insightType === 'severity_analysis') {
+                // Only highlight high-severity indicators (infant, very young, etc.)
+                const highSeverityIndicators = ['infant', 'very_young', 'under_5', 'under_10'];
+                severity.forEach(s => {
+                    if (s && highSeverityIndicators.includes(s)) {
+                        highlightTerms.add(s.toLowerCase());
+                        highlightTerms.add(s.replace('_', ' '));
+                        // Add common variations
+                        if (s === 'infant') {
+                            highlightTerms.add('infant');
+                            highlightTerms.add('baby');
+                            highlightTerms.add('babies');
+                        }
+                        if (s === 'very_young') {
+                            highlightTerms.add('very young');
+                            highlightTerms.add('very young child');
+                        }
+                    }
+                });
+            } else if (insightType === 'topic_analysis') {
+                // Only highlight the topic(s) that match this insight
+                topics.forEach(t => {
+                    if (t) {
+                        highlightTerms.add(t.toLowerCase());
+                        highlightTerms.add(t.replace('_', ' '));
+                    }
+                });
+            }
+            
+            // Apply highlights - sort by length (longest first) to avoid partial matches
+            const sortedTerms = Array.from(highlightTerms).filter(t => t && t.length > 2).sort((a, b) => b.length - a.length);
+            sortedTerms.forEach(term => {
+                if (term && typeof term === 'string' && term.length > 2) {
+                    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+                    highlightedText = highlightedText.replace(regex, '<mark style="background: rgba(255, 193, 7, 0.4); color: #ffc107; font-weight: 700;">$1</mark>');
+                }
+            });
+            
+            // Update the Cluster information section in the modal
+            const modal = document.getElementById('analysis-detail-modal');
+            if (modal) {
+                // Find the left column (Cluster information)
+                const leftColumn = modal.querySelector('div[style*="grid-template-columns"] > div:first-child');
+                if (leftColumn) {
+                    // Find the content div
+                    const contentDiv = leftColumn.querySelector('div[style*="white-space: pre-wrap"]');
+                    if (contentDiv) {
+                        contentDiv.innerHTML = highlightedText || 'No case text available';
+                        contentDiv.style.color = '#b0b0b0';
+                    }
+                }
+            }
         }
         
         function showPatternDetail(patternIdx) {
