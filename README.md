@@ -71,12 +71,7 @@ Then open your browser to:
 
 **Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2011-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
 
-**Database Encryption:** The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway. This is appropriate for:
-- **Research/Public Data:** The system processes only publicly available, already-redacted case reports with no PII
-- **Maximum Compatibility:** Plain SQLite works on all platforms (Railway, local, cloud) without additional dependencies
-- **Ease of Deployment:** No encryption key management or SQLCipher installation required
-
-For operational deployments with sensitive data, SQLCipher encryption can be added as needed. The architecture supports encryption through the `encrypt_database.py` script or implementing a custom database, but it is disabled by default for the research/demo use case.
+**Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
 
 You can process additional PDFs to add more cases to the database.
 
