@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 47 processed cases from AZICAC reports (2011-2014). No installation required—just open the link in your browser.
+The live deployment includes all features and 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Motivation
 
@@ -69,9 +69,10 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with processed cases from AZICAC reports (2011-2014). The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
+**Important:** The repository includes a database (`caselinker.db`) with 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
 
 **Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
+
 
 You can process additional PDFs to add more cases to the database.
 
@@ -129,26 +130,25 @@ The system will:
 5. Store all cases in the database
 6. Display summary with cases broken down by source
 
-**Note:** The database file (`caselinker.db`) is included in the repository. It contains 47 processed cases from publicly available AZICAC case reports (2011-2014) with extracted features including platforms, agencies, severity indicators, case topics, prosecution outcomes, victim/perpetrator demographics, and evidence volume.
 
-### Using the Visualization
+### Using the Visualizations
 
 1. **Timeline View**: See all cases plotted on an interactive timeline. Filter by year range using the dropdown. Click on case points to view detailed information.
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
-3. **Prosecution Outcomes**: Bar chart showing case distribution across prosecution categories (No Charges Listed, Sexual Exploitation of a Minor, Booked, Arrested). Click bars to view cases with highlighted outcome details.
+3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
 4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.
 5. **Environment**: Bar chart showing distribution of platforms and environments used (Facebook, online, chat, etc.). Click bars to view cases with highlighted platform text.
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
 
 ### Using Advanced Case Analysis
 
-1. **Tag-Based Analysis (🔬 Run Advanced Analysis)**:
+1. **Tag-Based Analysis (Run Advanced Analysis)**:
    - Select one or more tags from categories: Case Topics, Severity Indicators, Platforms & Environments, Investigation Types, Perpetrator Relationships, Perpetrator Status
    - Click "Run Advanced Analysis" to find all cases matching ALL selected tags (intersection logic)
    - View matching cases with highlighted text showing where tags were found in the raw case data
    - See case counts for each selected tag
 
-2. **Automated Analysis (⚡ Run Automated Analysis)**:
+2. **Automated Analysis (Run Automated Analysis)**:
    - Click "Run Automated Analysis" to run the full automated analysis pipeline
    - **Case Groups**: View cases grouped by similarity (platforms, demographics, topics, severity, investigation)
    - **Top Priority Cases**: See cases sorted by priority score (normalized to 5-10 scale) based on:
@@ -247,13 +247,9 @@ Each case includes structured features extracted from case narratives:
 CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, and similar platforms.
 
 
-## Security
-
-The database uses plain SQLite (no encryption) for maximum compatibility. The database file is included in the repository and will work immediately on Railway.
-
-- **Database**: Plain SQLite database for maximum compatibility across platforms
-- **No Sensitive Data**: Only publicly available case information is processed
-- **Disclaimer**: See `/sources` page for full disclaimer regarding data usage
+#
+- **No Sensitive Data**: The database contains 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain.
+- **See `/sources` page for full disclaimer regarding data usage**
 
 
 ## Contributing
