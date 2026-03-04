@@ -317,6 +317,9 @@
         }
         
         function renderClusters() {
+            // Stop any existing jiggle animation
+            stopJiggleAnimation();
+            
             if (clusterData.length === 0) {
                 showError('No clusters found');
                 return;
@@ -340,8 +343,8 @@
             };
             
             clusterData.forEach((cluster, i) => {
-                // Size based on number of cases - main cluster bubble (reduced for tighter fit)
-                const clusterSize = Math.sqrt(cluster.size) * 3.5 + 40;
+                // Size based on number of cases - main cluster bubble (5% bigger)
+                const clusterSize = (Math.sqrt(cluster.size) * 3.5 + 40);
                 
                 // Get position from predefined positions or use default
                 let clusterX, clusterY;
@@ -384,9 +387,9 @@
                 if (cluster.internal_groups && cluster.internal_groups.length > 0) {
                     const groupCount = cluster.internal_groups.length;
                     
-                    // Calculate sub-cluster sizes first (reduced for tighter fit)
+                    // Calculate sub-cluster sizes first (5% bigger)
                     const groupSizes = cluster.internal_groups.map(group => 
-                        Math.sqrt(group.size) * 2.5 + 12
+                        (Math.sqrt(group.size) * 2.5 + 12) * 1.10
                     );
                     const maxGroupSize = Math.max(...groupSizes);
                     
@@ -530,7 +533,7 @@
                         const clusterX = node.clusterX;
                         const clusterY = node.clusterY;
                         const clusterR = node.clusterR;
-                        const minDistance = clusterR + node.r + 8; // 8px minimum gap (tighter)
+                        const minDistance = clusterR + node.r + 15; // 15px minimum gap (more space)
                         
                         const dx = node.x - clusterX;
                         const dy = node.y - clusterY;
@@ -569,7 +572,7 @@
                     groupNodes.forEach(node => {
                         const clusterX = node.clusterX;
                         const clusterY = node.clusterY;
-                        const idealRadius = node.clusterR + node.r + 15; // Ideal distance from cluster center (tighter)
+                        const idealRadius = node.clusterR + node.r + 20; // Ideal distance from cluster center (more space)
                         
                         const dx = node.x - clusterX;
                         const dy = node.y - clusterY;
@@ -597,10 +600,11 @@
                         // Keep within bounds
                         return Math.max(margin + d.r, Math.min(height - margin - d.r, d.y));
                     }))
-                    .alphaDecay(0.1) // Faster decay for quick settling
-                    .velocityDecay(0.6) // Less bouncy, more stable
+                    .alphaDecay(0.02) // Slower decay for smoother, longer animation
+                    .velocityDecay(0.4) // Less damping for smoother movement
+                    .alpha(1) // Start with full alpha
                     .on('tick', function() {
-                        // Update positions
+                        // Update positions directly for smooth animation (no transitions in tick)
                         groupBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
                     })
                     .on('end', function() {
@@ -608,15 +612,132 @@
                         groupNodes.forEach(node => {
                             node.fx = node.x;
                             node.fy = node.y;
+                            // Store original position for jiggle animation
+                            node.originalX = node.x;
+                            node.originalY = node.y;
                         });
+                        
+                        // Special adjustment: Move "11 cases" bubble in Possession Cluster up a bit
+                        const possession11CasesBubble = groupNodes.find(node => 
+                            node.clusterId === 'possession_cluster' && 
+                            node.group && 
+                            node.group.size === 11
+                        );
+                        if (possession11CasesBubble) {
+                            // Move it up by 8 pixels
+                            possession11CasesBubble.fy = possession11CasesBubble.y - 8;
+                            possession11CasesBubble.y = possession11CasesBubble.y - 8;
+                            possession11CasesBubble.originalY = possession11CasesBubble.y;
+                            // Update the visual position immediately
+                            svg.selectAll('.group-bubble').filter(function(d) {
+                                return d === possession11CasesBubble;
+                            }).attr('transform', d => `translate(${d.x},${d.y})`);
+                        }
+                        
+                        // Also store original positions for main clusters
+                        nodes.filter(n => n.type === 'cluster').forEach(node => {
+                            node.originalX = node.x;
+                            node.originalY = node.y;
+                        });
+                        
+                        // Start gentle jiggle animation
+                        startJiggleAnimation();
                     });
             } else {
                 // If no groups, just position clusters
                 bubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+                
+                // Store original positions for all nodes
+                nodes.forEach(node => {
+                    node.originalX = node.x;
+                    node.originalY = node.y;
+                });
+                
+                // Start jiggle animation
+                startJiggleAnimation();
             }
             
             // Position main clusters (they're fixed)
             clusterBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+            
+            // Ensure original positions are stored for main clusters (in case simulation didn't run)
+            nodes.filter(n => n.type === 'cluster').forEach(node => {
+                if (node.originalX === undefined) {
+                    node.originalX = node.x;
+                    node.originalY = node.y;
+                }
+            });
+        }
+        
+        // Gentle jiggle animation for bubbles
+        let jiggleAnimationId = null;
+        function startJiggleAnimation() {
+            // Stop any existing animation first
+            stopJiggleAnimation();
+            
+            const jiggleAmount = 1.5; // Maximum pixels to jiggle
+            const jiggleSpeed = 0.0018; // Speed of jiggle (lower = slower) - halved for smoother movement
+            let startTime = Date.now();
+            
+            function animate() {
+                // Only select sub-cluster bubbles (group bubbles), NOT main clusters
+                const groupBubbles = svg.selectAll('.group-bubble');
+                const currentTime = Date.now();
+                const elapsed = (currentTime - startTime) * jiggleSpeed;
+                
+                // Update each sub-cluster bubble's position
+                groupBubbles.each(function(d) {
+                    // Ensure we have original positions stored
+                    if (d.originalX === undefined || d.originalY === undefined) {
+                        d.originalX = d.x || 0;
+                        d.originalY = d.y || 0;
+                    }
+                    
+                    // Create smooth, organic jiggle using sine waves with different frequencies
+                    // Each bubble has unique phase based on its ID for varied movement
+                    const idStr = d.id ? String(d.id) : '0';
+                    const phaseX = idStr.charCodeAt(0) * 0.1;
+                    const phaseY = idStr.charCodeAt(0) * 0.15;
+                    const freqX = 0.7 + (idStr.length > 1 ? (idStr.charCodeAt(1) % 5) * 0.05 : 0);
+                    const freqY = 0.6 + (idStr.length > 2 ? (idStr.charCodeAt(2) % 5) * 0.05 : 0);
+                    
+                    const offsetX = Math.sin(elapsed + phaseX) * jiggleAmount * 
+                                   (0.5 + Math.sin(elapsed * freqX + phaseX * 0.5) * 0.5);
+                    const offsetY = Math.cos(elapsed * 0.8 + phaseY) * jiggleAmount * 
+                                   (0.5 + Math.cos(elapsed * freqY + phaseY * 0.5) * 0.5);
+                    
+                    // Store jiggle offset (don't modify d.x and d.y - keep them at original)
+                    d.jiggleX = offsetX;
+                    d.jiggleY = offsetY;
+                });
+                
+                // Keep the group transform at original position (so text stays static)
+                groupBubbles.attr('transform', function(d) {
+                    return `translate(${d.originalX},${d.originalY})`;
+                });
+                
+                // Apply jiggle transform only to the circle element
+                groupBubbles.selectAll('circle').attr('transform', function(d) {
+                    const parentData = d3.select(this.parentNode).datum();
+                    if (parentData && parentData.jiggleX !== undefined && parentData.jiggleY !== undefined) {
+                        return `translate(${parentData.jiggleX},${parentData.jiggleY})`;
+                    }
+                    return 'translate(0,0)';
+                });
+                
+                // Continue animation loop - ALWAYS continue forever
+                jiggleAnimationId = requestAnimationFrame(animate);
+            }
+            
+            // Start the animation loop
+            jiggleAnimationId = requestAnimationFrame(animate);
+        }
+        
+        function stopJiggleAnimation() {
+            if (jiggleAnimationId) {
+                cancelAnimationFrame(jiggleAnimationId);
+                jiggleAnimationId = null;
+            }
         }
         
         function displayCases(cases, title) {

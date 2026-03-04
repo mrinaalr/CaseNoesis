@@ -7,6 +7,7 @@ Automated analysis with case grouping, triage, and insights.
 
 from typing import List, Dict, Any, Tuple
 import json
+import re
 from collections import Counter, defaultdict
 from datetime import datetime
 
