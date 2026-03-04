@@ -617,23 +617,6 @@
                             node.originalY = node.y;
                         });
                         
-                        // Special adjustment: Move "11 cases" bubble in Possession Cluster up a bit
-                        const possession11CasesBubble = groupNodes.find(node => 
-                            node.clusterId === 'possession_cluster' && 
-                            node.group && 
-                            node.group.size === 11
-                        );
-                        if (possession11CasesBubble) {
-                            // Move it up by 8 pixels
-                            possession11CasesBubble.fy = possession11CasesBubble.y - 8;
-                            possession11CasesBubble.y = possession11CasesBubble.y - 8;
-                            possession11CasesBubble.originalY = possession11CasesBubble.y;
-                            // Update the visual position immediately
-                            svg.selectAll('.group-bubble').filter(function(d) {
-                                return d === possession11CasesBubble;
-                            }).attr('transform', d => `translate(${d.x},${d.y})`);
-                        }
-                        
                         // Also store original positions for main clusters
                         nodes.filter(n => n.type === 'cluster').forEach(node => {
                             node.originalX = node.x;
