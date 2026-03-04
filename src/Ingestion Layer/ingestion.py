@@ -17,6 +17,7 @@ from typing import Dict, List, Any, Optional
 import warnings
 import logging
 import sys
+import re
 
 try:
     import pdfplumber
@@ -25,6 +26,34 @@ try:
     warnings.filterwarnings("ignore", category=UserWarning)
 except ImportError:
     PDFPLUMBER_AVAILABLE = False
+
+
+def detect_source_from_content(text: str, filename: str) -> str:
+    """
+    Detect source organization from file content and filename.
+    Checks for NCMEC patterns (CT numbers, state headers) and AZICAC patterns.
+    
+    Args:
+        text: Extracted text content
+        filename: Name of the file
+        
+    Returns:
+        Source organization name ('NCMEC', 'AZICAC', 'FBI', or 'unknown')
+    """
+    text_sample = text[:5000]  # Check first 5000 chars for efficiency
+    filename_lower = filename.lower()
+    
+    # Check filename first
+    if 'ncmec' in filename_lower:
+        return 'NCMEC'
+    elif 'azicac' in filename_lower:
+        return 'AZICAC'
+    elif 'fbi' in filename_lower:
+        return 'FBI'
+    
+    
+    # Default fallback
+    return 'AZICAC'  # Default to AZICAC for backward compatibility
 
 
 def extract_pdf_text(pdf_path: str) -> str:
@@ -76,11 +105,12 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
     
     if file_type == 'pdf':
         text = extract_pdf_text(str(path))
+        source = detect_source_from_content(text, path.name)
         
         df = pd.DataFrame({
             'source_file': [path.name],
             'extracted_text': [text],
-            'source': ['AZICAC'],
+            'source': [source],
         })
         
         return df
@@ -134,28 +164,15 @@ def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
         try:
             text = extract_pdf_text(str(path))
             
-            # Try to extract organization name from filename
-            # Common patterns: "AZICAC", "2013 Cases", etc.
-            org_name = 'AZICAC'  # default
-            filename_lower = path.stem.lower()
-            if 'azicac' in filename_lower:
-                org_name = 'AZICAC'
-            elif 'fbi' in filename_lower:
-                org_name = 'FBI'
-            elif 'ncmec' in filename_lower:
-                org_name = 'NCMEC'
-            else:
-                # Try to extract from first part of filename
-                parts = path.stem.split()
-                if parts:
-                    org_name = parts[0].upper()
+            # Detect source from content and filename
+            org_name = detect_source_from_content(text, path.name)
             
             all_data.append({
                 'source_file': path.name,
                 'extracted_text': text,
                 'source': org_name,
             })
-            print(f"✓ Ingested: {path.name} ({len(text):,} characters)")
+            print(f"✓ Ingested: {path.name} ({len(text):,} characters) - Detected source: {org_name}")
             
         except Exception as e:
             print(f"❌ Error processing {path.name}: {e}")

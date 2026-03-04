@@ -11,6 +11,8 @@ from collections import Counter, defaultdict
 from datetime import datetime
 
 
+
+
 def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, str]]) -> List[Dict[str, Any]]:
     """
     Query database and return all cases matching the selected tags.
@@ -50,8 +52,20 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
                     matches = isinstance(topics, list) and tag in topics
                 
             elif category == 'severity_indicators':
-                severity = case.get('severity_indicators', [])
-                matches = isinstance(severity, list) and tag in severity
+                if tag == 'very_young':
+                    # Check for very_young or under_12 tags (both indicate very young)
+                    severity = case.get('severity_indicators', [])
+                    if isinstance(severity, str):
+                        try:
+                            severity = json.loads(severity)
+                        except:
+                            severity = []
+                    if not isinstance(severity, list):
+                        severity = []
+                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
+                else:
+                    severity = case.get('severity_indicators', [])
+                    matches = isinstance(severity, list) and tag in severity
                 
             elif category == 'platforms_used':
                 platforms = case.get('platforms_used', [])
@@ -134,8 +148,20 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
                 else:
                     matches = isinstance(topics, list) and tag in topics
             elif category == 'severity_indicators':
-                severity = case.get('severity_indicators', [])
-                matches = isinstance(severity, list) and tag in severity
+                if tag == 'very_young':
+                    # Check for very_young or under_12 tags (both indicate very young)
+                    severity = case.get('severity_indicators', [])
+                    if isinstance(severity, str):
+                        try:
+                            severity = json.loads(severity)
+                        except:
+                            severity = []
+                    if not isinstance(severity, list):
+                        severity = []
+                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
+                else:
+                    severity = case.get('severity_indicators', [])
+                    matches = isinstance(severity, list) and tag in severity
             elif category == 'platforms_used':
                 platforms = case.get('platforms_used', [])
                 matches = isinstance(platforms, list) and any(
@@ -190,8 +216,20 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
                 else:
                     matches = isinstance(topics, list) and tag in topics
             elif category == 'severity_indicators':
-                severity = case.get('severity_indicators', [])
-                matches = isinstance(severity, list) and tag in severity
+                if tag == 'very_young':
+                    # Check for very_young or under_12 tags (both indicate very young)
+                    severity = case.get('severity_indicators', [])
+                    if isinstance(severity, str):
+                        try:
+                            severity = json.loads(severity)
+                        except:
+                            severity = []
+                    if not isinstance(severity, list):
+                        severity = []
+                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
+                else:
+                    severity = case.get('severity_indicators', [])
+                    matches = isinstance(severity, list) and tag in severity
             elif category == 'platforms_used':
                 platforms = case.get('platforms_used', [])
                 matches = isinstance(platforms, list) and any(

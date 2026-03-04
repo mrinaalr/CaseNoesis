@@ -314,12 +314,12 @@ class CaseStorage:
                 prosecution_cols = [desc[0] for desc in cursor.description]
                 case_dict['prosecution_outcomes'] = [dict(zip(prosecution_cols, row)) for row in prosecution_rows]
             
-            # Reconstruct date_range
-            if case_dict.get('date_start') or case_dict.get('date_end'):
-                case_dict['date_range'] = {
-                    'start': case_dict.get('date_start'),
-                    'end': case_dict.get('date_end')
-                }
+            # Reconstruct date_range - always create it, even if dates are None
+            # This ensures the frontend always has a date_range object to work with
+            case_dict['date_range'] = {
+                'start': case_dict.get('date_start'),
+                'end': case_dict.get('date_end')
+            }
             
             # Merge extracted_features back into case_dict (new schema fields)
             extracted_features = case_dict.get('extracted_features', {})

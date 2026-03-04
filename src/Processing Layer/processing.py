@@ -35,7 +35,8 @@ extract_prosecution_outcome = pattern_processing.extract_prosecution_outcome
 extract_severity = pattern_processing.extract_severity
 extract_topics = pattern_processing.extract_topics
 extract_severity_phrases = pattern_processing.extract_severity_phrases
-clean_urls_from_text = pattern_processing.clean_urls_from_text
+clean_urls_from_text = pattern_processing.clean_artifacts_from_text  # Backward compatibility alias
+clean_artifacts_from_text = pattern_processing.clean_artifacts_from_text
 
 __all__ = [
     'case_batching',
@@ -55,5 +56,6 @@ __all__ = [
     'extract_severity',
     'extract_topics',
     'extract_severity_phrases',
-    'clean_urls_from_text',
+    'clean_urls_from_text',  # Backward compatibility
+    'clean_artifacts_from_text',
 ]

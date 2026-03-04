@@ -22,78 +22,136 @@ import re
 from typing import Dict, List, Any, Optional
 
 
-def clean_urls_from_text(text: str) -> str:
+def clean_artifacts_from_text(text: str) -> str:
     """
-    Remove URLs from case text, specifically patterns like:
-    - "https://www.azicac.org/2012-cases-and-arrests/ 7/8 2/14/26, 10:32 AM 2012 Cases and Arrests - AZICAC.ORG"
-    - "5/12 2/14/26, 10:37 AM 2011 Cases and Arrests – AZICAC.ORG"
-    - "/2011-cases-and-arrests/" (URL path fragments in middle of text)
+    Remove artifacts from case text including URLs, page numbers, and other PDF extraction artifacts.
     
-    Removes all text from "http" (or page numbers before it) up to and including "AZICAC.ORG"
-    Also removes URL path fragments like "/2011-cases-and-arrests/"
-    Preserves the rest of the case text.
+    Handles:
+    - URLs (http://, https://, www.)
+    - URLs split across lines
+    - Page numbers at end of text
+    - AZICAC-specific artifacts (azicac.org references, URL fragments)
+    - Multiple consecutive spaces
+    - Leading/trailing whitespace
     
     Args:
-        text: Case text that may contain URLs
+        text: Case text that may contain artifacts
         
     Returns:
-        Cleaned text with URLs removed
+        Cleaned text with artifacts removed
     """
     if not text:
         return text
     
-    # Pattern 1: Match from http/https to AZICAC.ORG (case-insensitive)
-    # Matches: "https://www.azicac.org/... AZICAC.ORG"
-    pattern1 = r'https?://.*?azicac\.org'
+    cleaned_text = text
     
-    # Pattern 2: Match page numbers/date patterns that lead to AZICAC.ORG
-    # Matches: "5/12 2/14/26, 10:37 AM 2011 Cases and Arrests – AZICAC.ORG"
-    # This matches from page numbers/date all the way to AZICAC.ORG
-    pattern2 = r'\d+/\d+\s+\d+/\d+/\d+.*?azicac\.org'
+    # Pattern 1: Match full URLs (http:// or https://) - handles URLs split across lines
+    # Matches: "https://www.example.com/path" or "http://example.com"
+    # Also handles URLs that may be broken across lines with newlines
+    pattern1 = r'https?://[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
+    cleaned_text = re.sub(pattern1, '', cleaned_text, flags=re.IGNORECASE)
     
-    # Pattern 3: Match URL path fragments like "/2011-cases-and-arrests/" or "/2012-cases-and-arrests/"
-    # These appear in the middle of case text without http:// prefix
-    pattern3 = r'/\d{4}-cases-and-arrests/'
-    
-    # Pattern 4: Match standalone "azicac.org" or "AZICAC.ORG" (without http://)
-    # Matches: "azicac.org" or "AZICAC.ORG" anywhere in text
-    pattern4 = r'\bazicac\.org\b'
-    
-    # Pattern 5: Match any remaining http/https URLs (catch-all cleanup)
-    pattern5 = r'https?://[^\s]+'
-    
-    # Remove patterns in order (most specific first), case-insensitive
-    cleaned_text = re.sub(pattern1, '', text, flags=re.IGNORECASE)
+    # Pattern 2: Match www. URLs (without http://)
+    # Matches: "www.example.com/path" - handles split across lines
+    pattern2 = r'www\.[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
     cleaned_text = re.sub(pattern2, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Pattern 3: Match URLs with fragments/anchors (e.g., #:~:text=...)
+    # These often appear split across lines in PDFs
+    pattern3 = r'[^\s]+\.(com|org|gov|net|edu|io|co)[^\s\n]*(?:#|/)[^\s\n]*(?:\s*\n\s*[^\s\n]+)*'
     cleaned_text = re.sub(pattern3, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Pattern 4: AZICAC-specific patterns
+    # Match from http/https to AZICAC.ORG (case-insensitive)
+    pattern4 = r'https?://.*?azicac\.org'
     cleaned_text = re.sub(pattern4, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Pattern 5: Match page numbers/date patterns that lead to AZICAC.ORG
+    pattern5 = r'\d+/\d+\s+\d+/\d+/\d+.*?azicac\.org'
     cleaned_text = re.sub(pattern5, '', cleaned_text, flags=re.IGNORECASE)
     
-    # Clean up any double spaces or trailing whitespace that might result
-    cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+    # Pattern 6: Match URL path fragments like "/2011-cases-and-arrests/"
+    pattern6 = r'/\d{4}-cases-and-arrests/'
+    cleaned_text = re.sub(pattern6, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Pattern 7: Match standalone "azicac.org" or "AZICAC.ORG" (without http://)
+    pattern7 = r'\bazicac\.org\b'
+    cleaned_text = re.sub(pattern7, '', cleaned_text, flags=re.IGNORECASE)
+    
+    # Pattern 8: Remove page numbers at end of text (standalone numbers on last line)
+    # Matches: "42", "65", "74", "115", "165" etc. at end of text
+    # Only remove if it's a standalone number (1-4 digits) at the very end
+    cleaned_text = re.sub(r'\n\s*\d{1,4}\s*$', '', cleaned_text)
+    cleaned_text = re.sub(r'^\s*\d{1,4}\s*$', '', cleaned_text, flags=re.MULTILINE)
+    
+    # Pattern 9: Remove trailing page numbers that appear after content
+    # Matches patterns like "text.\n42" or "text\n65" where number is on separate line
+    cleaned_text = re.sub(r'\n\s*(\d{1,4})\s*(?=\n|$)', '', cleaned_text)
+    
+    # Clean up whitespace artifacts
+    # Replace multiple spaces with single space
+    cleaned_text = re.sub(r' +', ' ', cleaned_text)
+    # Replace multiple newlines with single newline (but preserve paragraph breaks)
+    cleaned_text = re.sub(r'\n{3,}', '\n\n', cleaned_text)
+    # Remove trailing whitespace from each line
+    cleaned_text = re.sub(r'[ \t]+$', '', cleaned_text, flags=re.MULTILINE)
+    # Remove leading/trailing whitespace from entire text
     cleaned_text = cleaned_text.strip()
     
     return cleaned_text
 
 
-def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
+def case_batching(text: str, org_name: str = "case", source: str = None) -> List[Dict[str, Any]]:
     """
-    Split text corpus into individual cases by multiple month/year patterns.
+    Router function that splits text corpus into individual cases.
+    Routes to appropriate batch function based on source format.
+    
+    Supported formats:
+    - NCMEC: Split by state headers (ALABAMA, ARIZONA, etc.)
+    - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
+    - Default: Falls back to AZICAC format
+    
+    To add new formats, create a _batch_[org]_cases() function and add detection logic here.
+    
+    Args:
+        text: Large text block from PDF ingestion
+        org_name: Organization name prefix for case IDs (e.g., "azicac", "ncmec")
+        source: Source organization name ('NCMEC', 'AZICAC', 'FBI', etc.) - used to determine format
+        
+    Returns:
+        List of case dictionaries, each with 'case_text', 'month_year', 'month', 'year', 'case_id'
+    """
+    # Normalize org name (lowercase, remove spaces/special chars)
+    org_name = org_name.lower().replace(" ", "_").replace("-", "_")
+    
+    # Detect format: check source parameter first, then auto-detect from content
+    is_ncmec = False
+    if source and source.upper() == 'NCMEC':
+        is_ncmec = True
+    
+    # Route to appropriate batch function
+    if is_ncmec:
+        return _batch_ncmec_cases(text, org_name)
+    else:
+        # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
+        return _batch_azicac_cases(text, org_name)
+
+
+def _batch_azicac_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
+    """
+    Split AZICAC cases by month/year patterns.
     
     Primary pattern: "In [Month]" (e.g., "In January", "In February")
     Secondary pattern: "[Month] [Year]," (e.g., "July 2012,", "September 2012,")
     
     Args:
-        text: Large text block from PDF ingestion
+        text: Full text from AZICAC PDF
         org_name: Organization name prefix for case IDs (e.g., "azicac")
         
     Returns:
-        List of case dictionaries, each with 'case_text' and 'month_year'
+        List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
     """
     cases = []
-    
-    # Normalize org name (lowercase, remove spaces/special chars)
-    org_name = org_name.lower().replace(" ", "_").replace("-", "_")
     
     months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
     
@@ -181,8 +239,8 @@ def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
         
         case_text = text[start_pos:end_pos].strip()
         
-        # Clean URLs from case text before processing
-        case_text = clean_urls_from_text(case_text)
+        # Clean artifacts from case text before processing
+        case_text = clean_artifacts_from_text(case_text)
         
         # Extract year
         if match_info['year']:
@@ -218,6 +276,125 @@ def case_batching(text: str, org_name: str = "case") -> List[Dict[str, Any]]:
     return cases
 
 
+def _batch_ncmec_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
+    """
+    Split NCMEC cases by state headers.
+    Each case starts with a state name (ALABAMA, ARIZONA, etc.) in all caps.
+    
+    Args:
+        text: Full text from NCMEC PDF
+        org_name: Organization name prefix for case IDs (e.g., "ncmec")
+        
+    Returns:
+        List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
+    """
+    cases = []
+    
+    # List of all US states (all caps for NCMEC format)
+    states = [
+        'ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA', 'COLORADO',
+        'CONNECTICUT', 'DELAWARE', 'FLORIDA', 'GEORGIA', 'HAWAII', 'IDAHO',
+        'ILLINOIS', 'INDIANA', 'IOWA', 'KANSAS', 'KENTUCKY', 'LOUISIANA',
+        'MAINE', 'MARYLAND', 'MASSACHUSETTS', 'MICHIGAN', 'MINNESOTA',
+        'MISSISSIPPI', 'MISSOURI', 'MONTANA', 'NEBRASKA', 'NEVADA',
+        'NEW HAMPSHIRE', 'NEW JERSEY', 'NEW MEXICO', 'NEW YORK',
+        'NORTH CAROLINA', 'NORTH DAKOTA', 'OHIO', 'OKLAHOMA', 'OREGON',
+        'PENNSYLVANIA', 'RHODE ISLAND', 'SOUTH CAROLINA', 'SOUTH DAKOTA',
+        'TENNESSEE', 'TEXAS', 'UTAH', 'VERMONT', 'VIRGINIA', 'WASHINGTON',
+        'WEST VIRGINIA', 'WISCONSIN', 'WYOMING'
+    ]
+    
+    # Build regex pattern to match state headers (must be at start of line)
+    # Sort by length (longest first) to match "NEW YORK" before "NEW"
+    states_sorted = sorted(states, key=len, reverse=True)
+    state_pattern = '|'.join(re.escape(state) for state in states_sorted)
+    pattern = rf'^({state_pattern})$'
+    
+    # Find all state header positions
+    matches = []
+    for match in re.finditer(pattern, text, re.MULTILINE):
+        matches.append({
+            'pos': match.start(),
+            'state': match.group(1)
+        })
+    
+    if not matches:
+        # No state headers found - return entire text as one case
+        from datetime import datetime
+        year = str(datetime.now().year)
+        return [{
+            'case_text': text,
+            'month_year': None,
+            'month': None,
+            'year': year,
+            'case_id': f'{org_name}_{year}_unknown_001'
+        }]
+    
+    # Track case numbers per year
+    year_case_counts = {}
+    
+    for i, match_info in enumerate(matches):
+        start_pos = match_info['pos']
+        state = match_info['state']
+        
+        # Determine end position (next state header or end of text)
+        if i + 1 < len(matches):
+            end_pos = matches[i + 1]['pos']
+        else:
+            end_pos = len(text)
+        
+        case_text = text[start_pos:end_pos].strip()
+        
+        # Clean artifacts from case text before processing
+        case_text = clean_artifacts_from_text(case_text)
+        
+        # Extract date from case text (e.g., "July 10, 2024" or "May 29, 2024")
+        # Look for month name followed by day and year
+        months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+        date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
+        date_match = re.search(date_pattern, case_text, re.IGNORECASE)
+        
+        if date_match:
+            month = date_match.group(1)
+            day = date_match.group(2)
+            year = date_match.group(3)
+            month_year = f"{month} {year}"
+        else:
+            # Try to extract just year from case text
+            year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
+            if year_match:
+                year = year_match.group(0)
+                month = None
+                month_year = year
+            else:
+                # Fallback: use current year
+                from datetime import datetime
+                year = str(datetime.now().year)
+                month = None
+                month_year = year
+        
+        # Track case number per year
+        if year not in year_case_counts:
+            year_case_counts[year] = 0
+        year_case_counts[year] += 1
+        case_number = year_case_counts[year]
+        
+        # Generate case ID: ncmec_2024_july_001 (or ncmec_2024_unknown_001 if no month)
+        month_str = month.lower() if month else 'unknown'
+        case_id = f"{org_name}_{year}_{month_str}_{case_number:03d}"
+        
+        cases.append({
+            'case_text': case_text,
+            'month_year': month_year,
+            'month': month,
+            'year': year,
+            'case_id': case_id,
+            'state': state  # Store state for reference
+        })
+    
+    return cases
+
+
 def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
     Process cases: split text into cases, extract features and assign comparison values.
@@ -246,7 +423,7 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
             if org_match:
                 org_name = org_match.group(1).lower()
         
-        case_batches = case_batching(extracted_text, org_name=org_name)
+        case_batches = case_batching(extracted_text, org_name=org_name, source=source)
         
         for case_batch in case_batches:
             raw_case = {
@@ -258,6 +435,9 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
                 'source': source,
                 'source_file': source_file
             }
+            # Copy any additional fields from batch (e.g., 'state' for NCMEC cases)
+            if 'state' in case_batch:
+                raw_case['state'] = case_batch['state']
             
             case_features = extract_features(raw_case)
             
@@ -797,7 +977,8 @@ def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]
 def extract_severity(case: Dict[str, Any]) -> List[str]:
     """
     Extract severity indicators.
-    Patterns: "infant", "very young", "under X" (where X < 10 merged to "under_10"), "physical_abuse", "rape"
+    Patterns: "infant", "very young", "under X" (where X < 12 merged to "under_12"), 
+    "physical_abuse", "rape"
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -808,26 +989,48 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     # Age-based severity
     if re.search(r'\binfants?\b', case_text, re.IGNORECASE):
         severity_indicators.append('infant')
-    if re.search(r'very\s+young\s+children', case_text, re.IGNORECASE):
+    if re.search(r'very\s+young', case_text, re.IGNORECASE):
         severity_indicators.append('very_young')
     
-    # Extract "under X" patterns - merge all under 10 into "under_10"
+    # Extract "under X" patterns - merge all under 12 into "under_12"
     under_pattern = r'under\s+(\d+)'
     under_matches = re.finditer(under_pattern, case_text, re.IGNORECASE)
-    has_under_10 = False
+    has_under_12 = False
     for match in under_matches:
         try:
             age = int(match.group(1))
-            if age < 10:
-                has_under_10 = True
+            if age < 12:
+                has_under_12 = True
             else:
-                # Keep ages 10 and above as separate indicators
+                # Keep ages 12 and above as separate indicators
                 severity_indicators.append(f'under_{age}')
         except (ValueError, IndexError):
             continue
     
-    if has_under_10:
-        severity_indicators.append('under_10')
+    # Extract "X year old" patterns - check if age < 12
+    age_pattern = r'(\d+)\s+year\s+old'
+    age_matches = re.finditer(age_pattern, case_text, re.IGNORECASE)
+    for match in age_matches:
+        try:
+            age = int(match.group(1))
+            if age < 12:
+                has_under_12 = True
+        except (ValueError, IndexError):
+            continue
+    
+    # Extract "age X" or "aged X" patterns - check if age < 12
+    age_context_pattern = r'\b(age|aged)\s+(\d+)'
+    age_context_matches = re.finditer(age_context_pattern, case_text, re.IGNORECASE)
+    for match in age_context_matches:
+        try:
+            age = int(match.group(2))
+            if age < 12:
+                has_under_12 = True
+        except (ValueError, IndexError):
+            continue
+    
+    if has_under_12:
+        severity_indicators.append('under_12')
     
     # Sexual assault indicators - severe sexual violence (includes rape, sexual abuse, etc.)
     if re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE):

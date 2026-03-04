@@ -69,7 +69,7 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
+**Important:** The repository includes a database (`caselinker.db`) with 48 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
 
 **Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
 
@@ -110,9 +110,9 @@ python3 -m src.main "path/to/your/file.pdf"
 python3 -m src.main "file1.pdf" "file2.pdf" "file3.pdf"
 ```
 
-**Example - Process all 4 years (2011-2014):**
+**Example - Process all desired pdfs:**
 ```bash
-python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2012 Cases and Arrests – AZICAC.ORG.pdf" "2013 Cases and Arrests – AZICAC.ORG.pdf" "2014 Cases and Arrests – AZICAC.ORG.pdf"
+python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2012 Cases and Arrests – AZICAC.ORG.pdf" "2024-media-coverage-cybertipline-success-stories.pdf" 
 ```
 
 Or run interactively:
@@ -133,7 +133,7 @@ The system will:
 
 ### Using the Visualizations
 
-1. **Timeline View**: See all cases plotted on an interactive timeline. Filter by year range using the dropdown. Click on case points to view detailed information.
+1. **Case Group**: Displays cases matching specific groups (infant, very young, assault, posession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
 3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
 4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.
@@ -248,7 +248,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 #
-- **No Sensitive Data**: The database contains 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain.
+- **No Sensitive Data**: The database contains 47 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain.
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

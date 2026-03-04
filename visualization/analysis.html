@@ -394,6 +394,7 @@
         <a href="/">Home</a>
         <a href="/visualization">Visualization</a>
         <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -604,7 +605,7 @@
             });
             
             // Define all possible topics (from extraction functions)
-            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'hands_on', 'online_digital', 'family', 'stranger'];
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_digital', 'family', 'stranger'];
             const allSeverity = ['infant', 'very_young', 'sexual_assault'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
@@ -740,7 +741,17 @@
                                 break;
                             case 'severity_indicators':
                                 const severity = caseData.severity_indicators || [];
-                                matches = Array.isArray(severity) && severity.includes(topic);
+                                if (topic === 'very_young') {
+                                    // Use same logic as Case Group Visualization for very_young
+                                    const caseText = (caseData.case_text || caseData.raw_data?.case_text || '').toLowerCase();
+                                    matches = severity.some(s => s.includes('very_young') || s.includes('under_')) ||
+                                             caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                             caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                             caseText.includes('very young') ||
+                                             caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                                } else {
+                                    matches = Array.isArray(severity) && severity.includes(topic);
+                                }
                                 break;
                             case 'platforms_used':
                                 const platforms = caseData.platforms_used || [];
@@ -1528,21 +1539,31 @@
                     }
                 });
             } else if (insightType === 'severity_analysis') {
-                // Only highlight high-severity indicators (infant, very young, etc.)
-                const highSeverityIndicators = ['infant', 'very_young', 'under_5', 'under_10'];
+                // Only highlight high-severity indicators (infant, very young, under_12, etc.)
+                const highSeverityIndicators = ['infant', 'very_young', 'under_12', 'under_11', 'under_10', 'under_9', 'under_8', 'under_7', 'under_6', 'under_5'];
                 severity.forEach(s => {
                     if (s && highSeverityIndicators.includes(s)) {
                         highlightTerms.add(s.toLowerCase());
-                        highlightTerms.add(s.replace('_', ' '));
+                        highlightTerms.add(s.replace(/_/g, ' '));
                         // Add common variations
                         if (s === 'infant') {
                             highlightTerms.add('infant');
                             highlightTerms.add('baby');
                             highlightTerms.add('babies');
                         }
-                        if (s === 'very_young') {
+                        if (s === 'very_young' || s.startsWith('under_')) {
                             highlightTerms.add('very young');
                             highlightTerms.add('very young child');
+                            highlightTerms.add('very young children');
+                            // Add age patterns for under_12 and similar
+                            if (s.startsWith('under_')) {
+                                const age = s.replace('under_', '');
+                                highlightTerms.add(`under ${age}`);
+                                highlightTerms.add(`under ${age} years`);
+                                highlightTerms.add(`under ${age} years old`);
+                                highlightTerms.add(`minor under ${age}`);
+                                highlightTerms.add(`child under ${age}`);
+                            }
                         }
                     }
                 });
@@ -1701,7 +1722,17 @@
                         matches = Array.isArray(topics) && topics.includes(tag);
                     } else if (category === 'severity_indicators') {
                         const severity = caseItem.severity_indicators || [];
-                        matches = Array.isArray(severity) && severity.includes(tag);
+                        if (tag === 'very_young') {
+                            // Use same logic as Case Group Visualization for very_young
+                            const caseText = (caseItem.case_text || caseItem.raw_data?.case_text || '').toLowerCase();
+                            matches = severity.some(s => s.includes('very_young') || s.includes('under_')) ||
+                                     caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                     caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                     caseText.includes('very young') ||
+                                     caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                        } else {
+                            matches = Array.isArray(severity) && severity.includes(tag);
+                        }
                     } else if (category === 'platforms_used') {
                         const platforms = caseItem.platforms_used || [];
                         matches = Array.isArray(platforms) && platforms.some(p => p && p.toLowerCase() === tag.toLowerCase());
@@ -1919,7 +1950,29 @@
                                 if (tag === 'infant') {
                                     patterns = [/\binfants?\b/gi];
                                 } else if (tag === 'very_young') {
-                                    patterns = [/\bvery\s+young\s+children\b/gi];
+                                    // Highlight both "very young" patterns and "under 12" patterns
+                                    patterns = [
+                                        /\bvery\s+young\b/gi,
+                                        /\bvery\s+young\s+children\b/gi,
+                                        /\bunder\s+12\b/gi,
+                                        /\bunder\s+11\b/gi,
+                                        /\bunder\s+10\b/gi,
+                                        /\bunder\s+9\b/gi,
+                                        /\bunder\s+8\b/gi,
+                                        /\bunder\s+7\b/gi,
+                                        /\bunder\s+6\b/gi,
+                                        /\bunder\s+5\b/gi,
+                                        /\bunder\s+4\b/gi,
+                                        /\bunder\s+3\b/gi,
+                                        /\bunder\s+2\b/gi,
+                                        /\bunder\s+1\b/gi,
+                                        /\b([1-9]|1[0-2])\s+year\s+old\b/gi,
+                                        /\b([1-9]|1[0-2])\s+years\s+old\b/gi,
+                                        /\b([1-9]|1[0-2])-year-old\b/gi,
+                                        /\b([1-9]|1[0-2])-years-old\b/gi,
+                                        /\bminor\s+under\s+12\b/gi,
+                                        /\bchild\s+under\s+12\b/gi
+                                    ];
                                 } else if (tag === 'sexual_assault') {
                                     patterns = [/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi];
                                 }

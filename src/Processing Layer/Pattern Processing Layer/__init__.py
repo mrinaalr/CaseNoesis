@@ -29,7 +29,8 @@ from .processing import (
     extract_severity,
     extract_topics,
     extract_severity_phrases,
-    clean_urls_from_text,
+    clean_urls_from_text,  # Backward compatibility (aliased to clean_artifacts_from_text)
+    clean_artifacts_from_text,
 )
 
 __all__ = [
@@ -50,5 +51,6 @@ __all__ = [
     'extract_severity',
     'extract_topics',
     'extract_severity_phrases',
-    'clean_urls_from_text',
+    'clean_urls_from_text',  # Backward compatibility
+    'clean_artifacts_from_text',
 ]

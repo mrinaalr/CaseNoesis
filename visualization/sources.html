@@ -185,6 +185,7 @@
         <a href="/">Home</a>
         <a href="/visualization">Visualization</a>
         <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -200,8 +201,8 @@
             <p>
                 <strong>This system is for research and analysis purposes only.</strong> All case data presented in CaseLinker 
                 is publicly available information obtained from the Arizona Internet Crimes Against Children Task Force (AZICAC) 
-                Cases and Arrests reports. This project is an independent research tool and is not affiliated with, endorsed by, 
-                or associated with AZICAC, NCMEC (National Center for Missing & Exploited Children), ICAC Task Force, or any 
+                Cases and Arrests & National Center for Missing & Exploited Children (NCMEC) CyberTipline reports. This project is an independent research tool and is not affiliated with, endorsed by, 
+                or associated with AZICAC, NCMEC, ICAC Task Force, or any 
                 law enforcement agency. The data has been processed and analyzed for research purposes to identify patterns and 
                 trends in case data. No sensitive or identifying information beyond what is publicly available has been included. 
                 This tool is intended to support research and analysis in child exploitation case studies.
@@ -224,10 +225,19 @@
                     description: "All cases received from AZ branch of Internet Crimes Against Children Task Force Cases and Arrests. Public case reports and arrest information published by AZICAC.",
                     type: "Official Website",
                     yearLinks: [
+                        { year: "2011", url: "https://www.azicac.org/2011-cases-and-arrests/" },
+                        { year: "2012", url: "https://www.azicac.org/2012-cases-and-arrests/" },
                         { year: "2013", url: "https://www.azicac.org/2013-cases-and-arrests/" },
-                        { year: "2014", url: "https://www.azicac.org/2014-cases-and-arrests/" },
-                        { year: "2015", url: "https://www.azicac.org/2015-cases-and-arrests/" },
-                        { year: "2016", url: "https://www.azicac.org/2016-cases-and-arrests/" }
+                        { year: "2014", url: "https://www.azicac.org/2014-cases-and-arrests/" }
+                    ]
+                },
+                {
+                    name: "National Center for Missing & Exploited Children - CyberTipline Report",
+                    url: "https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata",
+                    description: "Media coverage success stories from NCMEC's CyberTipline reports. The CyberTipline receives reports of suspected child sexual exploitation from the public and electronic service providers. This data includes publicly reported cases that resulted in successful law enforcement action.",
+                    type: "Official Website",
+                    yearLinks: [
+                        { year: "2024", url: "https://www.missingkids.org/content/dam/missingkids/pdfs/cybertiplinedata2024/2024-media-coverage-cybertipline-success-stories.pdf" }
                     ]
                 }
             ];
@@ -237,7 +247,7 @@
                 const response = await fetch('/api/cases');
                 const cases = await response.json();
                 
-                // Extract unique sources from cases
+                // Extract unique sources from cases to populate stats
                 const sourceMap = new Map();
                 cases.forEach(c => {
                     const source = c.source || c.raw_data?.source || 'Unknown';
@@ -250,8 +260,26 @@
                     sourceMap.get(source).cases.push(c);
                 });
                 
-                // Only show static sources (from Cases file)
-                // Don't show database sources as separate entries
+                // Add case counts to static sources
+                staticSources.forEach(staticSource => {
+                    if (staticSource.name.includes('Arizona Internet Crimes Against Children')) {
+                        // Match AZICAC cases
+                        const azicacCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'AZICAC';
+                        });
+                        staticSource.cases = azicacCases;
+                    } else if (staticSource.name.includes('National Center for Missing')) {
+                        // Match NCMEC cases
+                        const ncmecCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'NCMEC';
+                        });
+                        staticSource.cases = ncmecCases;
+                    }
+                });
+                
+                // Display sources with case counts
                 displaySources(staticSources);
             } catch (error) {
                 console.error('Error loading sources:', error);
@@ -269,7 +297,6 @@
             
             container.innerHTML = sources.map(source => {
                 const caseCount = source.cases ? source.cases.length : 0;
-                const dateRange = source.cases && source.cases.length > 0 ? getDateRange(source.cases) : null;
                 
                 return `
                     <div class="source-card">
@@ -293,12 +320,6 @@
                                     <div class="number">${caseCount}</div>
                                     <div class="label">Cases</div>
                                 </div>
-                                ${dateRange ? `
-                                    <div class="source-stat">
-                                        <div class="number">${dateRange}</div>
-                                        <div class="label">Date Range</div>
-                                    </div>
-                                ` : ''}
                             </div>
                         ` : ''}
                     </div>

@@ -281,6 +281,17 @@ async def serve_analysis():
     else:
         return HTMLResponse(content="<h1>Analysis page not found</h1>", status_code=404)
 
+@app.get("/clusters", response_class=HTMLResponse)
+async def serve_clusters():
+    """Serve the HTML clusters page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "clusters.html"
+    if html_path.exists():
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
+
 @app.get("/sources", response_class=HTMLResponse)
 async def serve_sources():
     """Serve the HTML sources page"""

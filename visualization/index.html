@@ -542,7 +542,7 @@
            <div class="nav">
                <a href="/">Home</a>
                <select id="viz-selector" onchange="changeVisualization(this.value)" style="padding: 8px 15px; border: 2px solid #4CAF50; border-radius: 4px; background: white; color: #333; font-size: 14px; cursor: pointer; margin-right: 20px;">
-                   <option value="timeline">Timeline</option>
+                   <option value="timeline">Case Group Visualization</option>
                    <option value="severity">Severity Indicators</option>
                    <option value="caseviz">Case Visualization</option>
                    <option value="perpetrator">Previous Perpetrator</option>
@@ -550,6 +550,7 @@
                     <option value="geographic">Organizations Involved</option>
                </select>
                <a href="/analysis">Analysis</a>
+               <a href="/clusters">Clusters</a>
                <a href="/sources">Sources</a>
                <a href="/audit">Audit</a>
                <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -558,15 +559,12 @@
     
     <div class="container">
         <h1><span class="case-part">Case</span><span class="linker-part">Linker</span></h1>
-        <p class="subtitle" id="viz-subtitle">Case Timeline Visualization</p>
+        <p class="subtitle" id="viz-subtitle">Case Group Visualization</p>
         
         <div class="stats" id="stats">
             <div class="stat-box">
                 <div class="number" id="total-cases">0</div>
-                <div class="label" id="total-cases-label">Total Cases</div>
-                <select id="year-filter" onchange="filterByYear()" style="margin-top: 10px; padding: 5px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; width: 100%;">
-                    <option value="all">All Years</option>
-                </select>
+                <div class="label" id="total-cases-label">Cases to Visualize</div>
             </div>
             <div class="stat-box">
                 <div class="number" id="victim-count">-</div>
@@ -661,8 +659,8 @@
                         return;
                     }
                     filteredCases = allCases; // Initialize with all cases
-                    populateYearFilter();
-                    filterByYear(); // This will update stats and render
+                    updateStats();
+                    renderTimeline(filteredCases);
                 })
                 .catch(error => {
                     console.error('Error loading cases:', error);
@@ -768,20 +766,33 @@
             
             if (currentViz === 'caseviz') {
                 // For case visualization, show total cases count
-                const totalCasesLabel = document.querySelector('#total-cases').parentElement.querySelector('.label');
-                totalCasesLabel.textContent = 'Cases to Visualize';
                 document.getElementById('total-cases').textContent = filteredCases.length;
                 
-                // Show "x cases" in the victim count box
-                document.getElementById('victim-count').textContent = `${allCaseIds.length} cases`;
-                victimLabel.textContent = 'Available Cases';
+                // Show case source types (NCMEC, AZICAC, etc.)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
+                const caseSources = new Set();
+                filteredCases.forEach(c => {
+                    const source = c.source || c.raw_data?.source;
+                    if (source) {
+                        caseSources.add(source.toUpperCase());
+                    }
+                });
+                
+                const sourceList = Array.from(caseSources).sort().join(', ');
+                document.getElementById('victim-count').textContent = sourceList || '-';
+                victimLabel.textContent = 'Case Sources';
                 
                 // Remove click handler
-                const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'perpetrator') {
                 // For previous perpetrator, show registered sex offenders
+                // Show the stat box (in case it was hidden)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
                 let registeredCount = 0;
                 filteredCases.forEach(c => {
                     if (c.perpetrator_registered_sex_offender === true) {
@@ -792,21 +803,27 @@
                 victimLabel.textContent = 'Registered Sex Offenders';
                 
                 // Remove click handler for perpetrator visualization
-                const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'geographic') {
                 // For organizations involved, count organizations in chart (excluding Unknown)
+                // Show the stat box (in case it was hidden)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
                 const uniqueCount = geographicChartData.filter(d => d.organization !== 'Unknown').length;
                 document.getElementById('victim-count').textContent = uniqueCount > 0 ? uniqueCount : '-';
                 victimLabel.textContent = 'Unique Organizations';
                 
                 // Remove click handler
-                const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'platform') {
                 // For environment visualization, count cases with digital component
+                // Show the stat box (in case it was hidden)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
                 let casesWithDigital = 0;
                 filteredCases.forEach(c => {
                     const platforms = c.platforms_used || [];
@@ -818,16 +835,131 @@
                 victimLabel.textContent = 'Cases with Digital Component';
                 
                 // Remove click handler
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else if (currentViz === 'severity') {
+                // For Severity Indicators Visualization, count severe cases (cases with severity indicators)
+                // Show the stat box (in case it was hidden)
                 const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
+                let severeCases = 0;
+                filteredCases.forEach(c => {
+                    const indicators = c.severity_indicators || [];
+                    if (indicators.length > 0) {
+                        severeCases++;
+                    }
+                });
+                document.getElementById('victim-count').textContent = severeCases > 0 ? severeCases : '-';
+                victimLabel.textContent = 'Severe Cases';
+                
+                // Remove click handler
+                statBox.style.cursor = 'default';
+                statBox.onclick = null;
+            } else if (currentViz === 'timeline') {
+                // For Case Group Visualization, show number of groups
+                // Show the stat box (in case it was hidden)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
+                
+                // Calculate number of groups using same logic as renderTimeline
+                const hasCategory = (caseData, category) => {
+                    const topics = (caseData.case_topics || []).map(t => String(t).toLowerCase());
+                    const severity = (caseData.severity_indicators || []).map(s => String(s).toLowerCase());
+                    const platforms = (caseData.platforms_used || []).map(p => String(p).toLowerCase());
+                    const caseText = (caseData.case_text || caseData.raw_data?.case_text || '').toLowerCase();
+                    
+                    switch(category) {
+                        case 'possession':
+                            return topics.includes('possession') || 
+                                   caseText.includes('possessing') || 
+                                   caseText.includes('possessed') ||
+                                   caseText.includes('possession');
+                        case 'production':
+                            return topics.includes('production') ||
+                                   caseText.includes('produced') ||
+                                   caseText.includes('producing') ||
+                                   caseText.includes('created') ||
+                                   caseText.includes('made movies');
+                        case 'infant':
+                            return severity.some(s => s.includes('infant')) ||
+                                   caseText.includes('infant') ||
+                                   caseText.includes('infants');
+                        case 'very_young':
+                            // Check for very_young or under_12 tags (same logic as Analysis page)
+                            // First check severity indicators for exact matches
+                            if (severity.some(s => String(s).toLowerCase() === 'very_young' || String(s).toLowerCase() === 'under_12')) {
+                                return true;
+                            }
+                            // Fallback to text matching for cases that might not have been tagged yet
+                            return caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                   caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
+                                   caseText.includes('very young') ||
+                                   caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                        case 'online':
+                            return platforms.some(p => p.includes('online')) ||
+                                   topics.includes('online_digital') ||
+                                   caseText.includes('online') ||
+                                   platforms.some(p => ['facebook', 'instagram', 'snapchat', 'discord', 'whatsapp', 'kik', 'chat'].some(pl => p.includes(pl)));
+                        case 'sexual_assault':
+                            return severity.some(s => s.includes('sexual_assault') || s.includes('rape')) ||
+                                   caseText.match(/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/i);
+                        default:
+                            return false;
+                    }
+                };
+                
+                const groupCategories = [
+                    { key: 'infant', label: 'Infant', check: (c) => hasCategory(c, 'infant') },
+                    { key: 'very_young', label: 'Very Young', check: (c) => hasCategory(c, 'very_young') },
+                    { key: 'sexual_assault', label: 'Sexual Assault', check: (c) => hasCategory(c, 'sexual_assault') },
+                    { key: 'production', label: 'Production', check: (c) => hasCategory(c, 'production') },
+                    { key: 'possession', label: 'Possession', check: (c) => hasCategory(c, 'possession') },
+                    { key: 'online', label: 'Online', check: (c) => hasCategory(c, 'online') },
+                    { key: 'other', label: 'Other', check: () => true }
+                ];
+                
+                // Group cases - each case goes into the first matching category
+                const groups = {};
+                groupCategories.forEach(cat => {
+                    groups[cat.key] = {
+                        key: cat.key,
+                        label: cat.label,
+                        cases: []
+                    };
+                });
+                
+                filteredCases.forEach(c => {
+                    let matchedAnyCategory = false;
+                    // Add case to ALL matching categories (except "other")
+                    for (const cat of groupCategories) {
+                        if (cat.key === 'other') {
+                            continue; // Skip "other" for now
+                        }
+                        if (cat.check(c)) {
+                            groups[cat.key].cases.push(c);
+                            matchedAnyCategory = true;
+                        }
+                    }
+                    // Only add to "other" if it didn't match any category
+                    if (!matchedAnyCategory) {
+                        groups['other'].cases.push(c);
+                    }
+                });
+                
+                // Count non-empty groups
+                const groupCount = Object.values(groups).filter(g => g.cases.length > 0).length;
+                document.getElementById('victim-count').textContent = groupCount > 0 ? groupCount : '-';
+                victimLabel.textContent = 'Number of Groups';
+                
+                // Remove click handler
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else {
                 // Total victims for other visualizations
-                // Reset "Total Cases" label if it was changed
-                const totalCasesLabel = document.querySelector('#total-cases').parentElement.querySelector('.label');
-                if (totalCasesLabel.textContent === 'Cases to Visualize') {
-                    totalCasesLabel.textContent = 'Total Cases';
-                }
+                // Show the stat box (in case it was hidden)
+                const statBox = document.getElementById('victim-count').parentElement;
+                statBox.style.display = 'block';
                 
                 let totalVictims = 0;
                 filteredCases.forEach(c => {
@@ -843,7 +975,6 @@
                 victimLabel.textContent = 'Total Victims';
                 
                 // Remove click handler for non-geographic visualizations
-                const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             }
@@ -857,196 +988,408 @@
             document.getElementById('data-sources').textContent = sources.size;
         }
 
+        // Track expanded group (only one at a time)
+        let expandedGroup = null;
+
         function renderTimeline(cases) {
             // Clear previous content
             svg.selectAll("*").remove();
             
-            // Parse dates
-            const parseDate = d3.timeParse("%Y-%m-%d");
-            cases.forEach((d, i) => {
-                if (d.date_range && d.date_range.start) {
-                    d.date = parseDate(d.date_range.start);
-                } else if (d.raw_data && d.raw_data.month_year) {
-                    // Fallback: try to parse from month_year string
-                    const monthYear = d.raw_data.month_year;
-                    const monthNames = ["January", "February", "March", "April", "May", "June",
-                                      "July", "August", "September", "October", "November", "December"];
-                    const parts = monthYear.split(" ");
-                    if (parts.length === 2) {
-                        const month = monthNames.indexOf(parts[0]);
-                        const year = parseInt(parts[1]);
-                        if (month >= 0 && year) {
-                            d.date = new Date(year, month, 1);
-                        }
+            // Helper functions to check case categories
+            const hasCategory = (caseData, category) => {
+                const topics = (caseData.case_topics || []).map(t => String(t).toLowerCase());
+                const severity = (caseData.severity_indicators || []).map(s => String(s).toLowerCase());
+                const platforms = (caseData.platforms_used || []).map(p => String(p).toLowerCase());
+                const caseText = (caseData.case_text || caseData.raw_data?.case_text || '').toLowerCase();
+                
+                switch(category) {
+                    case 'possession':
+                        return topics.includes('possession') || 
+                               caseText.includes('possessing') || 
+                               caseText.includes('possessed') ||
+                               caseText.includes('possession');
+                    case 'production':
+                        return topics.includes('production') ||
+                               caseText.includes('produced') ||
+                               caseText.includes('producing') ||
+                               caseText.includes('created') ||
+                               caseText.includes('made movies');
+                    case 'infant':
+                        return severity.some(s => s.includes('infant')) ||
+                               caseText.includes('infant') ||
+                               caseText.includes('infants');
+                    case 'very_young':
+                        return severity.some(s => s.includes('very_young') || s.includes('under_')) ||
+                               caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
+                               caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
+                               caseText.includes('very young') ||
+                               caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                    case 'online':
+                        return platforms.some(p => p.includes('online')) ||
+                               topics.includes('online_digital') ||
+                               caseText.includes('online') ||
+                               platforms.some(p => ['facebook', 'instagram', 'snapchat', 'discord', 'whatsapp', 'kik', 'chat'].some(pl => p.includes(pl)));
+                    case 'sexual_assault':
+                        return severity.some(s => s.includes('sexual_assault') || s.includes('rape')) ||
+                               caseText.match(/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/i);
+                    default:
+                        return false;
+                }
+            };
+            
+            const getGroupColor = (groupKey) => {
+                // Color scheme: Red (infant) -> Orange -> Muted Green -> Green (other)
+                const colors = {
+                    'infant': '#DC143C',        // Crimson (red) - keep as is
+                    'very_young': '#FF6347',    // Tomato (red-orange)
+                    'sexual_assault': '#FF8C00', // DarkOrange (orange)
+                    'production': '#FFA500',     // Orange (orange-yellow)
+                    'possession': '#9ACD32',     // YellowGreen (yellow-green)
+                    'online': '#4CAF50',         // Green
+                    'other': '#228B22'           // Forest Green (real green)
+                };
+                return colors[groupKey] || '#4CAF50';
+            };
+            
+            // Define group categories in priority order
+            const groupCategories = [
+                { key: 'infant', label: 'Infant', check: (c) => hasCategory(c, 'infant') },
+                { key: 'very_young', label: 'Very Young', check: (c) => hasCategory(c, 'very_young') },
+                { key: 'sexual_assault', label: 'Sexual Assault', check: (c) => hasCategory(c, 'sexual_assault') },
+                { key: 'production', label: 'Production', check: (c) => hasCategory(c, 'production') },
+                { key: 'possession', label: 'Possession', check: (c) => hasCategory(c, 'possession') },
+                { key: 'online', label: 'Online', check: (c) => hasCategory(c, 'online') },
+                { key: 'other', label: 'Other', check: () => true } // Catch-all
+            ];
+            
+            // Group cases - each case goes into ALL matching categories
+            const groups = {};
+            groupCategories.forEach(cat => {
+                groups[cat.key] = {
+                    key: cat.key,
+                    label: cat.label,
+                    color: getGroupColor(cat.key), // Set color based on group
+                    cases: []
+                };
+            });
+            
+            cases.forEach(c => {
+                let matchedAnyCategory = false;
+                // Add case to ALL matching categories (except "other")
+                for (const cat of groupCategories) {
+                    if (cat.key === 'other') {
+                        continue; // Skip "other" for now
+                    }
+                    if (cat.check(c)) {
+                        groups[cat.key].cases.push(c);
+                        matchedAnyCategory = true;
                     }
                 }
-                // Ensure we have a date - use first available year from cases or current year
-                if (!d.date) {
-                    const firstYear = validCases.length > 0 && validCases[0].date ? 
-                        validCases[0].date.getFullYear() : new Date().getFullYear();
-                    d.date = new Date(firstYear, 0, 1); // Default fallback
+                // Only add to "other" if it didn't match any category
+                if (!matchedAnyCategory) {
+                    groups['other'].cases.push(c);
                 }
             });
             
-            // Filter out cases without valid dates
-            const validCases = cases.filter(d => d.date);
+            // Filter out empty groups (colors already set)
+            const groupOrder = Object.values(groups)
+                .filter(g => g.cases.length > 0)
+                .sort((a, b) => {
+                    // Sort by priority (infant first, then by size)
+                    const aIndex = groupCategories.findIndex(cat => cat.key === a.key);
+                    const bIndex = groupCategories.findIndex(cat => cat.key === b.key);
+                    if (aIndex !== bIndex) return aIndex - bIndex;
+                    return b.cases.length - a.cases.length;
+                });
             
-            if (validCases.length === 0) {
+            if (groupOrder.length === 0) {
                 svg.append("text")
                     .attr("x", width / 2)
                     .attr("y", height / 2)
                     .attr("text-anchor", "middle")
                     .attr("fill", "#666")
-                    .text("No cases with valid dates found");
+                    .text("No cases found");
                 return;
             }
 
-            // Set up scales - handles multiple years automatically
-            const dateExtent = d3.extent(validCases, d => d.date);
-            const xScale = d3.scaleTime()
-                .domain(dateExtent)
-                .range([0, width])
+            // Set up scales - groups on Y axis
+            const yScale = d3.scaleBand()
+                .domain(groupOrder.map((g, i) => i))
+                .range([0, height])
+                .padding(0.15);
+            
+            const groupHeight = yScale.bandwidth();
+            
+            // X axis for case count
+            const maxCases = Math.max(...groupOrder.map(g => g.cases.length));
+            const xScale = d3.scaleLinear()
+                .domain([0, maxCases])
+                .range([margin.left + 150, width - margin.right])
                 .nice();
             
-            // Auto-adjust ticks based on date range span
-            const dateSpan = dateExtent[1] - dateExtent[0];
-            const daysSpan = dateSpan / (1000 * 60 * 60 * 24);
-            let tickFormat, tickInterval;
-            if (daysSpan > 730) { // More than 2 years
-                tickFormat = d3.timeFormat("%Y");
-                tickInterval = d3.timeYear;
-            } else if (daysSpan > 90) { // More than 3 months
-                tickFormat = d3.timeFormat("%b %Y");
-                tickInterval = d3.timeMonth;
-            } else {
-                tickFormat = d3.timeFormat("%b %d");
-                tickInterval = d3.timeWeek;
-            }
-
-            const yScale = d3.scaleBand()
-                .domain(validCases.map((d, i) => i))
-                .range([height, 0])
-                .padding(0.5);  // Increased padding from 0.3 to 0.5 for more space between points
-
-            // Add axes - dynamically adjusts for multiple years
-            const xAxis = d3.axisBottom(xScale)
-                .ticks(tickInterval)
-                .tickFormat(tickFormat);
-
+            // Add X axis label
+            svg.append("text")
+                .attr("transform", `translate(${(width + margin.left + 150) / 2}, ${height + margin.bottom - 10})`)
+                .style("text-anchor", "middle")
+                .style("font-size", "12px")
+                .text("Number of Cases");
+            
+            // Add Y axis
             svg.append("g")
-                .attr("transform", `translate(0,${height})`)
-                .call(xAxis)
+                .attr("transform", `translate(${margin.left + 150}, 0)`)
+                .call(d3.axisLeft(yScale).tickFormat((d, i) => groupOrder[i].label))
                 .selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-.8em")
-                .attr("dy", ".15em")
-                .attr("transform", "rotate(-45)");
-
-            // Color code by severity - infant cases get special color
-            const getCaseColor = (caseData) => {
-                const severity = caseData.severity_indicators || [];
-                if (Array.isArray(severity) && severity.some(s => String(s).toLowerCase().includes('infant'))) {
-                    return '#DC143C'; // Crimson for infant cases
-                } else if (Array.isArray(severity) && severity.length > 0) {
-                    return '#FF6347'; // Tomato for other severity cases
+                .style("font-size", "12px")
+                .style("font-weight", "600");
+            
+            // Add X axis
+            svg.append("g")
+                .attr("transform", `translate(0, ${height})`)
+                .call(d3.axisBottom(xScale).ticks(5));
+            
+            // Create gradient definitions for each group
+            const defs = svg.append("defs");
+            groupOrder.forEach((group) => {
+                const gradient = defs.append("linearGradient")
+                    .attr("id", `gradient-${group.key}`)
+                    .attr("x1", "0%")
+                    .attr("y1", "0%")
+                    .attr("x2", "100%")
+                    .attr("y2", "0%");
+                
+                gradient.append("stop")
+                    .attr("offset", "0%")
+                    .attr("stop-color", group.color)
+                    .attr("stop-opacity", 0.8);
+                
+                gradient.append("stop")
+                    .attr("offset", "100%")
+                    .attr("stop-color", d3.rgb(group.color).brighter(0.15))
+                    .attr("stop-opacity", 0.9);
+            });
+            
+            // Render each group
+            groupOrder.forEach((group, groupIndex) => {
+                const yPos = yScale(groupIndex);
+                const isExpanded = expandedGroup === group.key;
+                
+                // Group background bar with gradient
+                svg.append("rect")
+                    .attr("x", margin.left + 150)
+                    .attr("y", yPos)
+                    .attr("width", xScale(group.cases.length))
+                    .attr("height", groupHeight)
+                    .attr("fill", `url(#gradient-${group.key})`)
+                    .attr("rx", 4)
+                    .style("cursor", "pointer")
+                    .on("click", function() {
+                        toggleGroup(group.key);
+                    });
+                
+                // Group label and count
+                const labelText = `${group.label} (${group.cases.length} case${group.cases.length !== 1 ? 's' : ''})`;
+                svg.append("text")
+                    .attr("x", margin.left + 155)
+                    .attr("y", yPos + groupHeight / 2)
+                    .attr("dy", "0.35em")
+                    .attr("font-size", "13px")
+                    .attr("font-weight", "600")
+                    .attr("fill", "#fff")
+                    .style("cursor", "pointer")
+                    .text(labelText)
+                    .on("click", function() {
+                        toggleGroup(group.key);
+                    });
+                
+                // Expand/collapse indicator
+                if (group.cases.length > 5) {
+                    svg.append("text")
+                        .attr("x", margin.left + 140)
+                        .attr("y", yPos + groupHeight / 2)
+                        .attr("dy", "0.35em")
+                        .attr("font-size", "16px")
+                        .attr("font-weight", "bold")
+                        .attr("fill", group.color)
+                        .style("cursor", "pointer")
+                        .text(isExpanded ? "−" : "+")
+                        .on("click", function() {
+                            toggleGroup(group.key);
+                        });
                 }
-                return '#4CAF50'; // Green for standard cases
-            };
+            });
             
-            // Add connecting lines for visual flow
-            svg.append("path")
-                .datum(validCases)
-                .attr("fill", "none")
-                .attr("stroke", "#4CAF50")
-                .attr("stroke-width", 1.5)
-                .attr("stroke-opacity", 0.3)
-                .attr("d", d3.line()
-                    .x(d => xScale(d.date))
-                    .y((d, i) => yScale(i))
-                    .curve(d3.curveMonotoneX)
-                );
+            // If a group is expanded, show cases below
+            if (expandedGroup) {
+                const expandedGroupData = groupOrder.find(g => g.key === expandedGroup);
+                if (expandedGroupData) {
+                    const groupIndex = groupOrder.findIndex(g => g.key === expandedGroup);
+                    showExpandedGroupCases(expandedGroupData, groupIndex, groupOrder.length);
+                }
+            }
+        }
+        
+        function toggleGroup(groupKey) {
+            // If clicking the same group, collapse it
+            if (expandedGroup === groupKey) {
+                expandedGroup = null;
+            } else {
+                // Otherwise, expand this group (automatically collapses previous)
+                expandedGroup = groupKey;
+            }
+            // Re-render to show/hide expanded cases
+            const currentViz = document.getElementById('viz-selector')?.value || 'timeline';
+            if (currentViz === 'timeline') {
+                renderTimeline(filteredCases.length > 0 ? filteredCases : allCases);
+            }
+        }
+        
+        function showExpandedGroupCases(group, groupIndex, totalGroups) {
+            // Hide case detail panel
+            document.getElementById('case-detail').classList.remove('active');
             
-            // Add case points with color coding
-            const points = svg.selectAll(".case-point")
-                .data(validCases)
-                .enter()
-                .append("circle")
-                .attr("class", "case-point")
-                .attr("cx", d => xScale(d.date))
-                .attr("cy", (d, i) => yScale(i))
-                .attr("r", 7)
-                .attr("fill", d => getCaseColor(d))
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 2.5)
-                .attr("opacity", 0.9)
-                .style("cursor", "pointer")
-                .on("mouseover", function(event, d) {
-                    d3.select(this)
-                        .attr("r", 10)
-                        .attr("opacity", 1)
-                        .attr("stroke-width", 3);
-                    
-                    // Show tooltip
-                    const tooltip = d3.select("body").append("div")
-                        .attr("class", "timeline-tooltip")
-                        .style("opacity", 0)
-                        .style("position", "absolute")
-                        .style("background", "rgba(0, 0, 0, 0.85)")
-                        .style("color", "white")
-                        .style("padding", "10px 15px")
-                        .style("border-radius", "6px")
-                        .style("font-size", "13px")
-                        .style("pointer-events", "none")
-                        .style("z-index", "1000")
-                        .style("box-shadow", "0 4px 12px rgba(0,0,0,0.3)");
-                    
-                    const severity = d.severity_indicators || [];
-                    const severityText = Array.isArray(severity) && severity.length > 0 
-                        ? severity.join(", ").replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())
-                        : "No severity indicators";
-                    
-                    tooltip.html(`
-                        <strong>${d.id}</strong><br/>
-                        ${d.raw_data?.month_year || 'Unknown date'}<br/>
-                        <small>Severity: ${severityText}</small>
-                    `)
-                    .style("left", (event.pageX + 15) + "px")
-                    .style("top", (event.pageY - 10) + "px");
-                    
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 1);
-                })
-                .on("mouseout", function() {
-                    d3.select(this)
-                        .attr("r", 7)
-                        .attr("opacity", 0.9)
-                        .attr("stroke-width", 2.5);
-                    
-                    d3.selectAll(".timeline-tooltip").remove();
-                })
-                .on("click", function(event, d) {
-                    showCaseDetail(d);
-                });
-
-            // Add labels with better styling
-            svg.selectAll(".case-label")
-                .data(validCases)
-                .enter()
-                .append("text")
-                .attr("class", "case-label")
-                .attr("x", d => xScale(d.date) + 12)
-                .attr("y", (d, i) => yScale(i))
-                .attr("dy", "0.35em")
-                .attr("font-size", "12px")
-                .attr("fill", "#333")
-                .attr("font-weight", "500")
-                .text(d => {
-                    const monthYear = d.raw_data?.month_year || '';
-                    return monthYear || d.id || 'Unknown';
-                });
-
-            // Stats are updated by updateStats() function
+            // Show severity cases panel (reuse it for group cases)
+            const panel = document.getElementById('severity-cases-panel');
+            const title = document.getElementById('severity-cases-title');
+            const list = document.getElementById('severity-cases-list');
+            
+            panel.classList.add('active');
+            title.textContent = `${group.label} Cases (${group.cases.length} total)`;
+            
+            // Render cases with highlighting
+            list.innerHTML = '';
+            group.cases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'severity-case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                
+                // Highlight relevant terms based on group category
+                let highlightedText = highlightCaseTextForGroup(caseText, caseData, group.key);
+                
+                caseItem.innerHTML = `
+                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-text">${highlightedText}</div>
+                `;
+                
+                list.appendChild(caseItem);
+            });
+        }
+        
+        function highlightCaseTextForGroup(text, caseData, groupKey) {
+            if (!text) return '';
+            
+            // Escape HTML first
+            let highlighted = escapeHtml(text);
+            
+            // Build highlight terms based on group category
+            const highlightTerms = [];
+            
+            switch(groupKey) {
+                case 'infant':
+                    highlightTerms.push({ term: 'infant', category: 'severity' });
+                    highlightTerms.push({ term: 'infants', category: 'severity' });
+                    break;
+                case 'very_young':
+                    highlightTerms.push({ term: 'very young', category: 'severity' });
+                    // Add patterns for ages 1-12
+                    for (let age = 1; age <= 12; age++) {
+                        highlightTerms.push({ term: `${age} year old`, category: 'severity' });
+                        highlightTerms.push({ term: `${age} years old`, category: 'severity' });
+                        highlightTerms.push({ term: `${age}-year-old`, category: 'severity' });
+                        highlightTerms.push({ term: `under ${age}`, category: 'severity' });
+                        highlightTerms.push({ term: `age ${age}`, category: 'severity' });
+                        highlightTerms.push({ term: `aged ${age}`, category: 'severity' });
+                    }
+                    break;
+                case 'sexual_assault':
+                    highlightTerms.push({ term: 'rape', category: 'severity' });
+                    highlightTerms.push({ term: 'raped', category: 'severity' });
+                    highlightTerms.push({ term: 'raping', category: 'severity' });
+                    highlightTerms.push({ term: 'sexual assault', category: 'severity' });
+                    highlightTerms.push({ term: 'sexually assaulted', category: 'severity' });
+                    highlightTerms.push({ term: 'sexual abuse', category: 'severity' });
+                    highlightTerms.push({ term: 'sexually abused', category: 'severity' });
+                    highlightTerms.push({ term: 'molest', category: 'severity' });
+                    highlightTerms.push({ term: 'molested', category: 'severity' });
+                    highlightTerms.push({ term: 'molesting', category: 'severity' });
+                    break;
+                case 'production':
+                    highlightTerms.push({ term: 'produced', category: 'topic' });
+                    highlightTerms.push({ term: 'producing', category: 'topic' });
+                    highlightTerms.push({ term: 'created', category: 'topic' });
+                    highlightTerms.push({ term: 'made movies', category: 'topic' });
+                    highlightTerms.push({ term: 'created videos', category: 'topic' });
+                    break;
+                case 'possession':
+                    highlightTerms.push({ term: 'possessing', category: 'topic' });
+                    highlightTerms.push({ term: 'possessed', category: 'topic' });
+                    highlightTerms.push({ term: 'possession', category: 'topic' });
+                    highlightTerms.push({ term: 'trading', category: 'topic' });
+                    highlightTerms.push({ term: 'downloading', category: 'topic' });
+                    highlightTerms.push({ term: 'collecting', category: 'topic' });
+                    break;
+                case 'online':
+                    highlightTerms.push({ term: 'online', category: 'platform' });
+                    highlightTerms.push({ term: 'facebook', category: 'platform' });
+                    highlightTerms.push({ term: 'instagram', category: 'platform' });
+                    highlightTerms.push({ term: 'snapchat', category: 'platform' });
+                    highlightTerms.push({ term: 'discord', category: 'platform' });
+                    highlightTerms.push({ term: 'whatsapp', category: 'platform' });
+                    highlightTerms.push({ term: 'kik', category: 'platform' });
+                    highlightTerms.push({ term: 'chat', category: 'platform' });
+                    highlightTerms.push({ term: 'social media', category: 'platform' });
+                    break;
+            }
+            
+            // Also highlight all case features
+            const platforms = caseData.platforms_used || [];
+            platforms.forEach(p => highlightTerms.push({ term: p, category: 'platform' }));
+            
+            const severity = caseData.severity_indicators || [];
+            severity.forEach(s => {
+                const sStr = String(s).replace(/_/g, ' ');
+                highlightTerms.push({ term: sStr, category: 'severity' });
+            });
+            
+            const topics = caseData.case_topics || [];
+            topics.forEach(t => {
+                const tStr = String(t).replace(/_/g, ' ');
+                highlightTerms.push({ term: tStr, category: 'topic' });
+            });
+            
+            // Sort by length (longest first) to avoid partial matches
+            highlightTerms.sort((a, b) => b.term.length - a.term.length);
+            
+            // Remove duplicates
+            const seen = new Set();
+            const uniqueTerms = highlightTerms.filter(item => {
+                const key = `${item.term.toLowerCase()}_${item.category}`;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            
+            // Apply highlights
+            uniqueTerms.forEach(({ term, category }) => {
+                const colorClass = getHighlightColor(category);
+                const escapedTerm = escapeRegex(term);
+                
+                // Split by existing highlight spans
+                const parts = highlighted.split(/(<span class="case-text-highlight[^"]*">.*?<\/span>)/gi);
+                highlighted = parts.map(part => {
+                    // Skip parts that are already highlighted
+                    if (part.trim().startsWith('<span class="case-text-highlight')) {
+                        return part;
+                    }
+                    // Apply new highlights - use word boundaries for better matching
+                    const regex = new RegExp(`\\b${escapedTerm}\\b`, 'gi');
+                    return part.replace(regex, (match) => {
+                        return `<span class="case-text-highlight ${colorClass}">${match}</span>`;
+                    });
+                }).join('');
+            });
+            
+            return highlighted;
         }
 
         function showCaseDetail(caseData) {
@@ -1061,7 +1404,7 @@
         }
 
         const vizTitles = {
-            'timeline': 'Case Timeline Visualization',
+            'timeline': 'Case Group Visualization',
             'platform': 'Case Environment Visualization',
             'perpetrator': 'Previous Perpetrator Visualization',
             'geographic': 'Organizations Involved Visualization',
@@ -1078,22 +1421,16 @@
             const subtitle = document.getElementById('viz-subtitle');
             subtitle.textContent = vizTitles[type] || 'Case Visualization';
             
-            // Show/hide year filter based on visualization type
-            const yearFilter = document.getElementById('year-filter');
-            const statBox = yearFilter.closest('.stat-box');
-            
             if (type === 'timeline') {
-                statBox.style.display = 'block';
                 document.querySelector('.timeline-container').style.display = 'block';
                 document.getElementById('case-viz-container').style.display = 'none';
+                document.getElementById('severity-cases-panel').classList.remove('active');
                 loadCases();
             } else if (type === 'caseviz') {
-                statBox.style.display = 'none';
                 document.querySelector('.timeline-container').style.display = 'none';
                 document.getElementById('case-viz-container').style.display = 'block';
                 renderVisualization(type, filteredCases);
             } else {
-                statBox.style.display = 'none';
                 document.querySelector('.timeline-container').style.display = 'block';
                 document.getElementById('case-viz-container').style.display = 'none';
                 svg.selectAll("*").remove();
@@ -1661,7 +1998,7 @@
             // Define severity order
             const severityOrder = ['Infant', 'Sexual Assault', 'Very Young', 'Under 10', 'None'];
             
-            // Create data array and sort by severity order (None last)
+            // Create data array and sort by severity order
             const data = Object.entries(severityCounts).map(([severity, count]) => ({
                 severity,
                 count

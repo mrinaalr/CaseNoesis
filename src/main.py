@@ -54,14 +54,17 @@ def main():
         
         if len(file_paths) == 1:
             # Single file - use simpler approach
-            from ingestion import extract_pdf_text
+            from ingestion import extract_pdf_text, detect_source_from_content
             text = extract_pdf_text(file_paths[0])
+            filename = file_paths[0].split('/')[-1]
+            source = detect_source_from_content(text, filename)
             print(f"✓ Extracted {len(text):,} characters from {file_paths[0]}")
+            print(f"✓ Detected source: {source}")
             
             df = pd.DataFrame({
-                'source_file': [file_paths[0].split('/')[-1]],
+                'source_file': [filename],
                 'extracted_text': [text],
-                'source': ['AZICAC'],
+                'source': [source],
             })
         else:
             # Multiple files

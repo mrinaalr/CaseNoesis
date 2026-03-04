@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - Case Clusters</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f1419;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(76, 175, 80, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #0f1419 0%, #1a2520 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .nav a.ml-experimental {
+            color: #dc2626;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { 
+                opacity: 0.75;
+            }
+            50% { 
+                opacity: 0.90;
+            }
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 20px;
+        }
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+        h1 .case-part {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+        h1 .clusters-part {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseRed 6s ease-in-out infinite;
+            position: relative;
+        }
+        @keyframes pulseRed {
+            0%, 100% { 
+                opacity: 0.85;
+            }
+            50% { 
+                opacity: 1.0;
+            }
+        }
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            margin-left: 20px;
+        }
+        #cluster-visualization {
+            width: 100%;
+            height: 700px;
+            background: rgba(255, 193, 7, 0.02);
+            border: 1px solid rgba(255, 193, 7, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: visible;
+        }
+        .cluster-bubble {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cluster-bubble:hover {
+            stroke-width: 3px;
+        }
+        .cluster-bubble.selected circle {
+            fill-opacity: 0.6 !important;
+            stroke-width: 5px !important;
+            stroke-opacity: 1 !important;
+            stroke: #ffc107 !important;
+            filter: drop-shadow(0 0 10px rgba(255, 193, 7, 0.8));
+        }
+        .group-bubble.selected circle {
+            fill-opacity: 1 !important;
+            stroke-width: 4px !important;
+            stroke-opacity: 1 !important;
+            stroke: #ffc107 !important;
+            filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.8));
+        }
+        .cluster-label {
+            pointer-events: none;
+            font-weight: bold;
+            fill: #ffc107;
+            text-anchor: middle;
+            font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .cluster-count {
+            pointer-events: none;
+            fill: #fff;
+            text-anchor: middle;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .case-text-highlight {
+            font-weight: 600;
+        }
+        .case-text-highlight.highlight-platform {
+            color: #1565c0;
+        }
+        .case-text-highlight.highlight-severity {
+            color: #c62828;
+        }
+        .case-text-highlight.highlight-topic {
+            color: #e65100;
+        }
+        .case-text-highlight.highlight-agency {
+            color: #2e7d32;
+        }
+        .case-text-highlight.highlight-investigation {
+            color: #7b1fa2;
+        }
+        .case-text-highlight.highlight-relationship {
+            color: #00695c;
+        }
+        .case-text-highlight.highlight-demographic {
+            color: #f57f17;
+        }
+        .case-text-highlight.highlight-evidence {
+            color: #c2185b;
+        }
+        .case-text-highlight.highlight-prosecution {
+            color: #0277bd;
+        }
+        .case-text-highlight.highlight-severity-phrase {
+            color: #880e4f;
+        }
+        .case-text-highlight.highlight-date {
+            color: #558b2f;
+        }
+        .case-text-highlight.highlight-default {
+            color: #424242;
+        }
+        .group-bubble {
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.8;
+        }
+        .group-bubble:hover {
+            opacity: 1;
+            stroke-width: 3px;
+        }
+        .group-label {
+            pointer-events: none;
+            fill: #fff;
+            text-anchor: middle;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .case-display {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 193, 7, 0.05);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 10px;
+            display: none;
+        }
+        .case-display.active {
+            display: block;
+        }
+        .case-display h3 {
+            color: #ffc107;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .case-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #ffc107;
+            border-radius: 5px;
+        }
+        .case-item-header {
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 8px;
+        }
+        .case-item-text {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ffc107;
+            font-size: 1.2em;
+        }
+        .error {
+            padding: 20px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 5px;
+            color: #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+    
+    <div class="container">
+        <h1><span class="case-part">Case</span> <span class="clusters-part">Clusters</span></h1>
+        <p class="subtitle">Interactive visualization of automated case clustering</p>
+        
+        <div id="cluster-visualization">
+            <div class="loading">Loading clusters...</div>
+        </div>
+        
+        <div id="case-display" class="case-display">
+            <h3 id="case-display-title">Selected Cases</h3>
+            <div id="case-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const width = document.getElementById('cluster-visualization').clientWidth;
+        const height = 700;
+        const margin = 30;
+        
+        const svg = d3.select('#cluster-visualization')
+            .html('')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+        
+        let clusterData = [];
+        let selectedClusterId = null;
+        let selectedGroupId = null;
+        
+        // Load automated analysis data
+        async function loadClusters() {
+            try {
+                const response = await fetch('/api/automated-analysis');
+                const data = await response.json();
+                
+                if (data.success && data.analysis && data.analysis.case_groups) {
+                    clusterData = data.analysis.case_groups;
+                    renderClusters();
+                } else {
+                    showError('No cluster data available');
+                }
+            } catch (error) {
+                console.error('Error loading clusters:', error);
+                showError('Failed to load clusters. Make sure the API server is running.');
+            }
+        }
+        
+        function showError(message) {
+            d3.select('#cluster-visualization')
+                .html(`<div class="error">${message}</div>`);
+        }
+        
+        function renderClusters() {
+            if (clusterData.length === 0) {
+                showError('No clusters found');
+                return;
+            }
+            
+            // Clear previous content
+            svg.selectAll('*').remove();
+            
+            // Prepare nodes: main clusters as large bubbles
+            const nodes = [];
+            const colors = d3.schemeCategory10;
+            
+            // Position main clusters tightly together
+            const mainClusterNodes = [];
+            const clusterPositions = {
+                'online_digital_cluster': { x: width * 0.5, y: height * 0.35 }, // Top-center (moved down slightly)
+                'possession_cluster': { x: width * 0.3, y: height * 0.4 }, // Left
+                'general_cluster': { x: width * 0.7, y: height * 0.5 }, // Right
+                'severe_cluster': { x: width * 0.3, y: height * 0.75 }, // Bottom-left
+                'investigation_cluster': { x: width * 0.5, y: height * 0.75 } // Bottom-center (moved left)
+            };
+            
+            clusterData.forEach((cluster, i) => {
+                // Size based on number of cases - main cluster bubble (reduced for tighter fit)
+                const clusterSize = Math.sqrt(cluster.size) * 3.5 + 40;
+                
+                // Get position from predefined positions or use default
+                let clusterX, clusterY;
+                const position = clusterPositions[cluster.group_id];
+                if (position) {
+                    clusterX = position.x;
+                    clusterY = position.y;
+                } else {
+                    // Fallback: distribute evenly
+                    const angle = (i / clusterData.length) * 2 * Math.PI - Math.PI / 2;
+                    const radius = Math.min(width, height) * 0.25;
+                    clusterX = width / 2 + Math.cos(angle) * radius;
+                    clusterY = height / 2 + Math.sin(angle) * radius;
+                }
+                
+                // Main cluster bubble - positioned first
+                const mainNode = {
+                    id: cluster.group_id,
+                    type: 'cluster',
+                    cluster: cluster,
+                    r: clusterSize,
+                    x: clusterX,
+                    y: clusterY,
+                    color: colors[i % colors.length],
+                    fx: clusterX,
+                    fy: clusterY
+                };
+                mainClusterNodes.push(mainNode);
+                nodes.push(mainNode);
+            });
+            
+            // Second pass: position sub-cluster bubbles tightly around their clusters
+            clusterData.forEach((cluster, i) => {
+                const mainNode = mainClusterNodes[i];
+                const clusterX = mainNode.x;
+                const clusterY = mainNode.y;
+                const clusterSize = mainNode.r;
+                
+                // Add group bubbles AROUND each cluster (not inside)
+                if (cluster.internal_groups && cluster.internal_groups.length > 0) {
+                    const groupCount = cluster.internal_groups.length;
+                    
+                    // Calculate sub-cluster sizes first (reduced for tighter fit)
+                    const groupSizes = cluster.internal_groups.map(group => 
+                        Math.sqrt(group.size) * 2.5 + 12
+                    );
+                    const maxGroupSize = Math.max(...groupSizes);
+                    
+                    // Tight positioning: single ring around cluster (tighter spacing)
+                    const minSpacing = 12; // Minimum spacing between sub-cluster centers
+                    const baseRadius = clusterSize + maxGroupSize + 10; // Start just outside cluster (tighter)
+                    
+                    cluster.internal_groups.forEach((group, groupIdx) => {
+                        const groupSize = groupSizes[groupIdx];
+                        const angle = (groupIdx / groupCount) * 2 * Math.PI;
+                        
+                        // Calculate position around the main cluster
+                        const groupX = clusterX + Math.cos(angle) * baseRadius;
+                        const groupY = clusterY + Math.sin(angle) * baseRadius;
+                        
+                        nodes.push({
+                            id: `${cluster.group_id}_group_${groupIdx}`,
+                            type: 'group',
+                            clusterId: cluster.group_id,
+                            group: group,
+                            r: groupSize,
+                            x: groupX,
+                            y: groupY,
+                            color: colors[i % colors.length],
+                            opacity: 0.8,
+                            clusterX: clusterX,
+                            clusterY: clusterY,
+                            clusterR: clusterSize
+                        });
+                    });
+                }
+            });
+            
+            // Draw all bubbles first
+            const bubbles = svg.selectAll('.bubble')
+                .data(nodes)
+                .enter()
+                .append('g')
+                .attr('class', d => {
+                    const baseClass = d.type === 'cluster' ? 'cluster-bubble' : 'group-bubble';
+                    if (d.type === 'cluster' && d.id === selectedClusterId) {
+                        return baseClass + ' selected';
+                    }
+                    if (d.type === 'group' && d.id === selectedGroupId) {
+                        return baseClass + ' selected';
+                    }
+                    return baseClass;
+                })
+                .on('click', function(event, d) {
+                    if (d.type === 'cluster') {
+                        // Clear all selections first
+                        svg.selectAll('.cluster-bubble').classed('selected', false);
+                        svg.selectAll('.group-bubble').classed('selected', false);
+                        selectedClusterId = null;
+                        selectedGroupId = null;
+                        
+                        // Toggle selection
+                        if (selectedClusterId === d.id) {
+                            selectedClusterId = null;
+                            d3.select(this).classed('selected', false);
+                        } else {
+                            selectedClusterId = d.id;
+                            d3.select(this).classed('selected', true);
+                        }
+                        displayCases(d.cluster.cases, d.cluster.group_name);
+                    } else if (d.type === 'group') {
+                        // Clear all selections first
+                        svg.selectAll('.cluster-bubble').classed('selected', false);
+                        svg.selectAll('.group-bubble').classed('selected', false);
+                        selectedClusterId = null;
+                        selectedGroupId = null;
+                        
+                        const parentCluster = clusterData.find(c => c.group_id === d.clusterId);
+                        // Select parent cluster AND the clicked sub-cluster
+                        const parentBubble = svg.selectAll('.cluster-bubble').filter(function(node) {
+                            return node.id === d.clusterId;
+                        });
+                        parentBubble.classed('selected', true);
+                        selectedClusterId = d.clusterId;
+                        
+                        // Also highlight the clicked sub-cluster
+                        d3.select(this).classed('selected', true);
+                        selectedGroupId = d.id;
+                        
+                        displayCases(d.group.cases, `Group from ${parentCluster ? parentCluster.group_name : 'Cluster'}`);
+                    }
+                });
+            
+            // Draw circles - clusters first (so they appear behind groups)
+            const clusterBubbles = bubbles.filter(d => d.type === 'cluster');
+            const groupBubbles = bubbles.filter(d => d.type === 'group');
+            
+            // Draw main cluster bubbles - larger and more prominent
+            clusterBubbles.append('circle')
+                .attr('r', d => d.r)
+                .attr('fill', d => d.color)
+                .attr('fill-opacity', 0.25)
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 3)
+                .attr('stroke-opacity', 0.8);
+            
+            // Draw sub-cluster bubbles AROUND main clusters - smaller and positioned outside
+            groupBubbles.append('circle')
+                .attr('r', d => d.r)
+                .attr('fill', d => d.color)
+                .attr('fill-opacity', d => d.opacity || 0.7)
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 2)
+                .attr('stroke-opacity', 0.9);
+            
+            // Add labels to main clusters - show cluster name and total count inside the bubble
+            clusterBubbles.each(function(d) {
+                const g = d3.select(this);
+                // Cluster name inside the bubble (above count)
+                g.append('text')
+                    .attr('class', 'cluster-label')
+                    .attr('dy', -8)
+                    .text(d.cluster.group_name);
+                // Total case count inside the main bubble (below name)
+                g.append('text')
+                    .attr('class', 'cluster-count')
+                    .attr('dy', 12)
+                    .text(`${d.cluster.size} cases`);
+            });
+            
+            // Add labels to sub-cluster groups - show case count inside each sub-bubble
+            groupBubbles.each(function(d) {
+                const g = d3.select(this);
+                g.append('text')
+                    .attr('class', 'group-label')
+                    .attr('dy', 4)
+                    .text(`${d.group.size} cases`);
+            });
+            
+            // Static force simulation to settle positions neatly - runs once then stops
+            const groupNodes = nodes.filter(n => n.type === 'group');
+            if (groupNodes.length > 0) {
+                // Custom force to repel sub-clusters from their main cluster (10px minimum distance)
+                function clusterRepulsion(alpha) {
+                    groupNodes.forEach(node => {
+                        const clusterX = node.clusterX;
+                        const clusterY = node.clusterY;
+                        const clusterR = node.clusterR;
+                        const minDistance = clusterR + node.r + 8; // 8px minimum gap (tighter)
+                        
+                        const dx = node.x - clusterX;
+                        const dy = node.y - clusterY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < minDistance) {
+                            const force = (minDistance - distance) / distance;
+                            node.vx += dx * force * alpha * 0.8;
+                            node.vy += dy * force * alpha * 0.8;
+                        }
+                    });
+                }
+                
+                // Custom force to repel from all other main clusters too
+                function allClusterRepulsion(alpha) {
+                    groupNodes.forEach(node => {
+                        mainClusterNodes.forEach(mainNode => {
+                            if (mainNode.id === node.clusterId) return; // Skip own cluster
+                            
+                            const dx = node.x - mainNode.x;
+                            const dy = node.y - mainNode.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            const minDistance = mainNode.r + node.r + 8; // 8px minimum gap (tighter)
+                            
+                            if (distance < minDistance) {
+                                const force = (minDistance - distance) / distance;
+                                node.vx += dx * force * alpha * 0.5;
+                                node.vy += dy * force * alpha * 0.5;
+                            }
+                        });
+                    });
+                }
+                
+                // Custom force to keep sub-clusters near their parent cluster
+                function clusterAttraction(alpha) {
+                    groupNodes.forEach(node => {
+                        const clusterX = node.clusterX;
+                        const clusterY = node.clusterY;
+                        const idealRadius = node.clusterR + node.r + 15; // Ideal distance from cluster center (tighter)
+                        
+                        const dx = node.x - clusterX;
+                        const dy = node.y - clusterY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance > idealRadius * 1.2) {
+                            const force = (distance - idealRadius * 1.2) / distance;
+                            node.vx -= dx * force * alpha * 0.2;
+                            node.vy -= dy * force * alpha * 0.2;
+                        }
+                    });
+                }
+                
+                const simulation = d3.forceSimulation(groupNodes)
+                    .force('collision', d3.forceCollide().radius(d => d.r + 12).strength(0.9)) // 12px spacing (tighter)
+                    .force('charge', d3.forceManyBody().strength(-150))
+                    .force('clusterRepulsion', clusterRepulsion)
+                    .force('allClusterRepulsion', allClusterRepulsion)
+                    .force('clusterAttraction', clusterAttraction)
+                    .force('x', d3.forceX().strength(0.1).x(d => {
+                        // Keep within bounds
+                        return Math.max(margin + d.r, Math.min(width - margin - d.r, d.x));
+                    }))
+                    .force('y', d3.forceY().strength(0.1).y(d => {
+                        // Keep within bounds
+                        return Math.max(margin + d.r, Math.min(height - margin - d.r, d.y));
+                    }))
+                    .alphaDecay(0.1) // Faster decay for quick settling
+                    .velocityDecay(0.6) // Less bouncy, more stable
+                    .on('tick', function() {
+                        // Update positions
+                        groupBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+                    })
+                    .on('end', function() {
+                        // When simulation ends, fix all positions
+                        groupNodes.forEach(node => {
+                            node.fx = node.x;
+                            node.fy = node.y;
+                        });
+                    });
+            } else {
+                // If no groups, just position clusters
+                bubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+            }
+            
+            // Position main clusters (they're fixed)
+            clusterBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+        }
+        
+        function displayCases(cases, title) {
+            const displayDiv = document.getElementById('case-display');
+            const titleEl = document.getElementById('case-display-title');
+            const listEl = document.getElementById('case-list');
+            
+            titleEl.textContent = `${title} (${cases.length} cases)`;
+            listEl.innerHTML = '';
+            
+            cases.forEach(caseData => {
+                const caseItem = document.createElement('div');
+                caseItem.className = 'case-item';
+                
+                const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
+                const caseId = caseData.id || 'Unknown ID';
+                const date = caseData.date_range?.start || caseData.raw_data?.month_year || 'Unknown date';
+                
+                // Highlight case text with all relevant information - show FULL text
+                const highlightedText = highlightCaseText(caseText, caseData);
+                
+                caseItem.innerHTML = `
+                    <div class="case-item-header">${caseId} - ${date}</div>
+                    <div class="case-item-text">${highlightedText}</div>
+                `;
+                
+                listEl.appendChild(caseItem);
+            });
+            
+            displayDiv.classList.add('active');
+            displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+        
+        function getHighlightColor(category) {
+            const colors = {
+                'platform': 'highlight-platform',
+                'severity': 'highlight-severity',
+                'topic': 'highlight-topic',
+                'agency': 'highlight-agency',
+                'investigation': 'highlight-investigation',
+                'relationship': 'highlight-relationship',
+                'demographic': 'highlight-demographic',
+                'evidence': 'highlight-evidence',
+                'prosecution': 'highlight-prosecution',
+                'severity-phrase': 'highlight-severity-phrase',
+                'date': 'highlight-date'
+            };
+            return colors[category] || 'highlight-default';
+        }
+        
+        function highlightCaseText(text, caseData) {
+            if (!text) return '';
+            
+            // Escape HTML first
+            let highlighted = escapeHtml(text);
+            
+            // Build list of terms to highlight with their categories
+            const highlightTerms = [];
+            
+            // Platforms (highlight variations)
+            const platforms = caseData.platforms_used || [];
+            platforms.forEach(platform => {
+                highlightTerms.push({ term: platform, category: 'platform' });
+                // Also highlight common variations
+                const platformLower = platform.toLowerCase();
+                if (platformLower.includes('facebook')) {
+                    highlightTerms.push({ term: 'facebook', category: 'platform' });
+                }
+                if (platformLower.includes('instagram')) {
+                    highlightTerms.push({ term: 'instagram', category: 'platform' });
+                }
+                if (platformLower.includes('snapchat')) {
+                    highlightTerms.push({ term: 'snapchat', category: 'platform' });
+                }
+                if (platformLower.includes('discord')) {
+                    highlightTerms.push({ term: 'discord', category: 'platform' });
+                }
+                if (platformLower.includes('whatsapp')) {
+                    highlightTerms.push({ term: 'whatsapp', category: 'platform' });
+                }
+                if (platformLower === 'online' || platformLower.includes('online')) {
+                    highlightTerms.push({ term: 'online', category: 'platform' });
+                }
+                if (platformLower === 'chat' || platformLower.includes('chat')) {
+                    highlightTerms.push({ term: 'chat', category: 'platform' });
+                }
+            });
+            
+            // Severity indicators
+            const severity = caseData.severity_indicators || [];
+            severity.forEach(sev => {
+                const sevStr = String(sev).toLowerCase();
+                highlightTerms.push({ term: sevStr.replace(/_/g, ' '), category: 'severity' });
+                highlightTerms.push({ term: sevStr.replace(/_/g, '-'), category: 'severity' });
+                // Special handling for common severity terms
+                if (sevStr.includes('infant')) {
+                    highlightTerms.push({ term: 'infant', category: 'severity' });
+                    highlightTerms.push({ term: 'infants', category: 'severity' });
+                }
+                if (sevStr.includes('sexual_assault') || sevStr.includes('rape')) {
+                    highlightTerms.push({ term: 'rape', category: 'severity' });
+                    highlightTerms.push({ term: 'raped', category: 'severity' });
+                    highlightTerms.push({ term: 'raping', category: 'severity' });
+                    highlightTerms.push({ term: 'sexual assault', category: 'severity' });
+                    highlightTerms.push({ term: 'sexually assaulted', category: 'severity' });
+                    highlightTerms.push({ term: 'sexual abuse', category: 'severity' });
+                    highlightTerms.push({ term: 'sexually abused', category: 'severity' });
+                    highlightTerms.push({ term: 'molest', category: 'severity' });
+                    highlightTerms.push({ term: 'molested', category: 'severity' });
+                    highlightTerms.push({ term: 'molesting', category: 'severity' });
+                }
+                if (sevStr.includes('very_young') || sevStr.includes('very young')) {
+                    highlightTerms.push({ term: 'very young', category: 'severity' });
+                }
+                if (sevStr.startsWith('under_')) {
+                    const age = sevStr.replace('under_', '');
+                    highlightTerms.push({ term: `under ${age}`, category: 'severity' });
+                    highlightTerms.push({ term: `under-${age}`, category: 'severity' });
+                }
+            });
+            
+            // Case topics
+            const topics = caseData.case_topics || [];
+            topics.forEach(topic => {
+                const topicStr = String(topic).toLowerCase();
+                highlightTerms.push({ term: topicStr.replace(/_/g, ' '), category: 'topic' });
+                // Common variations
+                if (topicStr === 'production') {
+                    highlightTerms.push({ term: 'produced', category: 'topic' });
+                    highlightTerms.push({ term: 'producing', category: 'topic' });
+                }
+                if (topicStr === 'possession') {
+                    highlightTerms.push({ term: 'possessed', category: 'topic' });
+                    highlightTerms.push({ term: 'possessing', category: 'topic' });
+                }
+                if (topicStr.includes('hands_on') || topicStr.includes('hands-on')) {
+                    highlightTerms.push({ term: 'hands-on', category: 'topic' });
+                    highlightTerms.push({ term: 'hands on', category: 'topic' });
+                }
+                if (topicStr === 'online_digital' || topicStr.includes('online-digital')) {
+                    highlightTerms.push({ term: 'online-only', category: 'topic' });
+                }
+            });
+            
+            // Agencies involved
+            const agencies = caseData.agencies_involved || [];
+            agencies.forEach(agency => {
+                highlightTerms.push({ term: agency, category: 'agency' });
+                // Common abbreviations
+                if (agency === 'FBI') {
+                    highlightTerms.push({ term: 'Federal Bureau of Investigation', category: 'agency' });
+                }
+                if (agency.includes('AZICAC') || agency.includes('Arizona Internet Crimes')) {
+                    highlightTerms.push({ term: 'AZICAC', category: 'agency' });
+                    highlightTerms.push({ term: 'Arizona Internet Crimes Against Children', category: 'agency' });
+                }
+                if (agency.includes('ICAC')) {
+                    highlightTerms.push({ term: 'ICAC', category: 'agency' });
+                    highlightTerms.push({ term: 'Internet Crimes Against Children', category: 'agency' });
+                }
+            });
+            
+            // Investigation type
+            const investigationType = caseData.investigation_type || caseData.investigation_methods_and_teams?.type;
+            if (investigationType) {
+                const invType = String(investigationType).toLowerCase();
+                highlightTerms.push({ term: invType.replace(/_/g, ' '), category: 'investigation' });
+                if (invType === 'proactive') {
+                    highlightTerms.push({ term: 'proactive', category: 'investigation' });
+                }
+                if (invType === 'reactive') {
+                    highlightTerms.push({ term: 'reactive', category: 'investigation' });
+                }
+                if (invType === 'undercover') {
+                    highlightTerms.push({ term: 'undercover', category: 'investigation' });
+                }
+            }
+            
+            // Relationship to victim
+            const relationship = caseData.relationship_to_victim;
+            if (relationship) {
+                const relStr = String(relationship).toLowerCase();
+                highlightTerms.push({ term: relStr.replace(/_/g, ' '), category: 'relationship' });
+                // Common variations
+                if (relStr === 'father') {
+                    highlightTerms.push({ term: 'father', category: 'relationship' });
+                    highlightTerms.push({ term: 'dad', category: 'relationship' });
+                }
+                if (relStr === 'mother') {
+                    highlightTerms.push({ term: 'mother', category: 'relationship' });
+                    highlightTerms.push({ term: 'mom', category: 'relationship' });
+                }
+            }
+            
+            // Perpetrator age
+            const perpAge = caseData.perpetrator_age;
+            if (perpAge !== undefined && perpAge !== null) {
+                highlightTerms.push({ term: `${perpAge} year old`, category: 'demographic' });
+                highlightTerms.push({ term: `${perpAge}-year-old`, category: 'demographic' });
+                highlightTerms.push({ term: `${perpAge} years old`, category: 'demographic' });
+            }
+            
+            // Registered sex offender
+            const perpRegistered = caseData.perpetrator_registered_sex_offender;
+            if (perpRegistered === true) {
+                highlightTerms.push({ term: 'registered sex offender', category: 'demographic' });
+                highlightTerms.push({ term: 'RSO', category: 'demographic' });
+            }
+            
+            // Evidence volume
+            const evidence = caseData.evidence_volume;
+            if (evidence) {
+                if (evidence.images) {
+                    highlightTerms.push({ term: `${evidence.images} image`, category: 'evidence' });
+                    highlightTerms.push({ term: `${evidence.images} images`, category: 'evidence' });
+                }
+                if (evidence.videos) {
+                    highlightTerms.push({ term: `${evidence.videos} video`, category: 'evidence' });
+                    highlightTerms.push({ term: `${evidence.videos} videos`, category: 'evidence' });
+                }
+                if (evidence.messages) {
+                    highlightTerms.push({ term: `${evidence.messages} message`, category: 'evidence' });
+                    highlightTerms.push({ term: `${evidence.messages} messages`, category: 'evidence' });
+                }
+            }
+            
+            // Prosecution outcome
+            const prosecution = caseData.prosecution_outcome;
+            if (prosecution) {
+                const charges = prosecution.charges || [];
+                charges.forEach(ch => {
+                    const chargeName = ch.charge || '';
+                    if (chargeName) {
+                        highlightTerms.push({ term: chargeName, category: 'prosecution' });
+                    }
+                });
+                if (prosecution.booking_status) {
+                    highlightTerms.push({ term: prosecution.booking_status.toLowerCase(), category: 'prosecution' });
+                    if (prosecution.booking_status.toLowerCase() === 'booked') {
+                        highlightTerms.push({ term: 'booked', category: 'prosecution' });
+                    }
+                }
+                // Common prosecution terms
+                highlightTerms.push({ term: 'arrested', category: 'prosecution' });
+                highlightTerms.push({ term: 'arrest', category: 'prosecution' });
+                highlightTerms.push({ term: 'charged', category: 'prosecution' });
+                highlightTerms.push({ term: 'charges', category: 'prosecution' });
+            }
+            
+            // Severity phrases
+            const severityPhrases = caseData.severity_phrases || [];
+            severityPhrases.forEach(phrase => {
+                highlightTerms.push({ term: String(phrase).toLowerCase(), category: 'severity-phrase' });
+            });
+            
+            // Date mentions
+            const dateStr = caseData.date_range?.start || caseData.raw_data?.month_year || caseData.date_start;
+            if (dateStr) {
+                // Try to extract month/year for highlighting
+                const monthYear = caseData.raw_data?.month_year;
+                if (monthYear) {
+                    highlightTerms.push({ term: monthYear, category: 'date' });
+                }
+            }
+            
+            // Sort by length (longest first) to avoid partial matches
+            highlightTerms.sort((a, b) => b.term.length - a.term.length);
+            
+            // Remove duplicates
+            const seen = new Set();
+            const uniqueTerms = highlightTerms.filter(item => {
+                const key = `${item.term.toLowerCase()}_${item.category}`;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            
+            // Apply highlights - simple approach: replace text, avoiding already highlighted sections
+            uniqueTerms.forEach(({ term, category }) => {
+                const escapedTerm = escapeRegex(term);
+                const colorClass = getHighlightColor(category);
+                
+                // Split by existing highlight spans
+                const parts = highlighted.split(/(<span class="case-text-highlight[^"]*">.*?<\/span>)/gi);
+                highlighted = parts.map(part => {
+                    // Skip parts that are already highlighted
+                    if (part.trim().startsWith('<span class="case-text-highlight')) {
+                        return part;
+                    }
+                    // Apply new highlights to unhighlighted text
+                    const regex = new RegExp(`\\b${escapedTerm}\\b`, 'gi');
+                    return part.replace(regex, (match) => {
+                        return `<span class="case-text-highlight ${colorClass}">${match}</span>`;
+                    });
+                }).join('');
+            });
+            
+            return highlighted;
+        }
+        
+        // Load clusters on page load
+        loadClusters();
+    </script>
+</body>
+</html>
