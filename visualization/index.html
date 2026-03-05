@@ -536,6 +536,120 @@
             background: #f5f5f5;
             color: #424242;
         }
+        /* Floating Evaluation Form */
+        .eval-widget {
+            position: fixed;
+            right: 0;
+            top: 25%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .eval-toggle {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 10px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            border-radius: 10px 0 0 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .eval-toggle:hover {
+            background: #45a049;
+            box-shadow: -2px 0 12px rgba(0,0,0,0.3);
+        }
+        .eval-container {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: white;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -2px 0 12px rgba(0,0,0,0.25);
+            width: 400px;
+            max-height: 80vh;
+            min-width: 250px;
+            min-height: 200px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            resize: none;
+        }
+        .eval-container.open {
+            display: flex;
+        }
+        .eval-container.minimized {
+            width: 300px;
+        }
+        .eval-container.minimized .eval-iframe-container {
+            display: none;
+        }
+        .eval-resize-handle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            cursor: nwse-resize;
+            background: linear-gradient(135deg, transparent 0%, transparent 30%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.2) 35%, transparent 35%, transparent 65%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0.2) 70%, transparent 70%);
+            z-index: 10;
+        }
+        .eval-resize-handle:hover {
+            background: linear-gradient(135deg, transparent 0%, transparent 30%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.3) 35%, transparent 35%, transparent 65%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0.3) 70%, transparent 70%);
+        }
+        .eval-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .eval-header-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .eval-close, .eval-minimize {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .eval-close:hover, .eval-minimize:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .eval-minimize {
+            font-size: 0.9em;
+        }
+        .eval-iframe-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+        .eval-iframe-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        @media (max-width: 768px) {
+            .eval-container {
+                width: 90vw;
+                max-width: 400px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3156,6 +3270,148 @@
         loadCases();
         // Preload case IDs for autocomplete
         loadAllCaseIds();
+    </script>
+    
+    <!-- Floating Evaluation Form Widget -->
+    <div class="eval-widget">
+        <div class="eval-toggle" onclick="toggleEvalForm()">Feedback</div>
+        <div class="eval-container" id="evalContainer">
+            <div class="eval-header">
+                <span>Quick Evaluation</span>
+                <div class="eval-header-buttons">
+                    <button class="eval-minimize" onclick="toggleMinimize()" title="Minimize">−</button>
+                    <button class="eval-close" onclick="toggleEvalForm()" title="Close">×</button>
+                </div>
+            </div>
+            <div class="eval-iframe-container">
+                <iframe 
+                    src="https://forms.gle/QWiyeABtXq2vCrg4A?embedded=true" 
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0">
+                    Loading…
+                </iframe>
+            </div>
+            <div class="eval-resize-handle" id="evalResizeHandle"></div>
+        </div>
+    </div>
+    
+    <script>
+        // State persistence
+        const STATE_KEY = 'caselinker_feedback_widget_state';
+        
+        function saveWidgetState() {
+            const container = document.getElementById('evalContainer');
+            if (!container) return;
+            
+            const state = {
+                isOpen: container.classList.contains('open'),
+                isMinimized: container.classList.contains('minimized'),
+                width: container.style.width || getComputedStyle(container).width,
+                height: container.style.height || getComputedStyle(container).height
+            };
+            localStorage.setItem(STATE_KEY, JSON.stringify(state));
+        }
+        
+        function loadWidgetState() {
+            const container = document.getElementById('evalContainer');
+            if (!container) return;
+            
+            try {
+                const saved = localStorage.getItem(STATE_KEY);
+                if (!saved) return;
+                
+                const state = JSON.parse(saved);
+                
+                // Restore open state
+                if (state.isOpen) {
+                    container.classList.add('open');
+                }
+                
+                // Restore minimized state
+                if (state.isMinimized) {
+                    container.classList.add('minimized');
+                }
+                
+                // Restore dimensions (only if not minimized)
+                if (state.width && !state.isMinimized) {
+                    container.style.width = state.width;
+                }
+                if (state.height && !state.isMinimized) {
+                    container.style.height = state.height;
+                }
+            } catch (e) {
+                console.error('Error loading widget state:', e);
+            }
+        }
+        
+        function toggleEvalForm() {
+            const container = document.getElementById('evalContainer');
+            container.classList.toggle('open');
+            // Remove minimized state when closing
+            if (!container.classList.contains('open')) {
+                container.classList.remove('minimized');
+            }
+            saveWidgetState();
+        }
+        
+        function toggleMinimize() {
+            const container = document.getElementById('evalContainer');
+            container.classList.toggle('minimized');
+            saveWidgetState();
+        }
+        
+        // Resize functionality
+        (function() {
+            const container = document.getElementById('evalContainer');
+            const resizeHandle = document.getElementById('evalResizeHandle');
+            if (!container || !resizeHandle) return;
+            
+            let isResizing = false;
+            let startX, startY, startWidth, startHeight;
+            
+            resizeHandle.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = parseInt(document.defaultView.getComputedStyle(container).width, 10);
+                startHeight = parseInt(document.defaultView.getComputedStyle(container).height, 10);
+                container.style.height = startHeight + 'px';
+                container.classList.remove('minimized'); // Remove minimized class when resizing
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+                
+                const width = startWidth - (e.clientX - startX); // Subtract because we're on the right side
+                const height = startHeight + (e.clientY - startY);
+                
+                const minWidth = 250;
+                const maxWidth = window.innerWidth * 0.8;
+                const minHeight = 200;
+                const maxHeight = window.innerHeight * 0.9;
+                
+                if (width >= minWidth && width <= maxWidth) {
+                    container.style.width = width + 'px';
+                }
+                if (height >= minHeight && height <= maxHeight) {
+                    container.style.height = height + 'px';
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isResizing) {
+                    isResizing = false;
+                    saveWidgetState();
+                }
+            });
+        })();
+        
+        // Load saved state on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadWidgetState();
+        });
     </script>
 </body>
 </html>
