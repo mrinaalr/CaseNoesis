@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Extract real evaluation data from CaseLinker database and analysis functions.
-This script runs actual tests and extracts metrics to populate the Evaluation section of PAPER.md.
+Comprehensive Evaluation Data Extraction for CaseLinker
+
+This script performs comprehensive testing and evaluation of CaseLinker's capabilities,
+generating detailed metrics suitable for academic research and system performance analysis.
+
+Output: evaluation_results.json - Comprehensive evaluation data for academic sharing
 """
 
 import sys
 import json
 from pathlib import Path
 from collections import Counter, defaultdict
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 import statistics
+from datetime import datetime
 
 # Add paths
 src_path = Path(__file__).parent / "src"
@@ -22,118 +27,202 @@ from analysis import (
     triage_cases,
     generate_automated_insights,
     calculate_case_similarity,
-    calculate_group_similarity_metrics
+    calculate_group_similarity_metrics,
+    return_tagged_cases,
+    run_automated_analysis
 )
 
 def load_all_cases(db_path: str = "caselinker.db") -> List[Dict[str, Any]]:
     """Load all cases from database"""
     storage = CaseStorage(db_path)
     all_cases = storage.get_all_cases()
-    print(f"Loaded {len(all_cases)} cases from database")
+    print(f"✓ Loaded {len(all_cases)} cases from database")
     return all_cases
 
+def parse_json_field(field_value: Any) -> Any:
+    """Safely parse JSON string fields"""
+    if isinstance(field_value, str):
+        try:
+            return json.loads(field_value)
+        except:
+            return []
+    return field_value if field_value else []
+
 def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Calculate extraction coverage statistics"""
+    """Comprehensive extraction coverage analysis"""
     total = len(all_cases)
     
     coverage = {
-        'case_topics': {'extracted': 0, 'total': total},
-        'severity_indicators': {'extracted': 0, 'total': total},
-        'prosecution_outcome': {'extracted': 0, 'total': total},
-        'relationship_to_victim': {'extracted': 0, 'total': total},
-        'platforms_used': {'extracted': 0, 'total': total},
-        'investigation_type': {'extracted': 0, 'total': total},
-        'victim_count': {'extracted': 0, 'total': total},
-        'perpetrator_demographics': {'extracted': 0, 'total': total},
-        'evidence_volume': {'extracted': 0, 'total': total},
+        'case_topics': {'extracted': 0, 'total': total, 'details': {}},
+        'severity_indicators': {'extracted': 0, 'total': total, 'details': {}},
+        'prosecution_outcome': {'extracted': 0, 'total': total, 'details': {}},
+        'relationship_to_victim': {'extracted': 0, 'total': total, 'details': {}},
+        'platforms_used': {'extracted': 0, 'total': total, 'details': {}},
+        'investigation_type': {'extracted': 0, 'total': total, 'details': {}},
+        'victim_count': {'extracted': 0, 'total': total, 'details': {}},
+        'perpetrator_demographics': {'extracted': 0, 'total': total, 'details': {}},
+        'evidence_volume': {'extracted': 0, 'total': total, 'details': {}},
+        'agencies_involved': {'extracted': 0, 'total': total, 'details': {}},
+        'date_range': {'extracted': 0, 'total': total, 'details': {}},
     }
+    
+    topic_counter = Counter()
+    severity_counter = Counter()
+    platform_counter = Counter()
+    relationship_counter = Counter()
+    investigation_counter = Counter()
+    agency_counter = Counter()
+    rso_count = 0
+    age_distribution = []
     
     for case in all_cases:
         # Case topics
-        topics = case.get('case_topics', [])
-        if isinstance(topics, str):
-            try:
-                topics = json.loads(topics)
-            except:
-                topics = []
+        topics = parse_json_field(case.get('case_topics', []))
         if topics and len(topics) > 0:
             coverage['case_topics']['extracted'] += 1
+            topic_counter.update(topics)
         
         # Severity indicators
-        severity = case.get('severity_indicators', [])
-        if isinstance(severity, str):
-            try:
-                severity = json.loads(severity)
-            except:
-                severity = []
+        severity = parse_json_field(case.get('severity_indicators', []))
         if severity and len(severity) > 0:
             coverage['severity_indicators']['extracted'] += 1
+            severity_counter.update(severity)
         
         # Prosecution outcome
-        if case.get('prosecution_outcome') or case.get('prosecution_outcomes'):
+        prosecution = case.get('prosecution_outcome') or case.get('prosecution_outcomes')
+        if prosecution:
             coverage['prosecution_outcome']['extracted'] += 1
         
         # Relationship
-        if case.get('relationship_to_victim'):
+        relationship = case.get('relationship_to_victim')
+        if relationship:
             coverage['relationship_to_victim']['extracted'] += 1
+            relationship_counter[relationship] += 1
         
         # Platforms
-        platforms = case.get('platforms_used', [])
-        if isinstance(platforms, str):
-            try:
-                platforms = json.loads(platforms)
-            except:
-                platforms = []
+        platforms = parse_json_field(case.get('platforms_used', []))
         if platforms and len(platforms) > 0:
             coverage['platforms_used']['extracted'] += 1
+            platform_counter.update(platforms)
         
         # Investigation type
-        if case.get('investigation_type'):
+        inv_type = case.get('investigation_type')
+        if inv_type:
             coverage['investigation_type']['extracted'] += 1
+            investigation_counter[inv_type] += 1
         
         # Victim count
-        if case.get('victim_count') is not None:
+        victim_count = case.get('victim_count')
+        if victim_count is not None:
             coverage['victim_count']['extracted'] += 1
         
         # Perpetrator demographics
-        if case.get('perpetrator_age') is not None or case.get('perpetrator_registered_sex_offender') is not None:
+        perp_age = case.get('perpetrator_age')
+        rso = case.get('perpetrator_registered_sex_offender')
+        if perp_age is not None or rso is not None:
             coverage['perpetrator_demographics']['extracted'] += 1
+            if perp_age is not None:
+                age_distribution.append(perp_age)
+            if rso is True:
+                rso_count += 1
         
         # Evidence volume
         evidence = case.get('evidence_volume', {})
         if evidence and isinstance(evidence, dict) and any(evidence.values()):
             coverage['evidence_volume']['extracted'] += 1
+        
+        # Agencies
+        agencies = parse_json_field(case.get('agencies_involved', []))
+        if agencies and len(agencies) > 0:
+            coverage['agencies_involved']['extracted'] += 1
+            agency_counter.update(agencies)
+        
+        # Date range
+        if case.get('date_start') or case.get('date_range'):
+            coverage['date_range']['extracted'] += 1
     
-    # Calculate percentages
+    # Calculate percentages and add details
     for key in coverage:
         extracted = coverage[key]['extracted']
         total_cases = coverage[key]['total']
         coverage[key]['percentage'] = (extracted / total_cases * 100) if total_cases > 0 else 0
     
+    coverage['case_topics']['details'] = dict(topic_counter.most_common(20))
+    coverage['severity_indicators']['details'] = dict(severity_counter.most_common(20))
+    coverage['platforms_used']['details'] = dict(platform_counter.most_common(20))
+    coverage['relationship_to_victim']['details'] = dict(relationship_counter)
+    coverage['investigation_type']['details'] = dict(investigation_counter)
+    coverage['agencies_involved']['details'] = dict(agency_counter.most_common(20))
+    coverage['perpetrator_demographics']['details'] = {
+        'registered_sex_offenders': rso_count,
+        'age_distribution': {
+            'mean': statistics.mean(age_distribution) if age_distribution else None,
+            'median': statistics.median(age_distribution) if age_distribution else None,
+            'min': min(age_distribution) if age_distribution else None,
+            'max': max(age_distribution) if age_distribution else None,
+            'count': len(age_distribution)
+        }
+    }
+    
     return coverage
 
 def evaluate_clustering(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Evaluate clustering results"""
-    groups = group_similar_cases(all_cases)
+    """Comprehensive clustering evaluation"""
+    print("  Running clustering analysis...")
+    groups = group_similar_cases(all_cases, similarity_threshold=0.45)
     
     cluster_info = []
+    all_similarities = []
+    
     for group in groups:
+        similarities = []
+        cases_in_group = group.get('cases', [])
+        
+        # Calculate pairwise similarities within group
+        for i, case1 in enumerate(cases_in_group):
+            for case2 in cases_in_group[i+1:]:
+                sim = calculate_case_similarity(case1, case2)
+                similarities.append(sim)
+                all_similarities.append(sim)
+        
         cluster_info.append({
             'name': group.get('group_name', 'Unknown'),
             'size': group.get('size', 0),
             'average_similarity': group.get('average_similarity', 0.0),
             'min_similarity': group.get('min_similarity', 0.0),
             'max_similarity': group.get('max_similarity', 0.0),
-            'description': group.get('description', '')
+            'description': group.get('description', ''),
+            'internal_pairwise_similarities': {
+                'mean': statistics.mean(similarities) if similarities else 0.0,
+                'std': statistics.stdev(similarities) if len(similarities) > 1 else 0.0,
+                'min': min(similarities) if similarities else 0.0,
+                'max': max(similarities) if similarities else 0.0,
+                'count': len(similarities)
+            },
+            'statistics': group.get('statistics', {})
         })
     
     return {
         'total_groups': len(groups),
-        'groups': cluster_info
+        'groups': cluster_info,
+        'overall_similarity_metrics': {
+            'mean': statistics.mean(all_similarities) if all_similarities else 0.0,
+            'std': statistics.stdev(all_similarities) if len(all_similarities) > 1 else 0.0,
+            'min': min(all_similarities) if all_similarities else 0.0,
+            'max': max(all_similarities) if all_similarities else 0.0,
+            'total_pairs': len(all_similarities)
+        },
+        'cluster_size_distribution': {
+            'mean': statistics.mean([g['size'] for g in cluster_info]) if cluster_info else 0.0,
+            'median': statistics.median([g['size'] for g in cluster_info]) if cluster_info else 0.0,
+            'min': min([g['size'] for g in cluster_info]) if cluster_info else 0,
+            'max': max([g['size'] for g in cluster_info]) if cluster_info else 0
+        }
     }
 
 def evaluate_triage(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Evaluate priority triage results"""
+    """Comprehensive priority triage evaluation"""
+    print("  Running priority triage analysis...")
     triage_results = triage_cases(all_cases)
     
     scores = [case.get('priority_score', 0) for case in triage_results if case.get('priority_score') is not None]
@@ -141,12 +230,25 @@ def evaluate_triage(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     if not scores:
         return {
             'total_cases': len(all_cases),
-            'score_range': {'min': 0, 'max': 0, 'mean': 0, 'std': 0},
+            'score_range': {'min': 0, 'max': 0, 'mean': 0, 'std': 0, 'median': 0},
             'high_priority_count': 0,
-            'high_priority_threshold': 8.0
+            'high_priority_threshold': 8.0,
+            'score_distribution': {}
         }
     
     high_priority = [s for s in scores if s >= 8.0]
+    medium_priority = [s for s in scores if 6.0 <= s < 8.0]
+    low_priority = [s for s in scores if s < 6.0]
+    
+    # Analyze high-priority cases
+    high_priority_cases = [case for case in triage_results if case.get('priority_score', 0) >= 8.0]
+    high_priority_characteristics = {
+        'with_production': sum(1 for c in high_priority_cases if 'production' in parse_json_field(c.get('case_topics', []))),
+        'with_infant': sum(1 for c in high_priority_cases if 'infant' in parse_json_field(c.get('severity_indicators', []))),
+        'with_multiple_victims': sum(1 for c in high_priority_cases if (c.get('victim_count') or 0) > 1),
+        'with_rso': sum(1 for c in high_priority_cases if c.get('perpetrator_registered_sex_offender') is True),
+        'with_hands_on': sum(1 for c in high_priority_cases if 'hands_on' in parse_json_field(c.get('case_topics', [])))
+    }
     
     return {
         'total_cases': len(triage_results),
@@ -154,28 +256,117 @@ def evaluate_triage(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
             'min': min(scores),
             'max': max(scores),
             'mean': statistics.mean(scores),
-            'std': statistics.stdev(scores) if len(scores) > 1 else 0
+            'median': statistics.median(scores),
+            'std': statistics.stdev(scores) if len(scores) > 1 else 0,
+            'q1': statistics.quantiles(scores, n=4)[0] if len(scores) > 1 else 0,
+            'q3': statistics.quantiles(scores, n=4)[2] if len(scores) > 1 else 0
         },
         'high_priority_count': len(high_priority),
+        'medium_priority_count': len(medium_priority),
+        'low_priority_count': len(low_priority),
         'high_priority_threshold': 8.0,
-        'high_priority_cases': [case for case in triage_results if case.get('priority_score', 0) >= 8.0]
+        'high_priority_characteristics': high_priority_characteristics,
+        'score_distribution': {
+            'high_priority': {'count': len(high_priority), 'percentage': len(high_priority)/len(scores)*100},
+            'medium_priority': {'count': len(medium_priority), 'percentage': len(medium_priority)/len(scores)*100},
+            'low_priority': {'count': len(low_priority), 'percentage': len(low_priority)/len(scores)*100}
+        },
+        'top_10_priority_cases': [
+            {
+                'case_id': case.get('id'),
+                'priority_score': case.get('priority_score'),
+                'severity_indicators': parse_json_field(case.get('severity_indicators', [])),
+                'victim_count': case.get('victim_count'),
+                'case_topics': parse_json_field(case.get('case_topics', []))
+            }
+            for case in sorted(triage_results, key=lambda x: x.get('priority_score', 0), reverse=True)[:10]
+        ]
+    }
+
+def evaluate_tag_based_filtering(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate tag-based filtering capabilities"""
+    print("  Testing tag-based filtering...")
+    
+    test_queries = [
+        {'tags': [{'tag': 'possession', 'category': 'case_topics'}], 'description': 'Single tag: possession'},
+        {'tags': [{'tag': 'production', 'category': 'case_topics'}], 'description': 'Single tag: production'},
+        {'tags': [{'tag': 'infant', 'category': 'severity_indicators'}], 'description': 'Single tag: infant'},
+        {'tags': [{'tag': 'possession', 'category': 'case_topics'}, {'tag': 'registered_sex_offender', 'category': 'registered_sex_offender'}], 'description': 'Multi-tag: possession AND RSO'},
+        {'tags': [{'tag': 'production', 'category': 'case_topics'}, {'tag': 'hands_on', 'category': 'case_topics'}], 'description': 'Multi-tag: production AND hands_on'},
+        {'tags': [{'tag': 'family', 'category': 'case_topics'}, {'tag': 'very_young', 'category': 'severity_indicators'}], 'description': 'Multi-tag: family AND very_young'},
+    ]
+    
+    query_results = []
+    for query in test_queries:
+        matching = return_tagged_cases(all_cases, query['tags'])
+        query_results.append({
+            'query': query['description'],
+            'tags': query['tags'],
+            'matches': len(matching),
+            'percentage': (len(matching) / len(all_cases) * 100) if all_cases else 0
+        })
+    
+    return {
+        'total_test_queries': len(test_queries),
+        'query_results': query_results,
+        'filtering_capabilities': {
+            'supports_single_tag': True,
+            'supports_multi_tag_intersection': True,
+            'supports_cross_category_filtering': True
+        }
+    }
+
+def evaluate_similarity_calculation(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate similarity calculation performance"""
+    print("  Analyzing similarity calculations...")
+    
+    # Sample cases for similarity analysis
+    sample_size = min(50, len(all_cases))
+    sample_cases = all_cases[:sample_size]
+    
+    similarities = []
+    for i, case1 in enumerate(sample_cases):
+        for case2 in sample_cases[i+1:]:
+            sim = calculate_case_similarity(case1, case2)
+            similarities.append(sim)
+    
+    # Analyze similarity distribution
+    similarity_ranges = {
+        'very_high': [s for s in similarities if s >= 0.7],
+        'high': [s for s in similarities if 0.5 <= s < 0.7],
+        'medium': [s for s in similarities if 0.3 <= s < 0.5],
+        'low': [s for s in similarities if s < 0.3]
+    }
+    
+    return {
+        'sample_size': sample_size,
+        'total_pairs_analyzed': len(similarities),
+        'similarity_statistics': {
+            'mean': statistics.mean(similarities) if similarities else 0.0,
+            'median': statistics.median(similarities) if similarities else 0.0,
+            'std': statistics.stdev(similarities) if len(similarities) > 1 else 0.0,
+            'min': min(similarities) if similarities else 0.0,
+            'max': max(similarities) if similarities else 0.0
+        },
+        'similarity_distribution': {
+            'very_high_0.7+': {'count': len(similarity_ranges['very_high']), 'percentage': len(similarity_ranges['very_high'])/len(similarities)*100 if similarities else 0},
+            'high_0.5-0.7': {'count': len(similarity_ranges['high']), 'percentage': len(similarity_ranges['high'])/len(similarities)*100 if similarities else 0},
+            'medium_0.3-0.5': {'count': len(similarity_ranges['medium']), 'percentage': len(similarity_ranges['medium'])/len(similarities)*100 if similarities else 0},
+            'low_<0.3': {'count': len(similarity_ranges['low']), 'percentage': len(similarity_ranges['low'])/len(similarities)*100 if similarities else 0}
+        }
     }
 
 def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Extract automated insights"""
+    """Comprehensive automated insights evaluation"""
+    print("  Generating automated insights...")
     insights = generate_automated_insights(all_cases)
     
     # Platform analysis
     all_platforms = []
     platform_counts = Counter()
     for case in all_cases:
-        platforms = case.get('platforms_used', [])
-        if isinstance(platforms, str):
-            try:
-                platforms = json.loads(platforms)
-            except:
-                platforms = []
-        if isinstance(platforms, list):
+        platforms = parse_json_field(case.get('platforms_used', []))
+        if platforms:
             all_platforms.extend(platforms)
             platform_counts.update(platforms)
     
@@ -183,13 +374,8 @@ def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     all_severity = []
     severity_counts = Counter()
     for case in all_cases:
-        severity = case.get('severity_indicators', [])
-        if isinstance(severity, str):
-            try:
-                severity = json.loads(severity)
-            except:
-                severity = []
-        if isinstance(severity, list):
+        severity = parse_json_field(case.get('severity_indicators', []))
+        if severity:
             all_severity.extend(severity)
             severity_counts.update(severity)
     
@@ -197,44 +383,46 @@ def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     all_topics = []
     topic_counts = Counter()
     for case in all_cases:
-        topics = case.get('case_topics', [])
-        if isinstance(topics, str):
-            try:
-                topics = json.loads(topics)
-            except:
-                topics = []
-        if isinstance(topics, list):
+        topics = parse_json_field(case.get('case_topics', []))
+        if topics:
             all_topics.extend(topics)
             topic_counts.update(topics)
+    
+    # Relationship analysis
+    relationship_counts = Counter()
+    for case in all_cases:
+        rel = case.get('relationship_to_victim')
+        if rel:
+            relationship_counts[rel] += 1
     
     # RSO count
     rso_count = sum(1 for case in all_cases if case.get('perpetrator_registered_sex_offender') is True)
     
     # Family vs stranger
     family_count = sum(1 for case in all_cases 
-                      if 'family' in (case.get('case_topics', []) if isinstance(case.get('case_topics'), list) 
-                                     else json.loads(case.get('case_topics', '[]')) if isinstance(case.get('case_topics'), str) else []))
-    
+                      if 'family' in parse_json_field(case.get('case_topics', [])))
     stranger_count = len(all_cases) - family_count
     
     # Production vs possession
     production_count = sum(1 for case in all_cases 
-                          if 'production' in (case.get('case_topics', []) if isinstance(case.get('case_topics'), list)
-                                            else json.loads(case.get('case_topics', '[]')) if isinstance(case.get('case_topics'), str) else []))
-    
+                          if 'production' in parse_json_field(case.get('case_topics', [])))
     possession_count = sum(1 for case in all_cases 
-                          if 'possession' in (case.get('case_topics', []) if isinstance(case.get('case_topics'), list)
-                                             else json.loads(case.get('case_topics', '[]')) if isinstance(case.get('case_topics'), str) else []))
+                          if 'possession' in parse_json_field(case.get('case_topics', [])))
     
     # Hands-on
     hands_on_count = sum(1 for case in all_cases 
-                         if 'hands_on' in (case.get('case_topics', []) if isinstance(case.get('case_topics'), list)
-                                          else json.loads(case.get('case_topics', '[]')) if isinstance(case.get('case_topics'), str) else []))
+                         if 'hands_on' in parse_json_field(case.get('case_topics', [])))
     
     # Multi-state
     multi_state_count = sum(1 for case in all_cases 
-                           if 'multi_state' in (case.get('case_topics', []) if isinstance(case.get('case_topics'), list)
-                                               else json.loads(case.get('case_topics', '[]')) if isinstance(case.get('case_topics'), str) else []))
+                           if 'multi_state' in parse_json_field(case.get('case_topics', [])))
+    
+    # Investigation type distribution
+    investigation_dist = Counter()
+    for case in all_cases:
+        inv_type = case.get('investigation_type')
+        if inv_type:
+            investigation_dist[inv_type] += 1
     
     # Very young and infant
     very_young_count = severity_counts.get('very_young', 0)
@@ -246,8 +434,10 @@ def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     
     return {
         'platform_analysis': {
-            'top_platforms': dict(platform_counts.most_common(5)),
-            'total_platform_mentions': len(all_platforms)
+            'top_platforms': dict(platform_counts.most_common(10)),
+            'total_platform_mentions': len(all_platforms),
+            'unique_platforms': len(platform_counts),
+            'cases_with_platforms': sum(1 for case in all_cases if parse_json_field(case.get('platforms_used', [])))
         },
         'severity_distribution': {
             'production': production_count,
@@ -255,7 +445,8 @@ def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
             'infant': infant_count,
             'sexual_assault': sexual_assault_count,
             'under_10': under_10_count,
-            'total_cases': total
+            'total_cases': total,
+            'all_severity_indicators': dict(severity_counts)
         },
         'case_topics': {
             'family': family_count,
@@ -264,34 +455,193 @@ def evaluate_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
             'possession': possession_count,
             'hands_on': hands_on_count,
             'multi_state': multi_state_count,
-            'total_cases': total
+            'total_cases': total,
+            'all_topics': dict(topic_counts)
+        },
+        'relationship_analysis': {
+            'distribution': dict(relationship_counts),
+            'family_vs_stranger': {
+                'family': family_count,
+                'stranger': stranger_count,
+                'family_percentage': (family_count / total * 100) if total > 0 else 0,
+                'stranger_percentage': (stranger_count / total * 100) if total > 0 else 0
+            }
         },
         'pattern_detection': {
             'registered_sex_offenders': rso_count,
+            'rso_percentage': (rso_count / total * 100) if total > 0 else 0,
             'total_cases': total
         },
-        'topic_counts': dict(topic_counts),
-        'severity_counts': dict(severity_counts)
+        'investigation_analysis': {
+            'distribution': dict(investigation_dist),
+            'total_with_investigation_type': sum(investigation_dist.values())
+        },
+        'automated_insights': insights
     }
 
-def extract_keywords(all_cases: List[Dict[str, Any]], top_n: int = 10) -> List[str]:
-    """Extract top keywords from case text"""
+def extract_keywords(all_cases: List[Dict[str, Any]], top_n: int = 20) -> Dict[str, Any]:
+    """Extract and analyze keywords from case text"""
     from analysis import extract_keywords_semantic
     
     all_keywords = []
+    case_keyword_counts = []
+    
     for case in all_cases:
-        case_text = case.get('case_text', '') or case.get('raw_data', {}).get('case_text', '')
+        case_text = case.get('case_text', '') or (case.get('raw_data', {}) if isinstance(case.get('raw_data'), dict) else {}).get('case_text', '')
+        if not case_text and isinstance(case.get('raw_data'), str):
+            try:
+                raw_data = json.loads(case['raw_data'])
+                case_text = raw_data.get('case_text', '')
+            except:
+                pass
+        
         if case_text:
             keywords = extract_keywords_semantic(case_text, top_n=top_n)
             all_keywords.extend(keywords)
+            case_keyword_counts.append(len(keywords))
     
     keyword_counts = Counter(all_keywords)
-    return [word for word, count in keyword_counts.most_common(top_n)]
+    
+    return {
+        'top_keywords': [word for word, count in keyword_counts.most_common(top_n)],
+        'keyword_frequencies': dict(keyword_counts.most_common(top_n)),
+        'total_keywords_extracted': len(all_keywords),
+        'unique_keywords': len(keyword_counts),
+        'average_keywords_per_case': statistics.mean(case_keyword_counts) if case_keyword_counts else 0,
+        'cases_with_text': len(case_keyword_counts)
+    }
+
+def evaluate_data_quality(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate overall data quality and completeness"""
+    total = len(all_cases)
+    
+    completeness_scores = []
+    for case in all_cases:
+        score = 0
+        max_score = 10
+        
+        if parse_json_field(case.get('case_topics', [])): score += 1
+        if parse_json_field(case.get('severity_indicators', [])): score += 1
+        if case.get('prosecution_outcome'): score += 1
+        if case.get('relationship_to_victim'): score += 1
+        if parse_json_field(case.get('platforms_used', [])): score += 1
+        if case.get('investigation_type'): score += 1
+        if case.get('victim_count') is not None: score += 1
+        if case.get('perpetrator_age') is not None or case.get('perpetrator_registered_sex_offender') is not None: score += 1
+        if case.get('evidence_volume'): score += 1
+        if case.get('date_start') or case.get('date_range'): score += 1
+        
+        completeness_scores.append(score / max_score * 100)
+    
+    return {
+        'average_completeness': statistics.mean(completeness_scores) if completeness_scores else 0,
+        'completeness_distribution': {
+            'high_80-100': sum(1 for s in completeness_scores if s >= 80),
+            'medium_50-80': sum(1 for s in completeness_scores if 50 <= s < 80),
+            'low_<50': sum(1 for s in completeness_scores if s < 50)
+        },
+        'total_cases': total
+    }
+
+def evaluate_system_performance(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Evaluate system performance metrics"""
+    import time
+    
+    performance = {}
+    
+    # Clustering performance
+    start = time.time()
+    groups = group_similar_cases(all_cases)
+    performance['clustering_time'] = time.time() - start
+    performance['clustering_cases_per_second'] = len(all_cases) / performance['clustering_time'] if performance['clustering_time'] > 0 else 0
+    
+    # Triage performance
+    start = time.time()
+    triage_cases(all_cases)
+    performance['triage_time'] = time.time() - start
+    performance['triage_cases_per_second'] = len(all_cases) / performance['triage_time'] if performance['triage_time'] > 0 else 0
+    
+    # Insights performance
+    start = time.time()
+    generate_automated_insights(all_cases)
+    performance['insights_time'] = time.time() - start
+    performance['insights_cases_per_second'] = len(all_cases) / performance['insights_time'] if performance['insights_time'] > 0 else 0
+    
+    # Full analysis performance
+    start = time.time()
+    run_automated_analysis(all_cases)
+    performance['full_analysis_time'] = time.time() - start
+    performance['full_analysis_cases_per_second'] = len(all_cases) / performance['full_analysis_time'] if performance['full_analysis_time'] > 0 else 0
+    
+    return performance
+
+def generate_use_case_examples(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Generate example use cases demonstrating system capabilities"""
+    
+    # Example 1: Find high-priority cases
+    triage_results = triage_cases(all_cases)
+    high_priority = [c for c in triage_results if c.get('priority_score', 0) >= 8.0][:3]
+    
+    # Example 2: Find cases with specific tag combinations
+    possession_rso = return_tagged_cases(all_cases, [
+        {'tag': 'possession', 'category': 'case_topics'},
+        {'tag': 'registered_sex_offender', 'category': 'registered_sex_offender'}
+    ])
+    
+    # Example 3: Find production cases
+    production_cases = return_tagged_cases(all_cases, [
+        {'tag': 'production', 'category': 'case_topics'}
+    ])
+    
+    return {
+        'use_case_1_high_priority_triage': {
+            'description': 'Identify highest priority cases requiring immediate attention',
+            'query': 'Priority score >= 8.0',
+            'results_count': len(high_priority),
+            'example_cases': [
+                {
+                    'case_id': c.get('id'),
+                    'priority_score': c.get('priority_score'),
+                    'key_characteristics': {
+                        'severity': parse_json_field(c.get('severity_indicators', [])),
+                        'victim_count': c.get('victim_count'),
+                        'topics': parse_json_field(c.get('case_topics', []))
+                    }
+                }
+                for c in high_priority[:3]
+            ]
+        },
+        'use_case_2_tag_combination_filtering': {
+            'description': 'Find cases matching multiple criteria (possession AND registered sex offender)',
+            'query': 'possession AND registered_sex_offender',
+            'results_count': len(possession_rso),
+            'example_cases': [
+                {
+                    'case_id': c.get('id'),
+                    'relationship': c.get('relationship_to_victim'),
+                    'platforms': parse_json_field(c.get('platforms_used', []))
+                }
+                for c in possession_rso[:3]
+            ]
+        },
+        'use_case_3_production_case_analysis': {
+            'description': 'Analyze all production cases',
+            'query': 'production',
+            'results_count': len(production_cases),
+            'statistics': {
+                'with_hands_on': sum(1 for c in production_cases if 'hands_on' in parse_json_field(c.get('case_topics', []))),
+                'with_infant': sum(1 for c in production_cases if 'infant' in parse_json_field(c.get('severity_indicators', []))),
+                'with_multiple_victims': sum(1 for c in production_cases if (c.get('victim_count') or 0) > 1)
+            }
+        }
+    }
 
 def main():
     print("="*80)
-    print("CaseLinker Evaluation Data Extraction")
+    print("CaseLinker Comprehensive Evaluation")
     print("="*80)
+    print(f"Evaluation Date: {datetime.now().isoformat()}")
+    print()
     
     # Load cases
     db_path = "caselinker.db"
@@ -305,200 +655,124 @@ def main():
         print("ERROR: No cases found in database!")
         return
     
-    print(f"\nTotal cases: {len(all_cases)}")
+    print(f"\nTotal cases in database: {len(all_cases)}")
+    print()
     
-    # Run evaluations
-    print("\n" + "="*80)
+    # Run comprehensive evaluations
+    results = {
+        'metadata': {
+            'evaluation_date': datetime.now().isoformat(),
+            'total_cases': len(all_cases),
+            'database_path': db_path,
+            'system_version': 'CaseLinker v1.0'
+        },
+        'extraction_coverage': {},
+        'clustering': {},
+        'triage': {},
+        'tag_based_filtering': {},
+        'similarity_calculation': {},
+        'insights': {},
+        'keywords': {},
+        'data_quality': {},
+        'system_performance': {},
+        'use_case_examples': {}
+    }
+    
+    print("="*80)
     print("1. Extraction Coverage Evaluation")
     print("="*80)
-    coverage = evaluate_extraction_coverage(all_cases)
-    for key, data in coverage.items():
-        print(f"{key}: {data['extracted']}/{data['total']} ({data['percentage']:.1f}%)")
+    results['extraction_coverage'] = evaluate_extraction_coverage(all_cases)
+    for key, data in results['extraction_coverage'].items():
+        if isinstance(data, dict) and 'percentage' in data:
+            print(f"  {key}: {data['extracted']}/{data['total']} ({data['percentage']:.1f}%)")
     
     print("\n" + "="*80)
     print("2. Clustering Evaluation")
     print("="*80)
-    clustering = evaluate_clustering(all_cases)
-    print(f"Total groups: {clustering['total_groups']}")
-    for group in clustering['groups']:
-        print(f"  - {group['name']}: {group['size']} cases, avg similarity: {group['average_similarity']:.3f}")
+    results['clustering'] = evaluate_clustering(all_cases)
+    print(f"  Total groups: {results['clustering']['total_groups']}")
+    for group in results['clustering']['groups']:
+        print(f"    - {group['name']}: {group['size']} cases, avg similarity: {group['average_similarity']:.3f}")
     
     print("\n" + "="*80)
     print("3. Priority Triage Evaluation")
     print("="*80)
-    triage = evaluate_triage(all_cases)
-    print(f"Total cases: {triage['total_cases']}")
-    print(f"Score range: {triage['score_range']['min']:.1f} - {triage['score_range']['max']:.1f}")
-    print(f"Mean: {triage['score_range']['mean']:.2f}, Std: {triage['score_range']['std']:.2f}")
-    print(f"High-priority cases (≥8.0): {triage['high_priority_count']}")
+    results['triage'] = evaluate_triage(all_cases)
+    print(f"  Total cases: {results['triage']['total_cases']}")
+    print(f"  Score range: {results['triage']['score_range']['min']:.1f} - {results['triage']['score_range']['max']:.1f}")
+    print(f"  Mean: {results['triage']['score_range']['mean']:.2f}, Std: {results['triage']['score_range']['std']:.2f}")
+    print(f"  High-priority cases (≥8.0): {results['triage']['high_priority_count']}")
     
     print("\n" + "="*80)
-    print("4. Automated Insights")
+    print("4. Tag-Based Filtering Evaluation")
     print("="*80)
-    insights = evaluate_insights(all_cases)
-    
-    print("\nPlatform Analysis:")
-    for platform, count in list(insights['platform_analysis']['top_platforms'].items())[:5]:
-        pct = (count / insights['severity_distribution']['total_cases'] * 100) if insights['severity_distribution']['total_cases'] > 0 else 0
-        print(f"  - {platform}: {count} cases ({pct:.1f}%)")
-    
-    print("\nSeverity Distribution:")
-    total = insights['severity_distribution']['total_cases']
-    print(f"  - Production: {insights['severity_distribution']['production']} cases ({insights['severity_distribution']['production']/total*100:.1f}%)")
-    print(f"  - Very young: {insights['severity_distribution']['very_young']} cases ({insights['severity_distribution']['very_young']/total*100:.1f}%)")
-    print(f"  - Infant: {insights['severity_distribution']['infant']} cases ({insights['severity_distribution']['infant']/total*100:.1f}%)")
-    print(f"  - Sexual assault: {insights['severity_distribution']['sexual_assault']} cases ({insights['severity_distribution']['sexual_assault']/total*100:.1f}%)")
-    
-    print("\nCase Topics:")
-    topics = insights['case_topics']
-    print(f"  - Family: {topics['family']} cases ({topics['family']/total*100:.1f}%)")
-    print(f"  - Stranger: {topics['stranger']} cases ({topics['stranger']/total*100:.1f}%)")
-    print(f"  - Production: {topics['production']} cases ({topics['production']/total*100:.1f}%)")
-    print(f"  - Possession: {topics['possession']} cases ({topics['possession']/total*100:.1f}%)")
-    print(f"  - Hands-on: {topics['hands_on']} cases ({topics['hands_on']/total*100:.1f}%)")
-    print(f"  - Multi-state: {topics['multi_state']} cases ({topics['multi_state']/total*100:.1f}%)")
-    
-    print("\nPattern Detection:")
-    print(f"  - Registered sex offenders: {insights['pattern_detection']['registered_sex_offenders']} cases ({insights['pattern_detection']['registered_sex_offenders']/total*100:.1f}%)")
+    results['tag_based_filtering'] = evaluate_tag_based_filtering(all_cases)
+    print(f"  Test queries: {results['tag_based_filtering']['total_test_queries']}")
+    for query in results['tag_based_filtering']['query_results']:
+        print(f"    - {query['query']}: {query['matches']} matches ({query['percentage']:.1f}%)")
     
     print("\n" + "="*80)
-    print("5. Keywords")
+    print("5. Similarity Calculation Evaluation")
     print("="*80)
-    keywords = extract_keywords(all_cases, top_n=10)
-    print(f"Top keywords: {', '.join(keywords[:10])}")
+    results['similarity_calculation'] = evaluate_similarity_calculation(all_cases)
+    print(f"  Sample size: {results['similarity_calculation']['sample_size']}")
+    print(f"  Mean similarity: {results['similarity_calculation']['similarity_statistics']['mean']:.3f}")
     
-    # Save results
-    results = {
-        'total_cases': len(all_cases),
-        'extraction_coverage': coverage,
-        'clustering': clustering,
-        'triage': triage,
-        'insights': insights,
-        'keywords': keywords
-    }
+    print("\n" + "="*80)
+    print("6. Automated Insights Evaluation")
+    print("="*80)
+    results['insights'] = evaluate_insights(all_cases)
+    print(f"  Top platform: {list(results['insights']['platform_analysis']['top_platforms'].keys())[0] if results['insights']['platform_analysis']['top_platforms'] else 'N/A'}")
+    print(f"  Registered sex offenders: {results['insights']['pattern_detection']['registered_sex_offenders']} cases")
     
-    with open('evaluation_results.json', 'w') as f:
+    print("\n" + "="*80)
+    print("7. Keyword Extraction")
+    print("="*80)
+    results['keywords'] = extract_keywords(all_cases, top_n=20)
+    print(f"  Top keywords: {', '.join(results['keywords']['top_keywords'][:10])}")
+    
+    print("\n" + "="*80)
+    print("8. Data Quality Evaluation")
+    print("="*80)
+    results['data_quality'] = evaluate_data_quality(all_cases)
+    print(f"  Average completeness: {results['data_quality']['average_completeness']:.1f}%")
+    
+    print("\n" + "="*80)
+    print("9. System Performance Evaluation")
+    print("="*80)
+    results['system_performance'] = evaluate_system_performance(all_cases)
+    print(f"  Clustering time: {results['system_performance']['clustering_time']:.2f}s")
+    print(f"  Full analysis time: {results['system_performance']['full_analysis_time']:.2f}s")
+    
+    print("\n" + "="*80)
+    print("10. Use Case Examples")
+    print("="*80)
+    results['use_case_examples'] = generate_use_case_examples(all_cases)
+    print(f"  Generated {len(results['use_case_examples'])} use case examples")
+    
+    # Save comprehensive results
+    output_file = 'evaluation_results.json'
+    with open(output_file, 'w') as f:
         json.dump(results, f, indent=2, default=str)
     
     print("\n" + "="*80)
-    print("Results saved to evaluation_results.json")
+    print(f"✓ Comprehensive evaluation results saved to {output_file}")
     print("="*80)
-    
-    # Generate markdown for PAPER.md
-    print("\n" + "="*80)
-    print("Generated Markdown for PAPER.md Section 7:")
+    print(f"\nFile size: {Path(output_file).stat().st_size / 1024:.1f} KB")
+    print(f"Total evaluation metrics: {sum(1 for _ in _flatten_dict(results))} data points")
+    print("\nThis file is ready for academic sharing and research collaboration.")
     print("="*80)
-    print(generate_markdown(results))
 
-def generate_markdown(results: Dict[str, Any]) -> str:
-    """Generate markdown text for PAPER.md evaluation section"""
-    
-    total = results['total_cases']
-    coverage = results['extraction_coverage']
-    clustering = results['clustering']
-    triage = results['triage']
-    insights = results['insights']
-    keywords = results['keywords']
-    
-    md = f"""### 7.2 Information Extraction Evaluation
-
-**Extraction Coverage**:
-- **Case Topics**: Extracted semantic topics (production, possession, family, stranger, etc.) - {coverage['case_topics']['percentage']:.1f}% coverage ({coverage['case_topics']['extracted']}/{coverage['case_topics']['total']} cases)
-- **Severity Indicators**: Age-based severity (infant, very_young, under_10) and production indicators - {coverage['severity_indicators']['percentage']:.1f}% coverage ({coverage['severity_indicators']['extracted']}/{coverage['severity_indicators']['total']} cases)
-- **Prosecution Outcomes**: Charges and booking status extracted - {coverage['prosecution_outcome']['percentage']:.1f}% coverage ({coverage['prosecution_outcome']['extracted']}/{coverage['prosecution_outcome']['total']} cases)
-- **Relationship**: Perpetrator-victim relationships extracted (stranger, family members) - {coverage['relationship_to_victim']['percentage']:.1f}% coverage ({coverage['relationship_to_victim']['extracted']}/{coverage['relationship_to_victim']['total']} cases)
-- **Platforms**: Platform extraction - {coverage['platforms_used']['percentage']:.1f}% coverage ({coverage['platforms_used']['extracted']}/{coverage['platforms_used']['total']} cases) when explicitly mentioned
-
-**Challenges**:
-- Some cases lack explicit victim count (extracted when mentioned) - {coverage['victim_count']['percentage']:.1f}% coverage
-- Investigation type not always explicitly stated (inferred from context) - {coverage['investigation_type']['percentage']:.1f}% coverage
-- Evidence volume extraction limited to explicit mentions - {coverage['evidence_volume']['percentage']:.1f}% coverage
-
-### 7.3 Clustering Evaluation
-
-**Case Groups Identified**:
-
-CaseLinker identified {clustering['total_groups']} distinct cluster groups from the {total} cases:
-
-"""
-    
-    for i, group in enumerate(clustering['groups'], 1):
-        md += f"{i}. **{group['name']}**: {group['size']} cases, average internal similarity {group['average_similarity']:.3f}\n"
-    
-    md += f"""
-**Similarity Distribution**:
-
-Within-cluster similarity scores demonstrate effective grouping:
-"""
-    
-    for group in clustering['groups']:
-        name = group['name']
-        avg_sim = group['average_similarity']
-        if avg_sim >= 0.6:
-            desc = "Highest internal cohesion"
-        elif avg_sim >= 0.5:
-            desc = "Good cohesion"
-        elif avg_sim >= 0.4:
-            desc = "Moderate cohesion"
+def _flatten_dict(d, parent_key='', sep='.'):
+    """Helper to count nested dict items"""
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(_flatten_dict(v, new_key, sep=sep))
         else:
-            desc = "Lower cohesion"
-        md += f"- {name}: {desc} ({avg_sim:.3f} average)\n"
-    
-    md += f"""
-Cases can appear in multiple clusters (e.g., a case can be both Online-Digital and Severe), enabling multi-dimensional analysis.
-
-### 7.4 Priority Triage Evaluation
-
-**Score Distribution**:
-- Range: {triage['score_range']['min']:.1f} - {triage['score_range']['max']:.1f} (normalized)
-- Mean: {triage['score_range']['mean']:.2f}
-- Standard deviation: {triage['score_range']['std']:.2f}
-
-**High-Priority Cases** (score ≥ {triage['high_priority_threshold']:.1f}):
-- {triage['high_priority_count']} cases identified
-- Common characteristics: Multiple victims, production, registered sex offenders, severe age indicators
-
-**Priority Factors Contribution**:
-- Severity indicators: Primary driver for high-priority cases
-- Victim count: Significant impact on scores
-- Case type: Production cases scored higher than possession-only
-
-### 7.5 Automated Insights
-
-**Platform Analysis**:
-"""
-    
-    top_platforms = insights['platform_analysis']['top_platforms']
-    for platform, count in list(top_platforms.items())[:3]:
-        pct = (count / total * 100) if total > 0 else 0
-        md += f"- {platform}: {count} cases ({pct:.1f}%)\n"
-    
-    md += f"""
-**Severity Distribution**:
-- Production cases: {insights['severity_distribution']['production']} cases ({insights['severity_distribution']['production']/total*100:.1f}%) - highest proportion of case topics
-- Very young victims (under 10): {insights['severity_distribution']['very_young']} cases ({insights['severity_distribution']['very_young']/total*100:.1f}%)
-- Infant cases: {insights['severity_distribution']['infant']} cases ({insights['severity_distribution']['infant']/total*100:.1f}%) - highest priority cases
-- Sexual assault indicators: {insights['severity_distribution']['sexual_assault']} cases ({insights['severity_distribution']['sexual_assault']/total*100:.1f}%)
-
-**Case Topic Analysis**:
-- Family cases: {insights['case_topics']['family']} cases ({insights['case_topics']['family']/total*100:.1f}%) - family members as perpetrators
-- Stranger cases: {insights['case_topics']['stranger']} cases ({insights['case_topics']['stranger']/total*100:.1f}%) - non-family perpetrators
-- Production: {insights['case_topics']['production']} cases ({insights['case_topics']['production']/total*100:.1f}%) - content creation
-- Possession: {insights['case_topics']['possession']} cases ({insights['case_topics']['possession']/total*100:.1f}%) - content possession only
-- Multi-state: {insights['case_topics']['multi_state']} cases ({insights['case_topics']['multi_state']/total*100:.1f}%) - cross-jurisdictional cases
-- Hands-on abuse: {insights['case_topics']['hands_on']} cases ({insights['case_topics']['hands_on']/total*100:.1f}%) - physical contact
-
-**Pattern Detection**:
-- Registered sex offenders: {insights['pattern_detection']['registered_sex_offenders']} cases ({insights['pattern_detection']['registered_sex_offenders']/total*100:.1f}%) - repeat offenders
-- Relationship patterns: Family cases ({insights['case_topics']['family']/total*100:.1f}%) vs. stranger cases ({insights['case_topics']['stranger']/total*100:.1f}%)
-
-**Keyword Extraction**:
-- Top keywords across all cases: "{'", "'.join(keywords[:7])}"
-- Production-related keywords: "created", "produced", "shared", "distributed" - appeared in {insights['case_topics']['production']} cases
-- Severity-related keywords: "infant", "young", "minor", "child" - frequency-based extraction
-"""
-    
-    return md
+            items.append(new_key)
+    return items
 
 if __name__ == "__main__":
     main()

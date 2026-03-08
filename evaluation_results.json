@@ -1,50 +1,131 @@
 {
-  "total_cases": 95,
+  "metadata": {
+    "evaluation_date": "2026-03-08T11:40:31.765205",
+    "total_cases": 95,
+    "database_path": "caselinker.db",
+    "system_version": "CaseLinker v1.0"
+  },
   "extraction_coverage": {
     "case_topics": {
       "extracted": 84,
       "total": 95,
+      "details": {
+        "pornography": 47,
+        "possession": 31,
+        "hands_on": 28,
+        "online_digital": 20,
+        "family": 6,
+        "production": 6,
+        "multi_state": 3,
+        "international": 3
+      },
       "percentage": 88.42105263157895
     },
     "severity_indicators": {
       "extracted": 54,
       "total": 95,
+      "details": {
+        "sexual_assault": 50,
+        "under_12": 13,
+        "infant": 8,
+        "very_young": 6
+      },
       "percentage": 56.84210526315789
     },
     "prosecution_outcome": {
       "extracted": 90,
       "total": 95,
+      "details": {},
       "percentage": 94.73684210526315
     },
     "relationship_to_victim": {
       "extracted": 95,
       "total": 95,
+      "details": {
+        "teacher": 5,
+        "stranger": 84,
+        "mother": 3,
+        "father": 2,
+        "brother": 1
+      },
       "percentage": 100.0
     },
     "platforms_used": {
       "extracted": 31,
       "total": 95,
+      "details": {
+        "online": 23,
+        "chat": 11,
+        "Snapchat": 4,
+        "social media": 3,
+        "Facebook": 2
+      },
       "percentage": 32.631578947368425
     },
     "investigation_type": {
       "extracted": 58,
       "total": 95,
+      "details": {
+        "unknown": 36,
+        "proactive": 13,
+        "reactive": 2,
+        "online": 6,
+        "undercover": 1
+      },
       "percentage": 61.05263157894737
     },
     "victim_count": {
       "extracted": 5,
       "total": 95,
+      "details": {},
       "percentage": 5.263157894736842
     },
     "perpetrator_demographics": {
       "extracted": 95,
       "total": 95,
+      "details": {
+        "registered_sex_offenders": 6,
+        "age_distribution": {
+          "mean": 33.857142857142854,
+          "median": 33.0,
+          "min": 13,
+          "max": 62,
+          "count": 14
+        }
+      },
       "percentage": 100.0
     },
     "evidence_volume": {
       "extracted": 11,
       "total": 95,
+      "details": {},
       "percentage": 11.578947368421053
+    },
+    "agencies_involved": {
+      "extracted": 33,
+      "total": 95,
+      "details": {
+        "FBI": 12,
+        "AZICAC": 11,
+        "Phoenix Police": 10,
+        "ICAC": 9,
+        "Maricopa County": 7,
+        "California": 2,
+        "MCSO": 2,
+        "Chandler Police": 1,
+        "HSI": 1,
+        "DPS": 1,
+        "Buckeye": 1,
+        "Texas": 1,
+        "Colorado": 1
+      },
+      "percentage": 34.73684210526316
+    },
+    "date_range": {
+      "extracted": 95,
+      "total": 95,
+      "details": {},
+      "percentage": 100.0
     }
   },
   "clustering": {
@@ -56,7 +137,42 @@
         "average_similarity": 0.44,
         "min_similarity": 0.0,
         "max_similarity": 1.0,
-        "description": "All 95 cases grouped by Jaccard similarity"
+        "description": "All 95 cases grouped by Jaccard similarity",
+        "internal_pairwise_similarities": {
+          "mean": 0.44024232800155255,
+          "std": 0.17267172449137985,
+          "min": 0.0,
+          "max": 1.0,
+          "count": 4465
+        },
+        "statistics": {
+          "total_cases": 95,
+          "hands_on": "28/95 (29.5%)",
+          "online_digital": "20/95 (21.1%)",
+          "possession": "31/95 (32.6%)",
+          "production": "6/95 (6.3%)",
+          "infant_victims": "8/95 (8.4%)",
+          "very_young_victims": "6/95 (6.3%)",
+          "registered_sex_offenders": "6/95 (6.3%)",
+          "top_platforms": {
+            "online": 23,
+            "chat": 11,
+            "Snapchat": 4
+          },
+          "top_topics": {
+            "pornography": 47,
+            "possession": 31,
+            "hands_on": 28,
+            "online_digital": 20,
+            "family": 6
+          },
+          "top_severity": {
+            "sexual_assault": 50,
+            "under_12": 13,
+            "infant": 8,
+            "very_young": 6
+          }
+        }
       },
       {
         "name": "Investigation Cluster",
@@ -64,7 +180,42 @@
         "average_similarity": 0.435,
         "min_similarity": 0.0,
         "max_similarity": 1.0,
-        "description": "All 58 cases involving investigation type (online: 6, proactive: 13, reactive: 2, undercover: 1, unknown: 36)"
+        "description": "All 58 cases involving investigation type (online: 6, proactive: 13, reactive: 2, undercover: 1, unknown: 36)",
+        "internal_pairwise_similarities": {
+          "mean": 0.4352161241112875,
+          "std": 0.16376877995409847,
+          "min": 0.0,
+          "max": 1.0,
+          "count": 1653
+        },
+        "statistics": {
+          "total_cases": 58,
+          "hands_on": "18/58 (31.0%)",
+          "online_digital": "12/58 (20.7%)",
+          "possession": "20/58 (34.5%)",
+          "production": "3/58 (5.2%)",
+          "infant_victims": "4/58 (6.9%)",
+          "very_young_victims": "4/58 (6.9%)",
+          "registered_sex_offenders": "3/58 (5.2%)",
+          "top_platforms": {
+            "online": 14,
+            "chat": 8,
+            "Snapchat": 3
+          },
+          "top_topics": {
+            "pornography": 24,
+            "possession": 20,
+            "hands_on": 18,
+            "online_digital": 12,
+            "family": 5
+          },
+          "top_severity": {
+            "sexual_assault": 33,
+            "under_12": 6,
+            "very_young": 4,
+            "infant": 4
+          }
+        }
       },
       {
         "name": "Severe Cluster",
@@ -72,7 +223,42 @@
         "average_similarity": 0.499,
         "min_similarity": 0.115,
         "max_similarity": 1.0,
-        "description": "All 52 cases involve severe indicators (infant, very_young, sexual_assault)"
+        "description": "All 52 cases involve severe indicators (infant, very_young, sexual_assault)",
+        "internal_pairwise_similarities": {
+          "mean": 0.4992796312314247,
+          "std": 0.1414747970996544,
+          "min": 0.11538461538461538,
+          "max": 1.0,
+          "count": 1326
+        },
+        "statistics": {
+          "total_cases": 52,
+          "hands_on": "28/52 (53.8%)",
+          "online_digital": "7/52 (13.5%)",
+          "possession": "21/52 (40.4%)",
+          "production": "6/52 (11.5%)",
+          "infant_victims": "8/52 (15.4%)",
+          "very_young_victims": "6/52 (11.5%)",
+          "registered_sex_offenders": "4/52 (7.7%)",
+          "top_platforms": {
+            "online": 10,
+            "chat": 5,
+            "Snapchat": 3
+          },
+          "top_topics": {
+            "hands_on": 28,
+            "possession": 21,
+            "pornography": 21,
+            "online_digital": 7,
+            "production": 6
+          },
+          "top_severity": {
+            "sexual_assault": 50,
+            "under_12": 11,
+            "infant": 8,
+            "very_young": 6
+          }
+        }
       },
       {
         "name": "Possession Cluster",
@@ -80,7 +266,42 @@
         "average_similarity": 0.549,
         "min_similarity": 0.192,
         "max_similarity": 1.0,
-        "description": "All 31 cases involve possession | Most common topic: Possession (31/31 cases) | Most common severity: Sexual Assault (19/31 cases)"
+        "description": "All 31 cases involve possession | Most common topic: Possession (31/31 cases) | Most common severity: Sexual Assault (19/31 cases)",
+        "internal_pairwise_similarities": {
+          "mean": 0.5487155174311247,
+          "std": 0.14062157354944915,
+          "min": 0.1923076923076923,
+          "max": 1.0,
+          "count": 465
+        },
+        "statistics": {
+          "total_cases": 31,
+          "hands_on": "10/31 (32.3%)",
+          "online_digital": "5/31 (16.1%)",
+          "possession": "31/31 (100.0%)",
+          "production": "1/31 (3.2%)",
+          "infant_victims": "5/31 (16.1%)",
+          "very_young_victims": "5/31 (16.1%)",
+          "registered_sex_offenders": "1/31 (3.2%)",
+          "top_platforms": {
+            "online": 8,
+            "chat": 2,
+            "social media": 1
+          },
+          "top_topics": {
+            "possession": 31,
+            "pornography": 18,
+            "hands_on": 10,
+            "online_digital": 5,
+            "multi_state": 1
+          },
+          "top_severity": {
+            "sexual_assault": 19,
+            "very_young": 5,
+            "infant": 5,
+            "under_12": 4
+          }
+        }
       },
       {
         "name": "Online-Digital Cluster",
@@ -88,9 +309,54 @@
         "average_similarity": 0.633,
         "min_similarity": 0.358,
         "max_similarity": 1.0,
-        "description": "All 20 cases are online-digital | Most common platform: online (20/20 cases) | Most common topic: Online Digital (20/20 cases)"
+        "description": "All 20 cases are online-digital | Most common platform: online (20/20 cases) | Most common topic: Online Digital (20/20 cases)",
+        "internal_pairwise_similarities": {
+          "mean": 0.6333770717290708,
+          "std": 0.1393918723905758,
+          "min": 0.35833333333333334,
+          "max": 1.0,
+          "count": 190
+        },
+        "statistics": {
+          "total_cases": 20,
+          "hands_on": "0/20 (0.0%)",
+          "online_digital": "20/20 (100.0%)",
+          "possession": "5/20 (25.0%)",
+          "production": "0/20 (0.0%)",
+          "infant_victims": "1/20 (5.0%)",
+          "very_young_victims": "0/20 (0.0%)",
+          "registered_sex_offenders": "0/20 (0.0%)",
+          "top_platforms": {
+            "online": 19,
+            "chat": 9,
+            "social media": 2
+          },
+          "top_topics": {
+            "online_digital": 20,
+            "pornography": 8,
+            "possession": 5
+          },
+          "top_severity": {
+            "sexual_assault": 7,
+            "under_12": 1,
+            "infant": 1
+          }
+        }
       }
-    ]
+    ],
+    "overall_similarity_metrics": {
+      "mean": 0.45964111593156637,
+      "std": 0.1688751516859148,
+      "min": 0.0,
+      "max": 1.0,
+      "total_pairs": 8099
+    },
+    "cluster_size_distribution": {
+      "mean": 51.2,
+      "median": 52,
+      "min": 20,
+      "max": 95
+    }
   },
   "triage": {
     "total_cases": 95,
@@ -98,2098 +364,292 @@
       "min": 5.0,
       "max": 10.0,
       "mean": 6.235578947368421,
-      "std": 1.3053545338820944
+      "median": 6.27,
+      "std": 1.3053545338820944,
+      "q1": 5.06,
+      "q3": 6.87
     },
     "high_priority_count": 11,
+    "medium_priority_count": 39,
+    "low_priority_count": 45,
     "high_priority_threshold": 8.0,
-    "high_priority_cases": [
+    "high_priority_characteristics": {
+      "with_production": 2,
+      "with_infant": 8,
+      "with_multiple_victims": 3,
+      "with_rso": 0,
+      "with_hands_on": 9
+    },
+    "score_distribution": {
+      "high_priority": {
+        "count": 11,
+        "percentage": 11.578947368421053
+      },
+      "medium_priority": {
+        "count": 39,
+        "percentage": 41.05263157894737
+      },
+      "low_priority": {
+        "count": 45,
+        "percentage": 47.368421052631575
+      }
+    },
+    "top_10_priority_cases": [
       {
-        "id": "azicac_2014_january_001",
-        "source": "AZICAC",
-        "date_start": "2014-01-01",
-        "date_end": null,
-        "victim_count": 3,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [],
-        "investigation_methods": [
-          "unknown"
-        ],
+        "case_id": "azicac_2014_january_001",
+        "priority_score": 10.0,
         "severity_indicators": [
           "infant",
           "sexual_assault",
           "under_12"
         ],
+        "victim_count": 3,
         "case_topics": [
           "possession",
           "hands_on",
           "pornography"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In January of 2014, during an investigation by the\nArizona Internet Crimes Against Children Task\nForce, (Phoenix Police) and the FBI Child Sexual\nExploitation Unit, investigators intercepted\nimages of young children who were being\nsexually abused, it was learned the images were\nbeing traded from a residence. The suspect had\none of the largest collections in Arizona.\nNumerous files were located to include infants.\nInvestigators discovered that 3 children and an\nadult male and adult female lived at the\nresidence. The suspect was contacted and\ninterviewed, the suspect admitted to being the\nperson trading the images. In addition, the\nsuspect admitted he was currently molesting a\nchild since she was 7 years old. That child was\nlocated and rescued by investigators. The suspect\nadmitted he is sexually attracted to children\nunder 9 years old. The suspect told detectives \u201cI\nam a dangerous person and will continue to\nmolest children\u201d. Numerous electronic devices\nwere located and several cell phones. A large\nquantity of child pornography was also located\nand a 12 gauge shotgun. The suspect was\narrested and booked on numerous crimes against\nchildren charges.",
-          "month_year": "January 2014",
-          "month": "January",
-          "year": "2014",
-          "case_id": "azicac_2014_january_001",
-          "source": "AZICAC",
-          "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2014_january_001",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2014-01-01",
-            "end": null
-          },
-          "victim_count": 3,
-          "case_demographics": {
-            "ages": [],
-            "age_range": null,
-            "gender": "female"
-          },
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": "unknown",
-          "agencies_involved": [
-            "FBI",
-            "Phoenix Police"
-          ],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault",
-            "under_12"
-          ],
-          "case_topics": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_phrases": [
-            "told",
-            "dangerous",
-            "continue"
-          ],
-          "raw_data": {
-            "case_text": "In January of 2014, during an investigation by the\nArizona Internet Crimes Against Children Task\nForce, (Phoenix Police) and the FBI Child Sexual\nExploitation Unit, investigators intercepted\nimages of young children who were being\nsexually abused, it was learned the images were\nbeing traded from a residence. The suspect had\none of the largest collections in Arizona.\nNumerous files were located to include infants.\nInvestigators discovered that 3 children and an\nadult male and adult female lived at the\nresidence. The suspect was contacted and\ninterviewed, the suspect admitted to being the\nperson trading the images. In addition, the\nsuspect admitted he was currently molesting a\nchild since she was 7 years old. That child was\nlocated and rescued by investigators. The suspect\nadmitted he is sexually attracted to children\nunder 9 years old. The suspect told detectives \u201cI\nam a dangerous person and will continue to\nmolest children\u201d. Numerous electronic devices\nwere located and several cell phones. A large\nquantity of child pornography was also located\nand a 12 gauge shotgun. The suspect was\narrested and booked on numerous crimes against\nchildren charges.",
-            "month_year": "January 2014",
-            "month": "January",
-            "year": "2014",
-            "case_id": "azicac_2014_january_001",
-            "source": "AZICAC",
-            "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In January of 2014, during an investigation by the\nArizona Internet Crimes Against Children Task\nForce, (Phoenix Police) and the FBI Child Sexual\nExploitation Unit, investigators intercepted\nimages of young children who were being\nsexually abused, it was learned the images were\nbeing traded from a residence. The suspect had\none of the largest collections in Arizona.\nNumerous files were located to include infants.\nInvestigators discovered that 3 children and an\nadult male and adult female lived at the\nresidence. The suspect was contacted and\ninterviewed, the suspect admitted to being the\nperson trading the images. In addition, the\nsuspect admitted he was currently molesting a\nchild since she was 7 years old. That child was\nlocated and rescued by investigators. The suspect\nadmitted he is sexually attracted to children\nunder 9 years old. The suspect told detectives \u201cI\nam a dangerous person and will continue to\nmolest children\u201d. Numerous electronic devices\nwere located and several cell phones. A large\nquantity of child pornography was also located\nand a 12 gauge shotgun. The suspect was\narrested and booked on numerous crimes against\nchildren charges.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": 3,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": "unknown",
-              "agencies": [
-                "FBI",
-                "Phoenix Police"
-              ]
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2014-01-01",
-            "topic_vector": [
-              "possession",
-              "hands_on",
-              "pornography"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault",
-              "under_12"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.211134",
-          "updated_at": "2026-03-04T12:36:57.211145"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.295698",
-        "victim_demographics": [
-          {
-            "case_id": "azicac_2014_january_001",
-            "age_range": null,
-            "region": null,
-            "anonymized_id": null
-          }
-        ],
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2014_january_001",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2014-01-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "FBI",
-          "Phoenix Police"
-        ],
-        "investigation_type": "unknown",
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": {
-          "ages": [],
-          "age_range": null,
-          "gender": "female"
-        },
-        "severity_phrases": [
-          "told",
-          "dangerous",
-          "continue"
-        ],
-        "case_text": "In January of 2014, during an investigation by the\nArizona Internet Crimes Against Children Task\nForce, (Phoenix Police) and the FBI Child Sexual\nExploitation Unit, investigators intercepted\nimages of young children who were being\nsexually abused, it was learned the images were\nbeing traded from a residence. The suspect had\none of the largest collections in Arizona.\nNumerous files were located to include infants.\nInvestigators discovered that 3 children and an\nadult male and adult female lived at the\nresidence. The suspect was contacted and\ninterviewed, the suspect admitted to being the\nperson trading the images. In addition, the\nsuspect admitted he was currently molesting a\nchild since she was 7 years old. That child was\nlocated and rescued by investigators. The suspect\nadmitted he is sexually attracted to children\nunder 9 years old. The suspect told detectives \u201cI\nam a dangerous person and will continue to\nmolest children\u201d. Numerous electronic devices\nwere located and several cell phones. A large\nquantity of child pornography was also located\nand a 12 gauge shotgun. The suspect was\narrested and booked on numerous crimes against\nchildren charges.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": 3,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": "unknown",
-            "agencies": [
-              "FBI",
-              "Phoenix Police"
-            ]
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2014-01-01",
-          "topic_vector": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault",
-            "under_12"
-          ]
-        },
-        "priority_score": 10.0,
-        "priority_score_raw": 24.900000000000002
+        ]
       },
       {
-        "id": "azicac_2014_may_006",
-        "source": "AZICAC",
-        "date_start": "2014-05-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [],
-        "investigation_methods": [],
-        "severity_indicators": [
-          "infant",
-          "sexual_assault",
-          "very_young"
-        ],
-        "case_topics": [
-          "possession",
-          "hands_on",
-          "pornography"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In May 2014 a residence was identified as trading\nimages and videos of young children being\nsexually abused. There was a large quantity of\nimages (over 1,000) that were discovered and\nintercepted by investigators. The images and\nmovies depicted very young children to include\ninfants being sexually assaulted. At the time it\nwas unknown if children were in the home. A\nsearch warrant was served at the residence and\nthe suspect was located. The suspect lives at the\nresidence with other family members. The\nevidence was located in the residence on external\nmedia and a large quantity of child pornography\nwas found. The suspect was interviewed and\nadmitted to the crimes. He also stated he was\nsexually attracted to very young children. He\nstated he wanted to have sex with a minor and\nwas trying to figure out how to find one. No\nchildren were found in the home. Additional\ninvestigative follow-up is being conducted to\npossibly identify and locate the children in the\nmovies. The suspect was booked on multiple\ncounts of Sexual Exploitation of a Minor. DCAC\nC2F and Dangerous Crimes Against Children.",
-          "month_year": "May 2014",
-          "month": "May",
-          "year": "2014",
-          "case_id": "azicac_2014_may_006",
-          "source": "AZICAC",
-          "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2014_may_006",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2014-05-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": null,
-          "agencies_involved": [],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault",
-            "very_young"
-          ],
-          "case_topics": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_phrases": [
-            "stated",
-            "dangerous"
-          ],
-          "raw_data": {
-            "case_text": "In May 2014 a residence was identified as trading\nimages and videos of young children being\nsexually abused. There was a large quantity of\nimages (over 1,000) that were discovered and\nintercepted by investigators. The images and\nmovies depicted very young children to include\ninfants being sexually assaulted. At the time it\nwas unknown if children were in the home. A\nsearch warrant was served at the residence and\nthe suspect was located. The suspect lives at the\nresidence with other family members. The\nevidence was located in the residence on external\nmedia and a large quantity of child pornography\nwas found. The suspect was interviewed and\nadmitted to the crimes. He also stated he was\nsexually attracted to very young children. He\nstated he wanted to have sex with a minor and\nwas trying to figure out how to find one. No\nchildren were found in the home. Additional\ninvestigative follow-up is being conducted to\npossibly identify and locate the children in the\nmovies. The suspect was booked on multiple\ncounts of Sexual Exploitation of a Minor. DCAC\nC2F and Dangerous Crimes Against Children.",
-            "month_year": "May 2014",
-            "month": "May",
-            "year": "2014",
-            "case_id": "azicac_2014_may_006",
-            "source": "AZICAC",
-            "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In May 2014 a residence was identified as trading\nimages and videos of young children being\nsexually abused. There was a large quantity of\nimages (over 1,000) that were discovered and\nintercepted by investigators. The images and\nmovies depicted very young children to include\ninfants being sexually assaulted. At the time it\nwas unknown if children were in the home. A\nsearch warrant was served at the residence and\nthe suspect was located. The suspect lives at the\nresidence with other family members. The\nevidence was located in the residence on external\nmedia and a large quantity of child pornography\nwas found. The suspect was interviewed and\nadmitted to the crimes. He also stated he was\nsexually attracted to very young children. He\nstated he wanted to have sex with a minor and\nwas trying to figure out how to find one. No\nchildren were found in the home. Additional\ninvestigative follow-up is being conducted to\npossibly identify and locate the children in the\nmovies. The suspect was booked on multiple\ncounts of Sexual Exploitation of a Minor. DCAC\nC2F and Dangerous Crimes Against Children.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": null,
-              "agencies": []
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2014-05-01",
-            "topic_vector": [
-              "possession",
-              "hands_on",
-              "pornography"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault",
-              "very_young"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.213911",
-          "updated_at": "2026-03-04T12:36:57.213912"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.298020",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2014_may_006",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2014-05-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [],
-        "investigation_type": null,
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "stated",
-          "dangerous"
-        ],
-        "case_text": "In May 2014 a residence was identified as trading\nimages and videos of young children being\nsexually abused. There was a large quantity of\nimages (over 1,000) that were discovered and\nintercepted by investigators. The images and\nmovies depicted very young children to include\ninfants being sexually assaulted. At the time it\nwas unknown if children were in the home. A\nsearch warrant was served at the residence and\nthe suspect was located. The suspect lives at the\nresidence with other family members. The\nevidence was located in the residence on external\nmedia and a large quantity of child pornography\nwas found. The suspect was interviewed and\nadmitted to the crimes. He also stated he was\nsexually attracted to very young children. He\nstated he wanted to have sex with a minor and\nwas trying to figure out how to find one. No\nchildren were found in the home. Additional\ninvestigative follow-up is being conducted to\npossibly identify and locate the children in the\nmovies. The suspect was booked on multiple\ncounts of Sexual Exploitation of a Minor. DCAC\nC2F and Dangerous Crimes Against Children.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": null,
-            "agencies": []
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2014-05-01",
-          "topic_vector": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault",
-            "very_young"
-          ]
-        },
+        "case_id": "azicac_2014_may_006",
         "priority_score": 9.89,
-        "priority_score_raw": 24.349999999999998
-      },
-      {
-        "id": "azicac_2014_may_005",
-        "source": "AZICAC",
-        "date_start": "2014-05-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [],
-        "investigation_methods": [],
         "severity_indicators": [
           "infant",
           "sexual_assault",
           "very_young"
         ],
+        "victim_count": null,
         "case_topics": [
           "possession",
           "hands_on",
           "pornography"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In May 2014 ICAC investigators identified a\nresidence that was trading images and videos of\nyoung children being sexually abused. There was\na large quantity of images (over 600) that were\ndiscovered and intercepted by investigators. The\nimages and movies depicted very young children\nto include infants being sexually assaulted and\nphysically raped. At the time it was unknown if\nchildren were in the home. A search warrant was\nserved at the residence and the suspect was\nlocated. The suspect lives at the residence with\nother family members. All three of the occupants\nwere combative and argumentative during the\nsearch warrant. The evidence was located in the\nresidence on a laptop and a cell phone, a large\nquantity of child pornography was found. The\nsuspect was interviewed and admitted to the\ncrimes. He also stated he was sexually attracted\nto very young children. No children were found in\nthe home. The suspect was arrested and booked\non sex crimes.",
-          "month_year": "May 2014",
-          "month": "May",
-          "year": "2014",
-          "case_id": "azicac_2014_may_005",
-          "source": "AZICAC",
-          "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2014_may_005",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2014-05-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": null,
-          "agencies_involved": [],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault",
-            "very_young"
-          ],
-          "case_topics": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_phrases": [
-            "stated"
-          ],
-          "raw_data": {
-            "case_text": "In May 2014 ICAC investigators identified a\nresidence that was trading images and videos of\nyoung children being sexually abused. There was\na large quantity of images (over 600) that were\ndiscovered and intercepted by investigators. The\nimages and movies depicted very young children\nto include infants being sexually assaulted and\nphysically raped. At the time it was unknown if\nchildren were in the home. A search warrant was\nserved at the residence and the suspect was\nlocated. The suspect lives at the residence with\nother family members. All three of the occupants\nwere combative and argumentative during the\nsearch warrant. The evidence was located in the\nresidence on a laptop and a cell phone, a large\nquantity of child pornography was found. The\nsuspect was interviewed and admitted to the\ncrimes. He also stated he was sexually attracted\nto very young children. No children were found in\nthe home. The suspect was arrested and booked\non sex crimes.",
-            "month_year": "May 2014",
-            "month": "May",
-            "year": "2014",
-            "case_id": "azicac_2014_may_005",
-            "source": "AZICAC",
-            "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In May 2014 ICAC investigators identified a\nresidence that was trading images and videos of\nyoung children being sexually abused. There was\na large quantity of images (over 600) that were\ndiscovered and intercepted by investigators. The\nimages and movies depicted very young children\nto include infants being sexually assaulted and\nphysically raped. At the time it was unknown if\nchildren were in the home. A search warrant was\nserved at the residence and the suspect was\nlocated. The suspect lives at the residence with\nother family members. All three of the occupants\nwere combative and argumentative during the\nsearch warrant. The evidence was located in the\nresidence on a laptop and a cell phone, a large\nquantity of child pornography was found. The\nsuspect was interviewed and admitted to the\ncrimes. He also stated he was sexually attracted\nto very young children. No children were found in\nthe home. The suspect was arrested and booked\non sex crimes.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": null,
-              "agencies": []
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2014-05-01",
-            "topic_vector": [
-              "possession",
-              "hands_on",
-              "pornography"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault",
-              "very_young"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.213341",
-          "updated_at": "2026-03-04T12:36:57.213342"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.297235",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2014_may_005",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2014-05-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [],
-        "investigation_type": null,
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "stated"
-        ],
-        "case_text": "In May 2014 ICAC investigators identified a\nresidence that was trading images and videos of\nyoung children being sexually abused. There was\na large quantity of images (over 600) that were\ndiscovered and intercepted by investigators. The\nimages and movies depicted very young children\nto include infants being sexually assaulted and\nphysically raped. At the time it was unknown if\nchildren were in the home. A search warrant was\nserved at the residence and the suspect was\nlocated. The suspect lives at the residence with\nother family members. All three of the occupants\nwere combative and argumentative during the\nsearch warrant. The evidence was located in the\nresidence on a laptop and a cell phone, a large\nquantity of child pornography was found. The\nsuspect was interviewed and admitted to the\ncrimes. He also stated he was sexually attracted\nto very young children. No children were found in\nthe home. The suspect was arrested and booked\non sex crimes.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": null,
-            "agencies": []
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2014-05-01",
-          "topic_vector": [
-            "possession",
-            "hands_on",
-            "pornography"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault",
-            "very_young"
-          ]
-        },
-        "priority_score": 9.71,
-        "priority_score_raw": 23.45
+        ]
       },
       {
-        "id": "azicac_2014_june_007",
-        "source": "AZICAC",
-        "date_start": "2014-06-01",
-        "date_end": null,
-        "victim_count": 6,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [
-          "online"
+        "case_id": "azicac_2014_may_005",
+        "priority_score": 9.71,
+        "severity_indicators": [
+          "infant",
+          "sexual_assault",
+          "very_young"
         ],
-        "investigation_methods": [
-          "online"
-        ],
+        "victim_count": null,
+        "case_topics": [
+          "possession",
+          "hands_on",
+          "pornography"
+        ]
+      },
+      {
+        "case_id": "azicac_2014_june_007",
+        "priority_score": 9.2,
         "severity_indicators": [
           "sexual_assault",
           "very_young"
         ],
+        "victim_count": 6,
         "case_topics": [
           "possession",
           "hands_on",
           "pornography",
           "production"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In June 2014 2- Victims identified in home and\nsaved from suspects continued abuse. Suspect\ncharged with 32 counts Dangerous Crimes\n\nAgainst Children, 6 children in home. During an\nonline investigation numerous images of child\npornography were intercepted. The images\ndepicted very young children being sexually\nabused. Upon further review, pictures were found\nthat showed 2 young girls were sexually\nexploited. Immediate response was necessary as\nwe learned there were 6 children living in the\nhome with the suspect. A search warrant was\nserved and the suspect was taken into custody\nand admitted to possessing child porn. In\naddition, the warrant at the house revealed he\nhad taken numerous pictures of the victims and\ncreated child porn. A large quantity of evidence\nwas recovered. Interviews of the victim were\nconducted. Additional interviews to follow.\nInvestigators found numerous pictures of the\nvictim being sexually abused. The suspect was\narrested and charged with 32 counts of different\nsex crimes. Multiple agencies assisted ICAC to\ninclude, MCSO, Buckeye and DPS. Investigators\nspent long hours on this case. All agencies\nnotified.",
-          "month_year": "June 2014",
-          "month": "June",
-          "year": "2014",
-          "case_id": "azicac_2014_june_007",
-          "source": "AZICAC",
-          "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2014_june_007",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2014-06-01",
-            "end": null
-          },
-          "victim_count": 6,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [
-            "online"
-          ],
-          "investigation_type": "online",
-          "agencies_involved": [
-            "ICAC",
-            "MCSO",
-            "DPS",
-            "Buckeye"
-          ],
-          "prosecution_outcome": {
-            "charges": [
-              {
-                "count": 32,
-                "charge": "different\nsex crimes"
-              }
-            ],
-            "booking_status": "arrested",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "sexual_assault",
-            "very_young"
-          ],
-          "case_topics": [
-            "possession",
-            "hands_on",
-            "pornography",
-            "production"
-          ],
-          "severity_phrases": [
-            "dangerous",
-            "continue"
-          ],
-          "raw_data": {
-            "case_text": "In June 2014 2- Victims identified in home and\nsaved from suspects continued abuse. Suspect\ncharged with 32 counts Dangerous Crimes\n\nAgainst Children, 6 children in home. During an\nonline investigation numerous images of child\npornography were intercepted. The images\ndepicted very young children being sexually\nabused. Upon further review, pictures were found\nthat showed 2 young girls were sexually\nexploited. Immediate response was necessary as\nwe learned there were 6 children living in the\nhome with the suspect. A search warrant was\nserved and the suspect was taken into custody\nand admitted to possessing child porn. In\naddition, the warrant at the house revealed he\nhad taken numerous pictures of the victims and\ncreated child porn. A large quantity of evidence\nwas recovered. Interviews of the victim were\nconducted. Additional interviews to follow.\nInvestigators found numerous pictures of the\nvictim being sexually abused. The suspect was\narrested and charged with 32 counts of different\nsex crimes. Multiple agencies assisted ICAC to\ninclude, MCSO, Buckeye and DPS. Investigators\nspent long hours on this case. All agencies\nnotified.",
-            "month_year": "June 2014",
-            "month": "June",
-            "year": "2014",
-            "case_id": "azicac_2014_june_007",
-            "source": "AZICAC",
-            "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In June 2014 2- Victims identified in home and\nsaved from suspects continued abuse. Suspect\ncharged with 32 counts Dangerous Crimes\n\nAgainst Children, 6 children in home. During an\nonline investigation numerous images of child\npornography were intercepted. The images\ndepicted very young children being sexually\nabused. Upon further review, pictures were found\nthat showed 2 young girls were sexually\nexploited. Immediate response was necessary as\nwe learned there were 6 children living in the\nhome with the suspect. A search warrant was\nserved and the suspect was taken into custody\nand admitted to possessing child porn. In\naddition, the warrant at the house revealed he\nhad taken numerous pictures of the victims and\ncreated child porn. A large quantity of evidence\nwas recovered. Interviews of the victim were\nconducted. Additional interviews to follow.\nInvestigators found numerous pictures of the\nvictim being sexually abused. The suspect was\narrested and charged with 32 counts of different\nsex crimes. Multiple agencies assisted ICAC to\ninclude, MCSO, Buckeye and DPS. Investigators\nspent long hours on this case. All agencies\nnotified.",
-          "comparison_values": {
-            "platform_vector": [
-              "online"
-            ],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": 6,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": "online",
-              "agencies": [
-                "ICAC",
-                "MCSO",
-                "DPS",
-                "Buckeye"
-              ]
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2014-06-01",
-            "topic_vector": [
-              "possession",
-              "hands_on",
-              "pornography",
-              "production"
-            ],
-            "severity_vector": [
-              "sexual_assault",
-              "very_young"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.214644",
-          "updated_at": "2026-03-04T12:36:57.214644"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.298381",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2014_june_007",
-            "status": "arrested",
-            "charges": "[{\"count\": 32, \"charge\": \"different\\nsex crimes\"}]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2014-06-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "ICAC",
-          "MCSO",
-          "DPS",
-          "Buckeye"
-        ],
-        "investigation_type": "online",
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [
-            {
-              "count": 32,
-              "charge": "different\nsex crimes"
-            }
-          ],
-          "booking_status": "arrested",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "dangerous",
-          "continue"
-        ],
-        "case_text": "In June 2014 2- Victims identified in home and\nsaved from suspects continued abuse. Suspect\ncharged with 32 counts Dangerous Crimes\n\nAgainst Children, 6 children in home. During an\nonline investigation numerous images of child\npornography were intercepted. The images\ndepicted very young children being sexually\nabused. Upon further review, pictures were found\nthat showed 2 young girls were sexually\nexploited. Immediate response was necessary as\nwe learned there were 6 children living in the\nhome with the suspect. A search warrant was\nserved and the suspect was taken into custody\nand admitted to possessing child porn. In\naddition, the warrant at the house revealed he\nhad taken numerous pictures of the victims and\ncreated child porn. A large quantity of evidence\nwas recovered. Interviews of the victim were\nconducted. Additional interviews to follow.\nInvestigators found numerous pictures of the\nvictim being sexually abused. The suspect was\narrested and charged with 32 counts of different\nsex crimes. Multiple agencies assisted ICAC to\ninclude, MCSO, Buckeye and DPS. Investigators\nspent long hours on this case. All agencies\nnotified.",
-        "comparison_values": {
-          "platform_vector": [
-            "online"
-          ],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": 6,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": "online",
-            "agencies": [
-              "ICAC",
-              "MCSO",
-              "DPS",
-              "Buckeye"
-            ]
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2014-06-01",
-          "topic_vector": [
-            "possession",
-            "hands_on",
-            "pornography",
-            "production"
-          ],
-          "severity_vector": [
-            "sexual_assault",
-            "very_young"
-          ]
-        },
-        "priority_score": 9.2,
-        "priority_score_raw": 20.9
+        ]
       },
       {
-        "id": "azicac_2014_december_013",
-        "source": "AZICAC",
-        "date_start": "2014-12-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [
-          "online"
-        ],
-        "investigation_methods": [],
+        "case_id": "azicac_2014_december_013",
+        "priority_score": 8.8,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
+        "victim_count": null,
         "case_topics": [
           "possession",
           "hands_on"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In December 2014 during an online undercover\noperation the listed residence was identified as\ntrading images and videos of young children\nbeing sexually abused. Search warrants were\nconducted. Investigators conducted a search\nwarrant on the residence. During the warrant\ninvestigators found a large quantity of images\nand videos of young children being sexually\nabused mostly infants. The suspect admitted to\nthe images and videos and stated he is sexually\naroused by the children. Evidence found and\nsuspect confessed. The suspect was booked on 10\ncounts of sexual exploitation of a minor C2F.\n\u2190 2013 Cases and Arrests 2015 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 12/12",
-          "month_year": "December 2014",
-          "month": "December",
-          "year": "2014",
-          "case_id": "azicac_2014_december_013",
-          "source": "AZICAC",
-          "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2014_december_013",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2014-12-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [
-            "online"
-          ],
-          "investigation_type": null,
-          "agencies_involved": [],
-          "prosecution_outcome": {
-            "charges": [
-              {
-                "count": 10,
-                "charge": "sexual exploitation of a minor C2F"
-              }
-            ],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault"
-          ],
-          "case_topics": [
-            "possession",
-            "hands_on"
-          ],
-          "severity_phrases": [
-            "stated"
-          ],
-          "raw_data": {
-            "case_text": "In December 2014 during an online undercover\noperation the listed residence was identified as\ntrading images and videos of young children\nbeing sexually abused. Search warrants were\nconducted. Investigators conducted a search\nwarrant on the residence. During the warrant\ninvestigators found a large quantity of images\nand videos of young children being sexually\nabused mostly infants. The suspect admitted to\nthe images and videos and stated he is sexually\naroused by the children. Evidence found and\nsuspect confessed. The suspect was booked on 10\ncounts of sexual exploitation of a minor C2F.\n\u2190 2013 Cases and Arrests 2015 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 12/12",
-            "month_year": "December 2014",
-            "month": "December",
-            "year": "2014",
-            "case_id": "azicac_2014_december_013",
-            "source": "AZICAC",
-            "source_file": "2014 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In December 2014 during an online undercover\noperation the listed residence was identified as\ntrading images and videos of young children\nbeing sexually abused. Search warrants were\nconducted. Investigators conducted a search\nwarrant on the residence. During the warrant\ninvestigators found a large quantity of images\nand videos of young children being sexually\nabused mostly infants. The suspect admitted to\nthe images and videos and stated he is sexually\naroused by the children. Evidence found and\nsuspect confessed. The suspect was booked on 10\ncounts of sexual exploitation of a minor C2F.\n\u2190 2013 Cases and Arrests 2015 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 12/12",
-          "comparison_values": {
-            "platform_vector": [
-              "online"
-            ],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": null,
-              "agencies": []
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2014-12-01",
-            "topic_vector": [
-              "possession",
-              "hands_on"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.218059",
-          "updated_at": "2026-03-04T12:36:57.218060"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.301499",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2014_december_013",
-            "status": "booked",
-            "charges": "[{\"count\": 10, \"charge\": \"sexual exploitation of a minor C2F\"}]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2014-12-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [],
-        "investigation_type": null,
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [
-            {
-              "count": 10,
-              "charge": "sexual exploitation of a minor C2F"
-            }
-          ],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "stated"
-        ],
-        "case_text": "In December 2014 during an online undercover\noperation the listed residence was identified as\ntrading images and videos of young children\nbeing sexually abused. Search warrants were\nconducted. Investigators conducted a search\nwarrant on the residence. During the warrant\ninvestigators found a large quantity of images\nand videos of young children being sexually\nabused mostly infants. The suspect admitted to\nthe images and videos and stated he is sexually\naroused by the children. Evidence found and\nsuspect confessed. The suspect was booked on 10\ncounts of sexual exploitation of a minor C2F.\n\u2190 2013 Cases and Arrests 2015 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 12/12",
-        "comparison_values": {
-          "platform_vector": [
-            "online"
-          ],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": null,
-            "agencies": []
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2014-12-01",
-          "topic_vector": [
-            "possession",
-            "hands_on"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault"
-          ]
-        },
-        "priority_score": 8.8,
-        "priority_score_raw": 18.9
+        ]
       },
       {
-        "id": "azicac_2012_november_011",
-        "source": "AZICAC",
-        "date_start": "2012-11-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [
-          "Facebook"
-        ],
-        "investigation_methods": [
-          "proactive"
-        ],
+        "case_id": "azicac_2012_november_011",
+        "priority_score": 8.77,
         "severity_indicators": [
           "sexual_assault",
           "under_12",
           "very_young"
         ],
+        "victim_count": null,
         "case_topics": [
           "hands_on",
           "production"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "November 2012, during a proactive joint\ninvestigation by the AZICAC Task Force and the\nFBI Child Sexual Exploitation Unit, arrested a 22-\nyear old man for sexual conduct with a minor,\nchild prostitution and sexual exploitation of a\nminor after it was learned the suspect created\nfake Facebook accounts and lured young teenage\ngirls. In addition, the suspect possessed and\ndistributed images of very young children being\nsexually abused under 7 years of age. During the\ninvestigation, detective\u2019s found evidence. The\nsuspect admitted to the crimes and was arrested\n\nand booked into jail on numerous sexual crimes\nagainst children charges, Dangerous Crimes\nAgainst Children.",
-          "month_year": "November 2012",
-          "month": "November",
-          "year": "2012",
-          "case_id": "azicac_2012_november_011",
-          "source": "AZICAC",
-          "source_file": "2012 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2012_november_011",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2012-11-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [
-            "Facebook"
-          ],
-          "investigation_type": "proactive",
-          "agencies_involved": [
-            "AZICAC",
-            "FBI"
-          ],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "sexual_assault",
-            "under_12",
-            "very_young"
-          ],
-          "case_topics": [
-            "hands_on",
-            "production"
-          ],
-          "severity_phrases": [
-            "dangerous"
-          ],
-          "raw_data": {
-            "case_text": "November 2012, during a proactive joint\ninvestigation by the AZICAC Task Force and the\nFBI Child Sexual Exploitation Unit, arrested a 22-\nyear old man for sexual conduct with a minor,\nchild prostitution and sexual exploitation of a\nminor after it was learned the suspect created\nfake Facebook accounts and lured young teenage\ngirls. In addition, the suspect possessed and\ndistributed images of very young children being\nsexually abused under 7 years of age. During the\ninvestigation, detective\u2019s found evidence. The\nsuspect admitted to the crimes and was arrested\n\nand booked into jail on numerous sexual crimes\nagainst children charges, Dangerous Crimes\nAgainst Children.",
-            "month_year": "November 2012",
-            "month": "November",
-            "year": "2012",
-            "case_id": "azicac_2012_november_011",
-            "source": "AZICAC",
-            "source_file": "2012 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "November 2012, during a proactive joint\ninvestigation by the AZICAC Task Force and the\nFBI Child Sexual Exploitation Unit, arrested a 22-\nyear old man for sexual conduct with a minor,\nchild prostitution and sexual exploitation of a\nminor after it was learned the suspect created\nfake Facebook accounts and lured young teenage\ngirls. In addition, the suspect possessed and\ndistributed images of very young children being\nsexually abused under 7 years of age. During the\ninvestigation, detective\u2019s found evidence. The\nsuspect admitted to the crimes and was arrested\n\nand booked into jail on numerous sexual crimes\nagainst children charges, Dangerous Crimes\nAgainst Children.",
-          "comparison_values": {
-            "platform_vector": [
-              "Facebook"
-            ],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": "proactive",
-              "agencies": [
-                "AZICAC",
-                "FBI"
-              ]
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2012-11-01",
-            "topic_vector": [
-              "hands_on",
-              "production"
-            ],
-            "severity_vector": [
-              "sexual_assault",
-              "under_12",
-              "very_young"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.199674",
-          "updated_at": "2026-03-04T12:36:57.199674"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.290063",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2012_november_011",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2012-11-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "AZICAC",
-          "FBI"
-        ],
-        "investigation_type": "proactive",
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "dangerous"
-        ],
-        "case_text": "November 2012, during a proactive joint\ninvestigation by the AZICAC Task Force and the\nFBI Child Sexual Exploitation Unit, arrested a 22-\nyear old man for sexual conduct with a minor,\nchild prostitution and sexual exploitation of a\nminor after it was learned the suspect created\nfake Facebook accounts and lured young teenage\ngirls. In addition, the suspect possessed and\ndistributed images of very young children being\nsexually abused under 7 years of age. During the\ninvestigation, detective\u2019s found evidence. The\nsuspect admitted to the crimes and was arrested\n\nand booked into jail on numerous sexual crimes\nagainst children charges, Dangerous Crimes\nAgainst Children.",
-        "comparison_values": {
-          "platform_vector": [
-            "Facebook"
-          ],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": "proactive",
-            "agencies": [
-              "AZICAC",
-              "FBI"
-            ]
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2012-11-01",
-          "topic_vector": [
-            "hands_on",
-            "production"
-          ],
-          "severity_vector": [
-            "sexual_assault",
-            "under_12",
-            "very_young"
-          ]
-        },
-        "priority_score": 8.77,
-        "priority_score_raw": 18.75
+        ]
       },
       {
-        "id": "azicac_2012_december_012",
-        "source": "AZICAC",
-        "date_start": "2012-12-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [],
-        "investigation_methods": [],
+        "case_id": "azicac_2012_december_012",
+        "priority_score": 8.73,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
+        "victim_count": null,
         "case_topics": [
           "hands_on",
           "pornography"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "December 2012, the suspect was training a new\ntrucker when the new trainee asked to use his\ncell phone. The new trainee saw images of young\nchildren being sexually abused on the suspect\u2019s\ncell phone. The trainee reported this to the main\nsecurity at the trucking company. It was then the\ntrucking security contacted law enforcement\nwhen the suspect arrived at the yard. Interviews\nwere conducted and the suspect admitted he was\nin possession of over 1TB of child pornography.\nThe images depicted infants, toddlers that were\nbeing sexually abused. An on-scene preview of\nthe laptop and hard drive was done and hundreds\nof images located. The suspect was booked into\njail.\n\u2190 2011 Cases and Arrests 2013 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 8/8",
-          "month_year": "December 2012",
-          "month": "December",
-          "year": "2012",
-          "case_id": "azicac_2012_december_012",
-          "source": "AZICAC",
-          "source_file": "2012 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2012_december_012",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2012-12-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": null,
-          "agencies_involved": [],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": {
-            "images": null,
-            "videos": null,
-            "storage_size": "1TB",
-            "messages": null
-          },
-          "severity_indicators": [
-            "infant",
-            "sexual_assault"
-          ],
-          "case_topics": [
-            "hands_on",
-            "pornography"
-          ],
-          "severity_phrases": [],
-          "raw_data": {
-            "case_text": "December 2012, the suspect was training a new\ntrucker when the new trainee asked to use his\ncell phone. The new trainee saw images of young\nchildren being sexually abused on the suspect\u2019s\ncell phone. The trainee reported this to the main\nsecurity at the trucking company. It was then the\ntrucking security contacted law enforcement\nwhen the suspect arrived at the yard. Interviews\nwere conducted and the suspect admitted he was\nin possession of over 1TB of child pornography.\nThe images depicted infants, toddlers that were\nbeing sexually abused. An on-scene preview of\nthe laptop and hard drive was done and hundreds\nof images located. The suspect was booked into\njail.\n\u2190 2011 Cases and Arrests 2013 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 8/8",
-            "month_year": "December 2012",
-            "month": "December",
-            "year": "2012",
-            "case_id": "azicac_2012_december_012",
-            "source": "AZICAC",
-            "source_file": "2012 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "December 2012, the suspect was training a new\ntrucker when the new trainee asked to use his\ncell phone. The new trainee saw images of young\nchildren being sexually abused on the suspect\u2019s\ncell phone. The trainee reported this to the main\nsecurity at the trucking company. It was then the\ntrucking security contacted law enforcement\nwhen the suspect arrived at the yard. Interviews\nwere conducted and the suspect admitted he was\nin possession of over 1TB of child pornography.\nThe images depicted infants, toddlers that were\nbeing sexually abused. An on-scene preview of\nthe laptop and hard drive was done and hundreds\nof images located. The suspect was booked into\njail.\n\u2190 2011 Cases and Arrests 2013 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 8/8",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": null,
-              "agencies": []
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": "1TB"
-            },
-            "temporal_value": "2012-12-01",
-            "topic_vector": [
-              "hands_on",
-              "pornography"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.200073",
-          "updated_at": "2026-03-04T12:36:57.200074"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.290447",
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2012_december_012",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2012-12-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [],
-        "investigation_type": null,
-        "evidence_volume": {
-          "images": null,
-          "videos": null,
-          "storage_size": "1TB",
-          "messages": null
-        },
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [],
-        "case_text": "December 2012, the suspect was training a new\ntrucker when the new trainee asked to use his\ncell phone. The new trainee saw images of young\nchildren being sexually abused on the suspect\u2019s\ncell phone. The trainee reported this to the main\nsecurity at the trucking company. It was then the\ntrucking security contacted law enforcement\nwhen the suspect arrived at the yard. Interviews\nwere conducted and the suspect admitted he was\nin possession of over 1TB of child pornography.\nThe images depicted infants, toddlers that were\nbeing sexually abused. An on-scene preview of\nthe laptop and hard drive was done and hundreds\nof images located. The suspect was booked into\njail.\n\u2190 2011 Cases and Arrests 2013 Cases and Arrests \u2192\nCopyright \u00a9 2026\n 8/8",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": null,
-            "agencies": []
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": "1TB"
-          },
-          "temporal_value": "2012-12-01",
-          "topic_vector": [
-            "hands_on",
-            "pornography"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault"
-          ]
-        },
-        "priority_score": 8.73,
-        "priority_score_raw": 18.599999999999998
+        ]
       },
       {
-        "id": "azicac_2011_november_009",
-        "source": "AZICAC",
-        "date_start": "2011-11-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "mother",
-        "platforms_used": [],
-        "investigation_methods": [
-          "unknown"
-        ],
+        "case_id": "azicac_2011_november_009",
+        "priority_score": 8.63,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
+        "victim_count": null,
         "case_topics": [
           "hands_on",
           "family"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In November 2011, AZICAC investigators from the\nPhoenix Police Department and an F.B.I. Special\nAgent executed a search warrant at a Phoenix\narea residence as the result of a cybertip that\nPhoenix Police had received from the National\nCenter for Missing and Exploited Children. AOL\nhad discovered an e-mail sent by an AIM user on\nAugust 2, 2011 with an attached image of a\nyoung female being sexually assaulted by an adult\n\nmale. The lead Phoenix Police investigator\nconducted a court order process and identified\nthe AIM user who had sent to e-mail to himself\nvia his phone. Upon entry, investigators\ndiscovered the residence to be a mess and\ndeplorable conditions for the 15 month old infant\nliving in the house. The suspect was a resident\nand a 26 year old unemployed drug addict which\ndescribed others living in and out of the house.\nThe suspect admitted to sending the image via\nhis phone but investigators were unable to find it\nduring initial preview. He did not know the\nidentity of the victim. The baby was extremely\nmalnourished, there was no food in the house,\nnothing had been cleaned, trashed was piled, etc.\nBecause of this, a child neglect investigation was\ninitiated and C.P.S. contacted to take custody of\nthe child, monitor the child for a month and if\nneed be, charge the mother with child neglect.",
-          "month_year": "November 2011",
-          "month": "November",
-          "year": "2011",
-          "case_id": "azicac_2011_november_009",
-          "source": "AZICAC",
-          "source_file": "2011 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2011_november_009",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2011-11-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": {
-            "ages": [
-              26
-            ],
-            "age_range": null,
-            "gender": "female"
-          },
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "mother",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": "unknown",
-          "agencies_involved": [
-            "AZICAC",
-            "Phoenix Police"
-          ],
-          "prosecution_outcome": null,
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault"
-          ],
-          "case_topics": [
-            "hands_on",
-            "family"
-          ],
-          "severity_phrases": [],
-          "raw_data": {
-            "case_text": "In November 2011, AZICAC investigators from the\nPhoenix Police Department and an F.B.I. Special\nAgent executed a search warrant at a Phoenix\narea residence as the result of a cybertip that\nPhoenix Police had received from the National\nCenter for Missing and Exploited Children. AOL\nhad discovered an e-mail sent by an AIM user on\nAugust 2, 2011 with an attached image of a\nyoung female being sexually assaulted by an adult\n\nmale. The lead Phoenix Police investigator\nconducted a court order process and identified\nthe AIM user who had sent to e-mail to himself\nvia his phone. Upon entry, investigators\ndiscovered the residence to be a mess and\ndeplorable conditions for the 15 month old infant\nliving in the house. The suspect was a resident\nand a 26 year old unemployed drug addict which\ndescribed others living in and out of the house.\nThe suspect admitted to sending the image via\nhis phone but investigators were unable to find it\nduring initial preview. He did not know the\nidentity of the victim. The baby was extremely\nmalnourished, there was no food in the house,\nnothing had been cleaned, trashed was piled, etc.\nBecause of this, a child neglect investigation was\ninitiated and C.P.S. contacted to take custody of\nthe child, monitor the child for a month and if\nneed be, charge the mother with child neglect.",
-            "month_year": "November 2011",
-            "month": "November",
-            "year": "2011",
-            "case_id": "azicac_2011_november_009",
-            "source": "AZICAC",
-            "source_file": "2011 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In November 2011, AZICAC investigators from the\nPhoenix Police Department and an F.B.I. Special\nAgent executed a search warrant at a Phoenix\narea residence as the result of a cybertip that\nPhoenix Police had received from the National\nCenter for Missing and Exploited Children. AOL\nhad discovered an e-mail sent by an AIM user on\nAugust 2, 2011 with an attached image of a\nyoung female being sexually assaulted by an adult\n\nmale. The lead Phoenix Police investigator\nconducted a court order process and identified\nthe AIM user who had sent to e-mail to himself\nvia his phone. Upon entry, investigators\ndiscovered the residence to be a mess and\ndeplorable conditions for the 15 month old infant\nliving in the house. The suspect was a resident\nand a 26 year old unemployed drug addict which\ndescribed others living in and out of the house.\nThe suspect admitted to sending the image via\nhis phone but investigators were unable to find it\nduring initial preview. He did not know the\nidentity of the victim. The baby was extremely\nmalnourished, there was no food in the house,\nnothing had been cleaned, trashed was piled, etc.\nBecause of this, a child neglect investigation was\ninitiated and C.P.S. contacted to take custody of\nthe child, monitor the child for a month and if\nneed be, charge the mother with child neglect.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": {
-                "min": 26,
-                "max": 26
-              },
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "mother"
-            ],
-            "investigation_vector": {
-              "type": "unknown",
-              "agencies": [
-                "AZICAC",
-                "Phoenix Police"
-              ]
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2011-11-01",
-            "topic_vector": [
-              "hands_on",
-              "family"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.192422",
-          "updated_at": "2026-03-04T12:36:57.192423"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.284298",
-        "victim_demographics": [
-          {
-            "case_id": "azicac_2011_november_009",
-            "age_range": "{\"min\": 26, \"max\": 26}",
-            "region": null,
-            "anonymized_id": null
-          }
-        ],
-        "date_range": {
-          "start": "2011-11-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "AZICAC",
-          "Phoenix Police"
-        ],
-        "investigation_type": "unknown",
-        "evidence_volume": null,
-        "prosecution_outcome": null,
-        "case_demographics": {
-          "ages": [
-            26
-          ],
-          "age_range": null,
-          "gender": "female"
-        },
-        "severity_phrases": [],
-        "case_text": "In November 2011, AZICAC investigators from the\nPhoenix Police Department and an F.B.I. Special\nAgent executed a search warrant at a Phoenix\narea residence as the result of a cybertip that\nPhoenix Police had received from the National\nCenter for Missing and Exploited Children. AOL\nhad discovered an e-mail sent by an AIM user on\nAugust 2, 2011 with an attached image of a\nyoung female being sexually assaulted by an adult\n\nmale. The lead Phoenix Police investigator\nconducted a court order process and identified\nthe AIM user who had sent to e-mail to himself\nvia his phone. Upon entry, investigators\ndiscovered the residence to be a mess and\ndeplorable conditions for the 15 month old infant\nliving in the house. The suspect was a resident\nand a 26 year old unemployed drug addict which\ndescribed others living in and out of the house.\nThe suspect admitted to sending the image via\nhis phone but investigators were unable to find it\nduring initial preview. He did not know the\nidentity of the victim. The baby was extremely\nmalnourished, there was no food in the house,\nnothing had been cleaned, trashed was piled, etc.\nBecause of this, a child neglect investigation was\ninitiated and C.P.S. contacted to take custody of\nthe child, monitor the child for a month and if\nneed be, charge the mother with child neglect.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": {
-              "min": 26,
-              "max": 26
-            },
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "mother"
-          ],
-          "investigation_vector": {
-            "type": "unknown",
-            "agencies": [
-              "AZICAC",
-              "Phoenix Police"
-            ]
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2011-11-01",
-          "topic_vector": [
-            "hands_on",
-            "family"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault"
-          ]
-        },
-        "priority_score": 8.63,
-        "priority_score_raw": 18.099999999999998
+        ]
       },
       {
-        "id": "ncmec_2024_october_005",
-        "source": "NCMEC",
-        "date_start": "2024-10-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [
-          "online",
-          "chat"
-        ],
-        "investigation_methods": [
-          "online"
-        ],
+        "case_id": "ncmec_2024_october_005",
+        "priority_score": 8.54,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
+        "victim_count": null,
         "case_topics": [
           "possession",
           "online_digital",
           "pornography"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "COLORADO\nCOLORADO SPRINGS MAN ARRESTED FOR ALLEGEDLY SEXUALLY ASSAULTING AN INFANT,\nPOSSESSING CHILD PORNOGRAPHY\nBy Zachar Dupont\nThe Gazette\nOctober 3, 2024\n 176366127, 175547577\nA Colorado Springs man was arrested on Tuesday for allegedly sexually assaulting an infant and possessing\nthousands of pieces of child pornography, an arrest affidavit obtained by The Gazette detailed.\nAaron Mocalkins, 30, faces over 20 charges including sexual exploitation of a child, sexual assault of a child,\ncruelty to animals and more after a police investigation found that Mocalkins was in possession of thousands of\npieces of child pornography.\nAccording to an arrest affidavit, Aurora police became aware of Mocalkins after the messaging application Kik\ninformed Aurora police that an account with an IP address residing in Aurora contained possible child\npornography. The address connected to the Kik account was the residence of Mocalkins' boyfriend, according to\nthe arrest affidavit.\nAurora police in March 2023 executed a search warrant on Mocalkins' boyfriend's address and seized over 25\nelectronic devices. The affidavit states that six of the items recovered at the address contained child\npornography, and all of the devices \"appear to only be used by Aaron (Mocalkins).\"\nAurora police note within the affidavit that one external hard drive contained 5,151 images and videos depicting\nchild pornography. The affidavit goes into detail regarding some of the contents of the horrific videos discovered\non Mocalkins' devices, with \"numerous images and videos that were involving infants or toddlers.\"\nAurora police also discovered evidence that Mocalkins used an online chat website to convince minors to show\nhim their genitals, with screenshots of an interaction with one victim who was only 11 years old, according to\nthe affidavit.\nPolice became concerned that Mocalkins himself was not just watching child pornography, but was sexually\nassaulting children himself. Of note was this message which police say was recovered from his phone:\n\"Don't be afraid to rape. It's a mistake to avoid nonconsensual child sex. No matter what kind of sex you have\nwith kids, you'll always be judged as a rapist. So don't hold back.\"\nThe rest of the message encouraged the use of threats and torture \"to stop kids talking.\"\nThe affidavit does not make it clear if the message recovered on Mocalkins' phone was sent or received by him.\nAfter further investigation from Aurora police at least three videos were discovered where Mocalkins exposes\nhimself and touches his genitals on an infant at his boyfriend's home, according to the arrest affidavit.",
-          "month_year": "October 2024",
-          "month": "October",
-          "year": "2024",
-          "case_id": "ncmec_2024_october_005",
-          "source": "NCMEC",
-          "source_file": "NCMEC Cases.pdf",
-          "state": "COLORADO"
-        },
-        "extracted_features": {
-          "id": "ncmec_2024_october_005",
-          "source": "NCMEC",
-          "date_range": {
-            "start": "2024-10-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [
-            "online",
-            "chat"
-          ],
-          "investigation_type": "online",
-          "agencies_involved": [
-            "Colorado"
-          ],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "arrested",
-            "jail": null
-          },
-          "evidence_volume": {
-            "images": 5151,
-            "videos": null,
-            "storage_size": null,
-            "messages": null
-          },
-          "severity_indicators": [
-            "infant",
-            "sexual_assault"
-          ],
-          "case_topics": [
-            "possession",
-            "online_digital",
-            "pornography"
-          ],
-          "severity_phrases": [
-            "stated"
-          ],
-          "raw_data": {
-            "case_text": "COLORADO\nCOLORADO SPRINGS MAN ARRESTED FOR ALLEGEDLY SEXUALLY ASSAULTING AN INFANT,\nPOSSESSING CHILD PORNOGRAPHY\nBy Zachar Dupont\nThe Gazette\nOctober 3, 2024\n 176366127, 175547577\nA Colorado Springs man was arrested on Tuesday for allegedly sexually assaulting an infant and possessing\nthousands of pieces of child pornography, an arrest affidavit obtained by The Gazette detailed.\nAaron Mocalkins, 30, faces over 20 charges including sexual exploitation of a child, sexual assault of a child,\ncruelty to animals and more after a police investigation found that Mocalkins was in possession of thousands of\npieces of child pornography.\nAccording to an arrest affidavit, Aurora police became aware of Mocalkins after the messaging application Kik\ninformed Aurora police that an account with an IP address residing in Aurora contained possible child\npornography. The address connected to the Kik account was the residence of Mocalkins' boyfriend, according to\nthe arrest affidavit.\nAurora police in March 2023 executed a search warrant on Mocalkins' boyfriend's address and seized over 25\nelectronic devices. The affidavit states that six of the items recovered at the address contained child\npornography, and all of the devices \"appear to only be used by Aaron (Mocalkins).\"\nAurora police note within the affidavit that one external hard drive contained 5,151 images and videos depicting\nchild pornography. The affidavit goes into detail regarding some of the contents of the horrific videos discovered\non Mocalkins' devices, with \"numerous images and videos that were involving infants or toddlers.\"\nAurora police also discovered evidence that Mocalkins used an online chat website to convince minors to show\nhim their genitals, with screenshots of an interaction with one victim who was only 11 years old, according to\nthe affidavit.\nPolice became concerned that Mocalkins himself was not just watching child pornography, but was sexually\nassaulting children himself. Of note was this message which police say was recovered from his phone:\n\"Don't be afraid to rape. It's a mistake to avoid nonconsensual child sex. No matter what kind of sex you have\nwith kids, you'll always be judged as a rapist. So don't hold back.\"\nThe rest of the message encouraged the use of threats and torture \"to stop kids talking.\"\nThe affidavit does not make it clear if the message recovered on Mocalkins' phone was sent or received by him.\nAfter further investigation from Aurora police at least three videos were discovered where Mocalkins exposes\nhimself and touches his genitals on an infant at his boyfriend's home, according to the arrest affidavit.",
-            "month_year": "October 2024",
-            "month": "October",
-            "year": "2024",
-            "case_id": "ncmec_2024_october_005",
-            "source": "NCMEC",
-            "source_file": "NCMEC Cases.pdf",
-            "state": "COLORADO"
-          },
-          "case_text": "COLORADO\nCOLORADO SPRINGS MAN ARRESTED FOR ALLEGEDLY SEXUALLY ASSAULTING AN INFANT,\nPOSSESSING CHILD PORNOGRAPHY\nBy Zachar Dupont\nThe Gazette\nOctober 3, 2024\n 176366127, 175547577\nA Colorado Springs man was arrested on Tuesday for allegedly sexually assaulting an infant and possessing\nthousands of pieces of child pornography, an arrest affidavit obtained by The Gazette detailed.\nAaron Mocalkins, 30, faces over 20 charges including sexual exploitation of a child, sexual assault of a child,\ncruelty to animals and more after a police investigation found that Mocalkins was in possession of thousands of\npieces of child pornography.\nAccording to an arrest affidavit, Aurora police became aware of Mocalkins after the messaging application Kik\ninformed Aurora police that an account with an IP address residing in Aurora contained possible child\npornography. The address connected to the Kik account was the residence of Mocalkins' boyfriend, according to\nthe arrest affidavit.\nAurora police in March 2023 executed a search warrant on Mocalkins' boyfriend's address and seized over 25\nelectronic devices. The affidavit states that six of the items recovered at the address contained child\npornography, and all of the devices \"appear to only be used by Aaron (Mocalkins).\"\nAurora police note within the affidavit that one external hard drive contained 5,151 images and videos depicting\nchild pornography. The affidavit goes into detail regarding some of the contents of the horrific videos discovered\non Mocalkins' devices, with \"numerous images and videos that were involving infants or toddlers.\"\nAurora police also discovered evidence that Mocalkins used an online chat website to convince minors to show\nhim their genitals, with screenshots of an interaction with one victim who was only 11 years old, according to\nthe affidavit.\nPolice became concerned that Mocalkins himself was not just watching child pornography, but was sexually\nassaulting children himself. Of note was this message which police say was recovered from his phone:\n\"Don't be afraid to rape. It's a mistake to avoid nonconsensual child sex. No matter what kind of sex you have\nwith kids, you'll always be judged as a rapist. So don't hold back.\"\nThe rest of the message encouraged the use of threats and torture \"to stop kids talking.\"\nThe affidavit does not make it clear if the message recovered on Mocalkins' phone was sent or received by him.\nAfter further investigation from Aurora police at least three videos were discovered where Mocalkins exposes\nhimself and touches his genitals on an infant at his boyfriend's home, according to the arrest affidavit.",
-          "comparison_values": {
-            "platform_vector": [
-              "online",
-              "chat"
-            ],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": "online",
-              "agencies": [
-                "Colorado"
-              ]
-            },
-            "evidence_vector": {
-              "images": 5151,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2024-10-01",
-            "topic_vector": [
-              "possession",
-              "online_digital",
-              "pornography"
-            ],
-            "severity_vector": [
-              "infant",
-              "sexual_assault"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.231302",
-          "updated_at": "2026-03-04T12:36:57.231304"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.304134",
-        "prosecution_outcomes": [
-          {
-            "case_id": "ncmec_2024_october_005",
-            "status": "arrested",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2024-10-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "Colorado"
-        ],
-        "investigation_type": "online",
-        "evidence_volume": {
-          "images": 5151,
-          "videos": null,
-          "storage_size": null,
-          "messages": null
-        },
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "arrested",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [
-          "stated"
-        ],
-        "case_text": "COLORADO\nCOLORADO SPRINGS MAN ARRESTED FOR ALLEGEDLY SEXUALLY ASSAULTING AN INFANT,\nPOSSESSING CHILD PORNOGRAPHY\nBy Zachar Dupont\nThe Gazette\nOctober 3, 2024\n 176366127, 175547577\nA Colorado Springs man was arrested on Tuesday for allegedly sexually assaulting an infant and possessing\nthousands of pieces of child pornography, an arrest affidavit obtained by The Gazette detailed.\nAaron Mocalkins, 30, faces over 20 charges including sexual exploitation of a child, sexual assault of a child,\ncruelty to animals and more after a police investigation found that Mocalkins was in possession of thousands of\npieces of child pornography.\nAccording to an arrest affidavit, Aurora police became aware of Mocalkins after the messaging application Kik\ninformed Aurora police that an account with an IP address residing in Aurora contained possible child\npornography. The address connected to the Kik account was the residence of Mocalkins' boyfriend, according to\nthe arrest affidavit.\nAurora police in March 2023 executed a search warrant on Mocalkins' boyfriend's address and seized over 25\nelectronic devices. The affidavit states that six of the items recovered at the address contained child\npornography, and all of the devices \"appear to only be used by Aaron (Mocalkins).\"\nAurora police note within the affidavit that one external hard drive contained 5,151 images and videos depicting\nchild pornography. The affidavit goes into detail regarding some of the contents of the horrific videos discovered\non Mocalkins' devices, with \"numerous images and videos that were involving infants or toddlers.\"\nAurora police also discovered evidence that Mocalkins used an online chat website to convince minors to show\nhim their genitals, with screenshots of an interaction with one victim who was only 11 years old, according to\nthe affidavit.\nPolice became concerned that Mocalkins himself was not just watching child pornography, but was sexually\nassaulting children himself. Of note was this message which police say was recovered from his phone:\n\"Don't be afraid to rape. It's a mistake to avoid nonconsensual child sex. No matter what kind of sex you have\nwith kids, you'll always be judged as a rapist. So don't hold back.\"\nThe rest of the message encouraged the use of threats and torture \"to stop kids talking.\"\nThe affidavit does not make it clear if the message recovered on Mocalkins' phone was sent or received by him.\nAfter further investigation from Aurora police at least three videos were discovered where Mocalkins exposes\nhimself and touches his genitals on an infant at his boyfriend's home, according to the arrest affidavit.",
-        "comparison_values": {
-          "platform_vector": [
-            "online",
-            "chat"
-          ],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": "online",
-            "agencies": [
-              "Colorado"
-            ]
-          },
-          "evidence_vector": {
-            "images": 5151,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2024-10-01",
-          "topic_vector": [
-            "possession",
-            "online_digital",
-            "pornography"
-          ],
-          "severity_vector": [
-            "infant",
-            "sexual_assault"
-          ]
-        },
-        "priority_score": 8.54,
-        "priority_score_raw": 17.65
+        ]
       },
       {
-        "id": "azicac_2013_february_002",
-        "source": "AZICAC",
-        "date_start": "2013-02-01",
-        "date_end": null,
-        "victim_count": null,
-        "perpetrator_count": null,
-        "relationship_to_victim": "stranger",
-        "platforms_used": [],
-        "investigation_methods": [
-          "proactive"
-        ],
+        "case_id": "azicac_2013_february_002",
+        "priority_score": 8.23,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
-        "case_topics": [],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In February of 2013, during a proactive\ninvestigation by the Arizona Internet Crimes\nAgainst Children Task Force, (Phoenix Police) and\nthe FBI Child Sexual Exploitation Unit, arrested a\n62 year old man, for Sexual Exploitation of a\nMinor. It was learned the suspect had a large\nquantity of images and movies that involved the\nsexual abuse of young children to include infants.\n\nThe suspect was arrested and admitted to the\ncrimes. The suspect admitted to the crimes and\nwas booked into jail on multiple counts of crimes\nagainst children.",
-          "month_year": "February 2013",
-          "month": "February",
-          "year": "2013",
-          "case_id": "azicac_2013_february_002",
-          "source": "AZICAC",
-          "source_file": "2013 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2013_february_002",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2013-02-01",
-            "end": null
-          },
-          "victim_count": null,
-          "case_demographics": null,
-          "perpetrator_age": 62,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "stranger",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": "proactive",
-          "agencies_involved": [
-            "FBI",
-            "Phoenix Police"
-          ],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": null
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "infant",
-            "sexual_assault"
-          ],
-          "case_topics": [],
-          "severity_phrases": [],
-          "raw_data": {
-            "case_text": "In February of 2013, during a proactive\ninvestigation by the Arizona Internet Crimes\nAgainst Children Task Force, (Phoenix Police) and\nthe FBI Child Sexual Exploitation Unit, arrested a\n62 year old man, for Sexual Exploitation of a\nMinor. It was learned the suspect had a large\nquantity of images and movies that involved the\nsexual abuse of young children to include infants.\n\nThe suspect was arrested and admitted to the\ncrimes. The suspect admitted to the crimes and\nwas booked into jail on multiple counts of crimes\nagainst children.",
-            "month_year": "February 2013",
-            "month": "February",
-            "year": "2013",
-            "case_id": "azicac_2013_february_002",
-            "source": "AZICAC",
-            "source_file": "2013 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In February of 2013, during a proactive\ninvestigation by the Arizona Internet Crimes\nAgainst Children Task Force, (Phoenix Police) and\nthe FBI Child Sexual Exploitation Unit, arrested a\n62 year old man, for Sexual Exploitation of a\nMinor. It was learned the suspect had a large\nquantity of images and movies that involved the\nsexual abuse of young children to include infants.\n\nThe suspect was arrested and admitted to the\ncrimes. The suspect admitted to the crimes and\nwas booked into jail on multiple counts of crimes\nagainst children.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": null,
-              "victim_count": null,
-              "perpetrator_age": 62,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "stranger"
-            ],
-            "investigation_vector": {
-              "type": "proactive",
-              "agencies": [
-                "FBI",
-                "Phoenix Police"
-              ]
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2013-02-01",
-            "topic_vector": [],
-            "severity_vector": [
-              "infant",
-              "sexual_assault"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.202633",
-          "updated_at": "2026-03-04T12:36:57.202635"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.291335",
-        "perpetrator_demographics": [
-          {
-            "case_id": "azicac_2013_february_002",
-            "age_range": "{\"min\": 62, \"max\": 62}",
-            "region": null,
-            "anonymized_id": null,
-            "previous_conviction": null
-          }
-        ],
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2013_february_002",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2013-02-01",
-          "end": null
-        },
-        "perpetrator_age": 62,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [
-          "FBI",
-          "Phoenix Police"
-        ],
-        "investigation_type": "proactive",
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": null
-        },
-        "case_demographics": null,
-        "severity_phrases": [],
-        "case_text": "In February of 2013, during a proactive\ninvestigation by the Arizona Internet Crimes\nAgainst Children Task Force, (Phoenix Police) and\nthe FBI Child Sexual Exploitation Unit, arrested a\n62 year old man, for Sexual Exploitation of a\nMinor. It was learned the suspect had a large\nquantity of images and movies that involved the\nsexual abuse of young children to include infants.\n\nThe suspect was arrested and admitted to the\ncrimes. The suspect admitted to the crimes and\nwas booked into jail on multiple counts of crimes\nagainst children.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": null,
-            "victim_count": null,
-            "perpetrator_age": 62,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "stranger"
-          ],
-          "investigation_vector": {
-            "type": "proactive",
-            "agencies": [
-              "FBI",
-              "Phoenix Police"
-            ]
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2013-02-01",
-          "topic_vector": [],
-          "severity_vector": [
-            "infant",
-            "sexual_assault"
-          ]
-        },
-        "priority_score": 8.23,
-        "priority_score_raw": 16.099999999999998
-      },
-      {
-        "id": "azicac_2013_may_005",
-        "source": "AZICAC",
-        "date_start": "2013-05-01",
-        "date_end": null,
-        "victim_count": 15,
-        "perpetrator_count": null,
-        "relationship_to_victim": "brother",
-        "platforms_used": [],
-        "investigation_methods": [
-          "unknown"
-        ],
-        "severity_indicators": [
-          "sexual_assault",
-          "under_12"
-        ],
-        "case_topics": [
-          "hands_on",
-          "family"
-        ],
-        "tags": [],
-        "notes": null,
-        "raw_data": {
-          "case_text": "In May 2013, an Arizona Internet Crimes Against\nChildren Task Force investigator from the Phoenix\nPolice Department served a search warrant on a\nresidence that had been identified as trafficking\nin child sexual exploitation images. During the\nsearch warrant, numerous computers and images\nand videos of young children being sexually\nabused were discovered. The suspect admitted to\ntrafficking in child sexual exploitation images.\nAfter further interviews and investigation, the\nsuspect admitted to molesting at least 15\nchildren. Investigators identified 7 of the victims\nand are in the process of identifying the\nadditional children. The children were all known\nto the suspect, including his younger 9 year old\nbrother. The suspect was booked at Maricopa\nCounty Jail on numerous sex crimes.",
-          "month_year": "May 2013",
-          "month": "May",
-          "year": "2013",
-          "case_id": "azicac_2013_may_005",
-          "source": "AZICAC",
-          "source_file": "2013 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-        },
-        "extracted_features": {
-          "id": "azicac_2013_may_005",
-          "source": "AZICAC",
-          "date_range": {
-            "start": "2013-05-01",
-            "end": null
-          },
-          "victim_count": 15,
-          "case_demographics": {
-            "ages": [
-              9
-            ],
-            "age_range": null,
-            "gender": null
-          },
-          "perpetrator_age": null,
-          "perpetrator_registered_sex_offender": false,
-          "relationship_to_victim": "brother",
-          "previous_conviction": null,
-          "platforms_used": [],
-          "investigation_type": "unknown",
-          "agencies_involved": [],
-          "prosecution_outcome": {
-            "charges": [],
-            "booking_status": "booked",
-            "jail": "Maricopa\nCounty Jail"
-          },
-          "evidence_volume": null,
-          "severity_indicators": [
-            "sexual_assault",
-            "under_12"
-          ],
-          "case_topics": [
-            "hands_on",
-            "family"
-          ],
-          "severity_phrases": [],
-          "raw_data": {
-            "case_text": "In May 2013, an Arizona Internet Crimes Against\nChildren Task Force investigator from the Phoenix\nPolice Department served a search warrant on a\nresidence that had been identified as trafficking\nin child sexual exploitation images. During the\nsearch warrant, numerous computers and images\nand videos of young children being sexually\nabused were discovered. The suspect admitted to\ntrafficking in child sexual exploitation images.\nAfter further interviews and investigation, the\nsuspect admitted to molesting at least 15\nchildren. Investigators identified 7 of the victims\nand are in the process of identifying the\nadditional children. The children were all known\nto the suspect, including his younger 9 year old\nbrother. The suspect was booked at Maricopa\nCounty Jail on numerous sex crimes.",
-            "month_year": "May 2013",
-            "month": "May",
-            "year": "2013",
-            "case_id": "azicac_2013_may_005",
-            "source": "AZICAC",
-            "source_file": "2013 Cases and Arrests \u2013 AZICAC.ORG.pdf"
-          },
-          "case_text": "In May 2013, an Arizona Internet Crimes Against\nChildren Task Force investigator from the Phoenix\nPolice Department served a search warrant on a\nresidence that had been identified as trafficking\nin child sexual exploitation images. During the\nsearch warrant, numerous computers and images\nand videos of young children being sexually\nabused were discovered. The suspect admitted to\ntrafficking in child sexual exploitation images.\nAfter further interviews and investigation, the\nsuspect admitted to molesting at least 15\nchildren. Investigators identified 7 of the victims\nand are in the process of identifying the\nadditional children. The children were all known\nto the suspect, including his younger 9 year old\nbrother. The suspect was booked at Maricopa\nCounty Jail on numerous sex crimes.",
-          "comparison_values": {
-            "platform_vector": [],
-            "demographic_vector": {
-              "case_age_range": {
-                "min": 9,
-                "max": 9
-              },
-              "victim_count": 15,
-              "perpetrator_age": null,
-              "perpetrator_registered": false
-            },
-            "relationship_vector": [
-              "brother"
-            ],
-            "investigation_vector": {
-              "type": "unknown",
-              "agencies": []
-            },
-            "evidence_vector": {
-              "images": null,
-              "videos": null,
-              "storage_size": null
-            },
-            "temporal_value": "2013-05-01",
-            "topic_vector": [
-              "hands_on",
-              "family"
-            ],
-            "severity_vector": [
-              "sexual_assault",
-              "under_12"
-            ]
-          },
-          "created_at": "2026-03-04T12:36:57.204076",
-          "updated_at": "2026-03-04T12:36:57.204077"
-        },
-        "created_at": "2026-03-04 17:36:57",
-        "updated_at": "2026-03-04T12:36:57.292629",
-        "victim_demographics": [
-          {
-            "case_id": "azicac_2013_may_005",
-            "age_range": "{\"min\": 9, \"max\": 9}",
-            "region": null,
-            "anonymized_id": null
-          }
-        ],
-        "prosecution_outcomes": [
-          {
-            "case_id": "azicac_2013_may_005",
-            "status": "booked",
-            "charges": "[]",
-            "sentences": "[]"
-          }
-        ],
-        "date_range": {
-          "start": "2013-05-01",
-          "end": null
-        },
-        "perpetrator_age": null,
-        "perpetrator_registered_sex_offender": false,
-        "agencies_involved": [],
-        "investigation_type": "unknown",
-        "evidence_volume": null,
-        "prosecution_outcome": {
-          "charges": [],
-          "booking_status": "booked",
-          "jail": "Maricopa\nCounty Jail"
-        },
-        "case_demographics": {
-          "ages": [
-            9
-          ],
-          "age_range": null,
-          "gender": null
-        },
-        "severity_phrases": [],
-        "case_text": "In May 2013, an Arizona Internet Crimes Against\nChildren Task Force investigator from the Phoenix\nPolice Department served a search warrant on a\nresidence that had been identified as trafficking\nin child sexual exploitation images. During the\nsearch warrant, numerous computers and images\nand videos of young children being sexually\nabused were discovered. The suspect admitted to\ntrafficking in child sexual exploitation images.\nAfter further interviews and investigation, the\nsuspect admitted to molesting at least 15\nchildren. Investigators identified 7 of the victims\nand are in the process of identifying the\nadditional children. The children were all known\nto the suspect, including his younger 9 year old\nbrother. The suspect was booked at Maricopa\nCounty Jail on numerous sex crimes.",
-        "comparison_values": {
-          "platform_vector": [],
-          "demographic_vector": {
-            "case_age_range": {
-              "min": 9,
-              "max": 9
-            },
-            "victim_count": 15,
-            "perpetrator_age": null,
-            "perpetrator_registered": false
-          },
-          "relationship_vector": [
-            "brother"
-          ],
-          "investigation_vector": {
-            "type": "unknown",
-            "agencies": []
-          },
-          "evidence_vector": {
-            "images": null,
-            "videos": null,
-            "storage_size": null
-          },
-          "temporal_value": "2013-05-01",
-          "topic_vector": [
-            "hands_on",
-            "family"
-          ],
-          "severity_vector": [
-            "sexual_assault",
-            "under_12"
-          ]
-        },
-        "priority_score": 8.13,
-        "priority_score_raw": 15.6
+        "victim_count": null,
+        "case_topics": []
       }
     ]
+  },
+  "tag_based_filtering": {
+    "total_test_queries": 6,
+    "query_results": [
+      {
+        "query": "Single tag: possession",
+        "tags": [
+          {
+            "tag": "possession",
+            "category": "case_topics"
+          }
+        ],
+        "matches": 31,
+        "percentage": 32.631578947368425
+      },
+      {
+        "query": "Single tag: production",
+        "tags": [
+          {
+            "tag": "production",
+            "category": "case_topics"
+          }
+        ],
+        "matches": 6,
+        "percentage": 6.315789473684211
+      },
+      {
+        "query": "Single tag: infant",
+        "tags": [
+          {
+            "tag": "infant",
+            "category": "severity_indicators"
+          }
+        ],
+        "matches": 8,
+        "percentage": 8.421052631578947
+      },
+      {
+        "query": "Multi-tag: possession AND RSO",
+        "tags": [
+          {
+            "tag": "possession",
+            "category": "case_topics"
+          },
+          {
+            "tag": "registered_sex_offender",
+            "category": "registered_sex_offender"
+          }
+        ],
+        "matches": 1,
+        "percentage": 1.0526315789473684
+      },
+      {
+        "query": "Multi-tag: production AND hands_on",
+        "tags": [
+          {
+            "tag": "production",
+            "category": "case_topics"
+          },
+          {
+            "tag": "hands_on",
+            "category": "case_topics"
+          }
+        ],
+        "matches": 6,
+        "percentage": 6.315789473684211
+      },
+      {
+        "query": "Multi-tag: family AND very_young",
+        "tags": [
+          {
+            "tag": "family",
+            "category": "case_topics"
+          },
+          {
+            "tag": "very_young",
+            "category": "severity_indicators"
+          }
+        ],
+        "matches": 1,
+        "percentage": 1.0526315789473684
+      }
+    ],
+    "filtering_capabilities": {
+      "supports_single_tag": true,
+      "supports_multi_tag_intersection": true,
+      "supports_cross_category_filtering": true
+    }
+  },
+  "similarity_calculation": {
+    "sample_size": 50,
+    "total_pairs_analyzed": 1225,
+    "similarity_statistics": {
+      "mean": 0.40009756149197323,
+      "median": 0.375,
+      "std": 0.17757092640925112,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "similarity_distribution": {
+      "very_high_0.7+": {
+        "count": 69,
+        "percentage": 5.63265306122449
+      },
+      "high_0.5-0.7": {
+        "count": 265,
+        "percentage": 21.63265306122449
+      },
+      "medium_0.3-0.5": {
+        "count": 545,
+        "percentage": 44.48979591836735
+      },
+      "low_<0.3": {
+        "count": 346,
+        "percentage": 28.244897959183675
+      }
+    }
   },
   "insights": {
     "platform_analysis": {
@@ -2200,7 +660,9 @@
         "social media": 3,
         "Facebook": 2
       },
-      "total_platform_mentions": 43
+      "total_platform_mentions": 43,
+      "unique_platforms": 5,
+      "cases_with_platforms": 31
     },
     "severity_distribution": {
       "production": 6,
@@ -2208,7 +670,13 @@
       "infant": 8,
       "sexual_assault": 50,
       "under_10": 0,
-      "total_cases": 95
+      "total_cases": 95,
+      "all_severity_indicators": {
+        "sexual_assault": 50,
+        "under_12": 13,
+        "infant": 8,
+        "very_young": 6
+      }
     },
     "case_topics": {
       "family": 6,
@@ -2217,39 +685,339 @@
       "possession": 31,
       "hands_on": 28,
       "multi_state": 3,
-      "total_cases": 95
+      "total_cases": 95,
+      "all_topics": {
+        "possession": 31,
+        "online_digital": 20,
+        "pornography": 47,
+        "hands_on": 28,
+        "family": 6,
+        "production": 6,
+        "multi_state": 3,
+        "international": 3
+      }
+    },
+    "relationship_analysis": {
+      "distribution": {
+        "teacher": 5,
+        "stranger": 84,
+        "mother": 3,
+        "father": 2,
+        "brother": 1
+      },
+      "family_vs_stranger": {
+        "family": 6,
+        "stranger": 89,
+        "family_percentage": 6.315789473684211,
+        "stranger_percentage": 93.6842105263158
+      }
     },
     "pattern_detection": {
       "registered_sex_offenders": 6,
+      "rso_percentage": 6.315789473684211,
       "total_cases": 95
     },
-    "topic_counts": {
-      "possession": 31,
-      "online_digital": 20,
-      "pornography": 47,
-      "hands_on": 28,
-      "family": 6,
-      "production": 6,
-      "multi_state": 3,
-      "international": 3
+    "investigation_analysis": {
+      "distribution": {
+        "unknown": 36,
+        "proactive": 13,
+        "reactive": 2,
+        "online": 6,
+        "undercover": 1
+      },
+      "total_with_investigation_type": 58
     },
-    "severity_counts": {
-      "sexual_assault": 50,
-      "under_12": 13,
-      "infant": 8,
-      "very_young": 6
+    "automated_insights": {
+      "insights": [
+        {
+          "type": "platform_analysis",
+          "title": "Most Common Platform",
+          "description": "'online' appears in 23 cases (24.2% of all cases)",
+          "severity": "info",
+          "cases": [
+            "ncmec_2024_unknown_042",
+            "azicac_2011_january_001",
+            "azicac_2011_april_004",
+            "azicac_2011_august_007",
+            "azicac_2011_september_008",
+            "azicac_2011_december_010",
+            "azicac_2012_may_005",
+            "azicac_2013_july_007",
+            "azicac_2014_june_007",
+            "azicac_2014_july_008",
+            "azicac_2014_december_013",
+            "ncmec_2024_april_035",
+            "ncmec_2024_may_023",
+            "ncmec_2024_may_041",
+            "ncmec_2024_june_008",
+            "ncmec_2024_july_028",
+            "ncmec_2024_july_043",
+            "ncmec_2024_august_020",
+            "ncmec_2024_september_018",
+            "ncmec_2024_october_005",
+            "ncmec_2024_october_047",
+            "ncmec_2024_november_027",
+            "ncmec_2024_december_011"
+          ]
+        },
+        {
+          "type": "severity_analysis",
+          "title": "High Severity Cases",
+          "description": "14 cases involve high-severity indicators (infant, very young)",
+          "severity": "warning",
+          "cases": [
+            "azicac_2011_november_009",
+            "azicac_2012_november_011",
+            "azicac_2012_december_012",
+            "azicac_2013_february_002",
+            "azicac_2013_march_003",
+            "azicac_2013_april_004",
+            "azicac_2014_january_001",
+            "azicac_2014_may_005",
+            "azicac_2014_may_006",
+            "azicac_2014_june_007",
+            "azicac_2014_december_013",
+            "ncmec_2024_october_005"
+          ]
+        },
+        {
+          "type": "topic_analysis",
+          "title": "Most Common Case Topic",
+          "description": "'Pornography' appears in 47 cases",
+          "severity": "info",
+          "cases": [
+            "ncmec_2025_unknown_001",
+            "azicac_2011_january_001",
+            "azicac_2012_february_002",
+            "azicac_2012_march_003",
+            "azicac_2012_june_006",
+            "azicac_2012_december_012",
+            "azicac_2013_january_001",
+            "azicac_2014_january_001",
+            "azicac_2014_april_004",
+            "azicac_2014_may_005",
+            "azicac_2014_may_006",
+            "azicac_2014_june_007",
+            "azicac_2014_august_009",
+            "azicac_2014_november_012",
+            "ncmec_2024_january_021",
+            "ncmec_2024_february_022",
+            "ncmec_2024_february_033",
+            "ncmec_2024_february_034",
+            "ncmec_2024_march_019",
+            "ncmec_2024_march_030",
+            "ncmec_2024_march_031",
+            "ncmec_2024_april_032",
+            "ncmec_2024_may_002",
+            "ncmec_2024_may_023",
+            "ncmec_2024_may_041",
+            "ncmec_2024_may_046",
+            "ncmec_2024_june_008",
+            "ncmec_2024_june_026",
+            "ncmec_2024_july_001",
+            "ncmec_2024_july_003",
+            "ncmec_2024_july_006",
+            "ncmec_2024_july_007",
+            "ncmec_2024_july_012",
+            "ncmec_2024_july_016",
+            "ncmec_2024_july_036",
+            "ncmec_2024_august_009",
+            "ncmec_2024_august_020",
+            "ncmec_2024_august_025",
+            "ncmec_2024_august_037",
+            "ncmec_2024_september_018",
+            "ncmec_2024_september_038",
+            "ncmec_2024_september_039",
+            "ncmec_2024_october_005",
+            "ncmec_2024_october_044",
+            "ncmec_2024_october_047",
+            "ncmec_2024_november_024",
+            "ncmec_2024_december_011"
+          ]
+        }
+      ],
+      "patterns": [
+        {
+          "pattern": "repeat_offenders",
+          "description": "6 cases (6.3%) involve registered sex offenders",
+          "count": 6
+        },
+        {
+          "pattern": "relationship_pattern",
+          "description": "Stranger cases (89) outnumber family-related cases (6)",
+          "count": 89
+        }
+      ],
+      "trends": [
+        {
+          "trend": "temporal_span",
+          "description": "Cases span 5083 days (93 cases over 13.9 years)",
+          "start_date": "2011-01-01T00:00:00",
+          "end_date": "2024-12-01T00:00:00"
+        },
+        {
+          "trend": "investigation_type",
+          "description": "Most common investigation type: 'unknown' (36 cases)",
+          "count": 36
+        }
+      ],
+      "summary": {
+        "total_cases": 95,
+        "total_insights": 3,
+        "total_patterns": 2,
+        "total_trends": 2
+      }
     }
   },
-  "keywords": [
-    "child",
-    "suspect",
-    "sexual",
-    "arrested",
-    "children",
-    "police",
-    "man",
-    "images",
-    "pornography",
-    "county"
-  ]
+  "keywords": {
+    "top_keywords": [
+      "child",
+      "sexual",
+      "suspect",
+      "man",
+      "arrested",
+      "investigation",
+      "children",
+      "police",
+      "images",
+      "pornography",
+      "old",
+      "crimes",
+      "exploitation",
+      "county",
+      "investigators",
+      "year",
+      "during",
+      "against",
+      "internet",
+      "being"
+    ],
+    "keyword_frequencies": {
+      "child": 68,
+      "sexual": 43,
+      "suspect": 42,
+      "man": 38,
+      "arrested": 36,
+      "investigation": 35,
+      "children": 34,
+      "police": 33,
+      "images": 33,
+      "pornography": 26,
+      "old": 26,
+      "crimes": 25,
+      "exploitation": 24,
+      "county": 24,
+      "investigators": 24,
+      "year": 23,
+      "during": 21,
+      "against": 21,
+      "internet": 20,
+      "being": 20
+    },
+    "total_keywords_extracted": 1900,
+    "unique_keywords": 631,
+    "average_keywords_per_case": 20,
+    "cases_with_text": 95
+  },
+  "data_quality": {
+    "average_completeness": 65.05263157894737,
+    "completeness_distribution": {
+      "high_80-100": 17,
+      "medium_50-80": 77,
+      "low_<50": 1
+    },
+    "total_cases": 95
+  },
+  "system_performance": {
+    "clustering_time": 0.03685402870178223,
+    "clustering_cases_per_second": 2577.737179528649,
+    "triage_time": 0.0001709461212158203,
+    "triage_cases_per_second": 555730.6555090656,
+    "insights_time": 0.00012636184692382812,
+    "insights_cases_per_second": 751809.2075471698,
+    "full_analysis_time": 0.0371401309967041,
+    "full_analysis_cases_per_second": 2557.880046476694
+  },
+  "use_case_examples": {
+    "use_case_1_high_priority_triage": {
+      "description": "Identify highest priority cases requiring immediate attention",
+      "query": "Priority score >= 8.0",
+      "results_count": 3,
+      "example_cases": [
+        {
+          "case_id": "azicac_2014_january_001",
+          "priority_score": 10.0,
+          "key_characteristics": {
+            "severity": [
+              "infant",
+              "sexual_assault",
+              "under_12"
+            ],
+            "victim_count": 3,
+            "topics": [
+              "possession",
+              "hands_on",
+              "pornography"
+            ]
+          }
+        },
+        {
+          "case_id": "azicac_2014_may_006",
+          "priority_score": 9.89,
+          "key_characteristics": {
+            "severity": [
+              "infant",
+              "sexual_assault",
+              "very_young"
+            ],
+            "victim_count": null,
+            "topics": [
+              "possession",
+              "hands_on",
+              "pornography"
+            ]
+          }
+        },
+        {
+          "case_id": "azicac_2014_may_005",
+          "priority_score": 9.71,
+          "key_characteristics": {
+            "severity": [
+              "infant",
+              "sexual_assault",
+              "very_young"
+            ],
+            "victim_count": null,
+            "topics": [
+              "possession",
+              "hands_on",
+              "pornography"
+            ]
+          }
+        }
+      ]
+    },
+    "use_case_2_tag_combination_filtering": {
+      "description": "Find cases matching multiple criteria (possession AND registered sex offender)",
+      "query": "possession AND registered_sex_offender",
+      "results_count": 1,
+      "example_cases": [
+        {
+          "case_id": "azicac_2011_june_005",
+          "relationship": "stranger",
+          "platforms": []
+        }
+      ]
+    },
+    "use_case_3_production_case_analysis": {
+      "description": "Analyze all production cases",
+      "query": "production",
+      "results_count": 6,
+      "statistics": {
+        "with_hands_on": 6,
+        "with_infant": 0,
+        "with_multiple_victims": 2
+      }
+    }
+  }
 }
