@@ -2,11 +2,14 @@
 
 **CaseLinker** is a project designed to group and visualize **statistical** and **contextual** information from cases involving crimes against children and child sexual exploitation & abuse (CSEA).
 
-## 🌐 Live Demo
+## Live Demo
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 47 cases from publicly available Arizona ICAC annual reports (2011–2014). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and 95 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+
+**Read the technical report here:** [CaseLinker: An Open-Source System for Cross-Case Analysis of Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker.pdf)
+
 
 ## Motivation
 
@@ -42,7 +45,7 @@ CaseLinker follows a modular, layered architecture:
 **No installation required.** Visit the live deployment:
 - **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live version includes all features and 47 processed cases. Perfect for quick testing and demonstrations.
+The live version includes all features and 95 processed cases. Created for quick testing and demonstrations.
 
 ### Option 2: Local Setup (Works Out of the Box)
 
@@ -69,7 +72,7 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with 48 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. The database uses plain SQLite (no encryption) for maximum compatibility across all platforms including Railway.
+**Important:** The repository includes a database (`caselinker.db`) with 48 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. An IRB determination request was submitted to the University of Massachusetts Amherst Institutional Review Board for review of this research project.
 
 **Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
 
@@ -89,7 +92,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### ⚠️ Important: Data Source and Warning
+### ⚠️ Important: Data Content and Warning
 
 **This project processes sensitive case data related to child exploitation cases. The content may be disturbing and is intended for research and analysis purposes only.**
 
@@ -191,7 +194,7 @@ CaseLinker/
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
-├── caselinker.db                # SQLite database with 47 processed cases (2011-2014)
+├── caselinker.db                # SQLite database with 95 processed cases (47 AZICAC 2011-2014, 48 NCMEC 2024)
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -247,8 +250,8 @@ Each case includes structured features extracted from case narratives:
 CaseLinker can be deployed to cloud platforms for public access. The app includes a `Procfile` for deployment to Railway, Heroku, and similar platforms.
 
 
-#
-- **No Sensitive Data**: The database contains 47 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain.
+## Sources and Ethics
+- **No Sensitive Data**: The database contains 95 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. An IRB determination request was submitted to the University of Massachusetts Amherst Institutional Review Board for review of this research project.
 - **See `/sources` page for full disclaimer regarding data usage**
 
 
