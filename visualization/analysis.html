@@ -677,9 +677,19 @@
             if (selectedTopics.has(topic)) {
                 selectedTopics.delete(topic);
                 tag.classList.remove('selected');
+                if (tag.style) {
+                    tag.style.background = 'rgba(30,30,30,0.8)';
+                }
             } else {
                 selectedTopics.set(topic, {category: categoryType, element: tag});
                 tag.classList.add('selected');
+                if (tag.style) {
+                    tag.style.background = 'rgba(255,193,7,0.25)';
+                }
+            }
+            // If this is a custom topic, update the display to sync state
+            if (categoryType === 'custom') {
+                updateCustomTopicsDisplay();
             }
             updateCaseCount();
         }
@@ -923,7 +933,16 @@
             Array.from(customTopics).forEach(topic => {
                 const topicBadge = document.createElement('div');
                 topicBadge.className = 'topic-tag';
-                topicBadge.style.background = 'rgba(30,30,30,0.8)';
+                topicBadge.setAttribute('data-topic', topic);
+                topicBadge.setAttribute('data-category', 'custom');
+                
+                // Check if this topic is already selected
+                const isSelected = selectedTopics.has(topic);
+                if (isSelected) {
+                    topicBadge.classList.add('selected');
+                }
+                
+                topicBadge.style.background = isSelected ? 'rgba(255,193,7,0.25)' : 'rgba(30,30,30,0.8)';
                 topicBadge.style.display = 'inline-flex';
                 topicBadge.style.alignItems = 'center';
                 topicBadge.innerHTML = `
@@ -931,7 +950,13 @@
                     <button onclick="removeCustomTopic('${topic}'); event.stopPropagation();" 
                             style="margin-left: 10px; background: rgba(200,0,0,0.6); border: none; color: #fff; border-radius: 0; width: 22px; height: 22px; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-weight: 700;">×</button>
                 `;
-                topicBadge.onclick = () => toggleTopicTag(topicBadge, topic);
+                topicBadge.onclick = () => toggleTopicTag(topicBadge, topic, 'custom');
+                
+                // Update the element reference in selectedTopics if it exists
+                if (isSelected) {
+                    selectedTopics.set(topic, {category: 'custom', element: topicBadge});
+                }
+                
                 customDisplay.appendChild(topicBadge);
             });
         }
@@ -2000,7 +2025,9 @@
                             } else if (category === 'registered_sex_offender') {
                                 patterns = [/\bregistered\s+sex\s+offender\b/gi, /\bsex\s+offender\b/gi, /\bRSO\b/gi];
                             } else if (category === 'custom') {
-                                patterns = [new RegExp(`\\b${tag.replace(/_/g, '\\s+')}\\b`, 'gi')];
+                                // For custom tags, search in case text - escape regex special chars
+                                const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                patterns = [new RegExp(`\\b${escapedTag}\\b`, 'gi')];
                             }
                             
                             patterns.forEach(pattern => {

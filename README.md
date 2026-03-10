@@ -72,7 +72,7 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with 48 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. An IRB determination request was submitted to the University of Massachusetts Amherst Institutional Review Board for review of this research project.
+**Important:** The repository includes a database (`caselinker.db`) with 48 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668), confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 
 **Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
 
@@ -251,7 +251,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: The database contains 95 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. An IRB determination request was submitted to the University of Massachusetts Amherst Institutional Review Board for review of this research project.
+- **No Sensitive Data**: The database contains 95 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668), confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

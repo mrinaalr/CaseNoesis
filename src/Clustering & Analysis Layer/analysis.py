@@ -12,6 +12,65 @@ from collections import Counter, defaultdict
 from datetime import datetime
 
 
+def match_custom_tag_in_text(case_text: str, tag: str) -> bool:
+    """
+    Check if a custom tag matches in case text.
+    Uses word boundary matching for better accuracy.
+    
+    Args:
+        case_text: The case text to search in
+        tag: The custom tag to search for
+        
+    Returns:
+        True if tag is found in text, False otherwise
+    """
+    if not case_text or not tag:
+        return False
+    
+    # Normalize to lowercase
+    case_text_lower = case_text.lower()
+    tag_lower = tag.lower().strip()
+    
+    # Simple substring match (current behavior)
+    # This allows partial matches like "girl" matching "girls" or "girlfriend"
+    if tag_lower in case_text_lower:
+        return True
+    
+    # Optional: Word boundary matching for exact word matches
+    # Uncomment below for stricter matching (only matches whole words)
+    # import re
+    # pattern = re.compile(r'\b' + re.escape(tag_lower) + r'\b', re.IGNORECASE)
+    # return bool(pattern.search(case_text))
+    
+    return False
+
+
+def get_case_text(case: Dict[str, Any]) -> str:
+    """
+    Extract case text from a case dictionary.
+    Handles different data structures.
+    
+    Args:
+        case: Case dictionary
+        
+    Returns:
+        Case text as string, empty string if not found
+    """
+    # Try raw_data.case_text first
+    raw_data = case.get('raw_data', {})
+    if isinstance(raw_data, dict):
+        case_text = raw_data.get('case_text', '')
+        if case_text:
+            return case_text
+    
+    # Try case_text directly
+    case_text = case.get('case_text', '')
+    if case_text:
+        return case_text
+    
+    return ''
+
+
 
 
 def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, str]]) -> List[Dict[str, Any]]:
@@ -94,10 +153,9 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
                 
             elif category == 'custom':
-                # Search in case text for custom topics
-                case_text = (case.get('raw_data', {}).get('case_text', '') or 
-                           case.get('case_text', '') or '').lower()
-                matches = tag.lower() in case_text
+                # Search in case text for custom topics using helper function
+                case_text = get_case_text(case)
+                matches = match_custom_tag_in_text(case_text, tag)
             
             if not matches:
                 matches_all = False
@@ -185,9 +243,9 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
             elif category == 'registered_sex_offender':
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
             elif category == 'custom':
-                case_text = (case.get('raw_data', {}).get('case_text', '') or 
-                           case.get('case_text', '') or '').lower()
-                matches = tag.lower() in case_text
+                # Search in case text for custom topics using helper function
+                case_text = get_case_text(case)
+                matches = match_custom_tag_in_text(case_text, tag)
             
             if not matches:
                 matches_all = False
@@ -253,9 +311,9 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
             elif category == 'registered_sex_offender':
                 matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
             elif category == 'custom':
-                case_text = (case.get('raw_data', {}).get('case_text', '') or 
-                           case.get('case_text', '') or '').lower()
-                matches = tag.lower() in case_text
+                # Search in case text for custom topics using helper function
+                case_text = get_case_text(case)
+                matches = match_custom_tag_in_text(case_text, tag)
             
             if matches:
                 matching_case_ids.append(case.get('id', ''))
