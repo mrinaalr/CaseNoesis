@@ -97,7 +97,7 @@ You can process additional PDFs to add more cases to the database.
    - Extracts text, identifies sources, splits cases, extracts features, and stores them
    - Pre-computes clusters after storing new cases
 
-2. **`run/main.py`** - **FastAPI Web Server**
+2. **`run/main.py`** - **Main application**
    - Starts the web server that serves the visualization interface and API
    - Run this to access the web interface and visualizations
    - Uses pre-computes clusters on startup for fast performance
@@ -119,11 +119,6 @@ python3 -m src.main "path/to/your/file.pdf"
 
 **Multiple PDFs:**
 ```bash
-python3 -m src.main "file1.pdf" "file2.pdf" "file3.pdf"
-```
-
-**Example - Process all desired pdfs:**
-```bash
 python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2020 Reports" "2024-media-coverage-cybertipline-success-stories.pdf" 
 ```
 
@@ -142,7 +137,7 @@ The system will:
 5. Perform clustering computations and prepare to run main application
 
 
-### Using the Visualizations
+## Using the Visualizations
 
 1. **Case Group**: Displays cases matching specific groups (infant, very young, assault, posession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
@@ -151,7 +146,7 @@ The system will:
 5. **Environment**: Bar chart showing distribution of platforms and environments used (Facebook, online, chat, etc.). Click bars to view cases with highlighted platform text.
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
 
-### Using Advanced Case Analysis
+## Using Advanced Case Analysis
 
 1. **Tag-Based Analysis (Run Advanced Analysis)**:
    - Select one or more tags from categories: Case Topics, Severity Indicators, Platforms & Environments, Investigation Types, Perpetrator Relationships, Perpetrator Status
@@ -177,6 +172,7 @@ The system will:
 ### Other Features
 
 - **Sources Tab**: View data sources and access original case reports
+- **Clusters Tab**: View pre computed clusters, analze case reports
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 

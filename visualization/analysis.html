@@ -62,7 +62,7 @@
                 0 0 0 1px rgba(255, 193, 7, 0.1),
                 0 20px 60px rgba(0,0,0,0.8),
                 inset 0 1px 0 rgba(255, 193, 7, 0.05);
-            margin-top: 20px;
+            margin-top: 0;
             margin-bottom: 20px;
             border: 1px solid rgba(255, 193, 7, 0.15);
         }
@@ -405,6 +405,7 @@
         <div class="header-section">
             <h1>🔍 Advanced Case Analysis</h1>
             <p class="subtitle">Analysis tab - used for clustering, pattern detection, and case analysis. Use predefined topics or add custom topics to analyze cases.</p>
+            <div id="loading-indicator" style="display: none; margin-top: 15px; color: #888; font-size: 14px;">Loading cases...</div>
         </div>
         
         <div class="analysis-controls">
@@ -549,12 +550,9 @@
         let customTopics = new Set();
 
         async function loadCases() {
-            // Show loading indicator
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = 'loading-indicator';
-            loadingDiv.style.cssText = 'text-align: center; padding: 20px; color: #888;';
-            loadingDiv.textContent = 'Loading cases...';
-            document.body.insertBefore(loadingDiv, document.body.firstChild);
+            // Show subtle loading indicator in header
+            const loadingEl = document.getElementById('loading-indicator');
+            if (loadingEl) loadingEl.style.display = 'block';
             
             try {
                 // Load tags first (fast, cached endpoint) to populate selectors immediately
@@ -568,21 +566,19 @@
                 // Render selectors immediately with cached tags
                 renderTopicSelectorFromTags(tagsData);
                 
+                // Hide loading indicator once tags are loaded (page is usable)
+                if (loadingEl) loadingEl.style.display = 'none';
+                
                 // Then load full cases in background (for when user actually needs them)
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
                 window.allCases = allCases; // Store globally
                 
-                // Remove loading indicator
-                const loadingEl = document.getElementById('loading-indicator');
-                if (loadingEl) loadingEl.remove();
-                
                 // Re-render with full data (in case there are any differences)
                 renderTopicSelector();
             } catch (error) {
                 console.error('Error loading cases:', error);
-                const loadingEl = document.getElementById('loading-indicator');
-                if (loadingEl) loadingEl.remove();
+                if (loadingEl) loadingEl.style.display = 'none';
                 
                 // Fallback: try to load cases the old way
                 try {

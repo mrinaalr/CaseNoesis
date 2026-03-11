@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "evaluation_date": "2026-03-10T22:34:38.060435",
+    "evaluation_date": "2026-03-11T00:51:20.498404",
     "total_cases": 207,
     "database_path": "caselinker.db",
     "system_version": "CaseLinker v1.0"
@@ -400,25 +400,25 @@
         "case_id": "azicac_2014_001",
         "priority_score": 10.0,
         "severity_indicators": [
-          "infant",
+          "sexual_assault",
           "under_12",
-          "sexual_assault"
+          "infant"
         ],
         "victim_count": 3,
         "case_topics": [
-          "production",
-          "pornography",
           "possession",
-          "hands_on"
+          "hands_on",
+          "pornography",
+          "production"
         ]
       },
       {
         "case_id": "azicac_2014_006",
         "priority_score": 9.44,
         "severity_indicators": [
-          "infant",
           "very_young",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -431,9 +431,9 @@
         "case_id": "azicac_2014_005",
         "priority_score": 9.28,
         "severity_indicators": [
-          "infant",
           "very_young",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -451,18 +451,18 @@
         ],
         "victim_count": 6,
         "case_topics": [
-          "production",
-          "pornography",
           "possession",
-          "hands_on"
+          "hands_on",
+          "pornography",
+          "production"
         ]
       },
       {
         "case_id": "azicac_2014_013",
         "priority_score": 8.45,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -475,21 +475,21 @@
         "priority_score": 8.42,
         "severity_indicators": [
           "very_young",
-          "under_12",
-          "sexual_assault"
+          "sexual_assault",
+          "under_12"
         ],
         "victim_count": null,
         "case_topics": [
-          "production",
-          "hands_on"
+          "hands_on",
+          "production"
         ]
       },
       {
         "case_id": "azicac_2012_012",
         "priority_score": 8.39,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -501,8 +501,8 @@
         "case_id": "azicac_2011_009",
         "priority_score": 8.3,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -514,8 +514,8 @@
         "case_id": "ncmec_2024_005",
         "priority_score": 8.18,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -527,8 +527,8 @@
         "case_id": "azicac_2013_002",
         "priority_score": 7.94,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": []
@@ -1061,14 +1061,14 @@
     "total_cases": 207
   },
   "system_performance": {
-    "clustering_time": 0.14856290817260742,
-    "clustering_cases_per_second": 1393.349137723513,
-    "triage_time": 0.0003681182861328125,
-    "triage_cases_per_second": 562319.2538860104,
-    "insights_time": 0.00022792816162109375,
-    "insights_cases_per_second": 908180.8870292887,
-    "full_analysis_time": 0.15433382987976074,
-    "full_analysis_cases_per_second": 1341.2483845004735
+    "clustering_time": 0.1700589656829834,
+    "clustering_cases_per_second": 1217.2248559119223,
+    "triage_time": 0.0004143714904785156,
+    "triage_cases_per_second": 499551.7422324511,
+    "insights_time": 0.0002586841583251953,
+    "insights_cases_per_second": 800203.6202764977,
+    "full_analysis_time": 0.1701951026916504,
+    "full_analysis_cases_per_second": 1216.2512124395882
   },
   "use_case_examples": {
     "use_case_1_high_priority_triage": {
@@ -1081,16 +1081,16 @@
           "priority_score": 10.0,
           "key_characteristics": {
             "severity": [
-              "infant",
+              "sexual_assault",
               "under_12",
-              "sexual_assault"
+              "infant"
             ],
             "victim_count": 3,
             "topics": [
-              "production",
-              "pornography",
               "possession",
-              "hands_on"
+              "hands_on",
+              "pornography",
+              "production"
             ]
           }
         },
@@ -1099,9 +1099,9 @@
           "priority_score": 9.44,
           "key_characteristics": {
             "severity": [
-              "infant",
               "very_young",
-              "sexual_assault"
+              "sexual_assault",
+              "infant"
             ],
             "victim_count": null,
             "topics": [
@@ -1116,9 +1116,9 @@
           "priority_score": 9.28,
           "key_characteristics": {
             "severity": [
-              "infant",
               "very_young",
-              "sexual_assault"
+              "sexual_assault",
+              "infant"
             ],
             "victim_count": null,
             "topics": [
