@@ -214,21 +214,24 @@
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
+            align-items: center;
         }
-        .feature-value-array span {
+        .feature-value-array .highlightable-item {
             background: #4CAF50;
             color: white;
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
-        }
-        .feature-value-array span.highlightable-item {
             cursor: pointer;
             transition: all 0.2s;
         }
-        .feature-value-array span.highlightable-item:hover {
+        .feature-value-array .highlightable-item:hover {
             background: #45a049;
             transform: scale(1.05);
+        }
+        .feature-value-array .array-separator {
+            color: #999;
+            margin: 0 2px;
         }
         .feature-value-object {
             background: #fff;
@@ -348,6 +351,165 @@
         let selectedCaseId = null;
         let currentCaseText = '';
         let currentCaseData = null;
+        
+        function cleanAndDeduplicateAgencies(agencies) {
+            if (!agencies) return [];
+            if (!Array.isArray(agencies)) return [];
+            
+            // Filter out empty/null/whitespace-only values - be VERY strict
+            let cleaned = agencies.filter(agency => {
+                // Check for null/undefined
+                if (agency === null || agency === undefined) return false;
+                
+                // Convert to string and trim
+                const str = String(agency).trim();
+                
+                // Reject empty strings, whitespace-only, or special values
+                if (str.length === 0) return false;
+                if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                
+                // Reject strings that are only punctuation or special characters
+                if (!/[a-zA-Z0-9]/.test(str)) return false;
+                
+                // Reject strings that are only spaces, commas, quotes, apostrophes
+                if (/^[\s,.'"`]+$/.test(str)) return false;
+                
+                return true;
+            }).map(agency => String(agency).trim()).filter(str => {
+                // Triple filter - be extra sure
+                if (str.length === 0) return false;
+                if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                if (!/[a-zA-Z0-9]/.test(str)) return false;
+                if (/^[\s,.'"`]+$/.test(str)) return false;
+                return true;
+            });
+            
+            // Normalize and deduplicate - remove subsumed agencies
+            // e.g., if "AZICAC Phoenix Police" exists, remove "AZICAC" alone
+            const normalized = [];
+            const seen = new Map(); // Map of lowercase -> original case
+            
+            // Sort by length (longest first) to handle subsumption correctly
+            cleaned.sort((a, b) => b.length - a.length);
+            
+            cleaned.forEach(agency => {
+                const lower = agency.toLowerCase();
+                
+                // Skip exact duplicates (case-insensitive)
+                if (seen.has(lower)) return;
+                
+                // Check if this agency is subsumed by an existing one
+                // e.g., "AZICAC" is subsumed by "AZICAC Phoenix Police"
+                let isSubsumed = false;
+                for (const [existingLower, existingAgency] of seen.entries()) {
+                    // If new agency is a substring of existing (e.g., "azicac" in "azicac phoenix police")
+                    if (existingLower.includes(lower) && existingLower !== lower) {
+                        isSubsumed = true;
+                        break;
+                    }
+                    // If existing is a substring of new, remove the shorter existing one
+                    if (lower.includes(existingLower) && lower !== existingLower) {
+                        seen.delete(existingLower);
+                        // Remove from normalized array
+                        const index = normalized.indexOf(existingAgency);
+                        if (index > -1) {
+                            normalized.splice(index, 1);
+                        }
+                        break;
+                    }
+                }
+                
+                if (!isSubsumed) {
+                    normalized.push(agency); // Keep original case
+                    seen.set(lower, agency);
+                }
+            });
+            
+            // Return sorted unique agencies
+            return normalized.sort();
+        }
+        
+        function cleanAndDeduplicateArray(arr) {
+            if (!arr) return [];
+            if (!Array.isArray(arr)) return [];
+            
+            // Filter out empty/null values - be VERY strict
+            let cleaned = arr.filter(item => {
+                if (item === null || item === undefined) return false;
+                const str = String(item).trim();
+                if (str.length === 0) return false;
+                if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                // Reject strings that are only punctuation or special characters
+                if (!/[a-zA-Z0-9]/.test(str)) return false;
+                // Reject strings that are only spaces, commas, quotes, apostrophes
+                if (/^[\s,.'"`]+$/.test(str)) return false;
+                return true;
+            }).map(item => String(item).trim()).filter(str => {
+                // Double filter - be extra sure
+                if (str.length === 0) return false;
+                if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                if (!/[a-zA-Z0-9]/.test(str)) return false;
+                if (/^[\s,.'"`]+$/.test(str)) return false;
+                return true;
+            });
+            
+            // Deduplicate (case-insensitive)
+            const seen = new Set();
+            const normalized = [];
+            
+            cleaned.forEach(item => {
+                const lower = item.toLowerCase();
+                if (!seen.has(lower)) {
+                    seen.add(lower);
+                    normalized.push(item); // Keep original case
+                }
+            });
+            
+            // Return sorted unique items
+            return normalized.sort();
+        }
+        
+        function cleanAgeArray(ages) {
+            if (!ages) return null;
+            if (!Array.isArray(ages)) return ages;
+            
+            // Filter out empty/null/invalid ages
+            const cleaned = ages.filter(age => {
+                if (age === null || age === undefined) return false;
+                // Keep valid ages (1-100)
+                const ageNum = typeof age === 'number' ? age : parseInt(age);
+                return !isNaN(ageNum) && ageNum >= 1 && ageNum <= 100;
+            }).map(age => typeof age === 'number' ? age : parseInt(age));
+            
+            // Deduplicate and sort
+            const unique = [...new Set(cleaned)].sort((a, b) => a - b);
+            return unique.length > 0 ? unique : null;
+        }
+        
+        function cleanCaseDemographics(demo) {
+            if (!demo) return null;
+            if (typeof demo !== 'object') return demo;
+            
+            // Clean ages array if present
+            if (demo.ages && Array.isArray(demo.ages)) {
+                const cleanedAges = demo.ages.filter(age => {
+                    if (age === null || age === undefined) return false;
+                    // Keep valid ages (1-100)
+                    const ageNum = typeof age === 'number' ? age : parseInt(age);
+                    return !isNaN(ageNum) && ageNum >= 1 && ageNum <= 100;
+                }).map(age => typeof age === 'number' ? age : parseInt(age));
+                
+                // Deduplicate and sort
+                const uniqueAges = [...new Set(cleanedAges)].sort((a, b) => a - b);
+                
+                // Create new demographics object with cleaned ages
+                const cleaned = { ...demo };
+                cleaned.ages = uniqueAges;
+                return cleaned;
+            }
+            
+            return demo;
+        }
 
         async function loadCases() {
             try {
@@ -464,7 +626,7 @@
                 {
                     title: 'Perpetrator Context',
                     features: {
-                        'Age': caseData.perpetrator_age,
+                        'Age': cleanAgeArray(Array.isArray(caseData.perpetrator_age) ? caseData.perpetrator_age : (caseData.perpetrator_age !== null && caseData.perpetrator_age !== undefined ? [caseData.perpetrator_age] : null)),
                         'Registered Sex Offender': caseData.perpetrator_registered_sex_offender,
                         'Relationship to Victim': caseData.relationship_to_victim,
                         'Previous Conviction': caseData.previous_conviction
@@ -474,20 +636,20 @@
                     title: 'Case Context',
                     features: {
                         'Victim Count': caseData.victim_count,
-                        'Case Demographics': caseData.case_demographics || caseData.victim_demographics
+                        'Case Demographics': cleanCaseDemographics(caseData.case_demographics || caseData.victim_demographics)
                     }
                 },
                 {
                     title: 'Technology & Platforms',
                     features: {
-                        'Platforms Used': caseData.platforms_used
+                        'Platforms Used': cleanAndDeduplicateArray(caseData.platforms_used)
                     }
                 },
                 {
                     title: 'Law Enforcement',
                     features: {
                         'Investigation Type': caseData.investigation_type,
-                        'Agencies Involved': caseData.agencies_involved,
+                        'Agencies Involved': cleanAndDeduplicateAgencies(caseData.agencies_involved),
                         'Prosecution Outcome': caseData.prosecution_outcome
                     }
                 },
@@ -500,8 +662,8 @@
                 {
                     title: 'Content Classification',
                     features: {
-                        'Severity Indicators': caseData.severity_indicators,
-                        'Case Topics': caseData.case_topics
+                        'Severity Indicators': cleanAndDeduplicateArray(caseData.severity_indicators),
+                        'Case Topics': cleanAndDeduplicateArray(caseData.case_topics)
                     }
                 }
             ];
@@ -544,22 +706,54 @@
                 });
             });
             
-            // Add listeners to feature items (the whole box, but not the label)
+            // Add listeners to feature items (the whole box)
             // All highlightable items should have text highlighting
             const highlightableItems = document.querySelectorAll('.feature-item.highlightable, .feature-value-object.highlightable');
             highlightableItems.forEach(item => {
                 const label = item.getAttribute('data-label');
                 const value = item.getAttribute('data-value');
                 
-                if (!label || !value) return;
-                
-                item.addEventListener('mouseenter', () => {
-                    highlightTextInRawCase(value, label, currentCaseData);
-                });
-                
-                item.addEventListener('mouseleave', () => {
-                    clearHighlight();
-                });
+                // If no data attributes, try to get from the feature label and value elements
+                if (!label || !value) {
+                    const labelEl = item.querySelector('.feature-label');
+                    const valueEl = item.querySelector('.feature-value, .feature-value-array, .feature-value-object');
+                    
+                    if (labelEl && valueEl) {
+                        const extractedLabel = labelEl.textContent.replace(':', '').trim();
+                        let extractedValue = '';
+                        
+                        // Get value from different element types
+                        if (valueEl.classList.contains('feature-value-array')) {
+                            // For arrays, get all items
+                            const items = Array.from(valueEl.querySelectorAll('.highlightable-item'));
+                            extractedValue = JSON.stringify(items.map(el => el.textContent.trim()));
+                        } else if (valueEl.classList.contains('feature-value-object')) {
+                            // For objects, get the JSON string
+                            extractedValue = valueEl.getAttribute('data-value') || '';
+                        } else {
+                            extractedValue = valueEl.textContent.trim();
+                        }
+                        
+                        if (extractedLabel && extractedValue) {
+                            item.addEventListener('mouseenter', () => {
+                                highlightTextInRawCase(extractedValue, extractedLabel, currentCaseData);
+                            });
+                            
+                            item.addEventListener('mouseleave', () => {
+                                clearHighlight();
+                            });
+                        }
+                    }
+                } else {
+                    // Use data attributes
+                    item.addEventListener('mouseenter', () => {
+                        highlightTextInRawCase(value, label, currentCaseData);
+                    });
+                    
+                    item.addEventListener('mouseleave', () => {
+                        clearHighlight();
+                    });
+                }
             });
             
             // Add listeners to array items (like platforms, agencies)
@@ -633,8 +827,22 @@
             // If we have patterns, highlight them
             if (searchPatterns.length > 0) {
                 let highlightedText = currentCaseText;
+                
+                // Check if this is an age label to handle comma highlighting specially
+                const isAgeLabel = label.includes('Age');
+                
                 searchPatterns.forEach(pattern => {
                     highlightedText = highlightedText.replace(pattern, (match) => {
+                        // For age patterns, if match includes comma, only highlight the numeric part
+                        if (isAgeLabel && match.includes(',')) {
+                            // Extract just the age number from the match
+                            const ageMatch = match.match(/\d+/);
+                            if (ageMatch) {
+                                // Replace only the age number, not the comma
+                                return match.replace(ageMatch[0], `<span class="text-highlight">${ageMatch[0]}</span>`);
+                            }
+                        }
+                        // For non-age patterns or ages without commas, highlight the whole match
                         return `<span class="text-highlight">${match}</span>`;
                     });
                 });
@@ -651,10 +859,62 @@
             // Create search patterns based on the feature type
             let searchPatterns = [];
             
-            // Age patterns
-            if (label.includes('Age') && /^\d+$/.test(searchValue)) {
-                searchPatterns.push(new RegExp(`\\b${searchValue}\\s+year\\s+old\\b`, 'gi'));
-                searchPatterns.push(new RegExp(`\\b${searchValue}\\s+years?\\s+old\\b`, 'gi'));
+            // Age patterns - ONLY highlight the specific age being hovered (not all ages)
+            if (label.includes('Age')) {
+                // Get the specific age being hovered (not all ages)
+                let age = null;
+                try {
+                    const parsed = JSON.parse(searchValue);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        // If it's an array, only use the first one (shouldn't happen for individual tags)
+                        age = parsed[0];
+                    } else if (typeof parsed === 'number') {
+                        age = parsed;
+                    }
+                } catch {
+                    // Not JSON, check if it's a single number
+                    if (/^\d+$/.test(searchValue)) {
+                        age = parseInt(searchValue);
+                    }
+                }
+                
+                // Only highlight if we have a specific age
+                if (age !== null) {
+                    const ageStr = String(age);
+                    
+                    // Standard patterns: "25-year-old", "25 years old", "age 25", "aged 25"
+                    searchPatterns.push(new RegExp(`\\b${ageStr}\\s+year\\s+old\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\b${ageStr}\\s+years?\\s+old\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\b${ageStr}\\-year\\-old\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\b${ageStr}\\s+years?\\s+of\\s+age\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\bage\\s+${ageStr}\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\baged\\s+${ageStr}\\b`, 'gi'));
+                    
+                    // Pattern after name with comma: "Andrew Williams, 33" or "John Doe, 25"
+                    // Use lookbehind to match comma but only highlight the age (not the comma)
+                    searchPatterns.push(new RegExp(`(?<=,\\s+)${ageStr}(?=\\s+(was|is|of|from|arrested|booked|charged|\\b))`, 'gi'));
+                    // Also match "age 33" pattern (common in reports)
+                    searchPatterns.push(new RegExp(`\\bage\\s+${ageStr}(?=\\s*(,|\\s|of|from|was|is|arrested|booked|charged|\\b))`, 'gi'));
+                    
+                    // Pattern with "a" or "the" before: "a 33-year-old man", "the 25-year-old"
+                    searchPatterns.push(new RegExp(`\\b(a|an|the)\\s+${ageStr}\\s+year\\s+old\\b`, 'gi'));
+                    searchPatterns.push(new RegExp(`\\b(a|an|the)\\s+${ageStr}\\-year\\-old\\b`, 'gi'));
+                    
+                    // Pattern with name before: "Andrew Williams, 33" (already covered above, but also try without comma context)
+                    searchPatterns.push(new RegExp(`\\b[A-Z][a-z]+\\s+[A-Z][a-z]+,\\s+${ageStr}\\b`, 'gi'));
+                    
+                    // Pattern: "man, 33" or "woman, 25" (after relationship/descriptor)
+                    // Use lookbehind to match descriptor and comma but only highlight the age
+                    searchPatterns.push(new RegExp(`(?<=\\b(man|woman|male|female|person|suspect|defendant|individual),\\s+)${ageStr}\\b`, 'gi'));
+                    
+                    // Pattern: "33, was" or "33, of" (age followed by comma and verb/preposition)
+                    // Use lookahead to match comma and verb but only highlight the age
+                    searchPatterns.push(new RegExp(`\\b${ageStr}(?=,\\s+(was|is|of|from|arrested|booked|charged))`, 'gi'));
+                    
+                    // Standalone age (word boundary to avoid matching parts of larger numbers)
+                    // But be careful - only match if it's clearly an age context
+                    searchPatterns.push(new RegExp(`\\b${ageStr}\\s+(year|years|man|woman|male|female|person|suspect|defendant)\\b`, 'gi'));
+                }
             }
             
             // Registered sex offender
@@ -693,9 +953,60 @@
                 }
             }
             
-            // Agencies
+            // Agencies - ONLY highlight the specific agency being hovered (not all agencies)
             if (label.includes('Agencies')) {
-                searchPatterns.push(new RegExp(`\\b${escapeRegex(searchValue)}\\b`, 'gi'));
+                // Get the specific agency being hovered (not all agencies)
+                let agency = null;
+                
+                // Try to parse from searchValue
+                try {
+                    const parsed = JSON.parse(searchValue);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        // If it's an array, only use the first one (shouldn't happen for individual tags)
+                        agency = parsed[0];
+                    } else if (typeof parsed === 'string') {
+                        agency = parsed;
+                    }
+                } catch {
+                    // Not JSON, treat as single agency
+                    if (searchValue && searchValue.length > 0) {
+                        agency = searchValue;
+                    }
+                }
+                
+                // Only highlight if we have a specific agency
+                if (agency) {
+                    const agencyStr = String(agency).trim();
+                    if (agencyStr.length > 0 && agencyStr !== 'null' && agencyStr !== 'undefined') {
+                    const agencyStr = String(agency).trim();
+                    // Escape special regex characters
+                    const escapedAgency = escapeRegex(agencyStr);
+                    // Match whole words/phrases
+                    searchPatterns.push(new RegExp(`\\b${escapedAgency}\\b`, 'gi'));
+                    // Also try matching with common variations (e.g., "Phoenix Police" vs "Phoenix Police Department")
+                    if (agencyStr.includes('Police')) {
+                        const baseName = agencyStr.replace(/\s+Police.*$/i, '').trim();
+                        if (baseName.length > 0) {
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(baseName)}\\s+Police\\b`, 'gi'));
+                        }
+                    }
+                    if (agencyStr.includes('Department')) {
+                        const baseName = agencyStr.replace(/\s+Department.*$/i, '').trim();
+                        if (baseName.length > 0) {
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(baseName)}\\s+Department\\b`, 'gi'));
+                        }
+                    }
+                    // Also match partial agency names (e.g., "Maricopa County" matches "Maricopa County Attorney's Office")
+                    const words = agencyStr.split(/\s+/);
+                    if (words.length > 1) {
+                        // Match first two words (common pattern: "Maricopa County", "Phoenix Police")
+                        const firstTwoWords = words.slice(0, 2).join(' ');
+                        if (firstTwoWords.length > 0) {
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(firstTwoWords)}\\b`, 'gi'));
+                        }
+                    }
+                    }
+                }
             }
             
             // Investigation type
@@ -709,83 +1020,205 @@
                 searchPatterns.push(new RegExp(`\\bat\\s+least\\s+${searchValue}\\s+(child|children)\\b`, 'gi'));
             }
             
-            // Severity indicators
+            // Case Demographics - handle ages array, gender, and all fields
+            if (label.includes('Demographics') || label.includes('Case Demographics')) {
+                // Try to get all demographics from caseData
+                if (caseData && caseData.case_demographics) {
+                    const demo = caseData.case_demographics;
+                    
+                    // Highlight ages
+                    if (demo.ages && Array.isArray(demo.ages)) {
+                        demo.ages.forEach(age => {
+                            const ageStr = String(age);
+                            searchPatterns.push(new RegExp(`\\b${ageStr}\\s+year\\s+old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\b${ageStr}\\s+years?\\s+old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\b${ageStr}\\-year\\-old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\bage\\s+${ageStr}\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\baged\\s+${ageStr}\\b`, 'gi'));
+                        });
+                    }
+                    
+                    // Highlight gender
+                    if (demo.gender) {
+                        const gender = String(demo.gender).toLowerCase();
+                        if (gender === 'female' || gender === 'f') {
+                            searchPatterns.push(/\bfemale\b/gi);
+                            searchPatterns.push(/\bgirl\b/gi);
+                            searchPatterns.push(/\bgirls\b/gi);
+                            searchPatterns.push(/\bwoman\b/gi);
+                            searchPatterns.push(/\bwomen\b/gi);
+                        } else if (gender === 'male' || gender === 'm') {
+                            searchPatterns.push(/\bmale\b/gi);
+                            searchPatterns.push(/\bboy\b/gi);
+                            searchPatterns.push(/\bboys\b/gi);
+                            searchPatterns.push(/\bman\b/gi);
+                            searchPatterns.push(/\bmen\b/gi);
+                        }
+                    }
+                    
+                    // Highlight age_range if present
+                    if (demo.age_range) {
+                        if (typeof demo.age_range === 'object') {
+                            const min = demo.age_range.min;
+                            const max = demo.age_range.max;
+                            if (min) {
+                                searchPatterns.push(new RegExp(`\\b${min}\\s+year\\s+old`, 'gi'));
+                            }
+                            if (max) {
+                                searchPatterns.push(new RegExp(`\\b${max}\\s+year\\s+old`, 'gi'));
+                            }
+                        }
+                    }
+                }
+                // Also try parsing from searchValue if it's a JSON object
+                try {
+                    const parsed = JSON.parse(searchValue);
+                    if (parsed) {
+                        // Handle ages
+                        if (parsed.ages && Array.isArray(parsed.ages)) {
+                            parsed.ages.forEach(age => {
+                                const ageStr = String(age);
+                                searchPatterns.push(new RegExp(`\\b${ageStr}\\s+year\\s+old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
+                                searchPatterns.push(new RegExp(`\\b${ageStr}\\s+years?\\s+old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
+                            });
+                        }
+                        // Handle gender
+                        if (parsed.gender) {
+                            const gender = String(parsed.gender).toLowerCase();
+                            if (gender === 'female' || gender === 'f') {
+                                searchPatterns.push(/\bfemale\b/gi);
+                                searchPatterns.push(/\bgirl\b/gi);
+                                searchPatterns.push(/\bgirls\b/gi);
+                            } else if (gender === 'male' || gender === 'm') {
+                                searchPatterns.push(/\bmale\b/gi);
+                                searchPatterns.push(/\bboy\b/gi);
+                                searchPatterns.push(/\bboys\b/gi);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Not JSON, ignore
+                }
+            }
+            
+            // Severity indicators - ONLY highlight the specific severity being hovered
             if (label.includes('Severity')) {
+                // Normalize searchValue to match severity keys
+                const severityKey = String(searchValue).toLowerCase().trim();
+                
                 const severityMap = {
                     'infant': /\binfants?\b/gi,
                     'very_young': /\bvery\s+young\s+children\b/gi,
                     'under_5': /\bunder\s+5\b/gi,
                     'under_9': /\bunder\s+9\b/gi,
+                    'under_10': /\bunder\s+10\b/gi,
+                    'sexual_assault': /\b(sexual\s+assault|sexually\s+assaulted|rape|raped|raping)\b/gi,
+                    'multiple_perpetrators': /\bmultiple\s+perpetrators?\b/gi,
                     'production': /\b(produced|created|made\s+movies?)\b/gi
                 };
-                if (severityMap[searchValue]) {
-                    searchPatterns.push(severityMap[searchValue]);
+                
+                // Only add pattern if the specific severity matches
+                if (severityMap[severityKey]) {
+                    searchPatterns.push(severityMap[severityKey]);
                 }
             }
             
-            // Topics
+            // Topics - ONLY highlight the specific topic being hovered
             if (label.includes('Topic')) {
+                // Normalize searchValue to match topic keys
+                const topicKey = String(searchValue).toLowerCase().trim();
+                
                 const topicMap = {
-                    'production': /\b(produced|created|made|molest|molesting)\b/gi,
-                    'possession': /\b(trading|downloading|possessing|collecting)\b/gi,
+                    'production': /\b(produced|created|made|molest|molesting|molested)\b/gi,
+                    'possession': /\b(trading|downloading|possessing|collecting|possession)\b/gi,
+                    'pornography': /\b(child\s+pornography|child\s+sexual\s+abuse\s+material|CSAM|child\s+porn|pornography)\b/gi,
                     'international': /\b(Australia|Philippines|Japan|international|overseas)\b/gi,
+                    'multi_state': /\b(Colorado|Texas|California|Las\s+Vegas|Arizona|multi[\s-]?state)\b/gi,
+                    'online_only': /\bonline[\s-]?only\b/gi,
                     'family': /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|biological)\b/gi,
                     'stranger': /\bstranger\b/gi,
-                    'hands_on': /\b(molest|molesting|hands?\s+on|sexually\s+abused)\b/gi
+                    'hands_on': /\b(molest|molesting|molested|hands?\s+on|sexually\s+abused|sexually\s+assaulted|sexual\s+abuse)\b/gi
                 };
-                if (topicMap[searchValue]) {
-                    searchPatterns.push(topicMap[searchValue]);
+                
+                // Only add pattern if the specific topic matches
+                if (topicMap[topicKey]) {
+                    searchPatterns.push(topicMap[topicKey]);
                 }
             }
             
-            // Evidence volume - handle object structure
+            // Evidence volume - ONLY highlight the specific value being hovered
             if (label.includes('Evidence')) {
                 // Try to parse as JSON object first
                 try {
                     const evidence = JSON.parse(searchValue);
                     if (typeof evidence === 'object' && evidence !== null) {
-                        // Highlight images count
-                        if (evidence.images) {
+                        // Only highlight the specific field that matches the searchValue
+                        // Check which field is being hovered by looking at the searchValue content
+                        const searchStr = String(searchValue).toLowerCase();
+                        
+                        // Highlight images count ONLY if searchValue contains images info
+                        if (evidence.images && (searchStr.includes('image') || searchStr.includes(String(evidence.images)))) {
                             const imageCount = String(evidence.images);
-                            // Match patterns like "600 images", "200,000 images", "over 600 images"
                             searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${imageCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+images?\\b`, 'gi'));
                             searchPatterns.push(new RegExp(`\\b${imageCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+pictures?\\b`, 'gi'));
                         }
-                        // Highlight videos count
-                        if (evidence.videos) {
+                        // Highlight videos count ONLY if searchValue contains videos info
+                        if (evidence.videos && (searchStr.includes('video') || searchStr.includes(String(evidence.videos)))) {
                             const videoCount = String(evidence.videos);
                             searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${videoCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+videos?\\b`, 'gi'));
                         }
-                        // Highlight storage size
-                        if (evidence.storage_size) {
+                        // Highlight storage size ONLY if searchValue contains storage info
+                        if (evidence.storage_size && (searchStr.includes('tb') || searchStr.includes('gb') || searchStr.includes('mb') || searchStr.includes(String(evidence.storage_size)))) {
                             const storage = String(evidence.storage_size);
                             if (storage.includes('TB') || storage.includes('GB') || storage.includes('MB')) {
                                 searchPatterns.push(new RegExp(`\\b${escapeRegex(storage)}\\b`, 'gi'));
                             } else {
-                                // Just a number, try to match with TB/GB/MB
                                 searchPatterns.push(new RegExp(`\\b${escapeRegex(storage)}\\s*(TB|GB|MB)\\b`, 'gi'));
                             }
                         }
-                        // Highlight messages count
-                        if (evidence.messages) {
+                        // Highlight messages count ONLY if searchValue contains messages info
+                        if (evidence.messages && (searchStr.includes('message') || searchStr.includes(String(evidence.messages)))) {
                             const msgCount = String(evidence.messages);
                             searchPatterns.push(new RegExp(`\\b(over|more\\s+than|approximately)?\\s*${msgCount.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\\s+(chat\\s+)?messages?\\b`, 'gi'));
                         }
                     }
                 } catch (e) {
-                    // If not JSON, try string matching
-                    if (searchValue.includes('images')) {
-                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+images?\b/gi);
-                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+pictures?\b/gi);
+                    // If not JSON, try string matching - only match what's in searchValue
+                    const searchStr = searchValue.toLowerCase();
+                    if (searchStr.includes('image')) {
+                        // Extract number from searchValue if present
+                        const numMatch = searchValue.match(/(\d+[,\.]?\d*)/);
+                        if (numMatch) {
+                            searchPatterns.push(new RegExp(`\\b${numMatch[1].replace(/,/g, '')}\\s+images?\\b`, 'gi'));
+                            searchPatterns.push(new RegExp(`\\b${numMatch[1].replace(/,/g, '')}\\s+pictures?\\b`, 'gi'));
+                        } else {
+                            searchPatterns.push(/\b(\d+[,\.]?\d*)\s+images?\b/gi);
+                            searchPatterns.push(/\b(\d+[,\.]?\d*)\s+pictures?\b/gi);
+                        }
                     }
-                    if (searchValue.includes('videos')) {
-                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+videos?\b/gi);
+                    if (searchStr.includes('video')) {
+                        const numMatch = searchValue.match(/(\d+[,\.]?\d*)/);
+                        if (numMatch) {
+                            searchPatterns.push(new RegExp(`\\b${numMatch[1].replace(/,/g, '')}\\s+videos?\\b`, 'gi'));
+                        } else {
+                            searchPatterns.push(/\b(\d+[,\.]?\d*)\s+videos?\b/gi);
+                        }
                     }
-                    if (searchValue.includes('TB') || searchValue.includes('GB') || searchValue.includes('MB')) {
-                        searchPatterns.push(/\b\d+\.?\d*\s*(TB|GB|MB)\b/gi);
+                    if (searchStr.includes('tb') || searchStr.includes('gb') || searchStr.includes('mb')) {
+                        const storageMatch = searchValue.match(/(\d+\.?\d*)\s*(TB|GB|MB)/i);
+                        if (storageMatch) {
+                            searchPatterns.push(new RegExp(`\\b${escapeRegex(storageMatch[0])}\\b`, 'gi'));
+                        } else {
+                            searchPatterns.push(/\b\d+\.?\d*\s*(TB|GB|MB)\b/gi);
+                        }
                     }
-                    if (searchValue.includes('messages')) {
-                        searchPatterns.push(/\b(\d+[,\.]?\d*)\s+(chat\s+)?messages?\b/gi);
+                    if (searchStr.includes('message')) {
+                        const numMatch = searchValue.match(/(\d+[,\.]?\d*)/);
+                        if (numMatch) {
+                            searchPatterns.push(new RegExp(`\\b${numMatch[1].replace(/,/g, '')}\\s+(chat\\s+)?messages?\\b`, 'gi'));
+                        } else {
+                            searchPatterns.push(/\b(\d+[,\.]?\d*)\s+(chat\s+)?messages?\b/gi);
+                        }
                     }
                 }
             }
@@ -932,8 +1365,22 @@
             // If we have patterns, highlight them
             if (searchPatterns.length > 0) {
                 let highlightedText = currentCaseText;
+                
+                // Check if this is an age label to handle comma highlighting specially
+                const isAgeLabel = label.includes('Age');
+                
                 searchPatterns.forEach(pattern => {
                     highlightedText = highlightedText.replace(pattern, (match) => {
+                        // For age patterns, if match includes comma, only highlight the numeric part
+                        if (isAgeLabel && match.includes(',')) {
+                            // Extract just the age number from the match
+                            const ageMatch = match.match(/\d+/);
+                            if (ageMatch) {
+                                // Replace only the age number, not the comma
+                                return match.replace(ageMatch[0], `<span class="text-highlight">${ageMatch[0]}</span>`);
+                            }
+                        }
+                        // For non-age patterns or ages without commas, highlight the whole match
                         return `<span class="text-highlight">${match}</span>`;
                     });
                 });
@@ -981,34 +1428,125 @@
             if (value === null || value === undefined) {
                 html += `<span class="feature-value-null">Not extracted</span>`;
             } else if (Array.isArray(value)) {
-                if (value.length === 0) {
+                // Filter out empty/null/whitespace-only values before rendering - BE EXTREMELY STRICT
+                const filteredValue = value.filter(item => {
+                    if (item === null || item === undefined) return false;
+                    const str = String(item).trim();
+                    if (str.length === 0) return false;
+                    if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                    // Reject strings that are only punctuation or special characters
+                    if (!/[a-zA-Z0-9]/.test(str)) return false;
+                    // Reject strings that are only spaces, commas, quotes, apostrophes
+                    if (/^[\s,.'"`]+$/.test(str)) return false;
+                    return true;
+                }).filter(str => {
+                    // Double filter within renderFeatureItem too
+                    const s = String(str).trim();
+                    if (s.length === 0) return false;
+                    if (s === 'null' || s === 'undefined' || s === 'None' || s === 'none' || s === 'NULL' || s === 'UNDEFINED') return false;
+                    if (!/[a-zA-Z0-9]/.test(s)) return false;
+                    if (/^[\s,.'"`]+$/.test(s)) return false;
+                    return true;
+                });
+                
+                if (filteredValue.length === 0) {
                     html += `<span class="feature-value-null">Not extracted</span>`;
                 } else {
-                    html += `<div class="feature-value-array">`;
-                    value.forEach((item, idx) => {
-                        const itemValue = String(item);
-                        const itemDataValue = isHighlightable ? `data-item-value="${escapeHtml(itemValue)}"` : '';
-                        const itemClass = isHighlightable ? 'highlightable-item' : '';
-                        html += `<span class="${itemClass}" ${itemDataValue}>${escapeHtml(itemValue)}</span>`;
+                    // Final pass: filter out any remaining empty items one more time
+                    const finalFiltered = filteredValue.filter(item => {
+                        const str = String(item).trim();
+                        if (str.length === 0) return false;
+                        if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                        if (!/[a-zA-Z0-9]/.test(str)) return false;
+                        if (/^[\s,.'"`]+$/.test(str)) return false;
+                        return true;
+                    });
+                    
+                    if (finalFiltered.length === 0) {
+                        html += `<span class="feature-value-null">Not extracted</span>`;
+                    } else {
+                        // For arrays, store the full filtered array as JSON in data-value for whole-box highlighting
+                        const arrayJson = JSON.stringify(finalFiltered);
+                        const arrayDataValue = isHighlightable ? `data-value="${escapeHtml(arrayJson)}"` : '';
+                        html += `<div class="feature-value-array" ${arrayDataValue}>`;
+                        finalFiltered.forEach((item) => {
+                            const itemValue = String(item).trim();
+                            const itemDataValue = isHighlightable ? `data-item-value="${escapeHtml(itemValue)}"` : '';
+                            const itemClass = isHighlightable ? 'highlightable-item' : '';
+                            html += `<span class="${itemClass}" ${itemDataValue}>${escapeHtml(itemValue)}</span>`;
+                        });
+                        html += `</div>`;
+                    }
+                }
+            } else if (typeof value === 'object') {
+                // Filter out empty/null values from objects before rendering
+                const filteredObj = {};
+                Object.entries(value).forEach(([key, val]) => {
+                    if (val === null || val === undefined) return;
+                    if (Array.isArray(val)) {
+                        const filteredArr = val.filter(item => {
+                            if (item === null || item === undefined) return false;
+                            const str = String(item).trim();
+                            if (str.length === 0) return false;
+                            if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return false;
+                            if (!/[a-zA-Z0-9]/.test(str)) return false; // Reject strings that are only punctuation
+                            if (/^[\s,.'"`]+$/.test(str)) return false; // Reject strings that are only spaces, commas, quotes, apostrophes
+                            return true;
+                        });
+                        if (filteredArr.length > 0) {
+                            filteredObj[key] = filteredArr;
+                        }
+                    } else if (typeof val === 'object') {
+                        // Recursively filter nested objects
+                        const nestedFiltered = {};
+                        Object.entries(val).forEach(([nestedKey, nestedVal]) => {
+                            if (nestedVal === null || nestedVal === undefined) return;
+                            const str = String(nestedVal).trim();
+                            if (str.length === 0) return;
+                            if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return;
+                            if (!/[a-zA-Z0-9]/.test(str)) return; // Reject strings that are only punctuation
+                            if (/^[\s,.'"`]+$/.test(str)) return; // Reject strings that are only spaces, commas, quotes, apostrophes
+                            nestedFiltered[nestedKey] = nestedVal;
+                        });
+                        if (Object.keys(nestedFiltered).length > 0) {
+                            filteredObj[key] = nestedFiltered;
+                        }
+                    } else {
+                        const str = String(val).trim();
+                        if (str.length === 0) return;
+                        if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none' || str === 'NULL' || str === 'UNDEFINED') return;
+                        if (!/[a-zA-Z0-9]/.test(str)) return; // Reject strings that are only punctuation
+                        if (/^[\s,.'"`]+$/.test(str)) return; // Reject strings that are only spaces, commas, quotes, apostrophes
+                        filteredObj[key] = val;
+                    }
+                });
+                
+                // Only render object if it has at least one non-empty value
+                if (Object.keys(filteredObj).length === 0) {
+                    html += `<span class="feature-value-null">Not extracted</span>`;
+                } else {
+                    // All objects with data are highlightable (except metadata)
+                    const objectStr = JSON.stringify(filteredObj);
+                    const objectDataValue = isHighlightable ? `data-value="${escapeHtml(objectStr)}"` : '';
+                    const objectClass = isHighlightable ? 'highlightable' : '';
+                    html += `<div class="feature-value-object ${objectClass}" ${dataLabel} ${objectDataValue}>`;
+                    Object.entries(filteredObj).forEach(([key, val]) => {
+                        html += `<div class="nested-item"><strong>${key}:</strong> ${formatValue(val)}</div>`;
                     });
                     html += `</div>`;
                 }
-            } else if (typeof value === 'object') {
-                // All objects with data are highlightable (except metadata)
-                const objectStr = JSON.stringify(value);
-                const objectDataValue = isHighlightable ? `data-value="${escapeHtml(objectStr)}"` : '';
-                const objectClass = isHighlightable ? 'highlightable' : '';
-                html += `<div class="feature-value-object ${objectClass}" ${dataLabel} ${objectDataValue}>`;
-                Object.entries(value).forEach(([key, val]) => {
-                    html += `<div class="nested-item"><strong>${key}:</strong> ${formatValue(val)}</div>`;
-                });
-                html += `</div>`;
             } else if (typeof value === 'boolean') {
                 html += value ? 'Yes' : 'No';
             } else if (label === 'Full Case Narrative' && typeof value === 'string') {
                 html += `<div class="raw-text">${escapeHtml(value)}</div>`;
             } else {
-                html += escapeHtml(String(value));
+                // Filter out empty strings
+                const str = String(value).trim();
+                if (str.length === 0 || str === 'null' || str === 'undefined' || str === 'None' || str === 'none') {
+                    html += `<span class="feature-value-null">Not extracted</span>`;
+                } else {
+                    html += escapeHtml(str);
+                }
             }
 
             html += `</div></div>`;
@@ -1017,9 +1555,46 @@
 
         function formatValue(value) {
             if (value === null || value === undefined) return '<span class="feature-value-null">null</span>';
-            if (Array.isArray(value)) return `[${value.join(', ')}]`;
-            if (typeof value === 'object') return JSON.stringify(value, null, 2);
-            return escapeHtml(String(value));
+            if (Array.isArray(value)) {
+                // Filter out empty/null/whitespace values
+                const filtered = value.filter(item => {
+                    if (item === null || item === undefined) return false;
+                    const str = String(item).trim();
+                    if (str.length === 0) return false;
+                    if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none') return false;
+                    if (!/[a-zA-Z0-9]/.test(str)) return false; // Reject strings that are only punctuation
+                    return true;
+                });
+                if (filtered.length === 0) return '<span class="feature-value-null">null</span>';
+                return `[${filtered.join(', ')}]`;
+            }
+            if (typeof value === 'object') {
+                // Filter out empty values from objects
+                const filteredObj = {};
+                Object.entries(value).forEach(([key, val]) => {
+                    if (val === null || val === undefined) return;
+                    const str = String(val).trim();
+                    if (str.length === 0) return;
+                    if (str === 'null' || str === 'undefined' || str === 'None' || str === 'none') return;
+                    if (Array.isArray(val)) {
+                        const filteredArr = val.filter(item => {
+                            if (item === null || item === undefined) return false;
+                            const itemStr = String(item).trim();
+                            return itemStr.length > 0 && itemStr !== 'null' && itemStr !== 'undefined';
+                        });
+                        if (filteredArr.length > 0) {
+                            filteredObj[key] = filteredArr;
+                        }
+                    } else {
+                        filteredObj[key] = val;
+                    }
+                });
+                if (Object.keys(filteredObj).length === 0) return '<span class="feature-value-null">null</span>';
+                return JSON.stringify(filteredObj, null, 2);
+            }
+            const str = String(value).trim();
+            if (str.length === 0 || str === 'null' || str === 'undefined') return '<span class="feature-value-null">null</span>';
+            return escapeHtml(str);
         }
 
         function renderRawCaseText(caseData) {

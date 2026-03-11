@@ -122,7 +122,11 @@ def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, A
         if perp_age is not None or rso is not None:
             coverage['perpetrator_demographics']['extracted'] += 1
             if perp_age is not None:
-                age_distribution.append(perp_age)
+                # Handle perpetrator_age as list (for multiple perpetrators)
+                if isinstance(perp_age, list):
+                    age_distribution.extend(perp_age)
+                elif isinstance(perp_age, int):
+                    age_distribution.append(perp_age)
             if rso is True:
                 rso_count += 1
         

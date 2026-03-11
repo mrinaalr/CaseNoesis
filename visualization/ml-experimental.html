@@ -294,6 +294,14 @@
                     <li>Integration pending evaluation results</li>
                 </ul>
             </div>
+            <div class="status-box" style="margin-top: 20px;">
+                <div class="status-box-title">NER Development</div>
+                <ul class="status-box-list">
+                    <li><strong>Status:</strong> Active and integrated. NER extraction operational for law enforcement agency identification</li>
+                    <li><strong>Usage:</strong> Extracts organizations, ages, dates, and locations from case text using Stanza/Transformers NER models</li>
+                    <li><strong>Integration:</strong> Merges with regex-based pattern extraction via MergeProcessing class.  NER supplements missing data, pattern processing takes precedence when both sources have data</li>
+                </ul>
+            </div>
         </div>
 
         <div class="divider"></div>

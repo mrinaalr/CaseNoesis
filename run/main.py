@@ -265,6 +265,7 @@ def get_stats():
             "sources": [],
             "source_count": 0,
             "unique_features": 0,
+            "unique_organizations": 0,
             "date_range": {"start": None, "end": None}
         }
     
@@ -306,6 +307,20 @@ def get_stats():
         agencies = case.get('agencies_involved', [])
         if isinstance(agencies, list) and agencies:
             total_features += len([a for a in agencies if a])
+    
+    # Calculate unique organizations (from normalized agencies_involved and organizations fields)
+    unique_orgs = set()
+    for case in cases:
+        agencies = case.get('agencies_involved', [])
+        organizations = case.get('organizations', [])
+        if isinstance(agencies, list):
+            for org in agencies:
+                if org and isinstance(org, str) and org.strip():
+                    unique_orgs.add(org.strip())
+        if isinstance(organizations, list):
+            for org in organizations:
+                if org and isinstance(org, str) and org.strip():
+                    unique_orgs.add(org.strip())
         
         # Count single-value features (1 if exists)
         if case.get('investigation_type'):
@@ -341,6 +356,7 @@ def get_stats():
         "sources": list(sources),
         "source_count": len(sources),
         "unique_features": total_features,
+        "unique_organizations": len(unique_orgs),
         "date_range": {
             "start": min((c.get('date_range', {}).get('start') for c in cases if c.get('date_range', {}).get('start')), default=None),
             "end": max((c.get('date_range', {}).get('end') for c in cases if c.get('date_range', {}).get('end')), default=None)
@@ -425,7 +441,7 @@ async def automated_analysis_endpoint():
         
         # Last resort: Compute on-demand (slow, but works)
         print("⚠️  No pre-computed clusters found, computing on-demand (this is slow)...")
-        cases = storage.get_all_cases(include_raw_data=False)
+        cases = storage.get_all_cases(include_raw_data=True)  # Include raw_data so case text can be displayed in UI
         analysis_results = run_automated_analysis(cases)
         
         # Store in database for next time

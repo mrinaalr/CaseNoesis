@@ -387,7 +387,7 @@
                     <div class="detail-content">
                         <strong>Feature Extraction & Case Schema</strong>
                         <p style="margin-top: 15px; color: #666; font-size: 14px;">
-                            <strong>How it's done:</strong> Hybrid approach using regex patterns for structured data (demographics, platforms, evidence, prosecution) and pattern-based matching for semantic features (severity indicators, case topics, severity phrases). Text is cleaned (URL removal, artifact normalization), cases are batched by temporal patterns, and unique case IDs are generated.
+                            <strong>How it's done:</strong> Hybrid approach using regex patterns for structured data (demographics, platforms, evidence, prosecution) and pattern-based matching for semantic features (severity indicators, case topics, severity phrases). ML/NER extraction supplements with law enforcement agencies, ages, dates, and locations. Text is cleaned (URL removal, artifact normalization), cases are batched by temporal patterns, and unique case IDs are generated.
                         </p>
                         <div class="visual-preview">
                             <div class="code-snippet">
@@ -395,10 +395,11 @@
 <span class="keyword">cleaned_text</span> = clean_urls_from_text(<span class="keyword">raw_text</span>)<br><br>
 <span class="comment"># 2. Batch cases by month patterns</span><br>
 <span class="keyword">cases</span> = case_batching(<span class="keyword">cleaned_text</span>, org_name=<span class="string">"azicac"</span>)<br><br>
-<span class="comment"># 3. Extract features (regex + patterns)</span><br>
+<span class="comment"># 3. Extract features (regex + patterns + NER)</span><br>
 <span class="keyword">features</span> = extract_features(<span class="keyword">case</span>)<br>
 <span class="comment"># Regex: Demographics, platforms, evidence, prosecution</span><br>
-<span class="comment"># Patterns: Severity indicators, case topics, phrases</span>
+<span class="comment"># Patterns: Severity indicators, case topics, phrases</span><br>
+<span class="comment"># NER: Law enforcement agencies, ages, dates, locations</span>
                 </div>
                         </div>
                         <div class="schema-visual">

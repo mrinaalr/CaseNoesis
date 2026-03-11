@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 95 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and 207 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2022-2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 **Read the technical report here:** [CaseLinker: An Open-Source System for Cross-Case Analysis of Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker.pdf)
 
@@ -45,7 +45,7 @@ CaseLinker follows a modular, layered architecture:
 **No installation required.** Visit the live deployment:
 - **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live version includes all features and 95 processed cases. Created for quick testing and demonstrations.
+The live version includes all features and 207 processed cases. Created for quick testing and demonstrations.
 
 ### Option 2: Local Setup (Works Out of the Box)
 
@@ -107,7 +107,7 @@ You can process additional PDFs to add more cases to the database.
 1. First, process PDFs with `src/main.py` to populate the database
 2. Then, start the web server with `run/main.py` to view and analyze the cases
 
-### Process Your Own PDF Files
+## Process Your Own PDF Files
 
 To process case PDFs (single or multiple files):
 
@@ -139,6 +139,8 @@ The system will:
 
 ## Using the Visualizations
 
+Access the visualizations via the [live demo](https://web-production-13a2.up.railway.app/visualization) or by running the server locally (`python3 run/main.py`) and navigating to http://localhost:8000/visualization.
+
 1. **Case Group**: Displays cases matching specific groups (infant, very young, assault, posession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
 3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
@@ -147,6 +149,9 @@ The system will:
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
 
 ## Using Advanced Case Analysis
+
+Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or run server locally (`python3 run/main.py`) and navigate to http://localhost:8000/analysis.
+
 
 1. **Tag-Based Analysis (Run Advanced Analysis)**:
    - Select one or more tags from categories: Case Topics, Severity Indicators, Platforms & Environments, Investigation Types, Perpetrator Relationships, Perpetrator Status
@@ -172,7 +177,7 @@ The system will:
 ### Other Features
 
 - **Sources Tab**: View data sources and access original case reports
-- **Clusters Tab**: View pre computed clusters, analze case reports
+- **Clusters Tab**: View pre computed clusters, analyze case reports
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 
@@ -198,7 +203,7 @@ CaseLinker/
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
-├── caselinker.db                # SQLite database with 95 processed cases (47 AZICAC 2011-2014, 48 NCMEC 2024)
+├── caselinker.db                # SQLite database with 207 processed cases
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -255,7 +260,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: The database contains 95 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: The database contains 207 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

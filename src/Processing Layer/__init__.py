@@ -35,25 +35,17 @@ if _pattern_layer_path.exists():
     extract_severity = pattern_module.extract_severity
     extract_topics = pattern_module.extract_topics
     extract_severity_phrases = pattern_module.extract_severity_phrases
+    
+    # Import MergeProcessing (intersection class)
+    _merge_path = Path(__file__).parent / "merge_procesing.py"
+    _merge_spec = importlib.util.spec_from_file_location("merge_processing_module", _merge_path)
+    merge_module = importlib.util.module_from_spec(_merge_spec)
+    _merge_spec.loader.exec_module(merge_module)
+    
+    MergeProcessing = merge_module.MergeProcessing
+    merge_processing = merge_module.merge_processing
 else:
     raise ImportError("Pattern Processing Layer not found")
-    case_batching,
-    process_cases,
-    extract_features,
-    assign_comparison_values,
-    extract_date_range,
-    extract_victim_count,
-    extract_case_demographics,
-    extract_perpetrator_demographics,
-    extract_relationship,
-    extract_previous_conviction,
-    extract_platforms,
-    extract_evidence_volume,
-    extract_investigation_info,
-    extract_prosecution_outcome,
-    extract_severity,
-    extract_topics,
-    extract_severity_phrases,
 
 
 __all__ = [
@@ -74,4 +66,6 @@ __all__ = [
     'extract_severity',
     'extract_topics',
     'extract_severity_phrases',
+    'MergeProcessing',
+    'merge_processing',
 ]
