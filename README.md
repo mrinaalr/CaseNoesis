@@ -60,7 +60,7 @@ cd CaseLinker
 # Activate virtual environment
 source venv/bin/activate
 
-# Start the visualization server
+# Start the main application
 python3 run/main.py
 ```
 
@@ -68,6 +68,7 @@ Then open your browser to:
 - **Home**: http://localhost:8000/
 - **Visualizations**: http://localhost:8000/visualization
 - **Advanced Analysis**: http://localhost:8000/analysis
+- **Clusters**: http://localhost:8000/clusters
 - **Data Sources**: http://localhost:8000/sources
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
@@ -79,16 +80,6 @@ Then open your browser to:
 
 You can process additional PDFs to add more cases to the database.
 
-### Manual Setup
-
-```bash
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
 
 ## Usage
 
@@ -97,6 +88,24 @@ pip install -r requirements.txt
 **This project processes sensitive case data related to child exploitation cases. The content may be disturbing and is intended for research and analysis purposes only.**
 
 **Before proceeding, please ensure you are authorized to access and process this type of sensitive case data.**
+
+## Two Main Entry Points
+
+1. **`src/main.py`** - **CLI Tool for Processing PDFs**
+   - Processes PDF files to extract and store cases in the database
+   - Run this when you want to add new cases from PDF files
+   - Extracts text, identifies sources, splits cases, extracts features, and stores them
+   - Pre-computes clusters after storing new cases
+
+2. **`run/main.py`** - **FastAPI Web Server**
+   - Starts the web server that serves the visualization interface and API
+   - Run this to access the web interface and visualizations
+   - Uses pre-computes clusters on startup for fast performance
+   - Provides REST API endpoints for case data, analysis, and statistics
+
+**Typical use case:**
+1. First, process PDFs with `src/main.py` to populate the database
+2. Then, start the web server with `run/main.py` to view and analyze the cases
 
 ### Process Your Own PDF Files
 
@@ -115,7 +124,7 @@ python3 -m src.main "file1.pdf" "file2.pdf" "file3.pdf"
 
 **Example - Process all desired pdfs:**
 ```bash
-python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2012 Cases and Arrests – AZICAC.ORG.pdf" "2024-media-coverage-cybertipline-success-stories.pdf" 
+python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2020 Reports" "2024-media-coverage-cybertipline-success-stories.pdf" 
 ```
 
 Or run interactively:
@@ -128,10 +137,9 @@ When prompted, enter one or more PDF file paths separated by spaces (e.g., `2013
 The system will:
 1. Extract text from each PDF
 2. Identify organization name from filename (AZICAC, FBI, NCMEC, etc.)
-3. Split cases by month patterns ("In [Month] of [Year]", "In [Month] [Year]", "during [Month] [Year]")
-4. Extract features and assign case IDs (format: `org_name_year_month_number`)
-5. Store all cases in the database
-6. Display summary with cases broken down by source
+3. Batch cases, extract features, assign case IDs (format: `org_name_number`)
+4. Store all cases in the database
+5. Perform clustering computations and prepare to run main application
 
 
 ### Using the Visualizations
@@ -182,9 +190,9 @@ CaseLinker/
 │   ├── Storage Layer/            # Database storage
 │   ├── Clustering & Analysis Layer/  # Case comparison, clustering
 │   ├── Visualization Layer/      # Visualization data structures
-│   └── main.py                  # Main entry point
+│   └── main.py                  # CLI tool: Process PDFs and populate database
 ├── run/
-│   └── main.py                  # FastAPI backend server
+│   └── main.py                  # Main application: Serves visualizations and API
 ├── visualization/
 │   ├── home.html                # Home page
 │   ├── index.html               # Interactive visualizations (Timeline, Severity, Outcomes, Perpetrator, Environment, Organizations)

@@ -108,6 +108,17 @@ class CaseStorage:
             )
         ''')
         
+        # Table for pre-computed clusters (performance optimization)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS precomputed_clusters (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cluster_data TEXT,  -- JSON: full analysis results
+                case_count INTEGER,  -- Number of cases when computed
+                computed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(case_count)  -- Only one cluster set per case count
+            )
+        ''')
+        
         conn.commit()
         conn.close()
     
@@ -424,14 +435,26 @@ class CaseStorage:
             cursor = conn.cursor()
             
             # Single query to get all cases - much faster than N+1 queries
-            cursor.execute('''
-                SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
-                       relationship_to_victim, platforms_used, investigation_methods,
-                       severity_indicators, case_topics, tags, notes,
-                       raw_data, extracted_features, created_at, updated_at
-                FROM cases
-                ORDER BY date_start, id
-            ''')
+            # Optimize: Only select raw_data if include_raw_data is True
+            if include_raw_data:
+                cursor.execute('''
+                    SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           relationship_to_victim, platforms_used, investigation_methods,
+                           severity_indicators, case_topics, tags, notes,
+                           raw_data, extracted_features, created_at, updated_at
+                    FROM cases
+                    ORDER BY date_start, id
+                ''')
+            else:
+                # Exclude raw_data from query for faster loading (saves 10-50KB per case)
+                cursor.execute('''
+                    SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           relationship_to_victim, platforms_used, investigation_methods,
+                           severity_indicators, case_topics, tags, notes,
+                           '' as raw_data, extracted_features, created_at, updated_at
+                    FROM cases
+                    ORDER BY date_start, id
+                ''')
             
             columns = [desc[0] for desc in cursor.description]
             rows = cursor.fetchall()
@@ -480,11 +503,15 @@ class CaseStorage:
             for row in rows:
                 case_dict = dict(zip(columns, row))
                 
-                # Parse JSON fields
+                # Parse JSON fields (skip raw_data if empty string from optimized query)
                 for json_field in ['platforms_used', 'investigation_methods', 
                                  'severity_indicators', 'case_topics', 'tags', 
                                  'raw_data', 'extracted_features']:
                     if case_dict.get(json_field):
+                        # Skip parsing if raw_data is empty string (from optimized query)
+                        if json_field == 'raw_data' and case_dict[json_field] == '':
+                            case_dict[json_field] = None
+                            continue
                         try:
                             case_dict[json_field] = json.loads(case_dict[json_field])
                         except (json.JSONDecodeError, TypeError):
@@ -575,5 +602,82 @@ class CaseStorage:
         except Exception as e:
             print(f"Error searching cases: {e}")
             return []
+    
+    def store_precomputed_clusters(self, cluster_data: Dict[str, Any], case_count: int) -> bool:
+        """
+        Store pre-computed cluster analysis results in database.
+        
+        Args:
+            cluster_data: Full analysis results dictionary from run_automated_analysis()
+            case_count: Number of cases when clusters were computed
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            
+            # Delete old clusters for this case count (if any)
+            cursor.execute('DELETE FROM precomputed_clusters WHERE case_count = ?', (case_count,))
+            
+            # Store new clusters
+            cursor.execute('''
+                INSERT INTO precomputed_clusters (cluster_data, case_count)
+                VALUES (?, ?)
+            ''', (json.dumps(cluster_data), case_count))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing precomputed clusters: {e}")
+            return False
+    
+    def get_precomputed_clusters(self, case_count: int) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve pre-computed cluster analysis results from database.
+        
+        Args:
+            case_count: Current number of cases (must match stored count)
+            
+        Returns:
+            Cluster data dictionary or None if not found/outdated
+        """
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            
+            # Get clusters for this case count
+            cursor.execute('''
+                SELECT cluster_data FROM precomputed_clusters 
+                WHERE case_count = ?
+                ORDER BY computed_at DESC
+                LIMIT 1
+            ''', (case_count,))
+            
+            row = cursor.fetchone()
+            conn.close()
+            
+            if row:
+                cluster_json = row[0]
+                return json.loads(cluster_json)
+            return None
+        except Exception as e:
+            print(f"Error retrieving precomputed clusters: {e}")
+            return None
+    
+    def clear_precomputed_clusters(self):
+        """Clear all pre-computed clusters (useful when cases change significantly)."""
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM precomputed_clusters')
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error clearing precomputed clusters: {e}")
+            return False
 
 

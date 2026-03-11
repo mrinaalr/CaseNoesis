@@ -639,6 +639,15 @@
 
         // Load cases from API
         function loadCases() {
+            // Show loading indicator
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", height / 2)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#888")
+                .attr("id", "loading-text")
+                .text("Loading cases...");
+            
             fetch('/api/cases')
                 .then(response => {
                     if (!response.ok) {
@@ -647,6 +656,9 @@
                     return response.json();
                 })
                 .then(data => {
+                    // Remove loading indicator
+                    svg.select("#loading-text").remove();
+                    
                     // Handle both array and object with cases property
                     allCases = Array.isArray(data) ? data : (data.cases || []);
                     if (allCases.length === 0) {
@@ -664,6 +676,7 @@
                 })
                 .catch(error => {
                     console.error('Error loading cases:', error);
+                    svg.select("#loading-text").remove();
                     svg.append("text")
                         .attr("x", width / 2)
                         .attr("y", height / 2)

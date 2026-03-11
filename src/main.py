@@ -19,57 +19,6 @@ from storage import CaseStorage
 import pandas as pd
 
 
-def get_database_path() -> str:
-    """
-    Get database path from config or use default.
-    
-    Returns:
-        Path to database file
-    """
-    try:
-        from config import DATABASE_PATH
-        return DATABASE_PATH
-    except ImportError:
-        return "caselinker.db"
-
-
-def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
-    """
-    Store cases in the database.
-    
-    This abstracts storage operations to maintain layer boundaries.
-    The main orchestration layer doesn't need to know about storage
-    implementation details.
-    
-    Args:
-        cases: List of case dictionaries to store
-        db_path: Path to database file
-        
-    Returns:
-        Number of successfully stored cases
-    """
-    storage = CaseStorage(db_path)
-    stored_count = 0
-    for case in cases:
-        if storage.store_case(case):
-            stored_count += 1
-    return stored_count
-
-
-def get_all_stored_cases(db_path: str) -> List[Dict[str, Any]]:
-    """
-    Retrieve all cases from the database.
-    
-    Args:
-        db_path: Path to database file
-        
-    Returns:
-        List of all case dictionaries
-    """
-    storage = CaseStorage(db_path)
-    return storage.get_all_cases()
-
-
 def main():
     print("CaseLinker - Starting up...")
     print("\n✓ All layers loaded successfully!")
@@ -152,10 +101,78 @@ def main():
         for source, count in sorted(sources.items()):
             print(f"  - {source}: {count} cases")
         
+        # Pre-compute clusters after storing cases
+        print("\n" + "="*60)
+        print("Step 5: Pre-computing clusters...")
+        print("="*60)
+        try:
+            from analysis import run_automated_analysis
+            cluster_data = run_automated_analysis(all_stored_cases)
+            storage = CaseStorage(db_path)
+            storage.store_precomputed_clusters(cluster_data, len(all_stored_cases))
+            print(f"✓ Pre-computed clusters stored ({len(all_stored_cases)} cases)")
+        except Exception as e:
+            print(f"⚠️  Warning: Could not pre-compute clusters: {e}")
+            import traceback
+            traceback.print_exc()
+        
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
         traceback.print_exc()    
+
+
+
+def get_database_path() -> str:
+    """
+    Get database path from config or use default.
+    
+    Returns:
+        Path to database file
+    """
+    try:
+        from config import DATABASE_PATH
+        return DATABASE_PATH
+    except ImportError:
+        return "caselinker.db"
+
+
+def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
+    """
+    Store cases in the database.
+    
+    This abstracts storage operations to maintain layer boundaries.
+    The main orchestration layer doesn't need to know about storage
+    implementation details.
+    
+    Args:
+        cases: List of case dictionaries to store
+        db_path: Path to database file
+        
+    Returns:
+        Number of successfully stored cases
+    """
+    storage = CaseStorage(db_path)
+    stored_count = 0
+    for case in cases:
+        if storage.store_case(case):
+            stored_count += 1
+    return stored_count
+
+
+def get_all_stored_cases(db_path: str) -> List[Dict[str, Any]]:
+    """
+    Retrieve all cases from the database.
+    
+    Args:
+        db_path: Path to database file
+        
+    Returns:
+        List of all case dictionaries
+    """
+    storage = CaseStorage(db_path)
+    return storage.get_all_cases()
+
 
 
 if __name__ == "__main__":

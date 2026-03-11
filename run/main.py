@@ -46,13 +46,31 @@ else:
 # Initialize storage - will create database if it doesn't exist
 storage = CaseStorage(str(db_path))
 
-# Log database status on startup
+# Log database status on startup and pre-compute clusters
 try:
     test_cases = storage.get_all_cases()
     print(f"Database active with path : {db_path}")
     print(f"Cases in database: {len(test_cases)}")
     if len(test_cases) == 0:
         print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
+    else:
+        # Pre-compute clusters on startup (background, non-blocking)
+        import threading
+        def precompute_clusters_background():
+            try:
+                print("Pre-computing clusters in background...")
+                cases = storage.get_all_cases(include_raw_data=False)
+                if cases:
+                    from analysis import run_automated_analysis
+                    cluster_data = run_automated_analysis(cases)
+                    storage.store_precomputed_clusters(cluster_data, len(cases))
+                    print(f"✅ Pre-computed clusters stored ({len(cases)} cases)")
+            except Exception as e:
+                print(f"⚠️  Error pre-computing clusters: {e}")
+        
+        # Start background thread (non-blocking)
+        cluster_thread = threading.Thread(target=precompute_clusters_background, daemon=True)
+        cluster_thread.start()
 except Exception as e:
     print(f"⚠️  Database initialization warning: {e}")
     print(f"   Looking for database at: {db_path}")
@@ -71,18 +89,47 @@ async def serve_home():
         return HTMLResponse(content="<h1>CaseLinker</h1><p>Home page not found. Go to <a href='/visualization'>/visualization</a></p>", status_code=404)
 
 
+# Cache for cases (invalidates when cases change)
+_cases_cache = None
+_cases_cache_case_count = 0
+_cases_cache_raw_data_flag = None
+
 @app.get("/api/cases")
 def get_all_cases(include_raw_data: bool = False):
     """
-    Get all cases from database
+    Get all cases from database.
+    Uses caching to avoid recomputing on every request.
     
     Args:
         include_raw_data: If True, include full raw_data (slower, larger payload).
                          Default False for faster initial loads.
     """
+    global _cases_cache, _cases_cache_case_count, _cases_cache_raw_data_flag
+    
     try:
+        # Quick check: get case count first (fast query)
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        current_case_count = cursor.fetchone()[0]
+        db_conn.close()
+        
+        # Check if cache is still valid (same case count AND same raw_data flag)
+        if (_cases_cache is not None and 
+            _cases_cache_case_count == current_case_count and
+            _cases_cache_raw_data_flag == include_raw_data):
+            return _cases_cache
+        
+        # Load cases (only if cache invalid)
         cases = storage.get_all_cases(include_raw_data=include_raw_data)
-        return cases if cases else []
+        
+        # Update cache
+        _cases_cache = cases if cases else []
+        _cases_cache_case_count = current_case_count
+        _cases_cache_raw_data_flag = include_raw_data
+        
+        return _cases_cache
     except Exception as e:
         # Handle case where database doesn't exist or is empty
         return []
@@ -342,9 +389,9 @@ _cache_case_count = 0
 @app.get("/api/automated-analysis")
 async def automated_analysis_endpoint():
     """
-    Run automated analysis on all cases.
-    Returns case groups, triaged cases, and insights.
-    Uses caching to avoid recomputing on every request.
+    Get automated analysis results (case groups, triaged cases, insights).
+    Uses pre-computed clusters from database for fast response.
+    Falls back to computing if pre-computed clusters not available.
     """
     global _analysis_cache, _cache_case_count
     
@@ -357,28 +404,42 @@ async def automated_analysis_endpoint():
         current_case_count = cursor.fetchone()[0]
         db_conn.close()
         
-        # Check if cache is still valid (same number of cases)
+        # Try to get pre-computed clusters from database (fast!)
+        precomputed = storage.get_precomputed_clusters(current_case_count)
+        if precomputed:
+            return {
+                "success": True,
+                "analysis": precomputed,
+                "cached": True,
+                "source": "database"
+            }
+        
+        # Fallback: Check in-memory cache
         if _analysis_cache is not None and _cache_case_count == current_case_count:
             return {
                 "success": True,
                 "analysis": _analysis_cache,
-                "cached": True
+                "cached": True,
+                "source": "memory"
             }
         
-        # Load cases (don't need raw_data for clustering)
+        # Last resort: Compute on-demand (slow, but works)
+        print("⚠️  No pre-computed clusters found, computing on-demand (this is slow)...")
         cases = storage.get_all_cases(include_raw_data=False)
-        
-        # Run automated analysis (only if cache invalid)
         analysis_results = run_automated_analysis(cases)
         
-        # Update cache
+        # Store in database for next time
+        storage.store_precomputed_clusters(analysis_results, current_case_count)
+        
+        # Update memory cache
         _analysis_cache = analysis_results
         _cache_case_count = current_case_count
         
         return {
             "success": True,
             "analysis": analysis_results,
-            "cached": False
+            "cached": False,
+            "source": "computed"
         }
     except Exception as e:
         import traceback

@@ -549,6 +549,13 @@
         let customTopics = new Set();
 
         async function loadCases() {
+            // Show loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loading-indicator';
+            loadingDiv.style.cssText = 'text-align: center; padding: 20px; color: #888;';
+            loadingDiv.textContent = 'Loading cases...';
+            document.body.insertBefore(loadingDiv, document.body.firstChild);
+            
             try {
                 // Load tags first (fast, cached endpoint) to populate selectors immediately
                 const tagsResponse = await fetch('/api/tags');
@@ -566,10 +573,17 @@
                 allCases = await response.json();
                 window.allCases = allCases; // Store globally
                 
+                // Remove loading indicator
+                const loadingEl = document.getElementById('loading-indicator');
+                if (loadingEl) loadingEl.remove();
+                
                 // Re-render with full data (in case there are any differences)
                 renderTopicSelector();
             } catch (error) {
                 console.error('Error loading cases:', error);
+                const loadingEl = document.getElementById('loading-indicator');
+                if (loadingEl) loadingEl.remove();
+                
                 // Fallback: try to load cases the old way
                 try {
                     const response = await fetch('/api/cases');
@@ -1093,6 +1107,12 @@
             
             try {
                 // Call API
+                // Show loading indicator for automated analysis
+                const analysisSection = document.getElementById('automated-analysis-section');
+                if (analysisSection) {
+                    analysisSection.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Running automated analysis... This may take a few seconds.</div>';
+                }
+                
                 const response = await fetch('/api/automated-analysis');
                 const data = await response.json();
                 

@@ -268,9 +268,7 @@
         <h1><span class="case-part">Case</span> <span class="clusters-part">Clusters</span></h1>
         <p class="subtitle">Interactive visualization of automated case clustering</p>
         
-        <div id="cluster-visualization">
-            <div class="loading">Loading clusters...</div>
-        </div>
+        <div id="cluster-visualization"></div>
         
         <div id="case-display" class="case-display">
             <h3 id="case-display-title">Selected Cases</h3>
@@ -293,7 +291,7 @@
         let selectedClusterId = null;
         let selectedGroupId = null;
         
-        // Load automated analysis data
+        // Load automated analysis data (from pre-computed clusters)
         async function loadClusters() {
             try {
                 const response = await fetch('/api/automated-analysis');
@@ -306,7 +304,6 @@
                     showError('No cluster data available');
                 }
             } catch (error) {
-                console.error('Error loading clusters:', error);
                 showError('Failed to load clusters. Make sure the API server is running.');
             }
         }
@@ -478,60 +475,134 @@
                     }
                     return baseClass;
                 })
-                .on('click', function(event, d) {
+                .on('click', async function(event, d) {
+                    event.stopPropagation();
+                    
                     if (d.type === 'cluster') {
-                        // Check if clicking the same cluster (toggle collapse)
-                        if (selectedClusterId === d.id) {
-                            // Collapse: clear selection and hide case display
+                        // Check if this cluster is already selected - toggle off if so
+                        if (selectedClusterId === d.id && selectedGroupId === null) {
+                            // Deselect and hide
                             svg.selectAll('.cluster-bubble').classed('selected', false);
                             svg.selectAll('.group-bubble').classed('selected', false);
                             selectedClusterId = null;
                             selectedGroupId = null;
-                            document.getElementById('case-display').classList.remove('active');
+                            hideCaseDisplay();
+                            return;
+                        }
+                        
+                        // Select this cluster and deselect others
+                        svg.selectAll('.cluster-bubble').classed('selected', false);
+                        svg.selectAll('.group-bubble').classed('selected', false);
+                        selectedClusterId = d.id;
+                        selectedGroupId = null;
+                        d3.select(this).classed('selected', true);
+                        
+                        // Display "Online-Only Cluster" for online_only_cluster
+                        const displayName = d.cluster.group_id === 'online_only_cluster' 
+                            ? 'Online-Only Cluster' 
+                            : d.cluster.group_name;
+                        
+                        // Collect all case IDs from the cluster
+                        const caseIds = [];
+                        const seenIds = new Set();
+                        
+                        // First, try to get case IDs from main cases array
+                        if (d.cluster && d.cluster.cases && Array.isArray(d.cluster.cases)) {
+                            d.cluster.cases.forEach((c) => {
+                                // Handle both case objects and case ID strings
+                                const caseId = (typeof c === 'string') ? c : (c && c.id ? c.id : null);
+                                if (caseId && !seenIds.has(caseId)) {
+                                    caseIds.push(caseId);
+                                    seenIds.add(caseId);
+                                }
+                            });
+                        }
+                        
+                        // Also check internal_groups for case IDs
+                        if (d.cluster && d.cluster.internal_groups && Array.isArray(d.cluster.internal_groups)) {
+                            d.cluster.internal_groups.forEach((internalGroup) => {
+                                if (internalGroup && internalGroup.cases && Array.isArray(internalGroup.cases)) {
+                                    internalGroup.cases.forEach((c) => {
+                                        // Handle both case objects and case ID strings
+                                        const caseId = (typeof c === 'string') ? c : (c && c.id ? c.id : null);
+                                        if (caseId && !seenIds.has(caseId)) {
+                                            caseIds.push(caseId);
+                                            seenIds.add(caseId);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        
+                        if (caseIds.length > 0) {
+                            await displayCasesByIds(caseIds, displayName);
                         } else {
-                            // Expand: select this cluster
-                            svg.selectAll('.cluster-bubble').classed('selected', false);
-                            svg.selectAll('.group-bubble').classed('selected', false);
-                            selectedClusterId = d.id;
-                            selectedGroupId = null;
-                            d3.select(this).classed('selected', true);
-                            // Display "Online-Only Cluster" for online_only_cluster
-                            const displayName = d.cluster.group_id === 'online_only_cluster' 
-                                ? 'Online-Only Cluster' 
-                                : d.cluster.group_name;
-                            displayCases(d.cluster.cases, displayName);
+                            const displayDiv = document.getElementById('case-display');
+                            const listEl = document.getElementById('case-list');
+                            if (displayDiv && listEl) {
+                                displayDiv.classList.add('active');
+                                displayDiv.style.display = 'block';
+                                listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">No cases found in this cluster</div>';
+                            }
                         }
                     } else if (d.type === 'group') {
-                        // Check if clicking the same group (toggle collapse)
-                        if (selectedGroupId === d.id) {
-                            // Collapse: clear selection and hide case display
+                        // Check if this group is already selected - toggle off if so
+                        if (selectedGroupId === d.id && selectedClusterId === d.clusterId) {
+                            // Deselect and hide
                             svg.selectAll('.cluster-bubble').classed('selected', false);
                             svg.selectAll('.group-bubble').classed('selected', false);
                             selectedClusterId = null;
                             selectedGroupId = null;
-                            document.getElementById('case-display').classList.remove('active');
-                        } else {
-                            // Expand: select this group and its parent cluster
-                            svg.selectAll('.cluster-bubble').classed('selected', false);
-                            svg.selectAll('.group-bubble').classed('selected', false);
-                            
-                            const parentCluster = clusterData.find(c => c.group_id === d.clusterId);
-                            // Select parent cluster AND the clicked sub-cluster
-                            const parentBubble = svg.selectAll('.cluster-bubble').filter(function(node) {
-                                return node.id === d.clusterId;
+                            hideCaseDisplay();
+                            return;
+                        }
+                        
+                        // Select this group and deselect others
+                        svg.selectAll('.cluster-bubble').classed('selected', false);
+                        svg.selectAll('.group-bubble').classed('selected', false);
+                        
+                        const parentCluster = clusterData.find(c => c.group_id === d.clusterId);
+                        // Select parent cluster AND the clicked sub-cluster
+                        const parentBubble = svg.selectAll('.cluster-bubble').filter(function(node) {
+                            return node.id === d.clusterId;
+                        });
+                        parentBubble.classed('selected', true);
+                        selectedClusterId = d.clusterId;
+                        
+                        // Also highlight the clicked sub-cluster
+                        d3.select(this).classed('selected', true);
+                        selectedGroupId = d.id;
+                        
+                        // Display "Online-Only Cluster" for online_only_cluster
+                        const parentDisplayName = parentCluster && parentCluster.group_id === 'online_only_cluster'
+                            ? 'Online-Only Cluster'
+                            : (parentCluster ? parentCluster.group_name : 'Cluster');
+                        
+                        // Collect all case IDs from the group
+                        const caseIds = [];
+                        const seenIds = new Set();
+                        
+                        if (d.group && d.group.cases && Array.isArray(d.group.cases)) {
+                            d.group.cases.forEach((c) => {
+                                // Handle both case objects and case ID strings
+                                const caseId = (typeof c === 'string') ? c : (c && c.id ? c.id : null);
+                                if (caseId && !seenIds.has(caseId)) {
+                                    caseIds.push(caseId);
+                                    seenIds.add(caseId);
+                                }
                             });
-                            parentBubble.classed('selected', true);
-                            selectedClusterId = d.clusterId;
-                            
-                            // Also highlight the clicked sub-cluster
-                            d3.select(this).classed('selected', true);
-                            selectedGroupId = d.id;
-                            
-                            // Display "Online-Only Cluster" for online_only_cluster
-                            const parentDisplayName = parentCluster && parentCluster.group_id === 'online_only_cluster'
-                                ? 'Online-Only Cluster'
-                                : (parentCluster ? parentCluster.group_name : 'Cluster');
-                            displayCases(d.group.cases, `Group from ${parentDisplayName}`);
+                        }
+                        
+                        if (caseIds.length > 0) {
+                            await displayCasesByIds(caseIds, `Group from ${parentDisplayName}`);
+                        } else {
+                            const displayDiv = document.getElementById('case-display');
+                            const listEl = document.getElementById('case-list');
+                            if (displayDiv && listEl) {
+                                displayDiv.classList.add('active');
+                                displayDiv.style.display = 'block';
+                                listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">No cases found in this group</div>';
+                            }
                         }
                     }
                 });
@@ -791,18 +862,93 @@
             }
         }
         
-        function displayCases(cases, title) {
+        function hideCaseDisplay() {
+            const displayDiv = document.getElementById('case-display');
+            if (displayDiv) {
+                displayDiv.classList.remove('active');
+                displayDiv.style.display = 'none';
+            }
+        }
+        
+        async function displayCasesByIds(caseIds, title) {
             const displayDiv = document.getElementById('case-display');
             const titleEl = document.getElementById('case-display-title');
             const listEl = document.getElementById('case-list');
             
-            titleEl.textContent = `${title} (${cases.length} cases)`;
+            if (!displayDiv || !titleEl || !listEl) {
+                return;
+            }
+            
+            // Show the panel immediately and keep it visible
+            displayDiv.classList.add('active');
+            displayDiv.style.display = 'block'; // Force display
+            titleEl.textContent = `${title} (${caseIds ? caseIds.length : 0} cases)`;
+            listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Loading cases...</div>';
+            
+            // Scroll into view
+            displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            if (!caseIds || caseIds.length === 0) {
+                listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">No case IDs found</div>';
+                return;
+            }
+            
+            // Fetch each case from the API (like Visualization tab does)
+            const fullCases = [];
+            try {
+                // Fetch all cases at once (faster)
+                const response = await fetch('/api/cases?include_raw_data=true');
+                
+                if (response.ok) {
+                    const allCases = await response.json();
+                    
+                    // Filter to only cases in this cluster
+                    const casesMap = new Map();
+                    allCases.forEach(c => {
+                        if (c.id && caseIds.includes(c.id)) {
+                            casesMap.set(c.id, c);
+                        }
+                    });
+                    
+                    // Get cases in the same order as caseIds
+                    caseIds.forEach(id => {
+                        if (casesMap.has(id)) {
+                            fullCases.push(casesMap.get(id));
+                        }
+                    });
+                } else {
+                    // Fallback: fetch individually
+                    for (const caseId of caseIds) {
+                        try {
+                            const response = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
+                            if (response.ok) {
+                                const caseData = await response.json();
+                                fullCases.push(caseData);
+                            }
+                        } catch (e) {
+                            // Silently skip failed fetches
+                        }
+                    }
+                }
+            } catch (error) {
+                listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #d32f2f;">Error loading cases</div>';
+                return;
+            }
+            
+            // Clear loading and render cases
             listEl.innerHTML = '';
             
-            cases.forEach(caseData => {
+            if (fullCases.length === 0) {
+                listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">No cases found</div>';
+                return;
+            }
+            
+            // Render each case - exactly like Visualization tab
+            fullCases.forEach((caseData) => {
                 const caseItem = document.createElement('div');
                 caseItem.className = 'case-item';
                 
+                // Get case text (same logic as index.html)
                 const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
                 const caseId = caseData.id || 'Unknown ID';
                 
@@ -817,8 +963,9 @@
                 listEl.appendChild(caseItem);
             });
             
+            // Ensure display stays visible after rendering
             displayDiv.classList.add('active');
-            displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            displayDiv.style.display = 'block';
         }
         
         function escapeHtml(text) {
@@ -1027,9 +1174,13 @@
             // Prosecution outcome
             const prosecution = caseData.prosecution_outcome;
             if (prosecution) {
-                const charges = prosecution.charges || [];
+                // Ensure charges is an array
+                let charges = prosecution.charges;
+                if (!Array.isArray(charges)) {
+                    charges = [];
+                }
                 charges.forEach(ch => {
-                    const chargeName = ch.charge || '';
+                    const chargeName = (ch && typeof ch === 'object' && ch.charge) ? ch.charge : (typeof ch === 'string' ? ch : '');
                     if (chargeName) {
                         highlightTerms.push({ term: chargeName, category: 'prosecution' });
                     }
