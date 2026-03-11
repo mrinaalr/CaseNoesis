@@ -444,6 +444,13 @@
                 </div>
                 
                 <div class="topic-category">
+                    <div class="topic-category-title">Organizations Involved</div>
+                    <div class="topic-selector" id="topic-selector-organizations">
+                        <!-- Organizations: ICAC, FBI, NCMEC, Police, Unique -->
+                    </div>
+                </div>
+                
+                <div class="topic-category">
                     <div class="topic-category-title">Investigation Types</div>
                     <div class="topic-selector" id="topic-selector-investigation">
                         <!-- Investigation: proactive, reactive, online, undercover -->
@@ -548,6 +555,51 @@
         window.allCases = []; // Make globally accessible
         let availableTopics = new Set();
         let customTopics = new Set();
+        
+        // Cache for unique organizations (orgs that appear only once)
+        let uniqueOrganizationsCache = null;
+        
+        // Helper function to get unique organizations (orgs that appear in only one case)
+        function getUniqueOrganizations() {
+            if (uniqueOrganizationsCache !== null) {
+                return uniqueOrganizationsCache;
+            }
+            
+            const orgCounts = new Map(); // Map of lowercase org name -> count
+            
+            // Count occurrences of each organization across all cases
+            allCases.forEach(caseData => {
+                const agencies = caseData.agencies_involved || [];
+                const organizations = caseData.organizations || [];
+                const seenInCase = new Set(); // Track to avoid double-counting in same case
+                
+                [...agencies, ...organizations].forEach(org => {
+                    if (org && typeof org === 'string' && org.trim().length > 0) {
+                        const lower = org.trim().toLowerCase();
+                        if (!seenInCase.has(lower)) {
+                            seenInCase.add(lower);
+                            orgCounts.set(lower, (orgCounts.get(lower) || 0) + 1);
+                        }
+                    }
+                });
+            });
+            
+            // Find organizations that appear only once
+            const uniqueOrgs = new Set();
+            orgCounts.forEach((count, orgLower) => {
+                if (count === 1) {
+                    uniqueOrgs.add(orgLower);
+                }
+            });
+            
+            uniqueOrganizationsCache = uniqueOrgs;
+            return uniqueOrgs;
+        }
+        
+        // Reset cache when cases are reloaded
+        function resetUniqueOrganizationsCache() {
+            uniqueOrganizationsCache = null;
+        }
 
         async function loadCases() {
             // Show subtle loading indicator in header
@@ -573,6 +625,9 @@
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
                 window.allCases = allCases; // Store globally
+                
+                // Reset unique organizations cache when cases are reloaded
+                resetUniqueOrganizationsCache();
                 
                 // Re-render with full data (in case there are any differences)
                 renderTopicSelector();
@@ -606,6 +661,7 @@
             const allSeverity = ['infant', 'very_young', 'sexual_assault'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
             const allStatus = ['registered_sex_offender'];
             
@@ -614,6 +670,7 @@
             renderTopicCategory('topic-selector-severity', allSeverity, severitySet);
             renderTopicCategory('topic-selector-platforms', allPlatforms, platformsSet);
             renderTopicCategory('topic-selector-investigation', allInvestigation, investigationSet);
+            renderTopicCategory('topic-selector-organizations', allOrganizations, new Set()); // Always show all org tags
             renderTopicCategory('topic-selector-relationships', allRelationships, relationshipsSet);
             renderTopicCategory('topic-selector-status', allStatus, statusSet);
         }
@@ -667,6 +724,7 @@
             const allSeverity = ['infant', 'very_young', 'sexual_assault'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
             const allStatus = ['registered_sex_offender'];
             
@@ -675,6 +733,7 @@
             renderTopicCategory('topic-selector-severity', allSeverity, severitySet);
             renderTopicCategory('topic-selector-platforms', allPlatforms, platformsSet);
             renderTopicCategory('topic-selector-investigation', allInvestigation, investigationSet);
+            renderTopicCategory('topic-selector-organizations', allOrganizations, new Set()); // Always show all org tags
             renderTopicCategory('topic-selector-relationships', allRelationships, relationshipsSet);
             renderTopicCategory('topic-selector-status', allStatus, statusSet);
             
@@ -707,6 +766,7 @@
                                selectorId.includes('severity') ? 'severity_indicators' :
                                selectorId.includes('platforms') ? 'platforms_used' :
                                selectorId.includes('investigation') ? 'investigation_type' :
+                               selectorId.includes('organizations') ? 'organizations' :
                                selectorId.includes('relationships') ? 'relationship_to_victim' :
                                selectorId.includes('status') ? 'registered_sex_offender' : null;
             
@@ -1106,7 +1166,7 @@
                 // Show loading indicator for automated analysis
                 const analysisSection = document.getElementById('automated-analysis-section');
                 if (analysisSection) {
-                    analysisSection.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Running automated analysis... This may take a few seconds.</div>';
+                    analysisSection.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Running automated analysis...</div>';
                 }
                 
                 const response = await fetch('/api/automated-analysis');
@@ -1278,7 +1338,7 @@
             return html;
         }
         
-        function showCaseDetail(caseIdx, type) {
+        async function showCaseDetail(caseIdx, type) {
             if (!window.currentAnalysisData) return;
             
             const caseItem = window.currentAnalysisData.triaged_cases[caseIdx];
@@ -1295,6 +1355,29 @@
                     caseText = parsed.case_text || '';
                 } catch {
                     caseText = rawData;
+                }
+            }
+            
+            // If case text is missing, try to fetch it from API
+            if (!caseText && caseItem.id) {
+                try {
+                    const response = await fetch(`/api/cases/${caseItem.id}`);
+                    if (response.ok) {
+                        const fullCase = await response.json();
+                        const fullRawData = fullCase.raw_data;
+                        if (typeof fullRawData === 'object' && fullRawData) {
+                            caseText = fullRawData.case_text || '';
+                        } else if (typeof fullRawData === 'string') {
+                            try {
+                                const parsed = JSON.parse(fullRawData);
+                                caseText = parsed.case_text || '';
+                            } catch {
+                                caseText = fullRawData;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching case text:', error);
                 }
             }
             
@@ -1888,6 +1971,55 @@
                         matches = Array.isArray(platforms) && platforms.some(p => p && p.toLowerCase() === tag.toLowerCase());
                     } else if (category === 'investigation_type') {
                         matches = caseItem.investigation_type && caseItem.investigation_type.toLowerCase() === tag.toLowerCase();
+                    } else if (category === 'organizations') {
+                        const agencies = caseItem.agencies_involved || [];
+                        const organizations = caseItem.organizations || [];
+                        const allOrgs = [...agencies, ...organizations];
+                        const caseText = (caseItem.raw_data?.case_text || caseItem.case_text || '').toLowerCase();
+                        
+                        if (tag === 'ICAC') {
+                            // Match ICAC, AZICAC, Arizona Internet Crimes Against Children, etc.
+                            const hasICAC = allOrgs.some(org => {
+                                const orgLower = String(org).toLowerCase();
+                                return orgLower.includes('icac') || 
+                                       orgLower.includes('internet crimes against children') ||
+                                       orgLower.includes('arizona internet crimes');
+                            });
+                            const textHasICAC = caseText.includes('icac') || 
+                                                caseText.includes('internet crimes against children') ||
+                                                caseText.includes('arizona internet crimes');
+                            matches = hasICAC || textHasICAC;
+                        } else if (tag === 'FBI') {
+                            // Match FBI, Federal Bureau of Investigation
+                            const hasFBI = allOrgs.some(org => {
+                                const orgLower = String(org).toLowerCase();
+                                return orgLower === 'fbi' || 
+                                       orgLower.includes('federal bureau of investigation');
+                            });
+                            const textHasFBI = caseText.includes('fbi') || 
+                                               caseText.includes('federal bureau of investigation');
+                            matches = hasFBI || textHasFBI;
+                        } else if (tag === 'Police') {
+                            // Match any police department
+                            const hasPolice = allOrgs.some(org => {
+                                const orgLower = String(org).toLowerCase();
+                                return orgLower.includes('police') || 
+                                       orgLower.includes('sheriff');
+                            });
+                            const textHasPolice = /\bpolice\b/gi.test(caseText) || 
+                                                 /\bsheriff/gi.test(caseText);
+                            matches = hasPolice || textHasPolice;
+                        } else if (tag === 'Unique') {
+                            // Cases where at least one organization appears only once across all cases
+                            const uniqueOrgs = getUniqueOrganizations();
+                            matches = allOrgs.some(org => {
+                                if (!org || typeof org !== 'string') return false;
+                                const orgLower = org.trim().toLowerCase();
+                                return uniqueOrgs.has(orgLower);
+                            });
+                        } else {
+                            matches = false;
+                        }
                     } else if (category === 'relationship_to_victim') {
                         // Simple exact match (no biological prefix anymore)
                         matches = caseItem.relationship_to_victim && caseItem.relationship_to_victim.toLowerCase() === tag.toLowerCase();
@@ -2144,6 +2276,57 @@
                                     patterns = [
                                         new RegExp(`\\b${tag}\\s+(?:[\\w-]+\\s+){0,5}investigation\\b`, 'gi')
                                     ];
+                                }
+                            } else if (category === 'organizations') {
+                                if (tag === 'ICAC') {
+                                    // Highlight ICAC, AZICAC, Internet Crimes Against Children, etc.
+                                    patterns = [
+                                        /\bICAC\b/gi,
+                                        /\bAZICAC\b/gi,
+                                        /\bZICAC\b/gi,
+                                        /\binternet\s+crimes\s+against\s+children\b/gi,
+                                        /\barizona\s+internet\s+crimes\s+against\s+children\b/gi,
+                                        /\barizona\s+internet\s+crimes\b/gi
+                                    ];
+                                } else if (tag === 'FBI') {
+                                    // Highlight FBI, Federal Bureau of Investigation
+                                    patterns = [
+                                        /\bFBI\b/gi,
+                                        /\bfederal\s+bureau\s+of\s+investigation\b/gi
+                                    ];
+                                } else if (tag === 'NCMEC') {
+                                    // Highlight NCMEC, National Center for Missing and Exploited Children
+                                    patterns = [
+                                        /\bNCMEC\b/gi,
+                                        /\bnational\s+center\s+for\s+missing\s+and\s+exploited\s+children\b/gi,
+                                        /\bnational\s+center\s+for\s+missing\s+and\s+exp[^\s]*\s+children\b/gi
+                                    ];
+                                } else if (tag === 'Police') {
+                                    // Highlight police and sheriff mentions
+                                    patterns = [
+                                        /\bpolice\b/gi,
+                                        /\bsheriff'?s?\s+(office|department|dept\.?)\b/gi,
+                                        /\bpolice\s+(department|dept\.?|force)\b/gi
+                                    ];
+                                } else if (tag === 'Unique') {
+                                    // Highlight unique organizations - get them from the case
+                                    const uniqueOrgs = getUniqueOrganizations();
+                                    const agencies = caseData.agencies_involved || [];
+                                    const organizations = caseData.organizations || [];
+                                    const allOrgs = [...agencies, ...organizations];
+                                    
+                                    allOrgs.forEach(org => {
+                                        if (org && typeof org === 'string') {
+                                            const orgLower = org.trim().toLowerCase();
+                                            if (uniqueOrgs.has(orgLower)) {
+                                                // Escape regex special characters
+                                                const escapedOrg = org.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                                patterns.push(new RegExp(`\\b${escapedOrg}\\b`, 'gi'));
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    patterns = [];
                                 }
                             } else if (category === 'relationship_to_victim') {
                                 patterns = [new RegExp(`\\b${tag}\\b`, 'gi')];

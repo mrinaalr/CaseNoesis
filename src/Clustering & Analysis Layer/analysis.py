@@ -137,6 +137,115 @@ def _case_matches_tag(case: Dict[str, Any], tag: str, category: str) -> bool:
     elif category == 'registered_sex_offender':
         return tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
     
+    elif category == 'organizations':
+        # Handle organization tags: ICAC, FBI, Police, Unique
+        # Check both top-level and extracted_features (organizations may be in extracted_features)
+        agencies = case.get('agencies_involved', [])
+        organizations = case.get('organizations', [])
+        
+        # Always check extracted_features as organizations may not be merged to top level
+        extracted_features = case.get('extracted_features', {})
+        if isinstance(extracted_features, dict):
+            # Get organizations from extracted_features (organizations is NOT merged to top level)
+            extracted_orgs = extracted_features.get('organizations', [])
+            if isinstance(extracted_orgs, list):
+                # Combine with top-level organizations if any
+                if isinstance(organizations, list):
+                    organizations = list(set(organizations + extracted_orgs))  # Deduplicate
+                else:
+                    organizations = extracted_orgs
+            # Get agencies_involved from extracted_features (fallback if not at top level)
+            extracted_agencies = extracted_features.get('agencies_involved', [])
+            if isinstance(extracted_agencies, list):
+                if not agencies or (isinstance(agencies, list) and len(agencies) == 0):
+                    agencies = extracted_agencies
+                else:
+                    # Combine both sources
+                    if isinstance(agencies, list):
+                        agencies = list(set(agencies + extracted_agencies))  # Deduplicate
+        
+        all_orgs = []
+        
+        # Combine agencies and organizations
+        if isinstance(agencies, list):
+            all_orgs.extend(agencies)
+        if isinstance(organizations, list):
+            all_orgs.extend(organizations)
+        
+        # Normalize all orgs to lowercase for comparison
+        all_orgs_lower = [str(org).lower().strip() for org in all_orgs if org]
+        case_text = get_case_text(case).lower()
+        
+        if tag == 'ICAC':
+            # Match ICAC, AZICAC, Arizona Internet Crimes Against Children, etc.
+            has_icac_org = any(
+                'icac' in org_lower or 
+                'internet crimes against children' in org_lower or
+                'arizona internet crimes' in org_lower
+                for org_lower in all_orgs_lower
+            )
+            has_icac_text = (
+                'icac' in case_text or 
+                'internet crimes against children' in case_text or
+                'arizona internet crimes' in case_text
+            )
+            return has_icac_org or has_icac_text
+        
+        elif tag == 'FBI':
+            # Match FBI, Federal Bureau of Investigation
+            has_fbi_org = any(
+                org_lower == 'fbi' or 
+                'federal bureau of investigation' in org_lower
+                for org_lower in all_orgs_lower
+            )
+            has_fbi_text = (
+                'fbi' in case_text or 
+                'federal bureau of investigation' in case_text
+            )
+            return has_fbi_org or has_fbi_text
+        
+        elif tag == 'NCMEC':
+            # Match NCMEC, National Center for Missing and Exploited Children
+            has_ncmec_org = any(
+                org_lower == 'ncmec' or 
+                'national center for missing and exploited children' in org_lower or
+                ('national center for missing' in org_lower and 'exploited children' in org_lower)
+                for org_lower in all_orgs_lower
+            )
+            has_ncmec_text = (
+                'ncmec' in case_text or 
+                'national center for missing and exploited children' in case_text or
+                ('national center for missing' in case_text and 'exploited children' in case_text)
+            )
+            return has_ncmec_org or has_ncmec_text
+        
+        elif tag == 'Police':
+            # Match any police department
+            has_police_org = any(
+                'police' in org_lower or 
+                'sheriff' in org_lower
+                for org_lower in all_orgs_lower
+            )
+            has_police_text = (
+                re.search(r'\bpolice\b', case_text, re.IGNORECASE) is not None or
+                re.search(r'\bsheriff', case_text, re.IGNORECASE) is not None
+            )
+            return has_police_org or has_police_text
+        
+        elif tag == 'Unique':
+            # Cases where at least one organization appears only once across all cases
+            # We need to count occurrences across all cases - this requires all_cases context
+            # For now, we'll compute this on-demand when needed
+            # Note: This is less efficient but works correctly
+            from typing import TYPE_CHECKING
+            if TYPE_CHECKING:
+                pass
+            
+            # Get all cases to count org occurrences
+            # We'll need to pass all_cases to this function or compute it differently
+            # For now, return False and handle it in return_tagged_cases
+            return False  # Will be handled specially in return_tagged_cases
+    
     elif category == 'custom':
         # Search in case text for custom topics using helper function
         case_text = get_case_text(case)
@@ -160,6 +269,57 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
     if not selected_tags:
         return []
     
+    # Pre-compute unique organizations if "Unique" tag is selected
+    has_unique_tag = any(
+        tag_info.get('tag') == 'Unique' and tag_info.get('category') == 'organizations' 
+        for tag_info in selected_tags
+    )
+    
+    unique_orgs = set()
+    if has_unique_tag:
+        # Count occurrences of each organization across all cases
+        org_counts = {}
+        for case in all_cases:
+            agencies = case.get('agencies_involved', [])
+            organizations = case.get('organizations', [])
+            
+            # Always check extracted_features as organizations may not be merged to top level
+            extracted_features = case.get('extracted_features', {})
+            if isinstance(extracted_features, dict):
+                # Get organizations from extracted_features (organizations is NOT merged to top level)
+                extracted_orgs = extracted_features.get('organizations', [])
+                if isinstance(extracted_orgs, list):
+                    if isinstance(organizations, list):
+                        organizations = list(set(organizations + extracted_orgs))  # Deduplicate
+                    else:
+                        organizations = extracted_orgs
+                # Get agencies_involved from extracted_features (fallback if not at top level)
+                extracted_agencies = extracted_features.get('agencies_involved', [])
+                if isinstance(extracted_agencies, list):
+                    if not agencies or (isinstance(agencies, list) and len(agencies) == 0):
+                        agencies = extracted_agencies
+                    else:
+                        if isinstance(agencies, list):
+                            agencies = list(set(agencies + extracted_agencies))  # Deduplicate
+            
+            all_orgs = []
+            if isinstance(agencies, list):
+                all_orgs.extend(agencies)
+            if isinstance(organizations, list):
+                all_orgs.extend(organizations)
+            
+            # Track unique orgs per case to avoid double-counting
+            seen_in_case = set()
+            for org in all_orgs:
+                if org and isinstance(org, str):
+                    org_lower = org.strip().lower()
+                    if org_lower and org_lower not in seen_in_case:
+                        seen_in_case.add(org_lower)
+                        org_counts[org_lower] = org_counts.get(org_lower, 0) + 1
+        
+        # Find organizations that appear only once
+        unique_orgs = {org_lower for org_lower, count in org_counts.items() if count == 1}
+    
     matching_cases = []
     for case in all_cases:
         # Case must match ALL selected tags (intersection logic)
@@ -169,9 +329,37 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
             tag = tag_info['tag']
             category = tag_info['category']
             
-            if not _case_matches_tag(case, tag, category):
-                matches_all = False
-                break
+            # Special handling for Unique organizations (requires all_cases context)
+            if category == 'organizations' and tag == 'Unique':
+                agencies = case.get('agencies_involved', [])
+                organizations = case.get('organizations', [])
+                
+                # Always check extracted_features as organizations may not be merged to top level
+                extracted_features = case.get('extracted_features', {})
+                if isinstance(extracted_features, dict):
+                    if not organizations or (isinstance(organizations, list) and len(organizations) == 0):
+                        organizations = extracted_features.get('organizations', [])
+                    if not agencies or (isinstance(agencies, list) and len(agencies) == 0):
+                        agencies = extracted_features.get('agencies_involved', [])
+                
+                all_orgs = []
+                if isinstance(agencies, list):
+                    all_orgs.extend(agencies)
+                if isinstance(organizations, list):
+                    all_orgs.extend(organizations)
+                
+                # Check if case has at least one unique organization
+                has_unique = any(
+                    org and isinstance(org, str) and org.strip().lower() in unique_orgs
+                    for org in all_orgs
+                )
+                if not has_unique:
+                    matches_all = False
+                    break
+            else:
+                if not _case_matches_tag(case, tag, category):
+                    matches_all = False
+                    break
         
         if matches_all:
             matching_cases.append(case)
@@ -276,12 +464,47 @@ def calculate_case_similarity(case1: Dict[str, Any], case2: Dict[str, Any]) -> f
             demo_sim += min(vc1, vc2) / max(vc1, vc2)
         demo_count += 1
     
-    # Perpetrator age similarity
+    # Perpetrator age similarity (handles both single and multiple perpetrators)
     pa1 = demo1.get('perpetrator_age')
     pa2 = demo2.get('perpetrator_age')
-    if pa1 is not None and pa2 is not None:
-        age_diff = abs(pa1 - pa2)
-        demo_sim += max(0, 1.0 - age_diff / 20.0)  # Normalize by 20 year difference
+    
+    # Normalize to lists
+    if isinstance(pa1, int):
+        pa1 = [pa1]
+    elif not isinstance(pa1, list):
+        pa1 = []
+    
+    if isinstance(pa2, int):
+        pa2 = [pa2]
+    elif not isinstance(pa2, list):
+        pa2 = []
+    
+    if pa1 and pa2:
+        # Calculate similarity between perpetrator age lists
+        # Method 1: Exact matches (same ages)
+        set1 = set(pa1)
+        set2 = set(pa2)
+        if set1 == set2:
+            demo_sim += 1.0  # Perfect match
+        elif set1 & set2:
+            # Some ages match - calculate overlap
+            overlap = len(set1 & set2)
+            total_unique = len(set1 | set2)
+            demo_sim += overlap / total_unique
+        else:
+            # No exact matches - calculate average age difference
+            avg_age1 = sum(pa1) / len(pa1)
+            avg_age2 = sum(pa2) / len(pa2)
+            age_diff = abs(avg_age1 - avg_age2)
+            demo_sim += max(0, 1.0 - age_diff / 20.0)  # Normalize by 20 year difference
+        
+        # Bonus: Both have multiple perpetrators (gives more weight)
+        mp1 = demo1.get('multiple_perpetrators', False)
+        mp2 = demo2.get('multiple_perpetrators', False)
+        if mp1 and mp2:
+            demo_sim += 0.2  # Bonus for both having multiple perpetrators
+            demo_count += 1  # Count this as an additional factor
+        
         demo_count += 1
     
     # Registered sex offender match
@@ -922,9 +1145,17 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         
         # Add any remaining unclustered cases
         clustered_ids = {c.get('id') for c in all_online_only_cases}
+        unclustered_cases = []
         for case in online_only_cases:
             if case.get('id') not in clustered_ids:
                 all_online_only_cases.append(case)
+                unclustered_cases.append(case)
+        
+        # Build internal_groups list - include all clusters plus unclustered cases as a separate group
+        internal_groups_list = [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        # Add unclustered cases as a separate internal group if any exist
+        if unclustered_cases:
+            internal_groups_list.append({'cases': unclustered_cases, 'size': len(unclustered_cases)})
         
         # Calculate cluster-level metrics (across all cases)
         similarity_metrics = calculate_group_similarity_metrics(all_online_only_cases)
@@ -953,7 +1184,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             'group_name': 'Online-Only Cluster',
             'description': full_description,
             'statistics': characteristics.get('statistics', {}),
-            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+            'internal_groups': internal_groups_list
         })
     
     # 1b. Possession Cluster - Check ALL cases, then cluster internally
@@ -970,9 +1201,17 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         
         # Add any remaining unclustered cases
         clustered_ids = {c.get('id') for c in all_possession_cases}
+        unclustered_cases = []
         for case in possession_cases:
             if case.get('id') not in clustered_ids:
                 all_possession_cases.append(case)
+                unclustered_cases.append(case)
+        
+        # Build internal_groups list - include all clusters plus unclustered cases as a separate group
+        internal_groups_list = [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        # Add unclustered cases as a separate internal group if any exist
+        if unclustered_cases:
+            internal_groups_list.append({'cases': unclustered_cases, 'size': len(unclustered_cases)})
         
         # Calculate cluster-level metrics (across all cases)
         similarity_metrics = calculate_group_similarity_metrics(all_possession_cases)
@@ -1002,7 +1241,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             'group_name': 'Possession Cluster',
             'description': full_description,
             'statistics': characteristics.get('statistics', {}),
-            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+            'internal_groups': internal_groups_list
         })
     
     # 1c. Investigation Cluster - Check ALL cases, then cluster internally by investigation type
@@ -1020,9 +1259,17 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         
         # Add any remaining unclustered cases
         clustered_ids = {c.get('id') for c in all_investigation_cases}
+        unclustered_cases = []
         for case in investigation_cases:
             if case.get('id') not in clustered_ids:
                 all_investigation_cases.append(case)
+                unclustered_cases.append(case)
+        
+        # Build internal_groups list - include all clusters plus unclustered cases as a separate group
+        internal_groups_list = [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        # Add unclustered cases as a separate internal group if any exist
+        if unclustered_cases:
+            internal_groups_list.append({'cases': unclustered_cases, 'size': len(unclustered_cases)})
         
         # Calculate cluster-level metrics (across all cases)
         similarity_metrics = calculate_group_similarity_metrics(all_investigation_cases)
@@ -1046,7 +1293,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             'group_name': 'Investigation Cluster',
             'description': f"All {len(all_investigation_cases)} cases involving investigation type ({inv_type_summary})",
             'statistics': characteristics.get('statistics', {}),
-            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+            'internal_groups': internal_groups_list
         })
     
     # 1d. Severe Cluster - Check ALL cases, then cluster internally
@@ -1063,9 +1310,17 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         
         # Add any remaining unclustered cases
         clustered_ids = {c.get('id') for c in all_severe_cases}
+        unclustered_cases = []
         for case in severe_cases:
             if case.get('id') not in clustered_ids:
                 all_severe_cases.append(case)
+                unclustered_cases.append(case)
+        
+        # Build internal_groups list - include all clusters plus unclustered cases as a separate group
+        internal_groups_list = [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+        # Add unclustered cases as a separate internal group if any exist
+        if unclustered_cases:
+            internal_groups_list.append({'cases': unclustered_cases, 'size': len(unclustered_cases)})
         
         # Calculate cluster-level metrics (across all cases)
         if len(all_severe_cases) == 1:
@@ -1085,7 +1340,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             'group_name': 'Severe Cluster',
             'description': f"All {len(all_severe_cases)} cases involve severe indicators (infant, very_young, sexual_assault)",
             'statistics': characteristics.get('statistics', {}),
-            'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
+            'internal_groups': internal_groups_list
         })
     
     # 1e. General Cluster - Check ALL cases using Jaccard similarity, then cluster internally
@@ -1153,6 +1408,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         severity_weights = {
             'infant': 15.0,  # High weight but not excessive
             'sexual_assault': 18.0,  # Very high weight - sexual assault is extremely severe
+            'multiple_perpetrators': 15.0,  # High weight - multiple perpetrators indicates higher complexity, coordination, and severity
             'very_young': 10.0,  # Increased - very young is also critical
             'under_10': 7.0,  # Increased
             'under_5': 8.0,  # Keep for backward compatibility

@@ -182,12 +182,32 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
         elif case_demo.get('age_range'):
             case_age_range = case_demo.get('age_range')
     
+    # Handle perpetrator_age (can be single int or list)
+    perpetrator_age = case_features.get('perpetrator_age')
+    multiple_perpetrators = False
+    if isinstance(perpetrator_age, list):
+        multiple_perpetrators = len(perpetrator_age) > 1
+    elif perpetrator_age is not None:
+        # Convert single int to list for consistency
+        perpetrator_age = [perpetrator_age]
+    
+    # Add multiple_perpetrators to severity if applicable (gives more weight)
+    severity_vector = case_features.get('severity_indicators', [])
+    if not isinstance(severity_vector, list):
+        severity_vector = []
+    if multiple_perpetrators and 'multiple_perpetrators' not in severity_vector:
+        severity_vector = severity_vector.copy()
+        severity_vector.append('multiple_perpetrators')
+        # Update the case_features severity_indicators field
+        case_features['severity_indicators'] = severity_vector
+    
     comparison_values = {
         'platform_vector': case_features.get('platforms_used', []),
         'demographic_vector': {
             'case_age_range': case_age_range,
             'victim_count': case_features.get('victim_count'),
-            'perpetrator_age': case_features.get('perpetrator_age'),
+            'perpetrator_age': perpetrator_age,  # Now always a list (or None)
+            'multiple_perpetrators': multiple_perpetrators,  # Flag for clustering
             'perpetrator_registered': case_features.get('perpetrator_registered_sex_offender', False),
         },
         'relationship_vector': [case_features.get('relationship_to_victim')] if case_features.get('relationship_to_victim') else [],
@@ -202,7 +222,7 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
         },
         'temporal_value': date_range.get('start') if isinstance(date_range, dict) else None,
         'topic_vector': case_features.get('case_topics', []),
-        'severity_vector': case_features.get('severity_indicators', []),
+        'severity_vector': severity_vector,  # Includes multiple_perpetrators flag
     }
     
     case_features['comparison_values'] = comparison_values
@@ -701,17 +721,17 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     topics = []
     
     # Production vs possession
-    if re.search(r'\b(produced|created|made\s+movies?|created\s+videos?|trade|traded)\b', case_text, re.IGNORECASE):
+    if re.search(r'\b(production|produced|created|made\s+movies?|created\s+videos?took\s+photos)\b', case_text, re.IGNORECASE):
         topics.append('production')
-    if re.search(r'\b(trading|downloading|possessing|collecting)\b', case_text, re.IGNORECASE):
+    if re.search(r'\b(trading|downloading|possessing|collecting|possessed|traded|possession|dissemination)\b', case_text, re.IGNORECASE):
         topics.append('possession')
     
     # International cooperation
-    if re.search(r'\b(Australia|Philippines|Japan|international|overseas)\b', case_text, re.IGNORECASE):
+    if re.search(r'\b(Australia|Philippines|Japan|India|Thailand|international|overseas)\b', case_text, re.IGNORECASE):
         topics.append('international')
     
     # Multi-state
-    states = ['Colorado', 'Texas', 'California', 'Las Vegas', 'Arizona']
+    states = ['Colorado', 'Texas', 'California', 'Las Vegas', 'Arizona', 'Florida', 'New York', 'Ohio', 'Pennsylvania', 'Virginia', 'Washington', 'Oregon', 'Washington DC', 'Maryland', 'Massachusetts', 'New Jersey', 'New Mexico', 'New Hampshire', 'Rhode Island', 'Connecticut', 'Delaware', 'Maine', 'Michigan', 'Minnesota', 'Missouri', 'Nebraska', 'Nevada', 'North Carolina', 'North Dakota', 'South Carolina', 'South Dakota', 'Tennessee', 'Utah', 'Vermont', 'Wisconsin', 'Wyoming']
     state_count = sum(1 for state in states if re.search(r'\b' + re.escape(state) + r'\b', case_text, re.IGNORECASE))
     if state_count > 1:
         topics.append('multi_state')

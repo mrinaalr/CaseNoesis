@@ -636,6 +636,7 @@
         let allCases = [];
         let filteredCases = [];
         let geographicChartData = []; // Store chart data for stats calculation
+        let platformChartData = []; // Store platform chart data for stats calculation
 
         // Load cases from API
         function loadCases() {
@@ -819,32 +820,40 @@
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'geographic') {
-                // For organizations involved, count organizations in chart (excluding Unknown)
+                // For organizations involved, get unique organizations count from database (normalized)
                 // Show the stat box (in case it was hidden)
                 const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.display = 'block';
                 
-                const uniqueCount = geographicChartData.filter(d => d.organization !== 'Unknown').length;
-                document.getElementById('victim-count').textContent = uniqueCount > 0 ? uniqueCount : '-';
-                victimLabel.textContent = 'Unique Organizations';
+                // Fetch unique organizations count from API (already normalized in database)
+                fetch('/api/stats')
+                    .then(response => response.json())
+                    .then(stats => {
+                        const uniqueCount = stats.unique_organizations || 0;
+                        document.getElementById('victim-count').textContent = uniqueCount > 0 ? uniqueCount : '-';
+                        victimLabel.textContent = 'Unique Organizations';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching stats:', error);
+                        // Fallback to chart data if API fails
+                        const uniqueCount = geographicChartData.filter(d => d.organization !== 'Unknown').length;
+                        document.getElementById('victim-count').textContent = uniqueCount > 0 ? uniqueCount : '-';
+                        victimLabel.textContent = 'Unique Organizations';
+                    });
                 
                 // Remove click handler
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'platform') {
-                // For environment visualization, count cases with digital component
+                // For environment visualization, use count from "Online" bar in chart
                 // Show the stat box (in case it was hidden)
                 const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.display = 'block';
                 
-                let casesWithDigital = 0;
-                filteredCases.forEach(c => {
-                    const platforms = c.platforms_used || [];
-                    if (platforms.length > 0) {
-                        casesWithDigital++;
-                    }
-                });
-                document.getElementById('victim-count').textContent = casesWithDigital > 0 ? casesWithDigital : '-';
+                // Get count from platformChartData (matches what's shown in "Online" bar)
+                const onlineData = platformChartData.find(d => d.platform === 'Online');
+                const onlineCount = onlineData ? onlineData.count : 0;
+                document.getElementById('victim-count').textContent = onlineCount > 0 ? onlineCount : '-';
                 victimLabel.textContent = 'Cases with Digital Component';
                 
                 // Remove click handler
@@ -1508,6 +1517,9 @@
                 return b.count - a.count;
             });
 
+            // Store chart data for stats calculation
+            platformChartData = data;
+
             if (data.length === 0) {
                 svg.append("text")
                     .attr("x", width / 2)
@@ -1729,36 +1741,229 @@
         }
 
         function renderGeographicViz(cases) {
-            // Count organizations/agencies
+            // Helper function to normalize organization names (matches backend normalization)
+            function normalizeOrganization(org) {
+                if (!org || typeof org !== 'string') return null;
+                let orgTrimmed = org.trim();
+                if (orgTrimmed.length < 2) return null;
+                
+                // First pass: normalize apostrophes, quotes, and spacing issues
+                // Fix multiple apostrophes/quotes: "Attorney''s" -> "Attorney's", "Attorney 's" -> "Attorney's"
+                orgTrimmed = orgTrimmed.replace(/\s*['"]+\s*/g, '\''); // Replace multiple quotes/apostrophes with single
+                orgTrimmed = orgTrimmed.replace(/\s*'\s*s\s*/gi, '\'s'); // Fix " ' s" -> "'s"
+                orgTrimmed = orgTrimmed.replace(/\s+/g, ' '); // Normalize multiple spaces to single space
+                orgTrimmed = orgTrimmed.trim();
+                
+                const orgLower = orgTrimmed.toLowerCase();
+                
+                // Filter out generic standalone terms FIRST
+                const genericTerms = ['task force', 'force', 'county', 'internet', 'department', 'office', 'police', 'attorney'];
+                if (genericTerms.some(term => orgLower === term || orgLower === term + 's')) {
+                    return null; // Filter out generic terms
+                }
+                
+                // NCMEC variations -> "NCMEC"
+                if (orgLower === 'ncmec' ||
+                    orgLower.includes('national center for missing and exploited children') ||
+                    (orgLower.includes('national center for missing and exp') && orgLower.includes('ited children'))) {
+                    return 'NCMEC';
+                }
+                
+                // ICAC variations -> "ICAC" (merge all ICAC Task Force into ICAC)
+                // Handle both "ICAC" and "ICAC Task Force" and variations like "North Texas ICAC Task Force"
+                if ((orgLower.includes('icac') && !orgLower.includes('azicac')) ||
+                    (orgLower.includes('internet crimes against children') && !orgLower.includes('arizona'))) {
+                    // Normalize all ICAC variations (including "ICAC Task Force", "North Texas ICAC Task Force", etc.) to just "ICAC"
+                    return 'ICAC';
+                }
+                
+                // AZICAC variations -> "AZICAC" or "AZICAC Task Force"
+                // IMPORTANT: Handle "ZICAC" variations FIRST before checking AZICAC
+                if (orgLower === 'zicac' || orgLower.startsWith('zicac ')) {
+                    // "ZICAC Task Force" -> "AZICAC Task Force"
+                    if (orgLower.includes('task force')) {
+                        return 'AZICAC Task Force';
+                    }
+                    // "ZICAC" -> "AZICAC"
+                    return 'AZICAC';
+                }
+                if (orgLower === 'azicac' || orgLower.includes('arizona internet crimes against children')) {
+                    if (orgLower.includes('task force')) {
+                        return 'AZICAC Task Force';
+                    }
+                    // Handle "AZICAC Phoenix Police" -> normalize to "AZICAC"
+                    if (orgLower.includes('phoenix police') || (orgLower.includes('police') && orgLower.startsWith('azicac'))) {
+                        return 'AZICAC';
+                    }
+                    return 'AZICAC';
+                }
+                
+                // FBI variations -> "FBI"
+                if (orgLower === 'fbi' ||
+                    orgLower.includes('federal bureau of investigation')) {
+                    // Keep unit-specific names like "FBI Child Sexual Exploitation Unit"
+                    if (orgLower.includes('child sexual exploitation')) {
+                        return 'FBI Child Sexual Exploitation Unit';
+                    }
+                    return 'FBI';
+                }
+                
+                // DOJ variations -> "Department of Justice"
+                if (orgLower === 'doj' || orgLower.includes('department of justice') || orgLower.includes('justice department')) {
+                    // Keep state-specific names like "Wisconsin Department of Justice"
+                    if (orgLower.includes('wisconsin') || (orgLower.includes('state') && orgLower.includes('justice'))) {
+                        return orgTrimmed; // Keep full name for state-specific DOJ
+                    }
+                    return 'Department of Justice';
+                }
+                
+                // HSI variations -> "Homeland Security Investigations"
+                if (orgLower === 'hsi' || (orgLower.includes('homeland security') && orgLower.includes('investigation'))) {
+                    return 'Homeland Security Investigations';
+                }
+                
+                // Homeland Security variations -> "Department of Homeland Security"
+                if (orgLower.includes('homeland security')) {
+                    return 'Department of Homeland Security';
+                }
+                
+                // Police department normalization - normalize "Police" vs "Police Department"
+                if (orgLower.includes('police')) {
+                    // Filter out standalone "Police" or "Police Department" (too generic)
+                    if (orgLower === 'police' || orgLower === 'police department') {
+                        return null;
+                    }
+                    // Extract city/region name and normalize to consistent format
+                    const cityMatch = orgTrimmed.match(/^(.+?)\s+police/i);
+                    if (cityMatch) {
+                        const cityName = cityMatch[1].trim();
+                        // Check if it includes "Department" or "Department of Public Safety" etc.
+                        if (orgLower.includes('department of public safety')) {
+                            return cityName + ' Department of Public Safety';
+                        } else if (orgLower.includes('department')) {
+                            return cityName + ' Police Department';
+                        } else {
+                            // If truncated (like "Phoenix Police"), assume Department
+                            return cityName + ' Police Department';
+                        }
+                    }
+                    // Normalize "Police Department" to consistent format
+                    if (orgLower.includes('department')) {
+                        return orgTrimmed.replace(/\s+Department\s*$/i, ' Department');
+                    }
+                    return orgTrimmed;
+                }
+                
+                // Sheriff normalization - handle variations like "Sheriff's Office", "Sheriff's ' s Office", etc.
+                if (orgLower.includes('sheriff')) {
+                    // Extract county/region name before "sheriff"
+                    const sheriffMatch = orgTrimmed.match(/^(.+?)\s+sheriff/i);
+                    if (sheriffMatch) {
+                        const prefix = sheriffMatch[1].trim();
+                        // Check if it ends with "Office", "Department", or nothing
+                        if (orgLower.includes('office')) {
+                            return prefix + ' Sheriff\'s Office';
+                        } else if (orgLower.includes('department')) {
+                            return prefix + ' Sheriff\'s Department';
+                        } else {
+                            // If truncated (like "Boulder County Sheriff's"), assume Office
+                            return prefix + ' Sheriff\'s Office';
+                        }
+                    }
+                    return orgTrimmed.replace(/sheriff'?s?\s*/i, 'Sheriff\'s ');
+                }
+                
+                // Normalize "Attorney's Office" variations - already fixed apostrophes above
+                if (orgLower.includes('attorney') && orgLower.includes('office')) {
+                    // Ensure consistent "'s Office" format
+                    let normalized = orgTrimmed.replace(/\s*'?s?\s*Office\s*$/i, '\'s Office');
+                    return normalized;
+                }
+                
+                // Normalize "District Attorney's Office" variations
+                if (orgLower.includes('district attorney') && orgLower.includes('office')) {
+                    let normalized = orgTrimmed.replace(/\s*'?s?\s*Office\s*$/i, '\'s Office');
+                    return normalized;
+                }
+                
+                // Normalize "State's Attorney" variations
+                if (orgLower.includes('state') && orgLower.includes('attorney') && orgLower.includes('office')) {
+                    let normalized = orgTrimmed.replace(/\s*'?s?\s*Office\s*$/i, '\'s Office');
+                    return normalized;
+                }
+                
+                // Normalize "U.S. Attorney's Office" variations
+                if ((orgLower.includes('u.s.') || orgLower.includes('us ')) && orgLower.includes('attorney') && orgLower.includes('office')) {
+                    let normalized = orgTrimmed.replace(/u\.?\s*s\.?\s*/i, 'U.S. ');
+                    normalized = normalized.replace(/\s*'?s?\s*Office\s*$/i, '\'s Office');
+                    return normalized;
+                }
+                
+                return orgTrimmed; // Return normalized but keep original case
+            }
+            
+            // Count organizations/agencies - combine agencies_involved AND organizations fields
             const organizationCounts = {};
             const organizationCases = {};
+            const orgLowerToCanonical = {}; // Map lowercase -> canonical normalized name
             
             cases.forEach(c => {
+                // Get all organizations from both fields
                 const agencies = c.agencies_involved || [];
-                if (agencies.length === 0) {
+                const organizations = c.organizations || [];
+                
+                // Track unique orgs for this case (to avoid double-counting same org in same case)
+                const caseOrgs = new Set();
+                
+                // Process all organizations
+                [...agencies, ...organizations].forEach(org => {
+                    if (org && typeof org === 'string' && org.trim().length > 0) {
+                        const normalized = normalizeOrganization(org);
+                        if (!normalized) return; // Skip generic terms
+                        
+                        const lower = normalized.toLowerCase();
+                        
+                        // Use canonical normalized name (case-insensitive dedup)
+                        const canonicalOrg = orgLowerToCanonical[lower] || normalized;
+                        orgLowerToCanonical[lower] = canonicalOrg;
+                        
+                        // Track by canonical org to avoid double-counting in same case
+                        if (!caseOrgs.has(lower)) {
+                            caseOrgs.add(lower);
+                            organizationCounts[canonicalOrg] = (organizationCounts[canonicalOrg] || 0) + 1;
+                            if (!organizationCases[canonicalOrg]) organizationCases[canonicalOrg] = [];
+                            organizationCases[canonicalOrg].push(c);
+                        }
+                    }
+                });
+                
+                // If no organizations found, mark as Unknown
+                if (caseOrgs.size === 0) {
                     organizationCounts['Unknown'] = (organizationCounts['Unknown'] || 0) + 1;
                     if (!organizationCases['Unknown']) organizationCases['Unknown'] = [];
                     organizationCases['Unknown'].push(c);
-                } else {
-                    agencies.forEach(a => {
-                        organizationCounts[a] = (organizationCounts[a] || 0) + 1;
-                        if (!organizationCases[a]) organizationCases[a] = [];
-                        organizationCases[a].push(c);
-                    });
                 }
             });
 
+            // Sort by count (descending) and show ALL organizations (no limit)
             const data = Object.entries(organizationCounts).map(([org, count]) => ({
                 organization: org,
                 count,
                 cases: organizationCases[org] || []
-            })).sort((a, b) => b.count - a.count).slice(0, 10); // Top 10
+            })).sort((a, b) => b.count - a.count); // Show ALL organizations
+            
+            // Adjust chart height dynamically based on number of organizations
+            const minHeight = 400;
+            const barHeight = 25;
+            const padding = 0.2;
+            const calculatedHeight = Math.max(minHeight, data.length * barHeight * (1 + padding) + 100);
             
             // Store chart data for stats calculation
             geographicChartData = data;
 
             if (data.length === 0) {
                 geographicChartData = []; // Reset chart data
+                svg.selectAll("*").remove(); // Clear previous content
                 svg.append("text")
                     .attr("x", width / 2)
                     .attr("y", height / 2)
@@ -1767,6 +1972,13 @@
                     .text("No organization data available");
                 return;
             }
+
+            // Clear previous content
+            svg.selectAll("*").remove();
+            
+            // Update SVG height dynamically
+            const parentSvg = d3.select("#timeline");
+            parentSvg.attr("height", calculatedHeight + margin.top + margin.bottom);
 
             // Create tooltip
             const tooltip = d3.select("body").append("div")
@@ -1789,7 +2001,7 @@
 
             const yScale = d3.scaleBand()
                 .domain(data.map(d => d.organization))
-                .range([0, height])
+                .range([0, calculatedHeight])
                 .padding(0.2);
 
             const colorScale = d3.scaleOrdinal()
@@ -1847,11 +2059,11 @@
 
             // X axis
             svg.append("g")
-                .attr("transform", `translate(150, ${height})`)
+                .attr("transform", `translate(150, ${calculatedHeight})`)
                 .call(d3.axisBottom(xScale).ticks(5));
 
             svg.append("text")
-                .attr("transform", `translate(${150 + (width - 150) / 2}, ${height + margin.bottom - 10})`)
+                .attr("transform", `translate(${150 + (width - 150) / 2}, ${calculatedHeight + margin.bottom - 10})`)
                 .style("text-anchor", "middle")
                 .text("Number of Cases");
         }
@@ -1868,17 +2080,22 @@
             panel.classList.add('active');
             title.textContent = `Cases with Organization: "${organizationLabel}"`;
             
-            // Filter cases based on organization
+            // Filter cases based on organization - check both agencies_involved AND organizations
             let filteredCases = [];
             if (organizationLabel === 'Unknown') {
                 filteredCases = allCases.filter(c => {
                     const agencies = c.agencies_involved || [];
-                    return agencies.length === 0;
+                    const organizations = c.organizations || [];
+                    return agencies.length === 0 && organizations.length === 0;
                 });
             } else {
                 filteredCases = allCases.filter(c => {
                     const agencies = c.agencies_involved || [];
-                    return agencies.some(a => a === organizationLabel);
+                    const organizations = c.organizations || [];
+                    // Check if organization matches (case-insensitive)
+                    const orgLower = organizationLabel.toLowerCase();
+                    return agencies.some(a => a && a.toLowerCase() === orgLower) ||
+                           organizations.some(o => o && o.toLowerCase() === orgLower);
                 });
             }
             
@@ -1898,30 +2115,88 @@
                 // Highlight organization name in the text
                 let highlightedText = caseText;
                 if (organizationLabel !== 'Unknown') {
-                    // Highlight the organization name (case-insensitive)
+                    // Highlight the organization name (case-insensitive, word boundaries)
                     const orgPattern = new RegExp(`\\b${escapeRegex(organizationLabel)}\\b`, 'gi');
                     highlightedText = highlightedText.replace(orgPattern, (match) => {
                         return `<span class="severity-highlight">${match}</span>`;
                     });
                     
                     // Also highlight common abbreviations/variations
-                    // For example, if organization is "FBI", also highlight "Federal Bureau of Investigation"
-                    if (organizationLabel.toUpperCase() === 'FBI') {
+                    const orgUpper = organizationLabel.toUpperCase();
+                    const orgLower = organizationLabel.toLowerCase();
+                    
+                    // FBI variations
+                    if (orgUpper === 'FBI' || orgUpper.includes('FEDERAL BUREAU OF INVESTIGATION')) {
                         highlightedText = highlightedText.replace(/\bfederal\s+bureau\s+of\s+investigation\b/gi, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
                     }
-                    // For AZICAC
-                    if (organizationLabel.toUpperCase().includes('AZICAC') || organizationLabel.toUpperCase().includes('Arizona Internet Crimes Against Children')) {
-                        highlightedText = highlightedText.replace(/\barizona\s+internet\s+crimes\s+against\s+children\b/gi, (match) => {
+                    
+                    // DOD variations
+                    if (orgUpper === 'DOD' || orgUpper.includes('DEPARTMENT OF DEFENSE')) {
+                        highlightedText = highlightedText.replace(/\bdepartment\s+of\s+defense\b/gi, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
                     }
-                    // For police departments
-                    if (organizationLabel.toLowerCase().includes('police')) {
+                    
+                    // DOJ variations
+                    if (orgUpper === 'DOJ' || orgUpper.includes('DEPARTMENT OF JUSTICE')) {
+                        highlightedText = highlightedText.replace(/\bdepartment\s+of\s+justice\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    
+                    // AZICAC variations
+                    if (orgUpper.includes('AZICAC') || orgUpper.includes('ARIZONA INTERNET CRIMES AGAINST CHILDREN')) {
+                        highlightedText = highlightedText.replace(/\barizona\s+internet\s+crimes\s+against\s+children\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                        // Also highlight "ZICAC" if it appears
+                        highlightedText = highlightedText.replace(/\bZICAC\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    
+                    // ICAC variations
+                    if (orgUpper.includes('ICAC') && !orgUpper.includes('AZICAC')) {
+                        highlightedText = highlightedText.replace(/\binternet\s+crimes\s+against\s+children\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    
+                    // Police departments - highlight variations
+                    if (orgLower.includes('police')) {
+                        // Extract city/county name if present
+                        const cityMatch = organizationLabel.match(/^(.+?)\s+police/i);
+                        if (cityMatch && cityMatch[1]) {
+                            const cityName = cityMatch[1].trim();
+                            // Highlight "City Police", "City Police Department", etc.
+                            highlightedText = highlightedText.replace(new RegExp(`\\b${escapeRegex(cityName)}\\s+police(?:\\s+(?:department|dept\\.?|force))?\\b`, 'gi'), (match) => {
+                                return `<span class="severity-highlight">${match}</span>`;
+                            });
+                        }
+                        // General police patterns
                         highlightedText = highlightedText.replace(/\bpolice\s+(department|dept\.?|force)\b/gi, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
+                    }
+                    
+                    // Sheriff's Office variations
+                    if (orgLower.includes('sheriff')) {
+                        highlightedText = highlightedText.replace(/\bsheriff'?s?\s+(office|department|dept\.?)\b/gi, (match) => {
+                            return `<span class="severity-highlight">${match}</span>`;
+                        });
+                    }
+                    
+                    // State Bureau/Department variations
+                    if (orgLower.includes('state') && (orgLower.includes('bureau') || orgLower.includes('department'))) {
+                        const stateMatch = organizationLabel.match(/^(.+?)\s+state/i);
+                        if (stateMatch && stateMatch[1]) {
+                            const stateName = stateMatch[1].trim();
+                            highlightedText = highlightedText.replace(new RegExp(`\\b${escapeRegex(stateName)}\\s+state\\s+(bureau|department)\\b`, 'gi'), (match) => {
+                                return `<span class="severity-highlight">${match}</span>`;
+                            });
+                        }
                     }
                 }
                 
@@ -1951,6 +2226,8 @@
                                 const age = parseInt(ageMatch[1]);
                                 if (age < 10) {
                                     normalized = 'under_10';
+                                } else if (age === 12) {
+                                    normalized = 'under_12';
                                 }
                             }
                         }
@@ -1961,14 +2238,18 @@
                             label = 'Sexual Assault';
                         } else if (normalized === 'sexual_assault') {
                             label = 'Sexual Assault';
+                        } else if (normalized === 'multiple_perpetrators') {
+                            label = 'Multiple Perpetrators';
+                        } else if (normalized === 'under_12') {
+                            label = 'Under 12';
                         }
                         severityCounts[label] = (severityCounts[label] || 0) + 1;
                     });
                 }
             });
 
-            // Define severity order
-            const severityOrder = ['Infant', 'Sexual Assault', 'Very Young', 'Under 10', 'None'];
+            // Define severity order - Multiple Perpetrators between Sexual Assault and Very Young
+            const severityOrder = ['Infant', 'Sexual Assault', 'Multiple Perpetrators', 'Very Young', 'Under 10', 'None', 'Under 12'];
             
             // Create data array and sort by severity order
             const data = Object.entries(severityCounts).map(([severity, count]) => ({
@@ -2010,8 +2291,10 @@
             const severityColors = {
                 'Infant': '#8B0000',        // Dark red
                 'Sexual Assault': '#A00000', // Very dark red (second darkest)
+                'Multiple Perpetrators': '#8B0000', // Dark red (same as Infant - deep red)
                 'Very Young': '#B22222',    // Firebrick
                 'Under 10': '#DC143C',      // Crimson
+                'Under 12': '#E0667F',      // Medium pink-red (halfway between pink and red)
                 'None': '#FFB6C1'          // Light pink (lightest)
             };
 

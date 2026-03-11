@@ -11,6 +11,10 @@ It re-exports all functions from the Pattern Processing Layer and Batching modul
 # Handle spaces in directory name using importlib
 import importlib.util
 from pathlib import Path
+import pandas as pd
+import re
+from typing import Dict, Any, List
+from datetime import datetime
 
 # Import batching functions directly from batching module
 _batching_path = Path(__file__).parent / "batching.py"
@@ -30,7 +34,7 @@ clean_artifacts_from_text = batching.clean_artifacts_from_text
 clean_urls_from_text = batching.clean_artifacts_from_text  # Backward compatibility alias
 
 # Import pattern processing functions
-process_cases = pattern_processing.process_cases
+_pattern_process_cases = pattern_processing.process_cases
 extract_features = pattern_processing.extract_features
 assign_comparison_values = pattern_processing.assign_comparison_values
 extract_date_range = pattern_processing.extract_date_range
@@ -46,6 +50,115 @@ extract_prosecution_outcome = pattern_processing.extract_prosecution_outcome
 extract_severity = pattern_processing.extract_severity
 extract_topics = pattern_processing.extract_topics
 extract_severity_phrases = pattern_processing.extract_severity_phrases
+
+# Import merge_processing intersection class
+_merge_path = Path(__file__).parent / "merge_procesing.py"
+_merge_spec = importlib.util.spec_from_file_location("merge_processing_module", _merge_path)
+merge_module = importlib.util.module_from_spec(_merge_spec)
+_merge_spec.loader.exec_module(merge_module)
+
+MergeProcessing = merge_module.MergeProcessing
+merge_processing = merge_module.merge_processing
+
+# Import NER extractor from ML Processing Layer
+_ml_layer_path = Path(__file__).parent / "ML Processing Layer" / "ner_extraction.py"
+_ner_spec = importlib.util.spec_from_file_location("ner_extraction", _ml_layer_path)
+ner_module = importlib.util.module_from_spec(_ner_spec)
+_ner_spec.loader.exec_module(ner_module)
+
+NERExtractor = ner_module.NERExtractor
+
+
+def process_cases(df):
+    """
+    Process cases: batch → pattern extract → NER extract → merge → comparison values.
+    
+    Pipeline:
+    1. Batch cases using batching.py
+    2. Extract pattern features using Pattern Processing Layer
+    3. Extract NER features using ML Processing Layer (if available)
+    4. Merge features using MergeProcessing (for now, pattern-only)
+    5. Assign comparison values
+    6. Return cases ready for storage
+    
+    Args:
+        df: DataFrame from ingestion layer (parsed PDF data with 'extracted_text')
+        
+    Returns:
+        List of structured case dictionaries ready for storage
+    """
+    # Initialize NER extractor (gracefully handles if models not available)
+    ner_extractor = None
+    try:
+        # NERExtractor handles its own initialization and model loading
+        ner_extractor = NERExtractor(backend='stanza')  # Try Stanza first
+        if not ner_extractor.is_available():
+            # Fallback to transformers if Stanza not available
+            ner_extractor = NERExtractor(backend='transformers')
+            if not ner_extractor.is_available():
+                ner_extractor = None
+    except Exception:
+        # NER not available - continue without it
+        ner_extractor = None
+    
+    processed_cases = []
+    merger = MergeProcessing()
+    
+    for idx, row in df.iterrows():
+        extracted_text = row.get('extracted_text', '')
+        source = row.get('source', 'unknown')
+        source_file = row.get('source_file', 'unknown')
+        
+        # Step 1: Batch cases (batching.py handles its own logic)
+        org_name = source.lower() if source and source != 'unknown' else 'case'
+        if org_name == 'case' and source_file:
+            org_match = re.search(r'([A-Z]+)', source_file)
+            if org_match:
+                org_name = org_match.group(1).lower()
+        
+        case_batches = case_batching(extracted_text, org_name=org_name, source=source, source_file=source_file)
+        
+        for case_batch in case_batches:
+            raw_case = {
+                'case_text': case_batch.get('case_text'),
+                'month_year': case_batch.get('month_year'),
+                'month': case_batch.get('month'),
+                'year': case_batch.get('year'),
+                'case_id': case_batch.get('case_id'),
+                'source': source,
+                'source_file': source_file
+            }
+            if 'state' in case_batch:
+                raw_case['state'] = case_batch['state']
+            
+            # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
+            pattern_features = extract_features(raw_case)
+            
+            # Step 3: Extract NER features (ML Processing Layer handles its own logic)
+            ner_entities = None
+            if ner_extractor and ner_extractor.is_available():
+                case_text = raw_case.get('case_text', '')
+                if case_text:
+                    try:
+                        ner_entities = ner_extractor.extract_entities(case_text)
+                    except Exception:
+                        # NER extraction failed - continue without NER
+                        ner_entities = None
+            
+            # Step 4: Merge pattern + NER features (MergeProcessing handles its own logic)
+            merged_features = merger.merge_features(pattern_features, ner_entities)
+            
+            # Step 5: Assign comparison values (Pattern Processing Layer handles its own logic)
+            case_with_values = assign_comparison_values(merged_features)
+            
+            # Step 6: Add timestamps
+            timestamp = datetime.now().isoformat()
+            case_with_values['created_at'] = timestamp
+            case_with_values['updated_at'] = timestamp
+            
+            processed_cases.append(case_with_values)
+    
+    return processed_cases
 
 __all__ = [
     'case_batching',
@@ -67,4 +180,7 @@ __all__ = [
     'extract_severity_phrases',
     'clean_urls_from_text',  # Backward compatibility
     'clean_artifacts_from_text',
+    'MergeProcessing',      # Intersection class
+    'merge_processing',     # Convenience function
+    'NERExtractor',         # ML Processing Layer NER extractor
 ]
