@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 95 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and 207 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2022-2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 **Read the technical report here:** [CaseLinker: An Open-Source System for Cross-Case Analysis of Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker.pdf)
 
@@ -107,7 +107,7 @@ You can process additional PDFs to add more cases to the database.
 1. First, process PDFs with `src/main.py` to populate the database
 2. Then, start the web server with `run/main.py` to view and analyze the cases
 
-### Process Your Own PDF Files
+## Process Your Own PDF Files
 
 To process case PDFs (single or multiple files):
 
@@ -139,6 +139,8 @@ The system will:
 
 ## Using the Visualizations
 
+Access the visualizations via the [live demo](https://web-production-13a2.up.railway.app/visualization) or by running the server locally (`python3 run/main.py`) and navigating to http://localhost:8000/visualization.
+
 1. **Case Group**: Displays cases matching specific groups (infant, very young, assault, posession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
 3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
@@ -147,6 +149,9 @@ The system will:
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
 
 ## Using Advanced Case Analysis
+
+Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or run server locally (`python3 run/main.py`) and navigate to http://localhost:8000/analysis.
+
 
 1. **Tag-Based Analysis (Run Advanced Analysis)**:
    - Select one or more tags from categories: Case Topics, Severity Indicators, Platforms & Environments, Investigation Types, Perpetrator Relationships, Perpetrator Status
