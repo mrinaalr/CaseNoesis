@@ -370,9 +370,44 @@
                 casesCountElement.textContent = `Cases (${allCases.length})`;
             }
             
+            // Sort cases: alphabetically by source (AZICAC first, then NCMEC), then by year, then by case number
+            const sortedCases = [...allCases].sort((a, b) => {
+                const idA = a.id || '';
+                const idB = b.id || '';
+                
+                // Parse case ID: org_year_number (e.g., "azicac_2011_001", "ncmec_2022_003")
+                const parseCaseId = (id) => {
+                    const parts = id.split('_');
+                    if (parts.length === 3) {
+                        return {
+                            org: parts[0].toLowerCase(),
+                            year: parseInt(parts[1]) || 0,
+                            number: parseInt(parts[2]) || 0
+                        };
+                    }
+                    return { org: id.toLowerCase(), year: 0, number: 0 };
+                };
+                
+                const parsedA = parseCaseId(idA);
+                const parsedB = parseCaseId(idB);
+                
+                // First sort by source (alphabetically: azicac comes before ncmec)
+                if (parsedA.org !== parsedB.org) {
+                    return parsedA.org.localeCompare(parsedB.org);
+                }
+                
+                // Then sort by year (ascending: 2022, 2023, 2024)
+                if (parsedA.year !== parsedB.year) {
+                    return parsedA.year - parsedB.year;
+                }
+                
+                // Finally sort by case number (ascending: 001, 002, 003)
+                return parsedA.number - parsedB.number;
+            });
+            
             listContainer.innerHTML = '';
 
-            allCases.forEach((caseData, index) => {
+            sortedCases.forEach((caseData, index) => {
                 const caseItem = document.createElement('div');
                 caseItem.className = 'case-item';
                 caseItem.onclick = () => selectCase(caseData.id);

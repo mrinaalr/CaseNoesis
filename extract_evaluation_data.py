@@ -760,7 +760,6 @@ def main():
     print("="*80)
     print(f"\nFile size: {Path(output_file).stat().st_size / 1024:.1f} KB")
     print(f"Total evaluation metrics: {sum(1 for _ in _flatten_dict(results))} data points")
-    print("\nThis file is ready for academic sharing and research collaboration.")
     print("="*80)
 
 def _flatten_dict(d, parent_key='', sep='.'):

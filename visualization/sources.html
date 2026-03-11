@@ -212,7 +212,7 @@
         <div class="disclaimer" style="background: #e8f5e9; border-left-color: #4CAF50;">
             <h3>⚖️ Ethics Review</h3>
             <p>
-                This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668), confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)]
+                This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that this research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)]
             </p>
         </div>
         
@@ -244,7 +244,24 @@
                     description: "Media coverage success stories from NCMEC's CyberTipline reports. The CyberTipline receives reports of suspected child sexual exploitation from the public and electronic service providers. This data includes publicly reported cases that resulted in successful law enforcement action.",
                     type: "Official Website",
                     yearLinks: [
-                        { year: "2024", url: "https://www.missingkids.org/content/dam/missingkids/pdfs/cybertiplinedata2024/2024-media-coverage-cybertipline-success-stories.pdf" }
+                        { 
+                            year: "2022", 
+                            url: "https://www.missingkids.org/content/dam/missingkids/pdfs/2022-media-coverage-cybertipline-success-stories.pdf",
+                            casesUsed: 0,  // Will be populated dynamically
+                            totalAvailable: 752
+                        },
+                        { 
+                            year: "2023", 
+                            url: "https://www.missingkids.org/content/dam/missingkids/pdfs/2023-media-coverage-cybertipline-success-stories.pdf",
+                            casesUsed: 0,  // Will be populated dynamically
+                            totalAvailable: 834
+                        },
+                        { 
+                            year: "2024", 
+                            url: "https://www.missingkids.org/content/dam/missingkids/pdfs/cybertiplinedata2024/2024-media-coverage-cybertipline-success-stories.pdf",
+                            casesUsed: 0,  // Will be populated dynamically
+                            totalAvailable: 1435
+                        }
                     ]
                 }
             ];
@@ -283,6 +300,18 @@
                             return source.toUpperCase() === 'NCMEC';
                         });
                         staticSource.cases = ncmecCases;
+                        
+                        // Count cases by year for NCMEC
+                        if (staticSource.yearLinks) {
+                            staticSource.yearLinks.forEach(yearLink => {
+                                const year = yearLink.year;
+                                const yearCases = ncmecCases.filter(c => {
+                                    const caseId = c.id || '';
+                                    return caseId.includes(`_${year}_`);
+                                });
+                                yearLink.casesUsed = yearCases.length;
+                            });
+                        }
                     }
                 });
                 
@@ -315,9 +344,14 @@
                             <div class="year-links">
                                 <strong>Year Reports:</strong>
                                 <div style="margin-top: 10px;">
-                                    ${source.yearLinks.map(yl => 
-                                        `<a href="${yl.url}" target="_blank" rel="noopener noreferrer">${yl.year}</a>`
-                                    ).join('')}
+                                    ${source.yearLinks.map(yl => {
+                                        const casesUsed = yl.casesUsed !== undefined ? yl.casesUsed : 0;
+                                        const totalAvailable = yl.totalAvailable !== undefined ? yl.totalAvailable : null;
+                                        const countText = totalAvailable !== null 
+                                            ? ` (${casesUsed}/${totalAvailable})`
+                                            : (casesUsed > 0 ? ` (${casesUsed} cases)` : '');
+                                        return `<a href="${yl.url}" target="_blank" rel="noopener noreferrer" title="${yl.year}${countText}">${yl.year}${countText}</a>`;
+                                    }).join('')}
                                 </div>
                             </div>
                         ` : ''}

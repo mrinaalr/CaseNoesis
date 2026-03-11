@@ -5,6 +5,7 @@ Simple pipeline: ingest -> process -> analyze -> store -> visualize
 
 import sys
 from pathlib import Path
+from typing import List, Dict, Any
 
 src_path = Path(__file__).parent
 sys.path.insert(0, str(src_path / "Ingestion Layer"))
@@ -16,6 +17,57 @@ sys.path.insert(0, str(src_path / "Visualization Layer"))
 from processing import process_cases
 from storage import CaseStorage
 import pandas as pd
+
+
+def get_database_path() -> str:
+    """
+    Get database path from config or use default.
+    
+    Returns:
+        Path to database file
+    """
+    try:
+        from config import DATABASE_PATH
+        return DATABASE_PATH
+    except ImportError:
+        return "caselinker.db"
+
+
+def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
+    """
+    Store cases in the database.
+    
+    This abstracts storage operations to maintain layer boundaries.
+    The main orchestration layer doesn't need to know about storage
+    implementation details.
+    
+    Args:
+        cases: List of case dictionaries to store
+        db_path: Path to database file
+        
+    Returns:
+        Number of successfully stored cases
+    """
+    storage = CaseStorage(db_path)
+    stored_count = 0
+    for case in cases:
+        if storage.store_case(case):
+            stored_count += 1
+    return stored_count
+
+
+def get_all_stored_cases(db_path: str) -> List[Dict[str, Any]]:
+    """
+    Retrieve all cases from the database.
+    
+    Args:
+        db_path: Path to database file
+        
+    Returns:
+        List of all case dictionaries
+    """
+    storage = CaseStorage(db_path)
+    return storage.get_all_cases()
 
 
 def main():
@@ -80,21 +132,14 @@ def main():
         print("\n" + "="*60)
         print("Step 3: Storing cases in database...")
         print("="*60)
-        try:
-            from config import DATABASE_PATH
-        except ImportError:
-            DATABASE_PATH = "caselinker.db"
-        storage = CaseStorage(DATABASE_PATH)
-        stored_count = 0
-        for case in cases:
-            if storage.store_case(case):
-                stored_count += 1
+        db_path = get_database_path()
+        stored_count = store_cases(cases, db_path)
         print(f"✓ Stored {stored_count}/{len(cases)} cases in database")
         
         print("\n" + "="*60)
         print("Step 4: Summary")
         print("="*60)
-        all_stored_cases = storage.get_all_cases()
+        all_stored_cases = get_all_stored_cases(db_path)
         print(f"✓ Total cases in database: {len(all_stored_cases)}")
         
         # Show breakdown by source

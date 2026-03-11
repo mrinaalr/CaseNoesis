@@ -424,7 +424,7 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Case Topics</div>
                     <div class="topic-selector" id="topic-selector-case-topics">
-                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_digital, family, stranger -->
+                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_only, family, stranger -->
                     </div>
                 </div>
                 
@@ -550,14 +550,62 @@
 
         async function loadCases() {
             try {
+                // Load tags first (fast, cached endpoint) to populate selectors immediately
+                const tagsResponse = await fetch('/api/tags');
+                const tagsData = await tagsResponse.json();
+                
+                if (tagsData.error) {
+                    throw new Error(tagsData.error);
+                }
+                
+                // Render selectors immediately with cached tags
+                renderTopicSelectorFromTags(tagsData);
+                
+                // Then load full cases in background (for when user actually needs them)
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
                 window.allCases = allCases; // Store globally
                 
+                // Re-render with full data (in case there are any differences)
                 renderTopicSelector();
             } catch (error) {
                 console.error('Error loading cases:', error);
+                // Fallback: try to load cases the old way
+                try {
+                    const response = await fetch('/api/cases');
+                    allCases = await response.json();
+                    window.allCases = allCases;
+                    renderTopicSelector();
+                } catch (e) {
+                    console.error('Fallback also failed:', e);
+                }
             }
+        }
+        
+        function renderTopicSelectorFromTags(tagsData) {
+            // Quick render using pre-extracted tags
+            const caseTopicsSet = new Set(tagsData.case_topics || []);
+            const severitySet = new Set(tagsData.severity_indicators || []);
+            const platformsSet = new Set(tagsData.platforms_used || []);
+            const investigationSet = new Set(tagsData.investigation_types || []);
+            const relationshipsSet = new Set(tagsData.relationships || []);
+            const statusSet = new Set(tagsData.status || []);
+            
+            // Define all possible topics (from extraction functions)
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
+            const allSeverity = ['infant', 'very_young', 'sexual_assault'];
+            const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
+            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
+            const allStatus = ['registered_sex_offender'];
+            
+            // Render each category
+            renderTopicCategory('topic-selector-case-topics', allCaseTopics, caseTopicsSet);
+            renderTopicCategory('topic-selector-severity', allSeverity, severitySet);
+            renderTopicCategory('topic-selector-platforms', allPlatforms, platformsSet);
+            renderTopicCategory('topic-selector-investigation', allInvestigation, investigationSet);
+            renderTopicCategory('topic-selector-relationships', allRelationships, relationshipsSet);
+            renderTopicCategory('topic-selector-status', allStatus, statusSet);
         }
 
         function renderTopicSelector() {
@@ -605,7 +653,7 @@
             });
             
             // Define all possible topics (from extraction functions)
-            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_digital', 'family', 'stranger'];
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
             const allSeverity = ['infant', 'very_young', 'sexual_assault'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
@@ -661,8 +709,9 @@
                     tag.setAttribute('data-topic', topic);
                     tag.setAttribute('data-category', categoryType);
                     // Normalize display: replace 'rape' with 'sexual_assault' for display
-                    const displayTopic = topic === 'rape' ? 'sexual_assault' : topic;
-                    tag.textContent = displayTopic.replace(/_/g, ' ');
+                    let displayTopic = topic === 'rape' ? 'sexual_assault' : topic;
+                    displayTopic = displayTopic.replace(/_/g, ' ');
+                    tag.textContent = displayTopic;
                     tag.onclick = () => {
                         toggleTopicTag(tag, topic, categoryType);
                     };
@@ -835,7 +884,37 @@
             }
             
             const intersectionCaseIds = window.tagThreaderResult.intersection_cases;
-            const matchingCases = allCases.filter(c => intersectionCaseIds.includes(c.id));
+            let matchingCases = allCases.filter(c => intersectionCaseIds.includes(c.id));
+            
+            // Sort cases: NCMEC first (by year, then case number), then AZICAC (by year, then case number)
+            matchingCases.sort((a, b) => {
+                const parseCaseId = (id) => {
+                    const parts = id.split('_');
+                    if (parts.length === 3) {
+                        return {
+                            org: parts[0].toLowerCase(),
+                            year: parseInt(parts[1]) || 0,
+                            number: parseInt(parts[2]) || 0
+                        };
+                    }
+                    return { org: id.toLowerCase(), year: 0, number: 0 };
+                };
+                
+                const parsedA = parseCaseId(a.id || '');
+                const parsedB = parseCaseId(b.id || '');
+                
+                // NCMEC comes before AZICAC
+                if (parsedA.org === 'ncmec' && parsedB.org !== 'ncmec') return -1;
+                if (parsedA.org !== 'ncmec' && parsedB.org === 'ncmec') return 1;
+                
+                // Within same org, sort by year
+                if (parsedA.year !== parsedB.year) {
+                    return parsedA.year - parsedB.year;
+                }
+                
+                // Then by case number
+                return parsedA.number - parsedB.number;
+            });
             
             // Hide automated analysis section if visible
             const automatedSection = document.getElementById('automated-analysis-section');
@@ -1276,8 +1355,8 @@
                     reasons.push(`<strong>Case Type (10% weight):</strong> Hands-on abuse case - high priority as it involves physical contact with victims.`);
                 } else if (caseTopics.includes('possession')) {
                     reasons.push(`<strong>Case Type (10% weight):</strong> Possession case - moderate priority for evidence collection and prosecution.`);
-                } else if (caseTopics.includes('online_digital')) {
-                    reasons.push(`<strong>Case Type (10% weight):</strong> Online-Digital case - lower priority but still requires investigation.`);
+                } else if (caseTopics.includes('online_only')) {
+                    reasons.push(`<strong>Case Type (10% weight):</strong> Online-Only case - lower priority but still requires investigation.`);
                 }
             }
             
@@ -1322,7 +1401,7 @@
                 statsHTML += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; color: #b0b0b0; font-size: 0.9em;">`;
                 
                 if (stats.hands_on) statsHTML += `<div><strong style="color: #ffc107;">Hands-On:</strong> ${stats.hands_on}</div>`;
-                if (stats.online_digital) statsHTML += `<div><strong style="color: #ffc107;">Online-Digital:</strong> ${stats.online_digital}</div>`;
+                if (stats.online_only) statsHTML += `<div><strong style="color: #ffc107;">Online-Only:</strong> ${stats.online_only}</div>`;
                 if (stats.possession) statsHTML += `<div><strong style="color: #ffc107;">Possession:</strong> ${stats.possession}</div>`;
                 if (stats.production) statsHTML += `<div><strong style="color: #ffc107;">Production:</strong> ${stats.production}</div>`;
                 if (stats.infant_victims) statsHTML += `<div><strong style="color: #ffc107;">Infant Victims:</strong> ${stats.infant_victims}</div>`;
@@ -1724,6 +1803,36 @@
                 });
                 const result = await response.json();
                 matchingCases = result.cases || [];
+                
+                // Sort cases: NCMEC first (by year, then case number), then AZICAC (by year, then case number)
+                matchingCases.sort((a, b) => {
+                    const parseCaseId = (id) => {
+                        const parts = id.split('_');
+                        if (parts.length === 3) {
+                            return {
+                                org: parts[0].toLowerCase(),
+                                year: parseInt(parts[1]) || 0,
+                                number: parseInt(parts[2]) || 0
+                            };
+                        }
+                        return { org: id.toLowerCase(), year: 0, number: 0 };
+                    };
+                    
+                    const parsedA = parseCaseId(a.id || '');
+                    const parsedB = parseCaseId(b.id || '');
+                    
+                    // NCMEC comes before AZICAC
+                    if (parsedA.org === 'ncmec' && parsedB.org !== 'ncmec') return -1;
+                    if (parsedA.org !== 'ncmec' && parsedB.org === 'ncmec') return 1;
+                    
+                    // Within same org, sort by year
+                    if (parsedA.year !== parsedB.year) {
+                        return parsedA.year - parsedB.year;
+                    }
+                    
+                    // Then by case number
+                    return parsedA.number - parsedB.number;
+                });
             } catch (error) {
                 console.error('Error fetching tagged cases:', error);
                 alert('Error loading cases');
@@ -1957,14 +2066,14 @@
                                 if (tag === 'possession') {
                                     patterns = [/\btrading\b/gi, /\bdownloading\b/gi, /\bpossessing\b/gi, /\bcollecting\b/gi];
                                 } else if (tag === 'production') {
-                                    patterns = [/\bproduced\b/gi, /\bcreated\b/gi, /\bmade\b/gi, /\bmolest\w*\b/gi];
+                                    patterns = [/\bproduced\b/gi, /\bcreated\b/gi, /\bmade\b/gi, /\bmolest\w*\b/gi, /\btrade\b/gi, /\btraded\b/gi];
                                 } else if (tag === 'international') {
                                     patterns = [/\bAustralia\b/gi, /\bPhilippines\b/gi, /\bJapan\b/gi, /\binternational\b/gi, /\boverseas\b/gi];
                                 } else if (tag === 'multi_state') {
                                     patterns = [/\bColorado\b/gi, /\bTexas\b/gi, /\bCalifornia\b/gi, /\bLas\s+Vegas\b/gi, /\bArizona\b/gi];
                                 } else if (tag === 'hands_on') {
                                     patterns = [/\bmolest\w*\b/gi, /\bhands?\s+on\b/gi, /\bsexually\s+abused\b/gi, /\bsexually\s+assaulted\b/gi];
-                                } else if (tag === 'online_digital') {
+                                } else if (tag === 'online_only') {
                                     patterns = [/\bonline\b/gi, /\bchat\b/gi, /\btrading\s+images?\b/gi];
                                 } else if (tag === 'family') {
                                     patterns = [/\bfather\b/gi, /\bmother\b/gi, /\bparent\b/gi, /\bbrother\b/gi, /\bsister\b/gi, /\buncle\b/gi, /\baunt\b/gi, /\bcousin\b/gi, /\bbiological\b/gi];

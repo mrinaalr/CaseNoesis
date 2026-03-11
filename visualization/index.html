@@ -867,43 +867,20 @@
                     const topics = (caseData.case_topics || []).map(t => String(t).toLowerCase());
                     const severity = (caseData.severity_indicators || []).map(s => String(s).toLowerCase());
                     const platforms = (caseData.platforms_used || []).map(p => String(p).toLowerCase());
-                    const caseText = (caseData.case_text || caseData.raw_data?.case_text || '').toLowerCase();
                     
                     switch(category) {
                         case 'possession':
-                            return topics.includes('possession') || 
-                                   caseText.includes('possessing') || 
-                                   caseText.includes('possessed') ||
-                                   caseText.includes('possession');
+                            return topics.includes('possession');
                         case 'production':
-                            return topics.includes('production') ||
-                                   caseText.includes('produced') ||
-                                   caseText.includes('producing') ||
-                                   caseText.includes('created') ||
-                                   caseText.includes('made movies');
+                            return topics.includes('production');
                         case 'infant':
-                            return severity.some(s => s.includes('infant')) ||
-                                   caseText.includes('infant') ||
-                                   caseText.includes('infants');
+                            return severity.includes('infant');
                         case 'very_young':
-                            // Check for very_young or under_12 tags (same logic as Analysis page)
-                            // First check severity indicators for exact matches
-                            if (severity.some(s => String(s).toLowerCase() === 'very_young' || String(s).toLowerCase() === 'under_12')) {
-                                return true;
-                            }
-                            // Fallback to text matching for cases that might not have been tagged yet
-                            return caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
-                                   caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
-                                   caseText.includes('very young') ||
-                                   caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                            return severity.includes('very_young') || severity.includes('under_12');
                         case 'online':
-                            return platforms.some(p => p.includes('online')) ||
-                                   topics.includes('online_digital') ||
-                                   caseText.includes('online') ||
-                                   platforms.some(p => ['facebook', 'instagram', 'snapchat', 'discord', 'whatsapp', 'kik', 'chat'].some(pl => p.includes(pl)));
+                            return platforms.includes('online');
                         case 'sexual_assault':
-                            return severity.some(s => s.includes('sexual_assault') || s.includes('rape')) ||
-                                   caseText.match(/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/i);
+                            return severity.includes('sexual_assault') || severity.includes('rape');
                         default:
                             return false;
                     }
@@ -1000,38 +977,20 @@
                 const topics = (caseData.case_topics || []).map(t => String(t).toLowerCase());
                 const severity = (caseData.severity_indicators || []).map(s => String(s).toLowerCase());
                 const platforms = (caseData.platforms_used || []).map(p => String(p).toLowerCase());
-                const caseText = (caseData.case_text || caseData.raw_data?.case_text || '').toLowerCase();
                 
                 switch(category) {
                     case 'possession':
-                        return topics.includes('possession') || 
-                               caseText.includes('possessing') || 
-                               caseText.includes('possessed') ||
-                               caseText.includes('possession');
+                        return topics.includes('possession');
                     case 'production':
-                        return topics.includes('production') ||
-                               caseText.includes('produced') ||
-                               caseText.includes('producing') ||
-                               caseText.includes('created') ||
-                               caseText.includes('made movies');
+                        return topics.includes('production');
                     case 'infant':
-                        return severity.some(s => s.includes('infant')) ||
-                               caseText.includes('infant') ||
-                               caseText.includes('infants');
+                        return severity.includes('infant');
                     case 'very_young':
-                        return severity.some(s => s.includes('very_young') || s.includes('under_')) ||
-                               caseText.match(/\b(under\s+)?([1-9]|1[0-2])\s+year\s+old\b/) ||
-                               caseText.match(/\b([1-9]|1[0-2])\s+year\s+old\b/) ||
-                               caseText.includes('very young') ||
-                               caseText.match(/\b(age|aged)\s+([1-9]|1[0-2])\b/);
+                        return severity.includes('very_young') || severity.includes('under_12');
                     case 'online':
-                        return platforms.some(p => p.includes('online')) ||
-                               topics.includes('online_digital') ||
-                               caseText.includes('online') ||
-                               platforms.some(p => ['facebook', 'instagram', 'snapchat', 'discord', 'whatsapp', 'kik', 'chat'].some(pl => p.includes(pl)));
+                        return platforms.includes('online');
                     case 'sexual_assault':
-                        return severity.some(s => s.includes('sexual_assault') || s.includes('rape')) ||
-                               caseText.match(/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/i);
+                        return severity.includes('sexual_assault') || severity.includes('rape');
                     default:
                         return false;
                 }
@@ -1267,7 +1226,7 @@
                 let highlightedText = highlightCaseTextForGroup(caseText, caseData, group.key);
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 
@@ -1954,7 +1913,7 @@
                 }
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 
@@ -2216,7 +2175,7 @@
                 }
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 
@@ -2696,7 +2655,7 @@
                     highlightTerms.push({ term: 'hands-on', category: 'topic' });
                     highlightTerms.push({ term: 'hands on', category: 'topic' });
                 }
-                if (topicStr === 'online_digital' || topicStr.includes('online-digital')) {
+                if (topicStr === 'online_only' || topicStr.includes('online-only')) {
                     highlightTerms.push({ term: 'online-only', category: 'topic' });
                 }
             });
@@ -3001,7 +2960,7 @@
                 }
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 
@@ -3061,7 +3020,7 @@
                 }
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 
@@ -3144,7 +3103,7 @@
                 }
                 
                 caseItem.innerHTML = `
-                    <div class="case-header">${caseData.id} - ${caseData.raw_data?.month_year || caseData.date_range?.start || 'Unknown date'}</div>
+                    <div class="case-header">${caseData.id}</div>
                     <div class="case-text">${highlightedText}</div>
                 `;
                 

@@ -72,14 +72,118 @@ async def serve_home():
 
 
 @app.get("/api/cases")
-def get_all_cases():
-    """Get all cases from database"""
+def get_all_cases(include_raw_data: bool = False):
+    """
+    Get all cases from database
+    
+    Args:
+        include_raw_data: If True, include full raw_data (slower, larger payload).
+                         Default False for faster initial loads.
+    """
     try:
-        cases = storage.get_all_cases()
+        cases = storage.get_all_cases(include_raw_data=include_raw_data)
         return cases if cases else []
     except Exception as e:
         # Handle case where database doesn't exist or is empty
         return []
+
+# Cache for unique tags (invalidates when cases change)
+_tags_cache = None
+_tags_cache_case_count = 0
+
+@app.get("/api/tags")
+def get_unique_tags():
+    """
+    Get unique tags/topics from all cases for populating selectors.
+    Much faster than loading all cases - returns only unique values.
+    """
+    global _tags_cache, _tags_cache_case_count
+    
+    try:
+        # Quick check: get case count first (fast query)
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        current_case_count = cursor.fetchone()[0]
+        db_conn.close()
+        
+        # Return cached tags if case count hasn't changed
+        if _tags_cache is not None and _tags_cache_case_count == current_case_count:
+            return {
+                "case_topics": _tags_cache["case_topics"],
+                "severity_indicators": _tags_cache["severity_indicators"],
+                "platforms_used": _tags_cache["platforms_used"],
+                "investigation_types": _tags_cache["investigation_types"],
+                "relationships": _tags_cache["relationships"],
+                "status": _tags_cache["status"],
+                "cached": True
+            }
+        
+        # Load cases (without raw_data for speed)
+        cases = storage.get_all_cases(include_raw_data=False)
+        
+        # Extract unique values
+        case_topics = set()
+        severity_indicators = set()
+        platforms_used = set()
+        investigation_types = set()
+        relationships = set()
+        status = set()
+        
+        for case in cases:
+            # Case Topics
+            topics = case.get('case_topics', [])
+            if isinstance(topics, list):
+                case_topics.update(t for t in topics if t)
+            
+            # Severity Indicators
+            severity = case.get('severity_indicators', [])
+            if isinstance(severity, list):
+                severity_indicators.update(s for s in severity if s)
+            
+            # Platforms
+            platforms = case.get('platforms_used', [])
+            if isinstance(platforms, list):
+                platforms_used.update(p for p in platforms if p)
+            
+            # Investigation Type
+            inv_type = case.get('investigation_type')
+            if inv_type:
+                investigation_types.add(inv_type)
+            
+            # Relationship
+            rel = case.get('relationship_to_victim')
+            if rel:
+                relationships.add(rel)
+            
+            # Registered Sex Offender
+            if case.get('perpetrator_registered_sex_offender'):
+                status.add('registered_sex_offender')
+        
+        # Cache the results
+        _tags_cache = {
+            "case_topics": sorted(list(case_topics)),
+            "severity_indicators": sorted(list(severity_indicators)),
+            "platforms_used": sorted(list(platforms_used)),
+            "investigation_types": sorted(list(investigation_types)),
+            "relationships": sorted(list(relationships)),
+            "status": sorted(list(status))
+        }
+        _tags_cache_case_count = current_case_count
+        
+        return {
+            "case_topics": _tags_cache["case_topics"],
+            "severity_indicators": _tags_cache["severity_indicators"],
+            "platforms_used": _tags_cache["platforms_used"],
+            "investigation_types": _tags_cache["investigation_types"],
+            "relationships": _tags_cache["relationships"],
+            "status": _tags_cache["status"],
+            "cached": False
+        }
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 
 @app.get("/api/cases/{case_id}")
@@ -231,21 +335,50 @@ def get_tagged_cases(selected_tags: List[Dict[str, str]]):
     return {"cases": matching_cases}
 
 
+# Cache for automated analysis results (invalidates when cases change)
+_analysis_cache = None
+_cache_case_count = 0
+
 @app.get("/api/automated-analysis")
 async def automated_analysis_endpoint():
     """
     Run automated analysis on all cases.
     Returns case groups, triaged cases, and insights.
+    Uses caching to avoid recomputing on every request.
     """
+    global _analysis_cache, _cache_case_count
+    
     try:
-        cases = storage.get_all_cases()
+        # Quick check: get case count first (fast query)
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        current_case_count = cursor.fetchone()[0]
+        db_conn.close()
         
-        # Run automated analysis
+        # Check if cache is still valid (same number of cases)
+        if _analysis_cache is not None and _cache_case_count == current_case_count:
+            return {
+                "success": True,
+                "analysis": _analysis_cache,
+                "cached": True
+            }
+        
+        # Load cases (don't need raw_data for clustering)
+        cases = storage.get_all_cases(include_raw_data=False)
+        
+        # Run automated analysis (only if cache invalid)
         analysis_results = run_automated_analysis(cases)
+        
+        # Update cache
+        _analysis_cache = analysis_results
+        _cache_case_count = current_case_count
         
         return {
             "success": True,
-            "analysis": analysis_results
+            "analysis": analysis_results,
+            "cached": False
         }
     except Exception as e:
         import traceback

@@ -104,7 +104,7 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 700px;
+            height: 800px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -280,7 +280,7 @@
 
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
-        const height = 700;
+        const height = 800;
         const margin = 30;
         
         const svg = d3.select('#cluster-visualization')
@@ -335,11 +335,11 @@
             // Position main clusters tightly together
             const mainClusterNodes = [];
             const clusterPositions = {
-                'online_digital_cluster': { x: width * 0.5, y: height * 0.35 }, // Top-center (moved down slightly)
-                'possession_cluster': { x: width * 0.3, y: height * 0.4 }, // Left
-                'general_cluster': { x: width * 0.7, y: height * 0.5 }, // Right
-                'severe_cluster': { x: width * 0.3, y: height * 0.75 }, // Bottom-left
-                'investigation_cluster': { x: width * 0.5, y: height * 0.75 } // Bottom-center (moved left)
+                'online_only_cluster': { x: width * 0.415, y: height * 0.34 }, // Top-center
+                'possession_cluster': { x: width * 0.23, y: height * 0.25 }, // Left
+                'general_cluster': { x: width * 0.67, y: height * 0.3 }, // Right
+                'severe_cluster': { x: width * 0.23, y: height * 0.65 }, // Bottom-left
+                'investigation_cluster': { x: width * 0.5, y: height * 0.65 } // Bottom-center
             };
             
             clusterData.forEach((cluster, i) => {
@@ -393,17 +393,57 @@
                     );
                     const maxGroupSize = Math.max(...groupSizes);
                     
-                    // Tight positioning: single ring around cluster (tighter spacing)
+                    // Smart positioning: adjust based on number of bubbles
+                    // For few bubbles (1-5): use tighter radius and better distribution
+                    // For many bubbles (6+): use larger radius to spread them out
                     const minSpacing = 12; // Minimum spacing between sub-cluster centers
-                    const baseRadius = clusterSize + maxGroupSize + 10; // Start just outside cluster (tighter)
+                    
+                    // Adjust base radius based on number of groups
+                    // Add extra spacing for online_only_cluster to account for text label
+                    const textSpacing = cluster.group_id === 'online_only_cluster' ? 45 : 0;
+                    let baseRadius;
+                    if (groupCount <= 3) {
+                        // Very few bubbles: tight circle, close to cluster
+                        baseRadius = clusterSize + maxGroupSize + 15 + textSpacing;
+                    } else if (groupCount <= 5) {
+                        // Few bubbles: moderate distance
+                        baseRadius = clusterSize + maxGroupSize + 20 + textSpacing;
+                    } else {
+                        // Many bubbles: spread them out more
+                        baseRadius = clusterSize + maxGroupSize + 25 + textSpacing;
+                    }
+                    
+                    // For very few bubbles (1-3), use a more compact triangular/square arrangement
+                    let angleOffset = 0;
+                    if (groupCount === 1) {
+                        // Single bubble: place it to the right
+                        angleOffset = 0;
+                    } else if (groupCount === 2) {
+                        // Two bubbles: place them horizontally
+                        angleOffset = 0;
+                    } else if (groupCount === 3) {
+                        // Three bubbles: triangular arrangement (start from top)
+                        angleOffset = -Math.PI / 2;
+                    } else if (groupCount === 4) {
+                        // Four bubbles: square arrangement (start from top-right)
+                        angleOffset = -Math.PI / 4;
+                    }
                     
                     cluster.internal_groups.forEach((group, groupIdx) => {
                         const groupSize = groupSizes[groupIdx];
-                        const angle = (groupIdx / groupCount) * 2 * Math.PI;
+                        // Even distribution around circle, with optional offset for better positioning
+                        const angle = (groupIdx / groupCount) * 2 * Math.PI + angleOffset;
+                        
+                        // Special handling: position "30 cases" bubble closer for online_only_cluster
+                        let bubbleRadius = baseRadius;
+                        if (cluster.group_id === 'online_only_cluster' && group.size === 30) {
+                            // Position the 30 cases bubble closer (reduce radius by 20px)
+                            bubbleRadius = baseRadius - 100;
+                        }
                         
                         // Calculate position around the main cluster
-                        const groupX = clusterX + Math.cos(angle) * baseRadius;
-                        const groupY = clusterY + Math.sin(angle) * baseRadius;
+                        const groupX = clusterX + Math.cos(angle) * bubbleRadius;
+                        const groupY = clusterY + Math.sin(angle) * bubbleRadius;
                         
                         nodes.push({
                             id: `${cluster.group_id}_group_${groupIdx}`,
@@ -440,41 +480,59 @@
                 })
                 .on('click', function(event, d) {
                     if (d.type === 'cluster') {
-                        // Clear all selections first
-                        svg.selectAll('.cluster-bubble').classed('selected', false);
-                        svg.selectAll('.group-bubble').classed('selected', false);
-                        selectedClusterId = null;
-                        selectedGroupId = null;
-                        
-                        // Toggle selection
+                        // Check if clicking the same cluster (toggle collapse)
                         if (selectedClusterId === d.id) {
+                            // Collapse: clear selection and hide case display
+                            svg.selectAll('.cluster-bubble').classed('selected', false);
+                            svg.selectAll('.group-bubble').classed('selected', false);
                             selectedClusterId = null;
-                            d3.select(this).classed('selected', false);
+                            selectedGroupId = null;
+                            document.getElementById('case-display').classList.remove('active');
                         } else {
+                            // Expand: select this cluster
+                            svg.selectAll('.cluster-bubble').classed('selected', false);
+                            svg.selectAll('.group-bubble').classed('selected', false);
                             selectedClusterId = d.id;
+                            selectedGroupId = null;
                             d3.select(this).classed('selected', true);
+                            // Display "Online-Only Cluster" for online_only_cluster
+                            const displayName = d.cluster.group_id === 'online_only_cluster' 
+                                ? 'Online-Only Cluster' 
+                                : d.cluster.group_name;
+                            displayCases(d.cluster.cases, displayName);
                         }
-                        displayCases(d.cluster.cases, d.cluster.group_name);
                     } else if (d.type === 'group') {
-                        // Clear all selections first
-                        svg.selectAll('.cluster-bubble').classed('selected', false);
-                        svg.selectAll('.group-bubble').classed('selected', false);
-                        selectedClusterId = null;
-                        selectedGroupId = null;
-                        
-                        const parentCluster = clusterData.find(c => c.group_id === d.clusterId);
-                        // Select parent cluster AND the clicked sub-cluster
-                        const parentBubble = svg.selectAll('.cluster-bubble').filter(function(node) {
-                            return node.id === d.clusterId;
-                        });
-                        parentBubble.classed('selected', true);
-                        selectedClusterId = d.clusterId;
-                        
-                        // Also highlight the clicked sub-cluster
-                        d3.select(this).classed('selected', true);
-                        selectedGroupId = d.id;
-                        
-                        displayCases(d.group.cases, `Group from ${parentCluster ? parentCluster.group_name : 'Cluster'}`);
+                        // Check if clicking the same group (toggle collapse)
+                        if (selectedGroupId === d.id) {
+                            // Collapse: clear selection and hide case display
+                            svg.selectAll('.cluster-bubble').classed('selected', false);
+                            svg.selectAll('.group-bubble').classed('selected', false);
+                            selectedClusterId = null;
+                            selectedGroupId = null;
+                            document.getElementById('case-display').classList.remove('active');
+                        } else {
+                            // Expand: select this group and its parent cluster
+                            svg.selectAll('.cluster-bubble').classed('selected', false);
+                            svg.selectAll('.group-bubble').classed('selected', false);
+                            
+                            const parentCluster = clusterData.find(c => c.group_id === d.clusterId);
+                            // Select parent cluster AND the clicked sub-cluster
+                            const parentBubble = svg.selectAll('.cluster-bubble').filter(function(node) {
+                                return node.id === d.clusterId;
+                            });
+                            parentBubble.classed('selected', true);
+                            selectedClusterId = d.clusterId;
+                            
+                            // Also highlight the clicked sub-cluster
+                            d3.select(this).classed('selected', true);
+                            selectedGroupId = d.id;
+                            
+                            // Display "Online-Only Cluster" for online_only_cluster
+                            const parentDisplayName = parentCluster && parentCluster.group_id === 'online_only_cluster'
+                                ? 'Online-Only Cluster'
+                                : (parentCluster ? parentCluster.group_name : 'Cluster');
+                            displayCases(d.group.cases, `Group from ${parentDisplayName}`);
+                        }
                     }
                 });
             
@@ -504,10 +562,14 @@
             clusterBubbles.each(function(d) {
                 const g = d3.select(this);
                 // Cluster name inside the bubble (above count)
+                // Display "Online-Only Cluster" for online_only_cluster
+                const displayName = d.cluster.group_id === 'online_only_cluster' 
+                    ? 'Online-Only Cluster' 
+                    : d.cluster.group_name;
                 g.append('text')
                     .attr('class', 'cluster-label')
                     .attr('dy', -8)
-                    .text(d.cluster.group_name);
+                    .text(displayName);
                 // Total case count inside the main bubble (below name)
                 g.append('text')
                     .attr('class', 'cluster-count')
@@ -572,16 +634,22 @@
                     groupNodes.forEach(node => {
                         const clusterX = node.clusterX;
                         const clusterY = node.clusterY;
-                        const idealRadius = node.clusterR + node.r + 20; // Ideal distance from cluster center (more space)
+                        // Calculate ideal radius based on initial positioning (adaptive)
+                        const idealRadius = node.clusterR + node.r + 20; // Base ideal distance
                         
                         const dx = node.x - clusterX;
                         const dy = node.y - clusterY;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        if (distance > idealRadius * 1.2) {
-                            const force = (distance - idealRadius * 1.2) / distance;
-                            node.vx -= dx * force * alpha * 0.2;
-                            node.vy -= dy * force * alpha * 0.2;
+                        // For clusters with few bubbles, use tighter attraction
+                        const clusterGroupCount = groupNodes.filter(n => n.clusterId === node.clusterId).length;
+                        const attractionStrength = clusterGroupCount <= 5 ? 0.3 : 0.2; // Stronger for few bubbles
+                        const maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.1 : idealRadius * 1.2;
+                        
+                        if (distance > maxDistance) {
+                            const force = (distance - maxDistance) / distance;
+                            node.vx -= dx * force * alpha * attractionStrength;
+                            node.vy -= dy * force * alpha * attractionStrength;
                         }
                     });
                 }
@@ -737,13 +805,12 @@
                 
                 const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
                 const caseId = caseData.id || 'Unknown ID';
-                const date = caseData.date_range?.start || caseData.raw_data?.month_year || 'Unknown date';
                 
                 // Highlight case text with all relevant information - show FULL text
                 const highlightedText = highlightCaseText(caseText, caseData);
                 
                 caseItem.innerHTML = `
-                    <div class="case-item-header">${caseId} - ${date}</div>
+                    <div class="case-item-header">${caseId}</div>
                     <div class="case-item-text">${highlightedText}</div>
                 `;
                 
@@ -870,7 +937,7 @@
                     highlightTerms.push({ term: 'hands-on', category: 'topic' });
                     highlightTerms.push({ term: 'hands on', category: 'topic' });
                 }
-                if (topicStr === 'online_digital' || topicStr.includes('online-digital')) {
+                if (topicStr === 'online_only' || topicStr.includes('online-only')) {
                     highlightTerms.push({ term: 'online-only', category: 'topic' });
                 }
             });

@@ -12,7 +12,7 @@ from collections import Counter, defaultdict
 from datetime import datetime
 
 
-def match_custom_tag_in_text(case_text: str, tag: str) -> bool:
+def match_custom_tag(case_text: str, tag: str) -> bool:
     """
     Check if a custom tag matches in case text.
     Uses word boundary matching for better accuracy.
@@ -71,6 +71,78 @@ def get_case_text(case: Dict[str, Any]) -> str:
     return ''
 
 
+def _case_matches_tag(case: Dict[str, Any], tag: str, category: str) -> bool:
+    """
+    Check if a case matches a single tag in a category.
+    This is the core matching logic used by both return_tagged_cases and tag_threader.
+    
+    Args:
+        case: Case dictionary
+        tag: Tag to match
+        category: Category of the tag (case_topics, severity_indicators, etc.)
+        
+    Returns:
+        True if case matches the tag, False otherwise
+    """
+    if category == 'case_topics':
+        topics = case.get('case_topics', [])
+        # Special handling for "stranger": show all cases NOT family-tagged
+        if tag == 'stranger':
+            has_family = isinstance(topics, list) and 'family' in topics
+            relationship = case.get('relationship_to_victim', '')
+            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+            has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+            return not has_family and not has_family_rel
+        else:
+            return isinstance(topics, list) and tag in topics
+    
+    elif category == 'severity_indicators':
+        if tag == 'very_young':
+            # Check for very_young or under_12 tags (both indicate very young)
+            severity = case.get('severity_indicators', [])
+            if isinstance(severity, str):
+                try:
+                    severity = json.loads(severity)
+                except:
+                    severity = []
+            if not isinstance(severity, list):
+                severity = []
+            return isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
+        else:
+            severity = case.get('severity_indicators', [])
+            return isinstance(severity, list) and tag in severity
+    
+    elif category == 'platforms_used':
+        platforms = case.get('platforms_used', [])
+        return isinstance(platforms, list) and any(
+            p and p.lower() == tag.lower() for p in platforms
+        )
+    
+    elif category == 'investigation_type':
+        inv_type = case.get('investigation_type', '')
+        return inv_type and inv_type.lower() == tag.lower()
+    
+    elif category == 'relationship_to_victim':
+        relationship = case.get('relationship_to_victim', '')
+        # Special handling for "stranger": show all cases NOT family-tagged
+        if tag == 'stranger':
+            topics = case.get('case_topics', [])
+            has_family = isinstance(topics, list) and 'family' in topics
+            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+            has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
+            return not has_family and not has_family_rel
+        else:
+            return relationship and relationship.lower() == tag.lower()
+    
+    elif category == 'registered_sex_offender':
+        return tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
+    
+    elif category == 'custom':
+        # Search in case text for custom topics using helper function
+        case_text = get_case_text(case)
+        return match_custom_tag(case_text, tag)
+    
+    return False
 
 
 def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, str]]) -> List[Dict[str, Any]]:
@@ -97,67 +169,7 @@ def return_tagged_cases(all_cases: List[Dict[str, Any]], selected_tags: List[Dic
             tag = tag_info['tag']
             category = tag_info['category']
             
-            matches = False
-            
-            if category == 'case_topics':
-                topics = case.get('case_topics', [])
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    relationship = case.get('relationship_to_victim', '')
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = isinstance(topics, list) and tag in topics
-                
-            elif category == 'severity_indicators':
-                if tag == 'very_young':
-                    # Check for very_young or under_12 tags (both indicate very young)
-                    severity = case.get('severity_indicators', [])
-                    if isinstance(severity, str):
-                        try:
-                            severity = json.loads(severity)
-                        except:
-                            severity = []
-                    if not isinstance(severity, list):
-                        severity = []
-                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
-                else:
-                    severity = case.get('severity_indicators', [])
-                    matches = isinstance(severity, list) and tag in severity
-                
-            elif category == 'platforms_used':
-                platforms = case.get('platforms_used', [])
-                matches = isinstance(platforms, list) and any(
-                    p and p.lower() == tag.lower() for p in platforms
-                )
-                
-            elif category == 'investigation_type':
-                inv_type = case.get('investigation_type', '')
-                matches = inv_type and inv_type.lower() == tag.lower()
-                
-            elif category == 'relationship_to_victim':
-                relationship = case.get('relationship_to_victim', '')
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    topics = case.get('case_topics', [])
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = relationship and relationship.lower() == tag.lower()
-                
-            elif category == 'registered_sex_offender':
-                matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
-                
-            elif category == 'custom':
-                # Search in case text for custom topics using helper function
-                case_text = get_case_text(case)
-                matches = match_custom_tag_in_text(case_text, tag)
-            
-            if not matches:
+            if not _case_matches_tag(case, tag, category):
                 matches_all = False
                 break
         
@@ -186,73 +198,8 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
             'tag_results': []
         }
     
-    # Find cases matching ALL selected tags (intersection)
-    intersection_cases = []
-    for case in all_cases:
-        matches_all = True
-        for tag_info in selected_tags:
-            tag = tag_info['tag']
-            category = tag_info['category']
-            
-            matches = False
-            if category == 'case_topics':
-                topics = case.get('case_topics', [])
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    relationship = case.get('relationship_to_victim', '')
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = isinstance(topics, list) and tag in topics
-            elif category == 'severity_indicators':
-                if tag == 'very_young':
-                    # Check for very_young or under_12 tags (both indicate very young)
-                    severity = case.get('severity_indicators', [])
-                    if isinstance(severity, str):
-                        try:
-                            severity = json.loads(severity)
-                        except:
-                            severity = []
-                    if not isinstance(severity, list):
-                        severity = []
-                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
-                else:
-                    severity = case.get('severity_indicators', [])
-                    matches = isinstance(severity, list) and tag in severity
-            elif category == 'platforms_used':
-                platforms = case.get('platforms_used', [])
-                matches = isinstance(platforms, list) and any(
-                    p and p.lower() == tag.lower() for p in platforms
-                )
-            elif category == 'investigation_type':
-                inv_type = case.get('investigation_type', '')
-                matches = inv_type and inv_type.lower() == tag.lower()
-            elif category == 'relationship_to_victim':
-                relationship = case.get('relationship_to_victim', '')
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    topics = case.get('case_topics', [])
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = relationship and relationship.lower() == tag.lower()
-            elif category == 'registered_sex_offender':
-                matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
-            elif category == 'custom':
-                # Search in case text for custom topics using helper function
-                case_text = get_case_text(case)
-                matches = match_custom_tag_in_text(case_text, tag)
-            
-            if not matches:
-                matches_all = False
-                break
-        
-        if matches_all:
-            intersection_cases.append(case)
+    # Find cases matching ALL selected tags (intersection) - reuse return_tagged_cases
+    intersection_cases = return_tagged_cases(all_cases, selected_tags)
     
     # For each tag, find cases matching that specific tag
     tag_results = []
@@ -262,60 +209,7 @@ def tag_threader(all_cases: List[Dict[str, Any]], selected_tags: List[Dict[str, 
         
         matching_case_ids = []
         for case in all_cases:
-            matches = False
-            if category == 'case_topics':
-                topics = case.get('case_topics', [])
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    relationship = case.get('relationship_to_victim', '')
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = isinstance(topics, list) and tag in topics
-            elif category == 'severity_indicators':
-                if tag == 'very_young':
-                    # Check for very_young or under_12 tags (both indicate very young)
-                    severity = case.get('severity_indicators', [])
-                    if isinstance(severity, str):
-                        try:
-                            severity = json.loads(severity)
-                        except:
-                            severity = []
-                    if not isinstance(severity, list):
-                        severity = []
-                    matches = isinstance(severity, list) and ('very_young' in severity or 'under_12' in severity)
-                else:
-                    severity = case.get('severity_indicators', [])
-                    matches = isinstance(severity, list) and tag in severity
-            elif category == 'platforms_used':
-                platforms = case.get('platforms_used', [])
-                matches = isinstance(platforms, list) and any(
-                    p and p.lower() == tag.lower() for p in platforms
-                )
-            elif category == 'investigation_type':
-                inv_type = case.get('investigation_type', '')
-                matches = inv_type and inv_type.lower() == tag.lower()
-            elif category == 'relationship_to_victim':
-                relationship = case.get('relationship_to_victim', '')
-                # Special handling for "stranger": show all cases NOT family-tagged
-                if tag == 'stranger':
-                    topics = case.get('case_topics', [])
-                    has_family = isinstance(topics, list) and 'family' in topics
-                    family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
-                    has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
-                    matches = not has_family and not has_family_rel
-                else:
-                    matches = relationship and relationship.lower() == tag.lower()
-            elif category == 'registered_sex_offender':
-                matches = tag == 'registered_sex_offender' and case.get('perpetrator_registered_sex_offender') is True
-            elif category == 'custom':
-                # Search in case text for custom topics using helper function
-                case_text = get_case_text(case)
-                matches = match_custom_tag_in_text(case_text, tag)
-            
-            if matches:
+            if _case_matches_tag(case, tag, category):
                 matching_case_ids.append(case.get('id', ''))
         
         tag_results.append({
@@ -498,7 +392,7 @@ def analyze_group_characteristics(group_cases: List[Dict[str, Any]]) -> Dict[str
     infant_count = 0
     very_young_count = 0
     hands_on_count = 0
-    online_digital_count = 0
+    online_only_count = 0
     possession_count = 0
     production_count = 0
     
@@ -523,8 +417,8 @@ def analyze_group_characteristics(group_cases: List[Dict[str, Any]]) -> Dict[str
             all_topics.extend(topics)
             if 'hands_on' in topics:
                 hands_on_count += 1
-            if 'online_digital' in topics:
-                online_digital_count += 1
+            if 'online_only' in topics:
+                online_only_count += 1
             if 'possession' in topics:
                 possession_count += 1
             if 'production' in topics:
@@ -585,10 +479,10 @@ def analyze_group_characteristics(group_cases: List[Dict[str, Any]]) -> Dict[str
     elif rso_count >= max(2, total * 0.5):
         group_name = "Registered Sex Offender Cluster"
         description_parts.append(f"{rso_count}/{total} cases ({rso_count/total*100:.0f}%) involve registered sex offenders")
-    # Online-digital cluster (requires majority)
-    elif online_digital_count >= max(2, total * 0.5):
-        group_name = "Online-Digital Cluster"
-        description_parts.append(f"{online_digital_count}/{total} cases ({online_digital_count/total*100:.0f}%) are online-digital")
+    # Online-only cluster (requires majority)
+    elif online_only_count >= max(2, total * 0.5):
+        group_name = "Online-Only Cluster"
+        description_parts.append(f"{online_only_count}/{total} cases ({online_only_count/total*100:.0f}%) are online-only")
     # Possession cluster (requires majority)
     elif possession_count >= max(2, total * 0.5):
         group_name = "Possession Cluster"
@@ -616,7 +510,7 @@ def analyze_group_characteristics(group_cases: List[Dict[str, Any]]) -> Dict[str
         'statistics': {
             'total_cases': total,
             'hands_on': f"{hands_on_count}/{total} ({hands_on_count/total*100:.1f}%)",
-            'online_digital': f"{online_digital_count}/{total} ({online_digital_count/total*100:.1f}%)",
+            'online_only': f"{online_only_count}/{total} ({online_only_count/total*100:.1f}%)",
             'possession': f"{possession_count}/{total} ({possession_count/total*100:.1f}%)",
             'production': f"{production_count}/{total} ({production_count/total*100:.1f}%)",
             'infant_victims': f"{infant_count}/{total} ({infant_count/total*100:.1f}%)",
@@ -675,18 +569,18 @@ def find_physical_abuse_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str,
     return matching_cases
 
 
-def find_online_digital_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def find_online_only_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Find cases that fit the Online-Digital Cluster.
+    Find cases that fit the Online-Only Cluster.
     
     Criteria: Cases must have:
-    - online_digital in case_topics
+    - online_only in case_topics
     
     Args:
         all_cases: List of all case dictionaries
         
     Returns:
-        List of cases matching Online-Digital Cluster criteria
+        List of cases matching Online-Only Cluster criteria
     """
     matching_cases = []
     
@@ -700,7 +594,7 @@ def find_online_digital_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str,
         if not isinstance(topics, list):
             topics = []
         
-        if 'online_digital' in topics:
+        if 'online_only' in topics:
             matching_cases.append(case)
     
     return matching_cases
@@ -993,7 +887,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
     3. Severe cases can ALSO be in Possession or Investigation clusters (not mutually exclusive)
     
     Cluster Types (exactly 5):
-    1. Online-Digital Cluster: Cases with online_digital topic
+    1. Online-Only Cluster: Cases with online_only topic
     2. Possession Cluster: Cases with possession topic
     3. Investigation Cluster: Cases grouped by investigation_type (proactive, reactive, online, undercover, unknown)
     4. Severe Cluster: Cases with severe indicators (infant, very_young, sexual_assault)
@@ -1014,49 +908,49 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
     # Step 1: Check ALL cases against ALL predefined cluster criteria
     # Cases can be in multiple clusters
     
-    # 1a. Online-Digital Cluster - Check ALL cases, then cluster internally
-    online_digital_cases = find_online_digital_cases(all_cases)
+    # 1a. Online-Only Cluster - Check ALL cases, then cluster internally
+    online_only_cases = find_online_only_cases(all_cases)
     
-    if len(online_digital_cases) > 1:
+    if len(online_only_cases) > 1:
         # Cluster the matching cases internally using Jaccard similarity
-        internal_clusters = find_similar_cases_general(online_digital_cases, similarity_threshold=similarity_threshold)
+        internal_clusters = find_similar_cases_general(online_only_cases, similarity_threshold=similarity_threshold)
         
         # Combine all internal clusters into one group (cases organized by similarity)
-        all_online_digital_cases = []
+        all_online_only_cases = []
         for cluster in internal_clusters:
-            all_online_digital_cases.extend(cluster['cases'])
+            all_online_only_cases.extend(cluster['cases'])
         
         # Add any remaining unclustered cases
-        clustered_ids = {c.get('id') for c in all_online_digital_cases}
-        for case in online_digital_cases:
+        clustered_ids = {c.get('id') for c in all_online_only_cases}
+        for case in online_only_cases:
             if case.get('id') not in clustered_ids:
-                all_online_digital_cases.append(case)
+                all_online_only_cases.append(case)
         
         # Calculate cluster-level metrics (across all cases)
-        similarity_metrics = calculate_group_similarity_metrics(all_online_digital_cases)
-        characteristics = analyze_group_characteristics(all_online_digital_cases)
+        similarity_metrics = calculate_group_similarity_metrics(all_online_only_cases)
+        characteristics = analyze_group_characteristics(all_online_only_cases)
         
-        base_description = f"All {len(all_online_digital_cases)} cases are online-digital"
+        base_description = f"All {len(all_online_only_cases)} cases are online-only"
         additional_info = []
         if characteristics.get('statistics', {}).get('top_platforms'):
             top_platform = list(characteristics['statistics']['top_platforms'].keys())[0]
-            additional_info.append(f"Most common platform: {top_platform} ({len(all_online_digital_cases)}/{len(all_online_digital_cases)} cases)")
+            additional_info.append(f"Most common platform: {top_platform} ({len(all_online_only_cases)}/{len(all_online_only_cases)} cases)")
         if characteristics.get('statistics', {}).get('top_topics'):
             top_topic = list(characteristics['statistics']['top_topics'].keys())[0]
-            additional_info.append(f"Most common topic: {top_topic.replace('_', ' ').title()} ({len(all_online_digital_cases)}/{len(all_online_digital_cases)} cases)")
+            additional_info.append(f"Most common topic: {top_topic.replace('_', ' ').title()} ({len(all_online_only_cases)}/{len(all_online_only_cases)} cases)")
         
         full_description = base_description
         if additional_info:
             full_description += " | " + " | ".join(additional_info)
         
         groups.append({
-            'group_id': 'online_digital_cluster',
-            'cases': all_online_digital_cases,
-            'size': len(all_online_digital_cases),
+            'group_id': 'online_only_cluster',
+            'cases': all_online_only_cases,
+            'size': len(all_online_only_cases),
             'average_similarity': similarity_metrics['average_similarity'],
             'min_similarity': similarity_metrics['min_similarity'],
             'max_similarity': similarity_metrics['max_similarity'],
-            'group_name': 'Online-Digital Cluster',
+            'group_name': 'Online-Only Cluster',
             'description': full_description,
             'statistics': characteristics.get('statistics', {}),
             'internal_groups': [{'cases': cluster['cases'], 'size': len(cluster['cases'])} for cluster in internal_clusters]
@@ -1346,7 +1240,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             case_type_score += 8.0  # Increased from 6.0, and can stack with production
         if 'possession' in case_topics:
             case_type_score += 2.0  # Lower priority
-        if 'online_digital' in case_topics:
+        if 'online_only' in case_topics:
             case_type_score += 1.0  # Lowest priority
         
         score += case_type_score * 0.25  # Increased weight from 0.20

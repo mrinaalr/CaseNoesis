@@ -140,15 +140,62 @@ class CaseStorage:
             else:
                 investigation_methods = case.get('agencies_involved', [])
             
+            # Check if case already exists to preserve created_at timestamp and prevent conflicts
+            case_id = case.get('id')
+            cursor.execute('SELECT created_at, raw_data FROM cases WHERE id = ?', (case_id,))
+            existing_case = cursor.fetchone()
+            
+            # Use consistent ISO format for timestamps
+            current_time = datetime.now().isoformat()
+            
+            if existing_case:
+                existing_created_at, existing_raw_data_json = existing_case
+                
+                # Check if this is from a different source file (conflict detection)
+                new_source_file = None
+                if isinstance(case.get('raw_data'), dict):
+                    new_source_file = case.get('raw_data', {}).get('source_file')
+                elif isinstance(case.get('raw_data'), str):
+                    try:
+                        new_source_file = json.loads(case.get('raw_data', '{}')).get('source_file')
+                    except:
+                        pass
+                
+                existing_source_file = None
+                if existing_raw_data_json:
+                    try:
+                        existing_raw_data = json.loads(existing_raw_data_json)
+                        existing_source_file = existing_raw_data.get('source_file')
+                    except:
+                        pass
+                
+                # If source files differ, this is a conflict - don't overwrite
+                if new_source_file and existing_source_file and new_source_file != existing_source_file:
+                    print(f"⚠️  Warning: Case ID conflict detected for {case_id}")
+                    print(f"   Existing case from: {existing_source_file}")
+                    print(f"   New case from: {new_source_file}")
+                    print(f"   Skipping new case to prevent data loss")
+                    conn.close()
+                    return False
+                
+                # Case exists from same source: preserve original created_at, update updated_at
+                created_at = existing_created_at
+                updated_at = current_time  # Update timestamp since we're modifying existing case
+            else:
+                # New case: use created_at from case dict if provided, otherwise use current time
+                created_at = case.get('created_at') or current_time
+                # For new cases, updated_at should equal created_at (we're not updating, just creating)
+                updated_at = case.get('updated_at') or created_at
+            
             cursor.execute('''
                 INSERT OR REPLACE INTO cases (
                     id, source, date_start, date_end, victim_count, perpetrator_count,
                     relationship_to_victim, platforms_used,
                     investigation_methods, severity_indicators, case_topics, tags, notes,
-                    raw_data, extracted_features, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    raw_data, extracted_features, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                case.get('id'),
+                case_id,
                 case.get('source', 'unknown'),
                 date_start,
                 date_end,
@@ -163,7 +210,8 @@ class CaseStorage:
                 case.get('notes'),
                 json.dumps(case.get('raw_data', {})),
                 json.dumps(case),  # Store full case as extracted_features for new schema
-                datetime.now().isoformat()
+                created_at,
+                updated_at
             ))
             
             case_demo = case.get('case_demographics') or case.get('victim_demographics')  # Support both for backward compatibility
@@ -350,9 +398,12 @@ class CaseStorage:
             print(f"Error retrieving case: {e}")
             return None
     
-    def get_all_cases(self) -> List[Dict[str, Any]]:
+    def get_all_cases(self, include_raw_data: bool = True) -> List[Dict[str, Any]]:
         """
         Retrieve all cases from the database.
+        
+        Args:
+            include_raw_data: If False, exclude raw_data field to reduce payload size
         
         Returns:
             List of case dictionaries
@@ -372,16 +423,102 @@ class CaseStorage:
             conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
-            cursor.execute('SELECT id FROM cases ORDER BY date_start, id')
-            case_ids = [row[0] for row in cursor.fetchall()]
+            # Single query to get all cases - much faster than N+1 queries
+            cursor.execute('''
+                SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                       relationship_to_victim, platforms_used, investigation_methods,
+                       severity_indicators, case_topics, tags, notes,
+                       raw_data, extracted_features, created_at, updated_at
+                FROM cases
+                ORDER BY date_start, id
+            ''')
+            
+            columns = [desc[0] for desc in cursor.description]
+            rows = cursor.fetchall()
+            
+            # Get all related data in bulk queries
+            case_ids = [row[0] for row in rows]
+            if not case_ids:
+                conn.close()
+                return []
+            
+            # Bulk fetch victim demographics
+            placeholders = ','.join(['?'] * len(case_ids))
+            cursor.execute(f'SELECT * FROM victim_demographics WHERE case_id IN ({placeholders})', case_ids)
+            victim_data = {}
+            for row in cursor.fetchall():
+                victim_cols = [desc[0] for desc in cursor.description]
+                case_id = dict(zip(victim_cols, row))['case_id']
+                if case_id not in victim_data:
+                    victim_data[case_id] = []
+                victim_data[case_id].append(dict(zip(victim_cols, row)))
+            
+            # Bulk fetch perpetrator demographics
+            cursor.execute(f'SELECT * FROM perpetrator_demographics WHERE case_id IN ({placeholders})', case_ids)
+            perp_data = {}
+            for row in cursor.fetchall():
+                perp_cols = [desc[0] for desc in cursor.description]
+                case_id = dict(zip(perp_cols, row))['case_id']
+                if case_id not in perp_data:
+                    perp_data[case_id] = []
+                perp_data[case_id].append(dict(zip(perp_cols, row)))
+            
+            # Bulk fetch prosecution outcomes
+            cursor.execute(f'SELECT * FROM prosecution_outcomes WHERE case_id IN ({placeholders})', case_ids)
+            prosecution_data = {}
+            for row in cursor.fetchall():
+                prosecution_cols = [desc[0] for desc in cursor.description]
+                case_id = dict(zip(prosecution_cols, row))['case_id']
+                if case_id not in prosecution_data:
+                    prosecution_data[case_id] = []
+                prosecution_data[case_id].append(dict(zip(prosecution_cols, row)))
             
             conn.close()
             
+            # Build case dictionaries
             cases = []
-            for case_id in case_ids:
-                case = self.get_case(case_id)
-                if case:
-                    cases.append(case)
+            for row in rows:
+                case_dict = dict(zip(columns, row))
+                
+                # Parse JSON fields
+                for json_field in ['platforms_used', 'investigation_methods', 
+                                 'severity_indicators', 'case_topics', 'tags', 
+                                 'raw_data', 'extracted_features']:
+                    if case_dict.get(json_field):
+                        try:
+                            case_dict[json_field] = json.loads(case_dict[json_field])
+                        except (json.JSONDecodeError, TypeError):
+                            pass
+                
+                # Exclude raw_data if requested (for performance)
+                if not include_raw_data and 'raw_data' in case_dict:
+                    del case_dict['raw_data']
+                
+                # Merge extracted_features back into case_dict (same as get_case)
+                extracted_features = case_dict.get('extracted_features', {})
+                if isinstance(extracted_features, dict):
+                    # Merge new schema fields from extracted_features
+                    for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
+                               'agencies_involved', 'investigation_type', 'evidence_volume',
+                               'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
+                               'severity_phrases', 'case_text', 'comparison_values']:
+                        if key in extracted_features:
+                            case_dict[key] = extracted_features[key]
+                
+                # Add date_range
+                if case_dict.get('date_start') or case_dict.get('date_end'):
+                    case_dict['date_range'] = {
+                        'start': case_dict.get('date_start'),
+                        'end': case_dict.get('date_end')
+                    }
+                
+                # Add related data
+                case_id = case_dict['id']
+                case_dict['victim_demographics'] = victim_data.get(case_id, [])
+                case_dict['perpetrator_demographics'] = perp_data.get(case_id, [])
+                case_dict['prosecution_outcome'] = prosecution_data.get(case_id, [{}])[0] if prosecution_data.get(case_id) else {}
+                
+                cases.append(case_dict)
             
             return cases
             

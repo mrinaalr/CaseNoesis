@@ -22,12 +22,12 @@ import re
 from typing import Dict, List, Any, Optional
 
 
-def clean_artifacts_from_text(text: str) -> str:
+def clean_artifacts_from_text(text: str, remove_urls: bool = True) -> str:
     """
     Remove artifacts from case text including URLs, page numbers, and other PDF extraction artifacts.
     
     Handles:
-    - URLs (http://, https://, www.)
+    - URLs (http://, https://, www.) - optional, controlled by remove_urls parameter
     - URLs split across lines
     - Page numbers at end of text
     - AZICAC-specific artifacts (azicac.org references, URL fragments)
@@ -36,6 +36,7 @@ def clean_artifacts_from_text(text: str) -> str:
     
     Args:
         text: Case text that may contain artifacts
+        remove_urls: If True, remove URLs. If False, keep URLs in text (default: True)
         
     Returns:
         Cleaned text with artifacts removed
@@ -45,21 +46,23 @@ def clean_artifacts_from_text(text: str) -> str:
     
     cleaned_text = text
     
-    # Pattern 1: Match full URLs (http:// or https://) - handles URLs split across lines
-    # Matches: "https://www.example.com/path" or "http://example.com"
-    # Also handles URLs that may be broken across lines with newlines
-    pattern1 = r'https?://[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
-    cleaned_text = re.sub(pattern1, '', cleaned_text, flags=re.IGNORECASE)
-    
-    # Pattern 2: Match www. URLs (without http://)
-    # Matches: "www.example.com/path" - handles split across lines
-    pattern2 = r'www\.[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
-    cleaned_text = re.sub(pattern2, '', cleaned_text, flags=re.IGNORECASE)
-    
-    # Pattern 3: Match URLs with fragments/anchors (e.g., #:~:text=...)
-    # These often appear split across lines in PDFs
-    pattern3 = r'[^\s]+\.(com|org|gov|net|edu|io|co)[^\s\n]*(?:#|/)[^\s\n]*(?:\s*\n\s*[^\s\n]+)*'
-    cleaned_text = re.sub(pattern3, '', cleaned_text, flags=re.IGNORECASE)
+    # Only remove URLs if requested (for NCMEC media cases, we want to keep URLs)
+    if remove_urls:
+        # Pattern 1: Match full URLs (http:// or https://) - handles URLs split across lines
+        # Matches: "https://www.example.com/path" or "http://example.com"
+        # Also handles URLs that may be broken across lines with newlines
+        pattern1 = r'https?://[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
+        cleaned_text = re.sub(pattern1, '', cleaned_text, flags=re.IGNORECASE)
+        
+        # Pattern 2: Match www. URLs (without http://)
+        # Matches: "www.example.com/path" - handles split across lines
+        pattern2 = r'www\.[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
+        cleaned_text = re.sub(pattern2, '', cleaned_text, flags=re.IGNORECASE)
+        
+        # Pattern 3: Match URLs with fragments/anchors (e.g., #:~:text=...)
+        # These often appear split across lines in PDFs
+        pattern3 = r'[^\s]+\.(com|org|gov|net|edu|io|co)[^\s\n]*(?:#|/)[^\s\n]*(?:\s*\n\s*[^\s\n]+)*'
+        cleaned_text = re.sub(pattern3, '', cleaned_text, flags=re.IGNORECASE)
     
     # Pattern 4: AZICAC-specific patterns
     # Match from http/https to AZICAC.ORG (case-insensitive)
@@ -101,7 +104,7 @@ def clean_artifacts_from_text(text: str) -> str:
     return cleaned_text
 
 
-def case_batching(text: str, org_name: str = "case", source: str = None) -> List[Dict[str, Any]]:
+def case_batching(text: str, org_name: str = "case", source: str = None, source_file: str = None) -> List[Dict[str, Any]]:
     """
     Router function that splits text corpus into individual cases.
     Routes to appropriate batch function based on source format.
@@ -131,7 +134,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None) -> List
     
     # Route to appropriate batch function
     if is_ncmec:
-        return _batch_ncmec_cases(text, org_name)
+        return _batch_ncmec_cases(text, org_name, source_file)
     else:
         # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
         return _batch_azicac_cases(text, org_name)
@@ -222,7 +225,7 @@ def _batch_azicac_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
     if not unique_matches:
         from datetime import datetime
         year = str(datetime.now().year)
-        return [{'case_text': text, 'month_year': None, 'case_id': f'{org_name}_{year}_unknown_001'}]
+        return [{'case_text': text, 'month_year': None, 'case_id': f'{org_name}_{year}_001'}]
     
     # Track cases per year for proper numbering (resets each year)
     year_case_counts = {}
@@ -263,7 +266,7 @@ def _batch_azicac_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
         year_case_counts[year] += 1
         case_number = year_case_counts[year]
         
-        case_id = f"{org_name}_{year}_{month.lower()}_{case_number:03d}"
+        case_id = f"{org_name}_{year}_{case_number:03d}"
         
         cases.append({
             'case_text': case_text,
@@ -276,18 +279,70 @@ def _batch_azicac_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
     return cases
 
 
-def _batch_ncmec_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
+def _batch_ncmec_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
     """
-    Split NCMEC cases by state headers.
+    Router function for NCMEC case batching.
+    Detects format from year in filename or first 10 lines and routes to appropriate handler.
+    
+    Args:
+        text: Full text from NCMEC PDF
+        org_name: Organization name prefix for case IDs (e.g., "ncmec")
+        source_file: Filename to extract report year from (e.g., "2022 NCMEC.pdf")
+        
+    Returns:
+        List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
+    """
+    # Extract year from filename first (most reliable)
+    report_year = None
+    if source_file:
+        year_match = re.search(r'(\d{4})', source_file)
+        if year_match:
+            report_year = year_match.group(1)
+    
+    if report_year == '2024':
+        return _batch_ncmec_2024_cases(text, org_name, source_file)
+    elif report_year in ['2022', '2023']:
+        # 2022 or 2023 - use media format (numbered articles)
+        return _batch_ncmec_media_cases(text, org_name, source_file)
+    else:
+        # Try to detect from text
+        lines = text.split('\n')[:10]
+        first_lines_text = ' '.join(lines)
+        
+        # Look for year pattern (2022, 2023, 2024)
+        year_pattern = r'\b(202[234])\b'
+        year_match = re.search(year_pattern, first_lines_text)
+        
+        if year_match:
+            year = year_match.group(1)
+            if year == '2024':
+                return _batch_ncmec_2024_cases(text, org_name, source_file)
+            else:
+                return _batch_ncmec_media_cases(text, org_name, source_file)
+        else:
+            # No year found - default to media format
+            return _batch_ncmec_media_cases(text, org_name, source_file)
+
+
+def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split NCMEC 2024 cases by state headers.
     Each case starts with a state name (ALABAMA, ARIZONA, etc.) in all caps.
     
     Args:
         text: Full text from NCMEC PDF
         org_name: Organization name prefix for case IDs (e.g., "ncmec")
+        source_file: Filename to extract report year from (e.g., "2024 - NCMEC Cases.pdf")
         
     Returns:
         List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
     """
+    # Extract report year from filename if available
+    report_year = None
+    if source_file:
+        year_match = re.search(r'(\d{4})', source_file)
+        if year_match:
+            report_year = year_match.group(1)
     cases = []
     
     # List of all US states (all caps for NCMEC format)
@@ -321,16 +376,17 @@ def _batch_ncmec_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
     if not matches:
         # No state headers found - return entire text as one case
         from datetime import datetime
-        year = str(datetime.now().year)
+        id_year = report_year if report_year else str(datetime.now().year)
+        case_date_year = report_year if report_year else str(datetime.now().year)
         return [{
             'case_text': text,
             'month_year': None,
             'month': None,
-            'year': year,
-            'case_id': f'{org_name}_{year}_unknown_001'
+            'year': case_date_year,
+            'case_id': f'{org_name}_{id_year}_001'
         }]
     
-    # Track case numbers per year
+    # Track case numbers per report year (for ID generation)
     year_case_counts = {}
     
     for i, match_info in enumerate(matches):
@@ -357,31 +413,37 @@ def _batch_ncmec_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
         if date_match:
             month = date_match.group(1)
             day = date_match.group(2)
-            year = date_match.group(3)
-            month_year = f"{month} {year}"
+            case_date_year = date_match.group(3)
+            month_year = f"{month} {case_date_year}"
         else:
             # Try to extract just year from case text
             year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
             if year_match:
-                year = year_match.group(0)
+                case_date_year = year_match.group(0)
                 month = None
-                month_year = year
+                month_year = case_date_year
             else:
-                # Fallback: use current year
+                # Fallback: use report year if available, otherwise current year
                 from datetime import datetime
-                year = str(datetime.now().year)
+                case_date_year = report_year if report_year else str(datetime.now().year)
                 month = None
-                month_year = year
+                month_year = case_date_year
         
-        # Track case number per year
-        if year not in year_case_counts:
-            year_case_counts[year] = 0
-        year_case_counts[year] += 1
-        case_number = year_case_counts[year]
+        # Use report year for ID generation to ensure uniqueness across different report files
+        # This prevents conflicts when cases from different report years have the same case date year
+        id_year = report_year if report_year else case_date_year
         
-        # Generate case ID: ncmec_2024_july_001 (or ncmec_2024_unknown_001 if no month)
-        month_str = month.lower() if month else 'unknown'
-        case_id = f"{org_name}_{year}_{month_str}_{case_number:03d}"
+        # Track case number per report year (for ID generation)
+        if id_year not in year_case_counts:
+            year_case_counts[id_year] = 0
+        year_case_counts[id_year] += 1
+        case_number = year_case_counts[id_year]
+        
+        # Generate case ID using report year: ncmec_2024_001
+        case_id = f"{org_name}_{id_year}_{case_number:03d}"
+        
+        # Use case_date_year for case metadata (not ID)
+        year = case_date_year
         
         cases.append({
             'case_text': case_text,
@@ -391,6 +453,210 @@ def _batch_ncmec_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
             'case_id': case_id,
             'state': state  # Store state for reference
         })
+    
+    return cases
+
+
+def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split NCMEC media cases (2022/2023 format) by title → text → link pattern.
+    Each case starts with a title and ends with a URL link.
+    Pattern: title → text → text → link
+    
+    Args:
+        text: Full text from NCMEC PDF
+        org_name: Organization name prefix for case IDs (e.g., "ncmec")
+        source_file: Filename to extract report year from (e.g., "2022 NCMEC.pdf")
+        
+    Returns:
+        List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
+    """
+    # Extract report year from filename if available
+    report_year = None
+    if source_file:
+        year_match = re.search(r'(\d{4})', source_file)
+        if year_match:
+            report_year = year_match.group(1)
+    
+    cases = []
+    
+    # Find all URLs (these mark the end of each case)
+    # URLs can span multiple lines (if ending with dash, continue on next line)
+    # URLs end when we hit: newline → number → newline (the case marker)
+    # Pattern: http://... until we hit \n\d+\n (newline, number, newline)
+    url_pattern = r'https?://[^\n]+(?:\n(?!\s*\d+\s*\n)[^\n]+)*'
+    url_matches = []
+    for match in re.finditer(url_pattern, text):
+        url_text = match.group(0)
+        url_end_pos = match.end()
+        
+        # The URL ends, then we have newline → number → newline → next case
+        # So the case ends at the URL's end position
+        url_matches.append({
+            'pos': url_end_pos,  # End position of URL (start of next case)
+            'url': url_text
+        })
+    
+    if not url_matches:
+        # No URLs found - return entire text as one case
+        from datetime import datetime
+        year = report_year if report_year else str(datetime.now().year)
+        return [{
+            'case_text': clean_artifacts_from_text(text),
+            'month_year': None,
+            'month': None,
+            'year': year,
+            'case_id': f'{org_name}_{year}_001'
+        }]
+    
+    # Track case numbers per year
+    year_case_counts = {}
+    
+    # Process cases: each case is from previous URL end to current URL end
+    # But skip the number marker between cases (newline → number → newline)
+    for i, url_info in enumerate(url_matches):
+        # Start of case: end of previous URL (or start of text for first case)
+        if i == 0:
+            start_pos = 0
+        else:
+            # Skip the number marker between URLs
+            # Pattern: newline → number → newline → next case title
+            prev_url_end = url_matches[i - 1]['pos']
+            # Find the number marker and skip past it
+            # Look for: newline, optional whitespace, number, optional whitespace, newline
+            number_pattern = r'\n\s*(\d+)\s*\n'
+            number_match = re.search(number_pattern, text[prev_url_end:prev_url_end+20])  # Only check first 20 chars
+            if number_match:
+                # Start after the number marker (which includes the trailing newline)
+                start_pos = prev_url_end + number_match.end()
+            else:
+                # No number marker found - might be at end of file or malformed
+                # Start right after previous URL (skip the newline)
+                start_pos = prev_url_end + 1 if prev_url_end < len(text) and text[prev_url_end] == '\n' else prev_url_end
+        
+        # End of case: end of current URL
+        end_pos = url_info['pos']
+        
+        case_text = text[start_pos:end_pos].strip()
+        
+        # Clean artifacts from case text before processing
+        # Keep URLs for NCMEC media cases (they mark the end of each case)
+        case_text = clean_artifacts_from_text(case_text, remove_urls=False)
+        
+        # Skip empty cases
+        if not case_text or len(case_text) < 50:
+            continue
+        
+        # Extract date from case text (for case metadata)
+        months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+        date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
+        date_match = re.search(date_pattern, case_text, re.IGNORECASE)
+        
+        if date_match:
+            month = date_match.group(1)
+            day = date_match.group(2)
+            case_date_year = date_match.group(3)
+            month_year = f"{month} {case_date_year}"
+        else:
+            # Use report year from filename if available, otherwise try to extract from case text
+            if report_year:
+                case_date_year = report_year
+                month = None
+                month_year = case_date_year
+            else:
+                # Try to extract just year from case text (prefer 2022-2024 range)
+                year_match = re.search(r'\b(202[234])\b', case_text)
+                if year_match:
+                    case_date_year = year_match.group(1)
+                    month = None
+                    month_year = case_date_year
+                else:
+                    # Fallback: use current year
+                    from datetime import datetime
+                    case_date_year = str(datetime.now().year)
+                    month = None
+                    month_year = case_date_year
+        
+        # Use report year for ID generation to ensure uniqueness across different report files
+        # This prevents conflicts when cases from different report years have the same case date year
+        id_year = report_year if report_year else case_date_year
+        
+        # Track case number per report year (for ID generation)
+        if id_year not in year_case_counts:
+            year_case_counts[id_year] = 0
+        year_case_counts[id_year] += 1
+        case_number = year_case_counts[id_year]
+        
+        # Generate case ID using report year: org_reportyear_number
+        case_id = f"{org_name}_{id_year}_{case_number:03d}"
+        
+        # Use case_date_year for case metadata (not ID)
+        year = case_date_year
+        
+        cases.append({
+            'case_text': case_text,
+            'month_year': month_year,
+            'month': month,
+            'year': year,
+            'case_id': case_id
+        })
+    
+    # Handle last case: text after the last URL (if any)
+    if url_matches:
+        last_url_end = url_matches[-1]['pos']
+        text_after_last_url = text[last_url_end:].strip()
+        
+        if text_after_last_url and len(text_after_last_url) >= 50:
+            # This is a final case without a URL at the end
+            case_text = clean_artifacts_from_text(text_after_last_url, remove_urls=False)
+            
+            # Extract date from case text
+            months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+            date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
+            date_match = re.search(date_pattern, case_text, re.IGNORECASE)
+            
+            if date_match:
+                month = date_match.group(1)
+                day = date_match.group(2)
+                year = date_match.group(3)
+                month_year = f"{month} {year}"
+            else:
+                # Use report year from filename if available
+                if report_year:
+                    year = report_year
+                    month = None
+                    month_year = year
+                else:
+                    # Try to extract just year from case text (prefer 2022-2024 range)
+                    year_match = re.search(r'\b(202[234])\b', case_text)
+                    if year_match:
+                        year = year_match.group(1)
+                        month = None
+                        month_year = year
+                    else:
+                        # Fallback: use current year
+                        from datetime import datetime
+                        year = str(datetime.now().year)
+                        month = None
+                        month_year = year
+            
+            # Track case number per year
+            if year not in year_case_counts:
+                year_case_counts[year] = 0
+            year_case_counts[year] += 1
+            case_number = year_case_counts[year]
+            
+            # Generate case ID
+            month_str = month.lower() if month else 'unknown'
+            case_id = f"{org_name}_{year}_{month_str}_{case_number:03d}"
+            
+            cases.append({
+                'case_text': case_text,
+                'month_year': month_year,
+                'month': month,
+                'year': year,
+                'case_id': case_id
+            })
     
     return cases
 
@@ -423,7 +689,7 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
             if org_match:
                 org_name = org_match.group(1).lower()
         
-        case_batches = case_batching(extracted_text, org_name=org_name, source=source)
+        case_batches = case_batching(extracted_text, org_name=org_name, source=source, source_file=source_file)
         
         for case_batch in case_batches:
             raw_case = {
@@ -444,8 +710,10 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
             case_with_values = assign_comparison_values(case_features)
             
             from datetime import datetime
-            case_with_values['created_at'] = datetime.now().isoformat()
-            case_with_values['updated_at'] = datetime.now().isoformat()
+            # Use same timestamp for both created_at and updated_at for new cases
+            timestamp = datetime.now().isoformat()
+            case_with_values['created_at'] = timestamp
+            case_with_values['updated_at'] = timestamp
             
             processed_cases.append(case_with_values)
     
@@ -1042,7 +1310,7 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
-    Topics: production, possession, international, multi_state, hands_on, online_digital, family, stranger, pornography
+    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography
     
     Note: physical_abuse is extracted as a severity indicator, not a topic, to avoid redundancy with hands_on.
     """
@@ -1053,7 +1321,7 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     topics = []
     
     # Production vs possession
-    if re.search(r'\b(produced|created|made\s+movies?|created\s+videos?)\b', case_text, re.IGNORECASE):
+    if re.search(r'\b(produced|created|made\s+movies?|created\s+videos?|trade|traded)\b', case_text, re.IGNORECASE):
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting)\b', case_text, re.IGNORECASE):
         topics.append('possession')
@@ -1068,11 +1336,14 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     if state_count > 1:
         topics.append('multi_state')
     
-    # Hands-on vs online-digital
+    # Hands-on vs online-only
+    # Check for sexual assault first (excludes from online_only)
+    has_sexual_assault = re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE)
+    
     if re.search(r'\b(molest|molesting|hands?\s+on|sexually\s+abused|sexually\s+assaulted)\b', case_text, re.IGNORECASE):
         topics.append('hands_on')
-    elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics:
-        topics.append('online_digital')
+    elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics and not has_sexual_assault:
+        topics.append('online_only')
     
     # Family vs stranger
     if re.search(r'\b(father|mother|parent|brother|sister|uncle|aunt|cousin|biological)\b', case_text, re.IGNORECASE):

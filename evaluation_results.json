@@ -1,131 +1,135 @@
 {
   "metadata": {
-    "evaluation_date": "2026-03-08T11:40:31.765205",
-    "total_cases": 95,
+    "evaluation_date": "2026-03-10T22:34:38.060435",
+    "total_cases": 207,
     "database_path": "caselinker.db",
     "system_version": "CaseLinker v1.0"
   },
   "extraction_coverage": {
     "case_topics": {
-      "extracted": 84,
-      "total": 95,
+      "extracted": 186,
+      "total": 207,
       "details": {
-        "pornography": 47,
-        "possession": 31,
-        "hands_on": 28,
-        "online_digital": 20,
-        "family": 6,
-        "production": 6,
+        "pornography": 148,
+        "possession": 76,
+        "hands_on": 34,
+        "online_only": 27,
+        "production": 19,
+        "family": 8,
         "multi_state": 3,
         "international": 3
       },
-      "percentage": 88.42105263157895
+      "percentage": 89.85507246376811
     },
     "severity_indicators": {
-      "extracted": 54,
-      "total": 95,
+      "extracted": 84,
+      "total": 207,
       "details": {
-        "sexual_assault": 50,
-        "under_12": 13,
-        "infant": 8,
+        "sexual_assault": 78,
+        "under_12": 14,
+        "infant": 9,
         "very_young": 6
       },
-      "percentage": 56.84210526315789
+      "percentage": 40.57971014492754
     },
     "prosecution_outcome": {
-      "extracted": 90,
-      "total": 95,
+      "extracted": 196,
+      "total": 207,
       "details": {},
-      "percentage": 94.73684210526315
+      "percentage": 94.68599033816425
     },
     "relationship_to_victim": {
-      "extracted": 95,
-      "total": 95,
+      "extracted": 207,
+      "total": 207,
       "details": {
-        "teacher": 5,
-        "stranger": 84,
+        "stranger": 190,
+        "teacher": 9,
         "mother": 3,
-        "father": 2,
-        "brother": 1
+        "father": 3,
+        "brother": 1,
+        "parent": 1
       },
       "percentage": 100.0
     },
     "platforms_used": {
-      "extracted": 31,
-      "total": 95,
+      "extracted": 67,
+      "total": 207,
       "details": {
-        "online": 23,
-        "chat": 11,
-        "Snapchat": 4,
-        "social media": 3,
-        "Facebook": 2
+        "online": 44,
+        "chat": 17,
+        "social media": 13,
+        "Facebook": 10,
+        "Snapchat": 8,
+        "Discord": 2,
+        "Instagram": 2
       },
-      "percentage": 32.631578947368425
+      "percentage": 32.367149758454104
     },
     "investigation_type": {
-      "extracted": 58,
-      "total": 95,
+      "extracted": 124,
+      "total": 207,
       "details": {
-        "unknown": 36,
+        "unknown": 97,
+        "online": 10,
+        "undercover": 2,
         "proactive": 13,
-        "reactive": 2,
-        "online": 6,
-        "undercover": 1
+        "reactive": 2
       },
-      "percentage": 61.05263157894737
+      "percentage": 59.90338164251207
     },
     "victim_count": {
-      "extracted": 5,
-      "total": 95,
+      "extracted": 7,
+      "total": 207,
       "details": {},
-      "percentage": 5.263157894736842
+      "percentage": 3.3816425120772946
     },
     "perpetrator_demographics": {
-      "extracted": 95,
-      "total": 95,
+      "extracted": 207,
+      "total": 207,
       "details": {
-        "registered_sex_offenders": 6,
+        "registered_sex_offenders": 8,
         "age_distribution": {
-          "mean": 33.857142857142854,
-          "median": 33.0,
+          "mean": 32.8,
+          "median": 32,
           "min": 13,
           "max": 62,
-          "count": 14
+          "count": 15
         }
       },
       "percentage": 100.0
     },
     "evidence_volume": {
-      "extracted": 11,
-      "total": 95,
+      "extracted": 21,
+      "total": 207,
       "details": {},
-      "percentage": 11.578947368421053
+      "percentage": 10.144927536231885
     },
     "agencies_involved": {
-      "extracted": 33,
-      "total": 95,
+      "extracted": 50,
+      "total": 207,
       "details": {
-        "FBI": 12,
+        "ICAC": 21,
+        "FBI": 15,
         "AZICAC": 11,
         "Phoenix Police": 10,
-        "ICAC": 9,
         "Maricopa County": 7,
+        "MCSO": 3,
+        "Colorado": 3,
+        "HSI": 2,
         "California": 2,
-        "MCSO": 2,
+        "DPS": 2,
+        "Texas": 2,
         "Chandler Police": 1,
-        "HSI": 1,
-        "DPS": 1,
         "Buckeye": 1,
-        "Texas": 1,
-        "Colorado": 1
+        "Las Vegas": 1
       },
-      "percentage": 34.73684210526316
+      "percentage": 24.154589371980677
     },
     "date_range": {
-      "extracted": 95,
-      "total": 95,
+      "extracted": 146,
+      "total": 207,
       "details": {},
-      "percentage": 100.0
+      "percentage": 70.53140096618358
     }
   },
   "clustering": {
@@ -133,331 +137,329 @@
     "groups": [
       {
         "name": "General Cluster",
-        "size": 95,
-        "average_similarity": 0.44,
+        "size": 207,
+        "average_similarity": 0.518,
         "min_similarity": 0.0,
         "max_similarity": 1.0,
-        "description": "All 95 cases grouped by Jaccard similarity",
+        "description": "All 207 cases grouped by Jaccard similarity",
         "internal_pairwise_similarities": {
-          "mean": 0.44024232800155255,
-          "std": 0.17267172449137985,
+          "mean": 0.5182327129641459,
+          "std": 0.19663258483258803,
           "min": 0.0,
           "max": 1.0,
-          "count": 4465
+          "count": 21321
         },
         "statistics": {
-          "total_cases": 95,
-          "hands_on": "28/95 (29.5%)",
-          "online_digital": "20/95 (21.1%)",
-          "possession": "31/95 (32.6%)",
-          "production": "6/95 (6.3%)",
-          "infant_victims": "8/95 (8.4%)",
-          "very_young_victims": "6/95 (6.3%)",
-          "registered_sex_offenders": "6/95 (6.3%)",
+          "total_cases": 207,
+          "hands_on": "34/207 (16.4%)",
+          "online_only": "27/207 (13.0%)",
+          "possession": "76/207 (36.7%)",
+          "production": "19/207 (9.2%)",
+          "infant_victims": "9/207 (4.3%)",
+          "very_young_victims": "6/207 (2.9%)",
+          "registered_sex_offenders": "8/207 (3.9%)",
           "top_platforms": {
-            "online": 23,
-            "chat": 11,
-            "Snapchat": 4
+            "online": 44,
+            "chat": 17,
+            "social media": 13
           },
           "top_topics": {
-            "pornography": 47,
-            "possession": 31,
-            "hands_on": 28,
-            "online_digital": 20,
-            "family": 6
+            "pornography": 148,
+            "possession": 76,
+            "hands_on": 34,
+            "online_only": 27,
+            "production": 19
           },
           "top_severity": {
-            "sexual_assault": 50,
-            "under_12": 13,
-            "infant": 8,
+            "sexual_assault": 78,
+            "under_12": 14,
+            "infant": 9,
             "very_young": 6
           }
         }
       },
       {
         "name": "Investigation Cluster",
-        "size": 58,
-        "average_similarity": 0.435,
+        "size": 124,
+        "average_similarity": 0.518,
         "min_similarity": 0.0,
         "max_similarity": 1.0,
-        "description": "All 58 cases involving investigation type (online: 6, proactive: 13, reactive: 2, undercover: 1, unknown: 36)",
+        "description": "All 124 cases involving investigation type (online: 10, proactive: 13, reactive: 2, undercover: 2, unknown: 97)",
         "internal_pairwise_similarities": {
-          "mean": 0.4352161241112875,
-          "std": 0.16376877995409847,
+          "mean": 0.5176993360548146,
+          "std": 0.1972851451415662,
           "min": 0.0,
           "max": 1.0,
-          "count": 1653
+          "count": 7626
         },
         "statistics": {
-          "total_cases": 58,
-          "hands_on": "18/58 (31.0%)",
-          "online_digital": "12/58 (20.7%)",
-          "possession": "20/58 (34.5%)",
-          "production": "3/58 (5.2%)",
-          "infant_victims": "4/58 (6.9%)",
-          "very_young_victims": "4/58 (6.9%)",
-          "registered_sex_offenders": "3/58 (5.2%)",
+          "total_cases": 124,
+          "hands_on": "22/124 (17.7%)",
+          "online_only": "13/124 (10.5%)",
+          "possession": "46/124 (37.1%)",
+          "production": "12/124 (9.7%)",
+          "infant_victims": "5/124 (4.0%)",
+          "very_young_victims": "4/124 (3.2%)",
+          "registered_sex_offenders": "4/124 (3.2%)",
           "top_platforms": {
-            "online": 14,
-            "chat": 8,
-            "Snapchat": 3
+            "online": 23,
+            "chat": 11,
+            "social media": 6
           },
           "top_topics": {
-            "pornography": 24,
-            "possession": 20,
-            "hands_on": 18,
-            "online_digital": 12,
-            "family": 5
+            "pornography": 83,
+            "possession": 46,
+            "hands_on": 22,
+            "online_only": 13,
+            "production": 12
           },
           "top_severity": {
-            "sexual_assault": 33,
-            "under_12": 6,
-            "very_young": 4,
-            "infant": 4
+            "sexual_assault": 47,
+            "under_12": 7,
+            "infant": 5,
+            "very_young": 4
           }
         }
       },
       {
         "name": "Severe Cluster",
-        "size": 52,
-        "average_similarity": 0.499,
+        "size": 81,
+        "average_similarity": 0.542,
         "min_similarity": 0.115,
         "max_similarity": 1.0,
-        "description": "All 52 cases involve severe indicators (infant, very_young, sexual_assault)",
+        "description": "All 81 cases involve severe indicators (infant, very_young, sexual_assault)",
         "internal_pairwise_similarities": {
-          "mean": 0.4992796312314247,
-          "std": 0.1414747970996544,
+          "mean": 0.5421227640669445,
+          "std": 0.14792802281696854,
           "min": 0.11538461538461538,
           "max": 1.0,
-          "count": 1326
+          "count": 3240
         },
         "statistics": {
-          "total_cases": 52,
-          "hands_on": "28/52 (53.8%)",
-          "online_digital": "7/52 (13.5%)",
-          "possession": "21/52 (40.4%)",
-          "production": "6/52 (11.5%)",
-          "infant_victims": "8/52 (15.4%)",
-          "very_young_victims": "6/52 (11.5%)",
-          "registered_sex_offenders": "4/52 (7.7%)",
+          "total_cases": 81,
+          "hands_on": "34/81 (42.0%)",
+          "online_only": "0/81 (0.0%)",
+          "possession": "34/81 (42.0%)",
+          "production": "13/81 (16.0%)",
+          "infant_victims": "9/81 (11.1%)",
+          "very_young_victims": "6/81 (7.4%)",
+          "registered_sex_offenders": "4/81 (4.9%)",
           "top_platforms": {
-            "online": 10,
-            "chat": 5,
-            "Snapchat": 3
+            "online": 18,
+            "chat": 9,
+            "Facebook": 5
           },
           "top_topics": {
-            "hands_on": 28,
-            "possession": 21,
-            "pornography": 21,
-            "online_digital": 7,
-            "production": 6
+            "pornography": 44,
+            "possession": 34,
+            "hands_on": 34,
+            "production": 13,
+            "family": 6
           },
           "top_severity": {
-            "sexual_assault": 50,
+            "sexual_assault": 78,
             "under_12": 11,
-            "infant": 8,
+            "infant": 9,
             "very_young": 6
           }
         }
       },
       {
         "name": "Possession Cluster",
-        "size": 31,
-        "average_similarity": 0.549,
-        "min_similarity": 0.192,
+        "size": 76,
+        "average_similarity": 0.626,
+        "min_similarity": 0.125,
         "max_similarity": 1.0,
-        "description": "All 31 cases involve possession | Most common topic: Possession (31/31 cases) | Most common severity: Sexual Assault (19/31 cases)",
+        "description": "All 76 cases involve possession | Most common topic: Possession (76/76 cases) | Most common severity: Sexual Assault (31/76 cases)",
         "internal_pairwise_similarities": {
-          "mean": 0.5487155174311247,
-          "std": 0.14062157354944915,
-          "min": 0.1923076923076923,
+          "mean": 0.6259876776689083,
+          "std": 0.1746531336724966,
+          "min": 0.125,
           "max": 1.0,
-          "count": 465
+          "count": 2850
         },
         "statistics": {
-          "total_cases": 31,
-          "hands_on": "10/31 (32.3%)",
-          "online_digital": "5/31 (16.1%)",
-          "possession": "31/31 (100.0%)",
-          "production": "1/31 (3.2%)",
-          "infant_victims": "5/31 (16.1%)",
-          "very_young_victims": "5/31 (16.1%)",
-          "registered_sex_offenders": "1/31 (3.2%)",
+          "total_cases": 76,
+          "hands_on": "13/76 (17.1%)",
+          "online_only": "7/76 (9.2%)",
+          "possession": "76/76 (100.0%)",
+          "production": "6/76 (7.9%)",
+          "infant_victims": "6/76 (7.9%)",
+          "very_young_victims": "5/76 (6.6%)",
+          "registered_sex_offenders": "1/76 (1.3%)",
           "top_platforms": {
-            "online": 8,
-            "chat": 2,
-            "social media": 1
+            "online": 17,
+            "social media": 7,
+            "chat": 5
           },
           "top_topics": {
-            "possession": 31,
-            "pornography": 18,
-            "hands_on": 10,
-            "online_digital": 5,
-            "multi_state": 1
+            "possession": 76,
+            "pornography": 60,
+            "hands_on": 13,
+            "online_only": 7,
+            "production": 6
           },
           "top_severity": {
-            "sexual_assault": 19,
+            "sexual_assault": 31,
+            "infant": 6,
             "very_young": 5,
-            "infant": 5,
             "under_12": 4
           }
         }
       },
       {
-        "name": "Online-Digital Cluster",
-        "size": 20,
-        "average_similarity": 0.633,
-        "min_similarity": 0.358,
+        "name": "Online-Only Cluster",
+        "size": 27,
+        "average_similarity": 0.712,
+        "min_similarity": 0.368,
         "max_similarity": 1.0,
-        "description": "All 20 cases are online-digital | Most common platform: online (20/20 cases) | Most common topic: Online Digital (20/20 cases)",
+        "description": "All 27 cases are online-only | Most common platform: online (27/27 cases) | Most common topic: Online Only (27/27 cases)",
         "internal_pairwise_similarities": {
-          "mean": 0.6333770717290708,
-          "std": 0.1393918723905758,
-          "min": 0.35833333333333334,
+          "mean": 0.712319278056157,
+          "std": 0.162267530885257,
+          "min": 0.36764705882352944,
           "max": 1.0,
-          "count": 190
+          "count": 351
         },
         "statistics": {
-          "total_cases": 20,
-          "hands_on": "0/20 (0.0%)",
-          "online_digital": "20/20 (100.0%)",
-          "possession": "5/20 (25.0%)",
-          "production": "0/20 (0.0%)",
-          "infant_victims": "1/20 (5.0%)",
-          "very_young_victims": "0/20 (0.0%)",
-          "registered_sex_offenders": "0/20 (0.0%)",
+          "total_cases": 27,
+          "hands_on": "0/27 (0.0%)",
+          "online_only": "27/27 (100.0%)",
+          "possession": "7/27 (25.9%)",
+          "production": "4/27 (14.8%)",
+          "infant_victims": "0/27 (0.0%)",
+          "very_young_victims": "0/27 (0.0%)",
+          "registered_sex_offenders": "0/27 (0.0%)",
           "top_platforms": {
-            "online": 19,
-            "chat": 9,
-            "social media": 2
+            "online": 26,
+            "chat": 8,
+            "social media": 4
           },
           "top_topics": {
-            "online_digital": 20,
-            "pornography": 8,
-            "possession": 5
+            "online_only": 27,
+            "pornography": 20,
+            "possession": 7,
+            "production": 4
           },
-          "top_severity": {
-            "sexual_assault": 7,
-            "under_12": 1,
-            "infant": 1
-          }
+          "top_severity": {}
         }
       }
     ],
     "overall_similarity_metrics": {
-      "mean": 0.45964111593156637,
-      "std": 0.1688751516859148,
+      "mean": 0.5309082602405778,
+      "std": 0.19390918968789592,
       "min": 0.0,
       "max": 1.0,
-      "total_pairs": 8099
+      "total_pairs": 35388
     },
     "cluster_size_distribution": {
-      "mean": 51.2,
-      "median": 52,
-      "min": 20,
-      "max": 95
+      "mean": 103,
+      "median": 81,
+      "min": 27,
+      "max": 207
     }
   },
   "triage": {
-    "total_cases": 95,
+    "total_cases": 207,
     "score_range": {
       "min": 5.0,
       "max": 10.0,
-      "mean": 6.235578947368421,
-      "median": 6.27,
-      "std": 1.3053545338820944,
-      "q1": 5.06,
-      "q3": 6.87
+      "mean": 5.760628019323671,
+      "median": 5.15,
+      "std": 0.9928081638861899,
+      "q1": 5.05,
+      "q3": 6.24
     },
-    "high_priority_count": 11,
-    "medium_priority_count": 39,
-    "low_priority_count": 45,
+    "high_priority_count": 9,
+    "medium_priority_count": 70,
+    "low_priority_count": 128,
     "high_priority_threshold": 8.0,
     "high_priority_characteristics": {
-      "with_production": 2,
-      "with_infant": 8,
-      "with_multiple_victims": 3,
+      "with_production": 3,
+      "with_infant": 7,
+      "with_multiple_victims": 2,
       "with_rso": 0,
-      "with_hands_on": 9
+      "with_hands_on": 8
     },
     "score_distribution": {
       "high_priority": {
-        "count": 11,
-        "percentage": 11.578947368421053
+        "count": 9,
+        "percentage": 4.3478260869565215
       },
       "medium_priority": {
-        "count": 39,
-        "percentage": 41.05263157894737
+        "count": 70,
+        "percentage": 33.81642512077295
       },
       "low_priority": {
-        "count": 45,
-        "percentage": 47.368421052631575
+        "count": 128,
+        "percentage": 61.83574879227053
       }
     },
     "top_10_priority_cases": [
       {
-        "case_id": "azicac_2014_january_001",
+        "case_id": "azicac_2014_001",
         "priority_score": 10.0,
         "severity_indicators": [
           "infant",
-          "sexual_assault",
-          "under_12"
+          "under_12",
+          "sexual_assault"
         ],
         "victim_count": 3,
         "case_topics": [
+          "production",
+          "pornography",
           "possession",
-          "hands_on",
-          "pornography"
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2014_may_006",
-        "priority_score": 9.89,
+        "case_id": "azicac_2014_006",
+        "priority_score": 9.44,
         "severity_indicators": [
           "infant",
-          "sexual_assault",
-          "very_young"
+          "very_young",
+          "sexual_assault"
         ],
         "victim_count": null,
         "case_topics": [
           "possession",
-          "hands_on",
-          "pornography"
+          "pornography",
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2014_may_005",
-        "priority_score": 9.71,
+        "case_id": "azicac_2014_005",
+        "priority_score": 9.28,
         "severity_indicators": [
           "infant",
-          "sexual_assault",
-          "very_young"
+          "very_young",
+          "sexual_assault"
         ],
         "victim_count": null,
         "case_topics": [
           "possession",
-          "hands_on",
-          "pornography"
+          "pornography",
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2014_june_007",
-        "priority_score": 9.2,
+        "case_id": "azicac_2014_007",
+        "priority_score": 8.81,
         "severity_indicators": [
-          "sexual_assault",
-          "very_young"
+          "very_young",
+          "sexual_assault"
         ],
         "victim_count": 6,
         "case_topics": [
-          "possession",
-          "hands_on",
+          "production",
           "pornography",
-          "production"
+          "possession",
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2014_december_013",
-        "priority_score": 8.8,
+        "case_id": "azicac_2014_013",
+        "priority_score": 8.45,
         "severity_indicators": [
           "infant",
           "sexual_assault"
@@ -469,48 +471,48 @@
         ]
       },
       {
-        "case_id": "azicac_2012_november_011",
-        "priority_score": 8.77,
+        "case_id": "azicac_2012_011",
+        "priority_score": 8.42,
         "severity_indicators": [
-          "sexual_assault",
+          "very_young",
           "under_12",
-          "very_young"
+          "sexual_assault"
         ],
         "victim_count": null,
         "case_topics": [
-          "hands_on",
-          "production"
+          "production",
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2012_december_012",
-        "priority_score": 8.73,
+        "case_id": "azicac_2012_012",
+        "priority_score": 8.39,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
         "victim_count": null,
         "case_topics": [
-          "hands_on",
-          "pornography"
+          "pornography",
+          "hands_on"
         ]
       },
       {
-        "case_id": "azicac_2011_november_009",
-        "priority_score": 8.63,
+        "case_id": "azicac_2011_009",
+        "priority_score": 8.3,
         "severity_indicators": [
           "infant",
           "sexual_assault"
         ],
         "victim_count": null,
         "case_topics": [
-          "hands_on",
-          "family"
+          "family",
+          "hands_on"
         ]
       },
       {
-        "case_id": "ncmec_2024_october_005",
-        "priority_score": 8.54,
+        "case_id": "ncmec_2024_005",
+        "priority_score": 8.18,
         "severity_indicators": [
           "infant",
           "sexual_assault"
@@ -518,13 +520,12 @@
         "victim_count": null,
         "case_topics": [
           "possession",
-          "online_digital",
           "pornography"
         ]
       },
       {
-        "case_id": "azicac_2013_february_002",
-        "priority_score": 8.23,
+        "case_id": "azicac_2013_002",
+        "priority_score": 7.94,
         "severity_indicators": [
           "infant",
           "sexual_assault"
@@ -545,8 +546,8 @@
             "category": "case_topics"
           }
         ],
-        "matches": 31,
-        "percentage": 32.631578947368425
+        "matches": 76,
+        "percentage": 36.71497584541063
       },
       {
         "query": "Single tag: production",
@@ -556,8 +557,8 @@
             "category": "case_topics"
           }
         ],
-        "matches": 6,
-        "percentage": 6.315789473684211
+        "matches": 19,
+        "percentage": 9.178743961352657
       },
       {
         "query": "Single tag: infant",
@@ -567,8 +568,8 @@
             "category": "severity_indicators"
           }
         ],
-        "matches": 8,
-        "percentage": 8.421052631578947
+        "matches": 9,
+        "percentage": 4.3478260869565215
       },
       {
         "query": "Multi-tag: possession AND RSO",
@@ -583,7 +584,7 @@
           }
         ],
         "matches": 1,
-        "percentage": 1.0526315789473684
+        "percentage": 0.4830917874396135
       },
       {
         "query": "Multi-tag: production AND hands_on",
@@ -597,8 +598,8 @@
             "category": "case_topics"
           }
         ],
-        "matches": 6,
-        "percentage": 6.315789473684211
+        "matches": 11,
+        "percentage": 5.314009661835748
       },
       {
         "query": "Multi-tag: family AND very_young",
@@ -613,7 +614,7 @@
           }
         ],
         "matches": 1,
-        "percentage": 1.0526315789473684
+        "percentage": 0.4830917874396135
       }
     ],
     "filtering_capabilities": {
@@ -626,245 +627,376 @@
     "sample_size": 50,
     "total_pairs_analyzed": 1225,
     "similarity_statistics": {
-      "mean": 0.40009756149197323,
-      "median": 0.375,
-      "std": 0.17757092640925112,
-      "min": 0.0,
+      "mean": 0.631211000417483,
+      "median": 0.6071428571428572,
+      "std": 0.2036750106951943,
+      "min": 0.23529411764705885,
       "max": 1.0
     },
     "similarity_distribution": {
       "very_high_0.7+": {
-        "count": 69,
-        "percentage": 5.63265306122449
+        "count": 434,
+        "percentage": 35.42857142857142
       },
       "high_0.5-0.7": {
-        "count": 265,
-        "percentage": 21.63265306122449
+        "count": 496,
+        "percentage": 40.48979591836735
       },
       "medium_0.3-0.5": {
-        "count": 545,
-        "percentage": 44.48979591836735
+        "count": 274,
+        "percentage": 22.36734693877551
       },
       "low_<0.3": {
-        "count": 346,
-        "percentage": 28.244897959183675
+        "count": 21,
+        "percentage": 1.7142857142857144
       }
     }
   },
   "insights": {
     "platform_analysis": {
       "top_platforms": {
-        "online": 23,
-        "chat": 11,
-        "Snapchat": 4,
-        "social media": 3,
-        "Facebook": 2
+        "online": 44,
+        "chat": 17,
+        "social media": 13,
+        "Facebook": 10,
+        "Snapchat": 8,
+        "Discord": 2,
+        "Instagram": 2
       },
-      "total_platform_mentions": 43,
-      "unique_platforms": 5,
-      "cases_with_platforms": 31
+      "total_platform_mentions": 96,
+      "unique_platforms": 7,
+      "cases_with_platforms": 67
     },
     "severity_distribution": {
-      "production": 6,
+      "production": 19,
       "very_young": 6,
-      "infant": 8,
-      "sexual_assault": 50,
+      "infant": 9,
+      "sexual_assault": 78,
       "under_10": 0,
-      "total_cases": 95,
+      "total_cases": 207,
       "all_severity_indicators": {
-        "sexual_assault": 50,
-        "under_12": 13,
-        "infant": 8,
+        "infant": 9,
+        "sexual_assault": 78,
+        "under_12": 14,
         "very_young": 6
       }
     },
     "case_topics": {
-      "family": 6,
-      "stranger": 89,
-      "production": 6,
-      "possession": 31,
-      "hands_on": 28,
+      "family": 8,
+      "stranger": 199,
+      "production": 19,
+      "possession": 76,
+      "hands_on": 34,
       "multi_state": 3,
-      "total_cases": 95,
+      "total_cases": 207,
       "all_topics": {
-        "possession": 31,
-        "online_digital": 20,
-        "pornography": 47,
-        "hands_on": 28,
-        "family": 6,
-        "production": 6,
+        "possession": 76,
+        "pornography": 148,
+        "production": 19,
+        "online_only": 27,
+        "hands_on": 34,
+        "family": 8,
         "multi_state": 3,
         "international": 3
       }
     },
     "relationship_analysis": {
       "distribution": {
-        "teacher": 5,
-        "stranger": 84,
+        "stranger": 190,
+        "teacher": 9,
         "mother": 3,
-        "father": 2,
-        "brother": 1
+        "father": 3,
+        "brother": 1,
+        "parent": 1
       },
       "family_vs_stranger": {
-        "family": 6,
-        "stranger": 89,
-        "family_percentage": 6.315789473684211,
-        "stranger_percentage": 93.6842105263158
+        "family": 8,
+        "stranger": 199,
+        "family_percentage": 3.864734299516908,
+        "stranger_percentage": 96.1352657004831
       }
     },
     "pattern_detection": {
-      "registered_sex_offenders": 6,
-      "rso_percentage": 6.315789473684211,
-      "total_cases": 95
+      "registered_sex_offenders": 8,
+      "rso_percentage": 3.864734299516908,
+      "total_cases": 207
     },
     "investigation_analysis": {
       "distribution": {
-        "unknown": 36,
+        "unknown": 97,
+        "online": 10,
+        "undercover": 2,
         "proactive": 13,
-        "reactive": 2,
-        "online": 6,
-        "undercover": 1
+        "reactive": 2
       },
-      "total_with_investigation_type": 58
+      "total_with_investigation_type": 124
     },
     "automated_insights": {
       "insights": [
         {
           "type": "platform_analysis",
           "title": "Most Common Platform",
-          "description": "'online' appears in 23 cases (24.2% of all cases)",
+          "description": "'online' appears in 44 cases (21.3% of all cases)",
           "severity": "info",
           "cases": [
-            "ncmec_2024_unknown_042",
-            "azicac_2011_january_001",
-            "azicac_2011_april_004",
-            "azicac_2011_august_007",
-            "azicac_2011_september_008",
-            "azicac_2011_december_010",
-            "azicac_2012_may_005",
-            "azicac_2013_july_007",
-            "azicac_2014_june_007",
-            "azicac_2014_july_008",
-            "azicac_2014_december_013",
-            "ncmec_2024_april_035",
-            "ncmec_2024_may_023",
-            "ncmec_2024_may_041",
-            "ncmec_2024_june_008",
-            "ncmec_2024_july_028",
-            "ncmec_2024_july_043",
-            "ncmec_2024_august_020",
-            "ncmec_2024_september_018",
-            "ncmec_2024_october_005",
-            "ncmec_2024_october_047",
-            "ncmec_2024_november_027",
-            "ncmec_2024_december_011"
+            "ncmec_2022_007",
+            "ncmec_2022_011",
+            "ncmec_2022_018",
+            "ncmec_2022_023",
+            "ncmec_2022_033",
+            "ncmec_2022_042",
+            "ncmec_2023_005",
+            "ncmec_2023_015",
+            "ncmec_2023_017",
+            "ncmec_2023_025",
+            "ncmec_2023_unknown_055",
+            "ncmec_2024_042",
+            "azicac_2011_001",
+            "azicac_2011_004",
+            "azicac_2011_007",
+            "azicac_2011_008",
+            "azicac_2011_010",
+            "azicac_2012_005",
+            "azicac_2013_007",
+            "azicac_2014_007",
+            "azicac_2014_008",
+            "azicac_2014_013",
+            "ncmec_2022_002",
+            "ncmec_2022_031",
+            "ncmec_2022_051",
+            "ncmec_2022_021",
+            "ncmec_2023_038",
+            "ncmec_2023_033",
+            "ncmec_2023_016",
+            "ncmec_2023_035",
+            "ncmec_2023_051",
+            "ncmec_2023_009",
+            "ncmec_2024_035",
+            "ncmec_2024_023",
+            "ncmec_2024_041",
+            "ncmec_2024_008",
+            "ncmec_2024_028",
+            "ncmec_2024_043",
+            "ncmec_2024_020",
+            "ncmec_2024_018",
+            "ncmec_2024_005",
+            "ncmec_2024_047",
+            "ncmec_2024_027",
+            "ncmec_2024_011"
           ]
         },
         {
           "type": "severity_analysis",
           "title": "High Severity Cases",
-          "description": "14 cases involve high-severity indicators (infant, very young)",
+          "description": "15 cases involve high-severity indicators (infant, very young)",
           "severity": "warning",
           "cases": [
-            "azicac_2011_november_009",
-            "azicac_2012_november_011",
-            "azicac_2012_december_012",
-            "azicac_2013_february_002",
-            "azicac_2013_march_003",
-            "azicac_2013_april_004",
-            "azicac_2014_january_001",
-            "azicac_2014_may_005",
-            "azicac_2014_may_006",
-            "azicac_2014_june_007",
-            "azicac_2014_december_013",
-            "ncmec_2024_october_005"
+            "ncmec_2022_004",
+            "azicac_2011_009",
+            "azicac_2012_011",
+            "azicac_2012_012",
+            "azicac_2013_002",
+            "azicac_2013_003",
+            "azicac_2013_004",
+            "azicac_2014_001",
+            "azicac_2014_005",
+            "azicac_2014_006",
+            "azicac_2014_007",
+            "azicac_2014_013",
+            "ncmec_2024_005"
           ]
         },
         {
           "type": "topic_analysis",
           "title": "Most Common Case Topic",
-          "description": "'Pornography' appears in 47 cases",
+          "description": "'Pornography' appears in 148 cases",
           "severity": "info",
           "cases": [
-            "ncmec_2025_unknown_001",
-            "azicac_2011_january_001",
-            "azicac_2012_february_002",
-            "azicac_2012_march_003",
-            "azicac_2012_june_006",
-            "azicac_2012_december_012",
-            "azicac_2013_january_001",
-            "azicac_2014_january_001",
-            "azicac_2014_april_004",
-            "azicac_2014_may_005",
-            "azicac_2014_may_006",
-            "azicac_2014_june_007",
-            "azicac_2014_august_009",
-            "azicac_2014_november_012",
-            "ncmec_2024_january_021",
-            "ncmec_2024_february_022",
-            "ncmec_2024_february_033",
-            "ncmec_2024_february_034",
-            "ncmec_2024_march_019",
-            "ncmec_2024_march_030",
-            "ncmec_2024_march_031",
-            "ncmec_2024_april_032",
-            "ncmec_2024_may_002",
-            "ncmec_2024_may_023",
-            "ncmec_2024_may_041",
-            "ncmec_2024_may_046",
-            "ncmec_2024_june_008",
-            "ncmec_2024_june_026",
-            "ncmec_2024_july_001",
-            "ncmec_2024_july_003",
-            "ncmec_2024_july_006",
-            "ncmec_2024_july_007",
-            "ncmec_2024_july_012",
-            "ncmec_2024_july_016",
-            "ncmec_2024_july_036",
-            "ncmec_2024_august_009",
-            "ncmec_2024_august_020",
-            "ncmec_2024_august_025",
-            "ncmec_2024_august_037",
-            "ncmec_2024_september_018",
-            "ncmec_2024_september_038",
-            "ncmec_2024_september_039",
-            "ncmec_2024_october_005",
-            "ncmec_2024_october_044",
-            "ncmec_2024_october_047",
-            "ncmec_2024_november_024",
-            "ncmec_2024_december_011"
+            "ncmec_2022_001",
+            "ncmec_2022_003",
+            "ncmec_2022_004",
+            "ncmec_2022_007",
+            "ncmec_2022_009",
+            "ncmec_2022_010",
+            "ncmec_2022_011",
+            "ncmec_2022_013",
+            "ncmec_2022_019",
+            "ncmec_2022_022",
+            "ncmec_2022_023",
+            "ncmec_2022_025",
+            "ncmec_2022_026",
+            "ncmec_2022_028",
+            "ncmec_2022_030",
+            "ncmec_2022_032",
+            "ncmec_2022_033",
+            "ncmec_2022_035",
+            "ncmec_2022_039",
+            "ncmec_2022_040",
+            "ncmec_2022_041",
+            "ncmec_2022_042",
+            "ncmec_2022_043",
+            "ncmec_2022_044",
+            "ncmec_2022_046",
+            "ncmec_2022_048",
+            "ncmec_2022_050",
+            "ncmec_2022_053",
+            "ncmec_2022_054",
+            "ncmec_2022_057",
+            "ncmec_2023_001",
+            "ncmec_2023_008",
+            "ncmec_2023_010",
+            "ncmec_2023_014",
+            "ncmec_2023_017",
+            "ncmec_2023_019",
+            "ncmec_2023_020",
+            "ncmec_2023_021",
+            "ncmec_2023_022",
+            "ncmec_2023_025",
+            "ncmec_2023_026",
+            "ncmec_2023_028",
+            "ncmec_2023_029",
+            "ncmec_2023_031",
+            "ncmec_2023_041",
+            "ncmec_2023_043",
+            "ncmec_2023_044",
+            "ncmec_2023_045",
+            "ncmec_2023_046",
+            "ncmec_2023_049",
+            "ncmec_2023_unknown_055",
+            "ncmec_2024_048",
+            "azicac_2011_001",
+            "azicac_2012_002",
+            "azicac_2012_003",
+            "azicac_2012_006",
+            "azicac_2012_012",
+            "azicac_2013_001",
+            "azicac_2014_001",
+            "azicac_2014_004",
+            "azicac_2014_005",
+            "azicac_2014_006",
+            "azicac_2014_007",
+            "azicac_2014_009",
+            "azicac_2014_012",
+            "ncmec_2022_056",
+            "ncmec_2022_014",
+            "ncmec_2022_015",
+            "ncmec_2022_002",
+            "ncmec_2022_016",
+            "ncmec_2022_034",
+            "ncmec_2023_013",
+            "ncmec_2022_006",
+            "ncmec_2022_012",
+            "ncmec_2022_017",
+            "ncmec_2022_037",
+            "ncmec_2022_031",
+            "ncmec_2022_049",
+            "ncmec_2022_005",
+            "ncmec_2022_008",
+            "ncmec_2022_036",
+            "ncmec_2022_038",
+            "ncmec_2022_020",
+            "ncmec_2022_045",
+            "ncmec_2022_024",
+            "ncmec_2022_029",
+            "ncmec_2022_047",
+            "ncmec_2022_027",
+            "ncmec_2022_051",
+            "ncmec_2022_021",
+            "ncmec_2022_055",
+            "ncmec_2023_034",
+            "ncmec_2023_003",
+            "ncmec_2023_012",
+            "ncmec_2023_052",
+            "ncmec_2023_004",
+            "ncmec_2023_024",
+            "ncmec_2023_006",
+            "ncmec_2023_030",
+            "ncmec_2023_038",
+            "ncmec_2023_050",
+            "ncmec_2023_027",
+            "ncmec_2023_032",
+            "ncmec_2023_033",
+            "ncmec_2023_011",
+            "ncmec_2023_037",
+            "ncmec_2023_042",
+            "ncmec_2023_048",
+            "ncmec_2023_054",
+            "ncmec_2023_016",
+            "ncmec_2023_023",
+            "ncmec_2023_047",
+            "ncmec_2023_053",
+            "ncmec_2023_040",
+            "ncmec_2023_051",
+            "ncmec_2024_021",
+            "ncmec_2024_022",
+            "ncmec_2024_033",
+            "ncmec_2024_034",
+            "ncmec_2024_019",
+            "ncmec_2024_030",
+            "ncmec_2024_031",
+            "ncmec_2024_032",
+            "ncmec_2024_002",
+            "ncmec_2024_023",
+            "ncmec_2024_041",
+            "ncmec_2024_046",
+            "ncmec_2024_008",
+            "ncmec_2024_026",
+            "ncmec_2024_001",
+            "ncmec_2024_003",
+            "ncmec_2024_006",
+            "ncmec_2024_007",
+            "ncmec_2024_012",
+            "ncmec_2024_016",
+            "ncmec_2024_036",
+            "ncmec_2024_009",
+            "ncmec_2024_020",
+            "ncmec_2024_025",
+            "ncmec_2024_037",
+            "ncmec_2024_018",
+            "ncmec_2024_038",
+            "ncmec_2024_039",
+            "ncmec_2024_005",
+            "ncmec_2024_044",
+            "ncmec_2024_047",
+            "ncmec_2024_024",
+            "ncmec_2024_011"
           ]
         }
       ],
       "patterns": [
         {
           "pattern": "repeat_offenders",
-          "description": "6 cases (6.3%) involve registered sex offenders",
-          "count": 6
+          "description": "8 cases (3.9%) involve registered sex offenders",
+          "count": 8
         },
         {
           "pattern": "relationship_pattern",
-          "description": "Stranger cases (89) outnumber family-related cases (6)",
-          "count": 89
+          "description": "Stranger cases (199) outnumber family-related cases (8)",
+          "count": 199
+        },
+        {
+          "pattern": "investigation_focus",
+          "description": "97 cases (46.9%) involve 'unknown' investigations, indicating a focus area",
+          "count": 97
         }
       ],
       "trends": [
         {
           "trend": "temporal_span",
-          "description": "Cases span 5083 days (93 cases over 13.9 years)",
+          "description": "Cases span 5083 days (146 cases over 13.9 years)",
           "start_date": "2011-01-01T00:00:00",
           "end_date": "2024-12-01T00:00:00"
         },
         {
           "trend": "investigation_type",
-          "description": "Most common investigation type: 'unknown' (36 cases)",
-          "count": 36
+          "description": "Most common investigation type: 'unknown' (97 cases)",
+          "count": 97
         }
       ],
       "summary": {
-        "total_cases": 95,
+        "total_cases": 207,
         "total_insights": 3,
-        "total_patterns": 2,
+        "total_patterns": 3,
         "total_trends": 2
       }
     }
@@ -872,71 +1004,71 @@
   "keywords": {
     "top_keywords": [
       "child",
-      "sexual",
-      "suspect",
       "man",
       "arrested",
-      "investigation",
-      "children",
-      "police",
-      "images",
       "pornography",
-      "old",
-      "crimes",
-      "exploitation",
+      "sexual",
+      "police",
       "county",
-      "investigators",
-      "year",
-      "during",
-      "against",
-      "internet",
-      "being"
+      "children",
+      "investigation",
+      "exploitation",
+      "charged",
+      "images",
+      "suspect",
+      "possession",
+      "crimes",
+      "counts",
+      "according",
+      "charges",
+      "after",
+      "investigators"
     ],
     "keyword_frequencies": {
-      "child": 68,
-      "sexual": 43,
-      "suspect": 42,
-      "man": 38,
-      "arrested": 36,
-      "investigation": 35,
-      "children": 34,
-      "police": 33,
-      "images": 33,
-      "pornography": 26,
-      "old": 26,
-      "crimes": 25,
-      "exploitation": 24,
-      "county": 24,
-      "investigators": 24,
-      "year": 23,
-      "during": 21,
-      "against": 21,
-      "internet": 20,
-      "being": 20
+      "child": 172,
+      "man": 111,
+      "arrested": 93,
+      "pornography": 84,
+      "sexual": 83,
+      "police": 78,
+      "county": 71,
+      "children": 63,
+      "investigation": 55,
+      "exploitation": 48,
+      "charged": 47,
+      "images": 45,
+      "suspect": 44,
+      "possession": 42,
+      "crimes": 42,
+      "counts": 37,
+      "according": 35,
+      "charges": 35,
+      "after": 35,
+      "investigators": 32
     },
-    "total_keywords_extracted": 1900,
-    "unique_keywords": 631,
+    "total_keywords_extracted": 4140,
+    "unique_keywords": 1185,
     "average_keywords_per_case": 20,
-    "cases_with_text": 95
+    "cases_with_text": 207
   },
   "data_quality": {
-    "average_completeness": 65.05263157894737,
+    "average_completeness": 60.14492753623188,
     "completeness_distribution": {
-      "high_80-100": 17,
-      "medium_50-80": 77,
-      "low_<50": 1
+      "high_80-100": 18,
+      "medium_50-80": 170,
+      "low_<50": 19
     },
-    "total_cases": 95
+    "total_cases": 207
   },
   "system_performance": {
-    "clustering_time": 0.03685402870178223,
-    "clustering_cases_per_second": 2577.737179528649,
-    "triage_time": 0.0001709461212158203,
-    "triage_cases_per_second": 555730.6555090656,
-    "insights_time": 0.00012636184692382812,
-    "insights_cases_per_second": 751809.2075471698,
-    "full_analysis_time": 0.0371401309967041,
-    "full_analysis_cases_per_second": 2557.880046476694
+    "clustering_time": 0.14856290817260742,
+    "clustering_cases_per_second": 1393.349137723513,
+    "triage_time": 0.0003681182861328125,
+    "triage_cases_per_second": 562319.2538860104,
+    "insights_time": 0.00022792816162109375,
+    "insights_cases_per_second": 908180.8870292887,
+    "full_analysis_time": 0.15433382987976074,
+    "full_analysis_cases_per_second": 1341.2483845004735
   },
   "use_case_examples": {
     "use_case_1_high_priority_triage": {
@@ -945,53 +1077,54 @@
       "results_count": 3,
       "example_cases": [
         {
-          "case_id": "azicac_2014_january_001",
+          "case_id": "azicac_2014_001",
           "priority_score": 10.0,
           "key_characteristics": {
             "severity": [
               "infant",
-              "sexual_assault",
-              "under_12"
+              "under_12",
+              "sexual_assault"
             ],
             "victim_count": 3,
             "topics": [
+              "production",
+              "pornography",
               "possession",
-              "hands_on",
-              "pornography"
+              "hands_on"
             ]
           }
         },
         {
-          "case_id": "azicac_2014_may_006",
-          "priority_score": 9.89,
+          "case_id": "azicac_2014_006",
+          "priority_score": 9.44,
           "key_characteristics": {
             "severity": [
               "infant",
-              "sexual_assault",
-              "very_young"
+              "very_young",
+              "sexual_assault"
             ],
             "victim_count": null,
             "topics": [
               "possession",
-              "hands_on",
-              "pornography"
+              "pornography",
+              "hands_on"
             ]
           }
         },
         {
-          "case_id": "azicac_2014_may_005",
-          "priority_score": 9.71,
+          "case_id": "azicac_2014_005",
+          "priority_score": 9.28,
           "key_characteristics": {
             "severity": [
               "infant",
-              "sexual_assault",
-              "very_young"
+              "very_young",
+              "sexual_assault"
             ],
             "victim_count": null,
             "topics": [
               "possession",
-              "hands_on",
-              "pornography"
+              "pornography",
+              "hands_on"
             ]
           }
         }
@@ -1003,7 +1136,7 @@
       "results_count": 1,
       "example_cases": [
         {
-          "case_id": "azicac_2011_june_005",
+          "case_id": "azicac_2011_005",
           "relationship": "stranger",
           "platforms": []
         }
@@ -1012,11 +1145,11 @@
     "use_case_3_production_case_analysis": {
       "description": "Analyze all production cases",
       "query": "production",
-      "results_count": 6,
+      "results_count": 19,
       "statistics": {
-        "with_hands_on": 6,
-        "with_infant": 0,
-        "with_multiple_victims": 2
+        "with_hands_on": 11,
+        "with_infant": 1,
+        "with_multiple_victims": 4
       }
     }
   }

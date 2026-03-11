@@ -16,7 +16,6 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import warnings
 import logging
-import sys
 import re
 
 try:

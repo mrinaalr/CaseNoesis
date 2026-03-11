@@ -40,7 +40,6 @@ class MLModelManager:
         self.enable_ml = enable_ml
         self.models: Dict[str, Any] = {}
         self.model_status: Dict[str, bool] = {}
-        self._initialized = False
         
         if enable_ml:
             self._check_dependencies()

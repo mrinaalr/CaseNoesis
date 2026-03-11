@@ -122,7 +122,7 @@ Case:
   
   # Content Classification
   - severity_indicators: [str] (infant, rape, very_young, under_10, production)
-  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_digital, family, stranger, pornography)
+  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography)
   - severity_phrases: [str] (dangerous, stated, told, continue, attacked, out_of_control)  # Non-traditional severity indicators
   
   # Raw/Original Data
@@ -181,7 +181,7 @@ Case:
   - Multi-factor priority scoring (normalized to 5-10 scale):
     - Severity indicators (35%): infant, rape, very_young, production, etc.
     - Victim count (30%): Aggressive scoring for multiple victims
-    - Case type (25%): production, hands_on, possession, online_digital
+    - Case type (25%): production, hands_on, possession, online_only
     - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
     - Evidence volume (10%): images, videos, storage size
     - Registered sex offender (10%): Repeat offender status
