@@ -6,7 +6,7 @@ This class is the "intersection" layer that combines:
 - ML Processing Layer: NER / semantic extraction (ages, dates, orgs, locations, etc.)
 
 Merge logic:
-- Ages: NER ages merged (age > 18 → perpetrator_age, age <= 18 → case_demographics.ages)
+    - Ages: NER ages merged (age >= 18 → perpetrator_age, age <= 17 → case_demographics.ages)
 - Pattern processing takes precedence when both sources have data
 - NER supplements missing data from pattern processing
 - Raw NER entities stored in ml_features.ner_entities for reference/debugging
@@ -21,7 +21,7 @@ class MergeProcessing:
     Intersection class between Pattern Processing and ML (NER).
 
     Merge behavior:
-    - Ages: Merges NER ages (age > 18 → perpetrator_age list, age <= 18 → victim ages)
+    - Ages: Merges NER ages (age >= 18 → perpetrator_age list, age <= 17 → victim ages)
     - Pattern processing takes precedence when both sources have data
     - NER supplements missing data from pattern processing
     - Raw NER entities stored in ml_features.ner_entities for reference
@@ -51,7 +51,7 @@ class MergeProcessing:
 
         Returns:
             Dict with pattern_features merged with NER entities:
-            - Ages: NER ages merged (age > 18 → perpetrator_age list, age <= 18 → case_demographics.ages)
+            - Ages: NER ages merged (age >= 18 → perpetrator_age list, age <= 17 → case_demographics.ages)
             - Organizations: ALL NER organizations stored in 'organizations' field
             - Agencies: Law enforcement agencies filtered and merged into 'agencies_involved'
             - Dates: NER dates stored as additional_event_dates
@@ -85,8 +85,8 @@ class MergeProcessing:
         Merge ages from NER into pattern features.
         
         Logic:
-        - Age > 18 → perpetrator_age (if not already set by pattern)
-        - Age <= 18 → case_demographics.ages (victim ages)
+        - Age >= 18 → perpetrator_age (if not already set by pattern)
+        - Age <= 17 → case_demographics.ages (victim ages)
         - Pattern ages take precedence if they exist
         
         Args:
@@ -130,18 +130,18 @@ class MergeProcessing:
         if isinstance(case_demo, dict):
             pattern_victim_ages = case_demo.get('ages', [])
         
-        # Filter pattern victim ages to exclude ages > 18 (they should be perpetrator ages)
-        pattern_victim_ages_filtered = [age for age in pattern_victim_ages if age <= 18]
+        # Filter pattern victim ages to exclude ages >= 18 (they should be perpetrator ages)
+        pattern_victim_ages_filtered = [age for age in pattern_victim_ages if age <= 17]
         
-        # Check if pattern had any ages > 18 that should be perpetrator ages
-        pattern_perp_candidates = [age for age in pattern_victim_ages if age > 18]
+        # Check if pattern had any ages >= 18 that should be perpetrator ages
+        pattern_perp_candidates = [age for age in pattern_victim_ages if age >= 18]
         
         # Combine all pattern perpetrator ages
         all_pattern_perp_ages = list(set(pattern_perp_ages + pattern_perp_candidates))
         
-        # Separate NER ages into perpetrator (age > 18) and victim (age <= 18)
-        ner_perp_ages = [age for age in ner_age_ints if age > 18]
-        ner_victim_ages = [age for age in ner_age_ints if age <= 18]
+        # Separate NER ages into perpetrator (age >= 18) and victim (age <= 17)
+        ner_perp_ages = [age for age in ner_age_ints if age >= 18]
+        ner_victim_ages = [age for age in ner_age_ints if age <= 17]
         
         # Merge all perpetrator ages: combine pattern and NER, deduplicate
         all_perp_ages = list(set(all_pattern_perp_ages + ner_perp_ages))
@@ -153,21 +153,21 @@ class MergeProcessing:
         # Merge victim ages: combine filtered pattern and NER, deduplicate
         all_victim_ages = list(set(pattern_victim_ages_filtered + ner_victim_ages))
         
-        # Final safety check: remove any ages that match perpetrator ages AND ensure all are <= 18
+        # Final safety check: remove any ages that match perpetrator ages AND ensure all are <= 17
         if all_perp_ages:
             all_victim_ages = [age for age in all_victim_ages if age not in all_perp_ages]
         
-        # Double-check: remove any ages > 18 (shouldn't happen but safety net)
-        all_victim_ages = [age for age in all_victim_ages if age <= 18]
+        # Double-check: remove any ages >= 18 (shouldn't happen but safety net)
+        all_victim_ages = [age for age in all_victim_ages if age <= 17]
         all_victim_ages.sort()
         
-        # Update case_demographics - ensure no ages > 18 and no duplicates with perpetrator_age
+        # Update case_demographics - ensure no ages >= 18 and no duplicates with perpetrator_age
         if not isinstance(case_demo, dict):
             case_demo = {}
         
         # Final assignment - always overwrite with filtered victim ages
-        # One more check: ensure no ages > 18 and no duplicates with perpetrator ages
-        final_victim_ages = [age for age in all_victim_ages if age <= 18]
+        # One more check: ensure no ages >= 18 and no duplicates with perpetrator ages
+        final_victim_ages = [age for age in all_victim_ages if age <= 17]
         if all_perp_ages:
             final_victim_ages = [age for age in final_victim_ages if age not in all_perp_ages]
         

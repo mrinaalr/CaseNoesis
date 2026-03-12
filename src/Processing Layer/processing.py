@@ -52,7 +52,7 @@ extract_topics = pattern_processing.extract_topics
 extract_severity_phrases = pattern_processing.extract_severity_phrases
 
 # Import merge_processing intersection class
-_merge_path = Path(__file__).parent / "merge_procesing.py"
+_merge_path = Path(__file__).parent / "merge_processing.py"
 _merge_spec = importlib.util.spec_from_file_location("merge_processing_module", _merge_path)
 merge_module = importlib.util.module_from_spec(_merge_spec)
 _merge_spec.loader.exec_module(merge_module)

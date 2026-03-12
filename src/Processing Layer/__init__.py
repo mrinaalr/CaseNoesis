@@ -37,7 +37,7 @@ if _pattern_layer_path.exists():
     extract_severity_phrases = pattern_module.extract_severity_phrases
     
     # Import MergeProcessing (intersection class)
-    _merge_path = Path(__file__).parent / "merge_procesing.py"
+    _merge_path = Path(__file__).parent / "merge_processing.py"
     _merge_spec = importlib.util.spec_from_file_location("merge_processing_module", _merge_path)
     merge_module = importlib.util.module_from_spec(_merge_spec)
     _merge_spec.loader.exec_module(merge_module)

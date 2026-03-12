@@ -8,7 +8,11 @@
 
 The live deployment includes all features and 207 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2022-2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
-**Read the technical report here:** [CaseLinker: An Open-Source System for Cross-Case Analysis of Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker.pdf)
+## Technical Reports
+
+- **[Report #1: CaseLinker: An Open-Source System for Cross-Case Analysis of Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker.pdf)** - Initial technical report documenting the prototype architecture, deterministic extraction pipeline, and evaluation baseline on 47 cases.
+
+- **[Report #2: Interpretable ML Approaches for Analyzing Internet Crimes Against Children Reports](https://mrinaalr.github.io/website/CaseLinker-%20Interpretable%20ML%20Approaches%20for%20Analyzing%20Internet%20Crimes%20Against%20Children%20Reports.pdf)** - Second report covering NER integration, dataset expansion to 207 cases, and emerging patterns from the expanded dataset including the distributed network of 215 law enforcement organizations.
 
 
 ## Motivation
@@ -252,6 +256,10 @@ Each case includes structured features extracted from case narratives:
 - **PDF Processing**: pdfplumber
 - **Database**: SQLite (plain database for maximum compatibility)
 - **Visualization**: D3.js, HTML/CSS/JavaScript
+- **ML/NER**: Stanza (Stanford NLP), Transformers models for Named Entity Recognition
+  - Extracts law enforcement organizations, ages, dates, and locations from case text
+  - Hybrid approach: ML/NER supplements regex-based pattern extraction via MergeProcessing layer
+  - Pattern processing takes precedence when both sources have data; NER fills gaps
 - **Architecture**: Modular 5-layer design
 
 ## Deployment
