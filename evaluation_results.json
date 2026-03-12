@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "evaluation_date": "2026-03-11T13:56:57.151160",
+    "evaluation_date": "2026-03-11T14:30:57.443616",
     "total_cases": 207,
     "database_path": "caselinker.db",
     "system_version": "CaseLinker v1.0"
@@ -414,9 +414,9 @@
         "case_id": "azicac_2014_001",
         "priority_score": 10.0,
         "severity_indicators": [
-          "under_12",
           "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "under_12"
         ],
         "victim_count": 3,
         "case_topics": [
@@ -464,9 +464,9 @@
         ],
         "victim_count": 6,
         "case_topics": [
+          "production",
           "hands_on",
           "possession",
-          "production",
           "pornography"
         ]
       },
@@ -480,9 +480,9 @@
         ],
         "victim_count": null,
         "case_topics": [
+          "production",
           "hands_on",
-          "possession",
-          "production"
+          "possession"
         ]
       },
       {
@@ -1077,14 +1077,14 @@
     "total_cases": 207
   },
   "system_performance": {
-    "clustering_time": 0.22916007041931152,
-    "clustering_cases_per_second": 903.2987274844018,
-    "triage_time": 0.0003409385681152344,
-    "triage_cases_per_second": 607147.5020979021,
-    "insights_time": 0.0002219676971435547,
-    "insights_cases_per_second": 932568.1288936627,
-    "full_analysis_time": 0.22681307792663574,
-    "full_analysis_cases_per_second": 912.6457869724584
+    "clustering_time": 0.2313070297241211,
+    "clustering_cases_per_second": 894.914435790767,
+    "triage_time": 0.00036787986755371094,
+    "triage_cases_per_second": 562683.6863253403,
+    "insights_time": 0.0002372264862060547,
+    "insights_cases_per_second": 872583.8472361809,
+    "full_analysis_time": 0.2342529296875,
+    "full_analysis_cases_per_second": 883.6602397081814
   },
   "use_case_examples": {
     "use_case_1_high_priority_triage": {
@@ -1097,9 +1097,9 @@
           "priority_score": 10.0,
           "key_characteristics": {
             "severity": [
-              "under_12",
               "infant",
-              "sexual_assault"
+              "sexual_assault",
+              "under_12"
             ],
             "victim_count": 3,
             "topics": [

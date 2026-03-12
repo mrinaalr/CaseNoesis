@@ -721,7 +721,7 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     topics = []
     
     # Production vs possession
-    if re.search(r'\b(production|produced|created|made\s+movies?|created\s+videos?took\s+photos)\b', case_text, re.IGNORECASE):
+    if re.search(r'\b(production|produced|created|made\s+movies?|created\s+videos?|took\s+photos)\b', case_text, re.IGNORECASE):
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting|possessed|traded|possession|dissemination)\b', case_text, re.IGNORECASE):
         topics.append('possession')

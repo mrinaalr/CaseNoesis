@@ -73,7 +73,7 @@ def main():
             print(f"\n✓ Successfully ingested {len(df)} PDF file(s)")
         
         print("\n" + "="*60)
-        print("Step 2: Processing cases (splitting by month)...")
+        print("Step 2: Processing cases (batch, extract features, merge ml and pattern approaches)...")
         print("="*60)
         cases = process_cases(df)
         print(f"✓ Found {len(cases)} cases across all PDFs")
