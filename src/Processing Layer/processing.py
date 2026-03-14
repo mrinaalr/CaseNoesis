@@ -16,6 +16,16 @@ import re
 from typing import Dict, Any, List
 from datetime import datetime
 
+# Try to import tqdm for progress bars, fallback gracefully if not available
+try:
+    from tqdm import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
+    # Create a dummy tqdm that just returns the iterable unchanged
+    def tqdm(iterable, *args, **kwargs):
+        return iterable
+
 # Import batching functions directly from batching module
 _batching_path = Path(__file__).parent / "batching.py"
 _batching_spec = importlib.util.spec_from_file_location("batching", _batching_path)
@@ -104,6 +114,8 @@ def process_cases(df):
     processed_cases = []
     merger = MergeProcessing()
     
+    # First pass: Collect all case batches to get total count for progress bar
+    all_case_batches = []
     for idx, row in df.iterrows():
         extracted_text = row.get('extracted_text', '')
         source = row.get('source', 'unknown')
@@ -118,45 +130,73 @@ def process_cases(df):
         
         case_batches = case_batching(extracted_text, org_name=org_name, source=source, source_file=source_file)
         
+        # Store batches with metadata for processing
         for case_batch in case_batches:
-            raw_case = {
-                'case_text': case_batch.get('case_text'),
-                'month_year': case_batch.get('month_year'),
-                'month': case_batch.get('month'),
-                'year': case_batch.get('year'),
-                'case_id': case_batch.get('case_id'),
+            all_case_batches.append({
+                'case_batch': case_batch,
                 'source': source,
                 'source_file': source_file
-            }
-            if 'state' in case_batch:
-                raw_case['state'] = case_batch['state']
-            
-            # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
-            pattern_features = extract_features(raw_case)
-            
-            # Step 3: Extract NER features (ML Processing Layer handles its own logic)
-            ner_entities = None
-            if ner_extractor and ner_extractor.is_available():
-                case_text = raw_case.get('case_text', '')
-                if case_text:
-                    try:
-                        ner_entities = ner_extractor.extract_entities(case_text)
-                    except Exception:
-                        # NER extraction failed - continue without NER
-                        ner_entities = None
-            
-            # Step 4: Merge pattern + NER features (MergeProcessing handles its own logic)
-            merged_features = merger.merge_features(pattern_features, ner_entities)
-            
-            # Step 5: Assign comparison values (Pattern Processing Layer handles its own logic)
-            case_with_values = assign_comparison_values(merged_features)
-            
-            # Step 6: Add timestamps
-            timestamp = datetime.now().isoformat()
-            case_with_values['created_at'] = timestamp
-            case_with_values['updated_at'] = timestamp
-            
-            processed_cases.append(case_with_values)
+            })
+    
+    # Second pass: Process all cases with progress bar
+    total_cases = len(all_case_batches)
+    if total_cases == 0:
+        return processed_cases
+    
+    # Use tqdm for progress bar if available
+    if HAS_TQDM:
+        case_iterator = tqdm(
+            all_case_batches,
+            desc="Processing cases",
+            unit="case",
+            total=total_cases
+        )
+    else:
+        case_iterator = all_case_batches
+    
+    for batch_info in case_iterator:
+        case_batch = batch_info['case_batch']
+        source = batch_info['source']
+        source_file = batch_info['source_file']
+        
+        raw_case = {
+            'case_text': case_batch.get('case_text'),
+            'month_year': case_batch.get('month_year'),
+            'month': case_batch.get('month'),
+            'year': case_batch.get('year'),
+            'case_id': case_batch.get('case_id'),
+            'source': source,
+            'source_file': source_file
+        }
+        if 'state' in case_batch:
+            raw_case['state'] = case_batch['state']
+        
+        # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
+        pattern_features = extract_features(raw_case)
+        
+        # Step 3: Extract NER features (ML Processing Layer handles its own logic)
+        ner_entities = None
+        if ner_extractor and ner_extractor.is_available():
+            case_text = raw_case.get('case_text', '')
+            if case_text:
+                try:
+                    ner_entities = ner_extractor.extract_entities(case_text)
+                except Exception:
+                    # NER extraction failed - continue without NER
+                    ner_entities = None
+        
+        # Step 4: Merge pattern + NER features (MergeProcessing handles its own logic)
+        merged_features = merger.merge_features(pattern_features, ner_entities)
+        
+        # Step 5: Assign comparison values (Pattern Processing Layer handles its own logic)
+        case_with_values = assign_comparison_values(merged_features)
+        
+        # Step 6: Add timestamps
+        timestamp = datetime.now().isoformat()
+        case_with_values['created_at'] = timestamp
+        case_with_values['updated_at'] = timestamp
+        
+        processed_cases.append(case_with_values)
     
     return processed_cases
 

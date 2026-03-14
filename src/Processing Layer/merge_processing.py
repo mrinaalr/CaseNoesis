@@ -55,7 +55,7 @@ class MergeProcessing:
             - Organizations: ALL NER organizations stored in 'organizations' field
             - Agencies: Law enforcement agencies filtered and merged into 'agencies_involved'
             - Dates: NER dates stored as additional_event_dates
-            - Locations: NER locations stored at top level
+            - Locations: NER locations (states, countries, cities) normalized and stored in 'locations' field
             - NER entities kept in ml_features for reference
         """
         merged = pattern_features.copy()
@@ -73,6 +73,9 @@ class MergeProcessing:
             
             # Merge organizations (law enforcement only)
             merged = self._merge_organizations(merged, ner_entities)
+            
+            # Merge locations (geography: states, countries, cities)
+            merged = self._merge_locations(merged, ner_entities)
         else:
             # Even without NER entities, we need to filter pattern ages (remove 18+)
             merged = self._merge_ages(merged, {'ages': []})
@@ -487,6 +490,96 @@ class MergeProcessing:
             normalized.append(org_clean)
         
         return normalized
+    
+    def _merge_locations(
+        self,
+        merged: Dict[str, Any],
+        ner_entities: Dict[str, List[Any]]
+    ) -> Dict[str, Any]:
+        """
+        Merge locations (geography) from NER into pattern features.
+        
+        Extracts states, countries, cities, and other geographic entities.
+        Normalizes and deduplicates locations.
+        
+        Args:
+            merged: Merged features dict
+            ner_entities: NER entities dict
+            
+        Returns:
+            Updated merged dict with locations added
+        """
+        ner_locations = ner_entities.get('locations', [])
+        if not ner_locations:
+            return merged
+        
+        # Normalize and clean locations
+        normalized_locations = []
+        seen = set()
+        
+        for loc in ner_locations:
+            if not loc or len(loc.strip()) < 2:
+                continue
+            
+            # Clean up location text
+            loc_clean = loc.strip()
+            loc_lower = loc_clean.lower()
+            
+            # Skip if already seen (case-insensitive)
+            if loc_lower in seen:
+                continue
+            
+            # Normalize common variations
+            # US state abbreviations -> full names
+            state_abbrev_map = {
+                'az': 'Arizona', 'ca': 'California', 'co': 'Colorado', 'fl': 'Florida',
+                'il': 'Illinois', 'ny': 'New York', 'tx': 'Texas', 'wa': 'Washington',
+                'or': 'Oregon', 'nv': 'Nevada', 'nm': 'New Mexico', 'ut': 'Utah',
+                'id': 'Idaho', 'mt': 'Montana', 'wy': 'Wyoming', 'nd': 'North Dakota',
+                'sd': 'South Dakota', 'ne': 'Nebraska', 'ks': 'Kansas', 'ok': 'Oklahoma',
+                'ar': 'Arkansas', 'mo': 'Missouri', 'ia': 'Iowa', 'mn': 'Minnesota',
+                'wi': 'Wisconsin', 'mi': 'Michigan', 'in': 'Indiana', 'oh': 'Ohio',
+                'ky': 'Kentucky', 'tn': 'Tennessee', 'al': 'Alabama', 'ms': 'Mississippi',
+                'la': 'Louisiana', 'ga': 'Georgia', 'sc': 'South Carolina', 'nc': 'North Carolina',
+                'va': 'Virginia', 'wv': 'West Virginia', 'md': 'Maryland', 'de': 'Delaware',
+                'nj': 'New Jersey', 'pa': 'Pennsylvania', 'ct': 'Connecticut', 'ri': 'Rhode Island',
+                'ma': 'Massachusetts', 'vt': 'Vermont', 'nh': 'New Hampshire', 'me': 'Maine',
+                'ak': 'Alaska', 'hi': 'Hawaii', 'dc': 'Washington DC'
+            }
+            
+            # Check if it's a state abbreviation
+            if loc_lower in state_abbrev_map:
+                loc_clean = state_abbrev_map[loc_lower]
+                loc_lower = loc_clean.lower()
+            
+            # Normalize common location patterns
+            # "City, State" -> keep both parts
+            if ',' in loc_clean:
+                parts = [p.strip() for p in loc_clean.split(',')]
+                # If second part is a state abbreviation, expand it
+                if len(parts) == 2 and parts[1].lower() in state_abbrev_map:
+                    parts[1] = state_abbrev_map[parts[1].lower()]
+                loc_clean = ', '.join(parts)
+            
+            # Capitalize properly (Title Case for locations)
+            words = loc_clean.split()
+            loc_normalized = ' '.join(word.capitalize() if word.lower() not in ['of', 'de', 'la', 'the'] else word.lower() 
+                                     for word in words)
+            # Handle special cases
+            if loc_normalized.lower() == 'usa' or loc_normalized.lower() == 'u.s.a.':
+                loc_normalized = 'United States'
+            elif loc_normalized.lower() == 'us' and len(words) == 1:
+                loc_normalized = 'United States'
+            
+            normalized_locations.append(loc_normalized)
+            seen.add(loc_lower)
+            seen.add(loc_normalized.lower())
+        
+        # Store locations in merged features
+        if normalized_locations:
+            merged['locations'] = sorted(list(set(normalized_locations)))
+        
+        return merged
 
 
 def merge_processing(

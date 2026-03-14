@@ -620,6 +620,7 @@
                         'ID': caseData.id,
                         'Source': caseData.source,
                         'Date Range': caseData.date_range,
+                        'Locations': cleanAndDeduplicateArray(caseData.locations),
                         'Created At': caseData.created_at,
                         'Updated At': caseData.updated_at
                     }
@@ -1312,44 +1313,48 @@
                 }
             }
             
-            // Date Range - highlight the exact date pattern from source text
+            // Date Range - highlight the year in the text
             if (label === 'Date Range') {
-                // Use raw_data to get the exact month and year that appears in the text
+                let year = null;
+                
+                // Try to extract year from raw_data
                 if (caseData && caseData.raw_data) {
-                    const month = caseData.raw_data.month; // e.g., "January"
-                    const year = caseData.raw_data.year;   // e.g., "2013"
+                    year = caseData.raw_data.year; // e.g., "2013"
                     
-                    if (month && year) {
-                        // Find the exact pattern that appears in the text: "In January 2013"
-                        // This is the pattern used by case_batching to identify cases
-                        searchPatterns.push(new RegExp(`\\bIn\\s+${month}\\s+${year}\\b`, 'gi'));
-                        // Also try "In January of 2013" format
-                        searchPatterns.push(new RegExp(`\\bIn\\s+${month}\\s+of\\s+${year}\\b`, 'gi'));
+                    // If year not available, try to parse from month_year
+                    if (!year && caseData.raw_data.month_year) {
+                        const yearMatch = caseData.raw_data.month_year.match(/\b(19|20)\d{2}\b/);
+                        if (yearMatch) {
+                            year = yearMatch[0];
+                        }
                     }
                 }
                 
                 // Fallback: try to extract from date_range if raw_data not available
-                if (searchPatterns.length === 0) {
+                if (!year) {
                     try {
-                        const dateRange = JSON.parse(searchValue);
+                        const dateRange = caseData && caseData.date_range ? caseData.date_range : JSON.parse(searchValue);
                         const dateStart = dateRange.start || '';
                         
                         if (dateStart) {
                             const startDate = new Date(dateStart);
-                            const startYear = startDate.getFullYear();
-                            const startMonth = startDate.toLocaleString('en-US', { month: 'long' });
-                            
-                            // Highlight "In January 2013" format (most common in source text)
-                            searchPatterns.push(new RegExp(`\\bIn\\s+${startMonth}\\s+${startYear}\\b`, 'gi'));
-                            searchPatterns.push(new RegExp(`\\bIn\\s+${startMonth}\\s+of\\s+${startYear}\\b`, 'gi'));
+                            year = startDate.getFullYear();
                         }
                     } catch (e) {
-                        // If parsing fails, try to extract dates from string
+                        // If parsing fails, try to extract year from string
                         const yearMatch = searchValue.match(/\b(19|20)\d{2}\b/);
                         if (yearMatch) {
-                            searchPatterns.push(new RegExp(`\\b${yearMatch[0]}\\b`, 'gi'));
+                            year = yearMatch[0];
                         }
                     }
+                }
+                
+                // Highlight year if available (4 digits, word boundaries)
+                if (year) {
+                    const escapedYear = escapeRegex(String(year));
+                    // Use a single pattern that handles all cases: start of string, word boundaries, or after non-digit
+                    // This ensures we catch the first occurrence even if it's at the start or after punctuation
+                    searchPatterns.push(new RegExp(`(^|[^0-9])${escapedYear}(?![0-9])`, 'gim'));
                 }
             }
             
@@ -1369,9 +1374,20 @@
                 
                 // Check if this is an age label to handle comma highlighting specially
                 const isAgeLabel = label.includes('Age');
+                const isDateRange = label === 'Date Range';
                 
                 searchPatterns.forEach(pattern => {
-                    highlightedText = highlightedText.replace(pattern, (match) => {
+                    highlightedText = highlightedText.replace(pattern, (match, prefix) => {
+                        // For date range (year), we captured a prefix character - only highlight the year
+                        if (isDateRange && prefix !== undefined) {
+                            // Extract just the year (4 digits) from the match
+                            const yearMatch = match.match(/\d{4}/);
+                            if (yearMatch) {
+                                // Return prefix + highlighted year (preserve prefix like space or start)
+                                return (prefix || '') + `<span class="text-highlight">${yearMatch[0]}</span>`;
+                            }
+                        }
+                        
                         // For age patterns, if match includes comma, only highlight the numeric part
                         if (isAgeLabel && match.includes(',')) {
                             // Extract just the age number from the match

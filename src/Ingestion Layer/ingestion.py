@@ -43,7 +43,7 @@ def detect_source_from_content(text: str, filename: str) -> str:
     filename_lower = filename.lower()
     
     # Check filename first
-    if 'ncmec' in filename_lower:
+    if 'ncmec' in filename_lower or 'cybertipline' in filename_lower or 'cyber-tipline' in filename_lower:
         return 'NCMEC'
     elif 'azicac' in filename_lower:
         return 'AZICAC'

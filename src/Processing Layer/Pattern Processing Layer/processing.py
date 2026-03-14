@@ -667,18 +667,18 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     if re.search(r'very\s+young', case_text, re.IGNORECASE):
         severity_indicators.append('very_young')
     
-    # Extract "under X" patterns - merge all under 12 into "under_12"
+    # Extract "under X" patterns - only keep "under_12" (12 and younger only)
+    # Remove all other "under_X" indicators (under_13, under_14, under_15, under_16, under_17, under_18, under_40, under_311, etc.)
     under_pattern = r'under\s+(\d+)'
     under_matches = re.finditer(under_pattern, case_text, re.IGNORECASE)
     has_under_12 = False
     for match in under_matches:
         try:
             age = int(match.group(1))
-            if age < 12:
+            if age <= 12:
+                # Only keep ages 12 and younger as "under_12"
                 has_under_12 = True
-            else:
-                # Keep ages 12 and above as separate indicators
-                severity_indicators.append(f'under_{age}')
+            # Don't add any other "under_X" indicators - they are removed
         except (ValueError, IndexError):
             continue
     

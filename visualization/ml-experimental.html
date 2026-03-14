@@ -209,7 +209,10 @@
             <p>
                 Current research focuses on applying ML/NLP enhancements to improve case analysis capabilities. 
                 Specfically evaluating semantic similarity, named entity recognition, and content sanitization 
-                to complement existing pattern-based extraction, clustering, and visualizations.
+                to complement existing pattern-based extraction, clustering, and visualizations. Additionally, 
+                ML models will be run on cases within each extraction feature to identify similarities, differences, 
+                and distinguishing patterns between cases in each stat category (e.g. FBI cases vs Local Law Enforcement investigations, Stranger cases vs Family or Teacher cases)
+            
             </p>
         </div>
 
@@ -219,8 +222,8 @@
                 <p>
                     The core system demonstrates pattern-based extraction works well for structured case data. 
                     This phase explores where ML can add value: understanding semantic relationships, 
-                    extracting entities regex might miss, and generating case summaries that preserve 
-                    insights while reducing exposure to harmful content.
+                    extracting entities regex might miss, generating case summaries that preserve 
+                    insights while reducing exposure to harmful content, and analyzing case groups to identify distinguishing features, similarities, and differences between groups.
                 </p>
             </div>
         </div>
@@ -251,6 +254,15 @@
                         losing analytical value.
                     </div>
                 </li>
+                <li>
+                    <div class="feature-title">Comparative Case Group Analysis</div>
+                    <div class="feature-desc">
+                        ML models run on cases within each stat category to identify distinguishing features, 
+                        similarities, and differences between groups. For example, comparing agency efficiency, offender age correlations, and offender-behavioral patterns between strangers vs family or teacher cases. 
+                        Uses classification, feature importance analysis, and statistical comparison 
+                        to reveal patterns within cases.
+                    </div>
+                </li>
             </ul>
         </div>
 
@@ -278,6 +290,12 @@
                     Components are modular and can be evaluated independently.
                 </p>
                 <p>
+                    <strong>Analysis Execution:</strong> All ML analysis (comparative case group analysis, 
+                    semantic similarity, clustering) is pre-computed offline, not performed on live CaseLinker 
+                    instances. Results are stored and served via API endpoints, ensuring performance and 
+                    consistency without impacting real-time case processing.
+                </p>
+                <p>
                     <strong>Deployment:</strong> ML dependencies are available in <code>requirements-ml.txt</code> 
                     for local development. Production builds use <code>requirements.txt</code> (ML deps commented) 
                     for faster deployment; all ML code remains in the repository.
@@ -293,6 +311,7 @@
                     <li>ML Processing Layer components implemented</li>
                     <li>Evaluating performance on case data</li>
                     <li>Integration pending evaluation results</li>
+                    <li>Comparative case group analysis models in development</li>
                 </ul>
             </div>
             <div class="status-box" style="margin-top: 20px;">
@@ -332,6 +351,13 @@
                     <div class="feature-title">Clean Case Views</div>
                     <div class="feature-desc">
                         Sanitized summaries preserving analytical value without explicit details.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Comparative Group Analysis</div>
+                    <div class="feature-desc">
+                        ML models run on cases within each stat category to compare case groups—helps us 
+                        understand these cases and the landscape of exploitation better.
                     </div>
                 </li>
             </ul>

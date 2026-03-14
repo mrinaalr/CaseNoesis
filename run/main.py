@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from typing import List, Dict, Any
 import sys
+import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Storage Layer"))
@@ -679,6 +680,7 @@ def get_detailed_stats():
         date_count = sum(1 for c in cases if c.get('date_start') or c.get('date_range'))
         # Severity phrases: dangerous, stated, told, continue, attacked, out_of_control
         severity_phrases_count = sum(1 for c in cases if parse_field(c.get('severity_phrases', [])))
+        locations_count = sum(1 for c in cases if parse_field(c.get('locations', [])))
         
         feature_coverage = {
             "Severity Indicators": (severity_count / total_cases * 100) if total_cases > 0 else 0,
@@ -692,7 +694,8 @@ def get_detailed_stats():
             "Registry Status": (perp_registry_count / total_cases * 100) if total_cases > 0 else 0,
             "Evidence": (evidence_count / total_cases * 100) if total_cases > 0 else 0,
             "Agencies Involved": (agencies_count / total_cases * 100) if total_cases > 0 else 0,
-            "Date Range": (date_count / total_cases * 100) if total_cases > 0 else 0
+            "Date Range": (date_count / total_cases * 100) if total_cases > 0 else 0,
+            "Locations": (locations_count / total_cases * 100) if total_cases > 0 else 0
         }
         
         # 2. Platform Usage Over Time
@@ -955,6 +958,73 @@ async def serve_clusters():
         return HTMLResponse(content=html_content)
     else:
         return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
+
+@app.get("/api/location-stats")
+def get_location_stats():
+    """
+    Get aggregated location statistics (no raw cases).
+    Returns location data with counts and case IDs for US map visualization.
+    This endpoint is optimized for performance - returns only aggregated data.
+    """
+    try:
+        # Get current case count for cache versioning
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        current_case_count = cursor.fetchone()[0]
+        db_conn.close()
+        
+        # Build cache key
+        cache_key = get_cache_key('location-stats', version=current_case_count)
+        
+        # Try Redis cache first
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            return cached_result
+        
+        # Cache miss - aggregate location data
+        cases = storage.get_all_cases(include_raw_data=False)
+        
+        # Aggregate locations
+        location_map = {}
+        for case in cases:
+            locations = case.get('locations', [])
+            if isinstance(locations, str):
+                import json
+                try:
+                    locations = json.loads(locations)
+                except:
+                    locations = []
+            
+            if not isinstance(locations, list):
+                locations = []
+            
+            case_id = case.get('id', 'unknown')
+            
+            for loc in locations:
+                if loc and isinstance(loc, str) and loc.strip():
+                    loc_clean = loc.strip()
+                    if loc_clean not in location_map:
+                        location_map[loc_clean] = {
+                            'location': loc_clean,
+                            'count': 0,
+                            'caseIds': []
+                        }
+                    location_map[loc_clean]['count'] += 1
+                    location_map[loc_clean]['caseIds'].append(case_id)
+        
+        # Convert to list
+        location_data = list(location_map.values())
+        
+        # Store in cache (1 hour TTL)
+        set_cached(cache_key, location_data, ttl=3600)
+        
+        return location_data
+    except Exception as e:
+        # Fallback to empty list on error
+        return []
+
 
 @app.get("/stats", response_class=HTMLResponse)
 async def serve_stats():
