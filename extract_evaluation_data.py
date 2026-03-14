@@ -64,6 +64,7 @@ def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, A
         'evidence_volume': {'extracted': 0, 'total': total, 'details': {}},
         'agencies_involved': {'extracted': 0, 'total': total, 'details': {}},
         'date_range': {'extracted': 0, 'total': total, 'details': {}},
+        'locations': {'extracted': 0, 'total': total, 'details': {}},
     }
     
     topic_counter = Counter()
@@ -72,6 +73,7 @@ def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, A
     relationship_counter = Counter()
     investigation_counter = Counter()
     agency_counter = Counter()
+    location_counter = Counter()
     rso_count = 0
     age_distribution = []
     
@@ -144,6 +146,12 @@ def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, A
         # Date range
         if case.get('date_start') or case.get('date_range'):
             coverage['date_range']['extracted'] += 1
+        
+        # Locations
+        locations = parse_json_field(case.get('locations', []))
+        if locations and len(locations) > 0:
+            coverage['locations']['extracted'] += 1
+            location_counter.update(locations)
     
     # Calculate percentages and add details
     for key in coverage:
@@ -157,6 +165,7 @@ def evaluate_extraction_coverage(all_cases: List[Dict[str, Any]]) -> Dict[str, A
     coverage['relationship_to_victim']['details'] = dict(relationship_counter)
     coverage['investigation_type']['details'] = dict(investigation_counter)
     coverage['agencies_involved']['details'] = dict(agency_counter.most_common(20))
+    coverage['locations']['details'] = dict(location_counter.most_common(20))
     coverage['perpetrator_demographics']['details'] = {
         'registered_sex_offenders': rso_count,
         'age_distribution': {
@@ -534,7 +543,9 @@ def evaluate_data_quality(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
         if case.get('perpetrator_age') is not None or case.get('perpetrator_registered_sex_offender') is not None: score += 1
         if case.get('evidence_volume'): score += 1
         if case.get('date_start') or case.get('date_range'): score += 1
+        if parse_json_field(case.get('locations', [])): score += 1
         
+        max_score = 11  # Updated to include locations
         completeness_scores.append(score / max_score * 100)
     
     return {

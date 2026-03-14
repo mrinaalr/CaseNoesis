@@ -104,7 +104,7 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 800px;
+            height: 875px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -281,7 +281,7 @@
 
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
-        const height = 800;
+        const height = 875;
         const margin = 30;
         
         const svg = d3.select('#cluster-visualization')
@@ -778,9 +778,6 @@
                             node.originalY = node.y;
                         });
                         
-                        // Calculate bounding box of all nodes to fit everything in viewport
-                        fitToViewport();
-                        
                         // Start gentle jiggle animation
                         startJiggleAnimation();
                     });
@@ -794,49 +791,12 @@
                     node.originalY = node.y;
                 });
                 
-                // Calculate bounding box of all nodes to fit everything in viewport
-                fitToViewport();
-                
                 // Start jiggle animation
                 startJiggleAnimation();
             }
             
             // Position main clusters (they're fixed)
             clusterBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
-            
-            // Function to fit all bubbles in viewport
-            function fitToViewport() {
-                // Calculate bounding box of all nodes (including radius)
-                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-                
-                nodes.forEach(node => {
-                    const r = node.r || 0;
-                    minX = Math.min(minX, node.x - r);
-                    minY = Math.min(minY, node.y - r);
-                    maxX = Math.max(maxX, node.x + r);
-                    maxY = Math.max(maxY, node.y + r);
-                });
-                
-                // Add padding
-                const padding = 50;
-                minX -= padding;
-                minY -= padding;
-                maxX += padding;
-                maxY += padding;
-                
-                // Calculate dimensions
-                const contentWidth = maxX - minX;
-                const contentHeight = maxY - minY;
-                
-                // Calculate scale to fit in viewport
-                const scaleX = (width - 2 * margin) / contentWidth;
-                const scaleY = (height - 2 * margin) / contentHeight;
-                const scale = Math.min(scaleX, scaleY, 1.0); // Don't zoom in, only out
-                
-                // Apply viewBox to fit everything in viewport
-                svg.attr('viewBox', `${minX} ${minY} ${contentWidth} ${contentHeight}`)
-                   .attr('preserveAspectRatio', 'xMidYMid meet');
-            }
             
             // Ensure original positions are stored for main clusters (in case simulation didn't run)
             nodes.filter(n => n.type === 'cluster').forEach(node => {
