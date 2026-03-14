@@ -17,6 +17,7 @@ pdfplumber>=0.10.0
 # API
 fastapi>=0.100.0
 uvicorn>=0.23.0
+redis>=5.0.0
 
 # Database Encryption (optional - falls back to regular SQLite if not available)
 # Note: pysqlcipher3 requires SQLCipher system library

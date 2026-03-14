@@ -6,7 +6,7 @@ This class is the "intersection" layer that combines:
 - ML Processing Layer: NER / semantic extraction (ages, dates, orgs, locations, etc.)
 
 Merge logic:
-    - Ages: NER ages merged (age >= 18 → perpetrator_age, age <= 17 → case_demographics.ages)
+- Ages: NER ages merged (age >= 18 → perpetrator_age, age <= 17 → case_demographics.ages)
 - Pattern processing takes precedence when both sources have data
 - NER supplements missing data from pattern processing
 - Raw NER entities stored in ml_features.ner_entities for reference/debugging
@@ -68,11 +68,14 @@ class MergeProcessing:
         if ner_entities:
             merged['ml_features']['ner_entities'] = ner_entities
             
-            # Merge ages
+            # Merge ages (always call to filter pattern ages, even if no NER ages)
             merged = self._merge_ages(merged, ner_entities)
             
             # Merge organizations (law enforcement only)
             merged = self._merge_organizations(merged, ner_entities)
+        else:
+            # Even without NER entities, we need to filter pattern ages (remove 18+)
+            merged = self._merge_ages(merged, {'ages': []})
         
         return merged
     
@@ -97,26 +100,23 @@ class MergeProcessing:
             Updated merged dict with ages merged
         """
         ner_ages = ner_entities.get('ages', [])
-        if not ner_ages:
-            return merged
         
-        # Convert NER ages to integers and validate
+        # Convert NER ages to integers and validate (filter invalid ages: 0, >100)
         ner_age_ints = []
-        for age in ner_ages:
-            try:
-                if isinstance(age, str):
-                    age_int = int(age)
-                else:
-                    age_int = age
-                if 1 <= age_int <= 100:
-                    ner_age_ints.append(age_int)
-            except (ValueError, TypeError):
-                continue
+        if ner_ages:
+            for age in ner_ages:
+                try:
+                    if isinstance(age, str):
+                        age_int = int(age)
+                    else:
+                        age_int = age
+                    # Filter invalid ages: must be between 1 and 99 (reasonable age range)
+                    if 1 <= age_int <= 99:
+                        ner_age_ints.append(age_int)
+                except (ValueError, TypeError):
+                    continue
         
-        if not ner_age_ints:
-            return merged
-        
-        # Get existing pattern ages
+        # Get existing pattern ages (ALWAYS filter, even if no NER ages)
         pattern_victim_ages = []
         pattern_perp_ages = merged.get('perpetrator_age')
         
@@ -130,11 +130,14 @@ class MergeProcessing:
         if isinstance(case_demo, dict):
             pattern_victim_ages = case_demo.get('ages', [])
         
-        # Filter pattern victim ages to exclude ages >= 18 (they should be perpetrator ages)
-        pattern_victim_ages_filtered = [age for age in pattern_victim_ages if age <= 17]
+        # Filter pattern victim ages: exclude ages >= 18 and invalid ages (0, >100)
+        pattern_victim_ages_filtered = [age for age in pattern_victim_ages if 1 <= age <= 17]
         
-        # Check if pattern had any ages >= 18 that should be perpetrator ages
-        pattern_perp_candidates = [age for age in pattern_victim_ages if age >= 18]
+        # Check if pattern had any ages >= 18 that should be perpetrator ages (also filter invalid ages)
+        pattern_perp_candidates = [age for age in pattern_victim_ages if 18 <= age <= 99]
+        
+        # Filter existing perpetrator ages to valid range (1-99)
+        pattern_perp_ages = [age for age in pattern_perp_ages if 1 <= age <= 99]
         
         # Combine all pattern perpetrator ages
         all_pattern_perp_ages = list(set(pattern_perp_ages + pattern_perp_candidates))
@@ -145,35 +148,24 @@ class MergeProcessing:
         
         # Merge all perpetrator ages: combine pattern and NER, deduplicate
         all_perp_ages = list(set(all_pattern_perp_ages + ner_perp_ages))
-        all_perp_ages.sort()  # Sort for consistency
+        all_perp_ages.sort()
         
         if all_perp_ages:
             merged['perpetrator_age'] = all_perp_ages
+        elif pattern_perp_candidates:
+            # Even if no other perp ages, set empty list to clear any old data
+            merged['perpetrator_age'] = []
         
         # Merge victim ages: combine filtered pattern and NER, deduplicate
+        # Ensure victim ages are valid (1-17) and don't overlap with perpetrator ages
         all_victim_ages = list(set(pattern_victim_ages_filtered + ner_victim_ages))
-        
-        # Final safety check: remove any ages that match perpetrator ages AND ensure all are <= 17
-        if all_perp_ages:
-            all_victim_ages = [age for age in all_victim_ages if age not in all_perp_ages]
-        
-        # Double-check: remove any ages >= 18 (shouldn't happen but safety net)
-        all_victim_ages = [age for age in all_victim_ages if age <= 17]
+        all_victim_ages = [age for age in all_victim_ages if 1 <= age <= 17 and age not in all_perp_ages]
         all_victim_ages.sort()
         
-        # Update case_demographics - ensure no ages >= 18 and no duplicates with perpetrator_age
+        # Update case_demographics (ALWAYS update to ensure filtering is applied)
         if not isinstance(case_demo, dict):
             case_demo = {}
-        
-        # Final assignment - always overwrite with filtered victim ages
-        # One more check: ensure no ages >= 18 and no duplicates with perpetrator ages
-        final_victim_ages = [age for age in all_victim_ages if age <= 17]
-        if all_perp_ages:
-            final_victim_ages = [age for age in final_victim_ages if age not in all_perp_ages]
-        
-        # Always set victim ages (even if empty list) to ensure we overwrite any incorrect pattern values
-        case_demo['ages'] = final_victim_ages if final_victim_ages else []
-        
+        case_demo['ages'] = all_victim_ages
         merged['case_demographics'] = case_demo
         
         return merged

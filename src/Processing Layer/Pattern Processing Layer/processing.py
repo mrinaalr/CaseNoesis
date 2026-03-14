@@ -295,6 +295,9 @@ def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     for match in age_matches:
         try:
             age = int(match.group(1))
+            # Victims must be <= 17 (18+ are perpetrators)
+            if age >= 18:
+                continue
             # Check if it's a victim age (not perpetrator - perpetrators usually have "X year old man/woman")
             context = case_text[max(0, match.start()-30):match.end()+10].lower()
             if 'victim' in context or 'child' in context or ('year old' in context and 'man' not in context and 'woman' not in context):
@@ -309,7 +312,11 @@ def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         try:
             min_age = int(range_match.group(1))
             max_age = int(range_match.group(2))
-            demographics['age_range'] = {'min': min_age, 'max': max_age}
+            # Cap max age at 17 for victims (18+ are perpetrators)
+            if max_age >= 18:
+                max_age = 17
+            if min_age <= max_age:
+                demographics['age_range'] = {'min': min_age, 'max': max_age}
         except (ValueError, IndexError):
             pass
     
@@ -783,7 +790,7 @@ def extract_severity_phrases(case: Dict[str, Any]) -> List[str]:
         'dangerous': r'\bdangerous\b',
         'stated': r'\b(stated|states|stating)\b',  # Victim statements/disclosures
         'told': r'\b(told|tells|telling)\b',  # Victim disclosures
-        'continue': r'\b(continue|continued|continuing)\b',  # Ongoing abuse
+        'continue': r'\b(continued)\b',  # Ongoing abuse
         'attacked': r'\b(attacked|attack|attacking)\b',  # Physical violence
         'out_of_control': r'\bout\s+of\s+control\b',  # Escalation indicator
     }

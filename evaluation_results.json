@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "evaluation_date": "2026-03-11T14:30:57.443616",
+    "evaluation_date": "2026-03-13T18:30:15.262286",
     "total_cases": 207,
     "database_path": "caselinker.db",
     "system_version": "CaseLinker v1.0"
@@ -22,16 +22,16 @@
       "percentage": 94.20289855072464
     },
     "severity_indicators": {
-      "extracted": 95,
+      "extracted": 104,
       "total": 207,
       "details": {
         "sexual_assault": 78,
-        "multiple_perpetrators": 15,
+        "multiple_perpetrators": 29,
         "under_12": 14,
         "infant": 9,
         "very_young": 6
       },
-      "percentage": 45.893719806763286
+      "percentage": 50.24154589371981
     },
     "prosecution_outcome": {
       "extracted": 196,
@@ -90,11 +90,11 @@
       "details": {
         "registered_sex_offenders": 8,
         "age_distribution": {
-          "mean": 34.13496932515337,
-          "median": 31,
+          "mean": 32.67005076142132,
+          "median": 30,
           "min": 13,
           "max": 79,
-          "count": 163
+          "count": 197
         }
       },
       "percentage": 100.0
@@ -106,31 +106,31 @@
       "percentage": 10.144927536231885
     },
     "agencies_involved": {
-      "extracted": 182,
+      "extracted": 178,
       "total": 207,
       "details": {
-        "ICAC": 88,
-        "NCMEC": 30,
-        "FBI": 19,
-        "AZICAC Task Force": 14,
-        "Phoenix Police Department": 12,
+        "ICAC": 67,
+        "NCMEC": 54,
+        "FBI": 20,
+        "AZICAC Task Force": 15,
+        "Homeland Security Investigations": 11,
         "AZICAC": 11,
-        "Homeland Security Investigations": 10,
-        "FBI Child Sexual Exploitation Unit": 10,
+        "Phoenix Police Department": 11,
         "Maricopa County": 7,
         "Department of Homeland Security": 6,
-        "Attorney General's Office": 5,
-        "Maricopa County Attorney \u2019's Office": 5,
-        "State Police Department": 4,
+        "District Attorney\u2019's Office": 5,
+        "the Attorney General's Office": 5,
+        "the Phoenix Police Department": 5,
         "HSI": 4,
-        "Department of Justice": 4,
+        "the Maricopa County Attorney\u2019's Office": 4,
+        "the AZICAC Task Force": 4,
         "Indiana State Police Department": 3,
-        "Michigan State Police Department": 3,
+        "the U.S. Department of Justice": 3,
+        "State Police Department": 3,
         "MCSO": 3,
-        "Chandler Police Department": 3,
-        "Maricopa County Attorney's Office": 3
+        "the Chandler Police Department": 3
       },
-      "percentage": 87.92270531400966
+      "percentage": 85.99033816425121
     },
     "date_range": {
       "extracted": 146,
@@ -145,13 +145,13 @@
       {
         "name": "General Cluster",
         "size": 207,
-        "average_similarity": 0.463,
+        "average_similarity": 0.452,
         "min_similarity": 0.0,
         "max_similarity": 1.0,
         "description": "All 207 cases grouped by Jaccard similarity",
         "internal_pairwise_similarities": {
-          "mean": 0.46271443549228725,
-          "std": 0.16643664544361583,
+          "mean": 0.45226279487429155,
+          "std": 0.16348033182856547,
           "min": 0.0,
           "max": 1.0,
           "count": 21321
@@ -179,7 +179,7 @@
           },
           "top_severity": {
             "sexual_assault": 78,
-            "multiple_perpetrators": 15,
+            "multiple_perpetrators": 29,
             "under_12": 14,
             "infant": 9,
             "very_young": 6
@@ -189,13 +189,13 @@
       {
         "name": "Possession Cluster",
         "size": 145,
-        "average_similarity": 0.546,
+        "average_similarity": 0.535,
         "min_similarity": 0.074,
         "max_similarity": 1.0,
         "description": "All 145 cases involve possession | Most common topic: Possession (145/145 cases) | Most common severity: Sexual Assault (56/145 cases)",
         "internal_pairwise_similarities": {
-          "mean": 0.5461364787771904,
-          "std": 0.144457732251669,
+          "mean": 0.534956081013464,
+          "std": 0.14155016615047042,
           "min": 0.07352941176470587,
           "max": 1.0,
           "count": 10440
@@ -223,7 +223,7 @@
           },
           "top_severity": {
             "sexual_assault": 56,
-            "multiple_perpetrators": 11,
+            "multiple_perpetrators": 22,
             "infant": 7,
             "under_12": 7,
             "very_young": 6
@@ -233,13 +233,13 @@
       {
         "name": "Investigation Cluster",
         "size": 124,
-        "average_similarity": 0.485,
+        "average_similarity": 0.475,
         "min_similarity": 0.0,
         "max_similarity": 0.956,
         "description": "All 124 cases involving investigation type (online: 10, proactive: 13, reactive: 2, undercover: 2, unknown: 97)",
         "internal_pairwise_similarities": {
-          "mean": 0.48478795016410914,
-          "std": 0.18355537980868397,
+          "mean": 0.47503328437919945,
+          "std": 0.18021589616296005,
           "min": 0.0,
           "max": 0.9558823529411765,
           "count": 7626
@@ -267,7 +267,7 @@
           },
           "top_severity": {
             "sexual_assault": 47,
-            "multiple_perpetrators": 10,
+            "multiple_perpetrators": 17,
             "under_12": 7,
             "infant": 5,
             "very_young": 4
@@ -277,14 +277,14 @@
       {
         "name": "Severe Cluster",
         "size": 81,
-        "average_similarity": 0.514,
-        "min_similarity": 0.088,
+        "average_similarity": 0.502,
+        "min_similarity": 0.077,
         "max_similarity": 1.0,
         "description": "All 81 cases involve severe indicators (infant, very_young, sexual_assault)",
         "internal_pairwise_similarities": {
-          "mean": 0.5135825533821007,
-          "std": 0.13762358065117858,
-          "min": 0.08823529411764705,
+          "mean": 0.501873313202119,
+          "std": 0.13622884219766562,
+          "min": 0.07692307692307691,
           "max": 1.0,
           "count": 3240
         },
@@ -313,23 +313,23 @@
             "sexual_assault": 78,
             "under_12": 11,
             "infant": 9,
-            "very_young": 6,
-            "multiple_perpetrators": 4
+            "multiple_perpetrators": 9,
+            "very_young": 6
           }
         }
       },
       {
         "name": "Online-Only Cluster",
         "size": 27,
-        "average_similarity": 0.58,
-        "min_similarity": 0.26,
-        "max_similarity": 0.894,
+        "average_similarity": 0.563,
+        "min_similarity": 0.221,
+        "max_similarity": 0.912,
         "description": "All 27 cases are online-only | Most common platform: online (27/27 cases) | Most common topic: Online Only (27/27 cases)",
         "internal_pairwise_similarities": {
-          "mean": 0.580093209259876,
-          "std": 0.14916831427161614,
-          "min": 0.25980392156862747,
-          "max": 0.8941176470588236,
+          "mean": 0.563354481393697,
+          "std": 0.1506024560270635,
+          "min": 0.22083333333333333,
+          "max": 0.9117647058823528,
           "count": 351
         },
         "statistics": {
@@ -354,14 +354,14 @@
             "multi_state": 1
           },
           "top_severity": {
-            "multiple_perpetrators": 1
+            "multiple_perpetrators": 4
           }
         }
       }
     ],
     "overall_similarity_metrics": {
-      "mean": 0.49168905986608596,
-      "std": 0.16625951467927297,
+      "mean": 0.4810379105522631,
+      "std": 0.1633461869217809,
       "min": 0.0,
       "max": 1.0,
       "total_pairs": 42978
@@ -378,35 +378,35 @@
     "score_range": {
       "min": 5.0,
       "max": 10.0,
-      "mean": 5.9421739130434785,
-      "median": 5.26,
-      "std": 1.0926189294293025,
+      "mean": 6.021111111111111,
+      "median": 5.65,
+      "std": 1.1193363247847985,
       "q1": 5.1,
       "q3": 6.43
     },
-    "high_priority_count": 13,
-    "medium_priority_count": 78,
-    "low_priority_count": 116,
+    "high_priority_count": 16,
+    "medium_priority_count": 84,
+    "low_priority_count": 107,
     "high_priority_threshold": 8.0,
     "high_priority_characteristics": {
       "with_production": 2,
       "with_infant": 8,
       "with_multiple_victims": 3,
-      "with_rso": 0,
-      "with_hands_on": 11
+      "with_rso": 1,
+      "with_hands_on": 12
     },
     "score_distribution": {
       "high_priority": {
-        "count": 13,
-        "percentage": 6.280193236714976
+        "count": 16,
+        "percentage": 7.729468599033816
       },
       "medium_priority": {
-        "count": 78,
-        "percentage": 37.68115942028986
+        "count": 84,
+        "percentage": 40.57971014492754
       },
       "low_priority": {
-        "count": 116,
-        "percentage": 56.038647342995176
+        "count": 107,
+        "percentage": 51.690821256038646
       }
     },
     "top_10_priority_cases": [
@@ -414,9 +414,9 @@
         "case_id": "azicac_2014_001",
         "priority_score": 10.0,
         "severity_indicators": [
-          "infant",
+          "under_12",
           "sexual_assault",
-          "under_12"
+          "infant"
         ],
         "victim_count": 3,
         "case_topics": [
@@ -429,9 +429,9 @@
         "case_id": "azicac_2014_006",
         "priority_score": 9.89,
         "severity_indicators": [
+          "sexual_assault",
           "infant",
-          "very_young",
-          "sexual_assault"
+          "very_young"
         ],
         "victim_count": null,
         "case_topics": [
@@ -444,9 +444,9 @@
         "case_id": "azicac_2014_005",
         "priority_score": 9.71,
         "severity_indicators": [
+          "sexual_assault",
           "infant",
-          "very_young",
-          "sexual_assault"
+          "very_young"
         ],
         "victim_count": null,
         "case_topics": [
@@ -459,14 +459,14 @@
         "case_id": "azicac_2014_007",
         "priority_score": 9.2,
         "severity_indicators": [
-          "very_young",
-          "sexual_assault"
+          "sexual_assault",
+          "very_young"
         ],
         "victim_count": 6,
         "case_topics": [
-          "production",
-          "hands_on",
           "possession",
+          "hands_on",
+          "production",
           "pornography"
         ]
       },
@@ -475,22 +475,22 @@
         "priority_score": 8.87,
         "severity_indicators": [
           "under_12",
-          "very_young",
-          "sexual_assault"
+          "sexual_assault",
+          "very_young"
         ],
         "victim_count": null,
         "case_topics": [
-          "production",
+          "possession",
           "hands_on",
-          "possession"
+          "production"
         ]
       },
       {
         "case_id": "azicac_2012_012",
         "priority_score": 8.84,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -503,8 +503,8 @@
         "case_id": "azicac_2014_013",
         "priority_score": 8.8,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -516,21 +516,21 @@
         "case_id": "azicac_2011_009",
         "priority_score": 8.63,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
-          "hands_on",
-          "family"
+          "family",
+          "hands_on"
         ]
       },
       {
         "case_id": "ncmec_2024_005",
         "priority_score": 8.49,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": [
@@ -542,8 +542,8 @@
         "case_id": "azicac_2013_002",
         "priority_score": 8.23,
         "severity_indicators": [
-          "infant",
-          "sexual_assault"
+          "sexual_assault",
+          "infant"
         ],
         "victim_count": null,
         "case_topics": []
@@ -642,28 +642,28 @@
     "sample_size": 50,
     "total_pairs_analyzed": 1225,
     "similarity_statistics": {
-      "mean": 0.5369767048810866,
-      "median": 0.545,
-      "std": 0.168617421774892,
+      "mean": 0.5191719613262745,
+      "median": 0.515,
+      "std": 0.16204541875845474,
       "min": 0.15,
       "max": 1.0
     },
     "similarity_distribution": {
       "very_high_0.7+": {
-        "count": 235,
-        "percentage": 19.183673469387756
+        "count": 192,
+        "percentage": 15.673469387755102
       },
       "high_0.5-0.7": {
-        "count": 487,
-        "percentage": 39.755102040816325
+        "count": 465,
+        "percentage": 37.95918367346939
       },
       "medium_0.3-0.5": {
-        "count": 410,
-        "percentage": 33.46938775510204
+        "count": 471,
+        "percentage": 38.44897959183673
       },
       "low_<0.3": {
-        "count": 93,
-        "percentage": 7.591836734693877
+        "count": 97,
+        "percentage": 7.918367346938776
       }
     }
   },
@@ -692,7 +692,7 @@
       "all_severity_indicators": {
         "infant": 9,
         "sexual_assault": 78,
-        "multiple_perpetrators": 15,
+        "multiple_perpetrators": 29,
         "under_12": 14,
         "very_young": 6
       }
@@ -1068,23 +1068,23 @@
     "cases_with_text": 207
   },
   "data_quality": {
-    "average_completeness": 61.111111111111114,
+    "average_completeness": 61.54589371980676,
     "completeness_distribution": {
-      "high_80-100": 23,
+      "high_80-100": 24,
       "medium_50-80": 166,
-      "low_<50": 18
+      "low_<50": 17
     },
     "total_cases": 207
   },
   "system_performance": {
-    "clustering_time": 0.2313070297241211,
-    "clustering_cases_per_second": 894.914435790767,
-    "triage_time": 0.00036787986755371094,
-    "triage_cases_per_second": 562683.6863253403,
-    "insights_time": 0.0002372264862060547,
-    "insights_cases_per_second": 872583.8472361809,
-    "full_analysis_time": 0.2342529296875,
-    "full_analysis_cases_per_second": 883.6602397081814
+    "clustering_time": 0.3193798065185547,
+    "clustering_cases_per_second": 648.1311459745472,
+    "triage_time": 0.00039505958557128906,
+    "triage_cases_per_second": 523971.592033796,
+    "insights_time": 0.0002510547637939453,
+    "insights_cases_per_second": 824521.2991452991,
+    "full_analysis_time": 0.2786068916320801,
+    "full_analysis_cases_per_second": 742.9823389773071
   },
   "use_case_examples": {
     "use_case_1_high_priority_triage": {
@@ -1097,9 +1097,9 @@
           "priority_score": 10.0,
           "key_characteristics": {
             "severity": [
-              "infant",
+              "under_12",
               "sexual_assault",
-              "under_12"
+              "infant"
             ],
             "victim_count": 3,
             "topics": [
@@ -1114,9 +1114,9 @@
           "priority_score": 9.89,
           "key_characteristics": {
             "severity": [
+              "sexual_assault",
               "infant",
-              "very_young",
-              "sexual_assault"
+              "very_young"
             ],
             "victim_count": null,
             "topics": [
@@ -1131,9 +1131,9 @@
           "priority_score": 9.71,
           "key_characteristics": {
             "severity": [
+              "sexual_assault",
               "infant",
-              "very_young",
-              "sexual_assault"
+              "very_young"
             ],
             "victim_count": null,
             "topics": [

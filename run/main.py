@@ -18,6 +18,41 @@ from storage import CaseStorage
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 from visualization import create_timeline_visualization, filter_cases
 
+# Import Redis cache helper
+try:
+    from redis_cache import (
+        REDIS_AVAILABLE, 
+        get_cached, 
+        set_cached, 
+        get_cache_key
+    )
+    # Create a wrapper for get_case_count that uses our storage instance
+    def get_case_count():
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        count = cursor.fetchone()[0]
+        db_conn.close()
+        return count
+except ImportError:
+    # Fallback if redis_cache module not found
+    REDIS_AVAILABLE = False
+    def get_case_count():
+        import sqlite3
+        db_conn = sqlite3.connect(storage.db_path)
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM cases')
+        count = cursor.fetchone()[0]
+        db_conn.close()
+        return count
+    def get_cached(key):
+        return None
+    def set_cached(key, value, ttl=3600):
+        return False
+    def get_cache_key(endpoint, **kwargs):
+        return f"caselinker:{endpoint}"
+
 app = FastAPI(title="CaseLinker API")
 
 app.add_middleware(
@@ -89,50 +124,42 @@ async def serve_home():
         return HTMLResponse(content="<h1>CaseLinker</h1><p>Home page not found. Go to <a href='/visualization'>/visualization</a></p>", status_code=404)
 
 
-# Cache for cases (invalidates when cases change)
-_cases_cache = None
-_cases_cache_case_count = 0
-_cases_cache_raw_data_flag = None
-
 @app.get("/api/cases")
 def get_all_cases(include_raw_data: bool = False):
     """
     Get all cases from database.
-    Uses caching to avoid recomputing on every request.
+    Uses Redis caching for fast responses (shared across all workers/instances).
     
     Args:
         include_raw_data: If True, include full raw_data (slower, larger payload).
                          Default False for faster initial loads.
     """
-    global _cases_cache, _cases_cache_case_count, _cases_cache_raw_data_flag
-    
     try:
-        # Quick check: get case count first (fast query)
-        import sqlite3
-        db_conn = sqlite3.connect(storage.db_path)
-        cursor = db_conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM cases')
-        current_case_count = cursor.fetchone()[0]
-        db_conn.close()
+        # Get current case count for cache versioning
+        current_case_count = get_case_count()
         
-        # Check if cache is still valid (same case count AND same raw_data flag)
-        if (_cases_cache is not None and 
-            _cases_cache_case_count == current_case_count and
-            _cases_cache_raw_data_flag == include_raw_data):
-            return _cases_cache
+        # Build cache key with version and parameters
+        cache_key = get_cache_key('cases', version=current_case_count, include_raw_data=include_raw_data)
         
-        # Load cases (only if cache invalid)
+        # Try Redis cache first
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            return cached_result
+        
+        # Cache miss - load from database
         cases = storage.get_all_cases(include_raw_data=include_raw_data)
+        result = cases if cases else []
         
-        # Update cache
-        _cases_cache = cases if cases else []
-        _cases_cache_case_count = current_case_count
-        _cases_cache_raw_data_flag = include_raw_data
+        # Store in Redis cache (1 hour TTL)
+        set_cached(cache_key, result, ttl=3600)
         
-        return _cases_cache
+        return result
     except Exception as e:
-        # Handle case where database doesn't exist or is empty
-        return []
+        # Fallback to direct database query if Redis fails
+        try:
+            return storage.get_all_cases(include_raw_data=include_raw_data) or []
+        except:
+            return []
 
 # Cache for unique tags (invalidates when cases change)
 _tags_cache = None
@@ -252,116 +279,162 @@ def get_timeline():
 
 @app.get("/api/stats")
 def get_stats():
-    """Get statistics about cases"""
+    """
+    Get statistics about cases.
+    Uses Redis caching for fast responses.
+    """
     try:
-        cases = storage.get_all_cases()
-    except Exception:
-        cases = []
-    
-    if not cases:
-        return {
-            "total_cases": 0,
-            "total_victims": 0,
-            "sources": [],
-            "source_count": 0,
-            "unique_features": 0,
-            "unique_organizations": 0,
-            "date_range": {"start": None, "end": None}
+        # Get current case count for cache versioning
+        current_case_count = get_case_count()
+        
+        # Build cache key
+        cache_key = get_cache_key('stats', version=current_case_count)
+        
+        # Try Redis cache first
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            return cached_result
+        
+        # Cache miss - compute stats
+        try:
+            cases = storage.get_all_cases()
+        except Exception:
+            cases = []
+        
+        if not cases:
+            result = {
+                "total_cases": 0,
+                "total_victims": 0,
+                "sources": [],
+                "source_count": 0,
+                "unique_features": 0,
+                "unique_organizations": 0,
+                "date_range": {"start": None, "end": None}
+            }
+            set_cached(cache_key, result, ttl=3600)
+            return result
+        
+        # Calculate total victims
+        total_victims = 0
+        for case in cases:
+            victim_count = case.get('victim_count')
+            if victim_count and isinstance(victim_count, (int, float)):
+                total_victims += victim_count
+            elif case.get('raw_data', {}).get('victim_count'):
+                try:
+                    total_victims += int(case['raw_data']['victim_count'])
+                except:
+                    pass
+        
+        # Get unique sources
+        sources = set()
+        for case in cases:
+            source = case.get('source') or case.get('raw_data', {}).get('source')
+            if source:
+                sources.add(source)
+        
+        # Calculate total extracted features - DIRECT COUNT from actual database data
+        total_features = 0
+        for case in cases:
+            # Count array/list features - each item counts as 1 feature
+            platforms = case.get('platforms_used', [])
+            if isinstance(platforms, list) and platforms:
+                total_features += len([p for p in platforms if p])
+            
+            topics = case.get('case_topics', [])
+            if isinstance(topics, list) and topics:
+                total_features += len([t for t in topics if t])
+            
+            severity = case.get('severity_indicators', [])
+            if isinstance(severity, list) and severity:
+                total_features += len([s for s in severity if s])
+            
+            agencies = case.get('agencies_involved', [])
+            if isinstance(agencies, list) and agencies:
+                total_features += len([a for a in agencies if a])
+        
+        # Calculate unique organizations (from normalized agencies_involved and organizations fields)
+        unique_orgs = set()
+        for case in cases:
+            agencies = case.get('agencies_involved', [])
+            organizations = case.get('organizations', [])
+            if isinstance(agencies, list):
+                for org in agencies:
+                    if org and isinstance(org, str) and org.strip():
+                        unique_orgs.add(org.strip())
+            if isinstance(organizations, list):
+                for org in organizations:
+                    if org and isinstance(org, str) and org.strip():
+                        unique_orgs.add(org.strip())
+            
+            # Count single-value features (1 if exists)
+            if case.get('investigation_type'):
+                total_features += 1
+            if case.get('relationship_to_victim'):
+                total_features += 1
+            if case.get('perpetrator_registered_sex_offender') is True:
+                total_features += 1
+            if case.get('perpetrator_age') is not None:
+                total_features += 1
+            if case.get('victim_count') and isinstance(case.get('victim_count'), (int, float)) and case.get('victim_count') > 0:
+                total_features += 1
+            
+            # Count complex objects (1 if has any data)
+            evidence = case.get('evidence_volume')
+            if evidence and isinstance(evidence, dict):
+                if evidence.get('images') or evidence.get('videos') or evidence.get('storage_size'):
+                    total_features += 1
+            
+            prosecution = case.get('prosecution_outcome')
+            if prosecution and isinstance(prosecution, dict):
+                if prosecution.get('booking_status') or prosecution.get('charges') or prosecution.get('jail'):
+                    total_features += 1
+            
+            victim_demo = case.get('victim_demographics')
+            if victim_demo and isinstance(victim_demo, dict):
+                if victim_demo.get('ages') or victim_demo.get('age_range') or victim_demo.get('gender'):
+                    total_features += 1
+        
+        result = {
+            "total_cases": len(cases),
+            "total_victims": total_victims,
+            "sources": list(sources),
+            "source_count": len(sources),
+            "unique_features": total_features,
+            "unique_organizations": len(unique_orgs),
+            "date_range": {
+                "start": min((c.get('date_range', {}).get('start') for c in cases if c.get('date_range', {}).get('start')), default=None),
+                "end": max((c.get('date_range', {}).get('end') for c in cases if c.get('date_range', {}).get('end')), default=None)
+            }
         }
-    
-    # Calculate total victims
-    total_victims = 0
-    for case in cases:
-        victim_count = case.get('victim_count')
-        if victim_count and isinstance(victim_count, (int, float)):
-            total_victims += victim_count
-        elif case.get('raw_data', {}).get('victim_count'):
-            try:
-                total_victims += int(case['raw_data']['victim_count'])
-            except:
-                pass
-    
-    # Get unique sources
-    sources = set()
-    for case in cases:
-        source = case.get('source') or case.get('raw_data', {}).get('source')
-        if source:
-            sources.add(source)
-    
-    # Calculate total extracted features - DIRECT COUNT from actual database data
-    total_features = 0
-    for case in cases:
-        # Count array/list features - each item counts as 1 feature
-        platforms = case.get('platforms_used', [])
-        if isinstance(platforms, list) and platforms:
-            total_features += len([p for p in platforms if p])
         
-        topics = case.get('case_topics', [])
-        if isinstance(topics, list) and topics:
-            total_features += len([t for t in topics if t])
+        # Store in Redis cache (1 hour TTL)
+        set_cached(cache_key, result, ttl=3600)
         
-        severity = case.get('severity_indicators', [])
-        if isinstance(severity, list) and severity:
-            total_features += len([s for s in severity if s])
-        
-        agencies = case.get('agencies_involved', [])
-        if isinstance(agencies, list) and agencies:
-            total_features += len([a for a in agencies if a])
-    
-    # Calculate unique organizations (from normalized agencies_involved and organizations fields)
-    unique_orgs = set()
-    for case in cases:
-        agencies = case.get('agencies_involved', [])
-        organizations = case.get('organizations', [])
-        if isinstance(agencies, list):
-            for org in agencies:
-                if org and isinstance(org, str) and org.strip():
-                    unique_orgs.add(org.strip())
-        if isinstance(organizations, list):
-            for org in organizations:
-                if org and isinstance(org, str) and org.strip():
-                    unique_orgs.add(org.strip())
-        
-        # Count single-value features (1 if exists)
-        if case.get('investigation_type'):
-            total_features += 1
-        if case.get('relationship_to_victim'):
-            total_features += 1
-        if case.get('perpetrator_registered_sex_offender') is True:
-            total_features += 1
-        if case.get('perpetrator_age') is not None:
-            total_features += 1
-        if case.get('victim_count') and isinstance(case.get('victim_count'), (int, float)) and case.get('victim_count') > 0:
-            total_features += 1
-        
-        # Count complex objects (1 if has any data)
-        evidence = case.get('evidence_volume')
-        if evidence and isinstance(evidence, dict):
-            if evidence.get('images') or evidence.get('videos') or evidence.get('storage_size'):
-                total_features += 1
-        
-        prosecution = case.get('prosecution_outcome')
-        if prosecution and isinstance(prosecution, dict):
-            if prosecution.get('booking_status') or prosecution.get('charges') or prosecution.get('jail'):
-                total_features += 1
-        
-        victim_demo = case.get('victim_demographics')
-        if victim_demo and isinstance(victim_demo, dict):
-            if victim_demo.get('ages') or victim_demo.get('age_range') or victim_demo.get('gender'):
-                total_features += 1
-    
-    return {
-        "total_cases": len(cases),
-        "total_victims": total_victims,
-        "sources": list(sources),
-        "source_count": len(sources),
-        "unique_features": total_features,
-        "unique_organizations": len(unique_orgs),
-        "date_range": {
-            "start": min((c.get('date_range', {}).get('start') for c in cases if c.get('date_range', {}).get('start')), default=None),
-            "end": max((c.get('date_range', {}).get('end') for c in cases if c.get('date_range', {}).get('end')), default=None)
-        }
-    }
+        return result
+    except Exception as e:
+        # Fallback to direct computation
+        try:
+            cases = storage.get_all_cases()
+            return {
+                "total_cases": len(cases) if cases else 0,
+                "total_victims": 0,
+                "sources": [],
+                "source_count": 0,
+                "unique_features": 0,
+                "unique_organizations": 0,
+                "date_range": {"start": None, "end": None}
+            }
+        except:
+            return {
+                "total_cases": 0,
+                "total_victims": 0,
+                "sources": [],
+                "source_count": 0,
+                "unique_features": 0,
+                "unique_organizations": 0,
+                "date_range": {"start": None, "end": None}
+            }
 
 
 @app.post("/api/tag-threader")
@@ -398,21 +471,152 @@ def get_tagged_cases(selected_tags: List[Dict[str, str]]):
     return {"cases": matching_cases}
 
 
-# Cache for automated analysis results (invalidates when cases change)
-_analysis_cache = None
-_cache_case_count = 0
-
-@app.get("/api/automated-analysis")
-async def automated_analysis_endpoint():
+@app.get("/api/case-ids-by-filter")
+def get_case_ids_by_filter(
+    organization: str = None,
+    relationship: str = None,
+    prosecution_status: str = None,
+    age_range: str = None,
+    severity_indicator: str = None,
+    platform: str = None,
+    year: str = None,
+    investigation_type: str = None
+):
     """
-    Get automated analysis results (case groups, triaged cases, insights).
-    Uses pre-computed clusters from database for fast response.
-    Falls back to computing if pre-computed clusters not available.
+    Get case IDs filtered by various criteria.
+    Returns just the case IDs that match the filter.
     """
-    global _analysis_cache, _cache_case_count
-    
     try:
-        # Quick check: get case count first (fast query)
+        cases = storage.get_all_cases(include_raw_data=False)
+        
+        import json
+        def parse_field(field):
+            if isinstance(field, str):
+                try:
+                    return json.loads(field)
+                except:
+                    return []
+            return field if field else []
+        
+        filtered_cases = cases
+        
+        # Filter by organization (with normalization)
+        if organization:
+            def normalize_org_name(name):
+                if not name:
+                    return name
+                name = name.strip()
+                if name.lower().startswith('the '):
+                    name = name[4:].strip()
+                if name.startswith('The '):
+                    name = name[4:].strip()
+                name_upper = name.upper()
+                if name_upper == 'HSI' or name == 'Homeland Security Investigations':
+                    return 'Homeland Security Investigations (HSI)'
+                return name
+            
+            normalized_org = normalize_org_name(organization)
+            filtered_cases = [
+                c for c in filtered_cases
+                if normalized_org in [normalize_org_name(org) for org in parse_field(c.get('agencies_involved', []))] or
+                   normalized_org in [normalize_org_name(org) for org in parse_field(c.get('organizations', []))]
+            ]
+        
+        # Filter by relationship
+        if relationship:
+            filtered_cases = [
+                c for c in filtered_cases
+                if c.get('relationship_to_victim') == relationship
+            ]
+        
+        # Filter by prosecution status
+        if prosecution_status:
+            filtered_cases = [
+                c for c in filtered_cases
+                if c.get('prosecution_outcome') and (
+                    (isinstance(c.get('prosecution_outcome'), dict) and 
+                     (c.get('prosecution_outcome').get('booking_status') == prosecution_status or
+                      c.get('prosecution_outcome').get('status') == prosecution_status)) or
+                    str(c.get('prosecution_outcome')) == prosecution_status
+                )
+            ]
+        
+        # Filter by age range (e.g., "25-29")
+        if age_range:
+            try:
+                age_min, age_max = map(int, age_range.split('-'))
+                filtered_cases = [
+                    c for c in filtered_cases
+                    if c.get('perpetrator_age') and (
+                        (isinstance(c.get('perpetrator_age'), list) and
+                         any(age_min <= age <= age_max for age in c.get('perpetrator_age') if isinstance(age, (int, float)))) or
+                        (isinstance(c.get('perpetrator_age'), (int, float)) and age_min <= c.get('perpetrator_age') <= age_max)
+                    )
+                ]
+            except:
+                pass
+        
+        # Filter by severity indicator
+        if severity_indicator:
+            filtered_cases = [
+                c for c in filtered_cases
+                if severity_indicator in parse_field(c.get('severity_indicators', []))
+            ]
+        
+        # Filter by platform
+        if platform:
+            filtered_cases = [
+                c for c in filtered_cases
+                if platform in parse_field(c.get('platforms_used', []))
+            ]
+        
+        # Filter by year
+        if year:
+            filtered_cases = [
+                c for c in filtered_cases
+                if (c.get('date_start') and str(c.get('date_start'))[:4] == year) or
+                   (isinstance(c.get('date_range'), dict) and 
+                    c.get('date_range').get('start') and 
+                    str(c.get('date_range').get('start'))[:4] == year)
+            ]
+        
+        # Filter by investigation type
+        if investigation_type:
+            filtered_cases = [
+                c for c in filtered_cases
+                if c.get('investigation_type') == investigation_type
+            ]
+        
+        case_ids = [c.get('id') for c in filtered_cases if c.get('id')]
+        
+        return {
+            "case_ids": case_ids,
+            "count": len(case_ids),
+            "filter": {
+                "organization": organization,
+                "relationship": relationship,
+                "prosecution_status": prosecution_status,
+                "age_range": age_range,
+                "severity_indicator": severity_indicator,
+                "platform": platform,
+                "year": year,
+                "investigation_type": investigation_type
+            }
+        }
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
+
+
+@app.get("/api/stats-detailed")
+def get_detailed_stats():
+    """
+    Get detailed statistics for visualization charts.
+    Returns feature coverage, platform trends, organization involvement, etc.
+    Uses Redis caching for fast responses.
+    """
+    try:
+        # Get current case count for cache versioning
         import sqlite3
         db_conn = sqlite3.connect(storage.db_path)
         cursor = db_conn.cursor()
@@ -420,24 +624,275 @@ async def automated_analysis_endpoint():
         current_case_count = cursor.fetchone()[0]
         db_conn.close()
         
+        # Build cache key
+        cache_key = get_cache_key('stats-detailed', version=current_case_count)
+        
+        # Try Redis cache first
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            return cached_result
+        
+        # Cache miss - compute stats
+        cases = storage.get_all_cases(include_raw_data=False)
+        total_cases = len(cases)
+        
+        if total_cases == 0:
+            empty_result = {
+                "feature_coverage": {},
+                "platform_trends": {},
+                "top_organizations": [],
+                "agency_frequency": {},
+                "relationship_distribution": [],
+                "prosecution_distribution": [],
+                "perpetrator_age_data": [],
+                "severity_indicators_top": [],
+                "investigation_type_distribution": [],
+                "total_cases": 0
+            }
+            set_cached(cache_key, empty_result, ttl=3600)
+            return empty_result
+        
+        # 1. Feature Extraction Coverage
+        feature_coverage = {}
+        
+        # Parse JSON fields safely
+        import json
+        def parse_field(field):
+            if isinstance(field, str):
+                try:
+                    return json.loads(field)
+                except:
+                    return []
+            return field if field else []
+        
+        # Calculate coverage for each feature type
+        severity_count = sum(1 for c in cases if parse_field(c.get('severity_indicators', [])))
+        prosecution_count = sum(1 for c in cases if c.get('prosecution_outcome'))
+        relationship_count = sum(1 for c in cases if c.get('relationship_to_victim'))
+        platforms_count = sum(1 for c in cases if parse_field(c.get('platforms_used', [])))
+        investigation_count = sum(1 for c in cases if c.get('investigation_type'))
+        victim_count = sum(1 for c in cases if c.get('victim_count') is not None)
+        perp_age_count = sum(1 for c in cases if c.get('perpetrator_age') is not None)
+        perp_registry_count = sum(1 for c in cases if c.get('perpetrator_registered_sex_offender') is True)
+        evidence_count = sum(1 for c in cases if c.get('evidence_volume') and isinstance(c.get('evidence_volume'), dict) and any(c.get('evidence_volume', {}).values()))
+        agencies_count = sum(1 for c in cases if parse_field(c.get('agencies_involved', [])))
+        date_count = sum(1 for c in cases if c.get('date_start') or c.get('date_range'))
+        # Severity phrases: dangerous, stated, told, continue, attacked, out_of_control
+        severity_phrases_count = sum(1 for c in cases if parse_field(c.get('severity_phrases', [])))
+        
+        feature_coverage = {
+            "Severity Indicators": (severity_count / total_cases * 100) if total_cases > 0 else 0,
+            "Severity Phrases": (severity_phrases_count / total_cases * 100) if total_cases > 0 else 0,
+            "Prosecution": (prosecution_count / total_cases * 100) if total_cases > 0 else 0,
+            "Relationship to Victim": (relationship_count / total_cases * 100) if total_cases > 0 else 0,
+            "Platforms Used": (platforms_count / total_cases * 100) if total_cases > 0 else 0,
+            "Investigation Type": (investigation_count / total_cases * 100) if total_cases > 0 else 0,
+            "Victim Count": (victim_count / total_cases * 100) if total_cases > 0 else 0,
+            "Perpetrator Age": (perp_age_count / total_cases * 100) if total_cases > 0 else 0,
+            "Registry Status": (perp_registry_count / total_cases * 100) if total_cases > 0 else 0,
+            "Evidence": (evidence_count / total_cases * 100) if total_cases > 0 else 0,
+            "Agencies Involved": (agencies_count / total_cases * 100) if total_cases > 0 else 0,
+            "Date Range": (date_count / total_cases * 100) if total_cases > 0 else 0
+        }
+        
+        # 2. Platform Usage Over Time
+        from collections import defaultdict, Counter
+        import json
+        platform_by_year = defaultdict(lambda: defaultdict(int))
+        
+        for case in cases:
+            year = None
+            date_start = case.get('date_start') or (case.get('date_range', {}) if isinstance(case.get('date_range'), dict) else {}).get('start')
+            if date_start:
+                try:
+                    year = str(date_start)[:4]
+                except:
+                    pass
+            
+            if not year:
+                # Try to extract from raw_data
+                raw_data = case.get('raw_data', {})
+                if isinstance(raw_data, dict):
+                    month_year = raw_data.get('month_year', '')
+                    if month_year:
+                        year_match = month_year.split()[-1] if ' ' in month_year else None
+                        if year_match and year_match.isdigit():
+                            year = year_match
+            
+            if year and year.isdigit() and 2010 <= int(year) <= 2025:
+                platforms = parse_field(case.get('platforms_used', []))
+                for platform in platforms:
+                    platform_by_year[year][platform] += 1
+        
+        # Get top 7 platforms overall
+        all_platforms = Counter()
+        for year_data in platform_by_year.values():
+            all_platforms.update(year_data)
+        top_platforms = [p[0] for p in all_platforms.most_common(7)]
+        
+        platform_trends = {
+            "years": sorted(platform_by_year.keys()),
+            "platforms": top_platforms,
+            "data": {}
+        }
+        
+        for year in platform_trends["years"]:
+            platform_trends["data"][year] = {platform: platform_by_year[year][platform] for platform in top_platforms}
+        
+        # 3. Top Organizations
+        # Normalize organization names to merge duplicates (e.g., "the AZICAC Task Force" -> "AZICAC Task Force")
+        def normalize_org_name(name):
+            """Normalize organization name by removing common prefixes and standardizing abbreviations"""
+            if not name:
+                return name
+            name = name.strip()
+            # Remove leading "the " (case-insensitive)
+            if name.lower().startswith('the '):
+                name = name[4:].strip()
+            # Remove leading "The " 
+            if name.startswith('The '):
+                name = name[4:].strip()
+            
+            # Standardize common abbreviations
+            name_upper = name.upper()
+            if name_upper == 'HSI' or name == 'Homeland Security Investigations':
+                return 'Homeland Security Investigations (HSI)'
+            
+            return name
+        
+        # Count each organization once per case (deduplicate within case)
+        org_counter = Counter()
+        for case in cases:
+            agencies = parse_field(case.get('agencies_involved', []))
+            organizations = parse_field(case.get('organizations', []))
+            # Combine and deduplicate within this case, then normalize
+            case_orgs = set()
+            for org in agencies + organizations:
+                if org and isinstance(org, str) and org.strip():
+                    normalized = normalize_org_name(org.strip())
+                    if normalized:
+                        case_orgs.add(normalized)
+            # Count each org once per case
+            for org in case_orgs:
+                org_counter[org] += 1
+        
+        top_organizations = [{"name": name, "count": count} for name, count in org_counter.most_common(15)]
+        
+        # 4. Agency Frequency Distribution
+        # Count how many organizations appear in exactly N cases
+        org_frequency = Counter(org_counter.values())
+        agency_frequency = {
+            "cases_per_org": sorted(org_frequency.keys()),
+            "num_organizations": [org_frequency[k] for k in sorted(org_frequency.keys())]
+        }
+        
+        # 5. Relationship to Victim Distribution
+        relationship_counter = Counter()
+        for case in cases:
+            rel = case.get('relationship_to_victim')
+            if rel:
+                relationship_counter[rel] += 1
+        relationship_distribution = [{"name": name, "count": count} for name, count in relationship_counter.most_common()]
+        
+        # 6. Prosecution Distribution
+        prosecution_counter = Counter()
+        for case in cases:
+            prosecution = case.get('prosecution_outcome')
+            if prosecution:
+                if isinstance(prosecution, dict):
+                    status = prosecution.get('booking_status') or prosecution.get('status') or 'prosecuted'
+                else:
+                    status = str(prosecution)
+                prosecution_counter[status] += 1
+        prosecution_distribution = [{"name": name, "count": count} for name, count in prosecution_counter.most_common()]
+        
+        # 7. Perpetrator Age Data (for bubble chart)
+        age_counter = Counter()
+        for case in cases:
+            ages = case.get('perpetrator_age')
+            if ages:
+                if isinstance(ages, list):
+                    for age in ages:
+                        if isinstance(age, (int, float)) and 18 <= age <= 99:
+                            age_counter[int(age)] += 1
+                elif isinstance(ages, (int, float)) and 18 <= ages <= 99:
+                    age_counter[int(ages)] += 1
+        # Group ages into bins for better visualization
+        age_bins = {}
+        for age, count in age_counter.items():
+            bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
+            age_bins[bin_key] = age_bins.get(bin_key, 0) + count
+        perpetrator_age_data = [{"age": age, "count": count} for age, count in sorted(age_bins.items(), key=lambda x: int(x[0].split('-')[0]))]
+        
+        # 8. Severity Indicators (most common)
+        severity_counter = Counter()
+        for case in cases:
+            severities = parse_field(case.get('severity_indicators', []))
+            for sev in severities:
+                severity_counter[sev] += 1
+        severity_indicators_top = [{"name": name.replace('_', ' ').title(), "count": count} for name, count in severity_counter.most_common(10)]
+        
+        # 9. Investigation Type Distribution
+        investigation_counter = Counter()
+        for case in cases:
+            inv_type = case.get('investigation_type')
+            if inv_type:
+                investigation_counter[inv_type] += 1
+        investigation_type_distribution = [{"name": name.replace('_', ' ').title(), "count": count} for name, count in investigation_counter.most_common()]
+        
+        result = {
+            "feature_coverage": feature_coverage,
+            "platform_trends": platform_trends,
+            "top_organizations": top_organizations,
+            "agency_frequency": agency_frequency,
+            "relationship_distribution": relationship_distribution,
+            "prosecution_distribution": prosecution_distribution,
+            "perpetrator_age_data": perpetrator_age_data,
+            "severity_indicators_top": severity_indicators_top,
+            "investigation_type_distribution": investigation_type_distribution,
+            "total_cases": total_cases
+        }
+        
+        # Store in Redis cache (1 hour TTL)
+        set_cached(cache_key, result, ttl=3600)
+        
+        return result
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
+
+@app.get("/api/automated-analysis")
+async def automated_analysis_endpoint():
+    """
+    Get automated analysis results (case groups, triaged cases, insights).
+    Uses Redis caching + pre-computed clusters from database for fast response.
+    Falls back to computing if pre-computed clusters not available.
+    """
+    try:
+        # Get current case count for cache versioning
+        current_case_count = get_case_count()
+        
+        # Build cache key
+        cache_key = get_cache_key('automated-analysis', version=current_case_count)
+        
+        # Try Redis cache first (fastest!)
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            cached_result['_cache_source'] = 'redis'
+            return cached_result
+        
         # Try to get pre-computed clusters from database (fast!)
         precomputed = storage.get_precomputed_clusters(current_case_count)
         if precomputed:
-            return {
+            result = {
                 "success": True,
                 "analysis": precomputed,
                 "cached": True,
                 "source": "database"
             }
-        
-        # Fallback: Check in-memory cache
-        if _analysis_cache is not None and _cache_case_count == current_case_count:
-            return {
-                "success": True,
-                "analysis": _analysis_cache,
-                "cached": True,
-                "source": "memory"
-            }
+            # Store in Redis for even faster future access
+            set_cached(cache_key, result, ttl=3600)
+            return result
         
         # Last resort: Compute on-demand (slow, but works)
         print("⚠️  No pre-computed clusters found, computing on-demand (this is slow)...")
@@ -447,21 +902,20 @@ async def automated_analysis_endpoint():
         # Store in database for next time
         storage.store_precomputed_clusters(analysis_results, current_case_count)
         
-        # Update memory cache
-        _analysis_cache = analysis_results
-        _cache_case_count = current_case_count
-        
-        return {
+        result = {
             "success": True,
             "analysis": analysis_results,
             "cached": False,
             "source": "computed"
         }
+        
+        # Store in Redis cache (1 hour TTL)
+        set_cached(cache_key, result, ttl=3600)
+        
+        return result
     except Exception as e:
         import traceback
         return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
-
-
 
 
 @app.get("/api")
@@ -501,6 +955,17 @@ async def serve_clusters():
         return HTMLResponse(content=html_content)
     else:
         return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
+
+@app.get("/stats", response_class=HTMLResponse)
+async def serve_stats():
+    """Serve the HTML stats page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "stats.html"
+    if html_path.exists():
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Stats page not found</h1>", status_code=404)
 
 @app.get("/sources", response_class=HTMLResponse)
 async def serve_sources():

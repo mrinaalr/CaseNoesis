@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - Statistics</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f1419;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(76, 175, 80, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #0f1419 0%, #1a2520 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .nav a.ml-experimental {
+            color: #dc2626;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { 
+                opacity: 0.75;
+            }
+            50% { 
+                opacity: 0.90;
+            }
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 20px;
+        }
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+        h1 .case-part {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+        h1 .stats-part {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 50%, #4CAF50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseGreen 6s ease-in-out infinite;
+            position: relative;
+        }
+        @keyframes pulseGreen {
+            0%, 100% { 
+                opacity: 0.85;
+            }
+            50% { 
+                opacity: 1.0;
+            }
+        }
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            margin-left: 20px;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-title {
+            color: #4CAF50;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .chart {
+            width: 100%;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #4CAF50;
+            font-size: 1.2em;
+        }
+        .error {
+            padding: 20px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 5px;
+            color: #fca5a5;
+        }
+        .axis {
+            font-size: 12px;
+            fill: #b0b0b0;
+        }
+        .axis-label {
+            font-size: 14px;
+            fill: #e0e0e0;
+            font-weight: 600;
+        }
+        .grid-line {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1;
+        }
+        .feature-bar {
+            cursor: pointer;
+            transition: fill 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.3)) drop-shadow(0 0 6px rgba(76, 175, 80, 0.2));
+        }
+        .feature-bar:hover {
+            fill: #d4af37 !important;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 18px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 24px rgba(212, 175, 55, 0.3));
+        }
+        .legend {
+            font-size: 12px;
+            fill: #b0b0b0;
+        }
+        .case-ids-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        .case-ids-modal-content {
+            background-color: #1a2520;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+        }
+        .case-ids-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        .case-ids-modal-title {
+            color: #4CAF50;
+            font-size: 1.5em;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .case-ids-modal-close {
+            color: #b0b0b0;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+        }
+        .case-ids-modal-close:hover {
+            color: #4CAF50;
+        }
+        .case-ids-count {
+            color: #d4af37;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .case-ids-list {
+            background: rgba(15, 20, 25, 0.5);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #e0e0e0;
+            line-height: 1.8;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .case-ids-copy-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        .case-ids-copy-btn:hover {
+            background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        .case-ids-copy-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
+        <a href="/stats">Stats</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+    
+    <div class="container">
+        <h1><span class="case-part">Case</span> <span class="stats-part">Statistics</span></h1>
+        <p class="subtitle">Statistical analysis extracted from case features</p>
+        
+        <div id="chart-1" class="chart-container">
+            <div class="chart-title">Feature Extraction Coverage (% of cases with this feature)</div>
+            <div class="chart" id="feature-coverage-chart">
+                <div class="loading">Loading feature coverage data...</div>
+            </div>
+        </div>
+        
+        <div id="chart-2" class="chart-container">
+            <div class="chart-title">Top 15 Most Frequently Involved Law Enforcement Organizations</div>
+            <div class="chart" id="organizations-chart">
+                <div class="loading">Loading organization data...</div>
+            </div>
+        </div>
+        
+        <div id="chart-3" class="chart-container">
+            <div class="chart-title">Platform Usage Over Time (Top 7 Platforms)</div>
+            <div class="chart" id="platform-trends-chart">
+                <div class="loading">Loading platform trends...</div>
+            </div>
+        </div>
+        
+        <div id="chart-4" class="chart-container">
+            <div class="chart-title">Relationship to Victim Distribution</div>
+            <div class="chart" id="relationship-chart">
+                <div class="loading">Loading relationship data...</div>
+            </div>
+        </div>
+        
+        <div id="chart-5" class="chart-container">
+            <div class="chart-title">Perpetrator Age Distribution</div>
+            <div class="chart" id="perpetrator-age-chart">
+                <div class="loading">Loading age data...</div>
+            </div>
+        </div>
+        
+        <div id="chart-6" class="chart-container">
+            <div class="chart-title">Most Common Severity Indicators</div>
+            <div class="chart" id="severity-indicators-chart">
+                <div class="loading">Loading severity indicators...</div>
+            </div>
+        </div>
+        
+        <div id="chart-7" class="chart-container">
+            <div class="chart-title">Investigation Type Distribution</div>
+            <div class="chart" id="investigation-type-chart">
+                <div class="loading">Loading investigation type data...</div>
+            </div>
+        </div>
+        
+        <div id="chart-8" class="chart-container">
+            <div class="chart-title">Prosecution Outcomes</div>
+            <div class="chart" id="prosecution-chart">
+                <div class="loading">Loading prosecution data...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case IDs Modal -->
+    <div id="case-ids-modal" class="case-ids-modal">
+        <div class="case-ids-modal-content">
+            <div class="case-ids-modal-header">
+                <div class="case-ids-modal-title" id="modal-title">Case IDs</div>
+                <button class="case-ids-modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="case-ids-count" id="modal-count"></div>
+            <div class="case-ids-list" id="modal-case-ids"></div>
+            <button class="case-ids-copy-btn" id="modal-copy-btn">Copy All Case IDs</button>
+        </div>
+    </div>
+
+    <script>
+        const margin = {top: 20, right: 30, bottom: 60, left: 120};
+        const marginWide = {top: 20, right: 30, bottom: 60, left: 180}; // For organizations chart
+        const chartWidth = 1200;
+        const chartHeight = 500;
+        
+        // Color schemes
+        const colors = {
+            primary: '#4CAF50',
+            secondary: '#66BB6A',
+            accent: '#d4af37',
+            platform: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800', '#E91E63', '#00BCD4', '#8BC34A']
+        };
+        
+        // Modal functions
+        const modal = document.getElementById('case-ids-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalCount = document.getElementById('modal-count');
+        const modalCaseIds = document.getElementById('modal-case-ids');
+        const modalClose = document.getElementById('modal-close');
+        const modalCopyBtn = document.getElementById('modal-copy-btn');
+        
+        modalClose.onclick = function() {
+            modal.style.display = 'none';
+        };
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+        
+        modalCopyBtn.onclick = function() {
+            const text = modalCaseIds.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                modalCopyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    modalCopyBtn.textContent = 'Copy All Case IDs';
+                }, 2000);
+            });
+        };
+        
+        async function showCaseIds(filterType, filterValue, displayName) {
+            const filters = {};
+            if (filterType === 'organization') filters.organization = filterValue;
+            else if (filterType === 'relationship') filters.relationship = filterValue;
+            else if (filterType === 'prosecution') filters.prosecution_status = filterValue;
+            else if (filterType === 'age') filters.age_range = filterValue;
+            else if (filterType === 'severity') filters.severity_indicator = filterValue;
+            else if (filterType === 'platform') filters.platform = filterValue;
+            else if (filterType === 'year') filters.year = filterValue;
+            else if (filterType === 'investigation') filters.investigation_type = filterValue;
+            
+            showCaseIdsFiltered(filters, displayName);
+        }
+        
+        async function showCaseIdsFiltered(filters, displayName) {
+            try {
+                modalTitle.textContent = `Case IDs: ${displayName}`;
+                modalCount.textContent = 'Loading...';
+                modalCaseIds.textContent = '';
+                modal.style.display = 'block';
+                
+                const params = new URLSearchParams();
+                if (filters.organization) params.append('organization', filters.organization);
+                if (filters.relationship) params.append('relationship', filters.relationship);
+                if (filters.prosecution_status) params.append('prosecution_status', filters.prosecution_status);
+                if (filters.age_range) params.append('age_range', filters.age_range);
+                if (filters.severity_indicator) params.append('severity_indicator', filters.severity_indicator);
+                if (filters.platform) params.append('platform', filters.platform);
+                if (filters.year) params.append('year', filters.year);
+                if (filters.investigation_type) params.append('investigation_type', filters.investigation_type);
+                
+                const response = await fetch(`/api/case-ids-by-filter?${params.toString()}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    modalCount.textContent = `Error: ${data.error}`;
+                    return;
+                }
+                
+                const caseIds = data.case_ids || [];
+                modalCount.textContent = `Found ${caseIds.length} case(s)`;
+                modalCaseIds.textContent = caseIds.join(', ');
+            } catch (error) {
+                modalCount.textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats-detailed');
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError('chart-1', data.error);
+                    return;
+                }
+                
+                renderFeatureCoverage(data.feature_coverage);
+                renderOrganizations(data.top_organizations);
+                renderPlatformTrends(data.platform_trends);
+                renderRelationship(data.relationship_distribution);
+                renderPerpetratorAge(data.perpetrator_age_data);
+                renderSeverityIndicators(data.severity_indicators_top);
+                renderProsecution(data.prosecution_distribution);
+                renderInvestigationType(data.investigation_type_distribution);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                showError('chart-1', 'Failed to load statistics data');
+            }
+        }
+        
+        function showError(chartId, message) {
+            document.getElementById(chartId).innerHTML = `<div class="error">${message}</div>`;
+        }
+        
+        function renderFeatureCoverage(coverage) {
+            const container = d3.select('#feature-coverage-chart');
+            container.html('');
+            
+            const width = chartWidth - margin.left - margin.right;
+            const height = Math.max(400, Object.keys(coverage).length * 35);
+            
+            const svg = container.append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const sorted = Object.entries(coverage).sort((a, b) => a[1] - b[1]);
+            
+            const x = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, width]);
+            
+            const y = d3.scaleBand()
+                .domain(sorted.map(d => d[0]))
+                .range([0, height])
+                .padding(0.2);
+            
+            // Grid lines
+            g.selectAll('.grid-line')
+                .data(d3.range(0, 101, 20))
+                .enter().append('line')
+                .attr('class', 'grid-line')
+                .attr('x1', d => x(d))
+                .attr('x2', d => x(d))
+                .attr('y1', 0)
+                .attr('y2', height);
+            
+            // Feature name to chart ID mapping
+            const featureToChart = {
+                'Agencies Involved': 'chart-2',
+                'Platforms Used': 'chart-3',
+                'Relationship to Victim': 'chart-4',
+                'Perpetrator Age': 'chart-5',
+                'Severity Indicators': 'chart-6',
+                'Investigation Type': 'chart-7',
+                'Prosecution': 'chart-8',
+                'Victim Count': 'chart-1',
+                'Registry Status': 'chart-1',
+                'Evidence': 'chart-1',
+                'Date Range': 'chart-1'
+            };
+            
+            // Bars with click handlers
+            const bars = g.selectAll('.bar')
+                .data(sorted)
+                .enter().append('rect')
+                .attr('class', 'feature-bar')
+                .attr('x', 0)
+                .attr('y', d => y(d[0]))
+                .attr('width', d => x(d[1]))
+                .attr('height', y.bandwidth())
+                .attr('fill', colors.primary)
+                .attr('rx', 4)
+                .on('click', function(event, d) {
+                    const chartId = featureToChart[d[0]] || 'chart-1';
+                    const targetElement = document.getElementById(chartId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Add a brief highlight effect
+                        const originalBoxShadow = targetElement.style.boxShadow;
+                        targetElement.style.transition = 'box-shadow 0.5s ease';
+                        targetElement.style.boxShadow = '0 0 30px rgba(212, 175, 55, 1), 0 0 50px rgba(212, 175, 55, 0.6)';
+                        setTimeout(() => {
+                            targetElement.style.boxShadow = originalBoxShadow;
+                        }, 2000);
+                    }
+                });
+            
+            // Labels
+            g.selectAll('.label')
+                .data(sorted)
+                .enter().append('text')
+                .attr('class', 'axis')
+                .attr('x', d => x(d[1]) + 5)
+                .attr('y', d => y(d[0]) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .text(d => `${d[1].toFixed(1)}%`)
+                .attr('fill', '#fff')
+                .attr('font-weight', '600');
+            
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#e0e0e0')
+                .attr('font-size', '12px');
+            
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(5))
+                .selectAll('text')
+                .attr('fill', '#b0b0b0');
+            
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', `translate(${width/2}, ${height + 40})`)
+                .attr('text-anchor', 'middle')
+                .text('Coverage (%)');
+        }
+        
+        function renderPlatformTrends(trends) {
+            const container = d3.select('#platform-trends-chart');
+            container.html('');
+            
+            const legendWidth = 150; // Space for legend on the right
+            const chartAreaWidth = chartWidth - margin.left - margin.right - legendWidth;
+            const height = chartHeight - margin.top - margin.bottom;
+            
+            const svg = container.append('svg')
+                .attr('width', chartWidth + legendWidth)
+                .attr('height', height + margin.top + margin.bottom);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const years = trends.years || [];
+            const platforms = trends.platforms || [];
+            
+            // Grouped bar chart setup
+            const x0 = d3.scaleBand()
+                .domain(years)
+                .range([0, chartAreaWidth])
+                .padding(0.2);
+            
+            const x1 = d3.scaleBand()
+                .domain(platforms)
+                .range([0, x0.bandwidth()])
+                .padding(0.05);
+            
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(years, year => {
+                    const yearData = trends.data[year] || {};
+                    return d3.max(platforms, p => yearData[p] || 0);
+                }) || 1])
+                .nice()
+                .range([height, 0]);
+            
+            // Color scale
+            const colorScale = d3.scaleOrdinal()
+                .domain(platforms)
+                .range(colors.platform);
+            
+            // Grid lines
+            g.selectAll('.grid-line')
+                .data(y.ticks(5))
+                .enter().append('line')
+                .attr('class', 'grid-line')
+                .attr('x1', 0)
+                .attr('x2', chartAreaWidth)
+                .attr('y1', d => y(d))
+                .attr('y2', d => y(d));
+            
+            // Grouped bars
+            years.forEach(year => {
+                const yearGroup = g.append('g')
+                    .attr('transform', `translate(${x0(year)}, 0)`);
+                
+                platforms.forEach(platform => {
+                    const value = (trends.data[year] || {})[platform] || 0;
+                    if (value > 0) {
+                        yearGroup.append('rect')
+                            .attr('x', x1(platform))
+                            .attr('y', y(value))
+                            .attr('width', x1.bandwidth())
+                            .attr('height', height - y(value))
+                            .attr('fill', colorScale(platform))
+                            .attr('rx', 4)
+                            .attr('class', 'bar')
+                            .style('cursor', 'pointer')
+                            .datum({platform: platform, year: year})
+                            .on('click', function(event, d) {
+                                // Filter by both platform and year
+                                showCaseIdsFiltered({platform: d.platform, year: d.year}, `${d.platform} (${d.year})`);
+                            });
+                    }
+                });
+            });
+            
+            // X-axis with clickable year labels
+            const xAxis = g.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x0));
+            
+            xAxis.selectAll('text')
+                .attr('fill', '#b0b0b0')
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('year', d, `Year ${d}`);
+                });
+            
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#b0b0b0');
+            
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', `translate(${chartAreaWidth/2}, ${height + 40})`)
+                .attr('text-anchor', 'middle')
+                .text('Year');
+            
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', -margin.left + 20)
+                .attr('x', -height/2)
+                .attr('text-anchor', 'middle')
+                .text('Number of Cases');
+            
+            // Legend - positioned on the right side
+            const legend = g.append('g')
+                .attr('transform', `translate(${chartAreaWidth + 20}, 20)`);
+            
+            // Order platforms as specified
+            const orderedPlatforms = ['online', 'chat', 'social media', 'Facebook', 'Snapchat', 'Instagram'];
+            const displayPlatforms = orderedPlatforms.filter(p => platforms.includes(p));
+            
+            displayPlatforms.forEach((platform, i) => {
+                const legendRow = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 20})`);
+                
+                legendRow.append('rect')
+                    .attr('width', 15)
+                    .attr('height', 15)
+                    .attr('fill', colorScale(platform))
+                    .attr('rx', 2);
+                
+                legendRow.append('text')
+                    .attr('x', 20)
+                    .attr('y', 12)
+                    .attr('fill', '#e0e0e0')
+                    .attr('font-size', '11px')
+                    .text(platform);
+            });
+        }
+        
+        function renderOrganizations(orgs) {
+            const container = d3.select('#organizations-chart');
+            container.html('');
+            
+            const width = chartWidth - marginWide.left - marginWide.right;
+            const height = Math.max(500, orgs.length * 30);
+            
+            const svg = container.append('svg')
+                .attr('width', width + marginWide.left + marginWide.right)
+                .attr('height', height + marginWide.top + marginWide.bottom);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${marginWide.left},${marginWide.top})`);
+            
+            const sorted = orgs.slice().sort((a, b) => a.count - b.count);
+            
+            const x = d3.scaleLinear()
+                .domain([0, d3.max(orgs, d => d.count) || 1])
+                .range([0, width]);
+            
+            const y = d3.scaleBand()
+                .domain(sorted.map(d => d.name))
+                .range([0, height])
+                .padding(0.2);
+            
+            // Grid lines
+            g.selectAll('.grid-line')
+                .data(x.ticks(5))
+                .enter().append('line')
+                .attr('class', 'grid-line')
+                .attr('x1', d => x(d))
+                .attr('x2', d => x(d))
+                .attr('y1', 0)
+                .attr('y2', height);
+            
+            // Bars with click handlers
+            g.selectAll('.bar')
+                .data(sorted)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', 0)
+                .attr('y', d => y(d.name))
+                .attr('width', d => x(d.count))
+                .attr('height', y.bandwidth())
+                .attr('fill', colors.secondary)
+                .attr('rx', 4)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('organization', d.name, d.name);
+                });
+            
+            // Labels
+            g.selectAll('.label')
+                .data(sorted)
+                .enter().append('text')
+                .attr('class', 'axis')
+                .attr('x', d => x(d.count) + 5)
+                .attr('y', d => y(d.name) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .text(d => d.count)
+                .attr('fill', '#fff')
+                .attr('font-weight', '600');
+            
+            // Y-axis - with better text wrapping for long names
+            const yAxis = g.append('g')
+                .call(d3.axisLeft(y));
+            
+            yAxis.selectAll('text')
+                .attr('fill', '#e0e0e0')
+                .attr('font-size', '11px')
+                .each(function(d) {
+                    // Truncate very long names
+                    const text = d3.select(this);
+                    const name = text.text();
+                    if (name.length > 35) {
+                        text.text(name.substring(0, 32) + '...');
+                    }
+                });
+            
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(5))
+                .selectAll('text')
+                .attr('fill', '#b0b0b0');
+            
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', `translate(${width/2}, ${height + 40})`)
+                .attr('text-anchor', 'middle')
+                .text('Number of Cases');
+        }
+        
+        function renderRelationship(data) {
+            const container = d3.select('#relationship-chart');
+            container.html('');
+            
+            if (!data || data.length === 0) {
+                container.html('<div class="error">No relationship data available</div>');
+                return;
+            }
+            
+            const width = 1000;
+            const height = 500;
+            const radius = Math.min(400, height) / 2 - 20;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${width/2 + 100}, ${height/2})`);
+            
+            const color = d3.scaleOrdinal()
+                .domain(data.map(d => d.name))
+                .range(['#4CAF50', '#2196F3', '#9C27B0', '#FF9800', '#E91E63', '#00BCD4', '#8BC34A', '#FF5722', '#795548', '#607D8B']);
+            
+            const pie = d3.pie()
+                .value(d => d.count)
+                .sort(null);
+            
+            const arc = d3.arc()
+                .innerRadius(radius * 0.5)
+                .outerRadius(radius);
+            
+            const arcs = g.selectAll('.arc')
+                .data(pie(data))
+                .enter().append('g')
+                .attr('class', 'arc');
+            
+            arcs.append('path')
+                .attr('d', arc)
+                .attr('fill', d => color(d.data.name))
+                .attr('stroke', '#0f1419')
+                .attr('stroke-width', 2)
+                .style('opacity', 0.9)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('relationship', d.data.name, d.data.name);
+                })
+                .on('mouseover', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .attr('transform', `scale(1.05)`)
+                        .style('opacity', 1);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .attr('transform', 'scale(1)')
+                        .style('opacity', 0.9);
+                });
+            
+            arcs.append('text')
+                .attr('transform', d => `translate(${arc.centroid(d)})`)
+                .attr('dy', '0.35em')
+                .style('text-anchor', 'middle')
+                .style('fill', '#fff')
+                .style('font-weight', '600')
+                .style('font-size', '12px')
+                .text(d => {
+                    const percent = ((d.data.count / d3.sum(data, d => d.count)) * 100).toFixed(1);
+                    return percent > 5 ? `${percent}%` : '';
+                });
+            
+            // Legend on the left side
+            const legend = svg.append('g')
+                .attr('transform', `translate(40, ${height/2 - (data.length * 25)/2})`);
+            
+            const legendItems = legend.selectAll('.legend-item')
+                .data(data)
+                .enter().append('g')
+                .attr('class', 'legend-item')
+                .attr('transform', (d, i) => `translate(0, ${i * 25})`);
+            
+            legendItems.append('rect')
+                .attr('width', 15)
+                .attr('height', 15)
+                .attr('fill', d => color(d.name))
+                .attr('rx', 2);
+            
+            legendItems.append('text')
+                .attr('x', 20)
+                .attr('y', 12)
+                .style('fill', '#e0e0e0')
+                .style('font-size', '12px')
+                .style('font-weight', '500')
+                .text(d => `${d.name} (${d.count})`);
+        }
+        
+        function renderProsecution(data) {
+            const container = d3.select('#prosecution-chart');
+            container.html('');
+            
+            if (!data || data.length === 0) {
+                container.html('<div class="error">No prosecution data available</div>');
+                return;
+            }
+            
+            const width = 800;
+            const height = 500;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const x = d3.scaleBand()
+                .domain(data.map(d => d.name))
+                .range([0, chartWidth])
+                .padding(0.2);
+            
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)])
+                .nice()
+                .range([chartHeight, 0]);
+            
+            const colorScale = d3.scaleOrdinal()
+                .domain(data.map(d => d.name))
+                .range(['#4CAF50', '#2196F3', '#9C27B0', '#FF9800', '#E91E63', '#00BCD4']);
+            
+            // Bars with gradient
+            const bars = g.selectAll('.bar')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.name))
+                .attr('y', d => y(d.count))
+                .attr('width', x.bandwidth())
+                .attr('height', d => chartHeight - y(d.count))
+                .attr('fill', d => colorScale(d.name))
+                .attr('rx', 8)
+                .style('opacity', 0.8)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('prosecution', d.name, d.name);
+                })
+                .on('mouseover', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .style('opacity', 1)
+                        .attr('y', y(d.count) - 5)
+                        .attr('height', chartHeight - y(d.count) + 5);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .style('opacity', 0.8)
+                        .attr('y', y(d.count))
+                        .attr('height', chartHeight - y(d.count));
+                });
+            
+            // Labels on bars
+            g.selectAll('.bar-label')
+                .data(data)
+                .enter().append('text')
+                .attr('class', 'bar-label')
+                .attr('x', d => x(d.name) + x.bandwidth() / 2)
+                .attr('y', d => y(d.count) - 5)
+                .attr('text-anchor', 'middle')
+                .style('fill', '#fff')
+                .style('font-weight', '600')
+                .style('font-size', '12px')
+                .text(d => d.count);
+            
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0,${chartHeight})`)
+                .call(d3.axisBottom(x))
+                .selectAll('text')
+                .attr('fill', '#b0b0b0')
+                .style('text-anchor', 'end')
+                .attr('dx', '-.8em')
+                .attr('dy', '.15em')
+                .attr('transform', 'rotate(-45)');
+            
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#b0b0b0');
+        }
+        
+        function renderPerpetratorAge(data) {
+            const container = d3.select('#perpetrator-age-chart');
+            container.html('');
+            
+            if (!data || data.length === 0) {
+                container.html('<div class="error">No age data available</div>');
+                return;
+            }
+            
+            const width = 1000;
+            const height = 400;
+            const topMargin = 10;
+            const bottomMargin = 50;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${topMargin})`);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - topMargin - bottomMargin;
+            
+            const maxCount = d3.max(data, d => d.count);
+            const maxRadius = 45;
+            const radiusScale = d3.scaleSqrt()
+                .domain([0, maxCount])
+                .range([8, maxRadius]);
+            
+            const x = d3.scaleBand()
+                .domain(data.map(d => d.age))
+                .range([0, chartWidth])
+                .padding(0.3);
+            
+            // Create bubbles
+            const bubbles = g.selectAll('.bubble')
+                .data(data)
+                .enter().append('circle')
+                .attr('class', 'bubble')
+                .attr('cx', d => x(d.age) + x.bandwidth() / 2)
+                .attr('cy', chartHeight / 2)
+                .attr('r', 0)
+                .attr('fill', '#d4af37')
+                .attr('opacity', 0.7)
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('age', d.age, `Age ${d.age}`);
+                })
+                .on('mouseover', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .attr('opacity', 1)
+                        .attr('stroke-width', 3);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this).transition().duration(200)
+                        .attr('opacity', 0.7)
+                        .attr('stroke-width', 2);
+                });
+            
+            // Animate bubbles - position them at the bottom with minimal top space
+            bubbles.transition()
+                .duration(1000)
+                .delay((d, i) => i * 50)
+                .attr('r', d => radiusScale(d.count))
+                .attr('cy', d => chartHeight - radiusScale(d.count) - 10);
+            
+            // Add labels
+            g.selectAll('.age-label')
+                .data(data)
+                .enter().append('text')
+                .attr('class', 'age-label')
+                .attr('x', d => x(d.age) + x.bandwidth() / 2)
+                .attr('y', chartHeight + 25)
+                .attr('text-anchor', 'middle')
+                .style('fill', '#e0e0e0')
+                .style('font-size', '11px')
+                .text(d => d.age);
+            
+            // Add count labels on bubbles
+            g.selectAll('.count-label')
+                .data(data)
+                .enter().append('text')
+                .attr('class', 'count-label')
+                .attr('x', d => x(d.age) + x.bandwidth() / 2)
+                .attr('y', d => chartHeight - radiusScale(d.count) - 10)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .style('fill', '#fff')
+                .style('font-weight', '600')
+                .style('font-size', d => Math.max(10, Math.min(16, radiusScale(d.count) / 2.5)))
+                .style('pointer-events', 'none')
+                .text(d => d.count)
+                .style('opacity', 0)
+                .transition()
+                .duration(1000)
+                .delay((d, i) => i * 50 + 500)
+                .style('opacity', 1);
+        }
+        
+        function renderSeverityIndicators(data) {
+            const container = d3.select('#severity-indicators-chart');
+            container.html('');
+            
+            if (!data || data.length === 0) {
+                container.html('<div class="error">No severity indicators data available</div>');
+                return;
+            }
+            
+            const width = 1000;
+            const height = Math.max(400, data.length * 50);
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const maxCount = d3.max(data, d => d.count);
+            const x = d3.scaleLinear()
+                .domain([0, maxCount])
+                .range([0, chartWidth]);
+            
+            const y = d3.scaleBand()
+                .domain(data.map(d => d.name))
+                .range([0, chartHeight])
+                .padding(0.3);
+            
+            // Bars with gradient effect
+            const bars = g.selectAll('.bar')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', 0)
+                .attr('y', d => y(d.name))
+                .attr('width', 0)
+                .attr('height', y.bandwidth())
+                .attr('fill', '#E91E63')
+                .attr('rx', 6)
+                .style('opacity', 0.85)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    showCaseIds('severity', d.name.toLowerCase().replace(/\s+/g, '_'), d.name);
+                });
+            
+            bars.transition()
+                .duration(1000)
+                .delay((d, i) => i * 100)
+                .attr('width', d => x(d.count));
+            
+            // Labels
+            g.selectAll('.label')
+                .data(data)
+                .enter().append('text')
+                .attr('class', 'label')
+                .attr('x', d => x(d.count) + 10)
+                .attr('y', d => y(d.name) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .style('fill', '#fff')
+                .style('font-weight', '600')
+                .style('font-size', '12px')
+                .text(d => d.count);
+            
+            // Y-axis labels
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#e0e0e0')
+                .style('font-size', '12px');
+        }
+        
+        function renderInvestigationType(data) {
+            const container = d3.select('#investigation-type-chart');
+            container.html('');
+            
+            if (!data || data.length === 0) {
+                container.html('<div class="error">No investigation type data available</div>');
+                return;
+            }
+            
+            const width = 1000;
+            const height = Math.max(400, data.length * 50);
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const maxCount = d3.max(data, d => d.count);
+            const x = d3.scaleLinear()
+                .domain([0, maxCount])
+                .range([0, chartWidth]);
+            
+            const y = d3.scaleBand()
+                .domain(data.map(d => d.name))
+                .range([0, chartHeight])
+                .padding(0.3);
+            
+            // Bars with gradient effect
+            const bars = g.selectAll('.bar')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', 0)
+                .attr('y', d => y(d.name))
+                .attr('width', 0)
+                .attr('height', y.bandwidth())
+                .attr('fill', '#00BCD4')
+                .attr('rx', 6)
+                .style('opacity', 0.85)
+                .style('cursor', 'pointer')
+                .on('click', function(event, d) {
+                    const invType = d.name.toLowerCase().replace(/\s+/g, '_');
+                    showCaseIds('investigation', invType, d.name);
+                });
+            
+            bars.transition()
+                .duration(1000)
+                .delay((d, i) => i * 100)
+                .attr('width', d => x(d.count));
+            
+            // Labels
+            g.selectAll('.label')
+                .data(data)
+                .enter().append('text')
+                .attr('class', 'label')
+                .attr('x', d => x(d.count) + 10)
+                .attr('y', d => y(d.name) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .style('fill', '#fff')
+                .style('font-weight', '600')
+                .style('font-size', '12px')
+                .text(d => d.count);
+            
+            // Y-axis labels
+            g.append('g')
+                .call(d3.axisLeft(y))
+                .selectAll('text')
+                .attr('fill', '#e0e0e0')
+                .style('font-size', '12px');
+        }
+        
+        // Load stats on page load
+        loadStats();
+    </script>
+</body>
+</html>
