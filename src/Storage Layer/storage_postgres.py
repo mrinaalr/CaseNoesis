@@ -639,11 +639,18 @@ class CaseStorage:
             # Delete old clusters for this case count
             cursor.execute('DELETE FROM precomputed_clusters WHERE case_count = %s', (case_count,))
             
+            # Convert datetime objects to strings for JSON serialization
+            def json_serializer(obj):
+                """Custom JSON serializer for datetime objects."""
+                if isinstance(obj, datetime):
+                    return obj.isoformat()
+                raise TypeError(f"Type {type(obj)} not serializable")
+            
             # Store new clusters
             cursor.execute('''
                 INSERT INTO precomputed_clusters (cluster_data, case_count)
                 VALUES (%s, %s)
-            ''', (json.dumps(cluster_data), case_count))
+            ''', (json.dumps(cluster_data, default=json_serializer), case_count))
             
             conn.commit()
             cursor.close()
