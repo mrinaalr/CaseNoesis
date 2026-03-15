@@ -21,6 +21,8 @@ CASES_DIRECTORY = "Cases"
 DATA_DIRECTORY = "data"
 
 # API Server
+import os
 API_HOST = "0.0.0.0"
 API_PORT = 8000
-API_RELOAD = True
+# Disable reload in production (set via environment variable)
+API_RELOAD = os.getenv("API_RELOAD", "false").lower() == "true"

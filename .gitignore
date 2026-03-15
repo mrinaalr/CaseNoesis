@@ -35,7 +35,6 @@ case_data/
 *.sqlite
 *.sqlite3
 *.db
-!caselinker.db  # Exception: encrypted database can be pushed for Railway for Railway deployment
 
 # IDE
 .vscode/
@@ -56,7 +55,6 @@ case_data/
 *.log
 
 # Database files
-# Note: caselinker.db exception is above (allowed for Railway deployment)
 caselinker_graph.db
 demo_*.db
 
