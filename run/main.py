@@ -130,6 +130,7 @@ async def log_requests(request: Request, call_next):
 if os.getenv("DATABASE_URL"):
     # PostgreSQL - use DATABASE_URL directly
     storage = CaseStorage()
+    db_path = None  # PostgreSQL doesn't use file path
 else:
     # SQLite - use file path
     try:
@@ -148,10 +149,16 @@ else:
 # Log database status on startup and pre-compute clusters
 try:
     test_cases = storage.get_all_cases()
-    print(f"Database active with path : {db_path}")
+    if db_path:
+        print(f"Database active with path: {db_path}")
+    else:
+        print(f"Database active: PostgreSQL (via DATABASE_URL)")
     print(f"Cases in database: {len(test_cases)}")
     if len(test_cases) == 0:
-        print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
+        if db_path:
+            print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
+        else:
+            print(f"⚠️  Warning: PostgreSQL database contains 0 cases. Process PDFs to add cases.")
     else:
         # Pre-compute clusters on startup (background, non-blocking)
         import threading
@@ -172,8 +179,11 @@ try:
         cluster_thread.start()
 except Exception as e:
     print(f"⚠️  Database initialization warning: {e}")
-    print(f"   Looking for database at: {db_path}")
-    print(f"   Database exists: {db_path.exists()}")
+    if db_path:
+        print(f"   Looking for database at: {db_path}")
+        print(f"   Database exists: {db_path.exists()}")
+    else:
+        print(f"   Using PostgreSQL (check DATABASE_URL environment variable)")
 
 
 @app.get("/", response_class=HTMLResponse)
