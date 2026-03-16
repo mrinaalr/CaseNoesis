@@ -991,6 +991,10 @@ def find_similar_cases_general(all_cases: List[Dict[str, Any]], similarity_thres
     if not all_cases:
         return []
     
+    # Ensure deterministic ordering by sorting cases by ID first
+    # This ensures clusters are identical across different environments
+    all_cases = sorted(all_cases, key=lambda c: c.get('id', ''))
+    
     # Parse comparison_values if stored as JSON strings
     for case in all_cases:
         if isinstance(case.get('comparison_values'), str):
@@ -1026,7 +1030,8 @@ def find_similar_cases_general(all_cases: List[Dict[str, Any]], similarity_thres
     groups = []
     used_cases = set()
     
-    # Sort by connectivity
+    # Sort by connectivity, then by case ID for deterministic ordering
+    # This ensures clusters are identical across different environments
     case_connectivity = {}
     for case in all_cases:
         case_id = case.get('id')
@@ -1037,7 +1042,11 @@ def find_similar_cases_general(all_cases: List[Dict[str, Any]], similarity_thres
                           similarity_matrix.get((case_id, other_id), 0) >= similarity_threshold)
         case_connectivity[case_id] = similar_count
     
-    sorted_cases = sorted(all_cases, key=lambda c: case_connectivity.get(c.get('id'), 0), reverse=True)
+    # Sort by connectivity (descending), then by case ID (ascending) for deterministic ordering
+    sorted_cases = sorted(all_cases, key=lambda c: (
+        -case_connectivity.get(c.get('id'), 0),  # Negative for descending order
+        c.get('id', '')  # Then by ID for deterministic tie-breaking
+    ))
     
     for case1 in sorted_cases:
         case1_id = case1.get('id')
@@ -1048,10 +1057,12 @@ def find_similar_cases_general(all_cases: List[Dict[str, Any]], similarity_thres
         used_cases.add(case1_id)
         
         # Find cases similar to ALL cases in group
+        # Sort all_cases by ID for deterministic ordering
+        sorted_all_cases = sorted(all_cases, key=lambda c: c.get('id', ''))
         changed = True
         while changed:
             changed = False
-            for case2 in all_cases:
+            for case2 in sorted_all_cases:
                 case2_id = case2.get('id')
                 if not case2_id or case2_id in used_cases:
                     continue
@@ -1125,6 +1136,10 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
     """
     if not all_cases:
         return []
+    
+    # Ensure deterministic ordering by sorting cases by ID first
+    # This ensures clusters are identical across different environments (localhost vs production)
+    all_cases = sorted(all_cases, key=lambda c: c.get('id', ''))
     
     groups = []
     

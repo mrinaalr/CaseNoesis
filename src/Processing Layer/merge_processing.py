@@ -368,6 +368,8 @@ class MergeProcessing:
         - Police department variations
         - Apostrophe/spacing variations (Attorney's Office, Sheriff's Office, etc.)
         - Case variations and common abbreviations
+        - "The" prefix removal
+        - HSI abbreviation normalization
         
         Args:
             organizations: List of organization strings
@@ -383,12 +385,19 @@ class MergeProcessing:
             
             # First pass: normalize apostrophes, quotes, and spacing issues
             org_clean = org.strip()
-            # Fix multiple apostrophes/quotes: "Attorney''s" -> "Attorney's", "Attorney 's" -> "Attorney's"
-            org_clean = org_clean.replace("''", "'").replace(" ' '", " '").replace(" ' ", "'")
-            # Fix spacing around apostrophes: " ' s" -> "'s", " 's" -> "'s"
-            org_clean = org_clean.replace(" ' s", "'s").replace(" 's", "'s").replace("' s", "'s")
+            # Fix apostrophe issues: normalize all variations to "'s"
+            # Handle patterns like: " ' 's", " 's", "' 's", " ' s", "' s", etc.
+            # Match any sequence of spaces/quotes/apostrophes before 's' and replace with "'s"
+            org_clean = re.sub(r"\s*['']+\s*['']*\s*s\b", "'s", org_clean)
             # Normalize multiple spaces to single space
             org_clean = re.sub(r'\s+', ' ', org_clean).strip()
+            
+            # Remove leading "the " (case-insensitive)
+            if org_clean.lower().startswith('the '):
+                org_clean = org_clean[4:].strip()
+            # Remove leading "The " 
+            if org_clean.startswith('The '):
+                org_clean = org_clean[4:].strip()
             
             org_lower = org_clean.lower()
             
@@ -486,10 +495,25 @@ class MergeProcessing:
                     normalized.append('Department of Homeland Security')
                 continue
             
+            # HSI abbreviation normalization (must come after apostrophe fix and "the" removal)
+            org_upper = org_clean.upper()
+            if org_upper == 'HSI' or org_clean == 'Homeland Security Investigations':
+                normalized.append('Homeland Security Investigations')
+                continue
+            
             # Keep original for other organizations
             normalized.append(org_clean)
         
-        return normalized
+        # Deduplicate while preserving order (case-insensitive)
+        seen = set()
+        unique_normalized = []
+        for org in normalized:
+            org_lower = org.lower()
+            if org_lower not in seen:
+                seen.add(org_lower)
+                unique_normalized.append(org)
+        
+        return unique_normalized
     
     def _merge_locations(
         self,

@@ -264,6 +264,19 @@
                             totalAvailable: 1435
                         }
                     ]
+                },
+                {
+                    name: "Idaho Office of Attorney General - ICAC Press Releases",
+                    url: "https://www.ag.idaho.gov/newsroom/category/icac/?showall=true",
+                    description: "ICAC press releases from the Idaho Office of Attorney General Newsroom, including arrests, sentencing, and ICAC task force operations across Idaho.",
+                    type: "Official Website",
+                    yearLinks: [
+                        { 
+                            year: "2021–2026",
+                            url: "https://www.ag.idaho.gov/newsroom/category/icac/?showall=true",
+                            casesUsed: 0  // Will be populated dynamically (all Idaho ICAC cases on site included)
+                        }
+                    ]
                 }
             ];
             
@@ -312,6 +325,18 @@
                                 });
                                 yearLink.casesUsed = yearCases.length;
                             });
+                        }
+                    } else if (staticSource.name.includes('Idaho Office of Attorney General')) {
+                        // Match Idaho ICAC cases
+                        const idahoCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'IDAHO ICAC';
+                        });
+                        staticSource.cases = idahoCases;
+                        
+                        // Single combined entry for 2021–2026 with total count
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = idahoCases.length;
                         }
                     }
                 });

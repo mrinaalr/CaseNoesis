@@ -42,7 +42,8 @@ try:
         REDIS_AVAILABLE, 
         get_cached, 
         set_cached, 
-        get_cache_key
+        get_cache_key,
+        clear_all_cache
     )
     # Create a wrapper for get_case_count that uses our storage instance
     def get_case_count():
@@ -403,19 +404,24 @@ def get_stats(request: Request):
             if isinstance(agencies, list) and agencies:
                 total_features += len([a for a in agencies if a])
         
-        # Calculate unique organizations (from normalized agencies_involved and organizations fields)
+        # Calculate unique organizations (already normalized at ingestion time)
+        def parse_field(field):
+            """Parse JSON string fields or return list/array as-is"""
+            if isinstance(field, str):
+                try:
+                    return json.loads(field)
+                except:
+                    return []
+            return field if field else []
+        
         unique_orgs = set()
         for case in cases:
-            agencies = case.get('agencies_involved', [])
-            organizations = case.get('organizations', [])
-            if isinstance(agencies, list):
-                for org in agencies:
-                    if org and isinstance(org, str) and org.strip():
-                        unique_orgs.add(org.strip())
-            if isinstance(organizations, list):
-                for org in organizations:
-                    if org and isinstance(org, str) and org.strip():
-                        unique_orgs.add(org.strip())
+            agencies = parse_field(case.get('agencies_involved', []))
+            organizations = parse_field(case.get('organizations', []))
+            # Organizations are already normalized at ingestion time, just count unique ones
+            for org in agencies + organizations:
+                if org and isinstance(org, str) and org.strip():
+                    unique_orgs.add(org.strip())
             
             # Count single-value features (1 if exists)
             if case.get('investigation_type'):
@@ -554,26 +560,13 @@ def get_case_ids_by_filter(
         
         filtered_cases = cases
         
-        # Filter by organization (with normalization)
+        # Filter by organization (organizations already normalized at ingestion time)
         if organization:
-            def normalize_org_name(name):
-                if not name:
-                    return name
-                name = name.strip()
-                if name.lower().startswith('the '):
-                    name = name[4:].strip()
-                if name.startswith('The '):
-                    name = name[4:].strip()
-                name_upper = name.upper()
-                if name_upper == 'HSI' or name == 'Homeland Security Investigations':
-                    return 'Homeland Security Investigations (HSI)'
-                return name
-            
-            normalized_org = normalize_org_name(organization)
+            org_search = organization.strip()
             filtered_cases = [
                 c for c in filtered_cases
-                if normalized_org in [normalize_org_name(org) for org in parse_field(c.get('agencies_involved', []))] or
-                   normalized_org in [normalize_org_name(org) for org in parse_field(c.get('organizations', []))]
+                if org_search in [org.strip() for org in parse_field(c.get('agencies_involved', []))] or
+                   org_search in [org.strip() for org in parse_field(c.get('organizations', []))]
             ]
         
         # Filter by relationship
@@ -665,6 +658,37 @@ def get_case_ids_by_filter(
         from error_handler import handle_error
         return handle_error(e)
 
+
+@app.post("/api/cache/clear")
+@limiter.limit("10/hour")  # Rate limit to prevent abuse
+def clear_cache(request: Request):
+    """
+    Clear all cached data (useful when code changes but case count stays same).
+    Requires authentication token or environment variable for security.
+    """
+    try:
+        # Simple security: require CACHE_CLEAR_TOKEN env var or query param
+        token = request.query_params.get('token') or os.getenv('CACHE_CLEAR_TOKEN')
+        expected_token = os.getenv('CACHE_CLEAR_TOKEN', 'dev-cache-clear-token')
+        
+        if token != expected_token:
+            return {"error": "Unauthorized. Provide ?token=YOUR_TOKEN or set CACHE_CLEAR_TOKEN env var"}
+        
+        if REDIS_AVAILABLE:
+            cleared = clear_all_cache()
+            return {
+                "success": True,
+                "message": f"Cleared {cleared} cache entries",
+                "cache_type": "Redis"
+            }
+        else:
+            return {
+                "success": True,
+                "message": "No Redis cache to clear (using direct database queries)",
+                "cache_type": "None"
+            }
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.get("/api/stats-detailed")
 @limiter.limit("60/minute")
@@ -796,38 +820,17 @@ def get_detailed_stats(request: Request):
             platform_trends["data"][year] = {platform: platform_by_year[year][platform] for platform in top_platforms}
         
         # 3. Top Organizations
-        # Normalize organization names to merge duplicates (e.g., "the AZICAC Task Force" -> "AZICAC Task Force")
-        def normalize_org_name(name):
-            """Normalize organization name by removing common prefixes and standardizing abbreviations"""
-            if not name:
-                return name
-            name = name.strip()
-            # Remove leading "the " (case-insensitive)
-            if name.lower().startswith('the '):
-                name = name[4:].strip()
-            # Remove leading "The " 
-            if name.startswith('The '):
-                name = name[4:].strip()
-            
-            # Standardize common abbreviations
-            name_upper = name.upper()
-            if name_upper == 'HSI' or name == 'Homeland Security Investigations':
-                return 'Homeland Security Investigations (HSI)'
-            
-            return name
-        
+        # Organizations are already normalized at ingestion time, just count them
         # Count each organization once per case (deduplicate within case)
         org_counter = Counter()
         for case in cases:
             agencies = parse_field(case.get('agencies_involved', []))
             organizations = parse_field(case.get('organizations', []))
-            # Combine and deduplicate within this case, then normalize
+            # Combine and deduplicate within this case
             case_orgs = set()
             for org in agencies + organizations:
                 if org and isinstance(org, str) and org.strip():
-                    normalized = normalize_org_name(org.strip())
-                    if normalized:
-                        case_orgs.add(normalized)
+                    case_orgs.add(org.strip())
             # Count each org once per case
             for org in case_orgs:
                 org_counter[org] += 1

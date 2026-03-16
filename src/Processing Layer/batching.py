@@ -120,12 +120,20 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     
     # Detect format: check source parameter first, then auto-detect from content
     is_ncmec = False
-    if source and source.upper() == 'NCMEC':
-        is_ncmec = True
+    is_idaho_icac = False
+    
+    if source:
+        source_upper = source.upper()
+        if source_upper == 'NCMEC':
+            is_ncmec = True
+        elif source_upper == 'IDAHO ICAC':
+            is_idaho_icac = True
     
     # Route to appropriate batch function
     if is_ncmec:
         return _batch_ncmec_cases(text, org_name, source_file)
+    elif is_idaho_icac:
+        return _batch_idaho_icac_cases(text, org_name, source_file)
     else:
         # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
         return _batch_azicac_cases(text, org_name)
@@ -648,5 +656,138 @@ def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) 
                 'year': year,
                 'case_id': case_id
             })
+    
+    return cases
+
+
+def _batch_idaho_icac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split Idaho ICAC cases by navigation button pattern.
+    
+    Format: Each case ends with "« NEXT" or "PREVIOUS" or "« PREVIOUS" followed by navigation.
+    Cases start with "Newsroom" or have "CATEGORY: ICAC" header.
+    Year is extracted from date within each case (e.g., "March 11, 2026").
+    
+    Args:
+        text: Full text from Idaho ICAC PDF
+        org_name: Organization name prefix for case IDs (e.g., "idaho_icac")
+        source_file: Filename (not used for year extraction, year comes from case text)
+        
+    Returns:
+        List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
+    """
+    cases = []
+    
+    # Pattern to find case end markers: « NEXT, PREVIOUS », « PREVIOUS, etc.
+    # These mark the end of case content (before navigation/footer)
+    case_end_pattern = r'«\s*(?:NEXT|PREVIOUS)|(?:NEXT|PREVIOUS)\s*»'
+    end_matches = list(re.finditer(case_end_pattern, text, re.IGNORECASE))
+    
+    if not end_matches:
+        # No end markers found - return entire text as one case
+        from datetime import datetime
+        year = str(datetime.now().year)
+        return [{
+            'case_text': clean_artifacts_from_text(text),
+            'month_year': None,
+            'month': None,
+            'year': year,
+            'case_id': f'{org_name}_{year}_001'
+        }]
+    
+    # Track case numbers per year
+    year_case_counts = {}
+    
+    # Process cases: each case is from previous end marker to current end marker
+    # But we need to find the actual start of each case (skip navigation/footer)
+    for i, end_match in enumerate(end_matches):
+        # Find the start of this case
+        # Look backwards from end marker to find where case content starts
+        # Case starts after navigation/footer from previous case, or at beginning of text
+        
+        if i == 0:
+            # First case: start from beginning
+            case_start = 0
+        else:
+            # Find start by looking backwards from end marker
+            # Look for "Newsroom" or "CATEGORY: ICAC" pattern before the end marker
+            search_start = end_matches[i-1].end() if i > 0 else 0
+            search_end = end_match.start()
+            search_text = text[search_start:search_end]
+            
+            # Find case start markers
+            case_start_pattern = r'(?:Newsroom|CATEGORY:\s*ICAC)'
+            start_match = re.search(case_start_pattern, search_text, re.IGNORECASE)
+            
+            if start_match:
+                # Case starts at the marker
+                case_start = search_start + start_match.start()
+            else:
+                # Fallback: start after previous end marker + some buffer
+                case_start = end_matches[i-1].end() if i > 0 else 0
+                # Skip navigation/footer (usually ~200-300 chars)
+                # Look for first substantial content
+                buffer_text = text[case_start:case_start+500]
+                # Find first line that looks like content (not navigation)
+                lines = buffer_text.split('\n')
+                for j, line in enumerate(lines):
+                    if len(line.strip()) > 20 and 'Newsroom' not in line and 'PREVIOUS' not in line and 'NEXT' not in line:
+                        # Found content start
+                        case_start += sum(len(l) + 1 for l in lines[:j])
+                        break
+        
+        # Case end is at the end marker
+        case_end = end_match.start()
+        
+        # Extract case text
+        case_text_raw = text[case_start:case_end].strip()
+        
+        # Clean artifacts
+        case_text = clean_artifacts_from_text(case_text_raw)
+        
+        # Skip if too short (likely navigation/footer, not a real case)
+        if len(case_text) < 200:
+            continue
+        
+        # Extract date from case text (e.g., "March 11, 2026")
+        months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+        date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
+        date_match = re.search(date_pattern, case_text, re.IGNORECASE)
+        
+        if date_match:
+            month = date_match.group(1)
+            day = date_match.group(2)
+            case_date_year = date_match.group(3)
+            month_year = f"{month} {case_date_year}"
+        else:
+            # Try to extract just year from case text
+            year_match = re.search(r'\b(20\d{2})\b', case_text)
+            if year_match:
+                case_date_year = year_match.group(1)
+                month = None
+                month_year = case_date_year
+            else:
+                # Fallback: use current year
+                from datetime import datetime
+                case_date_year = str(datetime.now().year)
+                month = None
+                month_year = case_date_year
+        
+        # Track case number per year
+        if case_date_year not in year_case_counts:
+            year_case_counts[case_date_year] = 0
+        year_case_counts[case_date_year] += 1
+        case_number = year_case_counts[case_date_year]
+        
+        # Generate case ID: idaho_icac_2026_001
+        case_id = f"{org_name}_{case_date_year}_{case_number:03d}"
+        
+        cases.append({
+            'case_text': case_text,
+            'month_year': month_year,
+            'month': month,
+            'year': case_date_year,
+            'case_id': case_id
+        })
     
     return cases
