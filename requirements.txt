@@ -21,6 +21,7 @@ uvicorn>=0.23.0
 redis>=5.0.0
 slowapi>=0.1.9  # Rate limiting
 python-json-logger>=2.0.7  # Structured logging
+orjson>=3.9.0  # Fast JSON parsing for Redis cache (optional, falls back to json if not available)
 
 # Database Encryption (optional - falls back to regular SQLite if not available)
 # Note: pysqlcipher3 requires SQLCipher system library

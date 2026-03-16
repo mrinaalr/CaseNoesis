@@ -46,36 +46,12 @@ try:
     )
     # Create a wrapper for get_case_count that uses our storage instance
     def get_case_count():
-        if hasattr(storage, 'db_path'):
-            # SQLite
-            import sqlite3
-            db_conn = sqlite3.connect(storage.db_path)
-            cursor = db_conn.cursor()
-            cursor.execute('SELECT COUNT(*) FROM cases')
-            count = cursor.fetchone()[0]
-            db_conn.close()
-            return count
-        else:
-            # PostgreSQL - use storage method
-            cases = storage.get_all_cases(include_raw_data=False)
-            return len(cases) if cases else 0
+        return storage.get_case_count()
 except ImportError:
     # Fallback if redis_cache module not found
     REDIS_AVAILABLE = False
     def get_case_count():
-        if hasattr(storage, 'db_path'):
-            # SQLite
-            import sqlite3
-            db_conn = sqlite3.connect(storage.db_path)
-            cursor = db_conn.cursor()
-            cursor.execute('SELECT COUNT(*) FROM cases')
-            count = cursor.fetchone()[0]
-            db_conn.close()
-            return count
-        else:
-            # PostgreSQL
-            cases = storage.get_all_cases(include_raw_data=False)
-            return len(cases) if cases else 0
+        return storage.get_case_count()
     def get_cached(key):
         return None
     def set_cached(key, value, ttl=3600):
@@ -967,8 +943,8 @@ async def automated_analysis_endpoint(request: Request):
                 "cached": True,
                 "source": "database"
             }
-            # Store in Redis for even faster future access
-            set_cached(cache_key, result, ttl=3600)
+            # Store in Redis for even faster future access (24 hour TTL since data is pre-computed)
+            set_cached(cache_key, result, ttl=86400)
             return result
         
         # Last resort: Compute on-demand (slow, but works)
@@ -986,8 +962,8 @@ async def automated_analysis_endpoint(request: Request):
             "source": "computed"
         }
         
-        # Store in Redis cache (1 hour TTL)
-        set_cached(cache_key, result, ttl=3600)
+        # Store in Redis cache (24 hour TTL for pre-computed data)
+        set_cached(cache_key, result, ttl=86400)
         
         return result
     except Exception as e:

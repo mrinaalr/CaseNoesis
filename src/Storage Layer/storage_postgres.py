@@ -465,6 +465,25 @@ class CaseStorage:
                 return_connection(conn)
             return None
     
+    def get_case_count(self) -> int:
+        """
+        Get total number of cases in database (fast query).
+        
+        Returns:
+            Number of cases
+        """
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute('SELECT COUNT(*) FROM cases')
+            count = cursor.fetchone()[0]
+            cursor.close()
+            return_connection(conn)
+            return count
+        except Exception as e:
+            print(f"Error getting case count: {e}")
+            return 0
+    
     def get_all_cases(self, include_raw_data: bool = True) -> List[Dict[str, Any]]:
         """Retrieve all cases from the database."""
         try:
@@ -682,7 +701,13 @@ class CaseStorage:
             
             if row:
                 cluster_json = row[0]
-                return json.loads(cluster_json)
+                # Use faster JSON parsing if available, fallback to standard json
+                try:
+                    import orjson
+                    return orjson.loads(cluster_json)
+                except ImportError:
+                    # Fallback to standard json (slower but works)
+                    return json.loads(cluster_json)
             return None
         except Exception as e:
             print(f"Error retrieving precomputed clusters: {e}")
