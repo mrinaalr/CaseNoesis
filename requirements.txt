@@ -19,6 +19,7 @@ pdfplumber>=0.10.0
 fastapi>=0.100.0
 uvicorn>=0.23.0
 redis>=5.0.0
+orjson>=3.9.0  # Fast JSON parsing for Redis cache (optional, falls back to json if not available)
 
 # Database Encryption (optional - falls back to regular SQLite if not available)
 # Note: pysqlcipher3 requires SQLCipher system library

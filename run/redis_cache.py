@@ -120,7 +120,12 @@ def get_cached(key: str) -> Optional[Any]:
     try:
         cached = redis_client.get(key)
         if cached:
-            return json.loads(cached)
+            # Try faster JSON parsing if available, fallback to standard json
+            try:
+                import orjson
+                return orjson.loads(cached)
+            except ImportError:
+                return json.loads(cached)
     except redis.ConnectionError as e:
         # Connection lost - mark as unavailable for this request
         print(f"⚠️  Redis connection lost: {e}")
@@ -137,7 +142,12 @@ def set_cached(key: str, value: Any, ttl: int = 3600) -> bool:
         return False
     
     try:
-        serialized = json.dumps(value)
+        # Try faster JSON serialization if available, fallback to standard json
+        try:
+            import orjson
+            serialized = orjson.dumps(value).decode('utf-8')
+        except ImportError:
+            serialized = json.dumps(value)
         redis_client.setex(key, ttl, serialized)
         return True
     except redis.ConnectionError as e:
