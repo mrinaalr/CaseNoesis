@@ -294,14 +294,14 @@
         let selectedClusterId = null;
         let selectedGroupId = null;
         
-        // Load automated analysis data
+        // Load lightweight cluster group data
         async function loadClusters() {
             try {
-                const response = await fetch('/api/automated-analysis');
+                const response = await fetch('/api/cluster-groups');
                 const data = await response.json();
                 
-                if (data.success && data.analysis && data.analysis.case_groups) {
-                    clusterData = data.analysis.case_groups;
+                if (data.success && data.case_groups) {
+                    clusterData = data.case_groups;
                     renderClusters();
                 } else {
                     showError('No cluster data available');

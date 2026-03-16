@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and 399 cases from publicly available Arizona ICAC / NCMEC annual reports (2011–2014 and 2022-2024). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and 410 cases from publicly available ICAC / NCMEC press reports (AZICAC 2011–2014, NCMEC 2022–2024, Idaho ICAC 2021–2026, Michigan ICAC 2025–2026). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Technical Reports
 
@@ -49,7 +49,7 @@ CaseLinker follows a modular, layered architecture:
 **No installation required.** Visit the live deployment:
 - **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live version includes all features and 399 processed cases. Created for quick testing and demonstrations.
+The live version includes all features and 410 processed cases. Created for quick testing and demonstrations.
 
 ### Option 2: Local Setup (Works Out of the Box)
 
@@ -126,6 +126,7 @@ The sources page lists publicly available reports from:
 - **Arizona ICAC**: Annual case reports (2011–2014)
 - **National Center for Missing & Exploited Children (NCMEC)**: CyberTipline success stories and case summaries (2022–2024)
 - **Idaho ICAC (Idaho Office of Attorney General)**: ICAC press releases, 2021–2026
+- **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases, 2025–2026
 
 ### Processing PDFs to Populate Database
 
@@ -279,7 +280,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: The database contains 399 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: The database contains 410 cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, and ICAC press releases from the Idaho Office of Attorney General and Michigan State Police). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

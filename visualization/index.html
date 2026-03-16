@@ -639,8 +639,18 @@
         let geographicChartData = []; // Store chart data for stats calculation
         let platformChartData = []; // Store platform chart data for stats calculation
 
+        // Simple global cache so we only fetch /api/cases once per page load
+        window.CASELINKER_ALL_CASES = window.CASELINKER_ALL_CASES || null;
+
         // Load cases from API
         function loadCases() {
+            if (window.CASELINKER_ALL_CASES) {
+                allCases = window.CASELINKER_ALL_CASES;
+                filteredCases = allCases;
+                updateStats();
+                renderTimeline(filteredCases);
+                return;
+            }
             // Show loading indicator
             svg.append("text")
                 .attr("x", width / 2)
@@ -663,6 +673,7 @@
                     
                     // Handle both array and object with cases property
                     allCases = Array.isArray(data) ? data : (data.cases || []);
+                    window.CASELINKER_ALL_CASES = allCases;
                     if (allCases.length === 0) {
                         svg.append("text")
                             .attr("x", width / 2)
@@ -2547,10 +2558,18 @@
         }
         
         function loadAllCaseIds() {
+            // Reuse global cache if available, otherwise fetch once
+            if (window.CASELINKER_ALL_CASES) {
+                const cases = window.CASELINKER_ALL_CASES;
+                allCaseIds = cases.map(c => c.id).filter(id => id).sort();
+                return;
+            }
+
             fetch('/api/cases?include_raw_data=false')
                 .then(response => response.json())
                 .then(data => {
                     const cases = Array.isArray(data) ? data : (data.cases || []);
+                    window.CASELINKER_ALL_CASES = cases;
                     allCaseIds = cases.map(c => c.id).filter(id => id).sort();
                 })
                 .catch(error => {

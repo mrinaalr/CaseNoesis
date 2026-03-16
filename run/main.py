@@ -45,14 +45,9 @@ try:
         get_cache_key,
         clear_all_cache
     )
-    # Create a wrapper for get_case_count that uses our storage instance
-    def get_case_count():
-        return storage.get_case_count()
 except ImportError:
     # Fallback if redis_cache module not found
     REDIS_AVAILABLE = False
-    def get_case_count():
-        return storage.get_case_count()
     def get_cached(key):
         return None
     def set_cached(key, value, ttl=3600):
@@ -123,6 +118,24 @@ else:
     
     storage = CaseStorage(str(db_path))
 
+# Fast case-count helper that uses the already-initialized storage
+def get_case_count() -> int:
+    """
+    Lightweight helper for counting cases.
+    Uses the shared storage instance so we don't re-open connections.
+    """
+    try:
+        return storage.get_case_count()
+    except Exception:
+        return 0
+
+# In-process cache for /api/cases to keep local/dev fast even without Redis
+_cases_cache = {
+    "include_raw_false": None,
+    "include_raw_true": None,
+}
+_cases_cache_case_count = 0
+
 # Log database status on startup and pre-compute clusters
 try:
     test_cases = storage.get_all_cases()
@@ -186,31 +199,59 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
         include_raw_data: If True, include full raw_data (slower, larger payload).
                          Default False for faster initial loads.
     """
+    global _cases_cache, _cases_cache_case_count
+
     try:
         # Get current case count for cache versioning
         current_case_count = get_case_count()
-        
-        # Build cache key with version and parameters
-        cache_key = get_cache_key('cases', version=current_case_count, include_raw_data=include_raw_data)
-        
-        # Try Redis cache first
-        cached_result = get_cached(cache_key)
-        if cached_result is not None:
-            return cached_result
-        
+
+        # If Redis is available, prefer shared cache (works across workers)
+        if REDIS_AVAILABLE:
+            cache_key = get_cache_key(
+                "cases",
+                version=current_case_count,
+                include_raw_data=include_raw_data,
+            )
+
+            cached_result = get_cached(cache_key)
+            if cached_result is not None:
+                return cached_result
+
+        # Fallback / additional in-process cache for this worker
+        cache_key_local = "include_raw_true" if include_raw_data else "include_raw_false"
+        if (
+            _cases_cache[cache_key_local] is not None
+            and _cases_cache_case_count == current_case_count
+        ):
+            return _cases_cache[cache_key_local]
+
         # Cache miss - load from database
         cases = storage.get_all_cases(include_raw_data=include_raw_data)
         result = cases if cases else []
-        
-        # Store in Redis cache (1 hour TTL)
-        set_cached(cache_key, result, ttl=3600)
-        
+
+        # Update local in-process cache
+        _cases_cache[cache_key_local] = result
+        _cases_cache_case_count = current_case_count
+
+        # Store in Redis cache (1 hour TTL) if available
+        if REDIS_AVAILABLE:
+            try:
+                cache_key = get_cache_key(
+                    "cases",
+                    version=current_case_count,
+                    include_raw_data=include_raw_data,
+                )
+                set_cached(cache_key, result, ttl=3600)
+            except Exception:
+                # If Redis write fails, it's non-fatal
+                pass
+
         return result
-    except Exception as e:
-        # Fallback to direct database query if Redis fails
+    except Exception:
+        # Last-resort fallback to direct database query
         try:
             return storage.get_all_cases(include_raw_data=include_raw_data) or []
-        except:
+        except Exception:
             return []
 
 # Cache for unique tags (invalidates when cases change)
@@ -927,29 +968,73 @@ def get_detailed_stats(request: Request):
         from error_handler import handle_error
         return handle_error(e)
 
-@app.get("/api/automated-analysis")
-@limiter.limit("30/minute")
-async def automated_analysis_endpoint(request: Request):
+@app.get("/api/cluster-groups")
+@limiter.limit("60/minute")
+async def cluster_groups_endpoint(request: Request):
     """
-    Get automated analysis results (case groups, triaged cases, insights).
-    Uses Redis caching + pre-computed clusters from database for fast response.
-    Falls back to computing if pre-computed clusters not available.
+    Lightweight endpoint for cluster / case-group visualizations.
+    
+    Returns ONLY the pre-computed case_groups (no full triage/insights blob),
+    so payloads are smaller and faster for the clusters page.
     """
     try:
-        # Get current case count for cache versioning
         current_case_count = get_case_count()
+        cache_key = get_cache_key('cluster-groups', version=current_case_count)
         
-        # Build cache key
-        cache_key = get_cache_key('automated-analysis', version=current_case_count)
-        
-        # Try Redis cache first (fastest!)
+        # Try Redis cache first
         cached_result = get_cached(cache_key)
         if cached_result is not None:
             cached_result['_cache_source'] = 'redis'
             return cached_result
         
-        # Try to get pre-computed clusters from database
-        # Use a shorter cache key for database lookup to avoid version mismatch
+        # Try pre-computed clusters from database
+        precomputed = storage.get_precomputed_clusters(current_case_count)
+        if precomputed and isinstance(precomputed, dict) and precomputed.get('case_groups'):
+            result = {
+                "success": True,
+                "case_groups": precomputed.get('case_groups', []),
+                "cached": True,
+                "source": "database"
+            }
+            set_cached(cache_key, result, ttl=86400)
+            return result
+        
+        # Fallback: compute once on-demand, then store
+        print("⚠️  No pre-computed cluster groups found, computing on-demand (this is slow once)...")
+        cases = storage.get_all_cases(include_raw_data=False)
+        analysis_results = run_automated_analysis(cases)
+        storage.store_precomputed_clusters(analysis_results, current_case_count)
+        
+        result = {
+            "success": True,
+            "case_groups": analysis_results.get('case_groups', []),
+            "cached": False,
+            "source": "computed"
+        }
+        set_cached(cache_key, result, ttl=86400)
+        return result
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
+
+
+@app.get("/api/automated-analysis")
+@limiter.limit("30/minute")
+async def automated_analysis_endpoint(request: Request):
+    """
+    Full automated analysis (case groups, triaged cases, insights).
+    Uses Redis caching + pre-computed clusters from database for fast response.
+    Falls back to computing if pre-computed clusters not available.
+    """
+    try:
+        current_case_count = get_case_count()
+        cache_key = get_cache_key('automated-analysis', version=current_case_count)
+        
+        cached_result = get_cached(cache_key)
+        if cached_result is not None:
+            cached_result['_cache_source'] = 'redis'
+            return cached_result
+        
         precomputed = storage.get_precomputed_clusters(current_case_count)
         if precomputed:
             result = {
@@ -958,16 +1043,12 @@ async def automated_analysis_endpoint(request: Request):
                 "cached": True,
                 "source": "database"
             }
-            # Store in Redis for even faster future access (24 hour TTL since data is pre-computed)
             set_cached(cache_key, result, ttl=86400)
             return result
         
-        # Last resort: Compute on-demand (slow, but works)
         print("⚠️  No pre-computed clusters found, computing on-demand (this is slow)...")
-        cases = storage.get_all_cases(include_raw_data=True)  # Include raw_data so case text can be displayed in UI
+        cases = storage.get_all_cases(include_raw_data=True)
         analysis_results = run_automated_analysis(cases)
-        
-        # Store in database for next time
         storage.store_precomputed_clusters(analysis_results, current_case_count)
         
         result = {
@@ -976,10 +1057,7 @@ async def automated_analysis_endpoint(request: Request):
             "cached": False,
             "source": "computed"
         }
-        
-        # Store in Redis cache (24 hour TTL for pre-computed data)
         set_cached(cache_key, result, ttl=86400)
-        
         return result
     except Exception as e:
         import traceback

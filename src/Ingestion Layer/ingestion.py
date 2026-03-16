@@ -49,6 +49,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'AZICAC'
     elif 'idaho' in filename_lower and 'icac' in filename_lower:
         return 'Idaho ICAC'
+    elif 'michigan' in filename_lower and 'icac' in filename_lower:
+        return 'Michigan ICAC'
     elif 'fbi' in filename_lower:
         return 'FBI'
     

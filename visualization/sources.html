@@ -201,8 +201,8 @@
             <h3>⚠️ Disclaimer</h3>
             <p>
                 <strong>This system is for research and analysis purposes only.</strong> All case data presented in CaseLinker 
-                is publicly available information obtained from the Arizona Internet Crimes Against Children Task Force (AZICAC) 
-                Cases and Arrests & National Center for Missing & Exploited Children (NCMEC) CyberTipline reports. This project is an independent research tool and is not affiliated with, endorsed by, 
+                is publicly available information obtained from Internet Crimes Against Children Task Force (ICAC) 
+                press releases and National Center for Missing & Exploited Children (NCMEC) CyberTipline reports. This project is an independent research tool and is not affiliated with, endorsed by, 
                 or associated with AZICAC, NCMEC, ICAC Task Force, or any 
                 law enforcement agency. The data has been processed and analyzed for research purposes to identify patterns and 
                 trends in case data. No sensitive or identifying information beyond what is publicly available has been included. 
@@ -277,6 +277,19 @@
                             casesUsed: 0  // Will be populated dynamically (all Idaho ICAC cases on site included)
                         }
                     ]
+                },
+                {
+                    name: "Michigan State Police - ICAC News Releases",
+                    url: "https://www.michigan.gov/mspnewsroom/news-releases#news%20release%20type=8c228cf416664a14ad0e2e7af543bf04%20ICAC",
+                    description: "ICAC-related news releases from the Michigan State Police newsroom, including arrests, sentencing, and ICAC task force operations across Michigan.",
+                    type: "Official Website",
+                    yearLinks: [
+                        {
+                            year: "2025–2026",
+                            url: "https://www.michigan.gov/mspnewsroom/news-releases#news%20release%20type=8c228cf416664a14ad0e2e7af543bf04%20ICAC",
+                            casesUsed: 0  // Will be populated dynamically from Michigan ICAC cases
+                        }
+                    ]
                 }
             ];
             
@@ -338,6 +351,16 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = idahoCases.length;
                         }
+                    } else if (staticSource.name.includes('Michigan State Police')) {
+                        // Match Michigan ICAC cases
+                        const michiganCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'MICHIGAN ICAC';
+                        });
+                        staticSource.cases = michiganCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = michiganCases.length;
+                        }
                     }
                 });
                 
@@ -359,6 +382,7 @@
             
             container.innerHTML = sources.map(source => {
                 const caseCount = source.cases ? source.cases.length : 0;
+                const dateRange = source.cases ? getDateRange(source.cases) : null;
                 
                 return `
                     <div class="source-card">
@@ -366,6 +390,7 @@
                         ${source.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.url}</a>` : ''}
                         ${source.description ? `<p class="source-meta">${source.description}</p>` : ''}
                         ${source.type ? `<p class="source-meta"><strong>Type:</strong> ${source.type}</p>` : ''}
+                        ${dateRange ? `<p class="source-meta"><strong>Date range:</strong> ${dateRange}</p>` : ''}
                         ${source.yearLinks ? `
                             <div class="year-links">
                                 <strong>Year Reports:</strong>

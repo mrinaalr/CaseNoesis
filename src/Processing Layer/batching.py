@@ -9,7 +9,7 @@ Both layers can ingest the batched cases and process them independently.
 """
 
 import re
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 
 
 def clean_artifacts_from_text(text: str, remove_urls: bool = True) -> str:
@@ -121,6 +121,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     # Detect format: check source parameter first, then auto-detect from content
     is_ncmec = False
     is_idaho_icac = False
+    is_michigan_icac = False
     
     if source:
         source_upper = source.upper()
@@ -128,12 +129,16 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_ncmec = True
         elif source_upper == 'IDAHO ICAC':
             is_idaho_icac = True
+        elif source_upper == 'MICHIGAN ICAC':
+            is_michigan_icac = True
     
     # Route to appropriate batch function
     if is_ncmec:
         return _batch_ncmec_cases(text, org_name, source_file)
     elif is_idaho_icac:
         return _batch_idaho_icac_cases(text, org_name, source_file)
+    elif is_michigan_icac:
+        return _batch_michigan_icac_cases(text, org_name, source_file)
     else:
         # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
         return _batch_azicac_cases(text, org_name)
@@ -451,6 +456,122 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
             'year': year,
             'case_id': case_id,
             'state': state  # Store state for reference
+        })
+    
+    return cases
+
+
+def _batch_michigan_icac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split Michigan ICAC / Michigan State Police newsroom PDF into individual cases.
+    
+    Format (from Michigan ICAC.pdf):
+    - Web-printed MSP Newsroom articles, each repeated 3 times with patterns like:
+      "3/16/26, 2:36 PM Lake City Man Arrested for ..."
+      followed by "1/3", "2/3", "3/3".
+    
+    Strategy (kept intentionally simple and robust):
+    - Each case is the contiguous block of text from the first occurrence of
+      "MSP Newsroom" to the ICAC/MissingKids footer line:
+        "If you have information regarding possible child sexual exploitation, report it to the
+         Cyber Tip Line at https://www.missingkids.org/cybertipline."
+    - We find all such [start, end] spans and treat each as one case.
+    - Year/month are extracted from the first date in the case (MM/DD/YY).
+    """
+    cases: List[Dict[str, Any]] = []
+    
+    # Define markers
+    start_marker = "MSP Newsroom"
+    # Footer phrase can vary in spacing/capitalization (e.g., "CyberTipLine", "Cyber tipline"),
+    # and can use http/https with or without "www". The stable part is the path:
+    #   missingkids.org/cybertipline
+    # We therefore batch each article from "MSP Newsroom" to the *end of the first occurrence*
+    # of this URL path after that header (case-insensitive).
+    footer_core = "missingkids.org/cybertipline"
+    lower_text = text.lower()
+    
+    # Find all case spans: from "MSP Newsroom" to first footer_core URL after it
+    spans: List[Tuple[int, int]] = []
+    pos = 0
+    while True:
+        start = text.find(start_marker, pos)
+        if start == -1:
+            break
+        
+        # Look for the footer URL after this header (case-insensitive)
+        footer_index = lower_text.find(footer_core, start)
+        if footer_index == -1:
+            # No footer URL found after this header; treat the rest of the text as one span
+            end = len(text)
+        else:
+            end = footer_index + len(footer_core)
+        
+        spans.append((start, end))
+        pos = end
+    
+    if not spans:
+        from datetime import datetime
+        year = str(datetime.now().year)
+        return [{
+            'case_text': clean_artifacts_from_text(text),
+            'month_year': None,
+            'month': None,
+            'year': year,
+            'case_id': f'{org_name}_{year}_001'
+        }]
+    
+    # Helper to map month number to name
+    month_names = [
+        None,
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+    
+    # Track case numbers per year
+    year_case_counts: Dict[str, int] = {}
+    
+    # Regex to grab first date in MM/DD/YY format for month/year
+    date_pattern = r'(\d{1,2})/(\d{1,2})/(\d{2})'
+    
+    for start_pos, end_pos in spans:
+        case_text_raw = text[start_pos:end_pos].strip()
+        case_text = clean_artifacts_from_text(case_text_raw)
+        
+        # Skip very short fragments
+        if len(case_text) < 200:
+            continue
+        
+        # Extract date from case text
+        m = re.search(date_pattern, case_text)
+        if m:
+            mm, dd, yy = m.groups()
+            year = f"20{yy}"
+            month_num = int(mm)
+        else:
+            year = None
+            month_num = None
+        
+        month = month_names[month_num] if month_num and 1 <= month_num <= 12 else None
+        month_year = f"{month} {year}" if month else year
+        
+        # Case numbering per year
+        if not year:
+            from datetime import datetime
+            year = str(datetime.now().year)
+        
+        if year not in year_case_counts:
+            year_case_counts[year] = 0
+        year_case_counts[year] += 1
+        case_number = year_case_counts[year]
+        
+        case_id = f"{org_name}_{year}_{case_number:03d}"
+        
+        cases.append({
+            'case_text': case_text,
+            'month_year': month_year,
+            'month': month,
+            'year': year,
+            'case_id': case_id
         })
     
     return cases
