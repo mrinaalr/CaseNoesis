@@ -589,10 +589,12 @@ class MergeProcessing:
             words = loc_clean.split()
             loc_normalized = ' '.join(word.capitalize() if word.lower() not in ['of', 'de', 'la', 'the'] else word.lower() 
                                      for word in words)
-            # Handle special cases
-            if loc_normalized.lower() == 'usa' or loc_normalized.lower() == 'u.s.a.':
-                loc_normalized = 'United States'
-            elif loc_normalized.lower() == 'us' and len(words) == 1:
+            # Handle special cases - normalize all US variations to "United States"
+            loc_lower_clean = loc_normalized.lower().strip()
+            if (loc_lower_clean in ['usa', 'u.s.a.', 'u.s.a', 'us'] or
+                (loc_lower_clean == 'us' and len(words) == 1) or
+                loc_lower_clean == 'america' or
+                loc_lower_clean.startswith('the ') and loc_lower_clean.replace('the ', '').strip() == 'united states'):
                 loc_normalized = 'United States'
             
             normalized_locations.append(loc_normalized)

@@ -980,8 +980,7 @@
                 if (agency) {
                     const agencyStr = String(agency).trim();
                     if (agencyStr.length > 0 && agencyStr !== 'null' && agencyStr !== 'undefined') {
-                    const agencyStr = String(agency).trim();
-                    // Escape special regex characters
+                        // Escape special regex characters
                     const escapedAgency = escapeRegex(agencyStr);
                     // Match whole words/phrases
                     searchPatterns.push(new RegExp(`\\b${escapedAgency}\\b`, 'gi'));

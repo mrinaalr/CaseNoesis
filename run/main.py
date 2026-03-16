@@ -619,14 +619,25 @@ def get_case_ids_by_filter(
         
         # Filter by prosecution status
         if prosecution_status:
+            def normalize_prosecution_status(prosecution):
+                """
+                Mirror the logic used in stats aggregation so bar counts and
+                filtered case IDs stay in sync.
+                """
+                if not prosecution:
+                    return None
+                if isinstance(prosecution, dict):
+                    # Same fallback chain as in stats: booking_status → status → 'prosecuted'
+                    return (
+                        prosecution.get('booking_status')
+                        or prosecution.get('status')
+                        or 'prosecuted'
+                    )
+                return str(prosecution)
+
             filtered_cases = [
                 c for c in filtered_cases
-                if c.get('prosecution_outcome') and (
-                    (isinstance(c.get('prosecution_outcome'), dict) and 
-                     (c.get('prosecution_outcome').get('booking_status') == prosecution_status or
-                      c.get('prosecution_outcome').get('status') == prosecution_status)) or
-                    str(c.get('prosecution_outcome')) == prosecution_status
-                )
+                if normalize_prosecution_status(c.get('prosecution_outcome')) == prosecution_status
             ]
         
         # Filter by age range (e.g., "25-29")
@@ -836,7 +847,14 @@ def get_detailed_stats(request: Request):
                 if isinstance(raw_data, dict):
                     month_year = raw_data.get('month_year', '')
                     if month_year:
-                        year_match = month_year.split()[-1] if ' ' in month_year else None
+                        # Handle formats like "September 2025" or just "2025"
+                        if ' ' in month_year:
+                            year_match = month_year.split()[-1]
+                        elif month_year.isdigit() and len(month_year) == 4:
+                            # month_year is just a year like "2022" or "2023"
+                            year_match = month_year
+                        else:
+                            year_match = None
                         if year_match and year_match.isdigit():
                             year = year_match
             

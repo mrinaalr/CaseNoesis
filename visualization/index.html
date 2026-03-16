@@ -1600,7 +1600,7 @@
                         .style("opacity", 0);
                 })
                 .on("click", function(event, d) {
-                    showPlatformCases(d.platform, cases);
+                    showPlatformCases(d.platform, d.cases);
                 });
 
             // X axis
@@ -1762,7 +1762,8 @@
                 // First pass: normalize apostrophes, quotes, and spacing issues
                 // Fix multiple apostrophes/quotes: "Attorney''s" -> "Attorney's", "Attorney 's" -> "Attorney's"
                 orgTrimmed = orgTrimmed.replace(/\s*['"]+\s*/g, '\''); // Replace multiple quotes/apostrophes with single
-                orgTrimmed = orgTrimmed.replace(/\s*'\s*s\s*/gi, '\'s'); // Fix " ' s" -> "'s"
+                // Fix " ' s" -> "'s" but preserve trailing space if it exists
+                orgTrimmed = orgTrimmed.replace(/\s*'\s*s(\s*)/gi, (match, trailingSpace) => '\'s' + (trailingSpace ? ' ' : ''));
                 orgTrimmed = orgTrimmed.replace(/\s+/g, ' '); // Normalize multiple spaces to single space
                 orgTrimmed = orgTrimmed.trim();
                 
@@ -3344,7 +3345,7 @@
             });
         }
 
-        function showPlatformCases(platformLabel, allCases) {
+        function showPlatformCases(platformLabel, filteredCases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -3356,33 +3357,7 @@
             panel.classList.add('active');
             title.textContent = `Cases with Environment: "${platformLabel}"`;
             
-            // Filter cases based on environment
-            let filteredCases = [];
-            if (platformLabel === 'None/Unknown') {
-                filteredCases = allCases.filter(c => {
-                    const platforms = c.platforms_used || [];
-                    return platforms.length === 0;
-                });
-            } else if (platformLabel === 'Online') {
-                // Show all cases with online or social media platforms
-                filteredCases = allCases.filter(c => {
-                    const platforms = c.platforms_used || [];
-                    return platforms.some(p => {
-                        const pLower = p.toLowerCase();
-                        return pLower.includes('social media') || 
-                               pLower.includes('facebook') || 
-                               pLower.includes('twitter') || 
-                               pLower.includes('instagram') || 
-                               pLower.includes('snapchat') ||
-                               pLower === 'online';
-                    });
-                });
-            } else {
-                filteredCases = allCases.filter(c => {
-                    const platforms = c.platforms_used || [];
-                    return platforms.includes(platformLabel);
-                });
-            }
+            // Cases are already filtered by the chart grouping logic
             
             // Render cases
             if (filteredCases.length === 0) {

@@ -281,7 +281,8 @@
 
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
-        const height = 875;
+        // Slightly taller canvas so top bubbles never get clipped
+        const height = 920;
         const margin = 30;
         
         const svg = d3.select('#cluster-visualization')

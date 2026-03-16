@@ -687,9 +687,8 @@
             const legend = g.append('g')
                 .attr('transform', `translate(${chartAreaWidth + 20}, 20)`);
             
-            // Order platforms as specified
-            const orderedPlatforms = ['online', 'chat', 'social media', 'Facebook', 'Snapchat', 'Instagram'];
-            const displayPlatforms = orderedPlatforms.filter(p => platforms.includes(p));
+            // Use all platforms from backend data (already sorted by frequency)
+            const displayPlatforms = platforms;
             
             displayPlatforms.forEach((platform, i) => {
                 const legendRow = legend.append('g')
@@ -1294,6 +1293,7 @@
                 
                 // State coordinates for geocoding
                 const stateCoords = {
+                    // Contiguous US state centroids
                     'Arizona': { lat: 34.0489, lng: -111.0937 },
                     'California': { lat: 36.7783, lng: -119.4179 },
                     'Texas': { lat: 31.9686, lng: -99.9018 },
@@ -1341,7 +1341,10 @@
                     'Massachusetts': { lat: 42.2302, lng: -71.5301 },
                     'Vermont': { lat: 44.2664, lng: -72.5805 },
                     'New Hampshire': { lat: 43.4525, lng: -71.5639 },
-                    'Maine': { lat: 44.3235, lng: -69.7653 }
+                    'Maine': { lat: 44.3235, lng: -69.7653 },
+                    // Place Hawaii in a traditional inset position so it doesn't
+                    // overlap the Pacific Northwest on the projection
+                    'Hawaii': { lat: 21.3069, lng: -157.8583 }
                 };
                 
                 function geocodeLocation(locationName) {
