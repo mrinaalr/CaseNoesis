@@ -77,7 +77,6 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The live deployment includes 265 cases from NCMEC CyberTipline reports (2022-2024) and Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that this research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 
 **Database:** 
 - **Production (Railway)**: PostgreSQL database with encrypted connections and managed backups

@@ -5,7 +5,7 @@ Comprehensive Evaluation Data Extraction for CaseLinker
 This script performs comprehensive testing and evaluation of CaseLinker's capabilities,
 generating detailed metrics suitable for academic research and system performance analysis.
 
-Output: evaluation_results.json - Comprehensive evaluation data for academic sharing
+Output: evaluation_results.json - Comprehensive evaluation data for audit
 """
 
 import sys

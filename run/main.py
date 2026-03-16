@@ -596,6 +596,7 @@ def get_case_ids_by_filter(
             ]
         
         # Filter by age range (e.g., "25-29")
+        # Match bubble chart logic: only count ages between 18-99
         if age_range:
             try:
                 age_min, age_max = map(int, age_range.split('-'))
@@ -603,8 +604,11 @@ def get_case_ids_by_filter(
                     c for c in filtered_cases
                     if c.get('perpetrator_age') and (
                         (isinstance(c.get('perpetrator_age'), list) and
-                         any(age_min <= age <= age_max for age in c.get('perpetrator_age') if isinstance(age, (int, float)))) or
-                        (isinstance(c.get('perpetrator_age'), (int, float)) and age_min <= c.get('perpetrator_age') <= age_max)
+                         any(age_min <= age <= age_max for age in c.get('perpetrator_age') 
+                             if isinstance(age, (int, float)) and 18 <= age <= 99)) or
+                        (isinstance(c.get('perpetrator_age'), (int, float)) and 
+                         18 <= c.get('perpetrator_age') <= 99 and
+                         age_min <= c.get('perpetrator_age') <= age_max)
                     )
                 ]
             except:
@@ -859,22 +863,29 @@ def get_detailed_stats(request: Request):
         prosecution_distribution = [{"name": name, "count": count} for name, count in prosecution_counter.most_common()]
         
         # 7. Perpetrator Age Data (for bubble chart)
-        age_counter = Counter()
+        # Count unique cases per age bin (not individual age occurrences)
+        # This matches the filter behavior so bubble counts match filter results
+        age_bins = defaultdict(set)  # Use set to track unique case IDs
         for case in cases:
+            case_id = case.get('id')
             ages = case.get('perpetrator_age')
-            if ages:
+            if ages and case_id:
+                case_ages = []
                 if isinstance(ages, list):
-                    for age in ages:
-                        if isinstance(age, (int, float)) and 18 <= age <= 99:
-                            age_counter[int(age)] += 1
+                    case_ages = [int(a) for a in ages if isinstance(a, (int, float)) and 18 <= a <= 99]
                 elif isinstance(ages, (int, float)) and 18 <= ages <= 99:
-                    age_counter[int(ages)] += 1
-        # Group ages into bins for better visualization
-        age_bins = {}
-        for age, count in age_counter.items():
-            bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
-            age_bins[bin_key] = age_bins.get(bin_key, 0) + count
-        perpetrator_age_data = [{"age": age, "count": count} for age, count in sorted(age_bins.items(), key=lambda x: int(x[0].split('-')[0]))]
+                    case_ages = [int(ages)]
+                
+                # Add case to each age bin it belongs to
+                for age in case_ages:
+                    bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
+                    age_bins[bin_key].add(case_id)
+        
+        # Convert sets to counts
+        perpetrator_age_data = [
+            {"age": age, "count": len(case_ids)} 
+            for age, case_ids in sorted(age_bins.items(), key=lambda x: int(x[0].split('-')[0]))
+        ]
         
         # 8. Severity Indicators (most common)
         severity_counter = Counter()
