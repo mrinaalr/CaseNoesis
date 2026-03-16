@@ -3,19 +3,36 @@ FastAPI Backend for CaseLinker
 Provides API endpoints for visualization frontend
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from typing import List, Dict, Any
 import sys
 import json
+import os
+import logging
+import time
 from pathlib import Path
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Storage Layer"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
 
-from storage import CaseStorage
+# Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
+import os
+if os.getenv("DATABASE_URL"):
+    try:
+        from storage_postgres import CaseStorage
+        print("✅ Using PostgreSQL database")
+    except ImportError:
+        print("⚠️  PostgreSQL storage not available, falling back to SQLite")
+        from storage import CaseStorage
+else:
+    from storage import CaseStorage
+    print("✅ Using SQLite database (local development)")
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 from visualization import create_timeline_visualization, filter_cases
 
@@ -44,6 +61,12 @@ except ImportError:
 
 app = FastAPI(title="CaseLinker API")
 
+# Rate limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -52,31 +75,66 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Structured logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Request logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    
+    logger.info(
+        f"{request.method} {request.url.path}",
+        extra={
+            "method": request.method,
+            "path": request.url.path,
+            "status_code": response.status_code,
+            "process_time": round(process_time, 3),
+            "client_ip": request.client.host if request.client else None
+        }
+    )
+    
+    return response
+
 # Initialize storage
-try:
-    from config import DATABASE_PATH
-except ImportError:
-    DATABASE_PATH = "caselinker.db"
-
-# Fix path for Railway - Procfile runs from 'run/' directory, so go up one level
-# Check if we're in the 'run' directory and adjust path accordingly
-if Path(__file__).parent.name == 'run':
-    # We're in the run directory, database is one level up
-    db_path = Path(__file__).parent.parent / DATABASE_PATH
+if os.getenv("DATABASE_URL"):
+    # PostgreSQL - use DATABASE_URL directly
+    storage = CaseStorage()
+    db_path = None  # PostgreSQL doesn't use file path
 else:
-    # We're in the root directory
-    db_path = Path(DATABASE_PATH)
-
-# Initialize storage - will create database if it doesn't exist
-storage = CaseStorage(str(db_path))
+    # SQLite - use file path
+    try:
+        from config import DATABASE_PATH
+    except ImportError:
+        DATABASE_PATH = "caselinker.db"
+    
+    # Fix path for Railway - Procfile runs from 'run/' directory, so go up one level
+    if Path(__file__).parent.name == 'run':
+        db_path = Path(__file__).parent.parent / DATABASE_PATH
+    else:
+        db_path = Path(DATABASE_PATH)
+    
+    storage = CaseStorage(str(db_path))
 
 # Log database status on startup and pre-compute clusters
 try:
     test_cases = storage.get_all_cases()
-    print(f"Database active with path : {db_path}")
+    if db_path:
+        print(f"Database active with path: {db_path}")
+    else:
+        print(f"Database active: PostgreSQL (via DATABASE_URL)")
     print(f"Cases in database: {len(test_cases)}")
     if len(test_cases) == 0:
-        print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
+        if db_path:
+            print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
+        else:
+            print(f"⚠️  Warning: PostgreSQL database contains 0 cases. Process PDFs to add cases.")
     else:
         # Pre-compute clusters on startup (background, non-blocking)
         import threading
@@ -97,8 +155,11 @@ try:
         cluster_thread.start()
 except Exception as e:
     print(f"⚠️  Database initialization warning: {e}")
-    print(f"   Looking for database at: {db_path}")
-    print(f"   Database exists: {db_path.exists()}")
+    if db_path:
+        print(f"   Looking for database at: {db_path}")
+        print(f"   Database exists: {db_path.exists()}")
+    else:
+        print(f"   Using PostgreSQL (check DATABASE_URL environment variable)")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -114,7 +175,8 @@ async def serve_home():
 
 
 @app.get("/api/cases")
-def get_all_cases(include_raw_data: bool = False):
+@limiter.limit("100/minute")
+def get_all_cases(request: Request, include_raw_data: bool = False):
     """
     Get all cases from database.
     Uses Redis caching for fast responses (shared across all workers/instances).
@@ -155,7 +217,8 @@ _tags_cache = None
 _tags_cache_case_count = 0
 
 @app.get("/api/tags")
-def get_unique_tags():
+@limiter.limit("60/minute")
+def get_unique_tags(request: Request):
     """
     Get unique tags/topics from all cases for populating selectors.
     Much faster than loading all cases - returns only unique values.
@@ -240,12 +303,13 @@ def get_unique_tags():
             "cached": False
         }
     except Exception as e:
-        import traceback
-        return {"error": str(e), "traceback": traceback.format_exc()}
+        from error_handler import handle_error
+        return handle_error(e)
 
 
 @app.get("/api/cases/{case_id}")
-def get_case(case_id: str):
+@limiter.limit("100/minute")
+def get_case(request: Request, case_id: str):
     """Get a specific case by ID"""
     case = storage.get_case(case_id)
     if not case:
@@ -254,7 +318,8 @@ def get_case(case_id: str):
 
 
 @app.get("/api/timeline")
-def get_timeline():
+@limiter.limit("60/minute")
+def get_timeline(request: Request):
     """Get timeline visualization data"""
     cases = storage.get_all_cases()
     timeline_data = create_timeline_visualization(cases)
@@ -262,7 +327,8 @@ def get_timeline():
 
 
 @app.get("/api/stats")
-def get_stats():
+@limiter.limit("60/minute")
+def get_stats(request: Request):
     """
     Get statistics about cases.
     Uses Redis caching for fast responses.
@@ -422,7 +488,8 @@ def get_stats():
 
 
 @app.post("/api/tag-threader")
-def get_tag_threader(selected_tags: List[Dict[str, str]]):
+@limiter.limit("60/minute")
+def get_tag_threader(request: Request, selected_tags: List[Dict[str, str]]):
     """
     Query cases matching selected tags and create threaded tag links.
     
@@ -439,7 +506,8 @@ def get_tag_threader(selected_tags: List[Dict[str, str]]):
 
 
 @app.post("/api/return-tagged-cases")
-def get_tagged_cases(selected_tags: List[Dict[str, str]]):
+@limiter.limit("60/minute")
+def get_tagged_cases(request: Request, selected_tags: List[Dict[str, str]]):
     """
     Return all cases matching the selected tags.
     
@@ -456,7 +524,9 @@ def get_tagged_cases(selected_tags: List[Dict[str, str]]):
 
 
 @app.get("/api/case-ids-by-filter")
+@limiter.limit("100/minute")
 def get_case_ids_by_filter(
+    request: Request,
     organization: str = None,
     relationship: str = None,
     prosecution_status: str = None,
@@ -588,12 +658,13 @@ def get_case_ids_by_filter(
             }
         }
     except Exception as e:
-        import traceback
-        return {"error": str(e), "traceback": traceback.format_exc()}
+        from error_handler import handle_error
+        return handle_error(e)
 
 
 @app.get("/api/stats-detailed")
-def get_detailed_stats():
+@limiter.limit("60/minute")
+def get_detailed_stats(request: Request):
     """
     Get detailed statistics for visualization charts.
     Returns feature coverage, platform trends, organization involvement, etc.
@@ -839,11 +910,12 @@ def get_detailed_stats():
         
         return result
     except Exception as e:
-        import traceback
-        return {"error": str(e), "traceback": traceback.format_exc()}
+        from error_handler import handle_error
+        return handle_error(e)
 
 @app.get("/api/automated-analysis")
-async def automated_analysis_endpoint():
+@limiter.limit("30/minute")
+async def automated_analysis_endpoint(request: Request):
     """
     Get automated analysis results (case groups, triaged cases, insights).
     Uses Redis caching + pre-computed clusters from database for fast response.
@@ -939,7 +1011,8 @@ async def serve_clusters():
         return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
 
 @app.get("/api/location-stats")
-def get_location_stats():
+@limiter.limit("60/minute")
+def get_location_stats(request: Request):
     """
     Get aggregated location statistics (no raw cases).
     Returns location data with counts and case IDs for US map visualization.

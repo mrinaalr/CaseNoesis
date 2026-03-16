@@ -5,7 +5,7 @@ Simple pipeline: ingest -> process -> analyze -> store -> visualize
 
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 src_path = Path(__file__).parent
 sys.path.insert(0, str(src_path / "Ingestion Layer"))
@@ -15,8 +15,20 @@ sys.path.insert(0, str(src_path / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(src_path / "Visualization Layer"))
 
 from processing import process_cases
-from storage import CaseStorage
 import pandas as pd
+import os
+
+# Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
+if os.getenv("DATABASE_URL"):
+    try:
+        from storage_postgres import CaseStorage
+        print("✅ Using PostgreSQL database for storage")
+    except ImportError:
+        print("⚠️  PostgreSQL storage not available, falling back to SQLite")
+        from storage import CaseStorage
+else:
+    from storage import CaseStorage
+    print("✅ Using SQLite database for storage")
 
 
 def main():
@@ -108,7 +120,10 @@ def main():
         try:
             from analysis import run_automated_analysis
             cluster_data = run_automated_analysis(all_stored_cases)
-            storage = CaseStorage(db_path)
+            if db_path:
+                storage = CaseStorage(db_path)  # SQLite
+            else:
+                storage = CaseStorage()  # PostgreSQL
             storage.store_precomputed_clusters(cluster_data, len(all_stored_cases))
             print(f"✓ Pre-computed clusters stored ({len(all_stored_cases)} cases)")
         except Exception as e:
@@ -123,13 +138,16 @@ def main():
 
 
 
-def get_database_path() -> str:
+def get_database_path() -> Optional[str]:
     """
     Get database path from config or use default.
+    Returns None if using PostgreSQL (DATABASE_URL set).
     
     Returns:
-        Path to database file
+        Path to database file (SQLite) or None (PostgreSQL)
     """
+    if os.getenv("DATABASE_URL"):
+        return None  # PostgreSQL doesn't use file path
     try:
         from config import DATABASE_PATH
         return DATABASE_PATH
@@ -137,7 +155,7 @@ def get_database_path() -> str:
         return "caselinker.db"
 
 
-def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
+def store_cases(cases: List[Dict[str, Any]], db_path: Optional[str]) -> int:
     """
     Store cases in the database.
     
@@ -147,12 +165,16 @@ def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
     
     Args:
         cases: List of case dictionaries to store
-        db_path: Path to database file
+        db_path: Path to database file (SQLite) or None (PostgreSQL)
         
     Returns:
         Number of successfully stored cases
     """
-    storage = CaseStorage(db_path)
+    if db_path:
+        storage = CaseStorage(db_path)  # SQLite
+    else:
+        storage = CaseStorage()  # PostgreSQL (uses DATABASE_URL)
+    
     stored_count = 0
     for case in cases:
         if storage.store_case(case):
@@ -160,17 +182,20 @@ def store_cases(cases: List[Dict[str, Any]], db_path: str) -> int:
     return stored_count
 
 
-def get_all_stored_cases(db_path: str) -> List[Dict[str, Any]]:
+def get_all_stored_cases(db_path: Optional[str]) -> List[Dict[str, Any]]:
     """
     Retrieve all cases from the database.
     
     Args:
-        db_path: Path to database file
+        db_path: Path to database file (SQLite) or None (PostgreSQL)
         
     Returns:
         List of all case dictionaries
     """
-    storage = CaseStorage(db_path)
+    if db_path:
+        storage = CaseStorage(db_path)  # SQLite
+    else:
+        storage = CaseStorage()  # PostgreSQL (uses DATABASE_URL)
     return storage.get_all_cases()
 
 

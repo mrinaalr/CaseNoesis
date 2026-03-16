@@ -1,10 +1,11 @@
 """
-Storage Layer
+PostgreSQL Storage Layer
 
 Purpose: Store cases and relationships with fast retrieval and lookup capabilities.
+PostgreSQL version - uses psycopg2 for production-ready database.
 
 Design Ideas from Architecture:
-- Case Database (PostgreSQL/MySQL): keep it simple, store case data tables, ideally similar close together
+- Case Database (PostgreSQL): keep it simple, store case data tables, ideally similar close together
 - Store case entities in "rawish" format (preserve original structure + normalized fields)
 - Graph Database: Store case and relationships with weighted edges based on similarity strength
 - Efficient traversal for link analysis
@@ -12,35 +13,67 @@ Design Ideas from Architecture:
 """
 
 import json
-import sqlite3
-from pathlib import Path
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from psycopg2.pool import SimpleConnectionPool
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
+# Connection pool (reuse connections for better performance)
+_pool: Optional[SimpleConnectionPool] = None
 
-def get_connection(db_path: str, encryption_key: Optional[str] = None):
-    """Get database connection"""
-    return sqlite3.connect(db_path)
+
+def get_pool():
+    """Get or create connection pool"""
+    global _pool
+    if _pool is None:
+        database_url = os.getenv("DATABASE_URL")
+        if not database_url:
+            raise ValueError("DATABASE_URL environment variable not set")
+        
+        # Create connection pool
+        _pool = SimpleConnectionPool(
+            minconn=1,
+            maxconn=10,
+            dsn=database_url
+        )
+    return _pool
+
+
+def get_connection():
+    """Get connection from pool"""
+    pool = get_pool()
+    return pool.getconn()
+
+
+def return_connection(conn):
+    """Return connection to pool"""
+    pool = get_pool()
+    pool.putconn(conn)
 
 
 class CaseStorage:
     """
-    Case Database Storage
+    PostgreSQL Case Database Storage
     
     Stores processed case data in "rawish" format - preserves original structure 
     along with normalized fields. Designed for quick retrieval and lookups.
     Similar cases stored close together for efficient access.
     """
     
-    def __init__(self, db_path: str = "caselinker.db", encryption_key: Optional[str] = None):
+    def __init__(self, db_path: str = None, encryption_key: Optional[str] = None):
         """
-        Initialize case storage.
+        Initialize PostgreSQL storage.
         
         Args:
-            db_path: Path to SQLite database file
-            encryption_key: Deprecated (kept for backward compatibility)
+            db_path: Ignored (uses DATABASE_URL from environment)
+            encryption_key: Ignored (PostgreSQL handles encryption via SSL)
         """
-        self.db_path = db_path
+        # Verify DATABASE_URL is set
+        if not os.getenv("DATABASE_URL"):
+            raise ValueError("DATABASE_URL environment variable must be set for PostgreSQL storage")
+        
         self.init_database()
     
     def init_database(self):
@@ -48,79 +81,84 @@ class CaseStorage:
         Initialize database tables.
         Creates tables for storing case data in rawish format.
         """
-        conn = get_connection(self.db_path)
+        conn = get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS cases (
-                id TEXT PRIMARY KEY,
-                source TEXT,
-                date_start TEXT,
-                date_end TEXT,
-                victim_count INTEGER,
-                perpetrator_count INTEGER,
-                relationship_to_victim TEXT,
-                platforms_used TEXT,  -- JSON array
-                investigation_methods TEXT,   -- JSON array
-                severity_indicators TEXT,     -- JSON array
-                case_topics TEXT,             -- JSON array
-                tags TEXT,                    -- JSON array (reserved for future AI features)
-                notes TEXT,                    -- Reserved for future AI features
-                raw_data TEXT,                -- JSON - original case data
-                extracted_features TEXT,      -- JSON - structured features
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON cases(source)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_date_start ON cases(date_start)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_case_topics ON cases(case_topics)')
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS victim_demographics (
-                case_id TEXT,
-                age_range TEXT,
-                region TEXT,
-                anonymized_id TEXT,
-                FOREIGN KEY (case_id) REFERENCES cases(id)
-            )
-        ''')
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS perpetrator_demographics (
-                case_id TEXT,
-                age_range TEXT,
-                region TEXT,
-                anonymized_id TEXT,
-                previous_conviction TEXT,  -- JSON
-                FOREIGN KEY (case_id) REFERENCES cases(id)
-            )
-        ''')
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS prosecution_outcomes (
-                case_id TEXT,
-                status TEXT,
-                charges TEXT,
-                sentences TEXT,
-                FOREIGN KEY (case_id) REFERENCES cases(id)
-            )
-        ''')
-        
-        # Table for pre-computed clusters (performance optimization)
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS precomputed_clusters (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cluster_data TEXT,  -- JSON: full analysis results
-                case_count INTEGER,  -- Number of cases when computed
-                computed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(case_count)  -- Only one cluster set per case count
-            )
-        ''')
-        
-        conn.commit()
-        conn.close()
+        try:
+            # Create tables (PostgreSQL syntax)
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS cases (
+                    id TEXT PRIMARY KEY,
+                    source TEXT,
+                    date_start TEXT,
+                    date_end TEXT,
+                    victim_count INTEGER,
+                    perpetrator_count INTEGER,
+                    relationship_to_victim TEXT,
+                    platforms_used TEXT,
+                    investigation_methods TEXT,
+                    severity_indicators TEXT,
+                    case_topics TEXT,
+                    tags TEXT,
+                    notes TEXT,
+                    raw_data TEXT,
+                    extracted_features TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # Create indexes
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON cases(source)')
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_date_start ON cases(date_start)')
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_case_topics ON cases(case_topics)')
+            
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS victim_demographics (
+                    case_id TEXT PRIMARY KEY,
+                    age_range TEXT,
+                    region TEXT,
+                    anonymized_id TEXT,
+                    FOREIGN KEY (case_id) REFERENCES cases(id) ON DELETE CASCADE
+                )
+            ''')
+            
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS perpetrator_demographics (
+                    case_id TEXT PRIMARY KEY,
+                    age_range TEXT,
+                    region TEXT,
+                    anonymized_id TEXT,
+                    previous_conviction TEXT,
+                    FOREIGN KEY (case_id) REFERENCES cases(id) ON DELETE CASCADE
+                )
+            ''')
+            
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS prosecution_outcomes (
+                    case_id TEXT PRIMARY KEY,
+                    status TEXT,
+                    charges TEXT,
+                    sentences TEXT,
+                    FOREIGN KEY (case_id) REFERENCES cases(id) ON DELETE CASCADE
+                )
+            ''')
+            
+            # Table for pre-computed clusters (performance optimization)
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS precomputed_clusters (
+                    id SERIAL PRIMARY KEY,
+                    cluster_data TEXT,
+                    case_count INTEGER,
+                    computed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(case_count)
+                )
+            ''')
+            
+            conn.commit()
+        finally:
+            cursor.close()
+            return_connection(conn)
     
     def store_case(self, case: Dict[str, Any]) -> bool:
         """
@@ -134,7 +172,7 @@ class CaseStorage:
             True if successful, False otherwise
         """
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             
             date_range = case.get('date_range', {})
@@ -144,7 +182,6 @@ class CaseStorage:
             # Map new schema to database format (backward compatible)
             investigation_info = case.get('investigation_type') or case.get('investigation_methods_and_teams')
             if isinstance(investigation_info, dict):
-                # New format: {type: str, agencies: [str]}
                 investigation_methods = [investigation_info.get('type')] + investigation_info.get('agencies', [])
             elif isinstance(investigation_info, str):
                 investigation_methods = [investigation_info]
@@ -153,7 +190,7 @@ class CaseStorage:
             
             # Check if case already exists to preserve created_at timestamp and prevent conflicts
             case_id = case.get('id')
-            cursor.execute('SELECT created_at, raw_data FROM cases WHERE id = ?', (case_id,))
+            cursor.execute('SELECT created_at, raw_data FROM cases WHERE id = %s', (case_id,))
             existing_case = cursor.fetchone()
             
             # Use consistent ISO format for timestamps
@@ -186,32 +223,49 @@ class CaseStorage:
                     print(f"   Existing case from: {existing_source_file}")
                     print(f"   New case from: {new_source_file}")
                     print(f"   Skipping new case to prevent data loss")
-                    conn.close()
+                    cursor.close()
+                    return_connection(conn)
                     return False
                 
                 # Case exists from same source: preserve original created_at, update updated_at
                 created_at = existing_created_at
-                updated_at = current_time  # Update timestamp since we're modifying existing case
+                updated_at = current_time
             else:
                 # New case: use created_at from case dict if provided, otherwise use current time
                 created_at = case.get('created_at') or current_time
-                # For new cases, updated_at should equal created_at (we're not updating, just creating)
                 updated_at = case.get('updated_at') or created_at
             
+            # PostgreSQL: Use INSERT ... ON CONFLICT DO UPDATE instead of INSERT OR REPLACE
             cursor.execute('''
-                INSERT OR REPLACE INTO cases (
+                INSERT INTO cases (
                     id, source, date_start, date_end, victim_count, perpetrator_count,
                     relationship_to_victim, platforms_used,
                     investigation_methods, severity_indicators, case_topics, tags, notes,
                     raw_data, extracted_features, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (id) DO UPDATE SET
+                    source = EXCLUDED.source,
+                    date_start = EXCLUDED.date_start,
+                    date_end = EXCLUDED.date_end,
+                    victim_count = EXCLUDED.victim_count,
+                    perpetrator_count = EXCLUDED.perpetrator_count,
+                    relationship_to_victim = EXCLUDED.relationship_to_victim,
+                    platforms_used = EXCLUDED.platforms_used,
+                    investigation_methods = EXCLUDED.investigation_methods,
+                    severity_indicators = EXCLUDED.severity_indicators,
+                    case_topics = EXCLUDED.case_topics,
+                    tags = EXCLUDED.tags,
+                    notes = EXCLUDED.notes,
+                    raw_data = EXCLUDED.raw_data,
+                    extracted_features = EXCLUDED.extracted_features,
+                    updated_at = EXCLUDED.updated_at
             ''', (
                 case_id,
                 case.get('source', 'unknown'),
                 date_start,
                 date_end,
                 case.get('victim_count'),
-                None,  # perpetrator_count (deprecated, use perpetrator_age instead)
+                None,  # perpetrator_count (deprecated)
                 case.get('relationship_to_victim'),
                 json.dumps(case.get('platforms_used', [])),
                 json.dumps(investigation_methods),
@@ -220,41 +274,42 @@ class CaseStorage:
                 json.dumps(case.get('tags', [])),
                 case.get('notes'),
                 json.dumps(case.get('raw_data', {})),
-                json.dumps(case),  # Store full case as extracted_features for new schema
+                json.dumps(case),  # Store full case as extracted_features
                 created_at,
                 updated_at
             ))
             
-            case_demo = case.get('case_demographics') or case.get('victim_demographics')  # Support both for backward compatibility
+            case_demo = case.get('case_demographics') or case.get('victim_demographics')
             if case_demo and isinstance(case_demo, dict):
-                # Store age_range as JSON string (can be dict with min/max or list)
                 age_range_str = None
                 if case_demo.get('age_range'):
                     age_range_str = json.dumps(case_demo.get('age_range'))
                 elif case_demo.get('ages'):
-                    # Create age_range from ages list
                     ages = case_demo.get('ages', [])
                     if ages:
                         age_range_str = json.dumps({'min': min(ages), 'max': max(ages)})
                 
                 cursor.execute('''
-                    INSERT OR REPLACE INTO victim_demographics 
+                    INSERT INTO victim_demographics 
                     (case_id, age_range, region, anonymized_id)
-                    VALUES (?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (case_id) DO UPDATE SET
+                        age_range = EXCLUDED.age_range,
+                        region = EXCLUDED.region,
+                        anonymized_id = EXCLUDED.anonymized_id
                 ''', (
                     case.get('id'),
                     age_range_str,
                     case_demo.get('region'),
-                    None,  # anonymized_id (not extracted)
+                    None,
                 ))
             
-            # Store perpetrator demographics (new format: age, is_registered)
+            # Store perpetrator demographics
             perp_age = case.get('perpetrator_age')
             perp_registered = case.get('perpetrator_registered_sex_offender', False)
             perp_demo = case.get('perpetrator_demographics')
             
             if perp_age is not None or perp_registered or perp_demo:
-                # Create age_range from age
                 age_range_str = None
                 if perp_age is not None:
                     age_range_str = json.dumps({'min': perp_age, 'max': perp_age})
@@ -265,54 +320,59 @@ class CaseStorage:
                 prev_conviction = case.get('previous_conviction') or (perp_demo.get('previous_conviction') if isinstance(perp_demo, dict) else None)
                 
                 cursor.execute('''
-                    INSERT OR REPLACE INTO perpetrator_demographics 
+                    INSERT INTO perpetrator_demographics 
                     (case_id, age_range, region, anonymized_id, previous_conviction)
-                    VALUES (?, ?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON CONFLICT (case_id) DO UPDATE SET
+                        age_range = EXCLUDED.age_range,
+                        region = EXCLUDED.region,
+                        anonymized_id = EXCLUDED.anonymized_id,
+                        previous_conviction = EXCLUDED.previous_conviction
                 ''', (
                     case.get('id'),
                     age_range_str,
-                    None,  # region (not extracted)
-                    None,  # anonymized_id (not extracted)
+                    None,
+                    None,
                     json.dumps(prev_conviction) if prev_conviction else None,
                 ))
             
             prosecution = case.get('prosecution_outcome')
             if prosecution and isinstance(prosecution, dict):
-                # Map new format to old format for backward compatibility
                 status = prosecution.get('booking_status') or prosecution.get('status')
                 charges = prosecution.get('charges', [])
-                # Convert charges list to old format if needed
                 charges_str = json.dumps(charges)
                 
                 cursor.execute('''
-                    INSERT OR REPLACE INTO prosecution_outcomes 
+                    INSERT INTO prosecution_outcomes 
                     (case_id, status, charges, sentences)
-                    VALUES (?, ?, ?, ?)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (case_id) DO UPDATE SET
+                        status = EXCLUDED.status,
+                        charges = EXCLUDED.charges,
+                        sentences = EXCLUDED.sentences
                 ''', (
                     case.get('id'),
                     status,
                     charges_str,
-                    json.dumps([]),  # sentences (not extracted)
+                    json.dumps([]),
                 ))
             
             conn.commit()
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             return True
             
         except Exception as e:
             print(f"Error storing case: {e}")
+            import traceback
+            traceback.print_exc()
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return False
     
     def store_cases(self, cases: List[Dict[str, Any]]) -> int:
-        """
-        Store multiple cases in the database.
-        
-        Args:
-            cases: List of case dictionaries
-            
-        Returns:
-            Number of successfully stored cases
-        """
+        """Store multiple cases in the database."""
         stored_count = 0
         for case in cases:
             if self.store_case(case):
@@ -320,70 +380,62 @@ class CaseStorage:
         return stored_count
     
     def get_case(self, case_id: str) -> Optional[Dict[str, Any]]:
-        """
-        Retrieve a single case by ID.
-        
-        Args:
-            case_id: Case identifier
-            
-        Returns:
-            Case dictionary or None if not found
-        """
+        """Retrieve a single case by ID."""
         try:
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
+            conn = get_connection()
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
             
-            cursor.execute('SELECT * FROM cases WHERE id = ?', (case_id,))
+            cursor.execute('SELECT * FROM cases WHERE id = %s', (case_id,))
             row = cursor.fetchone()
             
             if not row:
-                conn.close()
+                cursor.close()
+                return_connection(conn)
                 return None
             
-            columns = [desc[0] for desc in cursor.description]
-            case_dict = dict(zip(columns, row))
+            case_dict = dict(row)
             
             # Parse JSON fields
-            for json_field in ['platforms_used',
-                             'investigation_methods', 'severity_indicators', 'case_topics',
-                             'tags', 'raw_data', 'extracted_features']:
+            for json_field in ['platforms_used', 'investigation_methods', 'severity_indicators', 
+                             'case_topics', 'tags', 'raw_data', 'extracted_features']:
                 if case_dict.get(json_field):
                     try:
                         case_dict[json_field] = json.loads(case_dict[json_field])
                     except (json.JSONDecodeError, TypeError):
-                        # Keep original value if JSON parsing fails
                         pass
             
             # Get related data
-            cursor.execute('SELECT * FROM victim_demographics WHERE case_id = ?', (case_id,))
+            cursor.execute('SELECT * FROM victim_demographics WHERE case_id = %s', (case_id,))
             victim_rows = cursor.fetchall()
             if victim_rows:
-                victim_cols = [desc[0] for desc in cursor.description]
-                case_dict['victim_demographics'] = [dict(zip(victim_cols, row)) for row in victim_rows]
+                case_dict['victim_demographics'] = [dict(row) for row in victim_rows]
+            else:
+                case_dict['victim_demographics'] = []
             
-            cursor.execute('SELECT * FROM perpetrator_demographics WHERE case_id = ?', (case_id,))
+            cursor.execute('SELECT * FROM perpetrator_demographics WHERE case_id = %s', (case_id,))
             perp_rows = cursor.fetchall()
             if perp_rows:
-                perp_cols = [desc[0] for desc in cursor.description]
-                case_dict['perpetrator_demographics'] = [dict(zip(perp_cols, row)) for row in perp_rows]
+                case_dict['perpetrator_demographics'] = [dict(row) for row in perp_rows]
+            else:
+                case_dict['perpetrator_demographics'] = []
             
-            cursor.execute('SELECT * FROM prosecution_outcomes WHERE case_id = ?', (case_id,))
+            cursor.execute('SELECT * FROM prosecution_outcomes WHERE case_id = %s', (case_id,))
             prosecution_rows = cursor.fetchall()
             if prosecution_rows:
                 prosecution_cols = [desc[0] for desc in cursor.description]
-                case_dict['prosecution_outcomes'] = [dict(zip(prosecution_cols, row)) for row in prosecution_rows]
+                case_dict['prosecution_outcomes'] = [dict(row) for row in prosecution_rows]
+            else:
+                case_dict['prosecution_outcomes'] = []
             
-            # Reconstruct date_range - always create it, even if dates are None
-            # This ensures the frontend always has a date_range object to work with
+            # Reconstruct date_range
             case_dict['date_range'] = {
                 'start': case_dict.get('date_start'),
                 'end': case_dict.get('date_end')
             }
             
-            # Merge extracted_features back into case_dict (new schema fields)
+            # Merge extracted_features back into case_dict
             extracted_features = case_dict.get('extracted_features', {})
             if isinstance(extracted_features, dict):
-                # Merge new schema fields from extracted_features
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                            'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
@@ -391,7 +443,7 @@ class CaseStorage:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
             
-            # Also merge prosecution_outcome from prosecution_outcomes table if not already merged
+            # Merge prosecution_outcome from prosecution_outcomes table
             if not case_dict.get('prosecution_outcome') and case_dict.get('prosecution_outcomes'):
                 prosecution_rows = case_dict.get('prosecution_outcomes', [])
                 if prosecution_rows and len(prosecution_rows) > 0:
@@ -402,11 +454,15 @@ class CaseStorage:
                         'jail': None
                     }
             
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             return case_dict
             
         except Exception as e:
             print(f"Error retrieving case: {e}")
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return None
     
     def get_case_count(self) -> int:
@@ -417,43 +473,24 @@ class CaseStorage:
             Number of cases
         """
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             cursor.execute('SELECT COUNT(*) FROM cases')
             count = cursor.fetchone()[0]
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             return count
         except Exception as e:
             print(f"Error getting case count: {e}")
             return 0
     
     def get_all_cases(self, include_raw_data: bool = True) -> List[Dict[str, Any]]:
-        """
-        Retrieve all cases from the database.
-        
-        Args:
-            include_raw_data: If False, exclude raw_data field to reduce payload size
-        
-        Returns:
-            List of case dictionaries
-        """
+        """Retrieve all cases from the database."""
         try:
-            # Check if database file exists
-            db_path_obj = Path(self.db_path)
-            if not db_path_obj.exists():
-                print(f"⚠️  Database file not found: {self.db_path}")
-                return []
+            conn = get_connection()
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
             
-            # Check file size - if it's very small, might be empty or corrupted
-            file_size = db_path_obj.stat().st_size
-            if file_size < 1000:  # Less than 1KB is suspicious
-                print(f"⚠️  Database file is very small ({file_size} bytes) - might be empty")
-            
-            conn = get_connection(self.db_path)
-            cursor = conn.cursor()
-            
-            # Single query to get all cases - much faster than N+1 queries
-            # Optimize: Only select raw_data if include_raw_data is True
+            # Single query to get all cases
             if include_raw_data:
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
@@ -464,7 +501,6 @@ class CaseStorage:
                     ORDER BY date_start, id
                 ''')
             else:
-                # Exclude raw_data from query for faster loading (saves 10-50KB per case)
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
                            relationship_to_victim, platforms_used, investigation_methods,
@@ -474,59 +510,54 @@ class CaseStorage:
                     ORDER BY date_start, id
                 ''')
             
-            columns = [desc[0] for desc in cursor.description]
             rows = cursor.fetchall()
+            case_ids = [row['id'] for row in rows]
             
-            # Get all related data in bulk queries
-            case_ids = [row[0] for row in rows]
             if not case_ids:
-                conn.close()
+                cursor.close()
+                return_connection(conn)
                 return []
             
-            # Bulk fetch victim demographics
-            placeholders = ','.join(['?'] * len(case_ids))
+            # Bulk fetch related data
+            placeholders = ','.join(['%s'] * len(case_ids))
+            
             cursor.execute(f'SELECT * FROM victim_demographics WHERE case_id IN ({placeholders})', case_ids)
             victim_data = {}
             for row in cursor.fetchall():
-                victim_cols = [desc[0] for desc in cursor.description]
-                case_id = dict(zip(victim_cols, row))['case_id']
+                case_id = row['case_id']
                 if case_id not in victim_data:
                     victim_data[case_id] = []
-                victim_data[case_id].append(dict(zip(victim_cols, row)))
+                victim_data[case_id].append(dict(row))
             
-            # Bulk fetch perpetrator demographics
             cursor.execute(f'SELECT * FROM perpetrator_demographics WHERE case_id IN ({placeholders})', case_ids)
             perp_data = {}
             for row in cursor.fetchall():
-                perp_cols = [desc[0] for desc in cursor.description]
-                case_id = dict(zip(perp_cols, row))['case_id']
+                case_id = row['case_id']
                 if case_id not in perp_data:
                     perp_data[case_id] = []
-                perp_data[case_id].append(dict(zip(perp_cols, row)))
+                perp_data[case_id].append(dict(row))
             
-            # Bulk fetch prosecution outcomes
             cursor.execute(f'SELECT * FROM prosecution_outcomes WHERE case_id IN ({placeholders})', case_ids)
             prosecution_data = {}
             for row in cursor.fetchall():
-                prosecution_cols = [desc[0] for desc in cursor.description]
-                case_id = dict(zip(prosecution_cols, row))['case_id']
+                case_id = row['case_id']
                 if case_id not in prosecution_data:
                     prosecution_data[case_id] = []
-                prosecution_data[case_id].append(dict(zip(prosecution_cols, row)))
+                prosecution_data[case_id].append(dict(row))
             
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             
             # Build case dictionaries
             cases = []
             for row in rows:
-                case_dict = dict(zip(columns, row))
+                case_dict = dict(row)
                 
-                # Parse JSON fields (skip raw_data if empty string from optimized query)
+                # Parse JSON fields
                 for json_field in ['platforms_used', 'investigation_methods', 
                                  'severity_indicators', 'case_topics', 'tags', 
                                  'raw_data', 'extracted_features']:
                     if case_dict.get(json_field):
-                        # Skip parsing if raw_data is empty string (from optimized query)
                         if json_field == 'raw_data' and case_dict[json_field] == '':
                             case_dict[json_field] = None
                             continue
@@ -535,14 +566,12 @@ class CaseStorage:
                         except (json.JSONDecodeError, TypeError):
                             pass
                 
-                # Exclude raw_data if requested (for performance)
                 if not include_raw_data and 'raw_data' in case_dict:
                     del case_dict['raw_data']
                 
-                # Merge extracted_features back into case_dict (same as get_case)
+                # Merge extracted_features
                 extracted_features = case_dict.get('extracted_features', {})
                 if isinstance(extracted_features, dict):
-                    # Merge new schema fields from extracted_features
                     for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                                'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
                                'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
@@ -571,35 +600,30 @@ class CaseStorage:
             print(f"❌ Error retrieving all cases: {e}")
             import traceback
             traceback.print_exc()
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return []
     
     def search_cases(self, query: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Search cases based on criteria.
-        
-        Args:
-            query: Dictionary with search criteria (source, date_range, etc.)
-            
-        Returns:
-            List of matching case dictionaries
-        """
+        """Search cases based on criteria."""
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             
             conditions = []
             params = []
             
             if query.get('source'):
-                conditions.append('source = ?')
+                conditions.append('source = %s')
                 params.append(query['source'])
             
             if query.get('date_start'):
-                conditions.append('date_start >= ?')
+                conditions.append('date_start >= %s')
                 params.append(query['date_start'])
             
             if query.get('date_end'):
-                conditions.append('date_start <= ?')
+                conditions.append('date_start <= %s')
                 params.append(query['date_end'])
             
             where_clause = ' AND '.join(conditions) if conditions else '1=1'
@@ -607,7 +631,8 @@ class CaseStorage:
             cursor.execute(f'SELECT id FROM cases WHERE {where_clause} ORDER BY date_start', params)
             case_ids = [row[0] for row in cursor.fetchall()]
             
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             
             cases = []
             for case_id in case_ids:
@@ -619,30 +644,23 @@ class CaseStorage:
             
         except Exception as e:
             print(f"Error searching cases: {e}")
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return []
     
     def store_precomputed_clusters(self, cluster_data: Dict[str, Any], case_count: int) -> bool:
-        """
-        Store pre-computed cluster analysis results in database.
-        
-        Args:
-            cluster_data: Full analysis results dictionary from run_automated_analysis()
-            case_count: Number of cases when clusters were computed
-            
-        Returns:
-            True if successful, False otherwise
-        """
+        """Store pre-computed cluster analysis results in database."""
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             
-            # Delete old clusters for this case count (if any)
-            cursor.execute('DELETE FROM precomputed_clusters WHERE case_count = ?', (case_count,))
+            # Delete old clusters for this case count
+            cursor.execute('DELETE FROM precomputed_clusters WHERE case_count = %s', (case_count,))
             
             # Convert datetime objects to strings for JSON serialization
             def json_serializer(obj):
                 """Custom JSON serializer for datetime objects."""
-                from datetime import datetime
                 if isinstance(obj, datetime):
                     return obj.isoformat()
                 raise TypeError(f"Type {type(obj)} not serializable")
@@ -650,40 +668,36 @@ class CaseStorage:
             # Store new clusters
             cursor.execute('''
                 INSERT INTO precomputed_clusters (cluster_data, case_count)
-                VALUES (?, ?)
+                VALUES (%s, %s)
             ''', (json.dumps(cluster_data, default=json_serializer), case_count))
             
             conn.commit()
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             return True
         except Exception as e:
             print(f"Error storing precomputed clusters: {e}")
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return False
     
     def get_precomputed_clusters(self, case_count: int) -> Optional[Dict[str, Any]]:
-        """
-        Retrieve pre-computed cluster analysis results from database.
-        
-        Args:
-            case_count: Current number of cases (must match stored count)
-            
-        Returns:
-            Cluster data dictionary or None if not found/outdated
-        """
+        """Retrieve pre-computed cluster analysis results from database."""
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             
-            # Get clusters for this case count
             cursor.execute('''
                 SELECT cluster_data FROM precomputed_clusters 
-                WHERE case_count = ?
+                WHERE case_count = %s
                 ORDER BY computed_at DESC
                 LIMIT 1
             ''', (case_count,))
             
             row = cursor.fetchone()
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             
             if row:
                 cluster_json = row[0]
@@ -697,19 +711,24 @@ class CaseStorage:
             return None
         except Exception as e:
             print(f"Error retrieving precomputed clusters: {e}")
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return None
     
     def clear_precomputed_clusters(self):
-        """Clear all pre-computed clusters (useful when cases change significantly)."""
+        """Clear all pre-computed clusters."""
         try:
-            conn = get_connection(self.db_path)
+            conn = get_connection()
             cursor = conn.cursor()
             cursor.execute('DELETE FROM precomputed_clusters')
             conn.commit()
-            conn.close()
+            cursor.close()
+            return_connection(conn)
             return True
         except Exception as e:
             print(f"Error clearing precomputed clusters: {e}")
+            if 'conn' in locals():
+                cursor.close()
+                return_connection(conn)
             return False
-
-

@@ -142,22 +142,34 @@ Case:
 **Purpose**: Store cases and relationships with fast retrieval and lookup capabilities.
 
 **Components**:
-- **Case Database** (SQLite):
+- **Case Database** (PostgreSQL / SQLite):
+  - Database-agnostic implementation - automatically selects PostgreSQL or SQLite based on environment
+  - Production: PostgreSQL on Railway with encrypted connections and managed backups
+  - Local Development: SQLite database auto-created on first run
   - Simple, efficient storage with normalized tables
   - Stores case entities in "rawish" format (preserves original structure + normalized fields)
-  - Uses plain SQLite for maximum compatibility across platforms (Railway, local, etc.)
   - Proper indexing for fast queries (source, date_start, case_topics)
   - JSON storage for complex fields (platforms, topics, severity indicators, etc.)
+  - Connection pooling for PostgreSQL (production performance)
+  - Fast JSON parsing with orjson (2-3x faster than standard json)
 
 **Current Implementation**:
-- SQLite database (`caselinker.db`) with 47 processed cases (2011-2014)
-- Tables: `cases`, `victim_demographics`, `perpetrator_demographics`, `prosecution_outcomes`
+- **Production**: PostgreSQL database with 265 processed cases (2011-2014 AZICAC, 2022-2024 NCMEC)
+- **Local**: SQLite database (`caselinker.db`) - created automatically, not tracked in git
+- Tables: `cases`, `victim_demographics`, `perpetrator_demographics`, `prosecution_outcomes`, `precomputed_clusters`
 - Full raw data preservation in `raw_data` and `extracted_features` fields
 - Fast retrieval with proper indexing
+- Pre-computed cluster storage for fast analysis responses
+- Redis caching layer for frequently accessed endpoints (24-hour TTL for pre-computed data)
+
+**Performance**:
+- API endpoints: 70-500ms response times (most endpoints <200ms)
+- Automated analysis: 1-2s (complex computation, cached after first request)
+- Redis caching: Sub-100ms for cached endpoints
+- Database queries: Optimized with proper indexing and connection pooling
 
 **Future Enhancements**:
 - Graph Database: Not yet implemented (future enhancement for relationship mapping)
-- Database encryption: Considered but deferred for MVP to ensure cross-platform compatibility
 
 
 

@@ -10,8 +10,8 @@ pdfplumber>=0.10.0
 # scikit-learn>=1.3.0
 # networkx>=3.0
 
-# Database (add when you choose)
-# psycopg2-binary>=2.9.0  # PostgreSQL
+# Database
+psycopg2-binary>=2.9.0  # PostgreSQL
 # pymongo>=4.5.0  # MongoDB
 # neo4j>=5.0.0  # Neo4j
 
@@ -19,6 +19,8 @@ pdfplumber>=0.10.0
 fastapi>=0.100.0
 uvicorn>=0.23.0
 redis>=5.0.0
+slowapi>=0.1.9  # Rate limiting
+python-json-logger>=2.0.7  # Structured logging
 orjson>=3.9.0  # Fast JSON parsing for Redis cache (optional, falls back to json if not available)
 
 # Database Encryption (optional - falls back to regular SQLite if not available)
