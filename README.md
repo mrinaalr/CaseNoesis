@@ -38,7 +38,7 @@ CaseLinker follows a modular, layered architecture:
 
 1. **Ingestion Layer**: Handles PDF data sources with text extraction and validation
 2. **Processing Layer**: Extracts features, assigns comparison values, and fills case schema
-3. **Storage Layer**: SQLite database (plain SQLite for maximum compatibility)
+3. **Storage Layer**: PostgreSQL (production) / SQLite (local development) - Database-agnostic implementation
 4. **Clustering & Analysis Layer**: Case comparison, similarity detection, automated grouping, triage, and insights generation
 5. **Visualization Layer**: Interactive web-based dashboards with D3.js visualizations
 
@@ -49,7 +49,7 @@ CaseLinker follows a modular, layered architecture:
 **No installation required.** Visit the live deployment:
 - **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live version includes all features and 207 processed cases. Created for quick testing and demonstrations.
+The live version includes all features and 265 processed cases. Created for quick testing and demonstrations.
 
 ### Option 2: Local Setup (Works Out of the Box)
 
@@ -77,9 +77,11 @@ Then open your browser to:
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
-**Important:** The repository includes a database (`caselinker.db`) with 160 cases from NCMEC 2024 CyberTipline report and 47 cases from Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that this research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+**Important:** The live deployment includes 265 cases from NCMEC CyberTipline reports (2022-2024) and Arizona ICAC annual reports (2011–2014). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. No PII was processed; all data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that this research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 
-**Database:** The database uses plain SQLite (no encryption) for maximum compatibility. The architecture supports merged, federated, or encrypted databases as needed. Researchers and orgs can encrypt the current implementation or swap out the database implementation with SQLCipher, PostgreSQL, or other database systems. 
+**Database:** 
+- **Production (Railway)**: PostgreSQL database with encrypted connections and managed backups
+- **Local Development**: SQLite database (`caselinker.db`) - created automatically when running locally
 
 
 You can process additional PDFs to add more cases to the database.
@@ -110,6 +112,46 @@ You can process additional PDFs to add more cases to the database.
 **Typical use case:**
 1. First, process PDFs with `src/main.py` to populate the database
 2. Then, start the web server with `run/main.py` to view and analyze the cases
+
+## Populating the Local Database
+
+**The local database starts empty.** To populate it with cases, you need to process PDF files from publicly available sources.
+
+### Finding PDF Sources
+
+Visit the **Sources** page on the live demo to see where PDFs can be obtained:
+- **Live Demo Sources Page**: [https://web-production-13a2.up.railway.app/sources](https://web-production-13a2.up.railway.app/sources)
+- Or visit `/sources` when running locally: http://localhost:8000/sources
+
+The sources page lists publicly available reports from:
+- **Arizona ICAC**: Annual case reports (2011-2014)
+- **NCMEC**: CyberTipline success stories and case summaries (2022-2024)
+
+### Processing PDFs to Populate Database
+
+Once you have PDF files, process them using the CLI tool:
+
+**Single PDF:**
+```bash
+source venv/bin/activate
+python3 src/main.py "path/to/your/file.pdf"
+```
+
+**Multiple PDFs:**
+```bash
+python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2022 NCMEC.pdf" "2023 NCMEC.pdf"
+```
+
+The system will:
+1. Extract text from each PDF
+2. Identify organization name from filename (AZICAC, NCMEC, etc.)
+3. Batch cases, extract features, assign case IDs
+4. Store all cases in the local SQLite database
+5. Pre-compute clusters for fast visualization
+
+**Example:** Processing the 7 PDFs used in production will populate your local database with 265 cases:
+- 4 AZICAC PDFs (2011-2014): 47 cases
+- 3 NCMEC PDFs (2022-2024): 218 cases
 
 ## Process Your Own PDF Files
 
@@ -207,7 +249,7 @@ CaseLinker/
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
-├── caselinker.db                # SQLite database with 207 processed cases
+├── caselinker.db                # SQLite database (created if used locally)
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -254,7 +296,9 @@ Each case includes structured features extracted from case narratives:
 - **Backend**: Python 3, FastAPI, Uvicorn
 - **Data Processing**: Pandas, NumPy
 - **PDF Processing**: pdfplumber
-- **Database**: SQLite (plain database for maximum compatibility)
+- **Database**: PostgreSQL (production) / SQLite (local development)
+  - Production: Railway PostgreSQL with encrypted connections
+  - Local: SQLite database auto-created on first run
 - **Visualization**: D3.js, HTML/CSS/JavaScript
 - **ML/NER**: Stanza (Stanford NLP), Transformers models for Named Entity Recognition
   - Extracts law enforcement organizations, ages, dates, and locations from case text
@@ -268,7 +312,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: The database contains 207 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: The database contains 265 cases from publicly available NCMEC / Arizona ICAC annual reports. These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

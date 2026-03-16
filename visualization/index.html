@@ -568,8 +568,9 @@
                 <div class="label" id="total-cases-label">Cases to Visualize</div>
             </div>
             <div class="stat-box">
-                <div class="number" id="victim-count">-</div>
-                <div class="label">Total Victims</div>
+                <div class="number" id="group-count">-</div>
+                <div class="label">Number of Groups
+                </div>
             </div>
             <div class="stat-box" style="cursor: pointer;" onclick="window.location.href='/sources'">
                 <div class="number" id="data-sources">-</div>
@@ -972,7 +973,7 @@
                     }
                 });
                 document.getElementById('victim-count').textContent = totalVictims > 0 ? totalVictims : '-';
-                victimLabel.textContent = 'Total Victims';
+                victimLabel.textContent = 'Number of Groups';
                 
                 // Remove click handler for non-geographic visualizations
                 statBox.style.cursor = 'default';
