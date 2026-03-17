@@ -943,7 +943,7 @@ def find_severe_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     Criteria: Cases with at least one of:
     - infant in severity_indicators
     - very_young in severity_indicators
-    - sexual_assault in severity_indicators
+    - sexual_abuse in severity_indicators
     - under_10 in severity_indicators
     
     Args:
@@ -965,7 +965,7 @@ def find_severe_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             severity = []
         
         # Check for severe indicators
-        severe_indicators = ['infant', 'very_young', 'sexual_assault', 'under_10', 'under_5', 'under_7', 'under_9']
+        severe_indicators = ['infant', 'very_young', 'sexual_abuse', 'under_10', 'under_5', 'under_7', 'under_9']
         has_severe = any(indicator in severity for indicator in severe_indicators)
         
         if has_severe:
@@ -1124,7 +1124,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
     1. Online-Only Cluster: Cases with online_only topic
     2. Possession Cluster: Cases with possession topic
     3. Investigation Cluster: Cases grouped by investigation_type (proactive, reactive, online, undercover, unknown)
-    4. Severe Cluster: Cases with severe indicators (infant, very_young, sexual_assault)
+    4. Severe Cluster: Cases with severe indicators (infant, very_young, sexual_abuse)
     5. General Cluster: All cases grouped by Jaccard similarity
     
     Args:
@@ -1353,7 +1353,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
             'min_similarity': similarity_metrics['min_similarity'],
             'max_similarity': similarity_metrics['max_similarity'],
             'group_name': 'Severe Cluster',
-            'description': f"All {len(all_severe_cases)} cases involve severe indicators (infant, very_young, sexual_assault)",
+            'description': f"All {len(all_severe_cases)} cases involve severe indicators (infant, very_young, sexual_abuse)",
             'statistics': characteristics.get('statistics', {}),
             'internal_groups': internal_groups_list
         })
@@ -1422,7 +1422,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         
         severity_weights = {
             'infant': 15.0,  # High weight but not excessive
-            'sexual_assault': 18.0,  # Very high weight - sexual assault is extremely severe
+            'sexual_abuse': 18.0,  # Very high weight - sexual abuse is extremely severe
             'multiple_perpetrators': 15.0,  # High weight - multiple perpetrators indicates higher complexity, coordination, and severity
             'very_young': 10.0,  # Increased - very young is also critical
             'under_10': 7.0,  # Increased

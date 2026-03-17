@@ -20,7 +20,7 @@ The live deployment includes all features and 410 cases from publicly available 
 This project was motivated by challenges I encountered with understanding child exploitation cases, including:
 
 - **Fragmented data sources**: Cases are scattered across numerous organizations, states, and agencies
-- **Cross-case analysis**: Identifying patterns, similarities, and connections between cases becomes challenging without a unified system, even when cases share common characteristics such as perpetrators, platforms, or victim demographics
+- **Cross-case analysis**: Identifying patterns, similarities, and connections between cases becomes challenging without a unified system, even when cases share common characteristics such as abuse patterns, platforms, or victim demographics
 - **Limitations in trend analysis**: Analyzing the evolution of child exploitation, the mediums in which it occurs, and recurring case topics
 - **Emotional impact**: The challenge of repeatedly reading and processing highly disturbing case material
 
@@ -155,7 +155,7 @@ The system will:
 
 Access the visualizations via the [live demo](https://web-production-13a2.up.railway.app/visualization) or by running the server locally (`python3 run/main.py`) and navigating to http://localhost:8000/visualization.
 
-1. **Case Group**: Displays cases matching specific groups (infant, very young, assault, posession, online) 
+1. **Case Group**: Displays cases matching specific groups (infant, very young, abuse, posession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
 3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
 4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.

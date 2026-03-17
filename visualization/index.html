@@ -913,8 +913,8 @@
                             return severity.includes('very_young') || severity.includes('under_12');
                         case 'online':
                             return platforms.includes('online');
-                        case 'sexual_assault':
-                            return severity.includes('sexual_assault') || severity.includes('rape');
+                        case 'sexual_abuse':
+                            return severity.includes('sexual_abuse') || severity.includes('rape');
                         default:
                             return false;
                     }
@@ -923,7 +923,7 @@
                 const groupCategories = [
                     { key: 'infant', label: 'Infant', check: (c) => hasCategory(c, 'infant') },
                     { key: 'very_young', label: 'Very Young', check: (c) => hasCategory(c, 'very_young') },
-                    { key: 'sexual_assault', label: 'Sexual Assault', check: (c) => hasCategory(c, 'sexual_assault') },
+                    { key: 'sexual_abuse', label: 'Sexual Abuse', check: (c) => hasCategory(c, 'sexual_abuse') },
                     { key: 'production', label: 'Production', check: (c) => hasCategory(c, 'production') },
                     { key: 'possession', label: 'Possession', check: (c) => hasCategory(c, 'possession') },
                     { key: 'online', label: 'Online', check: (c) => hasCategory(c, 'online') },
@@ -1023,8 +1023,8 @@
                         return severity.includes('very_young') || severity.includes('under_12');
                     case 'online':
                         return platforms.includes('online');
-                    case 'sexual_assault':
-                        return severity.includes('sexual_assault') || severity.includes('rape');
+                    case 'sexual_abuse':
+                        return severity.includes('sexual_abuse') || severity.includes('rape');
                     default:
                         return false;
                 }
@@ -1035,7 +1035,7 @@
                 const colors = {
                     'infant': '#DC143C',        // Crimson (red) - keep as is
                     'very_young': '#FF6347',    // Tomato (red-orange)
-                    'sexual_assault': '#FF8C00', // DarkOrange (orange)
+                    'sexual_abuse': '#FF8C00', // DarkOrange (orange)
                     'production': '#FFA500',     // Orange (orange-yellow)
                     'possession': '#9ACD32',     // YellowGreen (yellow-green)
                     'online': '#4CAF50',         // Green
@@ -1048,7 +1048,7 @@
             const groupCategories = [
                 { key: 'infant', label: 'Infant', check: (c) => hasCategory(c, 'infant') },
                 { key: 'very_young', label: 'Very Young', check: (c) => hasCategory(c, 'very_young') },
-                { key: 'sexual_assault', label: 'Sexual Assault', check: (c) => hasCategory(c, 'sexual_assault') },
+                { key: 'sexual_abuse', label: 'Sexual Abuse', check: (c) => hasCategory(c, 'sexual_abuse') },
                 { key: 'production', label: 'Production', check: (c) => hasCategory(c, 'production') },
                 { key: 'possession', label: 'Possession', check: (c) => hasCategory(c, 'possession') },
                 { key: 'online', label: 'Online', check: (c) => hasCategory(c, 'online') },
@@ -1294,7 +1294,7 @@
                         highlightTerms.push({ term: `aged ${age}`, category: 'severity' });
                     }
                     break;
-                case 'sexual_assault':
+                case 'sexual_abuse':
                     highlightTerms.push({ term: 'rape', category: 'severity' });
                     highlightTerms.push({ term: 'raped', category: 'severity' });
                     highlightTerms.push({ term: 'raping', category: 'severity' });
@@ -2257,11 +2257,11 @@
                         }
                         // Convert to display label
                         let label = normalized.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        // Normalize: replace 'Rape' with 'Sexual Assault' for display
+                        // Normalize: replace 'Rape' with 'Sexual Abuse' for display
                         if (label === 'Rape' || normalized === 'rape') {
-                            label = 'Sexual Assault';
-                        } else if (normalized === 'sexual_assault') {
-                            label = 'Sexual Assault';
+                            label = 'Sexual Abuse';
+                        } else if (normalized === 'sexual_abuse') {
+                            label = 'Sexual Abuse';
                         } else if (normalized === 'multiple_perpetrators') {
                             label = 'Multiple Perpetrators';
                         } else if (normalized === 'under_12') {
@@ -2272,8 +2272,8 @@
                 }
             });
 
-            // Define severity order - Multiple Perpetrators between Sexual Assault and Very Young
-            const severityOrder = ['Infant', 'Sexual Assault', 'Multiple Perpetrators', 'Very Young', 'Under 10', 'None', 'Under 12'];
+            // Define severity order - Multiple Perpetrators between Sexual Abuse and Very Young
+            const severityOrder = ['Infant', 'Sexual Abuse', 'Multiple Perpetrators', 'Very Young', 'Under 10', 'None', 'Under 12'];
             
             // Create data array and sort by severity order
             const data = Object.entries(severityCounts).map(([severity, count]) => ({
@@ -2314,7 +2314,7 @@
             // Custom color scale: Infant = darkest red, None = lightest
             const severityColors = {
                 'Infant': '#8B0000',        // Dark red
-                'Sexual Assault': '#A00000', // Very dark red (second darkest)
+                'Sexual Abuse': '#A00000', // Very dark red (second darkest)
                 'Multiple Perpetrators': '#8B0000', // Dark red (same as Infant - deep red)
                 'Very Young': '#B22222',    // Firebrick
                 'Under 10': '#DC143C',      // Crimson
@@ -2458,7 +2458,7 @@
                 // Create regex patterns for all severity indicators
                 const severityPatterns = {
                     'infant': /\binfants?\b/gi,
-                    'sexual_assault': /\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi,
+                    'sexual_abuse': /\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi,
                     'rape': /\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi,  // Legacy support
                     'very_young': /\bvery\s+young\b/gi,
                     'under_10': /\bunder\s+([1-9])\b/gi,  // Matches under 1-9
@@ -2473,10 +2473,10 @@
                         highlightedText = highlightedText.replace(/\bunder\s+([1-9])\b/gi, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
-                    } else if (severityLabel === 'Sexual Assault' || severityKey === 'sexual_assault' || severityKey === 'rape') {
-                        // Highlight sexual assault terms (rape, sexual assault, molest, etc.)
-                        const sexualAssaultPattern = /\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi;
-                        highlightedText = highlightedText.replace(sexualAssaultPattern, (match) => {
+                    } else if (severityLabel === 'Sexual Abuse' || severityKey === 'sexual_abuse' || severityKey === 'rape') {
+                        // Highlight sexual abuse terms (rape, sexual assault, molest, etc.)
+                        const sexualAbusePattern = /\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi;
+                        highlightedText = highlightedText.replace(sexualAbusePattern, (match) => {
                             return `<span class="severity-highlight">${match}</span>`;
                         });
                     } else {
@@ -2943,7 +2943,7 @@
                     highlightTerms.push({ term: 'infant', category: 'severity' });
                     highlightTerms.push({ term: 'infants', category: 'severity' });
                 }
-                if (sevStr.includes('sexual_assault') || sevStr.includes('rape')) {
+                if (sevStr.includes('sexual_abuse') || sevStr.includes('rape')) {
                     highlightTerms.push({ term: 'rape', category: 'severity' });
                     highlightTerms.push({ term: 'raped', category: 'severity' });
                     highlightTerms.push({ term: 'raping', category: 'severity' });

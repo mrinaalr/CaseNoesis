@@ -25,7 +25,7 @@
       "extracted": 176,
       "total": 410,
       "details": {
-        "sexual_assault": 134,
+        "sexual_abuse": 134,
         "multiple_perpetrators": 58,
         "under_12": 16,
         "infant": 12,
@@ -219,7 +219,7 @@
         "average_similarity": 0.54,
         "min_similarity": 0.074,
         "max_similarity": 1.0,
-        "description": "All 301 cases involve possession | Most common topic: Possession (301/301 cases) | Most common severity: Sexual Assault (99/301 cases)",
+        "description": "All 301 cases involve possession | Most common topic: Possession (301/301 cases) | Most common severity: Sexual Abuse (99/301 cases)",
         "internal_pairwise_similarities": {
           "mean": 0.5404533979882596,
           "std": 0.1385172922654687,
@@ -307,7 +307,7 @@
         "average_similarity": 0.517,
         "min_similarity": 0.077,
         "max_similarity": 1.0,
-        "description": "All 137 cases involve severe indicators (infant, very_young, sexual_assault)",
+            "description": "All 137 cases involve severe indicators (infant, very_young, sexual_abuse)",
         "internal_pairwise_similarities": {
           "mean": 0.5170164271998727,
           "std": 0.1371237219223053,

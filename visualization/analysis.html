@@ -433,7 +433,7 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Severity Indicators</div>
                     <div class="topic-selector" id="topic-selector-severity">
-                        <!-- Severity: infant, very_young, sexual_assault -->
+                        <!-- Severity: infant, very_young, sexual_abuse -->
                     </div>
                 </div>
                 
@@ -659,7 +659,7 @@
             
             // Define all possible topics (from extraction functions)
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'sexual_assault'];
+            const allSeverity = ['infant', 'very_young', 'sexual_abuse'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
@@ -722,7 +722,7 @@
             
             // Define all possible topics (from extraction functions)
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'sexual_assault'];
+            const allSeverity = ['infant', 'very_young', 'sexual_abuse'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
@@ -779,8 +779,8 @@
                     tag.className = 'topic-tag';
                     tag.setAttribute('data-topic', topic);
                     tag.setAttribute('data-category', categoryType);
-                    // Normalize display: replace 'rape' with 'sexual_assault' for display
-                    let displayTopic = topic === 'rape' ? 'sexual_assault' : topic;
+                    // Normalize display: replace 'rape' with 'sexual_abuse' for display
+                    let displayTopic = topic === 'rape' ? 'sexual_abuse' : topic;
                     displayTopic = displayTopic.replace(/_/g, ' ');
                     tag.textContent = displayTopic;
                     tag.onclick = () => {
@@ -2256,7 +2256,7 @@
                                         /\bminor\s+under\s+12\b/gi,
                                         /\bchild\s+under\s+12\b/gi
                                     ];
-                                } else if (tag === 'sexual_assault') {
+                                } else if (tag === 'sexual_abuse') {
                                     patterns = [/\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b/gi];
                                 }
                             } else if (category === 'platforms_used') {
@@ -2419,8 +2419,8 @@
                 allTags.push({
                     category: 'Severity Indicators',
                     tags: severity.map(s => {
-                        // Normalize: replace 'rape' with 'sexual_assault' for display
-                        const normalized = s === 'rape' ? 'sexual_assault' : s;
+                        // Normalize: replace 'rape' with 'sexual_abuse' for display
+                        const normalized = s === 'rape' ? 'sexual_abuse' : s;
                         return normalized.replace(/_/g, ' ').toUpperCase();
                     })
                 });

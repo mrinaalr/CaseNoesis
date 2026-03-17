@@ -707,9 +707,9 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
     if has_under_12:
         severity_indicators.append('under_12')
     
-    # Sexual assault indicators - severe sexual violence (includes rape, sexual abuse, etc.)
+    # Sexual abuse indicators - severe sexual violence (includes rape, assault, etc.)
     if re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE):
-        severity_indicators.append('sexual_assault')
+        severity_indicators.append('sexual_abuse')
     
     return list(set(severity_indicators))  # Remove duplicates
 
@@ -744,12 +744,12 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
         topics.append('multi_state')
     
     # Hands-on vs online-only
-    # Check for sexual assault first (excludes from online_only)
-    has_sexual_assault = re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE)
+    # Check for sexual abuse first (excludes from online_only)
+    has_sexual_abuse = re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE)
     
     if re.search(r'\b(molest|molesting|hands?\s+on|sexually\s+abused|sexually\s+assaulted)\b', case_text, re.IGNORECASE):
         topics.append('hands_on')
-    elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics and not has_sexual_assault:
+    elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics and not has_sexual_abuse:
         topics.append('online_only')
     
     # Family vs stranger

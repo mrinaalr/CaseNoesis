@@ -5,7 +5,7 @@ Goal: Identify key severity phrases **semantically** rather than purely
 via regex, so we can capture the same conceptual signals even when the
 exact words differ.
 
-Target phrases match the keys used by pattern processing in
+Target phrases match or extend the keys used by pattern processing in
 `extract_severity_phrases` (see Pattern Processing Layer):
 - dangerous
 - stated
@@ -13,6 +13,11 @@ Target phrases match the keys used by pattern processing in
 - continue
 - attacked
 - out_of_control
+- violent
+- obscene
+- assault
+- abuse
+- depictions
 
 Implementation:
 - Uses a sentence-transformer semantic model (via MLModelManager) when
@@ -93,6 +98,29 @@ class SemanticSeverity:
             "The situation or behavior is described as out of control, "
             "escalating, or unable to be stopped."
         ),
+        # Additional severity concepts (not yet wired into pattern regex):
+        "violent": (
+            "Explicit descriptions of violence or violent behavior, including "
+            "physical harm, threats of violence, or extremely aggressive acts."
+        ),
+        "obscene": (
+            "Obscene, graphic, or extremely explicit sexual content, including "
+            "obscene material or obscene communications involving minors."
+        ),
+        "assault": (
+            "Sexual abuse or physical assault against the victim, including "
+            "forcible contact, penetration, or repeated assaultive conduct."
+        ),
+        "abuse": (
+            "Ongoing or serious abuse of the victim, including sexual abuse, "
+            "physical abuse, emotional abuse, or exploitation over time."
+        ),
+        # Matches pattern key: 'depictions'
+        "depictions": (
+            "Depictions, images, or visual recordings of child sexual abuse or "
+            "exploitation, including child sexual abuse material and explicit "
+            "imagery of minors."
+        ),
     }
 
     def __init__(self, semantic_model: Optional[Any] = None, enable_ml: bool = True):
@@ -101,8 +129,9 @@ class SemanticSeverity:
 
         Args:
             semantic_model: Optional sentence-transformers model instance.
-                If None and enable_ml is True, we will try to obtain it from
-                the global MLModelManager.
+                If provided, we use it directly (e.g., from MLModelManager).
+                If None and enable_ml is True, we will try MLModelManager
+                first, then fall back to a local SentenceTransformer.
             enable_ml: If False, disables ML entirely and always returns [].
         """
         self.enable_ml = enable_ml
@@ -113,15 +142,35 @@ class SemanticSeverity:
         if not self.enable_ml:
             return
 
+        # 1) If caller passed a model (e.g. via MLModelManager), use it.
+        # 2) Otherwise, try MLModelManager to keep centralized control.
+        # 3) If that fails (e.g., import issues in ad‑hoc scripts), fall back
+        #    to a local SentenceTransformer instance.
         if self.model is None:
-            # Lazy import to avoid circulars at module import time
+            # Try MLModelManager first (centralized, configurable)
             try:
                 from .ml_models import get_global_ml_manager
 
                 ml_manager = get_global_ml_manager(enable_ml=True)
                 self.model = ml_manager.get_model("semantic")
             except Exception as exc:  # pragma: no cover - defensive
-                warnings.warn(f"SemanticSeverity: failed to load semantic model: {exc}")
+                warnings.warn(
+                    f"SemanticSeverity: failed to obtain semantic model from "
+                    f"MLModelManager: {exc}"
+                )
+                self.model = None
+
+        if self.model is None:
+            # Fallback: manage our own lightweight sentence-transformer
+            try:
+                from sentence_transformers import SentenceTransformer
+
+                self.model = SentenceTransformer("all-MiniLM-L6-v2")
+            except Exception as exc:  # pragma: no cover - defensive
+                warnings.warn(
+                    f"SemanticSeverity: failed to load semantic model via "
+                    f"sentence-transformers: {exc}"
+                )
                 self.model = None
 
         if self.model is None or np is None:
