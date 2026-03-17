@@ -1410,6 +1410,17 @@
             document.getElementById('case-detail').classList.remove('active');
             document.getElementById('severity-cases-panel').classList.remove('active');
             
+            // Reset timeline SVG height (geographic viz may have expanded it)
+            const timelineSvg = document.getElementById('timeline');
+            if (timelineSvg) {
+                timelineSvg.setAttribute('height', (height + margin.top + margin.bottom).toString());
+            }
+            
+            // Reset page scroll so new visualization starts from top
+            if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+                window.scrollTo(0, 0);
+            }
+            
             // Update subtitle
             const subtitle = document.getElementById('viz-subtitle');
             subtitle.textContent = vizTitles[type] || 'Case Visualization';
