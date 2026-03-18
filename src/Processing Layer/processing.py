@@ -78,6 +78,14 @@ _ner_spec.loader.exec_module(ner_module)
 
 NERExtractor = ner_module.NERExtractor
 
+# Import semantic concept detector from ML Processing Layer
+_semantic_path = Path(__file__).parent / "ML Processing Layer" / "semantic_concepts.py"
+_semantic_spec = importlib.util.spec_from_file_location("semantic_concepts", _semantic_path)
+semantic_module = importlib.util.module_from_spec(_semantic_spec)
+_semantic_spec.loader.exec_module(semantic_module)
+
+SemanticConcepts = semantic_module.SemanticConcepts
+
 
 def process_cases(df):
     """
@@ -110,6 +118,15 @@ def process_cases(df):
     except Exception:
         # NER not available - continue without it
         ner_extractor = None
+
+    # Initialize semantic concepts detector (optional; ML deps may be missing)
+    semantic_detector = None
+    try:
+        semantic_detector = SemanticConcepts()
+        if not semantic_detector.is_available():
+            semantic_detector = None
+    except Exception:
+        semantic_detector = None
     
     processed_cases = []
     merger = MergeProcessing()
@@ -173,6 +190,15 @@ def process_cases(df):
         
         # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
         pattern_features = extract_features(raw_case)
+
+        # Step 2b: Enrich with semantic concepts (if available)
+        if semantic_detector and semantic_detector.is_available():
+            try:
+                semantic_detector.enhance_case_with_concepts(pattern_features)
+                semantic_detector.enhance_case_with_semantic_production(pattern_features)
+            except Exception:
+                # If semantic enrichment fails, continue with pattern-only features
+                pass
         
         # Step 3: Extract NER features (ML Processing Layer handles its own logic)
         ner_entities = None

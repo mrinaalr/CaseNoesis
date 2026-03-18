@@ -79,7 +79,84 @@ class MergeProcessing:
         else:
             # Even without NER entities, we need to filter pattern ages (remove 18+)
             merged = self._merge_ages(merged, {'ages': []})
+
+        # Merge semantic concepts (if present under ml_features.semantic_severity)
+        merged = self._merge_semantic_concepts(merged)
         
+        return merged
+
+    # ------------------------------------------------------------------ #
+    # Semantic concepts merge (production/possession + severity add‑ons)
+    # ------------------------------------------------------------------ #
+    def _merge_semantic_concepts(
+        self,
+        merged: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Merge semantic concepts from ML Processing Layer into pattern features.
+
+        Behavior:
+        - Production vs possession:
+            * Default to regex topics.
+            * Only override when semantic concept scores are strong
+              (> 0.50) AND clearly favor production vs non‑production.
+        - Severity indicators:
+            * Add 'grooming' to severity_indicators when the corresponding
+              semantic concept is present.
+        """
+        ml_features = merged.get('ml_features') or {}
+        semantic = ml_features.get('semantic_severity') or {}
+
+        phrases: List[str] = semantic.get('phrases') or []
+        scores: Dict[str, float] = semantic.get('scores') or {}
+
+        # --- Production vs possession override logic ---
+        topics = merged.get('case_topics') or []
+        if not isinstance(topics, list):
+            topics = [topics] if topics else []
+
+        has_regex_production = 'production' in topics
+
+        prod_score = float(scores.get('production_csam', 0.0))
+        nonprod_keys = [
+            'account_platform',
+            'possession_csam',
+            'produced_evidence',
+            'created_committee_or_entity',
+            'created_account_for_storage',
+        ]
+        max_nonprod = max((float(scores.get(k, 0.0)) for k in nonprod_keys), default=0.0)
+
+        strong_prod = prod_score >= 0.5 and prod_score >= max_nonprod
+        strong_nonprod = max_nonprod >= 0.5 and max_nonprod >= prod_score
+
+        # Only override regex when transformer signal is strong (> 0.5)
+        if strong_prod:
+            if not has_regex_production:
+                topics.append('production')
+        elif strong_nonprod:
+            if has_regex_production:
+                topics = [t for t in topics if t != 'production']
+
+        # If semantic possession is strong, ensure 'possession' tag exists
+        poss_score = float(scores.get('possession_csam', 0.0))
+        if poss_score >= 0.5 and 'possession' not in topics:
+            topics.append('possession')
+
+        if topics:
+            merged['case_topics'] = list(dict.fromkeys(topics))
+
+        # --- Severity indicators from concepts (non‑regex ideas) ---
+        severity = merged.get('severity_indicators') or []
+        if not isinstance(severity, list):
+            severity = [severity] if severity else []
+
+        if 'grooming' in phrases and 'grooming' not in severity:
+            severity.append('grooming')
+
+        if severity:
+            merged['severity_indicators'] = list(dict.fromkeys(severity))
+
         return merged
     
     def _merge_ages(

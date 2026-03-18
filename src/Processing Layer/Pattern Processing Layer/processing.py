@@ -568,16 +568,17 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
         # No "investigation" keyword found - return None (case won't be in Investigation cluster)
         return None
     
-    # "investigation" keyword found - now check for specific types
+    # "investigation" keyword found - now check for specific types.
     # IMPORTANT: Check "undercover" FIRST because it's more specific and might be missed
-    # if "proactive" is checked first (e.g., "proactive undercover investigation")
-    # Patterns allow optional words (including hyphens) between type and "investigation"
-    # e.g., "proactive joint investigation", "proactive Internet investigation", "proactive investigation", "reactive multi-agency investigation"
+    # if "proactive" is checked first (e.g., "proactive undercover investigation").
+    # Patterns allow optional words (including hyphens) between type and "investigation",
+    # e.g., "proactive joint investigation", "proactive Internet investigation",
+    # "reactive multi-agency investigation".
     type_patterns = {
-        'undercover': r'undercover\s+(?:\S+\s+)*(?:operation|investigation)',
-        'proactive': r'proactive\s+(?:\S+\s+)*investigation',
-        'reactive': r'reactive\s+(?:\S+\s+)*investigation',
-        'online': r'online\s+(?:\S+\s+)*investigation',
+        "undercover": r'\bunder\s*cover\b|\bundercover\b(?:\s+(?:\S+\s+)*(?:operation|operations|investigation|detective[s]?))?',
+        "proactive": r'\bproactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+        "reactive": r'\breactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+        "online": r'\bonline\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
     }
     
     for inv_type, pattern in type_patterns.items():
