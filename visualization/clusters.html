@@ -294,15 +294,46 @@
         let clusterData = [];
         let selectedClusterId = null;
         let selectedGroupId = null;
-        
-        // Load lightweight cluster group data
+
+        const CLUSTER_CACHE_KEY = 'caselinker_cluster_groups';
+        const CLUSTER_CACHE_MAX_AGE_MS = 10 * 60 * 1000; // 10 min
+
+        function getCachedClusters() {
+            try {
+                const cached = sessionStorage.getItem(CLUSTER_CACHE_KEY);
+                if (!cached) return null;
+                const { case_groups, fetchedAt } = JSON.parse(cached);
+                if (!case_groups || !Array.isArray(case_groups)) return null;
+                if (Date.now() - fetchedAt > CLUSTER_CACHE_MAX_AGE_MS) return null;
+                return case_groups;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setCachedClusters(caseGroups) {
+            try {
+                sessionStorage.setItem(CLUSTER_CACHE_KEY, JSON.stringify({
+                    case_groups: caseGroups,
+                    fetchedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
+        // Load cluster data from cache or API
         async function loadClusters() {
+            const cached = getCachedClusters();
+            if (cached && cached.length > 0) {
+                clusterData = cached;
+                renderClusters();
+                return;
+            }
             try {
                 const response = await fetch('/api/cluster-groups');
                 const data = await response.json();
-                
                 if (data.success && data.case_groups) {
                     clusterData = data.case_groups;
+                    setCachedClusters(clusterData);
                     renderClusters();
                 } else {
                     showError('No cluster data available');

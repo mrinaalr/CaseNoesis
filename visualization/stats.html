@@ -434,20 +434,43 @@
             }
         }
         
+        const STATS_DETAILED_CACHE_KEY = 'caselinker_stats_detailed';
+        const LOCATION_STATS_CACHE_KEY = 'caselinker_location_stats';
+        const STATS_CACHE_MAX_AGE_MS = 30 * 60 * 1000;
+
+        function getCached(key) {
+            try {
+                const cached = sessionStorage.getItem(key);
+                if (!cached) return null;
+                const { data, fetchedAt } = JSON.parse(cached);
+                if (Date.now() - fetchedAt > STATS_CACHE_MAX_AGE_MS) return null;
+                return data;
+            } catch (e) { return null; }
+        }
+
+        function setCached(key, data) {
+            try {
+                sessionStorage.setItem(key, JSON.stringify({ data: data, fetchedAt: Date.now() }));
+            } catch (e) {}
+        }
+
         async function loadStats() {
             try {
-                const response = await fetch('/api/stats-detailed');
-                const data = await response.json();
-                
-                if (data.error) {
-                    showError('chart-1', data.error);
-                    return;
+                let data = getCached(STATS_DETAILED_CACHE_KEY);
+                if (!data) {
+                    const response = await fetch('/api/stats-detailed');
+                    data = await response.json();
+                    if (data.error) {
+                        showError('chart-1', data.error);
+                        return;
+                    }
+                    setCached(STATS_DETAILED_CACHE_KEY, data);
                 }
-                
+
                 renderFeatureCoverage(data.feature_coverage);
                 renderOrganizations(data.top_organizations);
                 renderPlatformTrends(data.platform_trends);
-                renderUSMap(); // Load US map with pins
+                renderUSMap();
                 renderRelationship(data.relationship_distribution);
                 renderPerpetratorAge(data.perpetrator_age_data);
                 renderSeverityIndicators(data.severity_indicators_top);
@@ -1249,11 +1272,14 @@
         async function renderUSMap() {
             const container = document.getElementById('us-map');
             container.innerHTML = '';
-            
+
             try {
-                // Fetch aggregated location stats (optimized - no raw cases)
-                const response = await fetch('/api/location-stats');
-                const locationData = await response.json();
+                let locationData = getCached(LOCATION_STATS_CACHE_KEY);
+                if (!locationData) {
+                    const response = await fetch('/api/location-stats');
+                    locationData = await response.json();
+                    setCached(LOCATION_STATS_CACHE_KEY, locationData);
+                }
                 
                 if (!locationData || locationData.length === 0) {
                     container.innerHTML = '<div class="error">No locations found in cases</div>';

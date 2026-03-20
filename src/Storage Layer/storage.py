@@ -118,7 +118,13 @@ class CaseStorage:
                 UNIQUE(case_count)  -- Only one cluster set per case count
             )
         ''')
-        
+        # Slimmed cluster groups (IDs only) - fast fetch for /api/cluster-groups
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS cluster_groups_slim (
+                case_count INTEGER PRIMARY KEY,
+                data TEXT NOT NULL
+            )
+        ''')
         conn.commit()
         conn.close()
     
@@ -621,6 +627,55 @@ class CaseStorage:
             print(f"Error searching cases: {e}")
             return []
     
+    def _slim_case_groups(self, case_groups: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Strip cases to ID strings only for fast transfer."""
+        if not case_groups:
+            return []
+        result = []
+        for group in case_groups:
+            slim = {k: v for k, v in group.items() if k not in ('cases', 'internal_groups')}
+            cases = group.get('cases', [])
+            slim['cases'] = [c.get('id') if isinstance(c, dict) else c for c in cases if (c.get('id') if isinstance(c, dict) else c)]
+            internal = group.get('internal_groups', [])
+            slim['internal_groups'] = [{'cases': [c.get('id') if isinstance(c, dict) else c for c in ig.get('cases', []) if (c.get('id') if isinstance(c, dict) else c)], 'size': ig.get('size', 0)} for ig in internal]
+            result.append(slim)
+        return result
+
+    def store_cluster_groups_slim(self, case_groups: List[Dict[str, Any]], case_count: int) -> bool:
+        """Store slimmed cluster groups (IDs only) for fast /api/cluster-groups fetches."""
+        slim = self._slim_case_groups(case_groups)
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT OR REPLACE INTO cluster_groups_slim (case_count, data)
+                VALUES (?, ?)
+            ''', (case_count, json.dumps(slim)))
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing cluster groups slim: {e}")
+            return False
+
+    def get_cluster_groups_slim(self, case_count: int) -> Optional[List[Dict[str, Any]]]:
+        """Fetch slimmed cluster groups - small payload, fast."""
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('SELECT data FROM cluster_groups_slim WHERE case_count = ?', (case_count,))
+            row = cursor.fetchone()
+            conn.close()
+            if row:
+                try:
+                    import orjson
+                    return orjson.loads(row[0])
+                except ImportError:
+                    return json.loads(row[0])
+            return None
+        except Exception as e:
+            return None
+
     def store_precomputed_clusters(self, cluster_data: Dict[str, Any], case_count: int) -> bool:
         """
         Store pre-computed cluster analysis results in database.
@@ -652,14 +707,17 @@ class CaseStorage:
                 INSERT INTO precomputed_clusters (cluster_data, case_count)
                 VALUES (?, ?)
             ''', (json.dumps(cluster_data, default=json_serializer), case_count))
-            
             conn.commit()
             conn.close()
+            # Also store slimmed version for fast /api/cluster-groups
+            case_groups = cluster_data.get('case_groups', [])
+            if case_groups:
+                self.store_cluster_groups_slim(case_groups, case_count)
             return True
         except Exception as e:
             print(f"Error storing precomputed clusters: {e}")
             return False
-    
+
     def get_precomputed_clusters(self, case_count: int) -> Optional[Dict[str, Any]]:
         """
         Retrieve pre-computed cluster analysis results from database.

@@ -39,6 +39,7 @@ def clear_database():
         
         # Delete in order (respecting foreign keys)
         tables = [
+            'cluster_groups_slim',
             'precomputed_clusters',
             'prosecution_outcomes',
             'perpetrator_demographics',

@@ -34,8 +34,6 @@ else:
     from storage import CaseStorage
     print("✅ Using SQLite database (local development)")
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
-from visualization import create_timeline_visualization, filter_cases
-
 # Import Redis cache helper
 try:
     from redis_cache import (
@@ -118,16 +116,60 @@ else:
     
     storage = CaseStorage(str(db_path))
 
-# Fast case-count helper that uses the already-initialized storage
+# Cached case count (avoids DB hit on every request - case count rarely changes)
+_case_count_cache = None
+_case_count_cache_time = 0.0
+_CASE_COUNT_TTL = 30  # seconds
+
 def get_case_count() -> int:
     """
     Lightweight helper for counting cases.
-    Uses the shared storage instance so we don't re-open connections.
+    Cached for 30s to avoid DB hit on every cluster-groups/stats request.
     """
+    global _case_count_cache, _case_count_cache_time
     try:
-        return storage.get_case_count()
+        now = time.time()
+        if _case_count_cache is not None and (now - _case_count_cache_time) < _CASE_COUNT_TTL:
+            return _case_count_cache
+        count = storage.get_case_count()
+        _case_count_cache = count
+        _case_count_cache_time = now
+        return count
     except Exception:
-        return 0
+        return _case_count_cache if _case_count_cache is not None else 0
+
+
+def _slim_for_cluster_groups(case_groups: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Strip case objects to ID strings only - frontend only needs IDs for the bubble chart.
+    Full case data is fetched via /api/cases when user clicks. Reduces payload 10-50x.
+    """
+    if not case_groups:
+        return []
+    result = []
+    for group in case_groups:
+        slim_group = {k: v for k, v in group.items() if k != 'cases' and k != 'internal_groups'}
+        cases = group.get('cases', [])
+        slim_group['cases'] = [
+            c.get('id') if isinstance(c, dict) else (c if isinstance(c, str) else None)
+            for c in cases
+        ]
+        slim_group['cases'] = [x for x in slim_group['cases'] if x]
+        internal = group.get('internal_groups', [])
+        slim_group['internal_groups'] = [
+            {
+                'cases': [
+                    c.get('id') if isinstance(c, dict) else (c if isinstance(c, str) else None)
+                    for c in ig.get('cases', [])
+                ],
+                'size': ig.get('size', 0)
+            }
+            for ig in internal
+        ]
+        for ig in slim_group['internal_groups']:
+            ig['cases'] = [x for x in ig['cases'] if x]
+        result.append(slim_group)
+    return result
 
 # In-process cache for /api/cases to keep local/dev fast even without Redis
 _cases_cache = {
@@ -151,20 +193,54 @@ try:
             print(f"⚠️  Warning: PostgreSQL database contains 0 cases. Process PDFs to add cases.")
     else:
         # Pre-compute clusters on startup (background, non-blocking)
+        # Also warms cluster-groups cache so first /clusters request is fast
         import threading
         def precompute_clusters_background():
+            global _cluster_groups_cache, _cluster_groups_cache_case_count, _tags_cache, _tags_cache_case_count
             try:
                 print("Pre-computing clusters in background...")
                 cases = storage.get_all_cases(include_raw_data=False)
                 if cases:
+                    # Warm tags cache (tags rarely change)
+                    case_topics = set()
+                    severity_indicators = set()
+                    platforms_used = set()
+                    investigation_types = set()
+                    relationships = set()
+                    status = set()
+                    for c in cases:
+                        for t in (c.get('case_topics') or []):
+                            if t: case_topics.add(t)
+                        for s in (c.get('severity_indicators') or []):
+                            if s: severity_indicators.add(s)
+                        for p in (c.get('platforms_used') or []):
+                            if p: platforms_used.add(p)
+                        if c.get('investigation_type'): investigation_types.add(c['investigation_type'])
+                        if c.get('relationship_to_victim'): relationships.add(c['relationship_to_victim'])
+                        if c.get('perpetrator_registered_sex_offender'): status.add('registered_sex_offender')
+                    tags_result = {
+                        "case_topics": sorted(case_topics), "severity_indicators": sorted(severity_indicators),
+                        "platforms_used": sorted(platforms_used), "investigation_types": sorted(investigation_types),
+                        "relationships": sorted(relationships), "status": sorted(status)
+                    }
+                    _tags_cache = tags_result
+                    _tags_cache_case_count = len(cases)
+                    set_cached(get_cache_key('tags', version=len(cases)), tags_result, ttl=86400)
                     from analysis import run_automated_analysis
                     cluster_data = run_automated_analysis(cases)
                     storage.store_precomputed_clusters(cluster_data, len(cases))
-                    print(f"✅ Pre-computed clusters stored ({len(cases)} cases)")
+                    case_count = len(cases)
+                    # Warm cache: in-memory + Redis so /api/cluster-groups is fast on first request
+                    slim_groups = _slim_for_cluster_groups(cluster_data.get('case_groups', []))
+                    result = {"success": True, "case_groups": slim_groups, "cached": True, "source": "startup"}
+                    cache_key = get_cache_key('cluster-groups', version=case_count)
+                    set_cached(cache_key, result, ttl=86400)
+                    _cluster_groups_cache = result
+                    _cluster_groups_cache_case_count = case_count
+                    print(f"✅ Pre-computed clusters stored and cache warmed ({case_count} cases)")
             except Exception as e:
                 print(f"⚠️  Error pre-computing clusters: {e}")
         
-        # Start background thread (non-blocking)
         cluster_thread = threading.Thread(target=precompute_clusters_background, daemon=True)
         cluster_thread.start()
 except Exception as e:
@@ -258,32 +334,39 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
 _tags_cache = None
 _tags_cache_case_count = 0
 
+# In-memory cache for cluster-groups (avoids Redis round-trip on repeat requests)
+_cluster_groups_cache = None
+_cluster_groups_cache_case_count = None
+
 @app.get("/api/tags")
 @limiter.limit("60/minute")
 def get_unique_tags(request: Request):
     """
     Get unique tags/topics from all cases for populating selectors.
-    Much faster than loading all cases - returns only unique values.
+    Uses in-memory -> Redis -> DB. Tags rarely change when cases are static.
     """
     global _tags_cache, _tags_cache_case_count
-    
+
     try:
-        # Quick check: get case count first (fast query)
         current_case_count = get_case_count()
-        
-        # Return cached tags if case count hasn't changed
+
+        # 1. In-memory cache
         if _tags_cache is not None and _tags_cache_case_count == current_case_count:
-            return {
-                "case_topics": _tags_cache["case_topics"],
-                "severity_indicators": _tags_cache["severity_indicators"],
-                "platforms_used": _tags_cache["platforms_used"],
-                "investigation_types": _tags_cache["investigation_types"],
-                "relationships": _tags_cache["relationships"],
-                "status": _tags_cache["status"],
-                "cached": True
-            }
-        
-        # Load cases (without raw_data for speed)
+            out = {k: _tags_cache[k] for k in ("case_topics", "severity_indicators", "platforms_used", "investigation_types", "relationships", "status")}
+            out["cached"] = True
+            return out
+
+        # 2. Redis cache
+        cache_key = get_cache_key('tags', version=current_case_count)
+        cached = get_cached(cache_key)
+        if cached is not None:
+            _tags_cache = cached
+            _tags_cache_case_count = current_case_count
+            out = {k: cached[k] for k in ("case_topics", "severity_indicators", "platforms_used", "investigation_types", "relationships", "status")}
+            out["cached"] = True
+            return out
+
+        # 3. Compute from cases
         cases = storage.get_all_cases(include_raw_data=False)
         
         # Extract unique values
@@ -324,8 +407,7 @@ def get_unique_tags(request: Request):
             if case.get('perpetrator_registered_sex_offender'):
                 status.add('registered_sex_offender')
         
-        # Cache the results
-        _tags_cache = {
+        result = {
             "case_topics": sorted(list(case_topics)),
             "severity_indicators": sorted(list(severity_indicators)),
             "platforms_used": sorted(list(platforms_used)),
@@ -333,17 +415,13 @@ def get_unique_tags(request: Request):
             "relationships": sorted(list(relationships)),
             "status": sorted(list(status))
         }
+        _tags_cache = result
         _tags_cache_case_count = current_case_count
-        
-        return {
-            "case_topics": _tags_cache["case_topics"],
-            "severity_indicators": _tags_cache["severity_indicators"],
-            "platforms_used": _tags_cache["platforms_used"],
-            "investigation_types": _tags_cache["investigation_types"],
-            "relationships": _tags_cache["relationships"],
-            "status": _tags_cache["status"],
-            "cached": False
-        }
+        set_cached(cache_key, result, ttl=86400)
+
+        out = {k: result[k] for k in ("case_topics", "severity_indicators", "platforms_used", "investigation_types", "relationships", "status")}
+        out["cached"] = False
+        return out
     except Exception as e:
         from error_handler import handle_error
         return handle_error(e)
@@ -357,15 +435,6 @@ def get_case(request: Request, case_id: str):
     if not case:
         return {"error": "Case not found"}, 404
     return case
-
-
-@app.get("/api/timeline")
-@limiter.limit("60/minute")
-def get_timeline(request: Request):
-    """Get timeline visualization data"""
-    cases = storage.get_all_cases()
-    timeline_data = create_timeline_visualization(cases)
-    return timeline_data
 
 
 @app.get("/api/stats")
@@ -387,9 +456,9 @@ def get_stats(request: Request):
         if cached_result is not None:
             return cached_result
         
-        # Cache miss - compute stats
+        # Cache miss - compute stats (no raw_data needed - faster)
         try:
-            cases = storage.get_all_cases()
+            cases = storage.get_all_cases(include_raw_data=False)
         except Exception:
             cases = []
         
@@ -991,45 +1060,77 @@ def get_detailed_stats(request: Request):
 async def cluster_groups_endpoint(request: Request):
     """
     Lightweight endpoint for cluster / case-group visualizations.
-    
-    Returns ONLY the pre-computed case_groups (no full triage/insights blob),
-    so payloads are smaller and faster for the clusters page.
+    Returns slimmed case_groups (IDs only) - full case data fetched on click.
+    Uses in-memory cache -> Redis -> DB to minimize latency.
     """
+    global _cluster_groups_cache, _cluster_groups_cache_case_count
     try:
         current_case_count = get_case_count()
+        
+        # 1. In-memory cache (fastest - no network/DB)
+        if (_cluster_groups_cache is not None and
+                _cluster_groups_cache_case_count == current_case_count):
+            _cluster_groups_cache['_cache_source'] = 'memory'
+            return _cluster_groups_cache
+        
         cache_key = get_cache_key('cluster-groups', version=current_case_count)
         
-        # Try Redis cache first
+        # 2. Redis cache
         cached_result = get_cached(cache_key)
         if cached_result is not None:
             cached_result['_cache_source'] = 'redis'
+            _cluster_groups_cache = cached_result
+            _cluster_groups_cache_case_count = current_case_count
             return cached_result
-        
-        # Try pre-computed clusters from database
-        precomputed = storage.get_precomputed_clusters(current_case_count)
-        if precomputed and isinstance(precomputed, dict) and precomputed.get('case_groups'):
+
+        # 3. Slim table (small fetch, ~10KB vs ~1MB full blob)
+        slim_groups = storage.get_cluster_groups_slim(current_case_count)
+        if slim_groups and len(slim_groups) > 0:
             result = {
                 "success": True,
-                "case_groups": precomputed.get('case_groups', []),
+                "case_groups": slim_groups,
                 "cached": True,
                 "source": "database"
             }
             set_cached(cache_key, result, ttl=86400)
+            _cluster_groups_cache = result
+            _cluster_groups_cache_case_count = current_case_count
+            return result
+
+        # 4. Full precomputed (fallback for old data before slim table)
+        precomputed = storage.get_precomputed_clusters(current_case_count)
+        if precomputed and isinstance(precomputed, dict) and precomputed.get('case_groups'):
+            raw_groups = precomputed.get('case_groups', [])
+            slim_groups = _slim_for_cluster_groups(raw_groups)
+            result = {
+                "success": True,
+                "case_groups": slim_groups,
+                "cached": True,
+                "source": "database"
+            }
+            set_cached(cache_key, result, ttl=86400)
+            storage.store_cluster_groups_slim(raw_groups, current_case_count)  # backfill slim table
+            _cluster_groups_cache = result
+            _cluster_groups_cache_case_count = current_case_count
             return result
         
-        # Fallback: compute once on-demand, then store
+        # 5. Fallback: compute on-demand, then store
         print("⚠️  No pre-computed cluster groups found, computing on-demand (this is slow once)...")
         cases = storage.get_all_cases(include_raw_data=False)
         analysis_results = run_automated_analysis(cases)
         storage.store_precomputed_clusters(analysis_results, current_case_count)
         
+        raw_groups = analysis_results.get('case_groups', [])
+        slim_groups = _slim_for_cluster_groups(raw_groups)
         result = {
             "success": True,
-            "case_groups": analysis_results.get('case_groups', []),
+            "case_groups": slim_groups,
             "cached": False,
             "source": "computed"
         }
         set_cached(cache_key, result, ttl=86400)
+        _cluster_groups_cache = result
+        _cluster_groups_cache_case_count = current_case_count
         return result
     except Exception as e:
         import traceback

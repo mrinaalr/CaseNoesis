@@ -602,45 +602,89 @@
             uniqueOrganizationsCache = null;
         }
 
+        const CASES_CACHE_KEY = 'caselinker_viz_cases';
+        const TAGS_CACHE_KEY = 'caselinker_tags';
+        const CASES_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
+        const TAGS_CACHE_MAX_AGE_MS = 30 * 60 * 1000;  // 30 min - tags rarely change
+
+        function getCachedTags() {
+            try {
+                const cached = sessionStorage.getItem(TAGS_CACHE_KEY);
+                if (!cached) return null;
+                const { tags, fetchedAt } = JSON.parse(cached);
+                if (!tags) return null;
+                if (Date.now() - fetchedAt > TAGS_CACHE_MAX_AGE_MS) return null;
+                return tags;
+            } catch (e) { return null; }
+        }
+
+        function setCachedTags(tags) {
+            try {
+                sessionStorage.setItem(TAGS_CACHE_KEY, JSON.stringify({
+                    tags: tags, fetchedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
+        function getCachedCases() {
+            try {
+                const cached = sessionStorage.getItem(CASES_CACHE_KEY);
+                if (!cached) return null;
+                const { cases, fetchedAt } = JSON.parse(cached);
+                if (!cases || !Array.isArray(cases)) return null;
+                if (Date.now() - fetchedAt > CASES_CACHE_MAX_AGE_MS) return null;
+                return cases;
+            } catch (e) { return null; }
+        }
+
+        function setCachedCases(cases) {
+            try {
+                sessionStorage.setItem(CASES_CACHE_KEY, JSON.stringify({
+                    cases: cases, fetchedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
         async function loadCases() {
-            // Show subtle loading indicator in header
             const loadingEl = document.getElementById('loading-indicator');
             if (loadingEl) loadingEl.style.display = 'block';
-            
+
             try {
-                // Load tags first (fast, cached endpoint) to populate selectors immediately
-                const tagsResponse = await fetch('/api/tags');
-                const tagsData = await tagsResponse.json();
-                
-                if (tagsData.error) {
-                    throw new Error(tagsData.error);
+                // Tags: use sessionStorage first - instant on reload
+                let tagsData = getCachedTags();
+                if (!tagsData) {
+                    const tagsResponse = await fetch('/api/tags');
+                    tagsData = await tagsResponse.json();
+                    if (tagsData.error) throw new Error(tagsData.error);
+                    setCachedTags(tagsData);
                 }
-                
-                // Render selectors immediately with cached tags
                 renderTopicSelectorFromTags(tagsData);
-                
-                // Hide loading indicator once tags are loaded (page is usable)
                 if (loadingEl) loadingEl.style.display = 'none';
-                
-                // Then load full cases in background (for when user actually needs them)
+
+                // Use sessionStorage cache (shared with visualization) - instant if recently loaded
+                const cached = getCachedCases();
+                if (cached && cached.length > 0) {
+                    allCases = cached;
+                    window.allCases = allCases;
+                    resetUniqueOrganizationsCache();
+                    renderTopicSelector();
+                    return;
+                }
+
                 const response = await fetch('/api/cases');
                 allCases = await response.json();
-                window.allCases = allCases; // Store globally
-                
-                // Reset unique organizations cache when cases are reloaded
+                window.allCases = allCases;
+                setCachedCases(allCases);
                 resetUniqueOrganizationsCache();
-                
-                // Re-render with full data (in case there are any differences)
                 renderTopicSelector();
             } catch (error) {
                 console.error('Error loading cases:', error);
                 if (loadingEl) loadingEl.style.display = 'none';
-                
-                // Fallback: try to load cases the old way
                 try {
                     const response = await fetch('/api/cases');
                     allCases = await response.json();
                     window.allCases = allCases;
+                    setCachedCases(allCases);
                     renderTopicSelector();
                 } catch (e) {
                     console.error('Fallback also failed:', e);

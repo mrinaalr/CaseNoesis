@@ -151,7 +151,9 @@ class MergeProcessing:
         if not isinstance(severity, list):
             severity = [severity] if severity else []
 
-        if 'grooming' in phrases and 'grooming' not in severity:
+        # Add grooming as a semantic severity indicator
+        grooming_score = float(scores.get('grooming', 0.0))
+        if grooming_score >= 0.40 and 'grooming' not in severity:
             severity.append('grooming')
 
         if severity:

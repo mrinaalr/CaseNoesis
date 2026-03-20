@@ -639,11 +639,37 @@
         let geographicChartData = []; // Store chart data for stats calculation
         let platformChartData = []; // Store platform chart data for stats calculation
 
-        // Simple global cache so we only fetch /api/cases once per page load
-        window.CASELINKER_ALL_CASES = window.CASELINKER_ALL_CASES || null;
+        // In-memory + sessionStorage cache - data is static, no refetch on nav/refresh
+        const CACHE_KEY = 'caselinker_viz_cases';
+        const CACHE_MAX_AGE_MS = 10 * 60 * 1000; // 10 min - data rarely changes
 
-        // Load cases from API
+        function getCachedCases() {
+            try {
+                const cached = sessionStorage.getItem(CACHE_KEY);
+                if (!cached) return null;
+                const { cases, fetchedAt } = JSON.parse(cached);
+                if (!cases || !Array.isArray(cases)) return null;
+                if (Date.now() - fetchedAt > CACHE_MAX_AGE_MS) return null;
+                return cases;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setCachedCases(cases) {
+            try {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+                    cases: cases,
+                    fetchedAt: Date.now()
+                }));
+            } catch (e) {
+                // sessionStorage full or disabled - ignore
+            }
+        }
+
+        // Load cases from cache or API
         function loadCases() {
+            // 1. In-memory (same page load)
             if (window.CASELINKER_ALL_CASES) {
                 allCases = window.CASELINKER_ALL_CASES;
                 filteredCases = allCases;
@@ -651,7 +677,17 @@
                 renderTimeline(filteredCases);
                 return;
             }
-            // Show loading indicator
+            // 2. sessionStorage (nav/refresh - instant)
+            const cached = getCachedCases();
+            if (cached && cached.length > 0) {
+                allCases = cached;
+                window.CASELINKER_ALL_CASES = allCases;
+                filteredCases = allCases;
+                updateStats();
+                renderTimeline(filteredCases);
+                return;
+            }
+            // 3. Fetch from API
             svg.append("text")
                 .attr("x", width / 2)
                 .attr("y", height / 2)
@@ -659,7 +695,7 @@
                 .attr("fill", "#888")
                 .attr("id", "loading-text")
                 .text("Loading cases...");
-            
+
             fetch('/api/cases?include_raw_data=false')
                 .then(response => {
                     if (!response.ok) {
@@ -668,12 +704,10 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Remove loading indicator
                     svg.select("#loading-text").remove();
-                    
-                    // Handle both array and object with cases property
                     allCases = Array.isArray(data) ? data : (data.cases || []);
                     window.CASELINKER_ALL_CASES = allCases;
+                    setCachedCases(allCases);
                     if (allCases.length === 0) {
                         svg.append("text")
                             .attr("x", width / 2)
@@ -683,7 +717,7 @@
                             .text("No cases found. Process a PDF first using: python3 -m src.main");
                         return;
                     }
-                    filteredCases = allCases; // Initialize with all cases
+                    filteredCases = allCases;
                     updateStats();
                     renderTimeline(filteredCases);
                 })
@@ -2571,18 +2605,22 @@
         }
         
         function loadAllCaseIds() {
-            // Reuse global cache if available, otherwise fetch once
             if (window.CASELINKER_ALL_CASES) {
-                const cases = window.CASELINKER_ALL_CASES;
-                allCaseIds = cases.map(c => c.id).filter(id => id).sort();
+                allCaseIds = window.CASELINKER_ALL_CASES.map(c => c.id).filter(id => id).sort();
                 return;
             }
-
+            const cached = getCachedCases();
+            if (cached && cached.length > 0) {
+                window.CASELINKER_ALL_CASES = cached;
+                allCaseIds = cached.map(c => c.id).filter(id => id).sort();
+                return;
+            }
             fetch('/api/cases?include_raw_data=false')
                 .then(response => response.json())
                 .then(data => {
                     const cases = Array.isArray(data) ? data : (data.cases || []);
                     window.CASELINKER_ALL_CASES = cases;
+                    setCachedCases(cases);
                     allCaseIds = cases.map(c => c.id).filter(id => id).sort();
                 })
                 .catch(error => {
