@@ -16,7 +16,7 @@ platforms, etc.).
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import warnings
 
@@ -45,7 +45,6 @@ class SemanticConcepts:
       - return concept keys + scores (for ideas DB / stats)
       - optionally enrich a case dict with:
           * `phrases` / `scores` / `concept_metadata`
-          * `production_flag` (when explicitly requested)
 
     Typical usage:
 
@@ -59,7 +58,6 @@ class SemanticConcepts:
         scores = detector.get_concept_scores(case_text)
         concepts = detector.get_concepts(case_text)
         detector.enhance_case_with_concepts(case)
-        detector.enhance_case_with_semantic_production(case)
     """
 
     # Map concept keys → natural language descriptions for embedding
@@ -228,8 +226,7 @@ class SemanticConcepts:
         ),
     }
 
-    # Concepts that indicate production of CSAM (True) vs not production (False).
-    # Used to compute production_flag from semantic scores; regex may still tag production.
+    # Concepts related to production vs possession (for concept_metadata only; no semantic production flag).
     _CONCEPT_IS_PRODUCTION: Dict[str, bool] = {
         "production_csam": True,
         "account_platform": False,
@@ -373,10 +370,6 @@ class SemanticConcepts:
                 'scores': {key: float},
                 'concept_metadata': {key: {...}},  # e.g. {'is_production': bool}
             }
-
-        It does **not** attach production_flag; that is handled by
-        `enhance_case_with_semantic_production` so that production
-        semantics are only computed/attached when explicitly requested.
         """
         if not case:
             return case
@@ -429,67 +422,6 @@ class SemanticConcepts:
 
         return case
 
-    def enhance_case_with_semantic_production(
-        self,
-        case: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """
-        Attach semantic production metadata to an already‑enriched case.
-
-        This computes and writes:
-
-            'production_flag': True|False|None
-            'production_flag_scores': {key: float}
-
-        under `case['ml_features']['semantic_severity']`.
-        """
-        if not case or not self.is_available():
-            return case
-
-        case_text = (
-            case.get("case_text")
-            or (case.get("raw_data") or {}).get("case_text")  # type: ignore[union-attr]
-            or (case.get("extracted_features") or {}).get("case_text")  # type: ignore[union-attr]
-            or ""
-        )
-        if not isinstance(case_text, str) or not case_text.strip():
-            return case
-
-        all_scores = self.get_concept_scores(case_text, min_score=0.0)
-        full_score_map: Dict[str, float] = {s.key: s.score for s in all_scores}
-        production_flag, production_flag_scores = self._compute_production_flag(full_score_map)
-
-        if "ml_features" not in case:
-            case["ml_features"] = {}
-        features = case["ml_features"].setdefault(
-            "semantic_severity",
-            {"phrases": [], "scores": {}, "concept_metadata": {}},
-        )
-        features["production_flag"] = production_flag
-        features["production_flag_scores"] = production_flag_scores
-        return case
-
-    def _compute_production_flag(
-        self, full_score_map: Dict[str, float]
-    ) -> Tuple[Optional[bool], Dict[str, float]]:
-        """
-        Compute production_flag from semantic scores.
-        """
-        production_keys = list(self._CONCEPT_IS_PRODUCTION.keys())
-        sub_scores = {k: full_score_map.get(k, 0.0) for k in production_keys}
-        if not any(v >= 0.25 for v in sub_scores.values()):
-            return None, sub_scores
-
-        prod_csam = sub_scores.get("production_csam", 0.0)
-        not_production_keys = [k for k in production_keys if not self._CONCEPT_IS_PRODUCTION[k]]
-        max_not = max((sub_scores.get(k, 0.0) for k in not_production_keys), default=0.0)
-
-        if prod_csam >= 0.30 and prod_csam >= max_not:
-            return True, sub_scores
-        if max_not >= 0.30 and max_not >= prod_csam:
-            return False, sub_scores
-        return None, sub_scores
-
     def _precompute_concept_embeddings(self) -> None:
         """Precompute normalized embeddings for concepts."""
         if self.model is None or np is None:
@@ -520,18 +452,6 @@ def enhance_case_with_concepts(
     return detector.enhance_case_with_concepts(case, min_score=min_score, top_k=top_k)
 
 
-def enhance_case_with_semantic_production(
-    case: Dict[str, Any],
-    semantic_model: Optional[Any] = None,
-) -> Dict[str, Any]:
-    """
-    Convenience function to attach semantic production metadata for a
-    single case.
-    """
-    detector = SemanticConcepts(semantic_model=semantic_model)
-    return detector.enhance_case_with_semantic_production(case)
-
-
 # Backwards‑compatible alias for older code/tests that still refer to
 # `SemanticSeverity` and `enhance_case_with_semantic_severity`.
 SemanticSeverity = SemanticConcepts
@@ -544,10 +464,8 @@ def enhance_case_with_semantic_severity(
     semantic_model: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """
-    Backwards‑compatible wrapper that enriches the case with concepts
-    only (no production flag). New code should call
-    `enhance_case_with_concepts` and, when needed,
-    `enhance_case_with_semantic_production`.
+    Backwards‑compatible wrapper that enriches the case with concepts.
+    Prefer `enhance_case_with_concepts` in new code.
     """
     return enhance_case_with_concepts(
         case,

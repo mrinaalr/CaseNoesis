@@ -195,7 +195,6 @@ def process_cases(df):
         if semantic_detector and semantic_detector.is_available():
             try:
                 semantic_detector.enhance_case_with_concepts(pattern_features)
-                semantic_detector.enhance_case_with_semantic_production(pattern_features)
             except Exception:
                 # If semantic enrichment fails, continue with pattern-only features
                 pass

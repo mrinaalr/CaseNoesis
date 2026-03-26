@@ -1703,19 +1703,25 @@ def generate_automated_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, An
             'count': stranger_count
         })
     
-    # Pattern: Investigation type distribution
+    # Pattern: Investigation type distribution (exclude "unknown": keyword hit but no specific type)
     investigation_types = {}
     for case in all_cases:
         inv_type = case.get('investigation_type')
-        if inv_type:
-            investigation_types[inv_type] = investigation_types.get(inv_type, 0) + 1
-    
-    if investigation_types:
+        if not inv_type or str(inv_type).lower() == 'unknown':
+            continue
+        key = str(inv_type).lower()
+        investigation_types[key] = investigation_types.get(key, 0) + 1
+
+    total_classified_inv = sum(investigation_types.values())
+    if investigation_types and total_classified_inv > 0:
         most_common_inv = max(investigation_types.items(), key=lambda x: x[1])
-        if most_common_inv[1] > len(all_cases) * 0.4:  # If >40% of cases
+        if most_common_inv[1] > total_classified_inv * 0.4:
             patterns.append({
                 'pattern': 'investigation_focus',
-                'description': f"{most_common_inv[1]} cases ({most_common_inv[1]/len(all_cases)*100:.1f}%) involve '{most_common_inv[0]}' investigations, indicating a focus area",
+                'description': (
+                    f"{most_common_inv[1]} cases ({most_common_inv[1]/total_classified_inv*100:.1f}% of cases from known investigation types) "
+                    f"involve '{most_common_inv[0]}' investigations, indicating a focus area"
+                ),
                 'count': most_common_inv[1]
             })
     
@@ -1740,13 +1746,13 @@ def generate_automated_insights(all_cases: List[Dict[str, Any]]) -> Dict[str, An
                 'end_date': dates[-1].isoformat()
             })
     
-    # Trend: Investigation type distribution
+    # Trend: Investigation type distribution (exclude "unknown")
     inv_types = []
     for case in all_cases:
         inv_type = case.get('investigation_type')
-        if inv_type:
-            inv_types.append(inv_type)
-    
+        if inv_type and str(inv_type).lower() != 'unknown':
+            inv_types.append(str(inv_type).lower())
+
     if inv_types:
         inv_counts = Counter(inv_types)
         top_inv = inv_counts.most_common(1)[0]

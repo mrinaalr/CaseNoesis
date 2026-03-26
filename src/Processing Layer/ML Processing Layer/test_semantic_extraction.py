@@ -251,9 +251,9 @@ def _run_api_coverage_tests(detector: SemanticConcepts, sample_text: str) -> boo
     check("enhance_case_with_concepts() 'concept_metadata' is dict",
           isinstance(sem.get("concept_metadata"), dict),
           "")
-    check("enhance_case_with_concepts() no production_flag yet",
+    check("enhance_case_with_concepts() does not set production_flag",
           "production_flag" not in sem,
-          "production_flag should only appear after enhance_case_with_semantic_production")
+          "")
 
     # concept_metadata only contains production-relevant keys
     for key, meta in sem.get("concept_metadata", {}).items():
@@ -261,21 +261,7 @@ def _run_api_coverage_tests(detector: SemanticConcepts, sample_text: str) -> boo
               isinstance(meta.get("is_production"), bool),
               "")
 
-    # 5. enhance_case_with_semantic_production — adds production_flag
-    detector.enhance_case_with_semantic_production(case)
-    sem2 = case.get("ml_features", {}).get("semantic_severity", {})
-    check("enhance_case_with_semantic_production() adds 'production_flag'",
-          "production_flag" in sem2,
-          f"value={sem2.get('production_flag')}")
-    check("enhance_case_with_semantic_production() adds 'production_flag_scores'",
-          isinstance(sem2.get("production_flag_scores"), dict),
-          f"{len(sem2.get('production_flag_scores', {}))} keys")
-    pf = sem2.get("production_flag")
-    check("production_flag is True, False, or None",
-          pf is True or pf is False or pf is None,
-          f"got {pf!r}")
-
-    # 6. Empty / edge-case inputs
+    # 5. Empty / edge-case inputs
     check("get_concept_scores('') returns []",
           detector.get_concept_scores("") == [],
           "")
@@ -283,7 +269,7 @@ def _run_api_coverage_tests(detector: SemanticConcepts, sample_text: str) -> boo
           detector.enhance_case_with_concepts({}) == {},
           "")
 
-    # 7. All configured concept keys are present in scores at min_score=0.0
+    # 6. All configured concept keys are present in scores at min_score=0.0
     returned_keys = {s.key for s in detector.get_concept_scores(sample_text, min_score=0.0)}
     expected_keys = set(detector._concept_keys)
     check("all concept keys present in get_concept_scores(min_score=0.0)",

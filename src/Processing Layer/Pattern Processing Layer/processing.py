@@ -40,6 +40,21 @@ clean_urls_from_text = batching.clean_artifacts_from_text  # Backward compatibil
 # Removed: case_batching, _batch_azicac_cases, _batch_ncmec_cases, _batch_ncmec_2024_cases, _batch_ncmec_media_cases
 # These are now in ../batching.py
 
+# Production topic: CSAM / explicit media-creation phrasing only. Bare "created" or "produced"
+# are excluded (e.g. "created new program", "produced evidence"). Optional words allowed
+# between verb and object (e.g. "created bad videos").
+_PRODUCTION_TOPIC_RE = re.compile(
+    r"""
+    \bproduction\s+of\b
+    | \bminor\s+production\b
+    | \bproduced\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|porn(?:ography)?|material)\b
+    | \bcreated\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|porn(?:ography)?)\b
+    | \bmade\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?)\b
+    | \btook\s+(?:\S+\s+){0,5}photos?\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
 
 def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
@@ -719,7 +734,10 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
     Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography
-    
+
+    Production requires phrase-level cues (e.g. "production of", "minor production", "created … videos",
+    "produced child …"); bare "created"/"produced" alone do not tag production.
+
     Note: physical_abuse is extracted as a severity indicator, not a topic, to avoid redundancy with hands_on.
     """
     case_text = case.get('case_text', '')
@@ -728,8 +746,8 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     
     topics = []
     
-    # Production vs possession
-    if re.search(r'\b(production|produced|created|made\s+movies?|created\s+videos?|took\s+photos)\b', case_text, re.IGNORECASE):
+    # Production vs possession (see _PRODUCTION_TOPIC_RE)
+    if _PRODUCTION_TOPIC_RE.search(case_text):
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting|possessed|traded|possession|dissemination)\b', case_text, re.IGNORECASE):
         topics.append('possession')
