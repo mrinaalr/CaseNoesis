@@ -1116,7 +1116,7 @@ async def cluster_groups_endpoint(request: Request):
         
         # 5. Fallback: compute on-demand, then store
         print("⚠️  No pre-computed cluster groups found, computing on-demand (this is slow once)...")
-        cases = storage.get_all_cases(include_raw_data=False)
+        cases = storage.get_all_cases(include_raw_data=True)
         analysis_results = run_automated_analysis(cases)
         storage.store_precomputed_clusters(analysis_results, current_case_count)
         

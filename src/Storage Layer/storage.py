@@ -14,6 +14,8 @@ Design Ideas from Architecture:
 import json
 import sqlite3
 from pathlib import Path
+
+from case_storage_utils import hydrate_case_text_from_raw_data, slim_extracted_features_for_storage
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
@@ -66,8 +68,8 @@ class CaseStorage:
                 case_topics TEXT,             -- JSON array
                 tags TEXT,                    -- JSON array (reserved for future AI features)
                 notes TEXT,                    -- Reserved for future AI features
-                raw_data TEXT,                -- JSON - original case data
-                extracted_features TEXT,      -- JSON - structured features
+                raw_data TEXT,                -- JSON - original ingestion batch (includes case_text)
+                extracted_features TEXT,      -- JSON - structured fields only (see case_storage_utils.slim_extracted_features_for_storage)
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -226,7 +228,7 @@ class CaseStorage:
                 json.dumps(case.get('tags', [])),
                 case.get('notes'),
                 json.dumps(case.get('raw_data', {})),
-                json.dumps(case),  # Store full case as extracted_features for new schema
+                json.dumps(slim_extracted_features_for_storage(case)),
                 created_at,
                 updated_at
             ))
@@ -408,6 +410,8 @@ class CaseStorage:
                         'jail': None
                     }
             
+            hydrate_case_text_from_raw_data(case_dict)
+            
             conn.close()
             return case_dict
             
@@ -541,10 +545,6 @@ class CaseStorage:
                         except (json.JSONDecodeError, TypeError):
                             pass
                 
-                # Exclude raw_data if requested (for performance)
-                if not include_raw_data and 'raw_data' in case_dict:
-                    del case_dict['raw_data']
-                
                 # Merge extracted_features back into case_dict (same as get_case)
                 extracted_features = case_dict.get('extracted_features', {})
                 if isinstance(extracted_features, dict):
@@ -555,6 +555,12 @@ class CaseStorage:
                                'severity_phrases', 'case_text', 'comparison_values']:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
+                
+                if include_raw_data:
+                    hydrate_case_text_from_raw_data(case_dict)
+                else:
+                    case_dict.pop('raw_data', None)
+                    case_dict.pop('case_text', None)
                 
                 # Add date_range
                 if case_dict.get('date_start') or case_dict.get('date_end'):
