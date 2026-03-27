@@ -20,6 +20,8 @@ from psycopg2.pool import SimpleConnectionPool
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 
+from case_storage_utils import hydrate_case_text_from_raw_data, slim_extracted_features_for_storage
+
 # Connection pool (reuse connections for better performance)
 _pool: Optional[SimpleConnectionPool] = None
 
@@ -85,7 +87,9 @@ class CaseStorage:
         cursor = conn.cursor()
         
         try:
-            # Create tables (PostgreSQL syntax)
+            # Create tables (PostgreSQL syntax).
+            # cases.raw_data: ingestion batch (includes case_text).
+            # cases.extracted_features: structured fields only — see case_storage_utils.
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS cases (
                     id TEXT PRIMARY KEY,
@@ -280,7 +284,7 @@ class CaseStorage:
                 json.dumps(case.get('tags', [])),
                 case.get('notes'),
                 json.dumps(case.get('raw_data', {})),
-                json.dumps(case),  # Store full case as extracted_features
+                json.dumps(slim_extracted_features_for_storage(case)),
                 created_at,
                 updated_at
             ))
@@ -460,6 +464,8 @@ class CaseStorage:
                         'jail': None
                     }
             
+            hydrate_case_text_from_raw_data(case_dict)
+            
             cursor.close()
             return_connection(conn)
             return case_dict
@@ -572,9 +578,6 @@ class CaseStorage:
                         except (json.JSONDecodeError, TypeError):
                             pass
                 
-                if not include_raw_data and 'raw_data' in case_dict:
-                    del case_dict['raw_data']
-                
                 # Merge extracted_features
                 extracted_features = case_dict.get('extracted_features', {})
                 if isinstance(extracted_features, dict):
@@ -584,6 +587,12 @@ class CaseStorage:
                                'severity_phrases', 'case_text', 'comparison_values']:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
+                
+                if include_raw_data:
+                    hydrate_case_text_from_raw_data(case_dict)
+                else:
+                    case_dict.pop('raw_data', None)
+                    case_dict.pop('case_text', None)
                 
                 # Add date_range
                 if case_dict.get('date_start') or case_dict.get('date_end'):

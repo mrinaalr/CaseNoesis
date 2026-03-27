@@ -671,7 +671,7 @@
                     return;
                 }
 
-                const response = await fetch('/api/cases');
+                const response = await fetch('/api/cases?include_raw_data=true');
                 allCases = await response.json();
                 window.allCases = allCases;
                 setCachedCases(allCases);
@@ -681,7 +681,7 @@
                 console.error('Error loading cases:', error);
                 if (loadingEl) loadingEl.style.display = 'none';
                 try {
-                    const response = await fetch('/api/cases');
+                    const response = await fetch('/api/cases?include_raw_data=true');
                     allCases = await response.json();
                     window.allCases = allCases;
                     setCachedCases(allCases);
@@ -1713,7 +1713,7 @@
             // If still not found, try fetching from API
             if (!caseItem) {
                 try {
-                    const response = await fetch('/api/cases');
+                    const response = await fetch('/api/cases?include_raw_data=true');
                     if (response.ok) {
                         const allCasesFromAPI = await response.json();
                         window.allCases = allCasesFromAPI;

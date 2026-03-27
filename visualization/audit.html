@@ -100,6 +100,141 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        /* Match other feature sections; title is not linked to raw-text highlight */
+        .feature-section h3.audit-tag-remove-title {
+            cursor: default;
+        }
+        .feature-section h3.audit-tag-remove-title:hover {
+            color: #4CAF50;
+            background: transparent;
+            padding-left: 0;
+            border-left: none;
+        }
+        .audit-tag-remove-card {
+            cursor: default;
+        }
+        .audit-tag-remove-card:hover {
+            background: #e8f5e9;
+            border-left-color: #45a049;
+            padding-left: 12px;
+            transform: none;
+        }
+        .audit-tag-remove-hint {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.45;
+            margin: 0 0 16px 0;
+        }
+        .audit-tag-remove-field select,
+        .audit-tag-remove-field input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #fff;
+        }
+        .audit-tag-remove-card .feature-label {
+            margin-top: 12px;
+        }
+        .audit-tag-remove-card .audit-tag-remove-hint + .feature-label {
+            margin-top: 0;
+        }
+        .tag-remove-btn {
+            margin-top: 16px;
+            padding: 10px 16px;
+            background: #c62828;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .tag-remove-btn:hover {
+            background: #b71c1c;
+        }
+        .tag-remove-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .tag-remove-status {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #2e7d32;
+            min-height: 1.2em;
+        }
+        .audit-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .audit-modal {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            max-width: 420px;
+            width: 100%;
+            padding: 22px 24px;
+        }
+        .audit-modal h3 {
+            margin: 0 0 12px 0;
+            color: #333;
+            font-size: 1.15rem;
+        }
+        .audit-modal p {
+            margin: 0 0 14px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+            word-break: break-word;
+        }
+        .audit-modal label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+        .audit-modal input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+        .audit-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .audit-modal-actions button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        .audit-modal-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .audit-modal-cancel:hover {
+            background: #d5d5d5;
+        }
+        .audit-modal-submit {
+            background: #c62828;
+            color: #fff;
+        }
+        .audit-modal-submit:hover {
+            background: #b71c1c;
+        }
         .features-panel {
             flex: 1;
             min-width: 400px;
@@ -347,11 +482,40 @@
         </div>
     </div>
 
+    <div id="audit-remove-modal" class="audit-modal-overlay" aria-hidden="true">
+        <div class="audit-modal" role="dialog" aria-modal="true" aria-labelledby="audit-remove-modal-title">
+            <h3 id="audit-remove-modal-title">Confirm tag removal</h3>
+            <p id="audit-remove-modal-summary"></p>
+            <label for="audit-remove-confirm-input" id="audit-remove-confirm-label">Type <strong>confirm</strong> to proceed:</label>
+            <input type="text" id="audit-remove-confirm-input" autocomplete="off" placeholder="confirm" />
+            <div class="audit-modal-actions">
+                <button type="button" class="audit-modal-cancel" id="audit-remove-modal-cancel">Cancel</button>
+                <button type="button" class="audit-modal-submit" id="audit-remove-modal-submit">Remove tag</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let allCases = [];
         let selectedCaseId = null;
         let currentCaseText = '';
         let currentCaseData = null;
+        let auditPendingRemove = null;
+
+        /**
+         * Local dev (SQLite) vs hosted (e.g. Railway): different modal copy and confirmation word.
+         * Quick test of hosted flow on localhost: open /audit?force_hosted=1 (same as Railway: type "vote").
+         */
+        function auditIsLocalDeployment() {
+            try {
+                const q = new URLSearchParams(window.location.search || '');
+                if (q.get('force_hosted') === '1' || q.get('railway') === '1') {
+                    return false;
+                }
+            } catch (e) { /* ignore */ }
+            const h = (window.location.hostname || '').toLowerCase();
+            return h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
+        }
         
         function cleanAndDeduplicateAgencies(agencies) {
             if (!agencies) return [];
@@ -514,7 +678,7 @@
 
         async function loadCases() {
             try {
-                const response = await fetch('/api/cases');
+                const response = await fetch('/api/cases?include_raw_data=true');
                 allCases = await response.json();
                 renderCasesList();
             } catch (error) {
@@ -665,7 +829,8 @@
                     title: 'Content Classification',
                     features: {
                         'Severity Indicators': cleanAndDeduplicateArray(caseData.severity_indicators),
-                        'Case Topics': cleanAndDeduplicateArray(caseData.case_topics)
+                        'Case Topics': cleanAndDeduplicateArray(caseData.case_topics),
+                        'Severity Phrases': cleanAndDeduplicateArray(caseData.severity_phrases)
                     }
                 }
             ];
@@ -683,8 +848,44 @@
                 
                 html += `</div>`;
             });
+
+            html += `
+            <div class="feature-section" id="audit-tag-remove-section">
+                <h3 class="audit-tag-remove-title">Remove an extracted tag</h3>
+                <div class="feature-item audit-tag-remove-card">
+                    <p class="audit-tag-remove-hint">
+                        Drop a false-positive value for <strong>this case only</strong> (e.g. wrong <code>case_topics</code>).
+                        <em>Demo — not saved yet.</em>
+                    </p>
+                    <div class="feature-label">Category (field)</div>
+                    <div class="audit-tag-remove-field">
+                        <select id="audit-remove-category">
+                            <option value="case_topics">case_topics</option>
+                            <option value="severity_indicators">severity_indicators</option>
+                            <option value="platforms_used">platforms_used</option>
+                            <option value="severity_phrases">severity_phrases</option>
+                        </select>
+                    </div>
+                    <div class="feature-label">Tag value to remove</div>
+                    <div class="audit-tag-remove-field">
+                        <select id="audit-remove-tag-value" aria-label="Tag value to remove">
+                            <option value="">— Select a tag —</option>
+                        </select>
+                    </div>
+                    <button type="button" class="tag-remove-btn" id="audit-remove-tag-btn">Remove tag…</button>
+                    <div id="audit-remove-status" class="tag-remove-status" aria-live="polite"></div>
+                </div>
+            </div>`;
             
             content.innerHTML = html;
+            
+            const rmBtn = document.getElementById('audit-remove-tag-btn');
+            if (rmBtn) rmBtn.addEventListener('click', auditOpenRemoveModal);
+            auditPopulateTagValueDropdown(caseData);
+            const catSel = document.getElementById('audit-remove-category');
+            if (catSel) {
+                catSel.addEventListener('change', () => auditPopulateTagValueDropdown(currentCaseData));
+            }
             
             // Add hover event listeners for highlighting
             addHighlightListeners();
@@ -1635,6 +1836,180 @@
             div.textContent = text;
             return div.innerHTML;
         }
+
+        function escapeAttr(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;');
+        }
+
+        function auditParseArrayField(val) {
+            if (val === null || val === undefined) return [];
+            if (Array.isArray(val)) {
+                return val
+                    .filter((x) => x !== null && x !== undefined && String(x).trim() !== '')
+                    .map((x) => String(x).trim());
+            }
+            if (typeof val === 'string') {
+                const s = val.trim();
+                if (!s) return [];
+                try {
+                    const parsed = JSON.parse(s);
+                    if (Array.isArray(parsed)) return auditParseArrayField(parsed);
+                } catch (e) { /* ignore */ }
+                return [s];
+            }
+            return [String(val)].map((x) => x.trim()).filter(Boolean);
+        }
+
+        function auditGetRemovableTagsForCategory(caseData, category) {
+            if (!caseData || !category) return [];
+            let raw;
+            switch (category) {
+                case 'case_topics':
+                    raw = caseData.case_topics;
+                    break;
+                case 'severity_indicators':
+                    raw = caseData.severity_indicators;
+                    break;
+                case 'platforms_used':
+                    raw = caseData.platforms_used;
+                    break;
+                case 'severity_phrases':
+                    raw = caseData.severity_phrases;
+                    break;
+                default:
+                    raw = [];
+            }
+            const list = auditParseArrayField(raw);
+            const seen = new Set();
+            const unique = [];
+            list.forEach((t) => {
+                const key = t.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    unique.push(t);
+                }
+            });
+            unique.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+            return unique;
+        }
+
+        function auditPopulateTagValueDropdown(caseData) {
+            const tagSel = document.getElementById('audit-remove-tag-value');
+            const catSel = document.getElementById('audit-remove-category');
+            if (!tagSel || !catSel) return;
+            const category = catSel.value;
+            const tags = auditGetRemovableTagsForCategory(caseData, category);
+            let opts;
+            if (tags.length === 0) {
+                opts = '<option value="">No tags in this category for this case</option>';
+            } else {
+                opts = '<option value="">— Select a tag —</option>';
+                tags.forEach((t) => {
+                    opts += `<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`;
+                });
+            }
+            tagSel.innerHTML = opts;
+            tagSel.disabled = tags.length === 0;
+        }
+
+        function auditOpenRemoveModal() {
+            if (!selectedCaseId || !currentCaseData) {
+                alert('Select a case first.');
+                return;
+            }
+            const catEl = document.getElementById('audit-remove-category');
+            const tagEl = document.getElementById('audit-remove-tag-value');
+            const cat = catEl ? catEl.value : '';
+            const tag = tagEl ? String(tagEl.value || '').trim() : '';
+            if (!tag) {
+                alert('Choose a category with tags, then pick a tag from the dropdown.');
+                return;
+            }
+            auditPendingRemove = { caseId: selectedCaseId, category: cat, tagValue: tag };
+            const summary = document.getElementById('audit-remove-modal-summary');
+            const titleEl = document.getElementById('audit-remove-modal-title');
+            const labelEl = document.getElementById('audit-remove-confirm-label');
+            const local = auditIsLocalDeployment();
+            if (summary) {
+                if (local) {
+                    summary.textContent = `Remove “${tag}” from ${cat} for case ${selectedCaseId}. This is a dry run — nothing is persisted yet.`;
+                } else {
+                    summary.textContent = `Remove “${tag}” from ${cat} for case ${selectedCaseId}. Manual deletion is not possible. Please vote to delete.`;
+                }
+            }
+            if (titleEl) {
+                titleEl.textContent = local ? 'Confirm tag removal' : 'Vote to delete';
+            }
+            if (labelEl) {
+                labelEl.innerHTML = local
+                    ? 'Type <strong>confirm</strong> to proceed:'
+                    : 'Type <strong>vote</strong> to proceed:';
+            }
+            const confirmInput = document.getElementById('audit-remove-confirm-input');
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.placeholder = local ? 'confirm' : 'vote';
+            }
+            const modal = document.getElementById('audit-remove-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+            }
+            if (confirmInput) setTimeout(() => confirmInput.focus(), 50);
+        }
+
+        function auditCloseRemoveModal() {
+            auditPendingRemove = null;
+            const modal = document.getElementById('audit-remove-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        function auditSubmitRemoveModal() {
+            const confirmInput = document.getElementById('audit-remove-confirm-input');
+            const typed = confirmInput ? String(confirmInput.value || '').trim().toLowerCase() : '';
+            const local = auditIsLocalDeployment();
+            const expected = local ? 'confirm' : 'vote';
+            if (typed !== expected) {
+                alert(local ? 'Type the word confirm to proceed.' : 'Type the word vote to proceed.');
+                return;
+            }
+            const pending = auditPendingRemove;
+            auditCloseRemoveModal();
+            if (pending) {
+                console.info(local ? '[Audit] Dummy tag removal (local dry run):' : '[Audit] Vote recorded (hosted demo, not persisted):', pending);
+            }
+            const status = document.getElementById('audit-remove-status');
+            if (status && pending) {
+                if (local) {
+                    status.textContent = `Dry run: would remove “${pending.tagValue}” from ${pending.category} for ${pending.caseId}. Not saved.`;
+                } else {
+                    status.textContent = `Vote recorded: remove “${pending.tagValue}” from ${pending.category} for ${pending.caseId}. (Demo — not persisted yet.)`;
+                }
+                setTimeout(() => {
+                    if (status) status.textContent = '';
+                }, 8000);
+            }
+        }
+
+        (function auditBindRemoveModal() {
+            document.getElementById('audit-remove-modal-cancel')?.addEventListener('click', auditCloseRemoveModal);
+            document.getElementById('audit-remove-modal-submit')?.addEventListener('click', auditSubmitRemoveModal);
+            document.getElementById('audit-remove-modal')?.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'audit-remove-modal') auditCloseRemoveModal();
+            });
+            document.getElementById('audit-remove-confirm-input')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    auditSubmitRemoveModal();
+                }
+            });
+        })();
 
         // Initialize
         loadCases();
