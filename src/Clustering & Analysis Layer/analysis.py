@@ -860,7 +860,7 @@ def find_investigation_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, 
     
     Criteria: Cases must have:
     - investigation_type set (proactive, reactive, online, undercover, or unknown)
-    - This means "investigation" keyword was found in the case text
+    - Set when case text mentions "investigation" or "operation(s)" and patterns run (see extract_investigation_info).
     
     Args:
         all_cases: List of all case dictionaries
@@ -873,7 +873,7 @@ def find_investigation_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, 
     for case in all_cases:
         inv_type = case.get('investigation_type')
         
-        # Only include cases that have investigation_type set (meaning "investigation" keyword was found)
+        # Only include cases that have investigation_type set
         if inv_type:  # Not None, not empty
             matching_cases.append(case)
     
@@ -1260,7 +1260,7 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
         })
     
     # 1c. Investigation Cluster - Check ALL cases, then cluster internally by investigation type
-    # Group cases that have "investigation" keyword (have investigation_type set)
+    # Group cases that have investigation_type set
     investigation_cases = find_investigation_cases(all_cases)
     
     if len(investigation_cases) > 1:

@@ -98,6 +98,69 @@ def _as_str_list(val: Any) -> List[str]:
     return [t] if t else []
 
 
+def filter_cases_by_constraints(
+    cases: List[Dict[str, Any]],
+    constraints: Dict[str, List[str]],
+) -> List[Dict[str, Any]]:
+    """
+    Keep cases whose primary_bucket for each constrained field is in that field's allow-list.
+    Empty allow-list for a field means no constraint on that field (ignored).
+    """
+    if not constraints:
+        return list(cases)
+    active = {k: set(v) for k, v in constraints.items() if v}
+    if not active:
+        return list(cases)
+    out: List[Dict[str, Any]] = []
+    for c in cases:
+        ok = True
+        for field_key, allowed in active.items():
+            if primary_bucket(c, field_key) not in allowed:
+                ok = False
+                break
+        if ok:
+            out.append(c)
+    return out
+
+
+def facet_order_subset(
+    base: Sequence[FacetStep],
+    include_fields: Optional[Sequence[str]],
+) -> List[FacetStep]:
+    """
+    Restrict partition order to given field keys, preserving DEFAULT order.
+    None or empty include_fields → full base order.
+    """
+    if not include_fields:
+        return list(base)
+    inc = set(include_fields)
+    sub = [step for step in base if step[0] in inc]
+    return sub if sub else list(base)
+
+
+def distinct_primary_buckets(
+    cases: List[Dict[str, Any]],
+    field_key: str,
+) -> List[str]:
+    """Sorted unique primary_bucket values for one field across cases (∅ last among empties)."""
+    seen = {primary_bucket(c, field_key) for c in cases}
+    return sorted(seen, key=lambda x: (x == EMPTY_BUCKET, x.upper()))
+
+
+def cohort_members_for_path(
+    cases: List[Dict[str, Any]],
+    path: Sequence[Tuple[str, str]],
+) -> List[Dict[str, Any]]:
+    """
+    Cases that match every (field_key, bucket_value) on the path using primary_bucket
+    (same cohort semantics as facet tree nodes).
+    """
+    out = list(cases)
+    for field_key, value in path:
+        out = [c for c in out if primary_bucket(c, field_key) == value]
+    return out
+
+
 def primary_bucket(case: Dict[str, Any], field_key: str) -> str:
     """
     Deterministic single bucket for this case at this facet level (partition).
@@ -209,6 +272,7 @@ def build_facet_tree(
     cases: List[Dict[str, Any]],
     facet_order: Optional[Sequence[FacetStep]] = None,
     max_depth: Optional[int] = None,
+    root_label: Optional[str] = None,
 ) -> FacetTreeNode:
     """
     Build the full facet tree for the given cases.
@@ -217,13 +281,15 @@ def build_facet_tree(
         cases: Case dicts (typically from get_all_cases(include_raw_data=False)).
         facet_order: Ordered list of (field_key, display_name); defaults to DEFAULT_FACET_ORDER.
         max_depth: Cap how many facet levels to expand (None = all).
+        root_label: Root node label (default "All cases").
 
     Returns:
-        Root node labeled "All cases" with partition children under DEFAULT_FACET_ORDER.
+        Root node with partition children under the given facet order.
     """
     order: Sequence[FacetStep] = facet_order if facet_order is not None else DEFAULT_FACET_ORDER
+    label = root_label if root_label is not None else "All cases"
     root = FacetTreeNode(
-        label="All cases",
+        label=label,
         depth=0,
         case_count=len(cases),
         cohort_group_id=cohort_group_id_from_path([]),

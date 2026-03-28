@@ -2,7 +2,7 @@
 
 ## Overview
 
-CaseLinker is designed as a system for ingesting, processing, clustering, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) scrapped from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
+CaseLinker is designed as a system for ingesting, processing, clustering, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) be news/success reports from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
 
 
 ## System Architecture

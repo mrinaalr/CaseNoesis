@@ -2309,18 +2309,15 @@
                                 patterns = [new RegExp(`\\b${platformName}\\b`, 'gi')];
                             } else if (category === 'investigation_type') {
                                 if (tag === 'unknown') {
-                                    // For "unknown" investigation type, highlight the "investigation" keyword
-                                    patterns = [/\binvestigation\b/gi];
+                                    // Match extract_investigation_info gate: investigation or operation(s)
+                                    patterns = [/\binvestigation\b/gi, /\boperations?\b/gi];
                                 } else if (tag === 'undercover') {
                                     // For undercover, match "undercover [optional words] (operation|investigation)"
                                     patterns = [/\bundercover\s+(?:\S+\s+)*(?:operation|investigation)\b/gi];
                                 } else {
-                                    // For specific types (proactive, reactive, online), highlight the full phrase:
-                                    // Type + optional words (0-5 words max) + investigation (e.g., "proactive joint investigation")
-                                    // Only match word characters (letters, numbers, hyphens) - not punctuation
-                                    // This prevents matching across sentence boundaries
+                                    // Align with processing: type + optional words + investigation OR operation(s)
                                     patterns = [
-                                        new RegExp(`\\b${tag}\\s+(?:[\\w-]+\\s+){0,5}investigation\\b`, 'gi')
+                                        new RegExp(`\\b${tag}\\s+(?:[\\w-]+\\s+){0,5}(?:investigation|operations?)\\b`, 'gi')
                                     ];
                                 }
                             } else if (category === 'organizations') {

@@ -575,15 +575,15 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
         'agencies': []
     }
     
-    # Extract investigation type
-    # First check if "investigation" keyword appears in the text
-    has_investigation_keyword = re.search(r'\binvestigation\b', case_text, re.IGNORECASE)
-    
-    if not has_investigation_keyword:
-        # No "investigation" keyword found - return None (case won't be in Investigation cluster)
+    # Gate: need narrative signal — "investigation" or "operation(s)" (covers e.g. "proactive operation").
+    has_inv_signal = (
+        re.search(r'\binvestigation\b', case_text, re.IGNORECASE)
+        or re.search(r'\boperations?\b', case_text, re.IGNORECASE)
+    )
+    if not has_inv_signal:
         return None
-    
-    # "investigation" keyword found - now check for specific types.
+
+    # Now check for specific types.
     # IMPORTANT: Check "undercover" FIRST because it's more specific and might be missed
     # if "proactive" is checked first (e.g., "proactive undercover investigation").
     # Patterns allow optional words (including hyphens) between type and "investigation",
@@ -601,7 +601,7 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
             investigation['type'] = inv_type
             break
     
-    # If "investigation" keyword found but no specific type matched, set to "unknown"
+    # If no subtype phrase matched, set to "unknown"
     if not investigation['type']:
         investigation['type'] = 'unknown'
     

@@ -40,7 +40,7 @@ CaseLinker follows a modular, layered architecture:
 2. **Processing Layer**: Extracts features, assigns comparison values, and fills case schema
 3. **Storage Layer**: PostgreSQL (production) / SQLite (local development) - Database-agnostic implementation
 4. **Clustering & Analysis Layer**: Case comparison, similarity detection, automated grouping, triage, and insights generation
-5. **Visualization Layer**: Interactive web-based dashboards with D3.js visualizations
+5. **Visualization Layer**: Interactive web-based dashboards with D3.js visualizations (main charts, Search tree, analysis views)
 
 ## Installation
 
@@ -73,6 +73,8 @@ Then open your browser to:
 - **Visualizations**: http://localhost:8000/visualization
 - **Advanced Analysis**: http://localhost:8000/analysis
 - **Clusters**: http://localhost:8000/clusters
+- **Stats**: http://localhost:8000/stats
+- **Search**: http://localhost:8000/search
 - **Data Sources**: http://localhost:8000/sources
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
@@ -162,6 +164,12 @@ Access the visualizations via the [live demo](https://web-production-13a2.up.rai
 5. **Environment**: Bar chart showing distribution of platforms and environments used (Facebook, online, chat, etc.). Click bars to view cases with highlighted platform text.
 6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
 
+## Using Search
+
+Access Search via the [live demo](https://web-production-13a2.up.railway.app/search) or locally at http://localhost:8000/search
+
+Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) gate ID listing behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
+
 ## Using Advanced Case Analysis
 
 Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or run server locally (`python3 run/main.py`) and navigate to http://localhost:8000/analysis.
@@ -192,6 +200,7 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
 
 - **Sources Tab**: View data sources and access original case reports
 - **Clusters Tab**: View pre computed clusters, analyze case reports
+- **Stats Tab**: Shows coverage over dataset, analyze case distributions
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 
@@ -211,6 +220,7 @@ CaseLinker/
 ├── visualization/
 │   ├── home.html                # Home page
 │   ├── index.html               # Interactive visualizations (Timeline, Severity, Outcomes, Perpetrator, Environment, Organizations)
+│   ├── search.html              # Facet tree search: cohort exploration, prune filters, cohort case IDs (D3)
 │   ├── analysis.html            # Advanced case analysis page (tag-based filtering and automated analysis)
 │   ├── sources.html             # Data sources page
 │   └── audit.html               # Data audit page (case-by-case feature review)
@@ -249,7 +259,11 @@ Each case includes structured features extracted from case narratives:
 
 - `GET /` - Home page
 - `GET /visualization` - Interactive visualization page with multiple chart types (Timeline, Severity Indicators, Prosecution Outcomes, Previous Perpetrator, Environment, Organizations Involved)
+- `GET /search` - Facet decision tree over stored cases (D3); prune filters; cohort case IDs via API
 - `GET /analysis` - Advanced case analysis page with tag-based filtering and automated analysis
+- `GET /api/facet-tree` - Build facet tree JSON (`max_depth`, optional prune query params)
+- `GET /api/facet-distinct` - Distinct primary-bucket values per facet (for Search prune UI)
+- `POST /api/facet-cohort-members` - Case IDs for a facet path (same prune semantics as tree; small cohorts gated)
 - `GET /sources` - Data sources page
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
 - `GET /api/cases` - Get all cases

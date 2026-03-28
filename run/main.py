@@ -4,9 +4,10 @@ Provides API endpoints for visualization frontend
 """
 
 from fastapi import FastAPI, Request, Query
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import sys
 import json
 import os
@@ -33,7 +34,16 @@ if os.getenv("DATABASE_URL"):
 else:
     from storage import CaseStorage
     print("✅ Using SQLite database (local development)")
-from facet_tree import DEFAULT_FACET_ORDER, build_facet_tree, count_nodes, max_tree_depth
+from facet_tree import (
+    DEFAULT_FACET_ORDER,
+    build_facet_tree,
+    cohort_members_for_path,
+    count_nodes,
+    distinct_primary_buckets,
+    facet_order_subset,
+    filter_cases_by_constraints,
+    max_tree_depth,
+)
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 # Import Redis cache helper
 try:
@@ -120,6 +130,50 @@ else:
 # Facet tree API: rebuilt when case count changes (not persisted to disk)
 _facet_tree_cache_payload: Optional[Dict[str, Any]] = None
 _facet_tree_cache_key: Optional[tuple] = None
+
+
+def _parse_facet_constraints_param(raw: Optional[str]) -> Dict[str, List[str]]:
+    """Query JSON: { field_key: [allowed primary bucket, ...], ... }."""
+    if not raw or not str(raw).strip():
+        return {}
+    try:
+        obj = json.loads(raw)
+        if not isinstance(obj, dict):
+            return {}
+        valid_keys = {k for k, _ in DEFAULT_FACET_ORDER}
+        out: Dict[str, List[str]] = {}
+        for k, v in obj.items():
+            fk = str(k)
+            if fk not in valid_keys:
+                continue
+            if isinstance(v, list):
+                out[fk] = [str(x) for x in v if x is not None and str(x).strip() != ""]
+            elif v is not None and str(v).strip():
+                out[fk] = [str(v).strip()]
+        return out
+    except json.JSONDecodeError:
+        return {}
+
+
+def _parse_include_facets_param(raw: Optional[str]) -> Optional[List[str]]:
+    """Comma-separated field keys; None / empty means use full DEFAULT order."""
+    if not raw or not str(raw).strip():
+        return None
+    valid = {k for k, _ in DEFAULT_FACET_ORDER}
+    parts = [p.strip() for p in str(raw).split(",") if p.strip()]
+    filtered = [p for p in parts if p in valid]
+    return filtered or None
+
+
+def _facet_tree_cache_key_tuple(
+    case_count: int,
+    max_depth: Optional[int],
+    constraints: Dict[str, List[str]],
+    include_facets: Optional[List[str]],
+) -> tuple:
+    inc = ",".join(sorted(include_facets)) if include_facets else "*"
+    cons = json.dumps(constraints, sort_keys=True, ensure_ascii=True)
+    return (case_count, max_depth, cons, inc)
 
 # Cached case count (avoids DB hit on every request - case count rarely changes)
 _case_count_cache = None
@@ -336,6 +390,27 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
             return []
 
 
+@app.get("/api/facet-distinct")
+@limiter.limit("60/minute")
+def get_facet_distinct(request: Request):
+    """
+    Distinct primary-bucket values per facet field (same bucketing as the facet tree).
+    Used to populate prune / drill-down selectors on the Search page.
+    """
+    try:
+        cases = storage.get_all_cases(include_raw_data=False) or []
+        options: Dict[str, Any] = {}
+        for field_key, label in DEFAULT_FACET_ORDER:
+            options[field_key] = {
+                "label": label,
+                "values": distinct_primary_buckets(cases, field_key),
+            }
+        return {"total_cases": len(cases), "facets": options}
+    except Exception as e:
+        logger.exception("facet-distinct failed: %s", e)
+        return {"error": str(e), "total_cases": 0, "facets": {}}
+
+
 @app.get("/api/facet-tree")
 @limiter.limit("60/minute")
 def get_facet_tree(
@@ -346,31 +421,53 @@ def get_facet_tree(
         ge=1,
         le=32,
     ),
+    facet_constraints: Optional[str] = Query(
+        None,
+        description='JSON object mapping field keys to allowed primary-bucket lists, e.g. {"source":["NCMEC"]}',
+    ),
+    include_facets: Optional[str] = Query(
+        None,
+        description="Comma-separated facet field keys to partition on (subset, order follows DEFAULT); omit for all",
+    ),
 ):
     """
     Deterministic facet decision tree over the case store (group-centric cohorts).
     Built in memory from `get_all_cases(include_raw_data=False)` — not stored as a separate file.
-    Cached briefly per (case_count, max_depth) to avoid repeat full scans on navigation.
+    Cached per (case_count, max_depth, constraints, include_facets).
     """
     global _facet_tree_cache_payload, _facet_tree_cache_key
 
     try:
         current_count = get_case_count()
-        cache_key = (current_count, max_depth)
+        constraints = _parse_facet_constraints_param(facet_constraints)
+        include_list = _parse_include_facets_param(include_facets)
+        cache_key = _facet_tree_cache_key_tuple(current_count, max_depth, constraints, include_list)
         if _facet_tree_cache_payload is not None and _facet_tree_cache_key == cache_key:
             return _facet_tree_cache_payload
 
-        cases = storage.get_all_cases(include_raw_data=False) or []
-        root = build_facet_tree(cases, max_depth=max_depth)
+        all_cases = storage.get_all_cases(include_raw_data=False) or []
+        source_count = len(all_cases)
+        cases = filter_cases_by_constraints(all_cases, constraints)
+        order = facet_order_subset(DEFAULT_FACET_ORDER, include_list)
+        active_constraints = {k: v for k, v in constraints.items() if v}
+        root_label = "Matching cases" if active_constraints else None
+        root = build_facet_tree(
+            cases,
+            facet_order=order,
+            max_depth=max_depth,
+            root_label=root_label,
+        )
         payload = {
             "total_cases": len(cases),
+            "source_case_count": source_count,
             "node_count": count_nodes(root),
             "tree_max_depth": max_tree_depth(root),
             "max_depth_param": max_depth,
-            "facet_levels": len(DEFAULT_FACET_ORDER),
-            "facet_order": [
-                {"field": k, "label": lab} for k, lab in DEFAULT_FACET_ORDER
-            ],
+            "facet_levels": len(order),
+            "facet_levels_full": len(DEFAULT_FACET_ORDER),
+            "facet_order": [{"field": k, "label": lab} for k, lab in order],
+            "prune_constraints": constraints,
+            "include_facets": include_list,
             "root": root.to_dict(),
         }
         _facet_tree_cache_payload = payload
@@ -381,15 +478,87 @@ def get_facet_tree(
         return {
             "error": str(e),
             "total_cases": 0,
+            "source_case_count": 0,
             "node_count": 0,
             "tree_max_depth": 0,
             "max_depth_param": max_depth,
             "facet_levels": len(DEFAULT_FACET_ORDER),
+            "facet_levels_full": len(DEFAULT_FACET_ORDER),
             "facet_order": [
                 {"field": k, "label": lab} for k, lab in DEFAULT_FACET_ORDER
             ],
+            "prune_constraints": {},
+            "include_facets": None,
             "root": None,
         }
+
+
+COHORT_SMALL_THRESHOLD = 3
+COHORT_DEMO_ACCESS_KEY = os.getenv("COHORT_DEMO_ACCESS_KEY", "demo")
+
+
+class FacetCohortMembersBody(BaseModel):
+    facet_path: List[Dict[str, Any]] = Field(default_factory=list)
+    facet_constraints: Dict[str, List[str]] = Field(default_factory=dict)
+    access_key: Optional[str] = None
+
+
+def _facet_path_tuples(raw_path: List[Dict[str, Any]]) -> List[Tuple[str, str]]:
+    out: List[Tuple[str, str]] = []
+    for step in raw_path:
+        if not isinstance(step, dict):
+            continue
+        fk = step.get("facet") or step.get("field")
+        val = step.get("value")
+        if fk is not None and val is not None:
+            out.append((str(fk), str(val)))
+    return out
+
+
+@app.post("/api/facet-cohort-members")
+@limiter.limit("60/minute")
+def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
+    """
+    Case IDs for the cohort at a facet-tree node: same prune constraints as the tree,
+    then each path step matches primary_bucket (field, value). IDs are omitted for
+    small cohorts (n < 3) unless access_key matches the demo key.
+    """
+    try:
+        all_cases = storage.get_all_cases(include_raw_data=False) or []
+        constraints = body.facet_constraints or {}
+        cases = filter_cases_by_constraints(all_cases, constraints)
+        path_tuples = _facet_path_tuples(body.facet_path)
+        members = cohort_members_for_path(cases, path_tuples)
+        ids = sorted(
+            str(c["id"])
+            for c in members
+            if c.get("id") is not None and str(c.get("id")).strip() != ""
+        )
+        count = len(ids)
+        key_ok = (body.access_key or "").strip() == COHORT_DEMO_ACCESS_KEY
+        if count < COHORT_SMALL_THRESHOLD:
+            if not key_ok:
+                return {
+                    "count": count,
+                    "case_ids": None,
+                    "requires_access_key": True,
+                    "threshold": COHORT_SMALL_THRESHOLD,
+                    "message": (
+                        "This cohort has fewer than three cases. Listing IDs is gated "
+                        "because small sets raise mosaic and adversarial-use risk. "
+                        "Enter the demo access key to reveal case IDs for use elsewhere "
+                        "in the system (for example case visualization)."
+                    ),
+                }
+        return {
+            "count": count,
+            "case_ids": ids,
+            "requires_access_key": False,
+            "threshold": COHORT_SMALL_THRESHOLD,
+        }
+    except Exception as e:
+        logger.exception("facet-cohort-members failed: %s", e)
+        return {"error": str(e), "count": 0, "case_ids": None, "requires_access_key": False}
 
 
 # Cache for unique tags (invalidates when cases change)
