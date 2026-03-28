@@ -11,7 +11,7 @@ Design Ideas from Architecture:
   - Case Context (anonymized): victim_count, case_demographics
   - Perpetrator Context (anonymized): perpetrator_count, perpetrator_demographics, relationship_to_victim, previous_conviction
   - Technology & Methods: platforms_used, technologies, communication_methods
-  - Law Enforcement: investigation_methods_and_teams, prosecution_outcome
+  - Law Enforcement: prosecution_outcome (agencies/orgs in extracted_features)
   - Content Classification: severity_indicators, case_topics
   - Raw/Original Data: raw_data, extracted_features
   - Metadata: created_at, updated_at

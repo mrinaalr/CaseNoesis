@@ -63,7 +63,6 @@ class CaseStorage:
                 perpetrator_count INTEGER,
                 relationship_to_victim TEXT,
                 platforms_used TEXT,  -- JSON array
-                investigation_methods TEXT,   -- JSON array
                 severity_indicators TEXT,     -- JSON array
                 case_topics TEXT,             -- JSON array
                 tags TEXT,                    -- JSON array (reserved for future AI features)
@@ -149,16 +148,6 @@ class CaseStorage:
             date_start = date_range.get('start') if isinstance(date_range, dict) else None
             date_end = date_range.get('end') if isinstance(date_range, dict) else None
             
-            # Map new schema to database format (backward compatible)
-            investigation_info = case.get('investigation_type') or case.get('investigation_methods_and_teams')
-            if isinstance(investigation_info, dict):
-                # New format: {type: str, agencies: [str]}
-                investigation_methods = [investigation_info.get('type')] + investigation_info.get('agencies', [])
-            elif isinstance(investigation_info, str):
-                investigation_methods = [investigation_info]
-            else:
-                investigation_methods = case.get('agencies_involved', [])
-            
             # Check if case already exists to preserve created_at timestamp and prevent conflicts
             case_id = case.get('id')
             cursor.execute('SELECT created_at, raw_data FROM cases WHERE id = ?', (case_id,))
@@ -210,9 +199,9 @@ class CaseStorage:
                 INSERT OR REPLACE INTO cases (
                     id, source, date_start, date_end, victim_count, perpetrator_count,
                     relationship_to_victim, platforms_used,
-                    investigation_methods, severity_indicators, case_topics, tags, notes,
+                    severity_indicators, case_topics, tags, notes,
                     raw_data, extracted_features, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 case_id,
                 case.get('source', 'unknown'),
@@ -222,7 +211,6 @@ class CaseStorage:
                 None,  # perpetrator_count (deprecated, use perpetrator_age instead)
                 case.get('relationship_to_victim'),
                 json.dumps(case.get('platforms_used', [])),
-                json.dumps(investigation_methods),
                 json.dumps(case.get('severity_indicators', [])),
                 json.dumps(case.get('case_topics', [])),
                 json.dumps(case.get('tags', [])),
@@ -352,8 +340,7 @@ class CaseStorage:
             case_dict = dict(zip(columns, row))
             
             # Parse JSON fields
-            for json_field in ['platforms_used',
-                             'investigation_methods', 'severity_indicators', 'case_topics',
+            for json_field in ['platforms_used', 'severity_indicators', 'case_topics',
                              'tags', 'raw_data', 'extracted_features']:
                 if case_dict.get(json_field):
                     try:
@@ -467,7 +454,7 @@ class CaseStorage:
             if include_raw_data:
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
-                           relationship_to_victim, platforms_used, investigation_methods,
+                           relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            raw_data, extracted_features, created_at, updated_at
                     FROM cases
@@ -477,7 +464,7 @@ class CaseStorage:
                 # Exclude raw_data from query for faster loading (saves 10-50KB per case)
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
-                           relationship_to_victim, platforms_used, investigation_methods,
+                           relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            '' as raw_data, extracted_features, created_at, updated_at
                     FROM cases
@@ -532,8 +519,7 @@ class CaseStorage:
                 case_dict = dict(zip(columns, row))
                 
                 # Parse JSON fields (skip raw_data if empty string from optimized query)
-                for json_field in ['platforms_used', 'investigation_methods', 
-                                 'severity_indicators', 'case_topics', 'tags', 
+                for json_field in ['platforms_used', 'severity_indicators', 'case_topics', 'tags',
                                  'raw_data', 'extracted_features']:
                     if case_dict.get(json_field):
                         # Skip parsing if raw_data is empty string (from optimized query)

@@ -31,7 +31,6 @@ _SLIM_EXCLUDED_KEYS = frozenset(
         "perpetrator_count",
         "relationship_to_victim",
         "platforms_used",
-        "investigation_methods",
         "severity_indicators",
         "case_topics",
         "created_at",

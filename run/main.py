@@ -3,10 +3,10 @@ FastAPI Backend for CaseLinker
 Provides API endpoints for visualization frontend
 """
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import sys
 import json
 import os
@@ -33,6 +33,7 @@ if os.getenv("DATABASE_URL"):
 else:
     from storage import CaseStorage
     print("✅ Using SQLite database (local development)")
+from facet_tree import DEFAULT_FACET_ORDER, build_facet_tree, count_nodes, max_tree_depth
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 # Import Redis cache helper
 try:
@@ -115,6 +116,10 @@ else:
         db_path = Path(DATABASE_PATH)
     
     storage = CaseStorage(str(db_path))
+
+# Facet tree API: rebuilt when case count changes (not persisted to disk)
+_facet_tree_cache_payload: Optional[Dict[str, Any]] = None
+_facet_tree_cache_key: Optional[tuple] = None
 
 # Cached case count (avoids DB hit on every request - case count rarely changes)
 _case_count_cache = None
@@ -329,6 +334,63 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
             return storage.get_all_cases(include_raw_data=include_raw_data) or []
         except Exception:
             return []
+
+
+@app.get("/api/facet-tree")
+@limiter.limit("60/minute")
+def get_facet_tree(
+    request: Request,
+    max_depth: Optional[int] = Query(
+        None,
+        description="Limit facet levels (see DEFAULT_FACET_ORDER in facet_tree). Omit for full tree.",
+        ge=1,
+        le=32,
+    ),
+):
+    """
+    Deterministic facet decision tree over the case store (group-centric cohorts).
+    Built in memory from `get_all_cases(include_raw_data=False)` — not stored as a separate file.
+    Cached briefly per (case_count, max_depth) to avoid repeat full scans on navigation.
+    """
+    global _facet_tree_cache_payload, _facet_tree_cache_key
+
+    try:
+        current_count = get_case_count()
+        cache_key = (current_count, max_depth)
+        if _facet_tree_cache_payload is not None and _facet_tree_cache_key == cache_key:
+            return _facet_tree_cache_payload
+
+        cases = storage.get_all_cases(include_raw_data=False) or []
+        root = build_facet_tree(cases, max_depth=max_depth)
+        payload = {
+            "total_cases": len(cases),
+            "node_count": count_nodes(root),
+            "tree_max_depth": max_tree_depth(root),
+            "max_depth_param": max_depth,
+            "facet_levels": len(DEFAULT_FACET_ORDER),
+            "facet_order": [
+                {"field": k, "label": lab} for k, lab in DEFAULT_FACET_ORDER
+            ],
+            "root": root.to_dict(),
+        }
+        _facet_tree_cache_payload = payload
+        _facet_tree_cache_key = cache_key
+        return payload
+    except Exception as e:
+        logger.exception("facet-tree failed: %s", e)
+        return {
+            "error": str(e),
+            "total_cases": 0,
+            "node_count": 0,
+            "tree_max_depth": 0,
+            "max_depth_param": max_depth,
+            "facet_levels": len(DEFAULT_FACET_ORDER),
+            "facet_order": [
+                {"field": k, "label": lab} for k, lab in DEFAULT_FACET_ORDER
+            ],
+            "root": None,
+        }
+
 
 # Cache for unique tags (invalidates when cases change)
 _tags_cache = None
@@ -1294,6 +1356,17 @@ async def serve_stats():
         return HTMLResponse(content=html_content)
     else:
         return HTMLResponse(content="<h1>Stats page not found</h1>", status_code=404)
+
+@app.get("/search", response_class=HTMLResponse)
+async def serve_search():
+    """Serve the HTML search page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "search.html"
+    if html_path.exists():
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Search page not found</h1>", status_code=404)
 
 @app.get("/sources", response_class=HTMLResponse)
 async def serve_sources():

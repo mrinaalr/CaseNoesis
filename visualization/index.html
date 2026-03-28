@@ -46,22 +46,28 @@
                 opacity: 0.92;
             }
         }
+        /* Compact select so nav bar height matches other pages (text links only). */
         .nav select {
-            padding: 8px 15px;
-            border: 2px solid #4CAF50;
-            border-radius: 6px;
-            background: white;
-            color: #333;
-            font-size: 14px;
-            cursor: pointer;
-            font-family: inherit;
             margin-right: 20px;
-            transition: all 0.3s;
+            height: 26px;
+            padding: 0 1.75rem 0 0.4rem;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            line-height: 24px;
+            color: #333;
+            background: #fff;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            cursor: pointer;
+            vertical-align: middle;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         .nav select:focus {
             outline: none;
             border-color: #45a049;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
         }
         .nav select:hover {
             border-color: #45a049;
@@ -541,7 +547,7 @@
 <body>
            <div class="nav">
                <a href="/">Home</a>
-               <select id="viz-selector" onchange="changeVisualization(this.value)" style="padding: 8px 15px; border: 2px solid #4CAF50; border-radius: 4px; background: white; color: #333; font-size: 14px; cursor: pointer; margin-right: 20px;">
+               <select id="viz-selector" onchange="changeVisualization(this.value)">
                    <option value="timeline">Case Group Visualization</option>
                    <option value="severity">Severity Indicators</option>
                    <option value="caseviz">Case Visualization</option>
@@ -552,6 +558,7 @@
                <a href="/analysis">Analysis</a>
                <a href="/clusters">Clusters</a>
                <a href="/stats">Stats</a>
+               <a href="/search">Search</a>
                <a href="/sources">Sources</a>
                <a href="/audit">Audit</a>
                <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
