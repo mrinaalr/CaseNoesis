@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker - Search</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .nav a.ml-experimental {
+            color: #dc2626;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulseRed 8s ease-in-out infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.92; }
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 0.90; }
+        }
+        .search-page .container {
+            max-width: 1100px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #66bb6a;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 1.1em;
+        }
+        .panel {
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px 24px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .panel h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.15em;
+        }
+        .panel ul {
+            margin: 0;
+            padding-left: 1.25em;
+            color: #444;
+            line-height: 1.6;
+        }
+        .placeholder {
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+        }
+        .tree-panel-wrap {
+            max-width: 1100px;
+            margin: 0 auto 20px;
+        }
+        .tree-intro {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .tree-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .tree-controls label {
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .tree-controls select {
+            padding: 6px 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .tree-controls button {
+            padding: 6px 14px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .tree-controls button:hover {
+            background: #45a049;
+        }
+        .facet-zoom-tools {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .facet-zoom-tools.visible {
+            display: flex;
+        }
+        .facet-zoom-tools button {
+            min-width: 36px;
+            padding: 6px 12px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            background: #fff;
+            color: #2e7d32;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .facet-zoom-tools button:hover {
+            background: #e8f5e9;
+        }
+        .facet-zoom-tools .facet-zoom-fit {
+            min-width: auto;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .tree-meta {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 6px;
+            font-family: ui-monospace, monospace;
+        }
+        .facet-tree-host {
+            background: #0d1117;
+            color: #e6edf3;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 12px 12px 16px;
+            min-height: 200px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        .facet-tree-host .tree-loading,
+        .facet-tree-host .tree-error {
+            padding: 24px;
+            text-align: center;
+            color: #8b949e;
+        }
+        .facet-tree-host .tree-error {
+            color: #f85149;
+        }
+        .facet-tree-host svg {
+            display: block;
+            width: 100%;
+            max-height: min(85vh, 920px);
+            cursor: grab;
+        }
+        .facet-tree-host svg:active {
+            cursor: grabbing;
+        }
+        .facet-tree-hint {
+            font-size: 0.8rem;
+            color: #8b949e;
+            margin: 0 0 8px 4px;
+        }
+        .tree-facet-order {
+            font-size: 0.78rem;
+            color: #6a737d;
+            line-height: 1.45;
+            margin: 0 0 10px 0;
+            word-break: break-word;
+        }
+        .facet-tree-host .node-rect {
+            fill: #1a3d24;
+            stroke: #0d1117;
+            stroke-width: 2px;
+        }
+        .facet-tree-host .node-rect.leaf {
+            fill: #234d2e;
+        }
+        .facet-tree-host .node-rect:hover {
+            filter: brightness(1.12);
+        }
+        .facet-tree-host .link {
+            fill: none;
+            stroke: #6e7681;
+            stroke-width: 1.75px;
+            stroke-linecap: round;
+        }
+        .facet-tree-host .node-label {
+            fill: #f0f6fc;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            pointer-events: none;
+        }
+        .facet-tree-host .node-sub {
+            fill: #8b949e;
+            font-size: 9px;
+            font-family: ui-monospace, monospace;
+            pointer-events: none;
+        }
+        .facet-tree-host .node-count {
+            fill: #aff5b4;
+            font-size: 10px;
+            font-weight: 700;
+            font-family: ui-monospace, monospace;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="search-page">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
+        <a href="/stats">Stats</a>
+        <a href="/search">Search</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+
+    <div class="container">
+        <h1>Search</h1>
+        <p class="subtitle">Tree-first exploration of the corpus: an accurate traversal model of the DB, then search on top (in development)</p>
+
+        <div class="panel tree-panel-wrap" style="max-width: none; background: #fff;">
+            <h2>Facet tree (live)</h2>
+            <p class="tree-intro">
+                This tree is <strong>not</strong> stored as its own file. The server builds it from the case database
+                (structured facets only, no raw narrative) whenever you load it or call <code>/api/facet-tree</code>.
+                The diagram below is drawn with <strong>D3</strong> as an SVG: each box is a cohort node, lines are parent→child edges (a <em>decision tree</em> over facets).
+            </p>
+            <p class="facet-tree-hint">Drag to pan · scroll/pinch to zoom (zoom in far to read labels) · or use the buttons · <em>Facet depth</em> shrinks large trees.</p>
+            <div class="facet-zoom-tools" id="facet-zoom-tools" aria-label="Tree zoom controls">
+                <button type="button" id="facet-zoom-in" title="Zoom in">+</button>
+                <button type="button" id="facet-zoom-out" title="Zoom out">−</button>
+                <button type="button" class="facet-zoom-fit" id="facet-zoom-fit" title="Fit whole tree">Fit all</button>
+            </div>
+            <div class="tree-controls">
+                <label for="facet-depth">Facet depth</label>
+                <select id="facet-depth" title="Fewer levels = smaller tree, faster load">
+                    <option value="">Full (all facet levels)</option>
+                    <option value="2">2 levels</option>
+                    <option value="3">3 levels</option>
+                    <option value="4">4 levels</option>
+                    <option value="5">5 levels</option>
+                    <option value="6">6 levels</option>
+                    <option value="7">7 levels</option>
+                    <option value="8">8 levels</option>
+                    <option value="9">9 levels (full)</option>
+                </select>
+                <button type="button" id="facet-reload">Reload tree</button>
+            </div>
+            <div class="tree-meta" id="facet-meta"></div>
+            <div class="tree-facet-order">Partition order (9 steps): 1.Topic → 2.Severity → 3.Platform → 4.Inv. type → 5.Source → 6.Agency → 7.Organization → 8.Location → 9.Severity Phrase.</div>
+            <div class="facet-tree-host" id="facet-tree-root">
+                <div class="tree-loading">Loading facet tree…</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Planned direction</h2>
+            <p class="placeholder">Build a faithful tree view of the stored data, then layer interactive search so users narrow by topics (and related facets) and resolve to <strong>grouped case IDs</strong> and cohorts—not specific cases or narratives. See <code>search.md</code> in the repo for broader design notes.</p>
+        </div>
+
+        <div class="panel">
+            <h2>Phase 1</h2>
+            <ul>
+                <li><strong>Database → tree</strong>: Derive a deterministic decision tree from the case store—nodes, edges, and state at each step (counts, facet signature, valid next branches). Dimensions follow curated enumerations so behavior is explainable.</li>
+                <li><strong>Traversal semantics</strong>: Each branch narrows the population; paths are reproducible (same choices → same cohort). Multi-step drill-down can use <code>cursor</code> / step state aligned with the tree.</li>
+                <li><strong>Leaves = cohorts</strong>: Terminal nodes expose <strong>group-centric</strong> payloads—<code>case_count</code>, labels, <code>facet_signature</code>, optional opaque member refs—not raw case narratives in the default search response.</li>
+                <li><strong>Foundation for search UX</strong>: Structured chips / paths on top of this tree; optional richer graph (multiple routes to similar cohorts) in a later phase. Implementation sketch: facet filters over the storage layer, then rollups if needed for speed.</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+(function () {
+    const host = document.getElementById('facet-tree-root');
+    const meta = document.getElementById('facet-meta');
+    const depthSel = document.getElementById('facet-depth');
+    const reloadBtn = document.getElementById('facet-reload');
+    const zoomTools = document.getElementById('facet-zoom-tools');
+    var facetZoomState = { svg: null, zoom: null, initial: null };
+
+    document.getElementById('facet-zoom-in').addEventListener('click', function () {
+        if (facetZoomState.svg && facetZoomState.zoom) {
+            facetZoomState.svg.transition().duration(180).call(facetZoomState.zoom.scaleBy, 1.45);
+        }
+    });
+    document.getElementById('facet-zoom-out').addEventListener('click', function () {
+        if (facetZoomState.svg && facetZoomState.zoom) {
+            facetZoomState.svg.transition().duration(180).call(facetZoomState.zoom.scaleBy, 1 / 1.45);
+        }
+    });
+    document.getElementById('facet-zoom-fit').addEventListener('click', function () {
+        if (facetZoomState.svg && facetZoomState.zoom && facetZoomState.initial) {
+            facetZoomState.svg.transition().duration(220).call(facetZoomState.zoom.transform, facetZoomState.initial);
+        }
+    });
+
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s == null ? '' : String(s);
+        return d.innerHTML;
+    }
+
+    function truncate(str, max) {
+        if (!str || str.length <= max) return str;
+        return str.slice(0, max - 1) + '…';
+    }
+
+    /**
+     * D3 tree layout: SVG rects + orthogonal-ish edges (textbook-style boxes & arrows).
+     * Data is still our facet decision tree from /api/facet-tree — not a B-tree on disk.
+     */
+    function drawFacetTreeSvg(rootData) {
+        host.innerHTML = '';
+        var hierarchy = d3.hierarchy(rootData, function (d) {
+            return d.children && d.children.length ? d.children : null;
+        });
+
+        var nodeW = 168;
+        var nodeH = 44;
+        var sepX = 52;
+        var sepY = 210;
+
+        d3.tree().nodeSize([nodeH + sepX, sepY])(hierarchy);
+
+        /* d3.tree: d.x = vertical, d.y = horizontal in layout space */
+        var minX = Infinity;
+        var maxX = -Infinity;
+        var minY = Infinity;
+        var maxY = -Infinity;
+        hierarchy.each(function (d) {
+            if (d.x < minX) minX = d.x;
+            if (d.x > maxX) maxX = d.x;
+            if (d.y < minY) minY = d.y;
+            if (d.y > maxY) maxY = d.y;
+        });
+
+        /* Padding inside gInner; viewBox is tight to actual node bounds (no extra slab below). */
+        var pad = 14;
+        /* gInner places node centers at (pad - minY + d.y, pad - minX + d.x) */
+        var bx0 = pad - minY + minY - nodeW / 2;
+        var bx1 = pad - minY + maxY + nodeW / 2;
+        var by0 = pad - minX + minX - nodeH / 2;
+        var by1 = pad - minX + maxX + nodeH / 2;
+        var margin = 6;
+        var vbW = bx1 - bx0 + margin * 2;
+        var vbH = by1 - by0 + margin * 2;
+        var bx = bx0 - margin;
+        var by = by0 - margin;
+
+        var svg = d3.select(host).append('svg')
+            .attr('viewBox', [bx, by, vbW, vbH])
+            .attr('width', '100%')
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .style('aspect-ratio', vbW + ' / ' + vbH);
+
+        var gZoom = svg.append('g');
+        /* One shared offset so edges and boxes align */
+        var gInner = gZoom.append('g').attr('transform', 'translate(' + (pad - minY) + ',' + (pad - minX) + ')');
+
+        function linkPath(d) {
+            var sy = d.source.y;
+            var sx = d.source.x;
+            var ty = d.target.y;
+            var tx = d.target.x;
+            var mid = (sy + ty) / 2;
+            return 'M' + sy + ',' + sx + ' C' + mid + ',' + sx + ' ' + mid + ',' + tx + ' ' + ty + ',' + tx;
+        }
+
+        gInner.selectAll('path.link')
+            .data(hierarchy.links())
+            .join('path')
+            .attr('class', 'link')
+            .attr('d', linkPath);
+
+        var nodeG = gInner.selectAll('g.node')
+            .data(hierarchy.descendants())
+            .join('g')
+            .attr('class', 'node')
+            .attr('transform', function (d) {
+                return 'translate(' + d.y + ',' + d.x + ')';
+            });
+
+        nodeG.append('title').text(function (d) {
+            return d.data.label + '\n' + 'n=' + d.data.case_count + '\n' + d.data.cohort_group_id;
+        });
+
+        nodeG.append('rect')
+            .attr('class', function (d) {
+                return 'node-rect' + (d.data.is_leaf ? ' leaf' : '');
+            })
+            .attr('x', -nodeW / 2)
+            .attr('y', -nodeH / 2)
+            .attr('rx', 4)
+            .attr('ry', 4)
+            .attr('width', nodeW)
+            .attr('height', nodeH);
+
+        nodeG.append('text')
+            .attr('class', 'node-label')
+            .attr('text-anchor', 'middle')
+            .attr('y', -6)
+            .text(function (d) {
+                return truncate(d.data.label, 26);
+            });
+
+        nodeG.append('text')
+            .attr('class', 'node-count')
+            .attr('text-anchor', 'middle')
+            .attr('y', 8)
+            .text(function (d) {
+                return 'n=' + d.data.case_count;
+            });
+
+        nodeG.append('text')
+            .attr('class', 'node-sub')
+            .attr('text-anchor', 'middle')
+            .attr('y', 18)
+            .text(function (d) {
+                return truncate(String(d.data.cohort_group_id), 14);
+            });
+
+        /* Min scale: don’t zoom out into a tiny sliver of empty canvas. Max: read labels. */
+        var zoom = d3.zoom()
+            .scaleExtent([0.12, 160])
+            .on('zoom', function (event) {
+                gZoom.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        /* Tight viewBox + identity: graph fills the SVG; no bogus height or extra fit scale. */
+        var initial = d3.zoomIdentity;
+        facetZoomState.svg = svg;
+        facetZoomState.zoom = zoom;
+        facetZoomState.initial = initial;
+        svg.call(zoom.transform, initial);
+        if (zoomTools) zoomTools.classList.add('visible');
+    }
+
+    async function loadTree() {
+        facetZoomState.svg = null;
+        facetZoomState.zoom = null;
+        facetZoomState.initial = null;
+        if (zoomTools) zoomTools.classList.remove('visible');
+        host.innerHTML = '<div class="tree-loading">Loading facet tree…</div>';
+        meta.textContent = '';
+        var v = depthSel.value;
+        var q = v === '' ? '' : ('?max_depth=' + encodeURIComponent(v));
+        try {
+            var r = await fetch('/api/facet-tree' + q);
+            var data = await r.json();
+            if (data.error) {
+                host.innerHTML = '<div class="tree-error">Could not build tree: ' + esc(data.error) + '</div>';
+                return;
+            }
+            var root = data.root;
+            var fl = data.facet_levels != null ? data.facet_levels : '?';
+            meta.textContent = 'cases=' + data.total_cases + '  nodes=' + data.node_count + '  facetLevels=' + fl + '  maxDepth=' + data.tree_max_depth + (data.max_depth_param != null ? '  param=max_depth:' + data.max_depth_param : '');
+            if (!root) {
+                host.innerHTML = '<div class="tree-error">Empty tree.</div>';
+                return;
+            }
+            drawFacetTreeSvg(root);
+        } catch (e) {
+            host.innerHTML = '<div class="tree-error">Failed to fetch /api/facet-tree (is the API running?)</div>';
+        }
+    }
+
+    depthSel.addEventListener('change', loadTree);
+    reloadBtn.addEventListener('click', loadTree);
+    loadTree();
+})();
+    </script>
+</body>
+</html>
