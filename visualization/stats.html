@@ -1309,9 +1309,53 @@
                     }
                     return false;
                 }
+
+                /**
+                 * Map-only: collapse "the State of Georgia" / "State of Georgia" to the same
+                 * label as "Georgia" so pins and modals match the rest of the corpus (no extraction change).
+                 */
+                function mapDisplayLocationLabel(rawLocation) {
+                    const t = String(rawLocation || '').trim().replace(/\s+/g, ' ');
+                    const m = t.match(/^(?:the\s+)?state\s+of\s+(.+)$/i);
+                    if (!m) return t;
+                    const namePart = m[1].trim().toLowerCase();
+                    const sorted = [...usStates].sort((a, b) => b.length - a.length);
+                    for (const stateName of sorted) {
+                        if (namePart === stateName.toLowerCase()) {
+                            return stateName;
+                        }
+                    }
+                    return t;
+                }
+
+                function mergeMapLocationsByDisplay(rows) {
+                    const byKey = new Map();
+                    for (const row of rows) {
+                        const label = mapDisplayLocationLabel(row.location);
+                        const key = label.toLowerCase();
+                        const ids = Array.isArray(row.caseIds) ? row.caseIds : [];
+                        if (!byKey.has(key)) {
+                            const uids = [...new Set(ids)];
+                            byKey.set(key, {
+                                location: label,
+                                caseIds: uids,
+                                count: uids.length
+                            });
+                        } else {
+                            const prev = byKey.get(key);
+                            const merged = new Set(prev.caseIds);
+                            for (const id of ids) merged.add(id);
+                            prev.caseIds = [...merged];
+                            prev.count = prev.caseIds.length;
+                        }
+                    }
+                    return Array.from(byKey.values());
+                }
                 
-                // Filter to US locations only (data already aggregated from API)
-                const usLocationData = locationData.filter(loc => isUSLocation(loc.location));
+                // Filter to US locations only (data already aggregated from API), then merge equivalent labels
+                const usLocationData = mergeMapLocationsByDisplay(
+                    locationData.filter(loc => isUSLocation(loc.location))
+                );
                 
                 if (usLocationData.length === 0) {
                     container.innerHTML = '<div class="error">No US locations found in cases</div>';

@@ -1532,6 +1532,7 @@ def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             'out_of_control': 4.0,  # High - escalation indicator
             'attacked': 5.0,  # Very high - physical violence
             'continue': 3.0,  # Medium-high - ongoing abuse
+            'attracted': 3.0,  # Medium-high - interest / predation language
             'stated': 2.0,  # Medium - victim disclosure
             'told': 2.0,  # Medium - victim disclosure
         }

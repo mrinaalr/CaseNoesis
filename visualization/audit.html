@@ -517,6 +517,23 @@
             const h = (window.location.hostname || '').toLowerCase();
             return h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
         }
+
+        /** US state / DC: USPS code → full name (for audit hover: AZ ↔ Arizona) */
+        const AUDIT_STATE_ABBR_TO_FULL = {
+            AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado',
+            CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho',
+            IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana',
+            ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
+            MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey',
+            NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma',
+            OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota',
+            TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
+            WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming', DC: 'District of Columbia'
+        };
+        const AUDIT_STATE_FULL_TO_ABBR = {};
+        Object.entries(AUDIT_STATE_ABBR_TO_FULL).forEach(([abbr, full]) => {
+            AUDIT_STATE_FULL_TO_ABBR[full.toLowerCase()] = abbr;
+        });
         
         function cleanAndDeduplicateAgencies(agencies) {
             if (!agencies) return [];
@@ -677,15 +694,76 @@
             return demo;
         }
 
-        async function loadCases() {
+        const CASELINKER_COUNT_KEY = 'caselinker_total_case_count_v1';
+        function caselinkerReadStoredCaseCount() {
             try {
-                const response = await fetch('/api/cases?include_raw_data=true');
-                allCases = await response.json();
+                const s = sessionStorage.getItem(CASELINKER_COUNT_KEY);
+                if (s != null) {
+                    const n = parseInt(s, 10);
+                    if (!Number.isNaN(n) && n >= 0) return n;
+                }
+            } catch (e) { /* ignore */ }
+            return null;
+        }
+        function caselinkerWriteStoredCaseCount(n) {
+            try {
+                if (typeof n === 'number' && n >= 0) sessionStorage.setItem(CASELINKER_COUNT_KEY, String(n));
+            } catch (e) { /* ignore */ }
+        }
+
+        async function loadCases() {
+            const listContainer = document.getElementById('cases-list');
+            const casesCountElement = document.getElementById('cases-count');
+            try {
+                const stored = caselinkerReadStoredCaseCount();
+                if (casesCountElement) {
+                    casesCountElement.textContent =
+                        stored != null ? `Cases (${stored})` : 'Cases (…)';
+                }
+                if (listContainer) {
+                    listContainer.innerHTML =
+                        '<div style="text-align: center; padding: 20px; color: #666;">Loading cases…</div>';
+                }
+                const [countData, casesData] = await Promise.all([
+                    fetch('/api/case-count').then((r) => r.json()),
+                    fetch('/api/cases?include_raw_data=false').then((r) => r.json()),
+                ]);
+                allCases = casesData;
+                const n =
+                    typeof countData.count === 'number' ? countData.count : allCases.length;
+                caselinkerWriteStoredCaseCount(allCases.length || n);
                 renderCasesList();
             } catch (error) {
                 console.error('Error loading cases:', error);
-                document.getElementById('cases-list').innerHTML = 
-                    '<div style="text-align: center; padding: 20px; color: #d32f2f;">Error loading cases</div>';
+                if (casesCountElement) casesCountElement.textContent = 'Cases';
+                if (listContainer) {
+                    listContainer.innerHTML =
+                        '<div style="text-align: center; padding: 20px; color: #d32f2f;">Error loading cases</div>';
+                }
+            }
+        }
+
+        function auditCaseHasFullNarrative(c) {
+            if (!c) return false;
+            const t = (c.raw_data && c.raw_data.case_text) || c.case_text;
+            return typeof t === 'string' && t.trim().length > 0;
+        }
+
+        async function ensureAuditCaseFull(caseId) {
+            const idx = allCases.findIndex((x) => x.id === caseId);
+            if (idx < 0) return;
+            const c = allCases[idx];
+            if (auditCaseHasFullNarrative(c)) return;
+            delete c._audit_raw_error;
+            try {
+                const r = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
+                if (!r.ok) throw new Error('fetch failed');
+                const full = await r.json();
+                full._audit_full_loaded = true;
+                allCases[idx] = full;
+            } catch (e) {
+                console.error('Error loading full case:', e);
+                allCases[idx] = { ...allCases[idx], _audit_raw_error: true };
             }
         }
 
@@ -741,20 +819,28 @@
                 caseItem.onclick = () => selectCase(caseData.id);
 
                 const dateRange = caseData.date_range || {};
-                const dateStr = dateRange.start || caseData.raw_data?.month_year || 'Unknown date';
-                const preview = (caseData.raw_data?.case_text || caseData.case_text || '').substring(0, 80);
+                const dateStr =
+                    dateRange.start ||
+                    caseData.raw_data?.month_year ||
+                    (dateRange.end ? String(dateRange.end).slice(0, 10) : '') ||
+                    'Unknown date';
+                const previewSrc = (caseData.raw_data?.case_text || caseData.case_text || '').substring(0, 80);
+                const preview =
+                    previewSrc.length > 0
+                        ? `${previewSrc}…`
+                        : (caseData.source ? `Source: ${caseData.source}` : '—');
 
                 caseItem.innerHTML = `
                     <div class="case-item-id">${caseData.id}</div>
                     <div class="case-item-date">${dateStr}</div>
-                    <div class="case-item-preview">${preview}...</div>
+                    <div class="case-item-preview">${preview}</div>
                 `;
 
                 listContainer.appendChild(caseItem);
             });
         }
 
-        function selectCase(caseId) {
+        async function selectCase(caseId) {
             selectedCaseId = caseId;
             const caseData = allCases.find(c => c.id === caseId);
             
@@ -771,8 +857,23 @@
                 }
             });
 
-            // Render features
+            // Structured fields from list; raw narrative is fetched once per case when missing
+            const hadNarrative = auditCaseHasFullNarrative(caseData);
+            if (!hadNarrative) {
+                const ix = allCases.findIndex((c) => c.id === caseId);
+                if (ix >= 0) delete allCases[ix]._audit_raw_error;
+            }
             renderFeatures(caseData);
+
+            if (hadNarrative) return;
+
+            const requestId = caseId;
+            await ensureAuditCaseFull(caseId);
+            if (selectedCaseId !== requestId) return;
+            const full = allCases.find((c) => c.id === caseId);
+            if (!full) return;
+            currentCaseData = full;
+            renderFeatures(full);
         }
 
         function renderFeatures(caseData) {
@@ -1211,6 +1312,25 @@
                     }
                 }
             }
+
+            // Locations — raw text often uses USPS abbreviations (e.g. "Scottsdale, AZ") while extracted value is "Arizona"
+            if (label.includes('Location')) {
+                const loc = String(searchValue).trim();
+                if (loc.length > 0) {
+                    const escaped = escapeRegex(loc);
+                    searchPatterns.push(new RegExp(`\\b${escaped}\\b`, 'gi'));
+                    const lower = loc.toLowerCase();
+                    const upper = loc.toUpperCase();
+                    if (upper.length === 2 && AUDIT_STATE_ABBR_TO_FULL[upper]) {
+                        const fullName = AUDIT_STATE_ABBR_TO_FULL[upper];
+                        searchPatterns.push(new RegExp(`\\b${escapeRegex(fullName)}\\b`, 'gi'));
+                    } else if (AUDIT_STATE_FULL_TO_ABBR[lower]) {
+                        const abbr = AUDIT_STATE_FULL_TO_ABBR[lower];
+                        searchPatterns.push(new RegExp(`\\b${escapeRegex(abbr)}\\b`, 'gi'));
+                        searchPatterns.push(new RegExp(`,\\s*${escapeRegex(abbr)}\\b`, 'gi'));
+                    }
+                }
+            }
             
             // Investigation type
             if (label.includes('Investigation Type')) {
@@ -1334,7 +1454,7 @@
                 const topicMap = {
                     'production': /\b(produced|created|made|molest|molesting|molested)\b/gi,
                     'possession': /\b(trading|downloading|possessing|collecting|possession)\b/gi,
-                    'pornography': /\b(child\s+pornography|child\s+sexual\s+abuse\s+material|CSAM|child\s+porn|pornography)\b/gi,
+                    'csam': /\b(csam|child\s+sexual\s+abuse\s+material|child\s+pornography|child\s+pornographic|child\s+porn)\b/gi,
                     'international': /\b(Australia|Philippines|Japan|international|overseas)\b/gi,
                     'multi_state': /\b(Colorado|Texas|California|Las\s+Vegas|Arizona|multi[\s-]?state)\b/gi,
                     'online_only': /\bonline[\s-]?only\b/gi,
@@ -1817,18 +1937,40 @@
 
         function renderRawCaseText(caseData) {
             const rawTextContent = document.getElementById('raw-text-content');
+            if (caseData._audit_raw_error) {
+                currentCaseText = '';
+                rawTextContent.innerHTML =
+                    '<div style="text-align: center; padding: 24px; color: #c62828;">Could not load full narrative. Try again or refresh the page.</div>';
+                return;
+            }
             const rawData = caseData.raw_data || {};
-            const caseText = rawData.case_text || caseData.case_text || 'No case text available';
-            
+            const caseText = rawData.case_text || caseData.case_text || '';
+            if (!caseText) {
+                currentCaseText = '';
+                if (caseData._audit_full_loaded) {
+                    let html = '';
+                    html += `<div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px; padding: 12px; margin-bottom: 15px; color: #856404;">`;
+                    html += `<strong>⚠️ Warning:</strong> This section contains the original, unprocessed case narrative. The content may be disturbing and is intended for research and verification purposes only.`;
+                    html += `</div>`;
+                    html +=
+                        '<div style="padding: 15px; color: #666;">No case text available</div>';
+                    rawTextContent.innerHTML = html;
+                    return;
+                }
+                rawTextContent.innerHTML =
+                    '<div style="text-align: center; padding: 24px; color: #666;">Loading full narrative…</div>';
+                return;
+            }
+
             // Store case text for highlighting (raw, unescaped)
             currentCaseText = caseText;
-            
+
             let html = '';
             html += `<div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px; padding: 12px; margin-bottom: 15px; color: #856404;">`;
             html += `<strong>⚠️ Warning:</strong> This section contains the original, unprocessed case narrative. The content may be disturbing and is intended for research and verification purposes only.`;
             html += `</div>`;
             html += `<div class="raw-text" style="max-height: none; overflow-y: auto; background: #fff; padding: 15px; border-radius: 4px; border: 2px solid #4CAF50; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; color: #333;">${escapeHtml(caseText)}</div>`;
-            
+
             rawTextContent.innerHTML = html;
         }
 

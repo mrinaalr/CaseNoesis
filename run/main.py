@@ -390,6 +390,34 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
             return []
 
 
+@app.get("/api/case-count")
+@limiter.limit("120/minute")
+def get_case_count_endpoint(request: Request):
+    """
+    Total cases only (single COUNT query). For headers and spinners without downloading /api/cases.
+
+    Redis-cached briefly so repeat reloads do not each hit the database; UIs also use sessionStorage.
+    """
+    try:
+        if REDIS_AVAILABLE:
+            cache_key = get_cache_key("case-count-slim")
+            cached = get_cached(cache_key)
+            if cached is not None:
+                if isinstance(cached, dict) and "count" in cached:
+                    return cached
+                try:
+                    return {"count": int(cached)}
+                except (TypeError, ValueError):
+                    pass
+        n = storage.get_case_count()
+        out = {"count": n}
+        if REDIS_AVAILABLE:
+            set_cached(get_cache_key("case-count-slim"), out, ttl=60)
+        return out
+    except Exception:
+        return {"count": 0}
+
+
 @app.get("/api/facet-distinct")
 @limiter.limit("60/minute")
 def get_facet_distinct(request: Request):

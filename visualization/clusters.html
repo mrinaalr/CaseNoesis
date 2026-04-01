@@ -104,7 +104,8 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 875px;
+            height: 1000px;
+            min-height: 1000px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -282,8 +283,8 @@
 
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
-        // Slightly taller canvas so top bubbles never get clipped
-        const height = 920;
+        // Match #cluster-visualization height; extra room so bottom satellite bubbles are not clipped
+        const height = 1000;
         const margin = 30;
         
         const svg = d3.select('#cluster-visualization')
@@ -370,7 +371,7 @@
             const mainClusterNodes = [];
             const clusterPositions = {
                 'online_only_cluster': { x: width * 0.415, y: height * 0.34 }, // Top-center
-                'possession_cluster': { x: width * 0.23, y: height * 0.26 }, // Left
+                'possession_cluster': { x: width * 0.21, y: height * 0.265 }, // Left
                 'general_cluster': { x: width * 0.67, y: height * 0.3 }, // Right
                 'severe_cluster': { x: width * 0.23, y: height * 0.65 }, // Bottom-left
                 'investigation_cluster': { x: width * 0.5, y: height * 0.65 } // Bottom-center

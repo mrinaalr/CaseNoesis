@@ -102,6 +102,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     Supported formats:
     - NCMEC: Split by state headers (ALABAMA, ARIZONA, etc.) or URL patterns
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
+    - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Default: Falls back to AZICAC format
     
     To add new formats, create a _batch_[org]_cases() function and add detection logic here.
@@ -122,6 +123,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_ncmec = False
     is_idaho_icac = False
     is_michigan_icac = False
+    is_gbi = False
     
     if source:
         source_upper = source.upper()
@@ -131,6 +133,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_idaho_icac = True
         elif source_upper == 'MICHIGAN ICAC':
             is_michigan_icac = True
+        elif source_upper == 'GBI':
+            is_gbi = True
     
     # Route to appropriate batch function
     if is_ncmec:
@@ -139,6 +143,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_idaho_icac_cases(text, org_name, source_file)
     elif is_michigan_icac:
         return _batch_michigan_icac_cases(text, org_name, source_file)
+    elif is_gbi:
+        return _batch_gbi_cases(text, org_name, source_file)
     else:
         # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
         return _batch_azicac_cases(text, org_name)
@@ -330,14 +336,18 @@ def _batch_ncmec_cases(text: str, org_name: str, source_file: str = None) -> Lis
 
 def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
     """
-    Split NCMEC 2024 cases by state headers.
-    Each case starts with a state name (ALABAMA, ARIZONA, etc.) in all caps.
-    
+    Split NCMEC 2024 by ALL-CAPS US state lines (primary structure — different from 2022/2023 media PDFs).
+
+    Some sections bundle **multiple** press stories under one state (notably a long WYOMING tail and
+    multi-article blocks). When a state segment contains more than one ``https://`` link, we run the
+    same URL-boundary splitter used for media years **on that segment only**, then flatten and renumber.
+    Single-URL segments stay one case each.
+
     Args:
         text: Full text from NCMEC PDF
         org_name: Organization name prefix for case IDs (e.g., "ncmec")
         source_file: Filename to extract report year from (e.g., "2024 - NCMEC Cases.pdf")
-        
+
     Returns:
         List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
     """
@@ -389,75 +399,80 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
             'year': case_date_year,
             'case_id': f'{org_name}_{id_year}_001'
         }]
-    
-    # Track case numbers per report year (for ID generation)
-    year_case_counts = {}
-    
+
+    def _metadata_from_text(case_text: str) -> Tuple[str, Optional[str], str]:
+        """Derive month_year, month, year string from a case blob."""
+        months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+        date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
+        date_match = re.search(date_pattern, case_text, re.IGNORECASE)
+        if date_match:
+            month = date_match.group(1)
+            case_date_year = date_match.group(3)
+            month_year = f"{month} {case_date_year}"
+            return month_year, month, case_date_year
+        year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
+        if year_match:
+            y = year_match.group(0)
+            return y, None, y
+        from datetime import datetime
+        y = report_year if report_year else str(datetime.now().year)
+        return y, None, y
+
+    cases: List[Dict[str, Any]] = []
+
     for i, match_info in enumerate(matches):
         start_pos = match_info['pos']
         state = match_info['state']
-        
-        # Determine end position (next state header or end of text)
         if i + 1 < len(matches):
             end_pos = matches[i + 1]['pos']
         else:
             end_pos = len(text)
-        
-        case_text = text[start_pos:end_pos].strip()
-        
-        # Clean artifacts from case text before processing
-        case_text = clean_artifacts_from_text(case_text)
-        
-        # Extract date from case text (e.g., "July 10, 2024" or "May 29, 2024")
-        # Look for month name followed by day and year
-        months = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
-        date_pattern = rf'{months}\s+(\d{{1,2}}),?\s+(\d{{4}})'
-        date_match = re.search(date_pattern, case_text, re.IGNORECASE)
-        
-        if date_match:
-            month = date_match.group(1)
-            day = date_match.group(2)
-            case_date_year = date_match.group(3)
-            month_year = f"{month} {case_date_year}"
-        else:
-            # Try to extract just year from case text
-            year_match = re.search(r'\b(19|20)\d{2}\b', case_text)
-            if year_match:
-                case_date_year = year_match.group(0)
-                month = None
-                month_year = case_date_year
-            else:
-                # Fallback: use report year if available, otherwise current year
-                from datetime import datetime
-                case_date_year = report_year if report_year else str(datetime.now().year)
-                month = None
-                month_year = case_date_year
-        
-        # Use report year for ID generation to ensure uniqueness across different report files
-        # This prevents conflicts when cases from different report years have the same case date year
+
+        raw_block = text[start_pos:end_pos].strip()
+        url_n = raw_block.count('https://')
+
+        if url_n > 1:
+            subs = _batch_ncmec_media_cases(raw_block, org_name, source_file)
+            sub_cases: List[Dict[str, Any]] = []
+            for sub in subs:
+                ct = sub.get('case_text', '')
+                ct = clean_artifacts_from_text(ct, remove_urls=False)
+                if not ct or len(ct) < 40:
+                    continue
+                my, mo, yr = _metadata_from_text(ct)
+                sub_cases.append({
+                    'case_text': ct,
+                    'month_year': sub.get('month_year') or my,
+                    'month': sub.get('month') or mo,
+                    'year': sub.get('year') or yr,
+                    'case_id': '',
+                    'state': state,
+                })
+            if len(sub_cases) > 1:
+                cases.extend(sub_cases)
+                continue
+
+        case_text = clean_artifacts_from_text(raw_block)
+        month_year, month, case_date_year = _metadata_from_text(case_text)
         id_year = report_year if report_year else case_date_year
-        
-        # Track case number per report year (for ID generation)
-        if id_year not in year_case_counts:
-            year_case_counts[id_year] = 0
-        year_case_counts[id_year] += 1
-        case_number = year_case_counts[id_year]
-        
-        # Generate case ID using report year: ncmec_2024_001
-        case_id = f"{org_name}_{id_year}_{case_number:03d}"
-        
-        # Use case_date_year for case metadata (not ID)
-        year = case_date_year
-        
         cases.append({
             'case_text': case_text,
             'month_year': month_year,
             'month': month,
-            'year': year,
-            'case_id': case_id,
-            'state': state  # Store state for reference
+            'year': case_date_year,
+            'case_id': f'{org_name}_{id_year}_000',
+            'state': state,
         })
-    
+
+    id_yr = report_year
+    if not id_yr and cases:
+        id_yr = cases[0].get('year', '2024')
+        if isinstance(id_yr, str) and len(id_yr) >= 4 and id_yr[:4].isdigit():
+            id_yr = id_yr[:4]
+
+    for idx, c in enumerate(cases, start=1):
+        c['case_id'] = f"{org_name}_{id_yr}_{idx:03d}"
+
     return cases
 
 
@@ -778,6 +793,163 @@ def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) 
                 'case_id': case_id
             })
     
+    return cases
+
+
+_GBI_DATE_LINE_RE = re.compile(
+    r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+    r"(\d{1,2}),\s+(\d{4})\s*$",
+    re.MULTILINE,
+)
+# Five hash marks with spaces (PDF extraction may vary spacing slightly)
+_GBI_SECTION_SPLIT_RE = re.compile(r"#\s+#\s+#\s+#\s+#")
+# First line starting here is site chrome after the press-release body (truncate before it)
+_GBI_FOOTER_START_RE = re.compile(
+    r"""
+    (?P<cut>
+        \nContact\sInformation:\s*\n
+      | \nRelated\sFiles\s*\n
+      | \nHow\s+can\s+we\s+help\?\s*\n
+      | \nContact\s*\n\s*Assistant\s+Special\s+Agent\b
+      | \nPrimary:\s*\(404\)\s*244-
+      | \nOnline\s+Tip\s+Form\s*\n
+      | \nSubmit\s+Tips\s+Online\s*\n
+      | \nVisit\s*\n3121\s+Panthersville\s+Road
+      | \nGeorgia\s+Bureau\s+of\s*\n\s*Investigation\s*\n\s*How\s+can\s+we\s+help
+    )
+    """,
+    re.IGNORECASE | re.MULTILINE | re.VERBOSE,
+)
+
+
+def _clean_gbi_case_text(text: str) -> str:
+    """
+    Keep press-release body only: drop GovHub footer, contact blocks, related-file links,
+    and fix lines left empty when URLs are stripped from PDF extraction.
+    """
+    if not text:
+        return text
+    t = text.strip()
+    m = _GBI_FOOTER_START_RE.search(t)
+    if m:
+        t = t[: m.start("cut")].rstrip()
+
+    t = re.sub(r"\n(?:20\d{2}\s+Press\s+Releases\s*\n)+$", "", t, flags=re.IGNORECASE)
+
+    # Drop the ICAC/GBI website line (URLs removed later would leave a hollow sentence)
+    t = re.sub(
+        r"^\s*The\s+Georgia\s+ICAC\s+Task\s+Force\s+website\s+is\s+.+$",
+        "",
+        t,
+        flags=re.IGNORECASE | re.MULTILINE,
+    )
+
+    t = clean_artifacts_from_text(t, remove_urls=True)
+
+    # Hollow sentence if URL strip ran on partial text
+    t = re.sub(
+        r"^\s*The\s+Georgia\s+ICAC\s+Task\s+Force\s+website\s+is\s+and\s+the\s+GBI\s+website\s+is\s*$",
+        "",
+        t,
+        flags=re.IGNORECASE | re.MULTILINE,
+    )
+    # CyberTipline: domain-only line after "at" (URL patterns already stripped)
+    t = re.sub(
+        r"CyberTipline\s+at\s*\n\s*Cybertipline\.org\.\s*",
+        "CyberTipline. ",
+        t,
+        flags=re.IGNORECASE,
+    )
+    t = re.sub(
+        r"CyberTipline\s+at\s*\n\s*Anonymous\s+tips",
+        "CyberTipline. Anonymous tips",
+        t,
+        flags=re.IGNORECASE,
+    )
+    t = re.sub(r"\bCybertipline\.org\b\.?", "", t, flags=re.IGNORECASE)
+    t = re.sub(
+        r"online\s+at\s*\n\s*or\s+by\s+downloading",
+        "or by downloading",
+        t,
+        flags=re.IGNORECASE,
+    )
+
+    t = re.sub(r"^\s*\S+@\S+\.[^\s]+\s*$", "", t, flags=re.MULTILINE)
+    t = re.sub(r"^\s*(?:Submit\s+Tips\s+Online|Visit)\s*$", "", t, flags=re.MULTILINE | re.IGNORECASE)
+    t = re.sub(r"\n{3,}", "\n\n", t)
+    return t.strip()
+
+
+def _batch_gbi_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split GBI / CEACC press-release PDFs into individual cases.
+
+    Most of the document uses blocks ending with "# # # # #", then contact/footer/navigation,
+    then the next case starting with a standalone "Month DD, YYYY" line. The tail section may
+    omit the hash row between releases; we then split on repeated standalone date lines.
+    """
+    cases: List[Dict[str, Any]] = []
+    if not text or not text.strip():
+        from datetime import datetime
+        y = str(datetime.now().year)
+        return [{"case_text": "", "month_year": None, "month": None, "year": y, "case_id": f"{org_name}_{y}_001"}]
+
+    sections = _GBI_SECTION_SPLIT_RE.split(text)
+    year_case_counts: Dict[str, int] = {}
+
+    for section in sections:
+        section = section.strip()
+        if not section:
+            continue
+
+        date_matches = list(_GBI_DATE_LINE_RE.finditer(section))
+        if not date_matches:
+            continue
+
+        for i, dm in enumerate(date_matches):
+            start = dm.start()
+            end = date_matches[i + 1].start() if i + 1 < len(date_matches) else len(section)
+            case_text_raw = section[start:end].strip()
+            if len(case_text_raw) < 80:
+                continue
+
+            month = dm.group(1)
+            year = dm.group(3)
+            month_year = f"{month} {year}"
+
+            if year not in year_case_counts:
+                year_case_counts[year] = 0
+            year_case_counts[year] += 1
+            case_number = year_case_counts[year]
+            case_id = f"{org_name}_{year}_{case_number:03d}"
+
+            case_text = _clean_gbi_case_text(case_text_raw)
+            if len(case_text) < 50:
+                continue
+
+            cases.append(
+                {
+                    "case_text": case_text,
+                    "month_year": month_year,
+                    "month": month,
+                    "year": year,
+                    "case_id": case_id,
+                }
+            )
+
+    if not cases:
+        from datetime import datetime
+        y = str(datetime.now().year)
+        return [
+            {
+                "case_text": _clean_gbi_case_text(text),
+                "month_year": None,
+                "month": None,
+                "year": y,
+                "case_id": f"{org_name}_{y}_001",
+            }
+        ]
+
     return cases
 
 

@@ -47,10 +47,22 @@ _PRODUCTION_TOPIC_RE = re.compile(
     r"""
     \bproduction\s+of\b
     | \bminor\s+production\b
-    | \bproduced\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|porn(?:ography)?|material)\b
-    | \bcreated\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|porn(?:ography)?)\b
+    | \bproduced\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|material|child\s+porn(?:ography)?|child\s+sexual\s+abuse\s+material)\b
+    | \bcreated\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?|child|csam|child\s+porn(?:ography)?|child\s+sexual\s+abuse\s+material)\b
     | \bmade\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?)\b
     | \btook\s+(?:\S+\s+){0,5}photos?\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+# CSAM material (topic key: ``csam``). Matches common legal/report phrasing only—not bare "porn"/"pornography".
+_CSAM_TOPIC_RE = re.compile(
+    r"""
+    \bcsam\b
+    | \bchild\s+sexual\s+abuse\s+material\b
+    | \bchild\s+pornography\b
+    | \bchild\s+pornographic\b
+    | \bchild\s+porn\b
     """,
     re.IGNORECASE | re.VERBOSE,
 )
@@ -733,7 +745,7 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
-    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography
+    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, csam
 
     Production requires phrase-level cues (e.g. "production of", "minor production", "created … videos",
     "produced child …"); bare "created"/"produced" alone do not tag production.
@@ -777,9 +789,9 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     elif re.search(r'\bstranger\b', case_text, re.IGNORECASE):
         topics.append('stranger')
     
-    # Pornography/material type indicators
-    if re.search(r'\b(porn|pornography|pornographic)\b', case_text, re.IGNORECASE):
-        topics.append('pornography')
+    # CSAM material indicators (internal topic key: csam)
+    if _CSAM_TOPIC_RE.search(case_text):
+        topics.append('csam')
     
     return list(set(topics))  # Remove duplicates
 
@@ -789,7 +801,7 @@ def extract_severity_phrases(case: Dict[str, Any]) -> List[str]:
     Extract key severity phrases from case text that indicate high severity.
     These are non-traditional indicators that show escalation, ongoing abuse, or dangerous behavior.
     
-    Phrases: "dangerous", "stated", "told", "continue", "attacked", "out of control"
+    Phrases: "dangerous", "stated", "told", "continue", "attacked", "out of control", "attracted"
     
     Args:
         case: Case dictionary with 'case_text'
@@ -812,6 +824,7 @@ def extract_severity_phrases(case: Dict[str, Any]) -> List[str]:
         'continue': r'\b(continued)\b',  # Ongoing abuse
         'attacked': r'\b(attacked|attack|attacking)\b',  # Physical violence
         'out_of_control': r'\bout\s+of\s+control\b',  # Escalation indicator
+        'attracted': r'\b(attracted|attracting|attracts)\b',  # e.g. sexual interest / grooming-adjacent language
     }
     
     for phrase_key, pattern in phrase_patterns.items():

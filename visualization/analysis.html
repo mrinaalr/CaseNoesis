@@ -427,7 +427,7 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Case Topics</div>
                     <div class="topic-selector" id="topic-selector-case-topics">
-                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_only, family, stranger -->
+                        <!-- Case topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, csam -->
                     </div>
                 </div>
                 
@@ -703,8 +703,8 @@
             const statusSet = new Set(tagsData.status || []);
             
             // Define all possible topics (from extraction functions)
-            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'grooming'];
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger', 'csam'];
+            const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'multiple_perpetrators', 'grooming'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
@@ -766,8 +766,8 @@
             });
             
             // Define all possible topics (from extraction functions)
-            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger'];
-            const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'grooming'];
+            const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger', 'csam'];
+            const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'multiple_perpetrators', 'grooming'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
@@ -827,6 +827,7 @@
                     // Normalize display: replace 'rape' with 'sexual_abuse' for display
                     let displayTopic = topic === 'rape' ? 'sexual_abuse' : topic;
                     displayTopic = displayTopic.replace(/_/g, ' ');
+                    if (topic === 'csam') displayTopic = 'CSAM';
                     tag.textContent = displayTopic;
                     tag.onclick = () => {
                         toggleTopicTag(tag, topic, categoryType);
@@ -2273,6 +2274,14 @@
                                     patterns = [/\bfather\b/gi, /\bmother\b/gi, /\bparent\b/gi, /\bbrother\b/gi, /\bsister\b/gi, /\buncle\b/gi, /\baunt\b/gi, /\bcousin\b/gi, /\bbiological\b/gi];
                                 } else if (tag === 'stranger') {
                                     patterns = [/\bstranger\b/gi];
+                                } else if (tag === 'csam') {
+                                    patterns = [
+                                        /\bcsam\b/gi,
+                                        /\bchild\s+sexual\s+abuse\s+material\b/gi,
+                                        /\bchild\s+pornography\b/gi,
+                                        /\bchild\s+pornographic\b/gi,
+                                        /\bchild\s+porn\b/gi
+                                    ];
                                 }
                             } else if (category === 'severity_indicators') {
                                 if (tag === 'infant') {

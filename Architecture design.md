@@ -2,7 +2,7 @@
 
 ## Overview
 
-CaseLinker is designed as a system for ingesting, processing, clustering, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) be news/success reports from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
+CaseLinker is designed as a system for ingesting, processing, clustering, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) news/success reports from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
 
 
 ## System Architecture
@@ -122,8 +122,8 @@ Case:
   
   # Content Classification
   - severity_indicators: [str] (infant, rape, very_young, under_10, production)
-  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_only, family, stranger, pornography)
-  - severity_phrases: [str] (dangerous, stated, told, continue, attacked, out_of_control)  # Non-traditional severity indicators
+  - case_topics: [str] (production, possession, international, multi_state, hands_on, online_only, family, stranger, csam)
+  - severity_phrases: [str] (dangerous, stated, told, continue, attacked, out_of_control, attracted)  # Non-traditional severity indicators
   
   # Raw/Original Data
   - raw_data: original case data (preserved for reference)
@@ -194,7 +194,7 @@ Case:
     - Severity indicators (35%): infant, rape, very_young, production, etc.
     - Victim count (30%): Aggressive scoring for multiple victims
     - Case type (25%): production, hands_on, possession, online_only
-    - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
+    - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control, attracted
     - Evidence volume (10%): images, videos, storage size
     - Registered sex offender (10%): Repeat offender status
   - Scores normalized: lowest case → 5.0, highest case → 10.0

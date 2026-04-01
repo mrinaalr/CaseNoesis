@@ -188,7 +188,7 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
      - Severity indicators (35%): infant, rape, very_young, physical_abuse
      - Victim count (30%): Higher scores for multiple victims
       - Case type (25%): production, hands_on, possession, online_only
-     - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control
+     - Severity phrases (15%): dangerous, stated, told, continue, attacked, out_of_control, attracted
      - Evidence volume (10%): images, videos, storage size
      - Registered sex offender (10%): Repeat offender status
    - **Automated Insights**: View insights about most common platforms, severity distribution, and case topics
@@ -247,9 +247,9 @@ Each case includes structured features extracted from case narratives:
 - **Agencies**: Law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.)
 
 ### **Semantic Features (Pattern-based)**
-- **Case Topics**: Themes such as production vs. possession, international cooperation, multi-state cases, hands-on vs. online-only, family vs. stranger, pornography
+- **Case Topics**: Themes such as production vs. possession, international cooperation, multi-state cases, hands-on vs. online-only, family vs. stranger, CSAM (`csam`)
 - **Severity Indicators**: Age-based severity (infant, rape, very_young, under_10) and production indicators
-- **Severity Phrases**: Non-traditional indicators extracted from case text (dangerous, stated, told, continue, attacked, out_of_control) - used for priority scoring
+- **Severity Phrases**: Non-traditional indicators extracted from case text (dangerous, stated, told, continue, attacked, out_of_control, attracted) - used for priority scoring
 
 ### **Preserved Data**
 - **Raw Case Text**: Original case narrative preserved for reference
