@@ -120,35 +120,35 @@
             transform: none;
         }
         .audit-tag-remove-hint {
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             line-height: 1.45;
-            margin: 0 0 16px 0;
+            margin: 0 0 10px 0;
         }
         .audit-tag-remove-field select,
         .audit-tag-remove-field input[type="text"] {
             width: 100%;
             box-sizing: border-box;
-            padding: 8px 10px;
+            padding: 6px 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 12px;
             background: #fff;
         }
         .audit-tag-remove-card .feature-label {
-            margin-top: 12px;
+            margin-top: 8px;
         }
         .audit-tag-remove-card .audit-tag-remove-hint + .feature-label {
             margin-top: 0;
         }
         .tag-remove-btn {
-            margin-top: 16px;
-            padding: 10px 16px;
+            margin-top: 10px;
+            padding: 7px 12px;
             background: #c62828;
             color: #fff;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
         }
         .tag-remove-btn:hover {
@@ -159,8 +159,8 @@
             cursor: not-allowed;
         }
         .tag-remove-status {
-            margin-top: 12px;
-            font-size: 13px;
+            margin-top: 8px;
+            font-size: 11px;
             color: #2e7d32;
             min-height: 1.2em;
         }
@@ -275,7 +275,9 @@
         .features-content {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 16px 18px;
+            font-size: 12px;
+            line-height: 1.45;
         }
         .no-selection {
             text-align: center;
@@ -283,12 +285,13 @@
             padding: 60px 20px;
         }
         .feature-section {
-            margin-bottom: 30px;
+            margin-bottom: 18px;
         }
         .feature-section h3 {
             color: #4CAF50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #e0e0e0;
             cursor: pointer;
             transition: all 0.2s;
@@ -300,19 +303,19 @@
             border-left: 3px solid #4CAF50;
         }
         .feature-item {
-            margin-bottom: 15px;
-            padding: 12px;
+            margin-bottom: 8px;
+            padding: 7px 9px;
             background: #f9f9f9;
             border-radius: 4px;
-            border-left: 3px solid #4CAF50;
+            border-left: 2px solid #4CAF50;
             cursor: default;
             transition: all 0.2s;
         }
         .feature-item:hover {
             background: #e8f5e9;
             border-left-color: #45a049;
-            padding-left: 15px;
-            transform: translateX(3px);
+            padding-left: 11px;
+            transform: translateX(2px);
         }
         .feature-item.highlightable {
             cursor: pointer;
@@ -324,9 +327,10 @@
             font-weight: bold;
         }
         .feature-label {
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 11px;
             color: #555;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             cursor: default;
             transition: all 0.2s;
         }
@@ -339,30 +343,32 @@
         }
         .feature-value {
             color: #333;
+            font-size: 12px;
             word-wrap: break-word;
         }
         .feature-value-null {
             color: #999;
             font-style: italic;
+            font-size: 11px;
         }
         .feature-value-array {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 3px;
             align-items: center;
         }
         .feature-value-array .highlightable-item {
             background: #4CAF50;
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10.5px;
             cursor: pointer;
             transition: all 0.2s;
         }
         .feature-value-array .highlightable-item:hover {
             background: #45a049;
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
         .feature-value-array .array-separator {
             color: #999;
@@ -370,21 +376,23 @@
         }
         .feature-value-object {
             background: #fff;
-            padding: 10px;
+            padding: 6px 8px;
             border-radius: 4px;
             border: 1px solid #e0e0e0;
-            margin-top: 5px;
+            margin-top: 3px;
+            font-size: 11.5px;
             transition: all 0.2s;
         }
         .feature-value-object.highlightable:hover {
             background: #e8f5e9;
             border-color: #4CAF50;
-            padding-left: 15px;
-            transform: translateX(3px);
+            padding-left: 10px;
+            transform: translateX(2px);
         }
         .feature-value-object .nested-item {
-            margin: 5px 0;
-            padding-left: 15px;
+            margin: 3px 0;
+            padding-left: 10px;
+            font-size: 11.5px;
         }
         .raw-text {
             max-height: 400px;
@@ -413,6 +421,77 @@
             margin-top: 0;
             margin-bottom: 15px;
             font-size: 18px;
+        }
+        .audit-toolbar {
+            padding: 12px 20px 16px;
+            border-bottom: 1px solid #e8e8e8;
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef1ee 100%);
+            flex-shrink: 0;
+        }
+        .audit-toolbar-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .audit-case-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            position: relative;
+        }
+        .audit-case-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        .audit-case-input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .audit-case-input-group input:focus {
+            outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+        }
+        .audit-case-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #4CAF50;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .audit-case-autocomplete.active {
+            display: block;
+        }
+        .audit-case-autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+        .audit-case-autocomplete-item:hover,
+        .audit-case-autocomplete-item.selected {
+            background: #e8f5e9;
+        }
+        .audit-case-autocomplete-item .match-text {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .audit-case-autocomplete-item .non-match-text {
+            color: #999;
         }
         .hood-link {
             background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
@@ -464,6 +543,15 @@
                     <span style="cursor: help;" title="Hover over features or section titles to see where they were extracted from in the raw text">🔍 <strong>Hover to highlight source text</strong></span>
                 </span>
             </h2>
+            <div class="audit-toolbar" id="audit-toolbar">
+                <div class="audit-toolbar-label">Jump to case ID</div>
+                <div class="audit-case-input-group">
+                    <div class="audit-case-input-wrapper">
+                        <input type="text" id="audit-case-id-input" placeholder="Type case id (e.g. ncmec_2024_001)…" autocomplete="off" aria-label="Search case by id" />
+                        <div class="audit-case-autocomplete" id="audit-case-autocomplete" role="listbox" aria-label="Matching case ids"></div>
+                    </div>
+                </div>
+            </div>
             <div class="features-content" id="features-content">
                 <div class="no-selection">
                     <h3>Select a case to view extracted features</h3>
@@ -498,10 +586,13 @@
 
     <script>
         let allCases = [];
+        let allCaseIdsAudit = [];
+        let auditSelectedAutocompleteIndex = -1;
         let selectedCaseId = null;
         let currentCaseText = '';
         let currentCaseData = null;
         let auditPendingRemove = null;
+        let auditToolbarInitialized = false;
 
         /**
          * Local dev (SQLite) vs hosted (e.g. Railway): different modal copy and confirmation word.
@@ -733,6 +824,7 @@
                     typeof countData.count === 'number' ? countData.count : allCases.length;
                 caselinkerWriteStoredCaseCount(allCases.length || n);
                 renderCasesList();
+                initAuditToolbar();
             } catch (error) {
                 console.error('Error loading cases:', error);
                 if (casesCountElement) casesCountElement.textContent = 'Cases';
@@ -840,46 +932,11 @@
             });
         }
 
-        async function selectCase(caseId) {
-            selectedCaseId = caseId;
-            const caseData = allCases.find(c => c.id === caseId);
-            
-            if (!caseData) return;
-
-            // Store current case data for highlighting
-            currentCaseData = caseData;
-
-            // Update active state
-            document.querySelectorAll('.case-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.querySelector('.case-item-id').textContent === caseId) {
-                    item.classList.add('active');
-                }
-            });
-
-            // Structured fields from list; raw narrative is fetched once per case when missing
-            const hadNarrative = auditCaseHasFullNarrative(caseData);
-            if (!hadNarrative) {
-                const ix = allCases.findIndex((c) => c.id === caseId);
-                if (ix >= 0) delete allCases[ix]._audit_raw_error;
-            }
-            renderFeatures(caseData);
-
-            if (hadNarrative) return;
-
-            const requestId = caseId;
-            await ensureAuditCaseFull(caseId);
-            if (selectedCaseId !== requestId) return;
-            const full = allCases.find((c) => c.id === caseId);
-            if (!full) return;
-            currentCaseData = full;
-            renderFeatures(full);
-        }
-
-        function renderFeatures(caseData) {
-            const content = document.getElementById('features-content');
-            
-            const sections = [
+        /**
+         * Same section layout as renderFeatures — used for counting extracted fields and rendering.
+         */
+        function getAuditSections(caseData) {
+            return [
                 {
                     title: 'Case Identification',
                     features: {
@@ -936,6 +993,174 @@
                     }
                 }
             ];
+        }
+
+        function initAuditToolbar() {
+            allCaseIdsAudit = allCases.map(c => c.id).filter(Boolean).sort();
+
+            const input = document.getElementById('audit-case-id-input');
+            const autocomplete = document.getElementById('audit-case-autocomplete');
+            if (!input || !autocomplete) return;
+
+            if (auditToolbarInitialized) return;
+            auditToolbarInitialized = true;
+
+            input.onkeydown = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (autocomplete.classList.contains('active') && auditSelectedAutocompleteIndex >= 0) {
+                        const items = autocomplete.querySelectorAll('.audit-case-autocomplete-item');
+                        if (items[auditSelectedAutocompleteIndex]) {
+                            items[auditSelectedAutocompleteIndex].click();
+                            return;
+                        }
+                    }
+                    const q = input.value.trim();
+                    if (q && allCaseIdsAudit.includes(q)) {
+                        hideAuditAutocomplete();
+                        selectCase(q);
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateAuditAutocomplete(1);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateAuditAutocomplete(-1);
+                } else if (e.key === 'Escape') {
+                    hideAuditAutocomplete();
+                }
+            };
+
+            input.oninput = function() {
+                handleAuditCaseIdInput(this.value);
+            };
+
+            const wrapper = input.closest('.audit-case-input-wrapper');
+            document.addEventListener('click', function auditClickOutside(e) {
+                const ac = document.getElementById('audit-case-autocomplete');
+                if (!ac || !ac.classList.contains('active')) return;
+                const w = document.getElementById('audit-case-id-input')?.closest('.audit-case-input-wrapper');
+                if (w && !w.contains(e.target)) {
+                    hideAuditAutocomplete();
+                }
+            });
+        }
+
+        function handleAuditCaseIdInput(value) {
+            const autocomplete = document.getElementById('audit-case-autocomplete');
+            if (!value || value.trim() === '') {
+                hideAuditAutocomplete();
+                return;
+            }
+            const query = value.toLowerCase();
+            const matches = allCaseIdsAudit.filter(id => id.toLowerCase().includes(query)).slice(0, 10);
+            if (matches.length === 0) {
+                hideAuditAutocomplete();
+                return;
+            }
+            let html = '';
+            matches.forEach((caseId, index) => {
+                const lowerCaseId = caseId.toLowerCase();
+                const queryIndex = lowerCaseId.indexOf(query);
+                let highlightedId = '';
+                if (queryIndex === -1) {
+                    highlightedId = escapeHtml(caseId);
+                } else {
+                    const before = caseId.substring(0, queryIndex);
+                    const match = caseId.substring(queryIndex, queryIndex + query.length);
+                    const after = caseId.substring(queryIndex + query.length);
+                    highlightedId = `${escapeHtml(before)}<span class="match-text">${escapeHtml(match)}</span><span class="non-match-text">${escapeHtml(after)}</span>`;
+                }
+                html += `<div class="audit-case-autocomplete-item" data-case-id="${escapeHtml(caseId)}" data-index="${index}">${highlightedId}</div>`;
+            });
+            autocomplete.innerHTML = html;
+            autocomplete.classList.add('active');
+            auditSelectedAutocompleteIndex = -1;
+            autocomplete.querySelectorAll('.audit-case-autocomplete-item').forEach(item => {
+                item.onclick = function() {
+                    const caseId = this.getAttribute('data-case-id');
+                    document.getElementById('audit-case-id-input').value = caseId;
+                    hideAuditAutocomplete();
+                    selectCase(caseId);
+                };
+            });
+        }
+
+        function navigateAuditAutocomplete(direction) {
+            const autocomplete = document.getElementById('audit-case-autocomplete');
+            if (!autocomplete.classList.contains('active')) return;
+            const items = autocomplete.querySelectorAll('.audit-case-autocomplete-item');
+            if (items.length === 0) return;
+            if (auditSelectedAutocompleteIndex >= 0 && items[auditSelectedAutocompleteIndex]) {
+                items[auditSelectedAutocompleteIndex].classList.remove('selected');
+            }
+            auditSelectedAutocompleteIndex += direction;
+            if (auditSelectedAutocompleteIndex < 0) {
+                auditSelectedAutocompleteIndex = items.length - 1;
+            } else if (auditSelectedAutocompleteIndex >= items.length) {
+                auditSelectedAutocompleteIndex = 0;
+            }
+            if (items[auditSelectedAutocompleteIndex]) {
+                items[auditSelectedAutocompleteIndex].classList.add('selected');
+                items[auditSelectedAutocompleteIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        }
+
+        function hideAuditAutocomplete() {
+            const autocomplete = document.getElementById('audit-case-autocomplete');
+            if (autocomplete) autocomplete.classList.remove('active');
+            auditSelectedAutocompleteIndex = -1;
+        }
+
+        function scrollAuditCaseListTo(caseId) {
+            document.querySelectorAll('.case-item').forEach(item => {
+                const idEl = item.querySelector('.case-item-id');
+                if (idEl && idEl.textContent === caseId) {
+                    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                }
+            });
+        }
+
+        async function selectCase(caseId) {
+            selectedCaseId = caseId;
+            const caseData = allCases.find(c => c.id === caseId);
+            
+            if (!caseData) return;
+
+            // Store current case data for highlighting
+            currentCaseData = caseData;
+
+            // Update active state
+            document.querySelectorAll('.case-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.querySelector('.case-item-id').textContent === caseId) {
+                    item.classList.add('active');
+                }
+            });
+            scrollAuditCaseListTo(caseId);
+
+            // Structured fields from list; raw narrative is fetched once per case when missing
+            const hadNarrative = auditCaseHasFullNarrative(caseData);
+            if (!hadNarrative) {
+                const ix = allCases.findIndex((c) => c.id === caseId);
+                if (ix >= 0) delete allCases[ix]._audit_raw_error;
+            }
+            renderFeatures(caseData);
+
+            if (hadNarrative) return;
+
+            const requestId = caseId;
+            await ensureAuditCaseFull(caseId);
+            if (selectedCaseId !== requestId) return;
+            const full = allCases.find((c) => c.id === caseId);
+            if (!full) return;
+            currentCaseData = full;
+            renderFeatures(full);
+        }
+
+        function renderFeatures(caseData) {
+            const content = document.getElementById('features-content');
+            const sections = getAuditSections(caseData);
 
             let html = '';
             
@@ -956,7 +1181,7 @@
                 <h3 class="audit-tag-remove-title">Remove an extracted tag</h3>
                 <div class="feature-item audit-tag-remove-card">
                     <p class="audit-tag-remove-hint">
-                        Drop a false-positive value for <strong>this case only</strong> (e.g. wrong <code>case_topics</code>).
+                        Drop a false-positive value for <strong>this case only</strong> (e.g. wrong <code>case_topics</code> or <code>locations</code>).
                         <em>Demo — not saved yet.</em>
                     </p>
                     <div class="feature-label">Category (field)</div>
@@ -966,6 +1191,7 @@
                             <option value="severity_indicators">severity_indicators</option>
                             <option value="platforms_used">platforms_used</option>
                             <option value="severity_phrases">severity_phrases</option>
+                            <option value="locations">locations</option>
                         </select>
                     </div>
                     <div class="feature-label">Tag value to remove</div>
@@ -2022,6 +2248,12 @@
                 case 'severity_phrases':
                     raw = caseData.severity_phrases;
                     break;
+                case 'locations': {
+                    const loc = caseData.locations;
+                    const asArr = Array.isArray(loc) ? loc : auditParseArrayField(loc);
+                    raw = cleanAndDeduplicateArray(asArr);
+                    break;
+                }
                 default:
                     raw = [];
             }
