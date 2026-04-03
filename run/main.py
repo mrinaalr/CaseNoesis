@@ -3,7 +3,7 @@ FastAPI Backend for CaseLinker
 Provides API endpoints for visualization frontend
 """
 
-from fastapi import FastAPI, Request, Query
+from fastapi import FastAPI, Request, Query, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
@@ -13,6 +13,7 @@ import json
 import os
 import logging
 import time
+from datetime import datetime
 from pathlib import Path
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -21,6 +22,7 @@ from slowapi.errors import RateLimitExceeded
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Storage Layer"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 # Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
 import os
@@ -39,7 +41,7 @@ from facet_tree import (
     build_facet_tree,
     cohort_members_for_path,
     count_nodes,
-    distinct_primary_buckets,
+    distinct_field_values,
     facet_order_subset,
     filter_cases_by_constraints,
     max_tree_depth,
@@ -133,7 +135,7 @@ _facet_tree_cache_key: Optional[tuple] = None
 
 
 def _parse_facet_constraints_param(raw: Optional[str]) -> Dict[str, List[str]]:
-    """Query JSON: { field_key: [allowed primary bucket, ...], ... }."""
+    """Query JSON: { field_key: [allowed values, ...], ... }; any tag on the case may match."""
     if not raw or not str(raw).strip():
         return {}
     try:
@@ -163,6 +165,100 @@ def _parse_include_facets_param(raw: Optional[str]) -> Optional[List[str]]:
     parts = [p.strip() for p in str(raw).split(",") if p.strip()]
     filtered = [p for p in parts if p in valid]
     return filtered or None
+
+
+def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[str, Any]:
+    """
+    Run the saved triage bundle on live DB cases (facet-filtered when constraints are set).
+    Response shape matches the former /api/triage-model-corpus JSON-file contract; no
+    triage_corpus_predictions.json is read.
+    """
+    try:
+        from triage import build_corpus_predictions_payload, default_bundle_path, load_triage_bundle
+    except ImportError as e:
+        logger.warning("triage live corpus: import failed: %s", e)
+        return {
+            "corpus_predictions_available": False,
+            "model_case_ids_by_tier": {},
+            "corpus_class_names": [],
+            "n_cases": 0,
+            "facet_filter_applied": bool(constraints),
+            "corpus_predictions_stale": False,
+        }
+
+    try:
+        bundle_path = default_bundle_path()
+        bundle = load_triage_bundle(bundle_path)
+    except FileNotFoundError:
+        return {
+            "corpus_predictions_available": False,
+            "model_case_ids_by_tier": {},
+            "corpus_class_names": [],
+            "n_cases": 0,
+            "facet_filter_applied": bool(constraints),
+            "corpus_predictions_stale": False,
+        }
+    except Exception:
+        logger.exception("triage live corpus: bundle load failed")
+        return {
+            "corpus_predictions_available": False,
+            "model_case_ids_by_tier": {},
+            "corpus_class_names": [],
+            "n_cases": 0,
+            "facet_filter_applied": bool(constraints),
+            "corpus_predictions_stale": False,
+        }
+
+    bp_resolved = str(Path(bundle_path).resolve())
+    cases = storage.get_all_cases(include_raw_data=False) or []
+    filtered = filter_cases_by_constraints(cases, constraints) if constraints else cases
+
+    if not filtered:
+        cn = list(bundle.class_names)
+        return {
+            "corpus_predictions_available": True,
+            "model_case_ids_by_tier": {n: [] for n in cn},
+            "corpus_class_names": cn,
+            "n_cases": 0,
+            "corpus_predictions_stale": False,
+            "facet_filter_applied": bool(constraints),
+            "corpus_predictions_meta": {
+                "generated_at": datetime.now().isoformat(),
+                "bundle_path": bp_resolved,
+                "n_cases_db": len(cases),
+                "n_cases_in_view": 0,
+                "source": "live_db",
+            },
+        }
+
+    try:
+        payload = build_corpus_predictions_payload(filtered, bundle, bp_resolved)
+    except Exception:
+        logger.exception("triage live corpus: inference failed")
+        return {
+            "corpus_predictions_available": False,
+            "model_case_ids_by_tier": {},
+            "corpus_class_names": [],
+            "n_cases": 0,
+            "facet_filter_applied": bool(constraints),
+            "corpus_predictions_stale": False,
+        }
+
+    return {
+        "corpus_predictions_available": True,
+        "model_case_ids_by_tier": payload["model_case_ids_by_tier"],
+        "corpus_class_names": payload["class_names"],
+        "n_cases": payload["n_cases"],
+        "corpus_predictions_stale": False,
+        "facet_filter_applied": bool(constraints),
+        "corpus_predictions_meta": {
+            "generated_at": payload["generated_at"],
+            "bundle_path": payload["bundle_path"],
+            "n_cases_db": len(cases),
+            "n_cases_in_view": payload["n_cases"],
+            "source": "live_db",
+        },
+    }
 
 
 def _facet_tree_cache_key_tuple(
@@ -422,8 +518,8 @@ def get_case_count_endpoint(request: Request):
 @limiter.limit("60/minute")
 def get_facet_distinct(request: Request):
     """
-    Distinct primary-bucket values per facet field (same bucketing as the facet tree).
-    Used to populate prune / drill-down selectors on the Search page.
+    Distinct tag values per facet field (union of all tags on cases), for prune filters.
+    The facet tree still partitions by primary bucket per level; filters match if any tag fits.
     """
     try:
         cases = storage.get_all_cases(include_raw_data=False) or []
@@ -431,7 +527,7 @@ def get_facet_distinct(request: Request):
         for field_key, label in DEFAULT_FACET_ORDER:
             options[field_key] = {
                 "label": label,
-                "values": distinct_primary_buckets(cases, field_key),
+                "values": distinct_field_values(cases, field_key),
             }
         return {"total_cases": len(cases), "facets": options}
     except Exception as e:
@@ -451,7 +547,7 @@ def get_facet_tree(
     ),
     facet_constraints: Optional[str] = Query(
         None,
-        description='JSON object mapping field keys to allowed primary-bucket lists, e.g. {"source":["NCMEC"]}',
+        description='JSON object mapping field keys to allowed value lists (any tag on case may match), e.g. {"case_topics":["family"]}',
     ),
     include_facets: Optional[str] = Query(
         None,
@@ -548,7 +644,8 @@ def _facet_path_tuples(raw_path: List[Dict[str, Any]]) -> List[Tuple[str, str]]:
 def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
     """
     Case IDs for the cohort at a facet-tree node: same prune constraints as the tree,
-    then each path step matches primary_bucket (field, value). IDs are omitted for
+    then each path step matches if the case has that value among its tags for the field.
+    IDs are omitted for
     small cohorts (n < 3) unless access_key matches the demo key.
     """
     try:
@@ -1564,6 +1661,182 @@ async def serve_search():
         return HTMLResponse(content=html_content)
     else:
         return HTMLResponse(content="<h1>Search page not found</h1>", status_code=404)
+
+
+@app.get("/triage", response_class=HTMLResponse)
+async def serve_triage():
+    """Serve the triage ML evaluation page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "triage.html"
+    if html_path.exists():
+        with open(html_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Triage page not found</h1>", status_code=404)
+
+
+@app.get("/api/triage-eval")
+def api_triage_eval(
+    model: str = Query("rf", description="rf or tree"),
+    criterion: str = Query("entropy", description="gini, entropy, or log_loss"),
+    no_agencies: bool = Query(False),
+    seed: int = Query(42),
+    test_size: float = Query(0.2, ge=0.05, le=0.45),
+):
+    """
+    Run the same 80/20-style eval as scripts/test_triage.py on the live DB,
+    using train_triage_model.train_pipeline and rule-based triage labels.
+    """
+    try:
+        import math
+
+        import numpy as np
+        from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+        from sklearn.model_selection import train_test_split
+        from train_triage_model import (
+            cases_to_dataframe,
+            make_labels,
+            priority_scores_by_id,
+            train_pipeline,
+        )
+    except ImportError as e:
+        raise HTTPException(status_code=503, detail=f"Triage eval unavailable: {e}") from e
+
+    if model not in ("rf", "tree"):
+        raise HTTPException(status_code=400, detail="model must be rf or tree")
+    if criterion not in ("gini", "entropy", "log_loss"):
+        raise HTTPException(status_code=400, detail="criterion must be gini, entropy, or log_loss")
+
+    cases = storage.get_all_cases(include_raw_data=False)
+    min_cases = max(20, int(math.ceil(1.0 / test_size)) + 5)
+    if len(cases) < min_cases:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Need at least {min_cases} cases for stratified split; found {len(cases)}",
+        )
+
+    use_agencies = not no_agencies
+    id_to_score = priority_scores_by_id(cases)
+    scores = np.array([id_to_score[c["id"]] for c in cases])
+    y, class_names, bin_edges = make_labels(scores, n_bins=3)
+    df = cases_to_dataframe(cases, include_agencies=use_agencies)
+    X = df.drop(columns=["id"])
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=seed, stratify=y
+    )
+
+    pipe = train_pipeline(
+        X_train,
+        y_train,
+        model,
+        seed,
+        use_agencies=use_agencies,
+        criterion=criterion,
+    )
+    y_pred = pipe.predict(X_test)
+
+    acc = float(accuracy_score(y_test, y_pred))
+    cm = confusion_matrix(y_test, y_pred, labels=list(range(len(class_names))))
+    report_dict = classification_report(
+        y_test, y_pred, target_names=class_names, zero_division=0, output_dict=True
+    )
+
+    case_ids_by_tier: Dict[str, List[str]] = {name: [] for name in class_names}
+    for i, c in enumerate(cases):
+        tier = class_names[int(y[i])]
+        cid = c.get("id")
+        if cid is not None:
+            case_ids_by_tier[tier].append(str(cid))
+    for tier in case_ids_by_tier:
+        case_ids_by_tier[tier] = sorted(case_ids_by_tier[tier])
+
+    out: Dict[str, Any] = {
+        "n_cases": len(cases),
+        "n_train": int(len(X_train)),
+        "n_test": int(len(X_test)),
+        "accuracy": acc,
+        "classification_report": report_dict,
+        "confusion_matrix": cm.tolist(),
+        "class_names": class_names,
+        "bin_edges": bin_edges,
+        "case_ids_by_tier": case_ids_by_tier,
+        "model": model,
+        "criterion": criterion,
+        "use_agencies": use_agencies,
+        "seed": seed,
+        "test_size": test_size,
+    }
+
+    try:
+        corp = _triage_saved_bundle_corpus_live({})
+        if corp.get("corpus_predictions_available"):
+            out["corpus_predictions_available"] = True
+            out["model_case_ids_by_tier"] = corp["model_case_ids_by_tier"]
+            out["corpus_class_names"] = corp["corpus_class_names"]
+            out["corpus_predictions_meta"] = corp.get("corpus_predictions_meta") or {}
+            out["corpus_predictions_stale"] = False
+        else:
+            out["corpus_predictions_available"] = False
+    except Exception:
+        out["corpus_predictions_available"] = False
+
+    return out
+
+
+@app.get("/api/triage-model-corpus")
+@limiter.limit("60/minute")
+def api_triage_model_corpus(
+    request: Request,
+    facet_constraints: Optional[str] = Query(
+        None,
+        description='JSON object: { field_key: [allowed values, ...], ... }; any tag may match.',
+    ),
+):
+    """
+    Model-predicted tiers from the saved bundle over the live database (and optional
+    facet filter). Does not read triage_corpus_predictions.json.
+    """
+    constraints = _parse_facet_constraints_param(facet_constraints)
+    return _triage_saved_bundle_corpus_live(constraints)
+
+
+class LiveTriageRequest(BaseModel):
+    raw: str = Field("", description="Pasted batch text (Case 1 : … Case 2 : …)")
+
+
+@app.post("/api/triage-live")
+def api_triage_live(body: LiveTriageRequest):
+    """
+    Process pasted narratives through the normal extraction pipeline (in memory only),
+    classify tiers with the saved triage bundle. Does not persist case text or features.
+    """
+    if not (body.raw or "").strip():
+        raise HTTPException(status_code=400, detail="raw text is required")
+
+    try:
+        from triage import run_live_triage
+    except ImportError as e:
+        raise HTTPException(status_code=503, detail=f"Live triage unavailable: {e}") from e
+
+    try:
+        out = run_live_triage(body.raw)
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=503, detail=str(e)) from e
+    except Exception as e:
+        logger.exception("live triage failed")
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+    if not out.get("ok"):
+        raise HTTPException(status_code=400, detail=out.get("message", "empty_input"))
+
+    return {
+        "class_names": out["class_names"],
+        "case_ids_by_tier": out["case_ids_by_tier"],
+        "predictions": out["predictions"],
+        "n_cases": out["n_cases"],
+        "bundle_path": out.get("bundle_path"),
+        "use_agencies": out.get("use_agencies"),
+    }
+
 
 @app.get("/sources", response_class=HTMLResponse)
 async def serve_sources():

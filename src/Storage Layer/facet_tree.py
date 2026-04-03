@@ -12,8 +12,14 @@ Fields may be JSON arrays on the case row or merged keys from ``extracted_featur
 (``get_all_cases`` merges those onto each case dict). More levels → wider tree and more
 nodes (combinatorial growth).
 
-Each case is assigned exactly one branch per level via ``primary_bucket`` (first value
-after sorting, or ``∅`` if empty).
+The **tree shape** partitions the corpus at each level by ``primary_bucket`` (one
+branch per case per depth — deterministic, tractable size).
+
+**Counts and cohort membership** use **any-tag** semantics: ``case_count`` on each node
+and :func:`cohort_members_for_path` count all cases that match the path with each value
+present anywhere in that field's tag list (and prune filters in
+:func:`filter_cases_by_constraints`). So e.g. ``Topic: online_only`` shows everyone with
+that topic, not only cases whose primary topic is online_only.
 
 Outputs cohort_group_id (hash of facet path), counts, and facet_signature for each
 node — aligned with search.md (groups by default, not case-level search payloads).
@@ -52,6 +58,20 @@ DEFAULT_FACET_ORDER: Sequence[FacetStep] = (
 )
 
 EMPTY_BUCKET = "∅"
+
+
+def case_has_field_value(case: Dict[str, Any], field_key: str, value: str) -> bool:
+    """
+    Whether ``case`` belongs on the branch ``(field_key, value)``.
+    Non-∅: ``value`` appears in the case's list for ``field_key`` (any position).
+    ∅: the case has no tags for that field.
+    """
+    vals = _as_str_list(case.get(field_key))
+    if not vals:
+        return value == EMPTY_BUCKET
+    if value == EMPTY_BUCKET:
+        return False
+    return value in vals
 
 
 def _scalar_to_str(val: Any) -> Optional[str]:
@@ -103,7 +123,8 @@ def filter_cases_by_constraints(
     constraints: Dict[str, List[str]],
 ) -> List[Dict[str, Any]]:
     """
-    Keep cases whose primary_bucket for each constrained field is in that field's allow-list.
+    Keep cases that satisfy every constrained field: for each field, at least one of the
+    case's tags (or ∅ when the field is empty) must appear in that field's allow-list.
     Empty allow-list for a field means no constraint on that field (ignored).
     """
     if not constraints:
@@ -115,7 +136,12 @@ def filter_cases_by_constraints(
     for c in cases:
         ok = True
         for field_key, allowed in active.items():
-            if primary_bucket(c, field_key) not in allowed:
+            vals = _as_str_list(c.get(field_key))
+            if not vals:
+                if EMPTY_BUCKET not in allowed:
+                    ok = False
+                    break
+            elif not any(v in allowed for v in vals):
                 ok = False
                 break
         if ok:
@@ -147,17 +173,35 @@ def distinct_primary_buckets(
     return sorted(seen, key=lambda x: (x == EMPTY_BUCKET, x.upper()))
 
 
+def distinct_field_values(
+    cases: List[Dict[str, Any]],
+    field_key: str,
+) -> List[str]:
+    """
+    Sorted unique values that appear on any case for this field (union of all tags),
+    including ∅ when any case has no value for the field.
+    """
+    seen: set[str] = set()
+    for c in cases:
+        vals = _as_str_list(c.get(field_key))
+        if not vals:
+            seen.add(EMPTY_BUCKET)
+        else:
+            seen.update(vals)
+    return sorted(seen, key=lambda x: (x == EMPTY_BUCKET, x.upper()))
+
+
 def cohort_members_for_path(
     cases: List[Dict[str, Any]],
     path: Sequence[Tuple[str, str]],
 ) -> List[Dict[str, Any]]:
     """
-    Cases that match every (field_key, bucket_value) on the path using primary_bucket
-    (same cohort semantics as facet tree nodes).
+    Cases that match every (field_key, bucket_value) on the path using any-tag
+    membership (same cohort semantics as facet tree nodes).
     """
     out = list(cases)
     for field_key, value in path:
-        out = [c for c in out if primary_bucket(c, field_key) == value]
+        out = [c for c in out if case_has_field_value(c, field_key, value)]
     return out
 
 
@@ -268,6 +312,24 @@ def _split_children(
     return nodes
 
 
+def _apply_any_tag_counts(node: FacetTreeNode, corpus: List[Dict[str, Any]]) -> None:
+    """
+    Replace case_count with any-tag cohort size (structure stays primary-partitioned).
+    Incremental filter down the tree — same result as cohort_members_for_path on full corpus.
+    """
+
+    def walk(n: FacetTreeNode, cohort: List[Dict[str, Any]]) -> None:
+        n.case_count = len(cohort)
+        for ch in n.children:
+            if ch.facet_key is None or ch.facet_value is None:
+                walk(ch, cohort)
+            else:
+                sub = [c for c in cohort if case_has_field_value(c, ch.facet_key, ch.facet_value)]
+                walk(ch, sub)
+
+    walk(node, corpus)
+
+
 def build_facet_tree(
     cases: List[Dict[str, Any]],
     facet_order: Optional[Sequence[FacetStep]] = None,
@@ -297,6 +359,7 @@ def build_facet_tree(
         children=_split_children(cases, 0, [], order, max_depth),
         is_leaf=False,
     )
+    _apply_any_tag_counts(root, cases)
     return root
 
 

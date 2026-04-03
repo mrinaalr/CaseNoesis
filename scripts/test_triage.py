@@ -38,6 +38,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate triage classifier with 80/20 split")
     parser.add_argument("--db", type=Path, default=ROOT / "caselinker.db", help="Path to SQLite DB")
     parser.add_argument("--model", choices=("rf", "tree"), default="rf", help="Model type")
+    parser.add_argument(
+        "--criterion",
+        choices=("gini", "entropy", "log_loss"),
+        default="entropy",
+        help="Tree split criterion. 'entropy' means information gain.",
+    )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--no-agencies", action="store_true", help="Drop agencies feature")
     args = parser.parse_args()
@@ -59,7 +65,14 @@ def main() -> None:
         X, y, test_size=0.20, random_state=args.seed, stratify=y
     )
 
-    pipe = train_pipeline(X_train, y_train, args.model, args.seed, use_agencies=use_agencies)
+    pipe = train_pipeline(
+        X_train,
+        y_train,
+        args.model,
+        args.seed,
+        use_agencies=use_agencies,
+        criterion=args.criterion,
+    )
     y_pred = pipe.predict(X_test)
 
     acc = accuracy_score(y_test, y_pred)
@@ -67,7 +80,7 @@ def main() -> None:
 
     print("=== Triage 80/20 Evaluation ===")
     print(f"cases={len(cases)} | train={len(X_train)} | test={len(X_test)}")
-    print(f"model={args.model} | use_agencies={use_agencies} | seed={args.seed}")
+    print(f"model={args.model} | criterion={args.criterion} | use_agencies={use_agencies} | seed={args.seed}")
     print(f"accuracy={acc:.4f}")
     print("\nClassification report:")
     print(classification_report(y_test, y_pred, target_names=class_names, zero_division=0))

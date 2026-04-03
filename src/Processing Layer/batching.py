@@ -104,7 +104,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - Default: Falls back to AZICAC format
+    - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
+    - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
     To add new formats, create a _batch_[org]_cases() function and add detection logic here.
     
@@ -126,6 +127,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_michigan_icac = False
     is_gbi = False
     is_texas_ag = False
+    is_other_external = False
     
     if source:
         source_upper = source.upper()
@@ -139,6 +141,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_gbi = True
         elif source_upper == 'TEXAS AG':
             is_texas_ag = True
+        elif source_upper in ('OTHER'):
+            is_other_external = True
     
     # Route to appropriate batch function
     if is_ncmec:
@@ -151,9 +155,93 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_gbi_cases(text, org_name, source_file)
     elif is_texas_ag:
         return _batch_texas_ag_cases(text, org_name, source_file)
+    elif is_other_external:
+        return _batch_external_cases(text, org_name, source_file)
     else:
-        # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
+        # Fallback before AZICAC: delimited "Case N :" wire format (e.g. external.pdf)
+        sample = text[:12000] if text else ""
+        if _EXTERNAL_CASE_HEADER_RE.search(sample):
+            return _batch_external_cases(text, "other", source_file)
         return _batch_azicac_cases(text, org_name)
+
+
+# "Case 1 : ... Case 2 : ..." delimited wire format (external/news/LinkedIn scrapes, etc.)
+_EXTERNAL_CASE_HEADER_RE = re.compile(
+    r"(?m)(?:^|\n)\s*Case\s+(\d+)\s*:",
+    re.IGNORECASE,
+)
+
+
+def _batch_external_cases(
+    text: str, org_name: str, source_file: str = None
+) -> List[Dict[str, Any]]:
+    """
+    Split text on delimiters: Case 1 : ... Case 2 : ... (case label and colon flexible).
+
+    Used for source ``Other`` / ``External``: heterogeneous narratives in one PDF where you
+    control the boundary format. If no markers match, returns a single case with the full text.
+    """
+    from datetime import datetime
+
+    year = str(datetime.now().year)
+    if not text or not text.strip():
+        return [
+            {
+                "case_text": "",
+                "month_year": None,
+                "month": None,
+                "year": year,
+                "case_id": f"{org_name}_{year}_001",
+            }
+        ]
+
+    matches = list(_EXTERNAL_CASE_HEADER_RE.finditer(text))
+    if not matches:
+        cleaned = clean_artifacts_from_text(text.strip())
+        return [
+            {
+                "case_text": cleaned,
+                "month_year": None,
+                "month": None,
+                "year": year,
+                "case_id": f"{org_name}_{year}_001",
+            }
+        ]
+
+    cases: List[Dict[str, Any]] = []
+    seq = 0
+    for i, m in enumerate(matches):
+        body_start = m.end()
+        body_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        case_text = text[body_start:body_end].strip()
+        case_text = clean_artifacts_from_text(case_text)
+        if len(case_text) < 1:
+            continue
+        seq += 1
+        case_id = f"{org_name}_{year}_{seq:03d}"
+        cases.append(
+            {
+                "case_text": case_text,
+                "month_year": None,
+                "month": None,
+                "year": year,
+                "case_id": case_id,
+            }
+        )
+
+    if not cases:
+        cleaned = clean_artifacts_from_text(text.strip())
+        return [
+            {
+                "case_text": cleaned,
+                "month_year": None,
+                "month": None,
+                "year": year,
+                "case_id": f"{org_name}_{year}_001",
+            }
+        ]
+
+    return cases
 
 
 def _batch_azicac_cases(text: str, org_name: str) -> List[Dict[str, Any]]:
@@ -340,6 +428,43 @@ def _batch_ncmec_cases(text: str, org_name: str, source_file: str = None) -> Lis
             return _batch_ncmec_media_cases(text, org_name, source_file)
 
 
+def _split_ncmec_2024_double_story_blocks(segment: str) -> List[str]:
+    """
+    Some 2024 state sections concatenate **two** unrelated stories: a local blurb (often no URL)
+    and a federal DOJ/USAO **Press Release** with a single ``justice.gov`` link. The multi-URL
+    branch only runs when ``https://`` appears more than once, so those pairs were one case.
+
+    Split at the last paragraph break before a federal-style ``Press Release`` / ``United States
+    Attorney`` block (typically after an ALL CAPS headline). Returns one or two segments.
+    """
+    if not segment or len(segment) < 500:
+        return [segment]
+    m = re.search(
+        r'(?i)\n\s*Press Release\s*\n\s*(?:United States Attorney|U\.S\. Attorney)',
+        segment[120:],
+    )
+    if not m:
+        return [segment]
+    cut_press = 120 + m.start()
+    probe = segment[:cut_press]
+    idx = probe.rfind('\n\n')
+    if idx < 80:
+        return [segment]
+    first_line = segment[idx + 2 : idx + 2 + 240].split('\n')[0].strip()
+    if len(first_line) < 10:
+        return [segment]
+    letters = [c for c in first_line if c.isalpha()]
+    if letters:
+        upper_ratio = sum(1 for c in letters if c.isupper()) / len(letters)
+        if upper_ratio < 0.55 and len(first_line) < 35:
+            return [segment]
+    first = segment[:idx].strip()
+    second = segment[idx:].strip()
+    if len(first) < 120 or len(second) < 120:
+        return [segment]
+    return [first, second]
+
+
 def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
     """
     Split NCMEC 2024 by ALL-CAPS US state lines (primary structure — different from 2022/2023 media PDFs).
@@ -347,7 +472,8 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
     Some sections bundle **multiple** press stories under one state (notably a long WYOMING tail and
     multi-article blocks). When a state segment contains more than one ``https://`` link, we run the
     same URL-boundary splitter used for media years **on that segment only**, then flatten and renumber.
-    Single-URL segments stay one case each.
+    When only one URL is present but a second federal **Press Release** block is pasted after a local
+    story, :func:`_split_ncmec_2024_double_story_blocks` splits first.
 
     Args:
         text: Full text from NCMEC PDF
@@ -435,40 +561,47 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
             end_pos = len(text)
 
         raw_block = text[start_pos:end_pos].strip()
-        url_n = raw_block.count('https://')
+        pieces = _split_ncmec_2024_double_story_blocks(raw_block)
 
-        if url_n > 1:
-            subs = _batch_ncmec_media_cases(raw_block, org_name, source_file)
-            sub_cases: List[Dict[str, Any]] = []
-            for sub in subs:
-                ct = sub.get('case_text', '')
-                ct = clean_artifacts_from_text(ct, remove_urls=False)
-                if not ct or len(ct) < 40:
+        for piece in pieces:
+            url_n = piece.count('https://')
+
+            if url_n > 1:
+                subs = _batch_ncmec_media_cases(piece, org_name, source_file)
+                sub_cases: List[Dict[str, Any]] = []
+                for sub in subs:
+                    ct = sub.get('case_text', '')
+                    ct = clean_artifacts_from_text(ct, remove_urls=False)
+                    if not ct or len(ct) < 40:
+                        continue
+                    # Local + federal DOJ blocks can share one URL in a segment (see WYOMING tail).
+                    for frag in _split_ncmec_2024_double_story_blocks(ct):
+                        if not frag or len(frag) < 40:
+                            continue
+                        my, mo, yr = _metadata_from_text(frag)
+                        sub_cases.append({
+                            'case_text': frag,
+                            'month_year': sub.get('month_year') or my,
+                            'month': sub.get('month') or mo,
+                            'year': sub.get('year') or yr,
+                            'case_id': '',
+                            'state': state,
+                        })
+                if sub_cases:
+                    cases.extend(sub_cases)
                     continue
-                my, mo, yr = _metadata_from_text(ct)
-                sub_cases.append({
-                    'case_text': ct,
-                    'month_year': sub.get('month_year') or my,
-                    'month': sub.get('month') or mo,
-                    'year': sub.get('year') or yr,
-                    'case_id': '',
-                    'state': state,
-                })
-            if len(sub_cases) > 1:
-                cases.extend(sub_cases)
-                continue
 
-        case_text = clean_artifacts_from_text(raw_block)
-        month_year, month, case_date_year = _metadata_from_text(case_text)
-        id_year = report_year if report_year else case_date_year
-        cases.append({
-            'case_text': case_text,
-            'month_year': month_year,
-            'month': month,
-            'year': case_date_year,
-            'case_id': f'{org_name}_{id_year}_000',
-            'state': state,
-        })
+            case_text = clean_artifacts_from_text(piece)
+            month_year, month, case_date_year = _metadata_from_text(case_text)
+            id_year = report_year if report_year else case_date_year
+            cases.append({
+                'case_text': case_text,
+                'month_year': month_year,
+                'month': month,
+                'year': case_date_year,
+                'case_id': f'{org_name}_{id_year}_000',
+                'state': state,
+            })
 
     id_yr = report_year
     if not id_yr and cases:

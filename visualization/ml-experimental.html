@@ -197,6 +197,7 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -208,12 +209,16 @@
             <span class="status">Experimental</span>
             <h1>Machine Learning Research</h1>
             <p>
-                Current research focuses on applying ML/NLP enhancements to improve case analysis capabilities. 
-                Specfically evaluating semantic similarity, named entity recognition, and content sanitization 
-                to complement existing pattern-based extraction, clustering, and visualizations. Additionally, 
-                ML models will be run on cases within each extraction feature to identify similarities, differences, 
-                and distinguishing patterns between cases in each stat category (e.g. FBI cases vs Local Law Enforcement investigations, Stranger cases vs Family or Teacher cases, possible offender patterns across ages)
-            
+                This area covers everything that goes beyond deterministic extraction and rule-based analysis:
+                NER during ingestion, optional heavy NLP libraries, ML Classification, and the supervised triage experiments.
+                Specifically in development are <strong>semantic similarity</strong>, <strong>named entity recognition</strong>,
+                and <strong>content sanitization</strong> to complement existing pattern-based extraction, clustering, and visualizations.
+                Additionally, <strong>in the works</strong>: ML models run on cases within each extraction feature to surface
+                similarities, differences, and distinguishing patterns across stat-style cohorts — for example FBI cases vs local
+                law enforcement investigations, stranger cases vs family or teacher cases, and possible offender patterns across ages.
+                The main workflow for triage is the <strong>Triage</strong> tab (<code>/triage</code>): rule-based
+                tiers and evaluation, <strong>Random Forest model</strong> over the <strong>live database</strong>, and paste-in
+                “live triage” that never writes to storage. This page explains scope, status, and how those pieces fit together.
             </p>
         </div>
 
@@ -221,10 +226,10 @@
             <div class="section-title">Research Objectives</div>
             <div class="section-content">
                 <p>
-                    The core system demonstrates pattern-based extraction works well for structured case data. 
-                    This phase explores where ML can add value: understanding semantic relationships, 
-                    extracting entities regex might miss, generating case summaries that preserve 
-                    insights while reducing exposure to harmful content, and analyzing case groups to identify distinguishing features, similarities, and differences between groups.
+                    Pattern extraction and explicit tags remain the source of truth for case schema and filtering.
+                    ML here either <strong>augments</strong> extraction (NER) or <strong>learns from</strong> the existing
+                    rule-based priority scores (supervised triage tiers) so we can compare model behavior to transparent rules—not replace them silently.
+                    Semantic search, richer clustering, and comparative group studies are being explored where data supports it.
                 </p>
             </div>
         </div>
@@ -233,35 +238,53 @@
             <div class="section-title">Active Development Areas</div>
             <ul class="feature-list">
                 <li>
-                    <div class="feature-title">Semantic Similarity</div>
+                    <div class="feature-title">Random Forest Triage (shipped)</div>
                     <div class="feature-desc">
-                        Case comparison using transformer embeddings rather than keyword matching. 
-                        Enables finding similar cases when terminology differs, improving clustering 
-                        and relationship detection.
+                        <p style="margin: 0;">
+                            A <strong>random forest</strong> (and optionally a simpler <strong>decision tree</strong>) is trained on the
+                            structured features the system already derives from each case. Training targets are
+                            <strong>priority tiers from an explicit, rule-based rubric</strong>—so model output stays anchored to
+                            policy investigators can review, not an opaque score. The <strong>Triage</strong> workspace presents
+                            <strong>evaluation metrics and accuracy</strong>, a clear view of <strong>where the model disagrees with the rubric</strong>,
+                            and <strong>case lists by tier</strong>
+                            against the <strong>current case database</strong>; the same model can be run across the full corpus on
+                            demand and narrowed with standard filters, always reflecting live data rather than a frozen export.
+                            <strong>Live triage</strong> lets analysts paste narrative text and see suggested tiers
+                            <strong>in the session only</strong>—nothing is stored. The model file can be retrained and checked
+                            against benchmarks as the dataset grows. Overall this is an <strong>interpretable assist</strong> with
+                            <strong>measurable performance</strong> alongside transparent rules: built for scale, accountability, and
+                            analyst support—not black-box automation.
+                        </p>
                     </div>
                 </li>
                 <li>
-                    <div class="feature-title">Named Entity Recognition</div>
+                    <div class="feature-title">Named Entity Recognition (deployed)</div>
                     <div class="feature-desc">
-                        Contextual extraction of organizations, locations, and dates that complement 
-                        regex patterns. Evaluates whether NER catches edge cases regex misses.
+                        Pipeline default is <strong>Stanza</strong> NER (with fallbacks when libraries or models are missing).
+                        Pulls organizations, dates, locations, and related agencies where regex is thin; merged with pattern
+                        output under the same case schema. 
                     </div>
                 </li>
                 <li>
-                    <div class="feature-title">Content Sanitization</div>
+                    <div class="feature-title">Semantic similarity &amp; transformers (optional install)</div>
                     <div class="feature-desc">
-                        Generating analytical summaries that preserve case facts and patterns while 
-                        removing explicit details. Supports safer case review and training without 
-                        losing analytical value.
+                        Sentence embeddings and related tooling live behind <code>requirements-ml.txt</code>. Not required
+                        for the triage bundle. Intended for future similarity search and embedding-backed clustering without
+                        disrupting the deterministic baseline.
                     </div>
                 </li>
                 <li>
-                    <div class="feature-title">Comparative Case Group Analysis</div>
+                    <div class="feature-title">Content sanitization</div>
                     <div class="feature-desc">
-                        ML models run on cases within each stat category to identify distinguishing features, 
-                        similarities, and differences between groups. For example, comparing agency efficiency, offender age correlations, and offender-behavioral patterns between strangers vs family or teacher cases. 
-                        Uses classification, feature importance analysis, and statistical comparison 
-                        to reveal patterns within cases.
+                        Summarization / redaction-style helpers remain experimental in the ML processing layer—useful for
+                        safer review workflows once evaluated; not a default view in production.
+                    </div>
+                </li>
+                <li>
+                    <div class="feature-title">Comparative case group analysis</div>
+                    <div class="feature-desc">
+                        Still a research direction: statistical and model-based contrasts between cohorts (e.g. agency mix,
+                        relationship classes) on top of facet and tag APIs—not a separate shipped feature yet.
                     </div>
                 </li>
             </ul>
@@ -271,9 +294,10 @@
             <div class="section-title">Technical Stack</div>
             <div class="section-content">
                 <ul class="tech-list">
-                    <li><code>sentence-transformers</code> — Semantic embeddings (all-MiniLM-L6-v2)</li>
-                    <li><code>spaCy</code> — Named entity recognition (en_core_web_sm)</li>
-                    <li><code>transformers</code> — Summarization models (BART/T5)</li>
+                    <li><code>scikit-learn</code> / <code>joblib</code> — Triage training, metrics, saved bundle (core <code>requirements.txt</code>)</li>
+                    <li><code>stanza</code> — Primary NER path in ingestion when installed and models are present</li>
+                    <li><code>sentence-transformers</code> — Optional embeddings (<code>requirements-ml.txt</code>)</li>
+                    <li><code>spaCy</code> / <code>transformers</code> — Optional NER or summarization paths where enabled</li>
                 </ul>
             </div>
         </div>
@@ -287,19 +311,17 @@
                     if ML models are unavailable or undesired.
                 </p>
                 <p>
-                    Processing flow: Case Text → Pattern extraction → ML enhancement (optional) → Storage. 
-                    Components are modular and can be evaluated independently.
+                    Ingestion flow: Case text → pattern extraction → NER merge → storage. Triage
+                    <strong>inference</strong> does not affect stored cases.
                 </p>
                 <p>
-                    <strong>Analysis Execution:</strong> All ML analysis (comparative case group analysis, 
-                    semantic similarity, clustering) is pre-computed offline, not performed on live CaseLinker 
-                    instances. Results are stored and served via API endpoints, ensuring performance and 
-                    consistency without impacting real-time case processing.
+                    <strong>What runs where:</strong> Cluster summaries for the Clusters view are precomputed and cached
+                    in the database for large corpora. Triage model classifies cases on demand from running the
+                    saved model over the current database (no static snapshot). 
                 </p>
                 <p>
-                    <strong>Deployment:</strong> ML dependencies are available in <code>requirements-ml.txt</code> 
-                    for local development. Production builds use <code>requirements.txt</code> (ML deps commented) 
-                    for faster deployment; all ML code remains in the repository.
+                    <strong>Deployment:</strong> Default <code>requirements.txt</code> includes sklearn/joblib for triage.
+                    Install <code>requirements-ml.txt</code> when you need embeddings, spaCy, or full transformers stacks locally.
                 </p>
             </div>
         </div>
@@ -307,20 +329,19 @@
         <div class="section">
             <div class="section-title">Current Status</div>
             <div class="status-box">
-                <div class="status-box-title">Initial Development</div>
+                <div class="status-box-title">Triage experiments</div>
                 <ul class="status-box-list">
-                    <li>ML Processing Layer components implemented</li>
-                    <li>Evaluating performance on case data</li>
-                    <li>Integration pending evaluation results</li>
-                    <li>Comparative case group analysis models in development</li>
+                    <li>UI on <code>/triage</code>: rule tiers, train/test-style metrics via API, demo Random Forest model over live data, paste-in live triage</li>
+                    <li>Bundle path configurable; train with <code>python3 scripts/train_triage_model.py --out models/triage_bundle.joblib</code></li>
+                    <li>Labeled as experimental: models mirror rule bins—always compare to transparent rule scores</li>
                 </ul>
             </div>
             <div class="status-box" style="margin-top: 20px;">
-                <div class="status-box-title">NER Development</div>
+                <div class="status-box-title">NER</div>
                 <ul class="status-box-list">
-                    <li><strong>Status:</strong> Active and integrated. NER extraction operational for law enforcement agency identification</li>
-                    <li><strong>Usage:</strong> Extracts organizations, ages, dates, and locations from case text using Stanza/Transformers NER models</li>
-                    <li><strong>Integration:</strong> Merges with regex-based pattern extraction via MergeProcessing class.  NER supplements missing data, pattern processing takes precedence when both sources have data</li>
+                    <li><strong>Status:</strong> Integrated on the ingestion path (Stanza-first; graceful without models)</li>
+                    <li><strong>Usage:</strong> Organizations, dates, locations, ages where the model fires—merged with regex features</li>
+                    <li><strong>Merge policy:</strong> Pattern extraction wins on conflicts; NER fills gaps (<code>MergeProcessing</code>)</li>
                 </ul>
             </div>
         </div>

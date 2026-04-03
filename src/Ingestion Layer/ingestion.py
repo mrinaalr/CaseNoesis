@@ -13,6 +13,8 @@ Design Ideas from Architecture:
 
 import pandas as pd
 from pathlib import Path
+
+_EXTERNAL_PDF_NAME = "external.pdf"
 from typing import Dict, List, Any, Optional
 import warnings
 import logging
@@ -37,11 +39,16 @@ def detect_source_from_content(text: str, filename: str) -> str:
         filename: Name of the file
         
     Returns:
-        Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'FBI', or 'unknown')
+        Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'FBI',
+        'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
     
+    # Default mixed-scrape PDF: canonical name → source Other (Case 1 : … batching)
+    if Path(filename).name.lower() == _EXTERNAL_PDF_NAME:
+        return "Other"
+
     # Check filename first
     if 'ncmec' in filename_lower or 'cybertipline' in filename_lower or 'cyber-tipline' in filename_lower:
         return 'NCMEC'
@@ -57,9 +64,14 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'Michigan ICAC'
     elif 'fbi' in filename_lower:
         return 'FBI'
-    
+
+
+    # Delimited "Case 1 : ... Case 2 : ..." scrapes (news, LinkedIn PDFs, etc.)
+    if re.search(r'(?m)(?:^|\n)\s*Case\s+1\s*:', text_sample, re.IGNORECASE):
+        return 'Other'
+
     # Default fallback
-    return 'AZICAC'  # Default to AZICAC for backward compatibility
+    return 'Other'  # Default to Other
 
 
 def extract_pdf_text(pdf_path: str) -> str:

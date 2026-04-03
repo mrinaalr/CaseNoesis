@@ -50,6 +50,7 @@ case_data/
 # Environment variables
 .env
 .env.local
+.env.*.local
 
 # Logs
 *.log
@@ -58,8 +59,41 @@ case_data/
 caselinker_graph.db
 demo_*.db
 
-# Trained triage bundles (local experiments)
-models/*.joblib
+# ---------------------------------------------------------------------------
+# ML bundles, predictions, exports — ignore models/ except the triage bundle if you
+# choose to commit it (optional). Corpus JSON / eval dumps stay local — not in git.
+# ---------------------------------------------------------------------------
+models/*
+!models/triage_bundle.joblib
+
+# JSON data dumps (corpus predictions, extract_evaluation.json, semantic exports, etc.)
+# Whitelist only standard JS/TS config files.
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!jsconfig.json
+
+# Serialized models / checkpoints (also covered by models/; these catch stray files)
+*.joblib
+!models/triage_bundle.joblib
+*.jbl
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.h5
+*.keras
+*.npy
+*.npz
+
+# Keys / secrets
+*.pem
+*.key
+credentials/
+secrets/
 
 # Temporary files
 *.tmp

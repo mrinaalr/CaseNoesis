@@ -317,6 +317,7 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -447,25 +448,23 @@
                 </div>
                 <div class="detail-panel" id="storage-detail">
                     <div class="detail-content">
-                        <strong>Case Schema & Database Storage</strong>
+                        <strong>Case schema & persistence</strong>
                         <div class="visual-preview">
                             <div class="code-snippet">
-<span class="comment"># Store case with schema</span><br>
-<span class="keyword">storage</span> = CaseStorage(<span class="string">"caselinker.db"</span>)<br>
+<span class="comment"># Production: DATABASE_URL → PostgreSQL (Railway).</span><br>
+<span class="comment"># Local/dev: SQLite file (caselinker.db - local).</span><br>
+<span class="keyword">storage</span> = CaseStorage()  <span class="comment"># or CaseStorage("caselinker.db")</span><br>
 <span class="keyword">storage</span>.store_case(<span class="keyword">case</span>)<br><br>
-<span class="comment"># Normalized tables:</span><br>
-<span class="comment"># - cases (main table)</span><br>
-<span class="comment"># - victim_demographics</span><br>
-<span class="comment"># - perpetrator_demographics</span><br>
-<span class="comment"># - prosecution_outcomes</span><br>
-<span class="comment"># - Raw data preserved in JSON</span>
+<span class="comment"># cases: JSON columns (topics, severity, platforms, …),</span><br>
+<span class="comment"># raw_data (ingestion + case_text), extracted_features (slim schema)</span><br>
+<span class="comment"># Postgres extras: precomputed_clusters, cluster_groups_slim (fast /api/cluster-groups)</span>
                             </div>
                         </div>
                         <ul class="detail-list">
-                            <li>SQLite database with normalized schema</li>
-                            <li>Raw data preservation in JSON format</li>
-                            <li>Indexed fields for fast queries</li>
-                            <li>Modular interface for database swapping</li>
+                            <li>Deployed on Railway with PostgreSQL; SQLite for local development</li>
+                            <li>Normalized columns plus raw_data / extracted_features JSON</li>
+                            <li>Optional slim cluster caches on Postgres for large corpora</li>
+                            <li>Shared CaseStorage interface; hydrate/slim via case_storage_utils</li>
                         </ul>
                     </div>
                 </div>
@@ -484,35 +483,25 @@
                 </div>
                 <div class="detail-panel" id="analysis-detail">
                     <div class="detail-content">
-                        <strong>Tag-Based Filtering & Triage</strong>
+                        <strong>Filtering, facets, clustering, triage</strong>
                         <div class="visual-preview">
                             <div class="code-snippet">
-<span class="comment"># Tag-based filtering (intersection logic)</span><br>
-<span class="comment"># Select case features to analzye across categories:</span><br>
-<span class="comment"># - Case Topics</span><br>
-<span class="comment"># - Severity Indicators</span><br>
-<span class="comment"># - Platforms & Environments</span><br>
-<span class="comment"># - Investigation Types</span><br>
-<span class="comment"># - Perpetrator Relationships</span><br>
-<span class="comment"># - Custom topics</span><br>
+<span class="comment"># Tag intersection (topics, severity, platforms, investigation, relationship, custom)</span><br>
 <span class="keyword">cases</span> = return_tagged_cases(<span class="keyword">all_cases</span>, [<br>
 &nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'production'</span>, <span class="string">'category'</span>: <span class="string">'case_topics'</span>},<br>
 &nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'infant'</span>, <span class="string">'category'</span>: <span class="string">'severity_indicators'</span>},<br>
-&nbsp;&nbsp;{<span class="string">'tag'</span>: <span class="string">'facebook'</span>, <span class="string">'category'</span>: <span class="string">'platforms_used'</span>},<br>
-])<br>
-<span class="comment"># Returns: Cases matching ALL selected tags</span><br><br>
-<span class="comment"># Priority triage scoring</span><br>
-<span class="keyword">triaged</span> = triage_cases(<span class="keyword">cases</span>)<br>
-<span class="comment"># Multi-factor scoring (5-10 scale):</span><br>
-<span class="comment"># - Severity (35%), Victim count (30%)</span><br>
-<span class="comment"># - Case type (25%), Evidence (10%), RSO (10%)</span>
+])<br><br>
+<span class="comment"># HTTP: /api/facet-tree, /api/facet-distinct, /api/facet-cohort-members</span><br>
+<span class="comment"># (navigable tag combinations + cohort case IDs from live DB)</span><br><br>
+<span class="comment"># Five cluster families + Jaccard “general”; /api/cluster-groups, /api/automated-analysis</span><br>
+<span class="keyword">triaged</span> = triage_cases(<span class="keyword">cases</span>)  <span class="comment"># rule-based 5–10 score</span><br>
+<span class="comment"># Experimental ML: saved sklearn bundle; /api/triage-model-corpus (live DB), /api/triage-live</span>
                             </div>
                         </div>
                         <ul class="detail-list">
-                            <li>Tag-based filtering with intersection logic</li>
-                            <li>Select cases by common features/tags</li>
-                            <li>Multi-factor priority triage (5-10 scale)</li>
-                            <li>Automated pattern detection and insights</li>
+                            <li>Filter cases sharing the same tags (intersection logic)</li>
+                            <li>Facet tree APIs for exploration with processed features</li>
+                            <li>Clustering and automated insights in analysis.py; optional ML triage alongside rules</li>
                         </ul>
                     </div>
                 </div>
@@ -531,28 +520,18 @@
                 </div>
                 <div class="detail-panel" id="visualization-detail">
                     <div class="detail-content">
-                        <strong>Interactive Visualizations & Analyst Interface</strong>
+                        <strong>Analyst UI: static pages + JSON APIs</strong>
                         <div class="visual-preview">
                             <div class="code-snippet">
-<span class="comment"># D3.js visualizations</span><br>
-renderTimeline(<span class="keyword">cases</span>)<br>
-renderSeverityViz(<span class="keyword">cases</span>)<br>
-renderOutcomesViz(<span class="keyword">cases</span>)<br>
-renderAutomatedAnalysis(<span class="keyword">results</span>)<br><br>
-<span class="comment"># Interactive features:</span><br>
-<span class="comment"># - Click to view case details</span><br>
-<span class="comment"># - Text highlighting for verification</span><br>
-<span class="comment"># - Temporal filtering</span><br>
-<span class="comment"># - Case grouping visualization</span>
+<span class="comment"># FastAPI serves visualization/ *.html; browser fetches /api/* JSON.</span><br>  <br><br>
+<span class="comment"># Examples: /api/cases (full row on demand), /api/case-count, /api/stats, /api/cluster-groups, /api/facet-tree, /api/triage-eval, /api/triage-live</span><br><br>
+<span class="comment"># D3 (and small helpers) in-page: clusters, stats, search, audit trail, live triage, analysis facet explorer</span>
                             </div>
                         </div>
                         <ul class="detail-list">
-                            <li>Timeline visualization (chronological view)</li>
-                            <li>Severity indicators (color-coded analysis)</li>
-                            <li>Prosecution outcomes (categorized display)</li>
-                            <li>Perpetrator demographics (pie charts)</li>
-                            <li>Platform/environment distribution</li>
-                            <li>Organizations involved (agency analysis)</li>
+                            <li>Slim list endpoints where possible; click-through loads full case text from API</li>
+                            <li>Same nav across pages; server-side caching where it helps (e.g. cases list, clusters)</li>
+                            <li>Modular: new views can sit on the same APIs and storage</li>
                         </ul>
                     </div>
                 </div>

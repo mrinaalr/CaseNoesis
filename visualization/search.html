@@ -621,6 +621,7 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -675,7 +676,8 @@
                 <p class="facet-prune-help">
                     Turn off <strong>Split on</strong> to drop that dimension from the tree (fewer branches).
                     For <strong>Allow values</strong>, choose from the dropdown; each pick appears on the right and disappears from the list until you remove it with ×.
-                    The tree will be updated to match <em>every</em> case that has a filter value selected.
+                    A case matches when <strong>any</strong> of its tags on that field are among your picks (OR within a row); between rows, AND.
+                    The tree <em>shape</em> follows one primary tag per case per depth (fast layout). Numbers on each box and the cohort ID list count every case that <em>includes</em> that tag on the path (any position), so sibling topic counts can add up to more than the parent.
                 </p>
                 <div class="facet-prune-rows" id="facet-prune-rows"></div>
                 <div class="facet-prune-actions">
@@ -745,7 +747,7 @@
     var facetZoomState = { svg: null, zoom: null, initial: null };
     var cohortModalMetaBase = '';
     var cohortModalNodeData = null;
-    /** facet field key → list of primary-bucket strings (from /api/facet-distinct) */
+    /** facet field key → list of tag strings (from /api/facet-distinct; union of all tags per field) */
     var sentenceFacetLists = {};
 
     var FACET_SCHEMA = [

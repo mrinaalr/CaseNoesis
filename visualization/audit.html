@@ -521,6 +521,7 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -825,6 +826,15 @@
                 caselinkerWriteStoredCaseCount(allCases.length || n);
                 renderCasesList();
                 initAuditToolbar();
+                try {
+                    const q = new URLSearchParams(window.location.search || '');
+                    const cid = (q.get('case') || '').trim();
+                    if (cid && Array.isArray(allCaseIdsAudit) && allCaseIdsAudit.includes(cid)) {
+                        const input = document.getElementById('audit-case-id-input');
+                        if (input) input.value = cid;
+                        selectCase(cid);
+                    }
+                } catch (e) { /* ignore */ }
             } catch (error) {
                 console.error('Error loading cases:', error);
                 if (casesCountElement) casesCountElement.textContent = 'Cases';

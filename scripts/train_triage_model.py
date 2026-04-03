@@ -336,12 +336,20 @@ def train_pipeline(
     model_kind: str,
     random_state: int,
     use_agencies: bool,
+    criterion: str,
 ) -> Pipeline:
     pre = TriageFeatures(use_agencies=use_agencies)
     if model_kind == "tree":
-        clf = DecisionTreeClassifier(max_depth=6, min_samples_leaf=4, random_state=random_state, class_weight="balanced")
+        clf = DecisionTreeClassifier(
+            criterion=criterion,
+            max_depth=6,
+            min_samples_leaf=4,
+            random_state=random_state,
+            class_weight="balanced",
+        )
     else:
         clf = RandomForestClassifier(
+            criterion=criterion,
             n_estimators=200,
             max_depth=12,
             min_samples_leaf=2,
@@ -388,6 +396,25 @@ What does it mean to "classify a new case"?
     print(text.strip())
 
 
+def normalize_triage_bundle_after_load(bundle: TriageModelBundle) -> None:
+    """
+    Bundles trained with newer scikit-learn can unpickle under an older sklearn with
+    SimpleImputer.statistics_ as object dtype; SimpleImputer.transform then raises.
+    Coerce numeric statistics to float64 so inference works across versions.
+    """
+    prep = bundle.pipeline.named_steps.get("prep")
+    if prep is None:
+        return
+    imp = getattr(prep, "imputer_", None)
+    if imp is None:
+        return
+    stats = getattr(imp, "statistics_", None)
+    if stats is None:
+        return
+    if hasattr(stats, "dtype") and stats.dtype == np.dtype("O"):
+        imp.statistics_ = np.asarray(stats, dtype=np.float64)
+
+
 @dataclass
 class TriageModelBundle:
     pipeline: Pipeline
@@ -397,6 +424,7 @@ class TriageModelBundle:
     score_stats: Dict[str, float] = field(default_factory=dict)
     model_kind: str = "rf"
     use_agencies: bool = True
+    criterion: str = "entropy"
 
 
 def main() -> None:
@@ -404,6 +432,13 @@ def main() -> None:
     parser.add_argument("--db", type=Path, default=None, help="SQLite path (default: repo caselinker.db)")
     parser.add_argument("--out", type=Path, default=REPO_ROOT / "models" / "triage_bundle.joblib")
     parser.add_argument("--model", type=str, choices=("rf", "tree"), default="rf", help="Classifier type")
+    parser.add_argument(
+        "--criterion",
+        type=str,
+        choices=("gini", "entropy", "log_loss"),
+        default="entropy",
+        help="Tree split criterion. 'entropy' uses information gain.",
+    )
     parser.add_argument("--test-size", type=float, default=0.25)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--no-agencies", action="store_true", help="Ablation: drop agencies_involved multi-hot")
@@ -432,6 +467,7 @@ def main() -> None:
             print(f"Bundle not found: {bundle_path}", file=sys.stderr)
             raise SystemExit(1)
         bundle: TriageModelBundle = joblib.load(bundle_path)
+        normalize_triage_bundle_after_load(bundle)
         storage = CaseStorage(str(db))
         case = storage.get_case(args.predict)
         if not case:
@@ -473,13 +509,14 @@ def main() -> None:
     X_test = X.iloc[idx_test]
     test_ids = ids[idx_test]
 
-    pipe = train_pipeline(X_train, y_train, args.model, args.seed, use_agencies)
+    pipe = train_pipeline(X_train, y_train, args.model, args.seed, use_agencies, args.criterion)
     y_pred = pipe.predict(X_test)
     proba = pipe.predict_proba(X_test)
     acc = accuracy_score(y_test, y_pred)
 
     print("=== Hold-out classification report ===")
     print(f"use_agencies={use_agencies}")
+    print(f"criterion={args.criterion}")
     print(f"test accuracy: {acc:.4f}")
     print(classification_report(y_test, y_pred, target_names=class_names, zero_division=0))
 
@@ -509,6 +546,7 @@ def main() -> None:
         score_stats={"min": float(scores.min()), "max": float(scores.max()), "mean": float(scores.mean())},
         model_kind=args.model,
         use_agencies=use_agencies,
+        criterion=args.criterion,
     )
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -520,6 +558,7 @@ def main() -> None:
         "priority_bin_edges": bundle.priority_bin_edges,
         "score_stats": bundle.score_stats,
         "model_kind": args.model,
+        "criterion": args.criterion,
         "use_agencies": use_agencies,
         "test_accuracy": acc,
         "n_cases": len(cases),

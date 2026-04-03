@@ -76,7 +76,9 @@ Then open your browser to:
 - **Clusters**: http://localhost:8000/clusters
 - **Stats**: http://localhost:8000/stats
 - **Search**: http://localhost:8000/search
+- **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
+- **Triage**: http://localhost:8000/triage
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
@@ -155,7 +157,6 @@ The system will:
 4. Store all cases in the local SQLite database
 5. Pre-compute clusters for fast visualization
 
-
 ## Using the Visualizations
 
 Access the visualizations via the [live demo](https://web-production-13a2.up.railway.app/visualization) or by running the server locally (`python3 run/main.py`) and navigating to http://localhost:8000/visualization.
@@ -172,6 +173,20 @@ Access the visualizations via the [live demo](https://web-production-13a2.up.rai
 Access Search via the [live demo](https://web-production-13a2.up.railway.app/search) or locally at http://localhost:8000/search
 
 Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) gate ID listing behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
+
+## Triage and Experimental ML
+
+Access Triage via the [live demo](https://web-production-13a2.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same 9 dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
+
+**Experimental ML** ([live](https://web-production-13a2.up.railway.app/ml-experimental), or http://localhost:8000/ml-experimental) is the in-app **documentation tab** for ML scope: what is production-adjacent (NER merge, triage model), what stays optional, and documents how ML functionality is evaluated and implemented. 
+
+**Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
+
+```bash
+python3 scripts/train_triage_model.py --model rf --out models/triage_bundle.joblib
+```
+
+Evaluate or reproduce metrics with `scripts/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
 
 ## Using Advanced Case Analysis
 
@@ -206,7 +221,6 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
 - **Stats Tab**: Shows coverage over dataset, analyze case distributions
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
-
 ## Project Structure
 
 ```
@@ -220,11 +234,17 @@ CaseLinker/
 │   └── main.py                  # CLI tool: Process PDFs and populate database
 ├── run/
 │   └── main.py                  # Main application: Serves visualizations and API
+├── scripts/
+│   ├── train_triage_model.py    # Train supervised triage bundle
+│   └── test_triage.py           # Offline stratified eval (same pipeline as /api/triage-eval)
 ├── visualization/
 │   ├── home.html                # Home page
 │   ├── index.html               # Interactive visualizations (Timeline, Severity, Outcomes, Perpetrator, Environment, Organizations)
 │   ├── search.html              # Facet tree search: cohort exploration, prune filters, cohort case IDs (D3)
 │   ├── analysis.html            # Advanced case analysis page (tag-based filtering and automated analysis)
+│   ├── triage.html              # Rule-based triage, model eval UI, live paste triage
+│   ├── ml-experimental.html     # In-app documentation for experimental ML / triage scope
+│   ├── under-the-hood.html      # Layered architecture overview
 │   ├── sources.html             # Data sources page
 │   └── audit.html               # Data audit page (case-by-case feature review)
 ├── setup.sh                     # Automated setup script
@@ -267,6 +287,11 @@ Each case includes structured features extracted from case narratives:
 - `GET /api/facet-tree` - Build facet tree JSON (`max_depth`, optional prune query params)
 - `GET /api/facet-distinct` - Distinct primary-bucket values per facet (for Search prune UI)
 - `POST /api/facet-cohort-members` - Case IDs for a facet path (same prune semantics as tree; small cohorts gated)
+- `GET /triage` - Triage page (rules, model evaluation, corpus model tiers, live paste)
+- `GET /ml-experimental` - Experimental ML documentation page
+- `GET /api/triage-eval` - Stratified train/test metrics on live cases (same pipeline as `scripts/test_triage.py`)
+- `GET /api/triage-model-corpus` - Saved bundle predictions over live DB; optional `facet_constraints` JSON query param (rate limited)
+- `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence
 - `GET /sources` - Data sources page
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
 - `GET /api/cases` - Get all cases
@@ -285,10 +310,11 @@ Each case includes structured features extracted from case narratives:
   - Production: Railway PostgreSQL with encrypted connections
   - Local: SQLite database auto-created on first run
 - **Visualization**: D3.js, HTML/CSS/JavaScript
-- **ML/NER**: Stanza (Stanford NLP), Transformers models for Named Entity Recognition
+- **ML/NER**: Stanza primar NER processing model; optional Transformers/spaCy paths in code
   - Extracts law enforcement organizations, ages, dates, and locations from case text
   - Hybrid approach: ML/NER supplements regex-based pattern extraction via MergeProcessing layer
   - Pattern processing takes precedence when both sources have data; NER fills gaps
+- **Supervised triage (experimental)**: scikit-learn random forest or decision tree; labels from rule-based priority scores; `joblib` bundle loaded at inference time (see `/triage` and `scripts/train_triage_model.py`)
 - **Architecture**: Modular 5-layer design
 
 ## Deployment
