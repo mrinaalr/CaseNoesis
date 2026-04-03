@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state press materials. There are currently **502 cases** processed across five sources: **AZICAC** (47), **NCMEC** (244), **Georgia Bureau of Investigation** (66), **Idaho ICAC** (134), **Michigan ICAC** (11). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state press materials. There are currently **530 cases** processed across six sources: **AZICAC** (47), **NCMEC** (244), **Georgia Bureau of Investigation** (66), **Idaho ICAC** (134), **Michigan ICAC** (11), **Texas AG** (28). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Technical Reports
 
@@ -130,6 +130,7 @@ The sources page lists publicly available reports from:
 - **National Center for Missing & Exploited Children (NCMEC)**: Case summaries and CyberTipline-related publications (2022–2024)
 - **Georgia Bureau of Investigation (GBI)**: Georgia CEACC Press releases
 - **Idaho ICAC (Idaho Office of Attorney General)**: ICAC press releases, 2021–2026
+- **Texas Office of the Attorney General**: Cyber Crimes press releases, 2016–2019
 - **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases, 2025–2026
 
 ### Processing PDFs to Populate Database
@@ -296,7 +297,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: This system contains cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, and ICAC press releases from the Idaho Office of Attorney General, Georgia Bureau of Investigation, and Michigan State Police). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: This system contains cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Idaho Office of Attorney General, Georgia Bureau of Investigation, Michigan State Police, and Texas Office of the Attorney General). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

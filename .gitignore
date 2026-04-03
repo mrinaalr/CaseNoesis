@@ -58,6 +58,9 @@ case_data/
 caselinker_graph.db
 demo_*.db
 
+# Trained triage bundles (local experiments)
+models/*.joblib
+
 # Temporary files
 *.tmp
 *.temp

@@ -103,6 +103,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - NCMEC: Split by state headers (ALABAMA, ARIZONA, etc.) or URL patterns
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
+    - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
     - Default: Falls back to AZICAC format
     
     To add new formats, create a _batch_[org]_cases() function and add detection logic here.
@@ -124,6 +125,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_idaho_icac = False
     is_michigan_icac = False
     is_gbi = False
+    is_texas_ag = False
     
     if source:
         source_upper = source.upper()
@@ -135,6 +137,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_michigan_icac = True
         elif source_upper == 'GBI':
             is_gbi = True
+        elif source_upper == 'TEXAS AG':
+            is_texas_ag = True
     
     # Route to appropriate batch function
     if is_ncmec:
@@ -145,6 +149,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_michigan_icac_cases(text, org_name, source_file)
     elif is_gbi:
         return _batch_gbi_cases(text, org_name, source_file)
+    elif is_texas_ag:
+        return _batch_texas_ag_cases(text, org_name, source_file)
     else:
         # Default to AZICAC format (can be extended for FBI, CA-ICAC, etc.)
         return _batch_azicac_cases(text, org_name)
@@ -1083,4 +1089,102 @@ def _batch_idaho_icac_cases(text: str, org_name: str, source_file: str = None) -
             'case_id': case_id
         })
     
+    return cases
+
+
+_TX_DATE_LINE_RE = re.compile(
+    r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+    r"(\d{1,2}),\s+(\d{4})\s+\|.*$",
+    re.MULTILINE,
+)
+_TX_BACK_TO_TOP_RE = re.compile(r"\bBack\s+to\s+Top\b", re.IGNORECASE)
+
+
+def _batch_texas_ag_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split Texas AG CEU press-release corpus into individual cases.
+
+    Primary strategy:
+    - Case start: standalone date line, e.g. "April 20, 2018 | Cyber Crimes ..."
+    - Case end: next date line OR end of text
+    - Optional trim at first "Back to Top" marker inside each case
+
+    This supports both:
+    - A merged Texas PDF (many releases in one file)
+    - A single release PDF (one date line -> one case)
+    """
+    cases: List[Dict[str, Any]] = []
+    if not text or not text.strip():
+        from datetime import datetime
+        y = str(datetime.now().year)
+        return [{"case_text": "", "month_year": None, "month": None, "year": y, "case_id": f"{org_name}_{y}_001"}]
+
+    starts = list(_TX_DATE_LINE_RE.finditer(text))
+    if not starts:
+        # Fallback: split on Back-to-Top if date-lines fail in extraction.
+        chunks = re.split(r"\bBack\s+to\s+Top\b", text, flags=re.IGNORECASE)
+        year_case_counts: Dict[str, int] = {}
+        for chunk in chunks:
+            chunk = clean_artifacts_from_text(chunk)
+            if len(chunk) < 180:
+                continue
+            dm = re.search(
+                r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+                r"(\d{1,2}),\s+(\d{4})",
+                chunk,
+                re.IGNORECASE,
+            )
+            if dm:
+                month = dm.group(1)
+                year = dm.group(3)
+            else:
+                from datetime import datetime
+                month = None
+                year = str(datetime.now().year)
+            if year not in year_case_counts:
+                year_case_counts[year] = 0
+            year_case_counts[year] += 1
+            case_id = f"{org_name}_{year}_{year_case_counts[year]:03d}"
+            cases.append(
+                {
+                    "case_text": chunk,
+                    "month_year": f"{month} {year}" if month else year,
+                    "month": month,
+                    "year": year,
+                    "case_id": case_id,
+                }
+            )
+        return cases if cases else _batch_azicac_cases(text, org_name)
+
+    year_case_counts: Dict[str, int] = {}
+    for i, dm in enumerate(starts):
+        start = dm.start()
+        end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
+        case_text = text[start:end].strip()
+
+        cut = _TX_BACK_TO_TOP_RE.search(case_text)
+        if cut:
+            case_text = case_text[: cut.start()].rstrip()
+
+        case_text = clean_artifacts_from_text(case_text)
+        if len(case_text) < 180:
+            continue
+
+        month = dm.group(1)
+        year = dm.group(3)
+        if year not in year_case_counts:
+            year_case_counts[year] = 0
+        year_case_counts[year] += 1
+        case_id = f"{org_name}_{year}_{year_case_counts[year]:03d}"
+
+        cases.append(
+            {
+                "case_text": case_text,
+                "month_year": f"{month} {year}",
+                "month": month,
+                "year": year,
+                "case_id": case_id,
+            }
+        )
+
     return cases

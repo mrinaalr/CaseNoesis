@@ -275,8 +275,7 @@
                         {
                             year: "2010–2026",
                             url: "https://gbi.georgia.gov/search/results?query=CEACC",
-                            casesUsed: 0,
-                            totalAvailable: 66
+                            casesUsed: 0
                         }
                     ]
                 },
@@ -290,6 +289,19 @@
                             year: "2021–2026",
                             url: "https://www.ag.idaho.gov/newsroom/category/icac/?showall=true",
                             casesUsed: 0  // Will be populated dynamically (all Idaho ICAC cases on site included)
+                        }
+                    ]
+                },
+                {
+                    name: "Texas Office of the Attorney General - Cyber Crimes",
+                    url: "https://www.texasattorneygeneral.gov/news/categories/cyber-crimes",
+                    description: "Cyber Crimes press releases from the Texas Office of the Attorney General, including Child Exploitation Unit investigations, arrests, and prosecution-related announcements.",
+                    type: "Official Website",
+                    yearLinks: [
+                        {
+                            year: "2016–2019",
+                            url: "https://www.texasattorneygeneral.gov/news/categories/cyber-crimes",
+                            casesUsed: 0  // Will be populated dynamically from Texas AG cases
                         }
                     ]
                 },
@@ -394,6 +406,16 @@
                         // Single combined entry for 2021–2026 with total count
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = idahoCases.length;
+                        }
+                    } else if (staticSource.name.includes('Texas Office of the Attorney General')) {
+                        // Match Texas AG cases
+                        const texasCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'TEXAS AG';
+                        });
+                        staticSource.cases = texasCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = texasCases.length;
                         }
                     } else if (staticSource.name.includes('Michigan State Police')) {
                         // Match Michigan ICAC cases
