@@ -183,10 +183,12 @@ def process_cases(df):
             'year': case_batch.get('year'),
             'case_id': case_batch.get('case_id'),
             'source': source,
-            'source_file': source_file
+            'source_file': source_file,
         }
         if 'state' in case_batch:
             raw_case['state'] = case_batch['state']
+        if 'source_url' in case_batch:
+            raw_case['source_url'] = case_batch['source_url']
         
         # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
         pattern_features = extract_features(raw_case)

@@ -8,7 +8,9 @@ This module is shared by both Pattern Processing Layer and ML Processing Layer.
 Both layers can ingest the batched cases and process them independently.
 """
 
+import json
 import re
+from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
 
@@ -104,6 +106,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
+    - SVICAC: Silicon Valley ICAC merged PDF split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -127,6 +130,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_michigan_icac = False
     is_gbi = False
     is_texas_ag = False
+    is_svicac = False
     is_other_external = False
     
     if source:
@@ -141,6 +145,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_gbi = True
         elif source_upper == 'TEXAS AG':
             is_texas_ag = True
+        elif source_upper == 'SVICAC':
+            is_svicac = True
         elif source_upper in ('OTHER'):
             is_other_external = True
     
@@ -155,6 +161,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_gbi_cases(text, org_name, source_file)
     elif is_texas_ag:
         return _batch_texas_ag_cases(text, org_name, source_file)
+    elif is_svicac:
+        return _batch_svicac_cases(text, org_name, source_file)
     elif is_other_external:
         return _batch_external_cases(text, org_name, source_file)
     else:
@@ -1089,6 +1097,156 @@ def _batch_gbi_cases(text: str, org_name: str, source_file: str = None) -> List[
             }
         ]
 
+    return cases
+
+
+def _svicac_article_year_from_url_and_text(url: str, chunk: str) -> Optional[str]:
+    """Prefer /YYYY/MM/ in article URLs, dateline (Mon DD, YYYY), 20xx in URL, then max plausible year in body."""
+    if url:
+        m = re.search(r"/(20\d{2})/(?:\d{1,2}/)?", url)
+        if m:
+            return m.group(1)
+        m = re.search(r"\b(20\d{2})\b", url)
+        if m:
+            return m.group(1)
+    head = chunk[:8000]
+    m = re.search(
+        r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+(20\d{2})\b",
+        head,
+        re.I,
+    )
+    if m:
+        return m.group(1)
+    years = [int(y) for y in re.findall(r"\b(20\d{2})\b", chunk)]
+    plausible = [y for y in years if 2005 <= y <= 2030]
+    if plausible:
+        return str(max(plausible))
+    return None
+
+
+def _batch_svicac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """
+    Split Silicon Valley ICAC merged PDF produced by ``scripts/svicac_scrape.py`` (ReportLab).
+
+    Layout per article: headline (1–4 lines) → ``Source: https://…`` → body (any length).
+    The merged file is expected at repo root as ``SVICAC_All.pdf``; if ingested ``text`` is
+    empty or lacks ``Source:`` lines, full text is read from that PDF (or ``svicac_output/`` fallback).
+    """
+    from datetime import datetime
+
+    root = Path(__file__).resolve().parent.parent.parent
+    corpus = (text or "").strip()
+    need_pdf = len(corpus) < 80 or not re.search(r"^\s*Source:\s*https?://", corpus, re.MULTILINE)
+    if need_pdf:
+        candidates = [root / "SVICAC_All.pdf"]
+        if source_file:
+            candidates.append(root / Path(source_file).name)
+        candidates.append(root / "svicac_output" / "SVICAC_All.pdf")
+        pdf_path = next((p for p in candidates if p.is_file()), None)
+        if pdf_path is not None:
+            try:
+                import pdfplumber
+
+                with pdfplumber.open(str(pdf_path)) as pdf:
+                    corpus = "\n".join((p.extract_text() or "") for p in pdf.pages).strip()
+            except Exception:
+                pass
+
+    # pdfplumber often puts "Source:" alone on one line and the URL on the next; merge so each
+    # marker is one line (matches ~85 cases vs ~77 when split).
+    corpus = re.sub(r"(?m)^(\s*Source:\s*)\n(\s*https?://\S+)", r"\1\2", corpus)
+
+    lines = corpus.splitlines()
+    sources = [i for i, ln in enumerate(lines) if re.match(r"^\s*Source:\s*https?://", ln)]
+    if not sources:
+        year_fb = str(datetime.now().year)
+        ct_fb = clean_artifacts_from_text(corpus.strip())
+        if len(ct_fb) < 200 and corpus:
+            ct_fb = clean_artifacts_from_text(corpus.strip(), remove_urls=False)
+        return [
+            {
+                "case_text": ct_fb,
+                "month_year": None,
+                "month": None,
+                "year": year_fb,
+                "case_id": f"{org_name}_{year_fb}_001",
+            }
+        ]
+
+    starts: List[int] = [0]
+    for j in range(1, len(sources)):
+        si, prev_si = sources[j], sources[j - 1]
+        lo, hi = prev_si + 1, si - 1
+        if lo > hi:
+            starts.append(si)
+            continue
+        br = hi
+        while br >= lo and not lines[br].strip():
+            br -= 1
+        if br < lo:
+            starts.append(lo)
+            continue
+        title_start = br
+        count = 0
+        h = br
+        while h >= lo and count < 4:
+            if lines[h].strip():
+                title_start = h
+                count += 1
+            h -= 1
+            if count >= 1 and h >= lo and not lines[h].strip():
+                break
+        starts.append(title_start)
+
+    year_case_counts: Dict[str, int] = {}
+    cases: List[Dict[str, Any]] = []
+
+    for i in range(len(sources)):
+        start = starts[i]
+        end = starts[i + 1] if i + 1 < len(starts) else len(lines)
+        chunk = "\n".join(lines[start:end]).strip()
+        case_text = clean_artifacts_from_text(chunk) if chunk else ""
+        if not case_text.strip() and chunk:
+            case_text = clean_artifacts_from_text(chunk, remove_urls=False)
+
+        url_line = lines[sources[i]]
+        um = re.search(r"(https?://\S+)", url_line)
+        url = um.group(1).rstrip(".,;)") if um else ""
+        case_date_year = _svicac_article_year_from_url_and_text(url, chunk)
+        if not case_date_year:
+            # PDF body often has no digit year; avoid labeling as "current" calendar year
+            case_date_year = "2022"
+
+        year_case_counts.setdefault(case_date_year, 0)
+        year_case_counts[case_date_year] += 1
+        num = year_case_counts[case_date_year]
+        case_id = f"{org_name}_{case_date_year}_{num:03d}"
+
+        cases.append(
+            {
+                "case_text": case_text,
+                "month_year": case_date_year,
+                "month": None,
+                "year": case_date_year,
+                "case_id": case_id,
+                "source_url": url,
+            }
+        )
+
+    if not cases:
+        year_fb = str(datetime.now().year)
+        ct_fb = clean_artifacts_from_text(corpus.strip())
+        if len(ct_fb) < 200 and corpus:
+            ct_fb = clean_artifacts_from_text(corpus.strip(), remove_urls=False)
+        return [
+            {
+                "case_text": ct_fb,
+                "month_year": None,
+                "month": None,
+                "year": year_fb,
+                "case_id": f"{org_name}_{year_fb}_001",
+            }
+        ]
     return cases
 
 

@@ -39,8 +39,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         filename: Name of the file
         
     Returns:
-        Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'FBI',
-        'Other', or defaults to Other).
+        Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
+        'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -62,6 +62,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'Idaho ICAC'
     elif 'michigan' in filename_lower and 'icac' in filename_lower:
         return 'Michigan ICAC'
+    elif 'svicac' in filename_lower:
+        return 'SVICAC'
     elif 'fbi' in filename_lower:
         return 'FBI'
 

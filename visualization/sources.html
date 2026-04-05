@@ -318,6 +318,19 @@
                             casesUsed: 0  // Will be populated dynamically from Michigan ICAC cases
                         }
                     ]
+                },
+                {
+                    name: "Silicon Valley ICAC – In The News",
+                    url: "https://www.svicac.org/news/category/100005/latest-news",
+                    description: "Public news articles covering Silicon Valley ICAC–related investigations, arrests, and prosecutions (from SVICAC Latest News / from regional news outlets).",
+                    type: "Aggregated news",
+                    yearLinks: [
+                        {
+                            year: "2009–2024",
+                            url: "https://www.svicac.org/news/category/100005/latest-news",
+                            casesUsed: 85
+                        }
+                    ]
                 }
             ];
             
@@ -428,6 +441,15 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = michiganCases.length;
                         }
+                    } else if (staticSource.name.includes('Silicon Valley ICAC')) {
+                        const svicacCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'SVICAC';
+                        });
+                        staticSource.cases = svicacCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = svicacCases.length;
+                        }
                     }
                 });
                 
@@ -506,7 +528,7 @@
 
         function getDateRange(cases) {
             const dates = cases
-                .map(c => c.date_range?.start || c.raw_data?.month_year)
+                .map(c => c.date_range?.start || c.date_start || c.raw_data?.month_year)
                 .filter(d => d)
                 .map(d => {
                     if (typeof d === 'string' && d.match(/^\d{4}-\d{2}-\d{2}$/)) {

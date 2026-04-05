@@ -106,11 +106,13 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
                 'year': case_batch.get('year'),
                 'case_id': case_batch.get('case_id'),
                 'source': source,
-                'source_file': source_file
+                'source_file': source_file,
             }
-            # Copy any additional fields from batch (e.g., 'state' for NCMEC cases)
+            # Copy any additional fields from batch (e.g., 'state' for NCMEC, 'source_url' for SVICAC)
             if 'state' in case_batch:
                 raw_case['state'] = case_batch['state']
+            if 'source_url' in case_batch:
+                raw_case['source_url'] = case_batch['source_url']
             
             case_features = extract_features(raw_case)
             
@@ -142,9 +144,8 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
     month = raw_case.get('month')
     year = raw_case.get('year')
     
-    date_range = None
-    if month and year:
-        date_range = extract_date_range(raw_case)
+    # Month+year (e.g. AZICAC) or year-only (e.g. SVICAC article year from URL/body)
+    date_range = extract_date_range(raw_case)
     
     # Extract all features
     case_demo = extract_case_demographics(raw_case)
@@ -260,17 +261,25 @@ def extract_date_range(case: Dict[str, Any]) -> Optional[Dict[str, str]]:
     """Extract date range from case data."""
     month = case.get('month')
     year = case.get('year')
-    
+    if not year:
+        return None
+
     if month and year:
         from datetime import datetime
         try:
             month_num = datetime.strptime(month, '%B').month
-            date_str = f"{year}-{month_num:02d}-01"
+            ys = str(year).strip()
+            date_str = f"{ys}-{month_num:02d}-01"
             return {'start': date_str, 'end': None}
         except (ValueError, AttributeError):
-            # Invalid month name or year format
             pass
-    
+
+    # Year-only (e.g. SVICAC: publication year from article URL or lead text)
+    if not month:
+        ys = str(year).strip()
+        if re.match(r'^\d{4}$', ys):
+            return {'start': f'{ys}-01-01', 'end': f'{ys}-12-31'}
+
     return None
 
 
