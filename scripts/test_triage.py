@@ -45,6 +45,12 @@ def main() -> None:
         help="Tree split criterion. 'entropy' means information gain.",
     )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument(
+        "--test-size",
+        type=float,
+        default=0.20,
+        help="Held-out fraction (default 0.20; match train_triage_model.py and /api/triage-eval)",
+    )
     parser.add_argument("--no-agencies", action="store_true", help="Drop agencies feature")
     args = parser.parse_args()
 
@@ -62,7 +68,7 @@ def main() -> None:
     X = df.drop(columns=["id"])
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.20, random_state=args.seed, stratify=y
+        X, y, test_size=args.test_size, random_state=args.seed, stratify=y
     )
 
     pipe = train_pipeline(

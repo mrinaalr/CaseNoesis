@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state press materials. There are currently **618 cases** processed across seven sources: **AZICAC** (47), **NCMEC** (244), **Georgia Bureau of Investigation** (66), **Idaho ICAC** (134), **Michigan ICAC** (11), **Texas AG** (28), **SVICAC** (85). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state press materials. There are currently **946 cases** processed across nine sources: **AZICAC** (47), **NCMEC** (244), **Georgia Bureau of Investigation** (66), **Idaho ICAC** (137), **Michigan ICAC** (11), **Texas AG** (28), **SVICAC** (85), **TBI ICAC** (63), **SCAG ICAC** (265). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Technical Reports
 
@@ -135,6 +135,8 @@ The sources page lists publicly available reports from:
 - **Texas Office of the Attorney General**: Cyber Crimes press releases, 2016–2019
 - **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases, 2025–2026
 - **Silicon Valley ICAC (SVICAC)**: Regional news articles (SVICAC Latest News), 2009–2024
+- **Tennessee Bureau of Investigation (TBI) ICAC**: Aggregated TBI newsroom ICAC press coverage, 2016–2026
+- **South Carolina Attorney General (SCAG) ICAC**: ICAC-tagged news releases, 2024–2026
 
 ### Processing PDFs to Populate Database
 
@@ -324,7 +326,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: This system contains cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Idaho Office of Attorney General, Georgia Bureau of Investigation, Michigan State Police, Texas Office of the Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: This system contains cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Idaho Office of Attorney General, Georgia Bureau of Investigation, Michigan State Police, Texas Office of the Attorney General, Tennessee Bureau of Investigation ICAC news coverage, South Carolina Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

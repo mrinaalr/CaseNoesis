@@ -331,6 +331,99 @@
                             casesUsed: 85
                         }
                     ]
+                },
+                {
+                    name: "Tennessee Bureau of Investigation (TBI) ICAC – Newsroom",
+                    url: "https://tbinewsroom.com/?s=ICAC",
+                    description: "Press releases Tennessee Bureau of Investigation’s Internet Crimes Against Children (ICAC) Task Force.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "2016–2026",
+                            url: "https://tbinewsroom.com/?s=ICAC",
+                            casesUsed: 63
+                        }
+                    ]
+                },
+                {
+                    name: "South Carolina Attorney General – ICAC News",
+                    url: "https://www.scag.gov/about-the-office/news/?category=icac",
+                    description: "Public news releases from the South Carolina Attorney General’s Internet Crimes Against Children (ICAC) Task Force.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "2024–2026",
+                            url: "https://www.scag.gov/about-the-office/news/?category=icac",
+                            casesUsed: 265
+                        }
+                    ]
+                },
+                {
+                    name: "New York State Police – Newsroom (ICAC)",
+                    url: "https://troopers.ny.gov/nysp-newsroom?keyword=ICAC",
+                    description: "Press releases from the New York State Police Newsroom (ICAC).",
+                    type: "Official website",
+                    dateRangeDisplay: "2022–2026",
+                    yearLinks: [
+                        {
+                            year: "2022–2026",
+                            url: "https://troopers.ny.gov/nysp-newsroom?keyword=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Illinois Attorney General – Press releases (ICAC)",
+                    url: "https://illinoisattorneygeneral.gov/site-search-page/press-releases/index?q=ICAC",
+                    description: "Illinois AG press release search for ICAC.",
+                    type: "Official website",
+                    dateRangeDisplay: "2010–2026",
+                    yearLinks: [
+                        {
+                            year: "2010–2026",
+                            url: "https://illinoisattorneygeneral.gov/site-search-page/press-releases/index?q=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Washoe County Sheriff's Office – Newsroom search (ICAC)",
+                    url: "https://washoesheriff.com/search_results.php?q=ICAC",
+                    description: "Site search results for ICAC from the Washoe County Sheriff's Office (Nevada), including Internet Crimes Against Children Task Force arrests and related newsroom items.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search index",
+                            url: "https://washoesheriff.com/search_results.php?q=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Los Angeles Police Department (LAPD) – ICAC News",
+                    url: "https://www.lapdonline.org/?s=ICAC",
+                    description: "LAPD Online search results for ICAC, including Internet Crimes Against Children Task Force releases and related items.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search index",
+                            url: "https://www.lapdonline.org/?s=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "South Florida ICAC – News",
+                    url: "https://southfloridaicac.org/news/",
+                    description: "News from the South Florida Internet Crimes Against Children (ICAC) Task Force, linking to regional coverage and task force operations.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC news index",
+                            url: "https://southfloridaicac.org/news/",
+                            casesUsed: 0
+                        }
+                    ]
                 }
             ];
             
@@ -450,6 +543,105 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = svicacCases.length;
                         }
+                    } else if (staticSource.name.includes('Tennessee Bureau of Investigation')) {
+                        const tbiCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'TBI ICAC';
+                        });
+                        staticSource.cases = tbiCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = tbiCases.length;
+                        }
+                    } else if (staticSource.name.includes('South Carolina Attorney General')) {
+                        const scagCases = cases.filter(c => {
+                            const source = c.source || c.raw_data?.source || '';
+                            return source.toUpperCase() === 'SCAG ICAC';
+                        });
+                        staticSource.cases = scagCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = scagCases.length;
+                        }
+                    } else if (staticSource.name.includes('New York State Police')) {
+                        const nyspCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'NEWYORK SP' || s === 'NEW YORK SP';
+                        });
+                        staticSource.cases = nyspCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = nyspCases.length;
+                        }
+                    } else if (staticSource.name.includes('Illinois Attorney General')) {
+                        const illinoisCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'ILLINOIS AG';
+                        });
+                        staticSource.cases = illinoisCases;
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = illinoisCases.length;
+                        }
+                    } else if (staticSource.name.includes("Washoe County Sheriff")) {
+                        const wcsoCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'WCSO';
+                        });
+                        staticSource.cases = wcsoCases;
+                        const wcsoRange = getDateRange(wcsoCases);
+                        if (wcsoRange) {
+                            staticSource.dateRangeDisplay = wcsoRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = wcsoRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = wcsoCases.length;
+                        }
+                    } else if (staticSource.name.includes('Los Angeles Police Department')) {
+                        const lapdCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'LAPD';
+                        });
+                        staticSource.cases = lapdCases;
+                        const lapdRange = getDateRange(lapdCases);
+                        if (lapdRange) {
+                            staticSource.dateRangeDisplay = lapdRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = lapdRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = lapdCases.length;
+                        }
+                    } else if (staticSource.name.includes('South Florida ICAC')) {
+                        const sfCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'SOUTH FLORIDA ICAC';
+                        });
+                        staticSource.cases = sfCases;
+                        const sfRange = getDateRange(sfCases);
+                        if (sfRange) {
+                            staticSource.dateRangeDisplay = sfRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = sfRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = sfCases.length;
+                        }
                     }
                 });
                 
@@ -473,7 +665,9 @@
             
             container.innerHTML = sources.map(source => {
                 const caseCount = source.cases ? source.cases.length : 0;
-                const dateRange = source.cases ? getDateRange(source.cases) : null;
+                const dateRange =
+                    source.dateRangeDisplay ||
+                    (source.cases ? getDateRange(source.cases) : null);
                 
                 return `
                     <div class="source-card">

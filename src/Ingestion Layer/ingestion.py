@@ -24,6 +24,8 @@ try:
     import pdfplumber
     PDFPLUMBER_AVAILABLE = True
     logging.getLogger("pdfplumber").setLevel(logging.ERROR)
+    # pdfplumber → pdfminer: suppress FontBBox / font descriptor noise on malformed PDFs
+    logging.getLogger("pdfminer").setLevel(logging.ERROR)
     warnings.filterwarnings("ignore", category=UserWarning)
 except ImportError:
     PDFPLUMBER_AVAILABLE = False
@@ -40,7 +42,7 @@ def detect_source_from_content(text: str, filename: str) -> str:
         
     Returns:
         Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
-        'FBI', 'Other', or defaults to Other).
+        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SOUTH FLORIDA ICAC', 'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -64,9 +66,42 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'Michigan ICAC'
     elif 'svicac' in filename_lower:
         return 'SVICAC'
+    elif 'tbi' in filename_lower and 'icac' in filename_lower:
+        return 'TBI ICAC'
+    elif 'scag' in filename_lower and 'icac' in filename_lower:
+        return 'SCAG ICAC'
+    elif 'nysp' in filename_lower and 'icac' in filename_lower:
+        return 'NEWYORK SP'
+    elif ('illinois' in filename_lower or 'illnois' in filename_lower) and 'icac' in filename_lower:
+        return 'ILLINOIS AG'
+    elif 'wcso' in filename_lower:
+        return 'WCSO'
+    elif 'washoe' in filename_lower and 'icac' in filename_lower:
+        return 'WCSO'
+    elif 'lapd' in filename_lower:
+        return 'LAPD'
+    elif 'southflorida' in filename_lower and 'icac' in filename_lower:
+        return 'SOUTH FLORIDA ICAC'
     elif 'fbi' in filename_lower:
         return 'FBI'
 
+    # Washoe County Sheriff site / newsroom ICAC scrape (merged PDF)
+    if re.search(r'washoesheriff\.com', text_sample, re.I) and re.search(
+        r'\bICAC\b|Internet Crimes Against Children', text_sample, re.I
+    ):
+        return 'WCSO'
+
+    # LAPD Online site search (merged ICAC news PDF)
+    if re.search(r'lapdonline\.org', text_sample, re.I) and re.search(
+        r'\bICAC\b|Internet Crimes Against Children', text_sample, re.I
+    ):
+        return 'LAPD'
+
+    # South Florida ICAC news index (merged external-article PDF)
+    if re.search(r'southfloridaicac\.org', text_sample, re.I) and re.search(
+        r'\bICAC\b|Internet Crimes Against Children', text_sample, re.I
+    ):
+        return 'SOUTH FLORIDA ICAC'
 
     # Delimited "Case 1 : ... Case 2 : ..." scrapes (news, LinkedIn PDFs, etc.)
     if re.search(r'(?m)(?:^|\n)\s*Case\s+1\s*:', text_sample, re.IGNORECASE):
@@ -94,11 +129,11 @@ def extract_pdf_text(pdf_path: str) -> str:
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text_content.append(page_text)
+            with pdfplumber.open(pdf_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text_content.append(page_text)
         
         return "\n".join(text_content)
     except Exception as e:

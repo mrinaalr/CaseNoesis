@@ -5,23 +5,42 @@ Comprehensive Evaluation Data Extraction for CaseLinker
 This script performs comprehensive testing and evaluation of CaseLinker's capabilities,
 generating detailed metrics suitable for academic research and system performance analysis.
 
-Output: evaluation_results.json - Comprehensive evaluation data for audit
+Designed for large corpora (hundreds–thousands of cases): corpus overview, per-source
+extraction rates, scaled similarity sampling.
+
+Output: evaluation_results.json — comprehensive evaluation data for audit
+
+Usage:
+  python3 extract_evaluation_data.py
+  python3 extract_evaluation_data.py --db /path/to/caselinker.db --output eval.json
+
+Uses DATABASE_URL (PostgreSQL) if set, else SQLite (CASELINKER_DB or ./caselinker.db).
 """
 
+import argparse
+import os
 import sys
 import json
 from pathlib import Path
 from collections import Counter, defaultdict
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Optional
 import statistics
 from datetime import datetime
 
+REPO_ROOT = Path(__file__).resolve().parent
+
 # Add paths
-src_path = Path(__file__).parent / "src"
+src_path = REPO_ROOT / "src"
 sys.path.insert(0, str(src_path / "Storage Layer"))
 sys.path.insert(0, str(src_path / "Clustering & Analysis Layer"))
 
-from storage import CaseStorage
+if os.getenv("DATABASE_URL"):
+    try:
+        from storage_postgres import CaseStorage
+    except ImportError:
+        from storage import CaseStorage
+else:
+    from storage import CaseStorage
 from analysis import (
     group_similar_cases,
     triage_cases,
@@ -32,12 +51,92 @@ from analysis import (
     run_automated_analysis
 )
 
-def load_all_cases(db_path: str = "caselinker.db") -> List[Dict[str, Any]]:
-    """Load all cases from database"""
-    storage = CaseStorage(db_path)
+def load_all_cases(db_path: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Load all cases from PostgreSQL (DATABASE_URL) or SQLite path."""
+    if os.getenv("DATABASE_URL"):
+        storage = CaseStorage()
+        label = "PostgreSQL"
+    else:
+        path = db_path or os.environ.get("CASELINKER_DB") or str(REPO_ROOT / "caselinker.db")
+        storage = CaseStorage(path)
+        label = path
     all_cases = storage.get_all_cases()
-    print(f"✓ Loaded {len(all_cases)} cases from database")
+    print(f"✓ Loaded {len(all_cases)} cases from {label}")
     return all_cases
+
+
+def _case_text_len(case: Dict[str, Any]) -> int:
+    t = case.get("case_text") or ""
+    if not t and case.get("raw_data"):
+        rd = case["raw_data"]
+        if isinstance(rd, str):
+            try:
+                rd = json.loads(rd)
+            except (json.JSONDecodeError, TypeError):
+                rd = None
+        if isinstance(rd, dict):
+            t = rd.get("case_text") or ""
+    return len(t) if isinstance(t, str) else 0
+
+
+def evaluate_corpus_overview(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Corpus scale: counts by source, narrative length distribution."""
+    by_source = Counter((c.get("source") or "Unknown") for c in all_cases)
+    lengths = [_case_text_len(c) for c in all_cases]
+    lengths_nonzero = [x for x in lengths if x > 0]
+
+    def pct(p: float) -> float:
+        if not lengths_nonzero:
+            return 0.0
+        s = sorted(lengths_nonzero)
+        k = int(round((len(s) - 1) * p))
+        return float(s[max(0, min(k, len(s) - 1))])
+
+    return {
+        "n_cases": len(all_cases),
+        "n_sources": len(by_source),
+        "cases_by_source": dict(sorted(by_source.items(), key=lambda x: -x[1])),
+        "narrative_chars": {
+            "min": min(lengths) if lengths else 0,
+            "max": max(lengths) if lengths else 0,
+            "mean": statistics.mean(lengths) if lengths else 0,
+            "median": statistics.median(lengths) if lengths else 0,
+            "p10": pct(0.10),
+            "p90": pct(0.90),
+            "cases_with_zero_len_text": sum(1 for x in lengths if x == 0),
+        },
+    }
+
+
+def evaluate_extraction_by_source(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Per-source extraction rates for key structured fields (sparse matrix view)."""
+    by_src: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for c in all_cases:
+        by_src[c.get("source") or "Unknown"].append(c)
+
+    rows = []
+    for src in sorted(by_src.keys(), key=lambda s: -len(by_src[s])):
+        sub = by_src[src]
+        n = len(sub)
+
+        def frac(pred) -> float:
+            return round(100.0 * sum(1 for c in sub if pred(c)) / n, 1) if n else 0.0
+
+        rows.append(
+            {
+                "source": src,
+                "n": n,
+                "pct_case_topics": frac(lambda c: bool(parse_json_field(c.get("case_topics", [])))),
+                "pct_severity": frac(lambda c: bool(parse_json_field(c.get("severity_indicators", [])))),
+                "pct_platforms": frac(lambda c: bool(parse_json_field(c.get("platforms_used", [])))),
+                "pct_agencies": frac(lambda c: bool(parse_json_field(c.get("agencies_involved", [])))),
+                "pct_investigation_type": frac(lambda c: bool(c.get("investigation_type"))),
+                "pct_relationship": frac(lambda c: bool(c.get("relationship_to_victim"))),
+                "pct_victim_count": frac(lambda c: c.get("victim_count") is not None),
+                "mean_text_chars": round(statistics.mean([_case_text_len(c) for c in sub]), 1) if n else 0,
+            }
+        )
+    return {"sources": rows}
 
 def parse_json_field(field_value: Any) -> Any:
     """Safely parse JSON string fields"""
@@ -333,8 +432,9 @@ def evaluate_similarity_calculation(all_cases: List[Dict[str, Any]]) -> Dict[str
     """Evaluate similarity calculation performance"""
     print("  Analyzing similarity calculations...")
     
-    # Sample cases for similarity analysis
-    sample_size = min(50, len(all_cases))
+    # Sample: scale with corpus (pairwise cost O(k²); cap for runtime)
+    sample_size = min(200, max(50, len(all_cases) // 5))
+    sample_size = min(sample_size, len(all_cases))
     sample_cases = all_cases[:sample_size]
     
     similarities = []
@@ -652,19 +752,30 @@ def generate_use_case_examples(all_cases: List[Dict[str, Any]]) -> Dict[str, Any
     }
 
 def main():
+    parser = argparse.ArgumentParser(description="CaseLinker comprehensive evaluation export")
+    parser.add_argument(
+        "--db",
+        type=str,
+        default=None,
+        help="SQLite DB path (ignored if DATABASE_URL is set). Default: CASELINKER_DB or ./caselinker.db",
+    )
+    parser.add_argument("--output", "-o", type=str, default="evaluation_results.json", help="Output JSON path")
+    args = parser.parse_args()
+
     print("="*80)
     print("CaseLinker Comprehensive Evaluation")
     print("="*80)
     print(f"Evaluation Date: {datetime.now().isoformat()}")
     print()
-    
-    # Load cases
-    db_path = "caselinker.db"
-    if not Path(db_path).exists():
-        print(f"ERROR: Database {db_path} not found!")
-        return
-    
-    all_cases = load_all_cases(db_path)
+
+    if not os.getenv("DATABASE_URL"):
+        db_path = args.db or os.environ.get("CASELINKER_DB") or str(REPO_ROOT / "caselinker.db")
+        if not Path(db_path).exists():
+            print(f"ERROR: Database not found: {db_path}")
+            return
+        all_cases = load_all_cases(db_path)
+    else:
+        all_cases = load_all_cases()
     
     if not all_cases:
         print("ERROR: No cases found in database!")
@@ -678,9 +789,11 @@ def main():
         'metadata': {
             'evaluation_date': datetime.now().isoformat(),
             'total_cases': len(all_cases),
-            'database_path': db_path,
-            'system_version': 'CaseLinker v1.0'
+            'database': 'postgresql' if os.getenv('DATABASE_URL') else (args.db or os.environ.get('CASELINKER_DB') or str(REPO_ROOT / 'caselinker.db')),
+            'system_version': 'CaseLinker evaluation export v2 (900+ corpus profile)',
         },
+        'corpus_overview': {},
+        'extraction_by_source': {},
         'extraction_coverage': {},
         'clustering': {},
         'triage': {},
@@ -694,6 +807,26 @@ def main():
     }
     
     print("="*80)
+    print("0. Corpus overview (sources, narrative length)")
+    print("="*80)
+    results['corpus_overview'] = evaluate_corpus_overview(all_cases)
+    print(f"  Sources: {results['corpus_overview']['n_sources']}")
+    for s, k in list(results['corpus_overview']['cases_by_source'].items())[:12]:
+        print(f"    {s}: {k}")
+    nl = results['corpus_overview']['narrative_chars']
+    print(f"  Narrative chars — median: {nl['median']:.0f}, mean: {nl['mean']:.0f}, p10–p90: {nl['p10']:.0f}–{nl['p90']:.0f}")
+
+    print("\n" + "="*80)
+    print("0b. Extraction strength by source")
+    print("="*80)
+    results['extraction_by_source'] = evaluate_extraction_by_source(all_cases)
+    for row in results['extraction_by_source']['sources'][:10]:
+        print(
+            f"  {row['source'][:40]:40} n={row['n']:4}  "
+            f"topics={row['pct_case_topics']}% sev={row['pct_severity']}% plat={row['pct_platforms']}%"
+        )
+
+    print("\n" + "="*80)
     print("1. Extraction Coverage Evaluation")
     print("="*80)
     results['extraction_coverage'] = evaluate_extraction_coverage(all_cases)
@@ -766,8 +899,8 @@ def main():
     print(f"  Generated {len(results['use_case_examples'])} use case examples")
     
     # Save comprehensive results
-    output_file = 'evaluation_results.json'
-    with open(output_file, 'w') as f:
+    output_file = args.output
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2, default=str)
     
     print("\n" + "="*80)

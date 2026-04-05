@@ -62,7 +62,7 @@
             }
         }
         .container {
-            max-width: 1400px;
+            max-width: 1680px;
             margin: 0 auto;
             padding: 20px 20px;
         }
@@ -104,8 +104,8 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 1000px;
-            min-height: 1000px;
+            height: 1400px;
+            min-height: 1400px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -201,7 +201,7 @@
             pointer-events: none;
             fill: #fff;
             text-anchor: middle;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             font-family: 'Rajdhani', sans-serif;
         }
@@ -285,8 +285,8 @@
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
         // Match #cluster-visualization height; extra room so bottom satellite bubbles are not clipped
-        const height = 1000;
-        const margin = 30;
+        const height = 1400;
+        const margin = 42;
         
         const svg = d3.select('#cluster-visualization')
             .html('')
@@ -371,16 +371,16 @@
             // Position main clusters tightly together
             const mainClusterNodes = [];
             const clusterPositions = {
-                'online_only_cluster': { x: width * 0.455, y: height * 0.34 }, // Top-center
-                'possession_cluster': { x: width * 0.21, y: height * 0.268 }, // Left
-                'general_cluster': { x: width * 0.72, y: height * 0.3 }, // Right
-                'severe_cluster': { x: width * 0.23, y: height * 0.66 }, // Bottom-left
-                'investigation_cluster': { x: width * 0.5, y: height * 0.65 } // Bottom-center
+                'online_only_cluster': { x: width * 0.45, y: height * 0.45 }, // Top-center
+                'possession_cluster': { x: width * 0.25, y: height * 0.25 }, // Left
+                'general_cluster': { x: width * 0.69, y: height * 0.29 }, // Right (inset from edge)
+                'severe_cluster': { x: width * 0.24, y: height * 0.63 }, // Bottom-left
+                'investigation_cluster': { x: width * 0.65, y: height * 0.70 } // Bottom-center
             };
             
             clusterData.forEach((cluster, i) => {
                 // Size based on number of cases - main cluster bubble (5% bigger)
-                const clusterSize = (Math.sqrt(cluster.size) * 3.5 + 40);
+                const clusterSize = (Math.sqrt(cluster.size) * 3.1 + 36);
                 
                 // Get position from predefined positions or use default
                 let clusterX, clusterY;
@@ -425,7 +425,7 @@
                     
                     // Calculate sub-cluster sizes first (5% bigger)
                     const groupSizes = cluster.internal_groups.map(group => 
-                        (Math.sqrt(group.size) * 2.5 + 12) * 1.10
+                        (Math.sqrt(group.size) * 2.22 + 11) * 1.10
                     );
                     const maxGroupSize = Math.max(...groupSizes);
                     
@@ -440,13 +440,13 @@
                     let baseRadius;
                     if (groupCount <= 3) {
                         // Very few bubbles: tight circle, close to cluster
-                        baseRadius = clusterSize + maxGroupSize + 15 + textSpacing;
+                        baseRadius = clusterSize + maxGroupSize + 13 + textSpacing;
                     } else if (groupCount <= 5) {
                         // Few bubbles: moderate distance
-                        baseRadius = clusterSize + maxGroupSize + 20 + textSpacing;
+                        baseRadius = clusterSize + maxGroupSize + 18 + textSpacing;
                     } else {
                         // Many bubbles: spread them out more
-                        baseRadius = clusterSize + maxGroupSize + 25 + textSpacing;
+                        baseRadius = clusterSize + maxGroupSize + 23 + textSpacing;
                     }
                     
                     // For very few bubbles (1-3), use a more compact triangular/square arrangement
@@ -717,7 +717,7 @@
                         const clusterX = node.clusterX;
                         const clusterY = node.clusterY;
                         const clusterR = node.clusterR;
-                        const minDistance = clusterR + node.r + 15; // 15px minimum gap (more space)
+                        const minDistance = clusterR + node.r + 22; // minimum gap from parent hub
                         
                         const dx = node.x - clusterX;
                         const dy = node.y - clusterY;
@@ -740,7 +740,7 @@
                             const dx = node.x - mainNode.x;
                             const dy = node.y - mainNode.y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
-                            const minDistance = mainNode.r + node.r + 8; // 8px minimum gap (tighter)
+                            const minDistance = mainNode.r + node.r + 7; // minimum gap vs other hubs
                             
                             if (distance < minDistance) {
                                 const force = (minDistance - distance) / distance;
@@ -757,7 +757,7 @@
                         const clusterX = node.clusterX;
                         const clusterY = node.clusterY;
                         // Calculate ideal radius based on initial positioning (adaptive)
-                        const idealRadius = node.clusterR + node.r + 20; // Base ideal distance
+                        const idealRadius = node.clusterR + node.r + 18; // Base ideal distance
                         
                         const dx = node.x - clusterX;
                         const dy = node.y - clusterY;
@@ -777,8 +777,8 @@
                 }
                 
                 const simulation = d3.forceSimulation(groupNodes)
-                    .force('collision', d3.forceCollide().radius(d => d.r + 12).strength(0.9)) // 12px spacing (tighter)
-                    .force('charge', d3.forceManyBody().strength(-150))
+                    .force('collision', d3.forceCollide().radius(d => d.r + 12).strength(0.92))
+                    .force('charge', d3.forceManyBody().strength(-175))
                     .force('clusterRepulsion', clusterRepulsion)
                     .force('allClusterRepulsion', allClusterRepulsion)
                     .force('clusterAttraction', clusterAttraction)

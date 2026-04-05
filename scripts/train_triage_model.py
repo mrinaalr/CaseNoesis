@@ -439,7 +439,7 @@ def main() -> None:
         default="entropy",
         help="Tree split criterion. 'entropy' uses information gain.",
     )
-    parser.add_argument("--test-size", type=float, default=0.25)
+    parser.add_argument("--test-size", type=float, default=0.20)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--no-agencies", action="store_true", help="Ablation: drop agencies_involved multi-hot")
     parser.add_argument(

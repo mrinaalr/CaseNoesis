@@ -368,16 +368,15 @@ def verify_claims(cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     
     total_cases = len(cases)
     
-    # Claim: 265 cases from NCMEC and AZICAC
+    # Sanity counts by id prefix (full corpus is 9 sources, not NCMEC+AZ only)
     ncmec_cases = sum(1 for c in cases if c.get('id', '').startswith('ncmec_'))
     azicac_cases = sum(1 for c in cases if c.get('id', '').startswith('azicac_'))
     
-    print(f"\nClaim: 265 cases from NCMEC and AZICAC")
-    print(f"  Actual: {total_cases} total cases")
-    print(f"  NCMEC: {ncmec_cases} cases")
-    print(f"  AZICAC: {azicac_cases} cases")
-    print(f"  Combined: {ncmec_cases + azicac_cases} cases")
-    print(f"  Status: {'✓ MATCH' if (ncmec_cases + azicac_cases) == 265 else '✗ MISMATCH'}")
+    print(f"\nSanity: NCMEC + AZICAC case id counts (subset of full corpus)")
+    print(f"  Total cases in DB: {total_cases}")
+    print(f"  NCMEC (ncmec_*): {ncmec_cases}")
+    print(f"  AZICAC (azicac_*): {azicac_cases}")
+    print(f"  Combined: {ncmec_cases + azicac_cases}")
     
     # Check date ranges
     years = Counter()

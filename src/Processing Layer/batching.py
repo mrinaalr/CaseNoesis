@@ -106,7 +106,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC: Silicon Valley ICAC merged PDF split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -131,10 +131,17 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_gbi = False
     is_texas_ag = False
     is_svicac = False
+    is_tbi_icac = False
+    is_scag_icac = False
+    is_newyork_sp = False
+    is_illinois_ag = False
+    is_wcso = False
+    is_lapd = False
+    is_south_florida_icac = False
     is_other_external = False
     
     if source:
-        source_upper = source.upper()
+        source_upper = source.upper().replace("_", " ")
         if source_upper == 'NCMEC':
             is_ncmec = True
         elif source_upper == 'IDAHO ICAC':
@@ -147,6 +154,20 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_texas_ag = True
         elif source_upper == 'SVICAC':
             is_svicac = True
+        elif source_upper == 'TBI ICAC':
+            is_tbi_icac = True
+        elif source_upper == 'SCAG ICAC':
+            is_scag_icac = True
+        elif source_upper in ('NEWYORK SP', 'NEW YORK SP'):
+            is_newyork_sp = True
+        elif source_upper == 'ILLINOIS AG':
+            is_illinois_ag = True
+        elif source_upper == 'WCSO':
+            is_wcso = True
+        elif source_upper == 'LAPD':
+            is_lapd = True
+        elif source_upper == 'SOUTH FLORIDA ICAC':
+            is_south_florida_icac = True
         elif source_upper in ('OTHER'):
             is_other_external = True
     
@@ -162,7 +183,21 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     elif is_texas_ag:
         return _batch_texas_ag_cases(text, org_name, source_file)
     elif is_svicac:
-        return _batch_svicac_cases(text, org_name, source_file)
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SVICAC")
+    elif is_tbi_icac:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "TBI ICAC")
+    elif is_scag_icac:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SCAG ICAC")
+    elif is_newyork_sp:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NEWYORK SP")
+    elif is_illinois_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ILLINOIS AG")
+    elif is_wcso:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "WCSO")
+    elif is_lapd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "LAPD")
+    elif is_south_florida_icac:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SOUTH FLORIDA ICAC")
     elif is_other_external:
         return _batch_external_cases(text, org_name, source_file)
     else:
@@ -1100,7 +1135,46 @@ def _batch_gbi_cases(text: str, org_name: str, source_file: str = None) -> List[
     return cases
 
 
-def _svicac_article_year_from_url_and_text(url: str, chunk: str) -> Optional[str]:
+# Merged ReportLab (or same-layout) news PDFs: one entry per ``Source: https://…`` line.
+# Add a key + repo-relative paths for each new scrape; route ``source`` in ``case_batching``.
+_MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
+    "SVICAC": ["SVICAC_All.pdf", "svicac_output/SVICAC_All.pdf"],
+    "TBI ICAC": ["TBI_ICAC_All.pdf", "TBI_ICAC_ALL.pdf"],
+    "SCAG ICAC": ["SCAG_ICAC_All.pdf", "SCAG_ICAC_ALL.pdf"],
+    "NEWYORK SP": ["NYSP_ICAC_All.pdf", "NEWYORK_SP_All.pdf", "newyork_sp/NEWYORK_SP_All.pdf"],
+    "ILLINOIS AG": ["ILLNOISAG_ICAC_All.pdf", "ILLINOIS_AG_All.pdf", "illinois_ag/ILLINOIS_AG_All.pdf"],
+    "WCSO": ["Washoe_ICAC_All.pdf", "wcso/Washoe_ICAC_All.pdf", "washoe/Washoe_ICAC_All.pdf"],
+    "LAPD": ["LAPD_ICAC_ALL.pdf", "LAPD_ICAC_All.pdf", "lapd/LAPD_ICAC_All.pdf"],
+    "SOUTH FLORIDA ICAC": [
+        "SouthFlorida_ICAC_All.pdf",
+        "Southflorida_ICAC_All.pdf",
+        "southflorida/Southflorida_ICAC_All.pdf",
+    ],
+}
+
+
+def _merged_icac_news_pdf_search_paths(source_key: str, source_file: Optional[str]) -> List[Path]:
+    """
+    Repo-relative PDF paths to try for merged ``Source: https://`` scrapes (SVICAC, TBI ICAC, …).
+    Order: primary corpus name, optional ingest filename basename, then alternates.
+    """
+    root = Path(__file__).resolve().parent.parent.parent
+    rels = _MERGED_ICAC_NEWS_PDF_CANDIDATES.get(source_key, [])
+    out: List[Path] = []
+    if rels:
+        out.append(root / rels[0])
+    if source_file:
+        p = root / Path(source_file).name
+        if p not in out:
+            out.append(p)
+    for r in rels[1:]:
+        rp = root / r
+        if rp not in out:
+            out.append(rp)
+    return out
+
+
+def _merged_news_article_year_from_url_and_text(url: str, chunk: str) -> Optional[str]:
     """Prefer /YYYY/MM/ in article URLs, dateline (Mon DD, YYYY), 20xx in URL, then max plausible year in body."""
     if url:
         m = re.search(r"/(20\d{2})/(?:\d{1,2}/)?", url)
@@ -1124,28 +1198,28 @@ def _svicac_article_year_from_url_and_text(url: str, chunk: str) -> Optional[str
     return None
 
 
-def _batch_svicac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+def _batch_merged_icac_news_cases(
+    text: str, org_name: str, source_file: str = None, source_key: str = "SVICAC"
+) -> List[Dict[str, Any]]:
     """
-    Split Silicon Valley ICAC merged PDF produced by ``scripts/svicac_scrape.py`` (ReportLab).
+    Split merged ICAC news PDFs built like the SVICAC scrape: each article is
+    headline (1–4 lines) → ``Source: https://…`` → body (any length).
 
-    Layout per article: headline (1–4 lines) → ``Source: https://…`` → body (any length).
-    The merged file is expected at repo root as ``SVICAC_All.pdf``; if ingested ``text`` is
-    empty or lacks ``Source:`` lines, full text is read from that PDF (or ``svicac_output/`` fallback).
+    ``source_key`` selects which repo PDF filenames to try (see ``_MERGED_ICAC_NEWS_PDF_CANDIDATES``).
     """
     from datetime import datetime
 
-    root = Path(__file__).resolve().parent.parent.parent
     corpus = (text or "").strip()
     need_pdf = len(corpus) < 80 or not re.search(r"^\s*Source:\s*https?://", corpus, re.MULTILINE)
     if need_pdf:
-        candidates = [root / "SVICAC_All.pdf"]
-        if source_file:
-            candidates.append(root / Path(source_file).name)
-        candidates.append(root / "svicac_output" / "SVICAC_All.pdf")
+        candidates = _merged_icac_news_pdf_search_paths(source_key, source_file)
         pdf_path = next((p for p in candidates if p.is_file()), None)
         if pdf_path is not None:
             try:
+                import logging
                 import pdfplumber
+
+                logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
                 with pdfplumber.open(str(pdf_path)) as pdf:
                     corpus = "\n".join((p.extract_text() or "") for p in pdf.pages).strip()
@@ -1212,7 +1286,7 @@ def _batch_svicac_cases(text: str, org_name: str, source_file: str = None) -> Li
         url_line = lines[sources[i]]
         um = re.search(r"(https?://\S+)", url_line)
         url = um.group(1).rstrip(".,;)") if um else ""
-        case_date_year = _svicac_article_year_from_url_and_text(url, chunk)
+        case_date_year = _merged_news_article_year_from_url_and_text(url, chunk)
         if not case_date_year:
             # PDF body often has no digit year; avoid labeling as "current" calendar year
             case_date_year = "2022"
@@ -1248,6 +1322,11 @@ def _batch_svicac_cases(text: str, org_name: str, source_file: str = None) -> Li
             }
         ]
     return cases
+
+
+def _batch_svicac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
+    """Backward-compatible name; same as ``_batch_merged_icac_news_cases(..., \"SVICAC\")``."""
+    return _batch_merged_icac_news_cases(text, org_name, source_file, "SVICAC")
 
 
 def _batch_idaho_icac_cases(text: str, org_name: str, source_file: str = None) -> List[Dict[str, Any]]:
