@@ -655,6 +655,7 @@
                     <span class="tree-sentence-wrap" data-sentence-slot="organizations"><input type="text" class="tree-sentence-input" data-field="organizations" id="facet-sent-organizations" placeholder="Org" title="7. Organization" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="locations"><input type="text" class="tree-sentence-input" data-field="locations" id="facet-sent-locations" placeholder="Location" title="8. Location" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="severity_phrases"><input type="text" class="tree-sentence-input" data-field="severity_phrases" id="facet-sent-severity_phrases" placeholder="Sev. phrase" title="9. Severity phrase" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
+                    <span class="tree-sentence-wrap" data-sentence-slot="era_period"><input type="text" class="tree-sentence-input" data-field="era_period" id="facet-sent-era_period" placeholder="Date range" title="10. Date range" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <p class="tree-sentence-hint"><strong>Workflow:</strong> fill in these sentence boxes (or open <em>Prune &amp; focus</em> for more filters), set <strong>Facet depth</strong> to reduce tree size, then click <strong>Reload tree</strong>. — Type a label: <strong>grey</strong> shows the rest of the <em>first</em> matching labels (alphabetically among prefixes). Searches that don't match pre-defined labels show nothing; red border means no label starts that way. Tab accepts the grey completion. Leave blank to skip.</p>
                 </div>
                 <button type="button" id="facet-reload">Reload tree</button>
@@ -668,7 +669,8 @@
                     <option value="6">6 levels</option>
                     <option value="7">7 levels</option>
                     <option value="8">8 levels</option>
-                    <option value="9">9 levels (full)</option>
+                    <option value="9">9 levels</option>
+                    <option value="10">10 levels (full)</option>
                 </select>
             </div>
             <details class="facet-prune-panel" id="facet-prune-panel">
@@ -687,7 +689,7 @@
                 <p class="facet-prune-status" id="facet-prune-status" aria-live="polite"></p>
             </details>
             <div class="tree-meta" id="facet-meta"></div>
-            <div class="tree-facet-order">Partition order (9 steps): 1.Topic → 2.Severity → 3.Platform → 4.Inv. type → 5.Source → 6.Agency → 7.Organization → 8.Location → 9.Severity Phrase.</div>
+            <div class="tree-facet-order">Partition order (10 steps): 1.Topic → 2.Severity → 3.Platform → 4.Inv. type → 5.Source → 6.Agency → 7.Organization → 8.Location → 9.Severity Phrase → 10.Date range.</div>
             <div class="facet-tree-host" id="facet-tree-root">
                 <div class="tree-loading">Loading facet tree…</div>
             </div>
@@ -759,7 +761,8 @@
         { field: 'agencies_involved', label: '6. Agency' },
         { field: 'organizations', label: '7. Organization' },
         { field: 'locations', label: '8. Location' },
-        { field: 'severity_phrases', label: '9. Severity Phrase' }
+        { field: 'severity_phrases', label: '9. Severity Phrase' },
+        { field: 'era_period', label: '10. Date range' }
     ];
 
     document.getElementById('facet-zoom-in').addEventListener('click', function () {

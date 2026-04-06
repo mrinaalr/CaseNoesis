@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CaseLinker - Advanced Analysis</title>
+    <script src="/viz-assets/caselinker-api.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -673,8 +674,10 @@
                     return;
                 }
 
-                const response = await fetch('/api/cases?include_raw_data=true');
-                allCases = await response.json();
+                if (typeof caselinkerLoadAllSummariesSequential !== 'function') {
+                    throw new Error('caselinker-api.js missing: caselinkerLoadAllSummariesSequential');
+                }
+                allCases = await caselinkerLoadAllSummariesSequential();
                 window.allCases = allCases;
                 setCachedCases(allCases);
                 resetUniqueOrganizationsCache();
@@ -683,8 +686,10 @@
                 console.error('Error loading cases:', error);
                 if (loadingEl) loadingEl.style.display = 'none';
                 try {
-                    const response = await fetch('/api/cases?include_raw_data=true');
-                    allCases = await response.json();
+                    if (typeof caselinkerLoadAllSummariesSequential !== 'function') {
+                        throw new Error('caselinkerLoadAllSummariesSequential missing');
+                    }
+                    allCases = await caselinkerLoadAllSummariesSequential();
                     window.allCases = allCases;
                     setCachedCases(allCases);
                     renderTopicSelector();
@@ -1716,14 +1721,16 @@
             // If still not found, try fetching from API
             if (!caseItem) {
                 try {
-                    const response = await fetch('/api/cases?include_raw_data=true');
-                    if (response.ok) {
-                        const allCasesFromAPI = await response.json();
-                        window.allCases = allCasesFromAPI;
-                        caseItem = allCasesFromAPI.find(c => c.id === caseId);
+                    const r = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
+                    if (r.ok) {
+                        caseItem = await r.json();
+                        if (window.allCases && Array.isArray(window.allCases)) {
+                            const ix = window.allCases.findIndex((c) => c.id === caseId);
+                            if (ix >= 0) window.allCases[ix] = caseItem;
+                        }
                     }
                 } catch (error) {
-                    console.error('Error fetching cases:', error);
+                    console.error('Error fetching case:', error);
                 }
             }
             

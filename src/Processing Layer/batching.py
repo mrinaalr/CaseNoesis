@@ -106,7 +106,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -138,6 +138,17 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_wcso = False
     is_lapd = False
     is_south_florida_icac = False
+    is_nj_ag = False
+    is_pa_ag = False
+    is_vt_ag = False
+    is_ohio_ag = False
+    is_ut_ag = False
+    is_ms_ag = False
+    is_nc_sbi = False
+    is_la_ag = False
+    is_wy_dci = False
+    is_sd_ag = False
+    is_ky_sp = False
     is_other_external = False
     
     if source:
@@ -168,6 +179,28 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_lapd = True
         elif source_upper == 'SOUTH FLORIDA ICAC':
             is_south_florida_icac = True
+        elif source_upper == 'NJ AG':
+            is_nj_ag = True
+        elif source_upper == 'PA AG':
+            is_pa_ag = True
+        elif source_upper == 'VT AG':
+            is_vt_ag = True
+        elif source_upper == 'OHIO AG':
+            is_ohio_ag = True
+        elif source_upper == 'UT AG':
+            is_ut_ag = True
+        elif source_upper == 'MS AG':
+            is_ms_ag = True
+        elif source_upper == 'NC SBI':
+            is_nc_sbi = True
+        elif source_upper == 'LA AG':
+            is_la_ag = True
+        elif source_upper == 'WY DCI':
+            is_wy_dci = True
+        elif source_upper == 'SD AG':
+            is_sd_ag = True
+        elif source_upper == 'KY SP':
+            is_ky_sp = True
         elif source_upper in ('OTHER'):
             is_other_external = True
     
@@ -198,6 +231,28 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "LAPD")
     elif is_south_florida_icac:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SOUTH FLORIDA ICAC")
+    elif is_nj_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NJ AG")
+    elif is_pa_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "PA AG")
+    elif is_vt_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "VT AG")
+    elif is_ohio_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "OHIO AG")
+    elif is_ut_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "UT AG")
+    elif is_ms_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "MS AG")
+    elif is_nc_sbi:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NC SBI")
+    elif is_la_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "LA AG")
+    elif is_wy_dci:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "WY DCI")
+    elif is_sd_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SD AG")
+    elif is_ky_sp:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "KY SP")
     elif is_other_external:
         return _batch_external_cases(text, org_name, source_file)
     else:
@@ -1145,11 +1200,18 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "ILLINOIS AG": ["ILLNOISAG_ICAC_All.pdf", "ILLINOIS_AG_All.pdf", "illinois_ag/ILLINOIS_AG_All.pdf"],
     "WCSO": ["Washoe_ICAC_All.pdf", "wcso/Washoe_ICAC_All.pdf", "washoe/Washoe_ICAC_All.pdf"],
     "LAPD": ["LAPD_ICAC_ALL.pdf", "LAPD_ICAC_All.pdf", "lapd/LAPD_ICAC_All.pdf"],
-    "SOUTH FLORIDA ICAC": [
-        "SouthFlorida_ICAC_All.pdf",
-        "Southflorida_ICAC_All.pdf",
-        "southflorida/Southflorida_ICAC_All.pdf",
-    ],
+    "SOUTH FLORIDA ICAC": ["SouthFlorida_ICAC_All.pdf"],
+    "NJ AG": ["NJAG_ICAC_All.pdf", "NJOAG_ICAC_All.pdf", "nj_ag/NJAG_ICAC_All.pdf"],
+    "PA AG": ["PAAG_ICAC_All.pdf", "PA_AG_ICAC_All.pdf", "PAOAG_ICAC_All.pdf", "pa_ag/PAAG_ICAC_All.pdf"],
+    "VT AG": ["VTAG_ICAC_All.pdf", "VTOAG_ICAC_All.pdf", "Vermont_ICAC_All.pdf", "vt_ag/VTAG_ICAC_All.pdf"],
+    "OHIO AG": ["OHIOAG_ICAC_All.pdf", "Ohio_ICAC_All.pdf", "ohio_ag/OHIOAG_ICAC_All.pdf"],
+    "UT AG": ["UTAG_ICAC_All.pdf", "UTOAG_ICAC_All.pdf", "Utah_ICAC_All.pdf", "ut_ag/UTAG_ICAC_All.pdf"],
+    "MS AG": ["MSAG_ICAC_All.pdf", "Mississippi_ICAC_All.pdf", "ms_ag/MSAG_ICAC_All.pdf"],
+    "NC SBI": ["NCSBI_ICAC_All.pdf", "NC_SBI_ICAC_All.pdf", "nc_sbi/NCSBI_ICAC_All.pdf"],
+    "LA AG": ["LAAG_ICAC_All.pdf", "Louisiana_ICAC_All.pdf", "la_ag/LAAG_ICAC_All.pdf"],
+    "WY DCI": ["WYDCI_ICAC_All.pdf", "WY_DCI_ICAC_All.pdf", "wy_dci/WYDCI_ICAC_All.pdf"],
+    "SD AG": ["SDAG_ICAC_All.pdf", "South_Dakota_ICAC_All.pdf", "sd_ag/SDAG_ICAC_All.pdf"],
+    "KY SP": ["KYSP_ICAC_All.pdf", "KSP_ICAC_All.pdf", "ky_sp/KYSP_ICAC_All.pdf"],
 }
 
 

@@ -24,6 +24,15 @@ else:
     db_path = project_root / "caselinker.db"
     storage = CaseStorage(str(db_path))
 
+
+def _perpetrator_age_bin_label(age: int) -> str:
+    """Match run/main.py Perpetrator Age chart binning."""
+    if 18 <= age <= 19:
+        return "18-19"
+    lo = (age // 5) * 5
+    return f"{lo}-{lo + 4}"
+
+
 def analyze_age_ranges(cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Analyze age range distributions and identify discrepancies."""
     print("\n" + "="*80)
@@ -56,14 +65,14 @@ def analyze_age_ranges(cases: List[Dict[str, Any]]) -> Dict[str, Any]:
     # Group into bins (like bubble chart)
     age_bins = {}
     for age, count in age_counter.items():
-        bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
+        bin_key = _perpetrator_age_bin_label(age)
         age_bins[bin_key] = age_bins.get(bin_key, 0) + count
     
     # Count cases per bin (like filter)
     case_bins = defaultdict(set)
     for case_info in cases_with_age:
         for age in case_info['ages']:
-            bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
+            bin_key = _perpetrator_age_bin_label(age)
             case_bins[bin_key].add(case_info['case_id'])
     
     print(f"\nTotal cases with age data: {len(cases_with_age)}")

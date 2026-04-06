@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state press materials. There are currently **946 cases** processed across nine sources: **AZICAC** (47), **NCMEC** (244), **Georgia Bureau of Investigation** (66), **Idaho ICAC** (137), **Michigan ICAC** (11), **Texas AG** (28), **SVICAC** (85), **TBI ICAC** (63), **SCAG ICAC** (265). These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state and regional press materials. There are currently **2,180 cases** across **25** ingestion sources: **ILLINOIS AG** (265), **SCAG ICAC** (265), **NCMEC** (244), **KY SP** (206), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **NEWYORK SP** (63), **TBI ICAC** (63), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **SD AG** (16), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Technical Reports
 
@@ -127,16 +127,32 @@ Visit the **Sources** page on the live demo to see where PDFs can be obtained:
 - **Live Demo Sources Page**: [https://web-production-13a2.up.railway.app/sources](https://web-production-13a2.up.railway.app/sources)
 - Or visit `/sources` when running locally: http://localhost:8000/sources
 
-The sources page lists publicly available reports from:
-- **Arizona ICAC**: Annual case reports (2011–2014)
-- **National Center for Missing & Exploited Children (NCMEC)**: Case summaries and CyberTipline-related publications (2022–2024)
-- **Georgia Bureau of Investigation (GBI)**: Georgia CEACC Press releases
-- **Idaho ICAC (Idaho Office of Attorney General)**: ICAC press releases, 2021–2026
-- **Texas Office of the Attorney General**: Cyber Crimes press releases, 2016–2019
-- **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases, 2025–2026
-- **Silicon Valley ICAC (SVICAC)**: Regional news articles (SVICAC Latest News), 2009–2024
-- **Tennessee Bureau of Investigation (TBI) ICAC**: Aggregated TBI newsroom ICAC press coverage, 2016–2026
-- **South Carolina Attorney General (SCAG) ICAC**: ICAC-tagged news releases, 2024–2026
+The sources page lists publicly available reports from (see `/sources` for links and disclaimers):
+- **Arizona ICAC (AZICAC)**: Annual case reports and related materials
+- **National Center for Missing & Exploited Children (NCMEC)**: Case summaries and CyberTipline-related publications
+- **Georgia Bureau of Investigation (GBI)**: Georgia CEACC / ICAC press releases
+- **Idaho ICAC (Idaho Office of Attorney General)**: ICAC press releases
+- **Texas Office of the Attorney General**: Cyber Crimes / ICAC-related press releases
+- **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases
+- **Silicon Valley ICAC (SVICAC)**: Regional news articles (SVICAC Latest News)
+- **Tennessee Bureau of Investigation (TBI) ICAC**: TBI newsroom ICAC press coverage
+- **South Carolina Attorney General (SCAG) ICAC**: ICAC-tagged news releases
+- **Illinois Attorney General**: ICAC-related press releases
+- **Kentucky State Police (KY SP)**: News archive search (ICAC)
+- **Vermont Attorney General (VT AG)**: ICAC-related releases
+- **Ohio Attorney General**: ICAC-related releases
+- **New Jersey Attorney General**: ICAC-related releases
+- **South Florida ICAC**: Regional ICAC news coverage
+- **Pennsylvania Attorney General**: ICAC-related releases
+- **New York State Police (NEWYORK SP)**: ICAC-related releases
+- **Louisiana Attorney General (LA AG)**: ICAC-related releases
+- **Utah Attorney General (UT AG)**: ICAC-related releases
+- **Los Angeles Police Department (LAPD)**: ICAC-related releases
+- **Wyoming Division of Criminal Investigation (WY DCI)**: ICAC-related releases
+- **North Carolina State Bureau of Investigation (NC SBI)**: ICAC-related releases
+- **South Dakota Attorney General (SD AG)**: ICAC-related releases
+- **Washoe County Sheriff's Office (WCSO, Nevada)**: ICAC-related releases
+- **Mississippi Attorney General (MS AG)**: ICAC-related releases
 
 ### Processing PDFs to Populate Database
 
@@ -179,7 +195,7 @@ Search provides a **facet decision tree** over the stored case corpus: the serve
 
 ## Triage and Experimental ML
 
-Access Triage via the [live demo](https://web-production-13a2.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same 9 dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
+Access Triage via the [live demo](https://web-production-13a2.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
 
 **Experimental ML** ([live](https://web-production-13a2.up.railway.app/ml-experimental), or http://localhost:8000/ml-experimental) is the in-app **documentation tab** for ML scope: what is production-adjacent (NER merge, triage model), what stays optional, and documents how ML functionality is evaluated and implemented. 
 
@@ -190,6 +206,7 @@ python3 scripts/train_triage_model.py --model rf --out models/triage_bundle.jobl
 ```
 
 Evaluate or reproduce metrics with `scripts/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
+
 
 ## Using Advanced Case Analysis
 
@@ -297,8 +314,10 @@ Each case includes structured features extracted from case narratives:
 - `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence
 - `GET /sources` - Data sources page
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
-- `GET /api/cases` - Get all cases
-- `GET /api/cases/{case_id}` - Get specific case
+- `GET /api/cases` - Full bulk case export (internal/local only; requires localhost or `CASELINKER_INTERNAL_API_KEY`)
+- `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
+- `POST /api/cases-summaries-by-ids` - Public batched summaries (max 500 ids per request) for cluster membership and similar flows
+- `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
 - `GET /api/automated-analysis` - Run automated analysis (case grouping, triage, insights)
 - `POST /api/return-tagged-cases` - Get cases matching selected tags (intersection logic)
 - `GET /api/stats` - Get case statistics (total cases, total victims, extracted features count, sources)
@@ -326,7 +345,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: This system contains cases from publicly available sources (AZ ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Idaho Office of Attorney General, Georgia Bureau of Investigation, Michigan State Police, Texas Office of the Attorney General, Tennessee Bureau of Investigation ICAC news coverage, South Carolina Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: This system contains cases from publicly available sources (AZ, South Florida, LAPD ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Georgia Bureau of Investigation, Michigan, New York, and Kentucky State Police, Texas, Pennsylvania, New Jersey, Vermont, Louisiana, South Dakota, and Idaho Office of the Attorney General, Tennessee Bureau of Investigation, South Carolina, Utah, Mississippi, Ohio, and Illinois Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CaseLinker - Case Clusters</title>
+    <script src="/viz-assets/caselinker-api.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -62,7 +63,7 @@
             }
         }
         .container {
-            max-width: 1680px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 20px 20px;
         }
@@ -104,8 +105,8 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 1400px;
-            min-height: 1400px;
+            height: 1720px;
+            min-height: 1720px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -285,7 +286,7 @@
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
         // Match #cluster-visualization height; extra room so bottom satellite bubbles are not clipped
-        const height = 1400;
+        const height = 1720;
         const margin = 42;
         
         const svg = d3.select('#cluster-visualization')
@@ -372,9 +373,9 @@
             const mainClusterNodes = [];
             const clusterPositions = {
                 'online_only_cluster': { x: width * 0.45, y: height * 0.45 }, // Top-center
-                'possession_cluster': { x: width * 0.25, y: height * 0.25 }, // Left
+                'possession_cluster': { x: width * 0.28, y: height * 0.23 }, // Left
                 'general_cluster': { x: width * 0.69, y: height * 0.29 }, // Right (inset from edge)
-                'severe_cluster': { x: width * 0.24, y: height * 0.63 }, // Bottom-left
+                'severe_cluster': { x: width * 0.27, y: height * 0.67 }, // Bottom-left
                 'investigation_cluster': { x: width * 0.65, y: height * 0.70 } // Bottom-center
             };
             
@@ -912,6 +913,24 @@
                 jiggleAnimationId = null;
             }
         }
+
+        async function hydrateCaseTextForList(cases) {
+            if (!Array.isArray(cases) || cases.length === 0) return;
+            const missing = cases.filter(c => c && c.id && !(c.raw_data?.case_text || c.case_text));
+            if (missing.length === 0) return;
+            await Promise.all(missing.map(async (c) => {
+                try {
+                    const r = await fetch(`/api/cases/${encodeURIComponent(c.id)}`);
+                    if (!r.ok) return;
+                    const full = await r.json();
+                    const fullText = full?.raw_data?.case_text || full?.case_text || '';
+                    if (fullText) c.case_text = fullText;
+                    if (!c.date_range && full?.date_range) c.date_range = full.date_range;
+                } catch (e) {
+                    // keep summary-only fallback when fetch fails
+                }
+            }));
+        }
         
         async function displayCasesByIds(caseIds, title) {
             const displayDiv = document.getElementById('case-display');
@@ -936,72 +955,34 @@
                 return;
             }
             
-            // Fetch each case from the API (like Visualization tab does)
+            // Summaries via POST /api/cases-summaries-by-ids (batched); missing IDs via GET /api/cases/{id}
             const fullCases = [];
             try {
                 console.log('Fetching cases for IDs:', caseIds);
-                // Fetch all cases at once (faster)
-                const response = await fetch('/api/cases?include_raw_data=true');
-                
-                if (response.ok) {
-                    const allCases = await response.json();
-                    console.log(`Fetched ${allCases.length} total cases from API`);
-                    
-                    // Filter to only cases in this cluster
-                    const casesMap = new Map();
-                    allCases.forEach(c => {
-                        if (c.id && caseIds.includes(c.id)) {
-                            casesMap.set(c.id, c);
-                        }
+                const byId = new Map();
+                if (typeof caselinkerPostSummariesByIdsBatched === 'function') {
+                    const summaries = await caselinkerPostSummariesByIdsBatched(caseIds, 500);
+                    summaries.forEach((c) => {
+                        if (c && c.id) byId.set(c.id, c);
                     });
-                    
-                    console.log(`Found ${casesMap.size} matching cases out of ${caseIds.length} requested`);
-                    
-                    // Get cases in the same order as caseIds
-                    caseIds.forEach(id => {
-                        if (casesMap.has(id)) {
-                            fullCases.push(casesMap.get(id));
-                        } else {
-                            console.warn(`Case ID ${id} not found in API response`);
-                        }
-                    });
-                    
-                    // If we didn't find all cases, try fetching individually as fallback
-                    if (fullCases.length < caseIds.length) {
-                        console.log(`Only found ${fullCases.length}/${caseIds.length} cases, trying individual fetches...`);
-                        const foundIds = new Set(fullCases.map(c => c.id));
-                        for (const caseId of caseIds) {
-                            if (!foundIds.has(caseId)) {
-                                try {
-                                    const individualResponse = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
-                                    if (individualResponse.ok) {
-                                        const caseData = await individualResponse.json();
-                                        fullCases.push(caseData);
-                                        console.log(`Found case ${caseId} via individual fetch`);
-                                    } else {
-                                        console.warn(`Failed to fetch case ${caseId}: ${individualResponse.status}`);
-                                    }
-                                } catch (e) {
-                                    console.error(`Error fetching case ${caseId}:`, e);
-                                }
-                            }
-                        }
+                    console.log(`Batched summaries: ${byId.size} / ${caseIds.length}`);
+                }
+                for (const caseId of caseIds) {
+                    if (byId.has(caseId)) {
+                        fullCases.push(byId.get(caseId));
+                        continue;
                     }
-                } else {
-                    console.error(`API response not OK: ${response.status} ${response.statusText}`);
-                    // Fallback: fetch individually
-                    for (const caseId of caseIds) {
-                        try {
-                            const response = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
-                            if (response.ok) {
-                                const caseData = await response.json();
-                                fullCases.push(caseData);
-                            } else {
-                                console.warn(`Failed to fetch case ${caseId}: ${response.status}`);
-                            }
-                        } catch (e) {
-                            console.error(`Error fetching case ${caseId}:`, e);
+                    try {
+                        const individualResponse = await fetch(
+                            `/api/cases/${encodeURIComponent(caseId)}`
+                        );
+                        if (individualResponse.ok) {
+                            fullCases.push(await individualResponse.json());
+                        } else {
+                            console.warn(`Failed to fetch case ${caseId}: ${individualResponse.status}`);
                         }
+                    } catch (e) {
+                        console.error(`Error fetching case ${caseId}:`, e);
                     }
                 }
             } catch (error) {
@@ -1017,6 +998,7 @@
                 listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">No cases found</div>';
                 return;
             }
+            await hydrateCaseTextForList(fullCases);
             
             // Render each case - exactly like Visualization tab
             fullCases.forEach((caseData) => {
@@ -1044,13 +1026,14 @@
             displayDiv.style.display = 'block';
         }
         
-        function displayCases(cases, title) {
+        async function displayCases(cases, title) {
             const displayDiv = document.getElementById('case-display');
             const titleEl = document.getElementById('case-display-title');
             const listEl = document.getElementById('case-list');
             
             titleEl.textContent = `${title} (${cases.length} cases)`;
             listEl.innerHTML = '';
+            await hydrateCaseTextForList(cases);
             
             cases.forEach(caseData => {
                 const caseItem = document.createElement('div');

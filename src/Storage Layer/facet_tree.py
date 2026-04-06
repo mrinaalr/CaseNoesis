@@ -36,6 +36,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from hashlib import sha256
@@ -55,9 +56,86 @@ DEFAULT_FACET_ORDER: Sequence[FacetStep] = (
     ("organizations", "Organization"),
     ("locations", "Location"),
     ("severity_phrases", "Severity Phrase"),
+    ("era_period", "Date range"),
 )
 
 EMPTY_BUCKET = "∅"
+
+# Inferred from case year (date_start / date_range / raw_data); not stored in DB.
+ERA_PERIOD_BUCKETS: Tuple[Tuple[int, int, str], ...] = (
+    (2010, 2014, "2010–2014"),
+    (2015, 2018, "2015–2018 (mobile-first transition)"),
+    (2019, 2022, "2019–2022 (platform proliferation and expansion)"),
+    (2023, 2026, "2023–2026 (social media and generative AI period)"),
+)
+
+
+def _year_from_value(val: Any) -> Optional[int]:
+    """Best-effort calendar year from DB date, ISO string, or text."""
+    if val is None:
+        return None
+    try:
+        if hasattr(val, "year"):
+            y = int(val.year)  # type: ignore[attr-defined]
+            if 1990 <= y <= 2035:
+                return y
+    except (TypeError, ValueError):
+        pass
+    s = str(val).strip()
+    if len(s) >= 4 and s[:4].isdigit():
+        y = int(s[:4])
+        if 1990 <= y <= 2035:
+            return y
+    m = re.search(r"\b((?:19|20)\d{2})\b", s)
+    if m:
+        y = int(m.group(1))
+        if 1990 <= y <= 2035:
+            return y
+    return None
+
+
+def infer_case_year(case: Dict[str, Any]) -> Optional[int]:
+    """Single representative year for facet bucketing (first available signal)."""
+    for key in ("date_start", "date_end"):
+        y = _year_from_value(case.get(key))
+        if y is not None:
+            return y
+    dr = case.get("date_range")
+    if isinstance(dr, dict):
+        for key in ("start", "end"):
+            y = _year_from_value(dr.get(key))
+            if y is not None:
+                return y
+    rd = case.get("raw_data")
+    if isinstance(rd, dict):
+        for key in ("month_year", "year", "date"):
+            y = _year_from_value(rd.get(key))
+            if y is not None:
+                return y
+    return None
+
+
+def era_period_label_for_year(year: int) -> Optional[str]:
+    """Map a year to the corpus era label, or None if outside defined ranges."""
+    for lo, hi, label in ERA_PERIOD_BUCKETS:
+        if lo <= year <= hi:
+            return label
+    return None
+
+
+def enrich_cases_with_era_period(cases: List[Dict[str, Any]]) -> None:
+    """
+    Set case['era_period'] to a one-element list for facet matching, or leave unset for ∅.
+    Mutates case dicts in place (API-only; not persisted).
+    """
+    for c in cases:
+        c.pop("era_period", None)
+        y = infer_case_year(c)
+        if y is None:
+            continue
+        lab = era_period_label_for_year(y)
+        if lab:
+            c["era_period"] = [lab]
 
 
 def case_has_field_value(case: Dict[str, Any], field_key: str, value: str) -> bool:

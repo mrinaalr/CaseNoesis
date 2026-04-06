@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CaseLinker - Data Sources</title>
+    <script src="/viz-assets/caselinker-api.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -222,6 +223,7 @@
         <div class="source-list" id="source-list">
             <!-- Sources loaded dynamically -->
         </div>
+
     </div>
 
     <script>
@@ -333,7 +335,7 @@
                     ]
                 },
                 {
-                    name: "Tennessee Bureau of Investigation (TBI) ICAC – Newsroom",
+                    name: "Tennessee Bureau of Investigation ICAC – Newsroom",
                     url: "https://tbinewsroom.com/?s=ICAC",
                     description: "Press releases Tennessee Bureau of Investigation’s Internet Crimes Against Children (ICAC) Task Force.",
                     type: "Official website",
@@ -387,6 +389,32 @@
                     ]
                 },
                 {
+                    name: "Pennsylvania Office of the Attorney General – ICAC",
+                    url: "https://www.attorneygeneral.gov/taking-action-search-results/?swpquery=child",
+                    description: "PA OAG search (child-related releases, incl. Child Predator Section).",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Taking Action search",
+                            url: "https://www.attorneygeneral.gov/taking-action-search-results/?swpquery=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "New Jersey Office of the Attorney General – Press Releases (ICAC)",
+                    url: "https://www.njoag.gov/?s=icac",
+                    description: "NJ OAG site search for ICAC-related releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://www.njoag.gov/?s=icac",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
                     name: "Washoe County Sheriff's Office – Newsroom search (ICAC)",
                     url: "https://washoesheriff.com/search_results.php?q=ICAC",
                     description: "Site search results for ICAC from the Washoe County Sheriff's Office (Nevada), including Internet Crimes Against Children Task Force arrests and related newsroom items.",
@@ -424,6 +452,123 @@
                             casesUsed: 0
                         }
                     ]
+                }, 
+                {
+                    name: "Vermont Office of the Attorney General – Site search (child-related)",
+                    url: "https://ago.vermont.gov/search/node?keys=child",
+                    description: "Vermont AG site search for child-related releases (includes ICAC/CSAM-relevant releases).",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Site search (child)",
+                            url: "https://ago.vermont.gov/search/node?keys=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Ohio Attorney General – News releases (ICAC)",
+                    url: "https://www.ohioattorneygeneral.gov/Media/News-Releases/News-Releases-Search-Results?searchtext=child&searchmode=anyword",
+                    description: "Ohio AG site search for ICAC-related releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (child)",
+                            url: "https://www.ohioattorneygeneral.gov/Media/News-Releases/News-Releases-Search-Results?searchtext=child&searchmode=anyword",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Mississippi Attorney General – Media releases (ICAC)",
+                    url: "https://attorneygenerallynnfitch.com/?s=child",
+                    description: "Mississippi AG site search for ICAC-related releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (child)",
+                            url: "https://attorneygenerallynnfitch.com/?s=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "North Carolina State Bureau of Investigation – News releases (ICAC)",
+                    url: "https://www.ncsbi.gov/getdoc/ae19a2eb-38f4-4653-9390-9fc0016f7985/Search-Results.aspx?searchtext=child&searchmode=anyword",
+                    description: "North Carolina SBI site search for ICAC-related releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (child)",
+                            url: "https://www.ncsbi.gov/getdoc/ae19a2eb-38f4-4653-9390-9fc0016f7985/Search-Results.aspx?searchtext=child&searchmode=anyword",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Louisiana Office of the Attorney General – News releases (ICAC)",
+                    url: "https://www.ag.state.la.us/News/Page/1",
+                    description: "Louisiana AG site search for ICAC-related releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (child)",
+                            url: "https://www.ag.state.la.us/News/Page/1",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Utah Attorney General – Site search (ICAC)",
+                    url: "https://attorneygeneral.utah.gov/?s=ICAC&e_search_props=d685999-19747",
+                    description: "Utah AG site search for ICAC-related releases and posts.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://attorneygeneral.utah.gov/?s=ICAC&e_search_props=d685999-19747",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Wyoming Division of Criminal Investigation – News (ICAC / Computer Crime)",
+                    url: "https://wyomingdci.wyo.gov/dci-homepage/news",
+                    description: "Wyoming DCI news and information; filter to Internet Crimes Against Children (ICAC) and Computer Crime Unit releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News index",
+                            url: "https://wyomingdci.wyo.gov/dci-homepage/news",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "South Dakota Office of the Attorney General – Press releases (ICAC)",
+                    url: "https://atg.sd.gov/OurOffice/Media/pressreleases.aspx",
+                    description: "South Dakota AG site search for ICAC-related releases and posts.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Press releases",
+                            url: "https://atg.sd.gov/OurOffice/Media/pressreleases.aspx",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Kentucky State Police – News Archive (ICAC)",
+                    url: "https://www.kentuckystatepolice.ky.gov/news?searchTerm=ICAC",
+                    description: "Kentucky State Police public news search filtered to ICAC-related posts.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://www.kentuckystatepolice.ky.gov/news?searchTerm=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
                 }
             ];
             
@@ -442,9 +587,15 @@
 
             // Get dynamic sources from API (no raw_data — only need source/id/date for counts & date range)
             try {
+                const loadCases =
+                    typeof caselinkerLoadAllSummariesSequential === 'function'
+                        ? caselinkerLoadAllSummariesSequential
+                        : async () => {
+                              throw new Error('caselinker-api.js missing: caselinkerLoadAllSummariesSequential');
+                          };
                 const [countData, cases] = await Promise.all([
                     fetch('/api/case-count').then((r) => r.json()),
-                    fetch('/api/cases?include_raw_data=false').then((r) => r.json()),
+                    loadCases(),
                 ]);
                 try {
                     const n =
@@ -585,6 +736,158 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = illinoisCases.length;
                         }
+                    } else if (staticSource.name.includes('New Jersey Office of the Attorney General')) {
+                        const njCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'NJ AG';
+                        });
+                        staticSource.cases = njCases;
+                        const njRange = getDateRange(njCases);
+                        if (njRange) {
+                            staticSource.dateRangeDisplay = njRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = njRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = njCases.length;
+                        }
+                    } else if (staticSource.name.includes('Vermont Office of the Attorney General')) {
+                        const vtCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'VT AG';
+                        });
+                        staticSource.cases = vtCases;
+                        const vtRange = getDateRange(vtCases);
+                        if (vtRange) {
+                            staticSource.dateRangeDisplay = vtRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = vtRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = vtCases.length;
+                        }
+                    } else if (staticSource.name.includes('Ohio Attorney General')) {
+                        const ohioCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'OHIO AG';
+                        });
+                        staticSource.cases = ohioCases;
+                        const ohioRange = getDateRange(ohioCases);
+                        if (ohioRange) {
+                            staticSource.dateRangeDisplay = ohioRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = ohioRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = ohioCases.length;
+                        }
+                    } else if (staticSource.name.includes('Mississippi Attorney General')) {
+                        const msCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'MS AG';
+                        });
+                        staticSource.cases = msCases;
+                        const msRange = getDateRange(msCases);
+                        if (msRange) {
+                            staticSource.dateRangeDisplay = msRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = msRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = msCases.length;
+                        }
+                    } else if (staticSource.name.includes('North Carolina State Bureau of Investigation')) {
+                        const ncSbiCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'NC SBI';
+                        });
+                        staticSource.cases = ncSbiCases;
+                        const ncSbiRange = getDateRange(ncSbiCases);
+                        if (ncSbiRange) {
+                            staticSource.dateRangeDisplay = ncSbiRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = ncSbiRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = ncSbiCases.length;
+                        }
+                    } else if (staticSource.name.includes('Louisiana Office of the Attorney General')) {
+                        const laCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'LA AG';
+                        });
+                        staticSource.cases = laCases;
+                        const laRange = getDateRange(laCases);
+                        if (laRange) {
+                            staticSource.dateRangeDisplay = laRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = laRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = laCases.length;
+                        }
+                    } else if (staticSource.name.includes('Utah Attorney General')) {
+                        const utCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'UT AG';
+                        });
+                        staticSource.cases = utCases;
+                        const utRange = getDateRange(utCases);
+                        if (utRange) {
+                            staticSource.dateRangeDisplay = utRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = utRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = utCases.length;
+                        }
+                    } else if (staticSource.name.includes('Pennsylvania Office of the Attorney General')) {
+                        const paCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'PA AG';
+                        });
+                        staticSource.cases = paCases;
+                        const paRange = getDateRange(paCases);
+                        if (paRange) {
+                            staticSource.dateRangeDisplay = paRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = paRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = paCases.length;
+                        }
                     } else if (staticSource.name.includes("Washoe County Sheriff")) {
                         const wcsoCases = cases.filter(c => {
                             const s = (c.source || c.raw_data?.source || '')
@@ -641,6 +944,63 @@
                         }
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = sfCases.length;
+                        }
+                    } else if (staticSource.name.includes('Wyoming Division of Criminal Investigation')) {
+                        const wyCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'WY DCI';
+                        });
+                        staticSource.cases = wyCases;
+                        const wyRange = getDateRange(wyCases);
+                        if (wyRange) {
+                            staticSource.dateRangeDisplay = wyRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = wyRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = wyCases.length;
+                        }
+                    } else if (staticSource.name.includes('South Dakota Office of the Attorney General')) {
+                        const sdCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'SD AG';
+                        });
+                        staticSource.cases = sdCases;
+                        const sdRange = getDateRange(sdCases);
+                        if (sdRange) {
+                            staticSource.dateRangeDisplay = sdRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = sdRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = sdCases.length;
+                        }
+                    } else if (staticSource.name.includes('Kentucky State Police')) {
+                        const kyCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'KY SP';
+                        });
+                        staticSource.cases = kyCases;
+                        const kyRange = getDateRange(kyCases);
+                        if (kyRange) {
+                            staticSource.dateRangeDisplay = kyRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = kyRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = kyCases.length;
                         }
                     }
                 });

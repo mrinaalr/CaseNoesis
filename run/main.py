@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request, Query, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from typing import List, Dict, Any, Optional, Tuple
 import sys
 import json
@@ -42,6 +43,7 @@ from facet_tree import (
     cohort_members_for_path,
     count_nodes,
     distinct_field_values,
+    enrich_cases_with_era_period,
     facet_order_subset,
     filter_cases_by_constraints,
     max_tree_depth,
@@ -88,6 +90,73 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+def _is_local_request(request: Request) -> bool:
+    """Treat localhost traffic as internal for local development."""
+    host = request.client.host if request.client else ""
+    return host in {"127.0.0.1", "::1", "localhost"}
+
+
+def _is_internal_api_request(request: Request) -> bool:
+    """
+    Internal API guard for sensitive endpoints.
+
+    - Allows localhost requests (dev).
+    - Allows requests with matching internal key header/query.
+    """
+    if _is_local_request(request):
+        return True
+
+    expected = os.getenv("CASELINKER_INTERNAL_API_KEY", "").strip()
+    if not expected:
+        return False
+
+    provided = (
+        request.headers.get("X-CaseLinker-Internal-Key")
+        or request.query_params.get("internal_key")
+        or ""
+    ).strip()
+    return bool(provided) and provided == expected
+
+
+def _sanitize_case_for_public(case: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove raw narrative material from public case payloads."""
+    case.pop("raw_data", None)
+    extracted = case.get("extracted_features")
+    if isinstance(extracted, dict):
+        extracted.pop("raw_data", None)
+        extracted.pop("case_text", None)
+    return case
+
+
+def _case_summary_slim(case: Dict[str, Any]) -> Dict[str, Any]:
+    """Slim case shape for chunk/by-ids summary APIs (no narratives/raw blobs)."""
+    out = {
+        "id": case.get("id"),
+        "source": case.get("source"),
+        "date_start": case.get("date_start"),
+        "date_end": case.get("date_end"),
+        "date_range": case.get("date_range"),
+        "victim_count": case.get("victim_count"),
+        "perpetrator_count": case.get("perpetrator_count"),
+        "relationship_to_victim": case.get("relationship_to_victim"),
+        "platforms_used": case.get("platforms_used"),
+        "severity_indicators": case.get("severity_indicators"),
+        "case_topics": case.get("case_topics"),
+        "tags": case.get("tags"),
+        "investigation_type": case.get("investigation_type"),
+        "agencies_involved": case.get("agencies_involved"),
+        "organizations": case.get("organizations"),
+    }
+    return out
+
+
+class CaseIdsBody(BaseModel):
+    """Up to 500 case ids per request for batched summaries (no raw narratives)."""
+
+    ids: List[str] = Field(..., min_length=1)
+
 
 # Request logging middleware
 @app.middleware("http")
@@ -211,6 +280,7 @@ def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[
 
     bp_resolved = str(Path(bundle_path).resolve())
     cases = storage.get_all_cases(include_raw_data=False) or []
+    enrich_cases_with_era_period(cases)
     filtered = filter_cases_by_constraints(cases, constraints) if constraints else cases
 
     if not filtered:
@@ -275,6 +345,15 @@ def _facet_tree_cache_key_tuple(
 _case_count_cache = None
 _case_count_cache_time = 0.0
 _CASE_COUNT_TTL = 30  # seconds
+
+
+def _perpetrator_age_bin_label(age: int) -> str:
+    """Label for stats chart: ages 18–19 use explicit bin (perp ages are filtered to 18+)."""
+    if 18 <= age <= 19:
+        return "18-19"
+    lo = (age // 5) * 5
+    return f"{lo}-{lo + 4}"
+
 
 def get_case_count() -> int:
     """
@@ -432,6 +511,13 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
     """
     global _cases_cache, _cases_cache_case_count
 
+    # Bulk export is intentionally internal-only.
+    if not _is_internal_api_request(request):
+        raise HTTPException(
+            status_code=403,
+            detail="Bulk case access is restricted to internal requests.",
+        )
+
     try:
         # Get current case count for cache versioning
         current_case_count = get_case_count()
@@ -486,6 +572,54 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
             return []
 
 
+@app.get("/api/cases-summaries-chunk")
+@limiter.limit("240/minute")
+def cases_summaries_chunk(
+    request: Request,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(300, ge=1, le=500),
+):
+    """
+    Public paginated case summaries (slim fields, no raw narratives).
+    Lets timelines load the full corpus via many small responses instead of one bulk JSON.
+    """
+    try:
+        slice_cases = storage.get_cases_slim_chunk(offset, limit)
+        return {
+            "offset": offset,
+            "limit": limit,
+            "count": len(slice_cases),
+            "summaries": [_case_summary_slim(c) for c in slice_cases],
+        }
+    except Exception:
+        return {"offset": offset, "limit": limit, "count": 0, "summaries": []}
+
+
+@app.post("/api/cases-summaries-by-ids")
+@limiter.limit("120/minute")
+def cases_summaries_by_ids(request: Request, body: CaseIdsBody):
+    """
+    Public batched summaries for known case ids (e.g. cluster membership).
+    Caps at 500 ids per request; does not expose the whole database in one call.
+    """
+    raw = body.ids
+    seen = set()
+    ids: List[str] = []
+    for x in raw:
+        if isinstance(x, str) and x.strip() and x not in seen:
+            seen.add(x)
+            ids.append(x)
+        if len(ids) >= 500:
+            break
+    if not ids:
+        raise HTTPException(status_code=400, detail="Provide at least one case id")
+    try:
+        cases = storage.get_cases_by_ids(ids, include_raw_data=False)
+        return {"summaries": [_case_summary_slim(c) for c in cases]}
+    except Exception:
+        return {"summaries": []}
+
+
 @app.get("/api/case-count")
 @limiter.limit("120/minute")
 def get_case_count_endpoint(request: Request):
@@ -523,6 +657,7 @@ def get_facet_distinct(request: Request):
     """
     try:
         cases = storage.get_all_cases(include_raw_data=False) or []
+        enrich_cases_with_era_period(cases)
         options: Dict[str, Any] = {}
         for field_key, label in DEFAULT_FACET_ORDER:
             options[field_key] = {
@@ -570,6 +705,7 @@ def get_facet_tree(
             return _facet_tree_cache_payload
 
         all_cases = storage.get_all_cases(include_raw_data=False) or []
+        enrich_cases_with_era_period(all_cases)
         source_count = len(all_cases)
         cases = filter_cases_by_constraints(all_cases, constraints)
         order = facet_order_subset(DEFAULT_FACET_ORDER, include_list)
@@ -650,6 +786,7 @@ def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
     """
     try:
         all_cases = storage.get_all_cases(include_raw_data=False) or []
+        enrich_cases_with_era_period(all_cases)
         constraints = body.facet_constraints or {}
         cases = filter_cases_by_constraints(all_cases, constraints)
         path_tuples = _facet_path_tuples(body.facet_path)
@@ -789,7 +926,10 @@ def get_case(request: Request, case_id: str):
     """Get a specific case by ID"""
     case = storage.get_case(case_id)
     if not case:
-        return {"error": "Case not found"}, 404
+        raise HTTPException(status_code=404, detail="Case not found")
+    # Public callers can still fetch a case, but never raw narrative payloads.
+    if not _is_internal_api_request(request):
+        case = _sanitize_case_for_public(case)
     return case
 
 
@@ -1365,7 +1505,7 @@ def get_detailed_stats(request: Request):
                 
                 # Add case to each age bin it belongs to
                 for age in case_ages:
-                    bin_key = f"{age // 5 * 5}-{age // 5 * 5 + 4}"
+                    bin_key = _perpetrator_age_bin_label(age)
                     age_bins[bin_key].add(case_id)
         
         # Convert sets to counts
@@ -1883,6 +2023,10 @@ async def serve_ml_experimental():
     else:
         return HTMLResponse(content="<h1>ML Experimental page not found</h1>", status_code=404)
 
+
+_viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets"
+if _viz_assets.is_dir():
+    app.mount("/viz-assets", StaticFiles(directory=str(_viz_assets)), name="viz_assets")
 
 
 if __name__ == "__main__":

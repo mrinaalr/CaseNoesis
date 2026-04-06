@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CaseLinker - Timeline</title>
+    <script src="/viz-assets/caselinker-api.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
@@ -675,7 +676,7 @@
             }
         }
 
-        // Load cases from cache or API
+        // Load cases from cache or API (paginated public summaries — not one bulk JSON)
         function loadCases() {
             // 1. In-memory (same page load)
             if (window.CASELINKER_ALL_CASES) {
@@ -683,7 +684,7 @@
                 filteredCases = allCases;
                 updateStats();
                 renderTimeline(filteredCases);
-                return;
+                return Promise.resolve();
             }
             // 2. sessionStorage (nav/refresh - instant)
             const cached = getCachedCases();
@@ -693,9 +694,9 @@
                 filteredCases = allCases;
                 updateStats();
                 renderTimeline(filteredCases);
-                return;
+                return Promise.resolve();
             }
-            // 3. Fetch from API
+            // 3. Fetch via /api/cases-summaries-chunk (paginated; see caselinker-api.js)
             svg.append("text")
                 .attr("x", width / 2)
                 .attr("y", height / 2)
@@ -704,16 +705,21 @@
                 .attr("id", "loading-text")
                 .text("Loading cases...");
 
-            fetch('/api/cases?include_raw_data=true')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
+            if (typeof caselinkerLoadAllSummariesSequential !== "function") {
+                svg.select("#loading-text").remove();
+                svg.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#d32f2f")
+                    .text("Missing /viz-assets/caselinker-api.js — cannot load cases.");
+                return Promise.reject(new Error("caselinkerLoadAllSummariesSequential missing"));
+            }
+
+            return caselinkerLoadAllSummariesSequential()
+                .then((data) => {
                     svg.select("#loading-text").remove();
-                    allCases = Array.isArray(data) ? data : (data.cases || []);
+                    allCases = Array.isArray(data) ? data : data.cases || [];
                     window.CASELINKER_ALL_CASES = allCases;
                     setCachedCases(allCases);
                     if (allCases.length === 0) {
@@ -729,8 +735,8 @@
                     updateStats();
                     renderTimeline(filteredCases);
                 })
-                .catch(error => {
-                    console.error('Error loading cases:', error);
+                .catch((error) => {
+                    console.error("Error loading cases:", error);
                     svg.select("#loading-text").remove();
                     svg.append("text")
                         .attr("x", width / 2)
@@ -899,15 +905,12 @@
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else if (currentViz === 'platform') {
-                // For environment visualization, use count from "Online" bar in chart
-                // Show the stat box (in case it was hidden)
+                // Cases with at least one listed platform (matches chart: Online, Instagram, Snapchat, etc.)
                 const statBox = document.getElementById('victim-count').parentElement;
                 statBox.style.display = 'block';
                 
-                // Get count from platformChartData (matches what's shown in "Online" bar)
-                const onlineData = platformChartData.find(d => d.platform === 'Online');
-                const onlineCount = onlineData ? onlineData.count : 0;
-                document.getElementById('victim-count').textContent = onlineCount > 0 ? onlineCount : '-';
+                const digitalCount = filteredCases.filter(c => (c.platforms_used || []).length > 0).length;
+                document.getElementById('victim-count').textContent = digitalCount > 0 ? digitalCount : '-';
                 victimLabel.textContent = 'Cases with Digital Component';
                 
                 // Remove click handler
@@ -1277,8 +1280,26 @@
                 renderTimeline(filteredCases.length > 0 ? filteredCases : allCases);
             }
         }
+
+        async function hydrateCaseTextForList(cases) {
+            if (!Array.isArray(cases) || cases.length === 0) return;
+            const missing = cases.filter(c => c && c.id && !(c.raw_data?.case_text || c.case_text));
+            if (missing.length === 0) return;
+            await Promise.all(missing.map(async (c) => {
+                try {
+                    const r = await fetch(`/api/cases/${encodeURIComponent(c.id)}`);
+                    if (!r.ok) return;
+                    const full = await r.json();
+                    const fullText = full?.raw_data?.case_text || full?.case_text || '';
+                    if (fullText) c.case_text = fullText;
+                    if (!c.date_range && full?.date_range) c.date_range = full.date_range;
+                } catch (e) {
+                    // Keep summary-only case if detail fetch fails
+                }
+            }));
+        }
         
-        function showExpandedGroupCases(group, groupIndex, totalGroups) {
+        async function showExpandedGroupCases(group, groupIndex, totalGroups) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -1289,6 +1310,7 @@
             
             panel.classList.add('active');
             title.textContent = `${group.label} Cases (${group.cases.length} total)`;
+            await hydrateCaseTextForList(group.cases);
             
             // Render cases with highlighting
             list.innerHTML = '';
@@ -1550,14 +1572,16 @@
                     platformCases['None/Unknown'].push(c);
                 } else {
                     platforms.forEach(p => {
-                        // Group social media platforms with "online"
+                        // Normalize: Instagram / Snapchat get their own bars; other generic web/social → Online
                         let platformKey = p;
-                        const platformLower = p.toLowerCase();
-                        if (platformLower.includes('social media') || 
-                            platformLower.includes('facebook') || 
-                            platformLower.includes('twitter') || 
-                            platformLower.includes('instagram') || 
-                            platformLower.includes('snapchat') ||
+                        const platformLower = String(p).toLowerCase();
+                        if (platformLower.includes('instagram')) {
+                            platformKey = 'Instagram';
+                        } else if (platformLower.includes('snapchat')) {
+                            platformKey = 'Snapchat';
+                        } else if (platformLower.includes('social media') ||
+                            platformLower.includes('facebook') ||
+                            platformLower.includes('twitter') ||
                             platformLower === 'online') {
                             platformKey = 'Online';
                         }
@@ -1569,12 +1593,12 @@
                 }
             });
 
-            // Sort data - move "None/Unknown" to the end
+            // Sort data - move "None/Unknown" to the end; omit categories with no cases (no empty x-axis slots)
             const data = Object.entries(platformCounts).map(([platform, count]) => ({
                 platform,
                 count,
                 cases: platformCases[platform] || []
-            })).sort((a, b) => {
+            })).filter(d => d.count > 0).sort((a, b) => {
                 // Put "None/Unknown" at the end
                 if (a.platform === 'None/Unknown') return 1;
                 if (b.platform === 'None/Unknown') return -1;
@@ -2134,7 +2158,7 @@
                 .text("Number of Cases");
         }
 
-        function showOrganizationCases(organizationLabel, allCases) {
+        async function showOrganizationCases(organizationLabel, allCases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -2170,6 +2194,7 @@
                 list.innerHTML = '<p>No cases found with this organization.</p>';
                 return;
             }
+            await hydrateCaseTextForList(filteredCases);
             
             list.innerHTML = '';
             filteredCases.forEach(caseData => {
@@ -2623,16 +2648,19 @@
                 allCaseIds = cached.map(c => c.id).filter(id => id).sort();
                 return;
             }
-            fetch('/api/cases?include_raw_data=true')
-                .then(response => response.json())
-                .then(data => {
-                    const cases = Array.isArray(data) ? data : (data.cases || []);
+            if (typeof caselinkerLoadAllSummariesSequential !== "function") {
+                console.error("caselinkerLoadAllSummariesSequential missing (caselinker-api.js)");
+                return;
+            }
+            caselinkerLoadAllSummariesSequential()
+                .then((data) => {
+                    const cases = Array.isArray(data) ? data : data.cases || [];
                     window.CASELINKER_ALL_CASES = cases;
                     setCachedCases(cases);
-                    allCaseIds = cases.map(c => c.id).filter(id => id).sort();
+                    allCaseIds = cases.map((c) => c.id).filter((id) => id).sort();
                 })
-                .catch(error => {
-                    console.error('Error loading case IDs:', error);
+                .catch((error) => {
+                    console.error("Error loading case IDs:", error);
                 });
         }
         
@@ -3208,7 +3236,7 @@
             return colors[category] || 'highlight-default';
         }
 
-        function showOutcomeCases(type, value, cases) {
+        async function showOutcomeCases(type, value, cases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -3256,6 +3284,7 @@
                 list.innerHTML = '<p>No cases found with this prosecution outcome.</p>';
                 return;
             }
+            await hydrateCaseTextForList(filteredCases);
             
             list.innerHTML = '';
             filteredCases.forEach(caseData => {
@@ -3347,7 +3376,7 @@
             return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-        function showPerpetratorCases(label, allCases) {
+        async function showPerpetratorCases(label, allCases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -3377,6 +3406,7 @@
                 list.innerHTML = '<p>No cases found with this perpetrator registration status.</p>';
                 return;
             }
+            await hydrateCaseTextForList(filteredCases);
             
             list.innerHTML = '';
             filteredCases.forEach(caseData => {
@@ -3403,7 +3433,7 @@
             });
         }
 
-        function showPlatformCases(platformLabel, filteredCases) {
+        async function showPlatformCases(platformLabel, filteredCases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -3422,6 +3452,7 @@
                 list.innerHTML = '<p>No cases found with this environment.</p>';
                 return;
             }
+            await hydrateCaseTextForList(filteredCases);
             
             list.innerHTML = '';
             filteredCases.forEach(caseData => {
@@ -3433,8 +3464,8 @@
                 // Highlight environment text
                 let highlightedText = caseText;
                 if (platformLabel === 'Online') {
-                    // Highlight online and social media terms
-                    highlightedText = highlightedText.replace(/\b(online|social media|facebook|twitter|instagram|snapchat)\b/gi, (match) => {
+                    // Highlight terms rolled into Online (Instagram/Snapchat have their own bars)
+                    highlightedText = highlightedText.replace(/\b(online|social media|facebook|twitter)\b/gi, (match) => {
                         return `<span class="severity-highlight">${match}</span>`;
                     });
                 } else if (platformLabel !== 'None/Unknown') {

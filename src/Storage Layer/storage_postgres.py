@@ -606,6 +606,255 @@ class CaseStorage:
                 cursor.close()
                 return_connection(conn)
             return []
+
+    def get_cases_by_ids(self, case_ids: List[str], include_raw_data: bool = False) -> List[Dict[str, Any]]:
+        """Load specific cases by id (same shape as get_all_cases for matching flags). Preserves input id order."""
+        if not case_ids:
+            return []
+        seen = set()
+        ordered_unique: List[str] = []
+        for cid in case_ids:
+            if cid and isinstance(cid, str) and cid not in seen:
+                seen.add(cid)
+                ordered_unique.append(cid)
+        if not ordered_unique:
+            return []
+        try:
+            conn = get_connection()
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            placeholders = ",".join(["%s"] * len(ordered_unique))
+            if include_raw_data:
+                cursor.execute(
+                    f"""
+                    SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           relationship_to_victim, platforms_used,
+                           severity_indicators, case_topics, tags, notes,
+                           raw_data, extracted_features, created_at, updated_at
+                    FROM cases WHERE id IN ({placeholders})
+                    """,
+                    ordered_unique,
+                )
+            else:
+                cursor.execute(
+                    f"""
+                    SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           relationship_to_victim, platforms_used,
+                           severity_indicators, case_topics, tags, notes,
+                           '' as raw_data, extracted_features, created_at, updated_at
+                    FROM cases WHERE id IN ({placeholders})
+                    """,
+                    ordered_unique,
+                )
+            rows = list(cursor.fetchall())
+            if not rows:
+                cursor.close()
+                return_connection(conn)
+                return []
+            found_ids = [row["id"] for row in rows]
+            ph2 = ",".join(["%s"] * len(found_ids))
+            cursor.execute(
+                f"SELECT * FROM victim_demographics WHERE case_id IN ({ph2})", found_ids
+            )
+            victim_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                case_id = row["case_id"]
+                victim_data.setdefault(case_id, []).append(dict(row))
+            cursor.execute(
+                f"SELECT * FROM perpetrator_demographics WHERE case_id IN ({ph2})", found_ids
+            )
+            perp_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                case_id = row["case_id"]
+                perp_data.setdefault(case_id, []).append(dict(row))
+            cursor.execute(
+                f"SELECT * FROM prosecution_outcomes WHERE case_id IN ({ph2})", found_ids
+            )
+            prosecution_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                case_id = row["case_id"]
+                prosecution_data.setdefault(case_id, []).append(dict(row))
+            cursor.close()
+            return_connection(conn)
+            cases: List[Dict[str, Any]] = []
+            for row in rows:
+                case_dict = dict(row)
+                for json_field in [
+                    "platforms_used",
+                    "severity_indicators",
+                    "case_topics",
+                    "tags",
+                    "raw_data",
+                    "extracted_features",
+                ]:
+                    if case_dict.get(json_field):
+                        if json_field == "raw_data" and case_dict[json_field] == "":
+                            case_dict[json_field] = None
+                            continue
+                        try:
+                            case_dict[json_field] = json.loads(case_dict[json_field])
+                        except (json.JSONDecodeError, TypeError):
+                            pass
+                extracted_features = case_dict.get("extracted_features", {})
+                if isinstance(extracted_features, dict):
+                    for key in [
+                        "perpetrator_age",
+                        "perpetrator_registered_sex_offender",
+                        "agencies_involved",
+                        "organizations",
+                        "locations",
+                        "investigation_type",
+                        "evidence_volume",
+                        "prosecution_outcome",
+                        "case_demographics",
+                        "victim_demographics",
+                        "relationship_to_victim",
+                        "severity_phrases",
+                        "case_text",
+                        "comparison_values",
+                    ]:
+                        if key in extracted_features:
+                            case_dict[key] = extracted_features[key]
+                if include_raw_data:
+                    hydrate_case_text_from_raw_data(case_dict)
+                else:
+                    case_dict.pop("raw_data", None)
+                    case_dict.pop("case_text", None)
+                if case_dict.get("date_start") or case_dict.get("date_end"):
+                    case_dict["date_range"] = {
+                        "start": case_dict.get("date_start"),
+                        "end": case_dict.get("date_end"),
+                    }
+                cid = case_dict["id"]
+                case_dict["victim_demographics"] = victim_data.get(cid, [])
+                case_dict["perpetrator_demographics"] = perp_data.get(cid, [])
+                case_dict["prosecution_outcome"] = (
+                    prosecution_data.get(cid, [{}])[0] if prosecution_data.get(cid) else {}
+                )
+                cases.append(case_dict)
+            id_to_case = {c["id"]: c for c in cases}
+            return [id_to_case[i] for i in ordered_unique if i in id_to_case]
+        except Exception as e:
+            print(f"❌ Error get_cases_by_ids: {e}")
+            if "conn" in locals():
+                try:
+                    cursor.close()
+                    return_connection(conn)
+                except Exception:
+                    pass
+            return []
+
+    def get_cases_slim_chunk(self, offset: int, limit: int) -> List[Dict[str, Any]]:
+        """Page through cases without raw_data (same dict shape as get_all_cases(include_raw_data=False))."""
+        offset = max(0, int(offset))
+        limit = max(1, min(int(limit), 500))
+        try:
+            conn = get_connection()
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            cursor.execute(
+                """
+                SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                       relationship_to_victim, platforms_used,
+                       severity_indicators, case_topics, tags, notes,
+                       '' as raw_data, extracted_features, created_at, updated_at
+                FROM cases
+                ORDER BY date_start NULLS LAST, id
+                LIMIT %s OFFSET %s
+                """,
+                (limit, offset),
+            )
+            rows = list(cursor.fetchall())
+            if not rows:
+                cursor.close()
+                return_connection(conn)
+                return []
+            case_ids = [row["id"] for row in rows]
+            placeholders = ",".join(["%s"] * len(case_ids))
+            cursor.execute(
+                f"SELECT * FROM victim_demographics WHERE case_id IN ({placeholders})", case_ids
+            )
+            victim_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                cid = row["case_id"]
+                victim_data.setdefault(cid, []).append(dict(row))
+            cursor.execute(
+                f"SELECT * FROM perpetrator_demographics WHERE case_id IN ({placeholders})", case_ids
+            )
+            perp_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                cid = row["case_id"]
+                perp_data.setdefault(cid, []).append(dict(row))
+            cursor.execute(
+                f"SELECT * FROM prosecution_outcomes WHERE case_id IN ({placeholders})", case_ids
+            )
+            prosecution_data: Dict[str, List] = {}
+            for row in cursor.fetchall():
+                cid = row["case_id"]
+                prosecution_data.setdefault(cid, []).append(dict(row))
+            cursor.close()
+            return_connection(conn)
+            cases: List[Dict[str, Any]] = []
+            for row in rows:
+                case_dict = dict(row)
+                for json_field in [
+                    "platforms_used",
+                    "severity_indicators",
+                    "case_topics",
+                    "tags",
+                    "raw_data",
+                    "extracted_features",
+                ]:
+                    if case_dict.get(json_field):
+                        if json_field == "raw_data" and case_dict[json_field] == "":
+                            case_dict[json_field] = None
+                            continue
+                        try:
+                            case_dict[json_field] = json.loads(case_dict[json_field])
+                        except (json.JSONDecodeError, TypeError):
+                            pass
+                extracted_features = case_dict.get("extracted_features", {})
+                if isinstance(extracted_features, dict):
+                    for key in [
+                        "perpetrator_age",
+                        "perpetrator_registered_sex_offender",
+                        "agencies_involved",
+                        "organizations",
+                        "locations",
+                        "investigation_type",
+                        "evidence_volume",
+                        "prosecution_outcome",
+                        "case_demographics",
+                        "victim_demographics",
+                        "relationship_to_victim",
+                        "severity_phrases",
+                        "case_text",
+                        "comparison_values",
+                    ]:
+                        if key in extracted_features:
+                            case_dict[key] = extracted_features[key]
+                case_dict.pop("raw_data", None)
+                case_dict.pop("case_text", None)
+                if case_dict.get("date_start") or case_dict.get("date_end"):
+                    case_dict["date_range"] = {
+                        "start": case_dict.get("date_start"),
+                        "end": case_dict.get("date_end"),
+                    }
+                cid = case_dict["id"]
+                case_dict["victim_demographics"] = victim_data.get(cid, [])
+                case_dict["perpetrator_demographics"] = perp_data.get(cid, [])
+                case_dict["prosecution_outcome"] = (
+                    prosecution_data.get(cid, [{}])[0] if prosecution_data.get(cid) else {}
+                )
+                cases.append(case_dict)
+            return cases
+        except Exception as e:
+            print(f"❌ Error get_cases_slim_chunk: {e}")
+            if "conn" in locals():
+                try:
+                    cursor.close()
+                    return_connection(conn)
+                except Exception:
+                    pass
+            return []
     
     def search_cases(self, query: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Search cases based on criteria."""

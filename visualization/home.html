@@ -290,9 +290,11 @@
         fetch('/api/stats')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('total-cases').textContent = data.total_cases || 0;
-                document.getElementById('unique-features').textContent = data.unique_features || 0;
-                document.getElementById('sources').textContent = data.source_count || (data.sources ? data.sources.length : 0);
+                const n = (v) => Number(v) || 0;
+                document.getElementById('total-cases').textContent = n(data.total_cases).toLocaleString('en-US');
+                document.getElementById('unique-features').textContent = n(data.unique_features).toLocaleString('en-US');
+                const src = data.source_count != null ? n(data.source_count) : n(data.sources && data.sources.length);
+                document.getElementById('sources').textContent = src.toLocaleString('en-US');
             })
             .catch(error => {
                 console.error('Error loading stats:', error);

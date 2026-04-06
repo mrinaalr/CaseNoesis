@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CaseLinker - Data Audit</title>
+    <script src="/viz-assets/caselinker-api.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -816,9 +817,15 @@
                     listContainer.innerHTML =
                         '<div style="text-align: center; padding: 20px; color: #666;">Loading cases…</div>';
                 }
+                const loadCases =
+                    typeof caselinkerLoadAllSummariesSequential === 'function'
+                        ? caselinkerLoadAllSummariesSequential
+                        : async () => {
+                              throw new Error('caselinker-api.js missing: caselinkerLoadAllSummariesSequential');
+                          };
                 const [countData, casesData] = await Promise.all([
                     fetch('/api/case-count').then((r) => r.json()),
-                    fetch('/api/cases?include_raw_data=false').then((r) => r.json()),
+                    loadCases(),
                 ]);
                 allCases = casesData;
                 const n =
