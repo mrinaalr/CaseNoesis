@@ -522,6 +522,8 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/query">Query</a>
+        <a href="/expand">Expand</a>
         <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
@@ -959,6 +961,7 @@
                     features: {
                         'ID': caseData.id,
                         'Source': caseData.source,
+                        'Source URL': caseData.source_url || caseData.raw_data?.source_url,
                         'Date Range': caseData.date_range,
                         'Locations': cleanAndDeduplicateArray(caseData.locations),
                         'Created At': caseData.created_at,

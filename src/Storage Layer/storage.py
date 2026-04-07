@@ -57,6 +57,7 @@ class CaseStorage:
             CREATE TABLE IF NOT EXISTS cases (
                 id TEXT PRIMARY KEY,
                 source TEXT,
+                source_url TEXT,
                 date_start TEXT,
                 date_end TEXT,
                 victim_count INTEGER,
@@ -77,6 +78,11 @@ class CaseStorage:
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_source ON cases(source)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_date_start ON cases(date_start)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_case_topics ON cases(case_topics)')
+        # Backward-compatible migration for pre-existing SQLite databases.
+        try:
+            cursor.execute('ALTER TABLE cases ADD COLUMN source_url TEXT')
+        except sqlite3.OperationalError:
+            pass
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS victim_demographics (
@@ -197,14 +203,15 @@ class CaseStorage:
             
             cursor.execute('''
                 INSERT OR REPLACE INTO cases (
-                    id, source, date_start, date_end, victim_count, perpetrator_count,
+                    id, source, source_url, date_start, date_end, victim_count, perpetrator_count,
                     relationship_to_victim, platforms_used,
                     severity_indicators, case_topics, tags, notes,
                     raw_data, extracted_features, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 case_id,
                 case.get('source', 'unknown'),
+                case.get('source_url') or (case.get('raw_data', {}) if isinstance(case.get('raw_data'), dict) else {}).get('source_url'),
                 date_start,
                 date_end,
                 case.get('victim_count'),
@@ -348,6 +355,12 @@ class CaseStorage:
                     except (json.JSONDecodeError, TypeError):
                         # Keep original value if JSON parsing fails
                         pass
+            if not case_dict.get('source_url'):
+                rd = case_dict.get('raw_data')
+                if isinstance(rd, dict):
+                    rd_url = rd.get('source_url')
+                    if isinstance(rd_url, str) and rd_url.strip():
+                        case_dict['source_url'] = rd_url.strip()
             
             # Get related data
             cursor.execute('SELECT * FROM victim_demographics WHERE case_id = ?', (case_id,))
@@ -454,6 +467,7 @@ class CaseStorage:
             if include_raw_data:
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           source_url,
                            relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            raw_data, extracted_features, created_at, updated_at
@@ -464,6 +478,7 @@ class CaseStorage:
                 # Exclude raw_data from query for faster loading (saves 10-50KB per case)
                 cursor.execute('''
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           source_url,
                            relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            '' as raw_data, extracted_features, created_at, updated_at
@@ -594,6 +609,7 @@ class CaseStorage:
                 cursor.execute(
                     f"""
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           source_url,
                            relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            raw_data, extracted_features, created_at, updated_at
@@ -605,6 +621,7 @@ class CaseStorage:
                 cursor.execute(
                     f"""
                     SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                           source_url,
                            relationship_to_victim, platforms_used,
                            severity_indicators, case_topics, tags, notes,
                            '' as raw_data, extracted_features, created_at, updated_at
@@ -722,6 +739,7 @@ class CaseStorage:
             cursor.execute(
                 """
                 SELECT id, source, date_start, date_end, victim_count, perpetrator_count,
+                       source_url,
                        relationship_to_victim, platforms_used,
                        severity_indicators, case_topics, tags, notes,
                        '' as raw_data, extracted_features, created_at, updated_at

@@ -189,6 +189,8 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/query">Query</a>
+        <a href="/expand">Expand</a>
         <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
@@ -566,6 +568,45 @@
                         {
                             year: "ICAC search",
                             url: "https://www.kentuckystatepolice.ky.gov/news?searchTerm=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Arkansas Department of Public Safety – Site search (ICAC)",
+                    url: "https://dps.arkansas.gov/?s=icac",
+                    description: "Arkansas DPS search results for ICAC-related Arkansas State Police news posts.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://dps.arkansas.gov/?s=icac",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "U.S. DOJ CEOS – Child Exploitation & Obscenity Section News",
+                    url: "https://www.justice.gov/criminal/child-exploitation-obscenity-section-news",
+                    description: "Federal CEOS press releases (supplemental cross-jurisdiction source).",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "CEOS news",
+                            url: "https://www.justice.gov/criminal/child-exploitation-obscenity-section-news",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "U.S. DOJ Archives – Child Exploitation and Obscenity Section (2002-2008)",
+                    url: "https://www.justice.gov/archives/criminal/child-exploitation-and-obscenity-section",
+                    description: "DOJ CEOS archive cases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Archive index",
+                            url: "https://www.justice.gov/archives/criminal/child-exploitation-and-obscenity-section",
                             casesUsed: 0
                         }
                     ]
@@ -1001,6 +1042,63 @@
                         }
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = kyCases.length;
+                        }
+                    } else if (staticSource.name.includes('Arkansas Department of Public Safety')) {
+                        const arCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'ARKANSAS DPS';
+                        });
+                        staticSource.cases = arCases;
+                        const arRange = getDateRange(arCases);
+                        if (arRange) {
+                            staticSource.dateRangeDisplay = arRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = arRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = arCases.length;
+                        }
+                    } else if (staticSource.name.includes('U.S. DOJ CEOS')) {
+                        const ceosCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'DOJ CEOS';
+                        });
+                        staticSource.cases = ceosCases;
+                        const ceosRange = getDateRange(ceosCases);
+                        if (ceosRange) {
+                            staticSource.dateRangeDisplay = ceosRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = ceosRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = ceosCases.length;
+                        }
+                    } else if (staticSource.name.includes('U.S. DOJ Archives')) {
+                        const archiveCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'DOJ ARCHIVES';
+                        });
+                        staticSource.cases = archiveCases;
+                        const archiveRange = getDateRange(archiveCases);
+                        if (archiveRange) {
+                            staticSource.dateRangeDisplay = archiveRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = archiveRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = archiveCases.length;
                         }
                     }
                 });

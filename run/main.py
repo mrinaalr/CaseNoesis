@@ -130,11 +130,85 @@ def _sanitize_case_for_public(case: Dict[str, Any]) -> Dict[str, Any]:
     return case
 
 
+def _extract_case_text_value(case: Dict[str, Any]) -> str:
+    """Best-effort extraction of case narrative text from a case payload."""
+    direct = case.get("case_text")
+    if isinstance(direct, str) and direct.strip():
+        return direct
+
+    raw_data = case.get("raw_data")
+    if isinstance(raw_data, dict):
+        text = raw_data.get("case_text")
+        if isinstance(text, str) and text.strip():
+            return text
+    elif isinstance(raw_data, str) and raw_data.strip():
+        try:
+            parsed = json.loads(raw_data)
+            if isinstance(parsed, dict):
+                text = parsed.get("case_text")
+                if isinstance(text, str) and text.strip():
+                    return text
+        except Exception:
+            pass
+    return ""
+
+
+def _attach_case_text_to_automated_analysis(analysis: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure triaged cases include `case_text` for public automated-analysis UI.
+    Keeps `raw_data` out of response while preserving quick modal rendering.
+    """
+    if not isinstance(analysis, dict):
+        return analysis
+
+    triaged = analysis.get("triaged_cases")
+    if not isinstance(triaged, list) or not triaged:
+        return analysis
+
+    ids = []
+    for c in triaged:
+        if isinstance(c, dict):
+            cid = c.get("id")
+            if isinstance(cid, str) and cid:
+                ids.append(cid)
+    ids = list(dict.fromkeys(ids))
+    if not ids:
+        return analysis
+
+    full_cases = storage.get_cases_by_ids(ids, include_raw_data=True) or []
+    text_by_id: Dict[str, str] = {}
+    for fc in full_cases:
+        if not isinstance(fc, dict):
+            continue
+        cid = fc.get("id")
+        if not isinstance(cid, str) or not cid:
+            continue
+        text = _extract_case_text_value(fc)
+        if text:
+            text_by_id[cid] = text
+
+    for c in triaged:
+        if not isinstance(c, dict):
+            continue
+        cid = c.get("id")
+        if not isinstance(cid, str) or not cid:
+            continue
+        if not c.get("case_text"):
+            case_text = text_by_id.get(cid, "")
+            if case_text:
+                c["case_text"] = case_text
+        # Never expose raw_data via this endpoint.
+        c.pop("raw_data", None)
+
+    return analysis
+
+
 def _case_summary_slim(case: Dict[str, Any]) -> Dict[str, Any]:
     """Slim case shape for chunk/by-ids summary APIs (no narratives/raw blobs)."""
     out = {
         "id": case.get("id"),
         "source": case.get("source"),
+        "source_url": case.get("source_url"),
         "date_start": case.get("date_start"),
         "date_end": case.get("date_end"),
         "date_range": case.get("date_range"),
@@ -1647,11 +1721,15 @@ async def automated_analysis_endpoint(request: Request):
         
         cached_result = get_cached(cache_key)
         if cached_result is not None:
+            analysis = cached_result.get("analysis")
+            if isinstance(analysis, dict):
+                cached_result["analysis"] = _attach_case_text_to_automated_analysis(analysis)
             cached_result['_cache_source'] = 'redis'
             return cached_result
         
         precomputed = storage.get_precomputed_clusters(current_case_count)
         if precomputed:
+            precomputed = _attach_case_text_to_automated_analysis(precomputed)
             result = {
                 "success": True,
                 "analysis": precomputed,
@@ -1664,6 +1742,7 @@ async def automated_analysis_endpoint(request: Request):
         print("⚠️  No pre-computed clusters found, computing on-demand (this is slow)...")
         cases = storage.get_all_cases(include_raw_data=True)
         analysis_results = run_automated_analysis(cases)
+        analysis_results = _attach_case_text_to_automated_analysis(analysis_results)
         storage.store_precomputed_clusters(analysis_results, current_case_count)
         
         result = {
@@ -1801,6 +1880,26 @@ async def serve_search():
         return HTMLResponse(content=html_content)
     else:
         return HTMLResponse(content="<h1>Search page not found</h1>", status_code=404)
+
+
+@app.get("/query", response_class=HTMLResponse)
+async def serve_query():
+    """Custom analysis: browser-side JS snippets calling public APIs only."""
+    html_path = Path(__file__).parent.parent / "visualization" / "query.html"
+    if html_path.exists():
+        with open(html_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Query page not found</h1>", status_code=404)
+
+
+@app.get("/expand", response_class=HTMLResponse)
+async def serve_expand():
+    """Build-your-own visualization: examples using public CaseLinker APIs."""
+    html_path = Path(__file__).parent.parent / "visualization" / "expand.html"
+    if html_path.exists():
+        with open(html_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Expand page not found</h1>", status_code=404)
 
 
 @app.get("/triage", response_class=HTMLResponse)

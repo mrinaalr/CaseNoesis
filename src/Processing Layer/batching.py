@@ -8,10 +8,18 @@ This module is shared by both Pattern Processing Layer and ML Processing Layer.
 Both layers can ingest the batched cases and process them independently.
 """
 
+import importlib.util
 import json
 import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
+
+_suc_path = Path(__file__).resolve().parent / "source_url_continuations.py"
+_suc_spec = importlib.util.spec_from_file_location("_case_linker_source_url_cont", _suc_path)
+_suc_mod = importlib.util.module_from_spec(_suc_spec)
+_suc_spec.loader.exec_module(_suc_mod)
+try_append_source_url_continuation = _suc_mod.try_append_source_url_continuation
+consume_same_line_slug_after_url = _suc_mod.consume_same_line_slug_after_url
 
 
 def clean_artifacts_from_text(text: str, remove_urls: bool = True) -> str:
@@ -106,7 +114,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -149,6 +157,9 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_wy_dci = False
     is_sd_ag = False
     is_ky_sp = False
+    is_arkansas_dps = False
+    is_doj_ceos = False
+    is_doj_archives = False
     is_other_external = False
     
     if source:
@@ -201,6 +212,12 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_sd_ag = True
         elif source_upper == 'KY SP':
             is_ky_sp = True
+        elif source_upper == 'ARKANSAS DPS':
+            is_arkansas_dps = True
+        elif source_upper == 'DOJ CEOS':
+            is_doj_ceos = True
+        elif source_upper == 'DOJ ARCHIVES':
+            is_doj_archives = True
         elif source_upper in ('OTHER'):
             is_other_external = True
     
@@ -253,6 +270,12 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SD AG")
     elif is_ky_sp:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "KY SP")
+    elif is_arkansas_dps:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ARKANSAS DPS")
+    elif is_doj_ceos:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "DOJ CEOS")
+    elif is_doj_archives:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "DOJ ARCHIVES")
     elif is_other_external:
         return _batch_external_cases(text, org_name, source_file)
     else:
@@ -268,6 +291,43 @@ _EXTERNAL_CASE_HEADER_RE = re.compile(
     r"(?m)(?:^|\n)\s*Case\s+(\d+)\s*:",
     re.IGNORECASE,
 )
+
+def _extract_wrapped_url_from_source_line(lines: List[str], source_idx: int) -> str:
+    """
+    Extract URL from `Source:` line and join wrapped continuation lines.
+    Handles PDF line wraps in long slugs.
+    """
+    if source_idx < 0 or source_idx >= len(lines):
+        return ""
+    line = lines[source_idx]
+    m = re.search(r"(https?://\S*)", line)
+    if not m:
+        return ""
+    url = m.group(1).strip()
+    spaced_slug_segments = 0
+    extra, add = consume_same_line_slug_after_url(url, line[m.end() :])
+    url = extra
+    spaced_slug_segments += add
+    j = source_idx + 1
+    while j < len(lines):
+        nxt = lines[j].strip()
+        if not nxt:
+            break
+        if nxt.lower().startswith("source:"):
+            break
+        if nxt.lower().startswith("http://") or nxt.lower().startswith("https://"):
+            break
+        tup = try_append_source_url_continuation(url, nxt, spaced_slug_segments)
+        if tup is None:
+            break
+        frag, is_spaced = tup
+        url += frag
+        if is_spaced:
+            spaced_slug_segments += 1
+        j += 1
+        if url.lower().endswith(".pdf"):
+            break
+    return url.rstrip(".,;)")
 
 
 def _batch_external_cases(
@@ -1212,6 +1272,9 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "WY DCI": ["WYDCI_ICAC_All.pdf", "WY_DCI_ICAC_All.pdf", "wy_dci/WYDCI_ICAC_All.pdf"],
     "SD AG": ["SDAG_ICAC_All.pdf", "South_Dakota_ICAC_All.pdf", "sd_ag/SDAG_ICAC_All.pdf"],
     "KY SP": ["KYSP_ICAC_All.pdf", "KSP_ICAC_All.pdf", "ky_sp/KYSP_ICAC_All.pdf"],
+    "ARKANSAS DPS": ["ARKDPS_ICAC_All.pdf", "arkansas_dps_output/ARKDPS_ICAC_All.pdf"],
+    "DOJ CEOS": ["DOJ_CEOS_All.pdf", "doj_ceos_output/DOJ_CEOS_All.pdf"],
+    "DOJ ARCHIVES": ["DOJ_ARCHIVES_All.pdf", "doj_archives_output/DOJ_ARCHIVES_All.pdf"],
 }
 
 
@@ -1236,15 +1299,8 @@ def _merged_icac_news_pdf_search_paths(source_key: str, source_file: Optional[st
     return out
 
 
-def _merged_news_article_year_from_url_and_text(url: str, chunk: str) -> Optional[str]:
-    """Prefer /YYYY/MM/ in article URLs, dateline (Mon DD, YYYY), 20xx in URL, then max plausible year in body."""
-    if url:
-        m = re.search(r"/(20\d{2})/(?:\d{1,2}/)?", url)
-        if m:
-            return m.group(1)
-        m = re.search(r"\b(20\d{2})\b", url)
-        if m:
-            return m.group(1)
+def _merged_news_article_year_from_url_and_text(_url: str, chunk: str) -> Optional[str]:
+    """Dateline-only year extraction (e.g., 'May 5, 2010') from case text."""
     head = chunk[:8000]
     m = re.search(
         r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+(20\d{2})\b",
@@ -1253,10 +1309,6 @@ def _merged_news_article_year_from_url_and_text(url: str, chunk: str) -> Optiona
     )
     if m:
         return m.group(1)
-    years = [int(y) for y in re.findall(r"\b(20\d{2})\b", chunk)]
-    plausible = [y for y in years if 2005 <= y <= 2030]
-    if plausible:
-        return str(max(plausible))
     return None
 
 
@@ -1345,9 +1397,7 @@ def _batch_merged_icac_news_cases(
         if not case_text.strip() and chunk:
             case_text = clean_artifacts_from_text(chunk, remove_urls=False)
 
-        url_line = lines[sources[i]]
-        um = re.search(r"(https?://\S+)", url_line)
-        url = um.group(1).rstrip(".,;)") if um else ""
+        url = _extract_wrapped_url_from_source_line(lines, sources[i])
         case_date_year = _merged_news_article_year_from_url_and_text(url, chunk)
         if not case_date_year:
             # PDF body often has no digit year; avoid labeling as "current" calendar year

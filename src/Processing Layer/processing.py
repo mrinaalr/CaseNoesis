@@ -31,6 +31,8 @@ _batching_path = Path(__file__).parent / "batching.py"
 _batching_spec = importlib.util.spec_from_file_location("batching", _batching_path)
 batching = importlib.util.module_from_spec(_batching_spec)
 _batching_spec.loader.exec_module(batching)
+try_append_source_url_continuation = batching.try_append_source_url_continuation
+consume_same_line_slug_after_url = batching.consume_same_line_slug_after_url
 
 # Import from Pattern Processing Layer
 _pattern_processing_path = Path(__file__).parent / "Pattern Processing Layer" / "processing.py"
@@ -85,6 +87,42 @@ semantic_module = importlib.util.module_from_spec(_semantic_spec)
 _semantic_spec.loader.exec_module(semantic_module)
 
 SemanticConcepts = semantic_module.SemanticConcepts
+
+
+def _extract_source_url(case_text: str) -> str:
+    """Extract URL only from `Source: <url>` lines."""
+    if not isinstance(case_text, str) or not case_text:
+        return ""
+    lines = case_text.splitlines()
+    break_re = re.compile(r"^(?:[A-Za-z][A-Za-z ]{0,40}:|Case\s+\d+\s*:)", re.IGNORECASE)
+    for i, line in enumerate(lines):
+        m = re.match(r"^\s*Source:\s*(https?://\S*)", line, flags=re.IGNORECASE)
+        if not m:
+            continue
+        url = m.group(1).strip()
+        spaced_slug_segments = 0
+        extra, add = consume_same_line_slug_after_url(url, line[m.end() :])
+        url = extra
+        spaced_slug_segments += add
+        j = i + 1
+        while j < len(lines):
+            nxt = lines[j].strip()
+            if not nxt or break_re.match(nxt):
+                break
+            if nxt.lower().startswith("http://") or nxt.lower().startswith("https://"):
+                break
+            tup = try_append_source_url_continuation(url, nxt, spaced_slug_segments)
+            if tup is None:
+                break
+            frag, is_spaced = tup
+            url += frag
+            if is_spaced:
+                spaced_slug_segments += 1
+            j += 1
+            if url.lower().endswith(".pdf"):
+                break
+        return url.rstrip('.,);]')
+    return ""
 
 
 def process_cases(df):
@@ -152,7 +190,8 @@ def process_cases(df):
             all_case_batches.append({
                 'case_batch': case_batch,
                 'source': source,
-                'source_file': source_file
+                'source_file': source_file,
+                'source_url': row.get('source_url'),
             })
     
     # Second pass: Process all cases with progress bar
@@ -185,10 +224,17 @@ def process_cases(df):
             'source': source,
             'source_file': source_file,
         }
+        row_source_url = batch_info.get('source_url')
+        if isinstance(row_source_url, str) and row_source_url.strip():
+            raw_case['source_url'] = row_source_url.strip()
         if 'state' in case_batch:
             raw_case['state'] = case_batch['state']
         if 'source_url' in case_batch:
             raw_case['source_url'] = case_batch['source_url']
+        if not raw_case.get('source_url'):
+            inferred_url = _extract_source_url(raw_case.get('case_text', ''))
+            if inferred_url:
+                raw_case['source_url'] = inferred_url
         
         # Step 2: Extract pattern features (Pattern Processing Layer handles its own logic)
         pattern_features = extract_features(raw_case)

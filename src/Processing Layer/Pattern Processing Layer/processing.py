@@ -29,11 +29,49 @@ import importlib.util
 spec = importlib.util.spec_from_file_location("batching", _batching_path)
 batching = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(batching)
+try_append_source_url_continuation = batching.try_append_source_url_continuation
+consume_same_line_slug_after_url = batching.consume_same_line_slug_after_url
 
 # Import batching functions
 case_batching = batching.case_batching
 clean_artifacts_from_text = batching.clean_artifacts_from_text
 clean_urls_from_text = batching.clean_artifacts_from_text  # Backward compatibility alias
+
+
+def _extract_source_url(case_text: str) -> str:
+    """Extract URL only from `Source: <url>` lines."""
+    if not isinstance(case_text, str) or not case_text:
+        return ""
+    lines = case_text.splitlines()
+    break_re = re.compile(r"^(?:[A-Za-z][A-Za-z ]{0,40}:|Case\s+\d+\s*:)", re.IGNORECASE)
+    for i, line in enumerate(lines):
+        m = re.match(r"^\s*Source:\s*(https?://\S*)", line, flags=re.IGNORECASE)
+        if not m:
+            continue
+        url = m.group(1).strip()
+        spaced_slug_segments = 0
+        extra, add = consume_same_line_slug_after_url(url, line[m.end() :])
+        url = extra
+        spaced_slug_segments += add
+        j = i + 1
+        while j < len(lines):
+            nxt = lines[j].strip()
+            if not nxt or break_re.match(nxt):
+                break
+            if nxt.lower().startswith("http://") or nxt.lower().startswith("https://"):
+                break
+            tup = try_append_source_url_continuation(url, nxt, spaced_slug_segments)
+            if tup is None:
+                break
+            frag, is_spaced = tup
+            url += frag
+            if is_spaced:
+                spaced_slug_segments += 1
+            j += 1
+            if url.lower().endswith(".pdf"):
+                break
+        return url.rstrip('.,);]')
+    return ""
 
 
 # case_batching and all batching functions are now imported from batching module
@@ -86,6 +124,7 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
         extracted_text = row.get('extracted_text', '')
         source = row.get('source', 'unknown')
         source_file = row.get('source_file', 'unknown')
+        source_url = row.get('source_url')
         
         # Extract org name from source (e.g., "AZICAC" -> "azicac")
         # If source is not available, try to extract from source_file name
@@ -108,11 +147,17 @@ def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
                 'source': source,
                 'source_file': source_file,
             }
+            if isinstance(source_url, str) and source_url.strip():
+                raw_case['source_url'] = source_url.strip()
             # Copy any additional fields from batch (e.g., 'state' for NCMEC, 'source_url' for SVICAC)
             if 'state' in case_batch:
                 raw_case['state'] = case_batch['state']
             if 'source_url' in case_batch:
                 raw_case['source_url'] = case_batch['source_url']
+            if not raw_case.get('source_url'):
+                inferred_url = _extract_source_url(raw_case.get('case_text', ''))
+                if inferred_url:
+                    raw_case['source_url'] = inferred_url
             
             case_features = extract_features(raw_case)
             

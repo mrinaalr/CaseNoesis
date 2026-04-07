@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker — Expand</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="/viz-assets/caselinker-api.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .nav a.ml-experimental {
+            color: #dc2626;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulseRed 8s ease-in-out infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.92;
+            }
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% {
+                opacity: 0.75;
+            }
+            50% {
+                opacity: 0.90;
+            }
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #66bb6a;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 1.1em;
+            line-height: 1.55;
+        }
+        .lead {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+            line-height: 1.55;
+            color: #333;
+        }
+        .lead a { color: #4CAF50; font-weight: 500; }
+        .lead a:hover { color: #45a049; }
+        .ex {
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px 24px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .ex h2 { margin: 0 0 8px; font-size: 1.15em; color: #333; }
+        .ex h2 code { font-size: 0.95em; background: #eceff1; padding: 2px 6px; border-radius: 4px; }
+        .ex p.desc { margin: 0 0 14px; color: #444; font-size: 0.95em; line-height: 1.5; }
+        .ex button {
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .ex button:hover { background: #45a049; }
+        .ex-output-wrap { margin-top: 4px; }
+        .ex-output-wrap.collapsed { display: none; }
+        .bar-row { display: flex; align-items: center; margin: 4px 0; font-size: 0.88em; }
+        .bar-row .label { width: 140px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .bar-row .bar { flex: 1; height: 18px; background: #c8e6c9; border-radius: 4px; overflow: hidden; margin: 0 10px; }
+        .bar-row .bar > div { height: 100%; background: #43a047; border-radius: 4px; }
+        .bar-row .num { width: 48px; text-align: right; color: #666; }
+        #ex2-tree {
+            font-size: 0.88em;
+            line-height: 1.4;
+            max-height: 280px;
+            overflow: auto;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 4px;
+            background: #fff;
+        }
+        #ex2-tree .node { margin-left: 16px; border-left: 2px solid #e0e0e0; padding-left: 8px; margin-top: 4px; }
+        #ex3-chart { width: 100%; min-height: 200px; }
+        .endpoints {
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px 24px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 0.95em;
+            color: #444;
+            line-height: 1.55;
+        }
+        .endpoints h3 { margin: 0 0 12px 0; color: #333; font-size: 1.15em; }
+        .endpoints h4 {
+            margin: 14px 0 6px 0;
+            color: #555;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .endpoints h4:first-of-type { margin-top: 4px; }
+        .endpoints ul { margin: 0 0 10px 0; padding-left: 1.25em; }
+        .endpoints p { margin: 0; }
+        .endpoints .endpoints-note { margin: 10px 0 0 0; font-size: 0.9em; color: #666; line-height: 1.45; }
+        .endpoints a { color: #4CAF50; font-weight: 500; }
+        .endpoints a:hover { color: #45a049; }
+        .endpoints code { background: #eceff1; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+           <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
+        <a href="/stats">Stats</a>
+        <a href="/search">Search</a>
+        <a href="/query">Query</a>
+        <a href="/expand" aria-current="page">Expand</a>
+        <a href="/triage">Triage</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+
+    <div class="container">
+        <h1>Expand</h1>
+        <p class="subtitle">
+            The built-in analysis, facet search, and clusters platforms are one opinionated UI. Your team can ship <strong>your own</strong> dashboards, maps, or reports using the same <strong>public JSON APIs</strong> — no fork required.
+        </p>
+        <div class="lead">
+            <strong>For ICAC / analysts:</strong> If you like the data model but not our charts, treat CaseLinker as an <strong>API backend</strong>: pull from <a href="/docs">/docs</a>, respect rate limits, and host an internal page or notebook. Below are three minimal patterns you can copy.
+        </div>
+
+        <div class="ex" id="example-1">
+            <h2>Example 1 — Platform mix from <code>/api/stats</code> + summaries</h2>
+            <p class="desc">One GET to <code>/api/stats</code> for headline totals, then paginated slim summaries for <code>platforms_used</code> (same pattern as the main site). No bulk case download. Good for leadership slides, high-level statistics, and quick platform mix views.</p>
+            <button type="button" id="btn-ex1" aria-expanded="false">Run example</button>
+            <div class="ex-output-wrap collapsed" id="ex1-output-wrap">
+                <div id="ex1-out"></div>
+            </div>
+        </div>
+
+        <div class="ex" id="example-2">
+            <h2>Example 2 — Facet tree as text hierarchy</h2>
+            <p class="desc">Uses <code>GET /api/facet-tree?max_depth=2</code>. Your app could turn the same JSON into a custom tree, Sankey, or filter UI.</p>
+            <button type="button" id="btn-ex2" aria-expanded="false">Run example</button>
+            <div class="ex-output-wrap collapsed" id="ex2-output-wrap">
+                <div id="ex2-tree"></div>
+            </div>
+        </div>
+
+        <div class="ex" id="example-3">
+            <h2>Example 3 — Year histogram from paginated summaries</h2>
+            <p class="desc">Uses <code>GET /api/cases-summaries-chunk</code> (same as the main site). Demonstrates building a chart without <code>/api/cases</code>.</p>
+            <button type="button" id="btn-ex3" aria-expanded="false">Run example</button>
+            <div class="ex-output-wrap collapsed" id="ex3-output-wrap">
+                <div id="ex3-chart"></div>
+            </div>
+        </div>
+
+        <div class="endpoints">
+            <h3>Handy public endpoints</h3>
+            <p class="endpoints-note">Same JSON routes the built-in pages use. Rate limits apply. Open <a href="/docs"><strong>Interactive API docs</strong></a> for schemas, parameters, and try-it requests.</p>
+
+            <h4>API root</h4>
+            <ul>
+                <li><code>GET /api</code> — service name / version ping</li>
+            </ul>
+
+            <h4>Overview &amp; aggregates</h4>
+            <ul>
+                <li><code>GET /api/case-count</code> — total cases</li>
+                <li><code>GET /api/stats</code> — high-level stats (sources, orgs, date range, …)</li>
+                <li><code>GET /api/stats-detailed</code> — chart-ready breakdowns (coverage, trends, …)</li>
+                <li><code>GET /api/tags</code> — tag dimensions (topics, platforms, severity tags, …)</li>
+                <li><code>GET /api/location-stats</code> — geographic aggregates for maps / stats UI</li>
+            </ul>
+
+            <h4>Cases (single record &amp; paging; not bulk dump)</h4>
+            <ul>
+                <li><code>GET /api/cases/{id}</code> — one case JSON (fields depend on deployment)</li>
+                <li><code>GET /api/cases-summaries-chunk</code> — paginated slim summaries (offset/limit)</li>
+                <li><code>POST /api/cases-summaries-by-ids</code> — slim summaries for explicit ID lists</li>
+            </ul>
+
+            <h4>Facets, search tree &amp; cohorts</h4>
+            <ul>
+                <li><code>GET /api/facet-tree</code> — hierarchical facet counts (Search / filters)</li>
+                <li><code>GET /api/facet-distinct</code> — distinct tag strings per facet field</li>
+                <li><code>POST /api/facet-cohort-members</code> — case IDs matching a facet path</li>
+                <li><code>GET /api/case-ids-by-filter</code> — case IDs from structured filter params (Stats drill-downs)</li>
+            </ul>
+
+            <h4>Analysis &amp; tagging helpers</h4>
+            <ul>
+                <li><code>POST /api/tag-threader</code> — tag-threading / analysis pipeline (body per docs)</li>
+                <li><code>POST /api/return-tagged-cases</code> — cases matching tag-threader output</li>
+                <li><code>GET /api/automated-analysis</code> — cached automated analysis payload (see docs for caching)</li>
+            </ul>
+
+            <h4>Clusters</h4>
+            <ul>
+                <li><code>GET /api/cluster-groups</code> — cluster families / membership metadata</li>
+            </ul>
+
+            <h4>Triage (experimental ML UI)</h4>
+            <ul>
+                <li><code>GET /api/triage-eval</code> — evaluation metrics / splits (see docs)</li>
+                <li><code>GET /api/triage-model-corpus</code> — model training / corpus stats from live DB</li>
+                <li><code>POST /api/triage-live</code> — live scoring request (body per docs)</li>
+            </ul>
+
+            <h4>Not open anonymous integration</h4>
+            <ul>
+                <li><code>GET /api/cases</code> — <strong>bulk</strong> full-corpus export; returns <strong>403</strong> without the internal key (ops / trusted clients only).</li>
+                <li><code>POST /api/cache/clear</code> — clears server-side cache; requires <code>CACHE_CLEAR_TOKEN</code> (maintenance).</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const EX_BTN = { run: 'Run example', collapse: 'Press to collapse', expand: 'Press to expand' };
+
+        function wireExample(btn, wrap, run) {
+            btn.addEventListener('click', async () => {
+                if (btn.textContent === EX_BTN.collapse) {
+                    wrap.classList.add('collapsed');
+                    btn.textContent = EX_BTN.expand;
+                    btn.setAttribute('aria-expanded', 'false');
+                    return;
+                }
+                if (btn.textContent === EX_BTN.expand) {
+                    wrap.classList.remove('collapsed');
+                    btn.textContent = EX_BTN.collapse;
+                    btn.setAttribute('aria-expanded', 'true');
+                    return;
+                }
+                wrap.classList.remove('collapsed');
+                btn.setAttribute('aria-expanded', 'true');
+                await run();
+                btn.textContent = EX_BTN.collapse;
+            });
+        }
+
+        function renderBars(container, entries, maxBars) {
+            const max = Math.max(...entries.map((e) => e[1]), 1);
+            const slice = entries.slice(0, maxBars);
+            container.innerHTML = slice
+                .map(
+                    ([label, n]) => `
+                <div class="bar-row">
+                    <span class="label" title="${String(label).replace(/"/g, '&quot;')}">${label}</span>
+                    <div class="bar"><div style="width:${(100 * n) / max}%"></div></div>
+                    <span class="num">${n}</span>
+                </div>`
+                )
+                .join('');
+        }
+
+        function normPlatformList(x) {
+            if (x == null) return [];
+            if (Array.isArray(x)) return x;
+            if (typeof x === 'string') {
+                try {
+                    const j = JSON.parse(x);
+                    return Array.isArray(j) ? j : [x];
+                } catch {
+                    return [x];
+                }
+            }
+            return [];
+        }
+
+        wireExample(
+            document.getElementById('btn-ex1'),
+            document.getElementById('ex1-output-wrap'),
+            async () => {
+                const el = document.getElementById('ex1-out');
+                el.textContent = 'Loading…';
+                try {
+                    const r = await fetch('/api/stats');
+                    const s = await r.json();
+                    const total = s.total_cases || 0;
+                    el.innerHTML =
+                        '<p style="margin:0 0 10px;color:#666;"><code>/api/stats</code> → total_cases: <strong>' +
+                        total +
+                        '</strong>. Bars = top platforms by mention across cases (from <code>platforms_used</code> in paginated summaries).</p><div id="ex1-bars"></div>';
+                    const summaries =
+                        typeof caselinkerLoadAllSummariesSequential === 'function'
+                            ? await caselinkerLoadAllSummariesSequential()
+                            : [];
+                    const by = {};
+                    for (const c of summaries) {
+                        const plats = normPlatformList(c.platforms_used);
+                        const uniq = [...new Set(plats.map((p) => String(p || '').trim() || '(unknown)'))];
+                        for (const p of uniq) {
+                            by[p] = (by[p] || 0) + 1;
+                        }
+                    }
+                    const sorted = Object.entries(by).sort((a, b) => b[1] - a[1]);
+                    if (sorted.length === 0) {
+                        el.innerHTML =
+                            '<p style="color:#666">No <code>platforms_used</code> values found in summaries.</p>';
+                        return;
+                    }
+                    renderBars(document.getElementById('ex1-bars'), sorted, 15);
+                } catch (e) {
+                    el.textContent = 'Error: ' + (e.message || e);
+                }
+            }
+        );
+
+        function renderFacetNode(node, depth, maxDepth) {
+            if (!node || depth > maxDepth) return '';
+            const label = node.label != null ? node.label : '(root)';
+            const cnt = node.case_count != null ? node.case_count : node.count;
+            const count = cnt != null ? ` <span style="color:#888">(${cnt})</span>` : '';
+            let html = `<div class="node"><strong>${label}</strong>${count}`;
+            const kids = node.children || [];
+            for (const ch of kids) {
+                html += renderFacetNode(ch, depth + 1, maxDepth);
+            }
+            html += '</div>';
+            return html;
+        }
+
+        wireExample(
+            document.getElementById('btn-ex2'),
+            document.getElementById('ex2-output-wrap'),
+            async () => {
+                const el = document.getElementById('ex2-tree');
+                el.textContent = 'Loading…';
+                try {
+                    const r = await fetch('/api/facet-tree?max_depth=2');
+                    const data = await r.json();
+                    const root = data.root || data;
+                    el.innerHTML = renderFacetNode(root, 0, 3);
+                } catch (e) {
+                    el.textContent = 'Error: ' + (e.message || e);
+                }
+            }
+        );
+
+        wireExample(
+            document.getElementById('btn-ex3'),
+            document.getElementById('ex3-output-wrap'),
+            async () => {
+                const el = document.getElementById('ex3-chart');
+                el.innerHTML = '<p style="color:#666">Loading chunks…</p>';
+                try {
+                    const years = {};
+                    let offset = 0;
+                    const limit = 400;
+                    for (;;) {
+                        const r = await fetch(`/api/cases-summaries-chunk?offset=${offset}&limit=${limit}`);
+                        const j = await r.json();
+                        const chunk = j.summaries || [];
+                        for (const c of chunk) {
+                            const ds = c.date_start || (c.date_range && c.date_range.start) || '';
+                            const y =
+                                typeof ds === 'string' && ds.length >= 4 && /^\d{4}/.test(ds)
+                                    ? ds.slice(0, 4)
+                                    : 'unknown';
+                            years[y] = (years[y] || 0) + 1;
+                        }
+                        if (chunk.length < limit) break;
+                        offset += limit;
+                    }
+                    const entries = Object.entries(years)
+                        .filter(([y]) => y !== 'unknown')
+                        .sort(([a], [b]) => a.localeCompare(b));
+                    el.innerHTML = '';
+                    const w = el.clientWidth || 800;
+                    const h = 220;
+                    const margin = { top: 20, right: 20, bottom: 40, left: 36 };
+                    const svg = d3
+                        .select(el)
+                        .append('svg')
+                        .attr('width', w)
+                        .attr('height', h);
+                    const x = d3
+                        .scaleBand()
+                        .domain(entries.map((d) => d[0]))
+                        .range([margin.left, w - margin.right])
+                        .padding(0.15);
+                    const y = d3
+                        .scaleLinear()
+                        .domain([0, d3.max(entries, (d) => d[1]) || 1])
+                        .nice()
+                        .range([h - margin.bottom, margin.top]);
+                    svg
+                        .append('g')
+                        .attr('transform', `translate(0,${h - margin.bottom})`)
+                        .call(d3.axisBottom(x))
+                        .selectAll('text')
+                        .attr('transform', 'rotate(-45)')
+                        .style('text-anchor', 'end');
+                    svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(5));
+                    svg
+                        .selectAll('rect')
+                        .data(entries)
+                        .join('rect')
+                        .attr('x', (d) => x(d[0]))
+                        .attr('y', (d) => y(d[1]))
+                        .attr('width', x.bandwidth())
+                        .attr('height', (d) => y(0) - y(d[1]))
+                        .attr('fill', '#66bb6a');
+                } catch (e) {
+                    el.textContent = 'Error: ' + (e.message || e);
+                }
+            }
+        );
+    </script>
+</body>
+</html>

@@ -398,6 +398,8 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/query">Query</a>
+        <a href="/expand">Expand</a>
         <a href="/triage">Triage</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
@@ -1397,17 +1399,17 @@
             const caseItem = window.currentAnalysisData.triaged_cases[caseIdx];
             if (!caseItem) return;
             
-            // Get raw case text
-            let caseText = '';
+            // Prefer case_text from automated-analysis API, then raw_data, then fetch fallback.
+            let caseText = caseItem.case_text || '';
             const rawData = caseItem.raw_data;
             if (typeof rawData === 'object' && rawData) {
-                caseText = rawData.case_text || '';
+                caseText = rawData.case_text || caseText;
             } else if (typeof rawData === 'string') {
                 try {
                     const parsed = JSON.parse(rawData);
-                    caseText = parsed.case_text || '';
+                    caseText = parsed.case_text || caseText;
                 } catch {
-                    caseText = rawData;
+                    caseText = rawData || caseText;
                 }
             }
             
@@ -2412,7 +2414,12 @@
                                  onclick="updateCaseTagsPanel(window.matchingCases.find(c => c.id === '${caseData.id}'))">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; padding-bottom: 6px; border-bottom: 1px solid rgba(255,193,7,0.2);">
                                     <div style="color: #ffc107; font-weight: 700; font-size: 0.95em;">
-                                        ${caseData.id}
+                                        <a href="/audit?case=${encodeURIComponent(caseData.id)}"
+                                           onclick="event.stopPropagation();"
+                                           title="Open this case in Audit"
+                                           style="color: #ffc107; text-decoration: underline; text-underline-offset: 2px;">
+                                            ${caseData.id}
+                                        </a>
                                     </div>
                                     <div style="color: #888; font-size: 0.8em;">
                                         ${date}
@@ -2435,7 +2442,11 @@
                                 return `
                                     <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,193,7,0.1);">
                                         <div style="color: #ffc107; font-weight: 600; font-size: 0.85em; margin-bottom: 10px;">
-                                            ${caseData.id}
+                                            <a href="/audit?case=${encodeURIComponent(caseData.id)}"
+                                               title="Open this case in Audit"
+                                               style="color: #ffc107; text-decoration: underline; text-underline-offset: 2px;">
+                                                ${caseData.id}
+                                            </a>
                                         </div>
                                         ${allTags.length > 0 ? allTags.map(category => `
                                             <div style="margin-bottom: 10px;">

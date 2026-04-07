@@ -15,8 +15,8 @@ sys.path.insert(0, str(src_path / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(src_path / "Visualization Layer"))
 
 from processing import process_cases
-import pandas as pd
 import os
+import re
 
 # Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
 if os.getenv("DATABASE_URL"):
@@ -66,19 +66,16 @@ def main():
         from ingestion import ingest_multiple_pdfs
         
         if len(file_paths) == 1:
-            # Single file - use simpler approach
-            from ingestion import extract_pdf_text, detect_source_from_content
-            text = extract_pdf_text(file_paths[0])
-            filename = file_paths[0].split('/')[-1]
-            source = detect_source_from_content(text, filename)
+            # Single file - route through ingestion helper so source_url fallback is applied.
+            from ingestion import ingest_file
+            df = ingest_file(file_paths[0], file_type='pdf')
+            text = str(df.iloc[0].get('extracted_text', '') or '')
+            source = str(df.iloc[0].get('source', 'unknown') or 'unknown')
+            source_url = df.iloc[0].get('source_url')
             print(f"✓ Extracted {len(text):,} characters from {file_paths[0]}")
             print(f"✓ Detected source: {source}")
-            
-            df = pd.DataFrame({
-                'source_file': [filename],
-                'extracted_text': [text],
-                'source': [source],
-            })
+            if source_url:
+                print(f"✓ Source URL: {source_url}")
         else:
             # Multiple files
             df = ingest_multiple_pdfs(file_paths)
@@ -175,11 +172,106 @@ def store_cases(cases: List[Dict[str, Any]], db_path: Optional[str]) -> int:
     else:
         storage = CaseStorage()  # PostgreSQL (uses DATABASE_URL)
     
+    cases_to_store = _filter_doj_cases_by_novelty(cases, storage)
+
     stored_count = 0
-    for case in cases:
+    for case in cases_to_store:
         if storage.store_case(case):
             stored_count += 1
     return stored_count
+
+
+def _normalize_text_for_exact_match(text: Any) -> str:
+    if not isinstance(text, str):
+        return ""
+    return re.sub(r"\s+", " ", text.strip().lower())
+
+
+def _filter_doj_cases_by_novelty(
+    incoming_cases: List[Dict[str, Any]],
+    storage: "CaseStorage",
+    similarity_threshold: float = 0.98,
+) -> List[Dict[str, Any]]:
+    """
+    DOJ-only guardrail:
+      a) skip exact narrative matches already in DB
+      b) skip if similarity to any existing case is >= threshold
+
+    Non-DOJ cases pass through unchanged.
+    """
+    if not incoming_cases:
+        return incoming_cases
+
+    # Separate DOJ from all other sources; only DOJ gets novelty gating.
+    doj_sources = {"DOJ CEOS"}
+    doj_cases = [c for c in incoming_cases if str(c.get("source", "")).upper() in doj_sources]
+    non_doj_cases = [c for c in incoming_cases if str(c.get("source", "")).upper() not in doj_sources]
+    if not doj_cases:
+        return incoming_cases
+
+    try:
+        from analysis import calculate_case_similarity
+    except Exception:
+        # If similarity module unavailable, keep only exact-match guard.
+        calculate_case_similarity = None
+
+    existing_cases = storage.get_all_cases(include_raw_data=True)
+    existing_norm_texts = set()
+    for ex in existing_cases:
+        t = ex.get("case_text")
+        if not t and isinstance(ex.get("raw_data"), dict):
+            t = ex.get("raw_data", {}).get("case_text")
+        nt = _normalize_text_for_exact_match(t)
+        if nt:
+            existing_norm_texts.add(nt)
+
+    kept_doj: List[Dict[str, Any]] = []
+    dropped_exact = 0
+    dropped_similar = 0
+
+    # Include already-kept DOJ cases in similarity pool to prevent duplicates within same run.
+    similarity_pool = list(existing_cases)
+    seen_new_norm = set()
+
+    for c in doj_cases:
+        c_text = c.get("case_text")
+        if not c_text and isinstance(c.get("raw_data"), dict):
+            c_text = c.get("raw_data", {}).get("case_text")
+        ntext = _normalize_text_for_exact_match(c_text)
+        if not ntext:
+            # If no text, treat as low-confidence and skip.
+            dropped_exact += 1
+            continue
+        if ntext in existing_norm_texts or ntext in seen_new_norm:
+            dropped_exact += 1
+            continue
+
+        if calculate_case_similarity is not None:
+            max_sim = 0.0
+            for ex in similarity_pool:
+                try:
+                    sim = float(calculate_case_similarity(c, ex))
+                except Exception:
+                    sim = 0.0
+                if sim > max_sim:
+                    max_sim = sim
+                if max_sim >= similarity_threshold:
+                    break
+            if max_sim >= similarity_threshold:
+                dropped_similar += 1
+                continue
+
+        kept_doj.append(c)
+        similarity_pool.append(c)
+        seen_new_norm.add(ntext)
+
+    if dropped_exact or dropped_similar:
+        print(
+            f"✓ DOJ novelty filter: kept {len(kept_doj)}/{len(doj_cases)} "
+            f"(dropped exact={dropped_exact}, similar={dropped_similar}, threshold={similarity_threshold:.2f})"
+        )
+
+    return non_doj_cases + kept_doj
 
 
 def get_all_stored_cases(db_path: Optional[str]) -> List[Dict[str, Any]]:

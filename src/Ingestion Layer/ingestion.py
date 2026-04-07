@@ -11,14 +11,24 @@ Design Ideas from Architecture:
 - Modular so can upload website/pdf
 """
 
+import importlib.util
 import pandas as pd
 from pathlib import Path
 
 _EXTERNAL_PDF_NAME = "external.pdf"
+
+_suc_path = Path(__file__).resolve().parents[1] / "Processing Layer" / "source_url_continuations.py"
+_suc_spec = importlib.util.spec_from_file_location("source_url_continuations", _suc_path)
+_suc_mod = importlib.util.module_from_spec(_suc_spec)
+_suc_spec.loader.exec_module(_suc_mod)
+try_append_source_url_continuation = _suc_mod.try_append_source_url_continuation
+consume_same_line_slug_after_url = _suc_mod.consume_same_line_slug_after_url
+
 from typing import Dict, List, Any, Optional
 import warnings
 import logging
 import re
+from functools import lru_cache
 
 try:
     import pdfplumber
@@ -112,6 +122,12 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'SD AG'
     elif ('kysp' in filename_lower or 'ksp_icac' in filename_lower or 'kentucky_sp' in filename_lower) and 'icac' in filename_lower:
         return 'KY SP'
+    elif ('arkdps' in filename_lower or 'arkansas_dps' in filename_lower or 'arkansas_dps_icac' in filename_lower) and 'icac' in filename_lower:
+        return 'ARKANSAS DPS'
+    elif 'doj_ceos' in filename_lower or ('doj' in filename_lower and 'ceos' in filename_lower):
+        return 'DOJ CEOS'
+    elif 'doj_archives' in filename_lower or ('doj' in filename_lower and 'archive' in filename_lower):
+        return 'DOJ ARCHIVES'
     elif 'fbi' in filename_lower:
         return 'FBI'
 
@@ -213,6 +229,30 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'KY SP'
 
+    # Arkansas Department of Public Safety (dps.arkansas.gov — ICAC / CSAM news; merged ICAC news PDF)
+    if re.search(r'dps\.arkansas\.gov', text_sample, re.I) and re.search(
+        r'Arkansas State Police|\bASP\b|\bICAC\b|Internet Crimes Against Children|\bCSAM\b|child porn',
+        text_sample,
+        re.I,
+    ):
+        return 'ARKANSAS DPS'
+
+    # U.S. DOJ CEOS news (federal child exploitation press releases; supplemental source)
+    if re.search(r'justice\.gov', text_sample, re.I) and re.search(
+        r'Child Exploitation\s*&\s*Obscenity Section|CEOS|Press Release',
+        text_sample,
+        re.I,
+    ):
+        return 'DOJ CEOS'
+
+    # U.S. DOJ archived CEOS pages (legacy archive domain path)
+    if re.search(r'justice\.gov/archives/criminal', text_sample, re.I) and re.search(
+        r'Child Exploitation|Obscenity Section|Press Release|child pornography|sexual abuse material',
+        text_sample,
+        re.I,
+    ):
+        return 'DOJ ARCHIVES'
+
     # Pennsylvania Office of Attorney General (attorneygeneral.gov — exclude other state AG domains)
     if re.search(r'attorneygeneral\.gov', text_sample, re.I) and not re.search(
         r'illinoisattorneygeneral|texasattorneygeneral|njoag\.gov|ohioattorneygeneral|attorneygeneral\.utah\.gov',
@@ -231,6 +271,155 @@ def detect_source_from_content(text: str, filename: str) -> str:
 
     # Default fallback
     return 'Other'  # Default to Other
+
+
+def _clean_url(url: str) -> str:
+    """Normalize and trim trailing punctuation from extracted URLs."""
+    if not isinstance(url, str):
+        return ""
+    return url.strip().rstrip('.,);]')
+
+
+_SOURCE_FIELD_BREAK_RE = re.compile(r"^(?:[A-Za-z][A-Za-z ]{0,40}:|Case\s+\d+\s*:)", re.IGNORECASE)
+
+
+def _extract_source_url_marker_value(text: str) -> Optional[str]:
+    """
+    Extract `Source: <url>` with support for PDF-wrapped URL lines.
+    Example:
+      Source: https://...-who-disse
+      minated-child...   -> joined into one URL.
+    Spaced path fragments after a date slug (e.g. ``.../202109-16`` + next line title) are
+    hyphenated and appended.
+    """
+    if not isinstance(text, str) or not text.strip():
+        return None
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        m = re.match(r"^\s*Source:\s*(https?://\S*)", line, flags=re.IGNORECASE)
+        if not m:
+            continue
+        url = m.group(1).strip()
+        spaced_slug_segments = 0
+        extra, add = consume_same_line_slug_after_url(url, line[m.end() :])
+        url = extra
+        spaced_slug_segments += add
+        j = i + 1
+        while j < len(lines):
+            nxt = lines[j].strip()
+            if not nxt:
+                break
+            if _SOURCE_FIELD_BREAK_RE.match(nxt):
+                break
+            if nxt.lower().startswith("http://") or nxt.lower().startswith("https://"):
+                break
+            tup = try_append_source_url_continuation(url, nxt, spaced_slug_segments)
+            if tup is None:
+                break
+            frag, is_spaced = tup
+            url += frag
+            if is_spaced:
+                spaced_slug_segments += 1
+            j += 1
+            if url.lower().endswith(".pdf"):
+                break
+        return _clean_url(url)
+    return None
+
+
+def extract_source_url_from_text(text: str) -> Optional[str]:
+    """
+    Extract canonical source URL from text using only `Source: <url>`.
+    """
+    return _extract_source_url_marker_value(text)
+
+
+@lru_cache(maxsize=1)
+def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
+    """
+    Parse `visualization/sources.html` staticSources and build source->url fallbacks.
+    This avoids hardcoding per-agency links in ingestion scripts.
+    """
+    mapping: Dict[str, str] = {}
+    try:
+        sources_path = Path(__file__).resolve().parents[2] / "visualization" / "sources.html"
+        html = sources_path.read_text(encoding="utf-8")
+    except Exception:
+        return mapping
+
+    objects = re.findall(
+        r'name:\s*"([^"]+)"\s*,\s*url:\s*"([^"]+)"',
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    for name, url in objects:
+        n = name.lower()
+        url_clean = _clean_url(url)
+        if "arizona internet crimes against children" in n:
+            mapping["AZICAC"] = url_clean
+        elif "national center for missing" in n:
+            mapping["NCMEC"] = url_clean
+        elif "georgia bureau of investigation" in n:
+            mapping["GBI"] = url_clean
+        elif "idaho office of attorney general" in n:
+            mapping["IDAHO ICAC"] = url_clean
+        elif "texas office of the attorney general" in n:
+            mapping["TEXAS AG"] = url_clean
+        elif "michigan state police" in n:
+            mapping["MICHIGAN ICAC"] = url_clean
+        elif "silicon valley icac" in n:
+            mapping["SVICAC"] = url_clean
+        elif "tennessee bureau of investigation" in n:
+            mapping["TBI ICAC"] = url_clean
+        elif "south carolina attorney general" in n:
+            mapping["SCAG ICAC"] = url_clean
+        elif "new york state police" in n:
+            mapping["NEWYORK SP"] = url_clean
+        elif "illinois attorney general" in n:
+            mapping["ILLINOIS AG"] = url_clean
+        elif "washoe county sheriff" in n:
+            mapping["WCSO"] = url_clean
+        elif "los angeles police department" in n:
+            mapping["LAPD"] = url_clean
+        elif "south florida icac" in n:
+            mapping["SOUTH FLORIDA ICAC"] = url_clean
+        elif "new jersey office of the attorney general" in n:
+            mapping["NJ AG"] = url_clean
+        elif "pennsylvania office of the attorney general" in n:
+            mapping["PA AG"] = url_clean
+        elif "vermont office of the attorney general" in n:
+            mapping["VT AG"] = url_clean
+        elif "ohio attorney general" in n:
+            mapping["OHIO AG"] = url_clean
+        elif "utah attorney general" in n:
+            mapping["UT AG"] = url_clean
+        elif "mississippi attorney general" in n:
+            mapping["MS AG"] = url_clean
+        elif "north carolina state bureau of investigation" in n:
+            mapping["NC SBI"] = url_clean
+        elif "louisiana office of the attorney general" in n:
+            mapping["LA AG"] = url_clean
+        elif "wyoming division of criminal investigation" in n:
+            mapping["WY DCI"] = url_clean
+        elif "south dakota office of the attorney general" in n:
+            mapping["SD AG"] = url_clean
+        elif "kentucky state police" in n:
+            mapping["KY SP"] = url_clean
+        elif "arkansas department of public safety" in n:
+            mapping["ARKANSAS DPS"] = url_clean
+        elif "child exploitation & obscenity section news" in n:
+            mapping["DOJ CEOS"] = url_clean
+        elif "child exploitation and obscenity section archive" in n:
+            mapping["DOJ ARCHIVES"] = url_clean
+    return mapping
+
+
+def get_source_url_fallback(source: str) -> Optional[str]:
+    """Lookup source URL fallback from `visualization/sources.html` by source label."""
+    key = (source or "").strip().upper()
+    if not key:
+        return None
+    return _load_source_url_fallbacks_from_sources_html().get(key)
 
 
 def extract_pdf_text(pdf_path: str) -> str:
@@ -262,7 +451,7 @@ def extract_pdf_text(pdf_path: str) -> str:
         raise Exception(f"Error extracting text from PDF: {str(e)}")
 
 
-def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame:
+def ingest_file(file_path: str, file_type: Optional[str] = None, source_url: Optional[str] = None) -> pd.DataFrame:
     """
     Ingest a file and return a DataFrame.
     Supports PDF files (extracts text) and other formats as needed.
@@ -271,6 +460,7 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
         file_path: Path to the file to ingest
         file_type: Optional file type hint (e.g., 'pdf', 'csv', 'txt')
                    If None, will be inferred from file extension
+        source_url: Optional canonical source URL for custom/manual PDFs
         
     Returns:
         DataFrame with ingested data
@@ -283,11 +473,14 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
     if file_type == 'pdf':
         text = extract_pdf_text(str(path))
         source = detect_source_from_content(text, path.name)
+        detected_source_url = extract_source_url_from_text(text)
+        resolved_source_url = source_url or detected_source_url or get_source_url_fallback(source)
         
         df = pd.DataFrame({
             'source_file': [path.name],
             'extracted_text': [text],
             'source': [source],
+            'source_url': [resolved_source_url],
         })
         
         return df
@@ -311,13 +504,19 @@ def ingest_file(file_path: str, file_type: Optional[str] = None) -> pd.DataFrame
         raise ValueError(f"Unsupported file type: {file_type}")
 
 
-def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
+def ingest_multiple_pdfs(
+    pdf_paths: List[str],
+    source_urls_by_file: Optional[Dict[str, str]] = None,
+    default_source_url: Optional[str] = None,
+) -> pd.DataFrame:
     """
     Ingest multiple PDF files and return a combined DataFrame.
     Each PDF is processed separately and combined into a single DataFrame.
     
     Args:
         pdf_paths: List of paths to PDF files
+        source_urls_by_file: Optional mapping of filename or full path to source URL
+        default_source_url: Optional fallback source URL for files not in mapping
         
     Returns:
         DataFrame with ingested data from all PDFs
@@ -343,11 +542,20 @@ def ingest_multiple_pdfs(pdf_paths: List[str]) -> pd.DataFrame:
             
             # Detect source from content and filename
             org_name = detect_source_from_content(text, path.name)
+            detected_source_url = extract_source_url_from_text(text)
+            resolved_source_url = (
+                (source_urls_by_file or {}).get(str(path))
+                or (source_urls_by_file or {}).get(path.name)
+                or default_source_url
+                or detected_source_url
+                or get_source_url_fallback(org_name)
+            )
             
             all_data.append({
                 'source_file': path.name,
                 'extracted_text': text,
                 'source': org_name,
+                'source_url': resolved_source_url,
             })
             print(f"✓ Ingested: {path.name} ({len(text):,} characters) - Detected source: {org_name}")
             

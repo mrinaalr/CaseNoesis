@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / state and regional press materials. There are currently **2,180 cases** across **25** ingestion sources: **ILLINOIS AG** (265), **SCAG ICAC** (265), **NCMEC** (244), **KY SP** (206), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **NEWYORK SP** (63), **TBI ICAC** (63), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **SD AG** (16), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / state and regional press materials. There are currently **2,397 cases** across **28** ingestion sources: **ILLINOIS AG** (265), **NCMEC** (244), **SCAG ICAC** (207), **KY SP** (205), **DOJ ARCHIVES** (202), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **TBI ICAC** (63), **NEWYORK SP** (62), **DOJ CEOS** (49), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **ARKANSAS DPS** (31), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11), **SD AG** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
 
 ## Technical Reports
 
@@ -76,6 +76,8 @@ Then open your browser to:
 - **Clusters**: http://localhost:8000/clusters
 - **Stats**: http://localhost:8000/stats
 - **Search**: http://localhost:8000/search
+- **Query**: http://localhost:8000/query — browser-side JS snippets against public APIs (custom analysis)
+- **Expand**: http://localhost:8000/expand — examples for building your own visualizations on the APIs
 - **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
@@ -139,6 +141,7 @@ The sources page lists publicly available reports from (see `/sources` for links
 - **South Carolina Attorney General (SCAG) ICAC**: ICAC-tagged news releases
 - **Illinois Attorney General**: ICAC-related press releases
 - **Kentucky State Police (KY SP)**: News archive search (ICAC)
+- **Arkansas Department of Public Safety (ARKANSAS DPS)**: ICAC / CSAM-related press releases
 - **Vermont Attorney General (VT AG)**: ICAC-related releases
 - **Ohio Attorney General**: ICAC-related releases
 - **New Jersey Attorney General**: ICAC-related releases
@@ -153,6 +156,8 @@ The sources page lists publicly available reports from (see `/sources` for links
 - **South Dakota Attorney General (SD AG)**: ICAC-related releases
 - **Washoe County Sheriff's Office (WCSO, Nevada)**: ICAC-related releases
 - **Mississippi Attorney General (MS AG)**: ICAC-related releases
+- **U.S. DOJ CEOS (DOJ CEOS)**: Child Exploitation and Obscenity Section press releases
+- **U.S. DOJ CEOS Archives (DOJ ARCHIVES)**: Archived CEOS criminal press releases
 
 ### Processing PDFs to Populate Database
 
@@ -303,6 +308,8 @@ Each case includes structured features extracted from case narratives:
 - `GET /` - Home page
 - `GET /visualization` - Interactive visualization page with multiple chart types (Timeline, Severity Indicators, Prosecution Outcomes, Previous Perpetrator, Environment, Organizations Involved)
 - `GET /search` - Facet decision tree over stored cases (D3); prune filters; cohort case IDs via API
+- `GET /query` - Custom analysis lab (browser-only JavaScript calling public APIs; see page for examples)
+- `GET /expand` - Build-your-own viz examples (stats bars, facet tree text view, D3 histogram via public APIs)
 - `GET /analysis` - Advanced case analysis page with tag-based filtering and automated analysis
 - `GET /api/facet-tree` - Build facet tree JSON (`max_depth`, optional prune query params)
 - `GET /api/facet-distinct` - Distinct primary-bucket values per facet (for Search prune UI)
@@ -345,7 +352,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: This system contains cases from publicly available sources (AZ, South Florida, LAPD ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, ICAC press releases from the Georgia Bureau of Investigation, Michigan, New York, and Kentucky State Police, Texas, Pennsylvania, New Jersey, Vermont, Louisiana, South Dakota, and Idaho Office of the Attorney General, Tennessee Bureau of Investigation, South Carolina, Utah, Mississippi, Ohio, and Illinois Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: This system contains cases from publicly available sources (AZ, South Florida, LAPD ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, DOJ CEOS Press Releases, ICAC press releases from the Georgia Bureau of Investigation, Michigan, New York, and Kentucky State Police, Texas, Pennsylvania, New Jersey, Vermont, Louisiana, South Dakota, and Idaho Office of the Attorney General, Tennessee Bureau of Investigation, South Carolina, Utah, Mississippi, Ohio, and Illinois Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 
