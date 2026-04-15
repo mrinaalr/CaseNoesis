@@ -698,13 +698,14 @@
             border-radius: 6px;
         }
         #modelTierTreeWrap .facet-prune-inc {
-            flex: 0 0 200px;
+            flex: 0 0 230px;
             font-size: 0.85rem;
             color: #333;
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            white-space: nowrap;
         }
         #modelTierTreeWrap .facet-prune-val-wrap {
             flex: 1;
@@ -1177,7 +1178,7 @@ Case 3 : …</code>
             { field: 'investigation_type', label: '4. Inv. type' },
             { field: 'source', label: '5. Source' },
             { field: 'agencies_involved', label: '6. Agency' },
-            { field: 'organizations', label: '7. Organization' },
+            { field: 'prosecution_outcome', label: '7. Prosecution Outcome' },
             { field: 'locations', label: '8. Location' },
             { field: 'severity_phrases', label: '9. Severity Phrase' },
             { field: 'era_period', label: '10. Date range' },
@@ -1221,7 +1222,13 @@ Case 3 : …</code>
             sel.innerHTML = '';
             var ph = document.createElement('option');
             ph.value = '';
-            ph.textContent = remaining.length ? 'Select value…' : '(all values in chips)';
+            if (remaining.length) {
+                ph.textContent = 'Select value…';
+            } else if (!all.length) {
+                ph.textContent = 'No values available';
+            } else {
+                ph.textContent = '(all values in chips)';
+            }
             sel.appendChild(ph);
             remaining.forEach(function (v) {
                 var opt = document.createElement('option');

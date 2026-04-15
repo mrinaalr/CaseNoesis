@@ -367,13 +367,14 @@
             border-radius: 6px;
         }
         .facet-prune-inc {
-            flex: 0 0 200px;
+            flex: 0 0 230px;
             font-size: 0.85rem;
             color: #333;
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            white-space: nowrap;
         }
         .facet-prune-inc input {
             flex-shrink: 0;
@@ -654,7 +655,7 @@
                     <span class="tree-sentence-wrap" data-sentence-slot="investigation_type"><input type="text" class="tree-sentence-input" data-field="investigation_type" id="facet-sent-investigation_type" placeholder="Inv. type" title="4. Inv. type" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="source"><input type="text" class="tree-sentence-input" data-field="source" id="facet-sent-source" placeholder="Source" title="5. Source" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="agencies_involved"><input type="text" class="tree-sentence-input" data-field="agencies_involved" id="facet-sent-agencies_involved" placeholder="Agency" title="6. Agency — type A to see first bucket starting with A" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
-                    <span class="tree-sentence-wrap" data-sentence-slot="organizations"><input type="text" class="tree-sentence-input" data-field="organizations" id="facet-sent-organizations" placeholder="Org" title="7. Organization" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
+                    <span class="tree-sentence-wrap" data-sentence-slot="prosecution_outcome"><input type="text" class="tree-sentence-input" data-field="prosecution_outcome" id="facet-sent-prosecution_outcome" placeholder="Prosecution" title="7. Prosecution Outcome" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="locations"><input type="text" class="tree-sentence-input" data-field="locations" id="facet-sent-locations" placeholder="Location" title="8. Location" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="severity_phrases"><input type="text" class="tree-sentence-input" data-field="severity_phrases" id="facet-sent-severity_phrases" placeholder="Sev. phrase" title="9. Severity phrase" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="era_period"><input type="text" class="tree-sentence-input" data-field="era_period" id="facet-sent-era_period" placeholder="Date range" title="10. Date range" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
@@ -691,7 +692,7 @@
                 <p class="facet-prune-status" id="facet-prune-status" aria-live="polite"></p>
             </details>
             <div class="tree-meta" id="facet-meta"></div>
-            <div class="tree-facet-order">Partition order (10 steps): 1.Topic → 2.Severity → 3.Platform → 4.Inv. type → 5.Source → 6.Agency → 7.Organization → 8.Location → 9.Severity Phrase → 10.Date range.</div>
+            <div class="tree-facet-order">Partition order (10 steps): 1.Topic → 2.Severity → 3.Platform → 4.Inv. type → 5.Source → 6.Agency → 7.Prosecution Outcome → 8.Location → 9.Severity Phrase → 10.Date range.</div>
             <div class="facet-tree-host" id="facet-tree-root">
                 <div class="tree-loading">Loading facet tree…</div>
             </div>
@@ -761,7 +762,7 @@
         { field: 'investigation_type', label: '4. Inv. type' },
         { field: 'source', label: '5. Source' },
         { field: 'agencies_involved', label: '6. Agency' },
-        { field: 'organizations', label: '7. Organization' },
+        { field: 'prosecution_outcome', label: '7. Prosecution Outcome' },
         { field: 'locations', label: '8. Location' },
         { field: 'severity_phrases', label: '9. Severity Phrase' },
         { field: 'era_period', label: '10. Date range' }
@@ -1127,7 +1128,13 @@
         sel.innerHTML = '';
         var ph = document.createElement('option');
         ph.value = '';
-        ph.textContent = remaining.length ? 'Select value…' : '(all values in chips)';
+        if (remaining.length) {
+            ph.textContent = 'Select value…';
+        } else if (!all.length) {
+            ph.textContent = 'No values available';
+        } else {
+            ph.textContent = '(all values in chips)';
+        }
         sel.appendChild(ph);
         remaining.forEach(function (v) {
             var opt = document.createElement('option');

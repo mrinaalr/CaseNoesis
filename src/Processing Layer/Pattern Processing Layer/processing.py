@@ -303,27 +303,32 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def extract_date_range(case: Dict[str, Any]) -> Optional[Dict[str, str]]:
-    """Extract date range from case data."""
-    month = case.get('month')
-    year = case.get('year')
+    """
+    Publication-oriented dates from batching only: ``month`` / ``year`` on the raw case
+    (PDF split, URL, or lead line). Does not scan full narrative for years (avoids
+    historical mentions skewing timelines).
+    """
+    from datetime import datetime
+
+    month = case.get("month")
+    year = case.get("year")
     if not year:
         return None
 
     if month and year:
-        from datetime import datetime
         try:
-            month_num = datetime.strptime(month, '%B').month
+            month_num = datetime.strptime(month, "%B").month
             ys = str(year).strip()
             date_str = f"{ys}-{month_num:02d}-01"
-            return {'start': date_str, 'end': None}
+            return {"start": date_str, "end": None}
         except (ValueError, AttributeError):
             pass
 
     # Year-only (e.g. SVICAC: publication year from article URL or lead text)
     if not month:
         ys = str(year).strip()
-        if re.match(r'^\d{4}$', ys):
-            return {'start': f'{ys}-01-01', 'end': f'{ys}-12-31'}
+        if re.match(r"^\d{4}$", ys):
+            return {"start": f"{ys}-01-01", "end": f"{ys}-12-31"}
 
     return None
 

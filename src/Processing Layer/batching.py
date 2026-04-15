@@ -114,7 +114,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / WA AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -151,6 +151,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_vt_ag = False
     is_ohio_ag = False
     is_ut_ag = False
+    is_wa_ag = False
     is_ms_ag = False
     is_nc_sbi = False
     is_la_ag = False
@@ -200,6 +201,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_ohio_ag = True
         elif source_upper == 'UT AG':
             is_ut_ag = True
+        elif source_upper == 'WA AG':
+            is_wa_ag = True
         elif source_upper == 'MS AG':
             is_ms_ag = True
         elif source_upper == 'NC SBI':
@@ -258,6 +261,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "OHIO AG")
     elif is_ut_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "UT AG")
+    elif is_wa_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "WA AG")
     elif is_ms_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "MS AG")
     elif is_nc_sbi:
@@ -1266,6 +1271,7 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "VT AG": ["VTAG_ICAC_All.pdf", "VTOAG_ICAC_All.pdf", "Vermont_ICAC_All.pdf", "vt_ag/VTAG_ICAC_All.pdf"],
     "OHIO AG": ["OHIOAG_ICAC_All.pdf", "Ohio_ICAC_All.pdf", "ohio_ag/OHIOAG_ICAC_All.pdf"],
     "UT AG": ["UTAG_ICAC_All.pdf", "UTOAG_ICAC_All.pdf", "Utah_ICAC_All.pdf", "ut_ag/UTAG_ICAC_All.pdf"],
+    "WA AG": ["WAAG_ICAC_All.pdf", "Washington_AG_ICAC_All.pdf", "wa_ag/WAAG_ICAC_All.pdf"],
     "MS AG": ["MSAG_ICAC_All.pdf", "Mississippi_ICAC_All.pdf", "ms_ag/MSAG_ICAC_All.pdf"],
     "NC SBI": ["NCSBI_ICAC_All.pdf", "NC_SBI_ICAC_All.pdf", "nc_sbi/NCSBI_ICAC_All.pdf"],
     "LA AG": ["LAAG_ICAC_All.pdf", "Louisiana_ICAC_All.pdf", "la_ag/LAAG_ICAC_All.pdf"],
@@ -1299,17 +1305,248 @@ def _merged_icac_news_pdf_search_paths(source_key: str, source_file: Optional[st
     return out
 
 
-def _merged_news_article_year_from_url_and_text(_url: str, chunk: str) -> Optional[str]:
-    """Dateline-only year extraction (e.g., 'May 5, 2010') from case text."""
-    head = chunk[:8000]
-    m = re.search(
-        r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+(20\d{2})\b",
-        head,
-        re.I,
-    )
+def _merged_news_text_before_source_line(chunk: str) -> str:
+    """
+    Headline / masthead block only: everything before the first ``Source: https://`` line.
+    Avoids body text (and URL path segments) influencing the publication-year guess.
+    """
+    m = re.search(r"(?m)^\s*Source:\s*https?://", chunk)
     if m:
+        return chunk[: m.start()].strip()
+    return (chunk or "")[:8000].strip()
+
+
+def _merged_news_default_year_from_source_file(source_file: Optional[str]) -> Optional[str]:
+    """Optional corpus year from PDF filename (e.g. ``2024_NCMEC.pdf``)."""
+    if not source_file:
+        return None
+    name = Path(source_file).name
+    m = re.search(r"\b((?:19|20)\d{2})\b", name)
+    return m.group(1) if m else None
+
+
+_MERGED_NEWS_DATELINE_MONTH_DAY_YEAR_RE = re.compile(
+    r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+((?:19|20)\d{2})\b",
+    re.I,
+)
+_MERGED_NEWS_DOB_LINE_HINT_RE = re.compile(
+    r"date\s+of\s+birth|\bd\.?\s*o\.?\s*b\.?\s*:|\bborn\b|birthdate|birth\s+date",
+    re.I,
+)
+
+
+def _merged_news_dateline_year(text: str) -> Optional[str]:
+    """Month + day + year dateline (e.g. 'May 5, 2010') from masthead-sized text only."""
+    if not text:
+        return None
+    head = text[:4000]
+    for m in _MERGED_NEWS_DATELINE_MONTH_DAY_YEAR_RE.finditer(head):
+        pre = head[max(0, m.start() - 120) : m.start()]
+        if _MERGED_NEWS_DOB_LINE_HINT_RE.search(pre):
+            continue
         return m.group(1)
     return None
+
+
+# CEOS material under justice.gov/archives/criminal/... is a static-era corpus (~1990s–2008).
+# Scraped PDFs sometimes pick up modern “updated” masthead dates; cap using URL path when possible.
+_DOJ_ARCHIVES_MAX_PUBLICATION_YEAR = 2008
+
+
+def _four_digit_years_in_string_bounded(s: str, y_min: int, y_max: int) -> List[int]:
+    if not s:
+        return []
+    out: List[int] = []
+    for m in re.finditer(r"\b((?:19|20)\d{2})\b", s):
+        y = int(m.group(1))
+        if y_min <= y <= y_max:
+            out.append(y)
+    return out
+
+
+def _resolve_doj_archives_batch_year(url: str, dateline_year: str) -> str:
+    """
+    If masthead dateline exceeds the archive era, prefer a year embedded in the Source URL
+    (common on justice.gov paths), else clamp to the archive ceiling.
+    """
+    cap = _DOJ_ARCHIVES_MAX_PUBLICATION_YEAR
+    ds = str(dateline_year).strip() if dateline_year else ""
+    if ds.isdigit() and int(ds) <= cap:
+        return ds
+    url_years = _four_digit_years_in_string_bounded(url or "", 1990, cap)
+    if url_years:
+        return str(max(url_years))
+    if ds.isdigit():
+        return str(cap)
+    return str(cap)
+
+
+_MERGED_NEWS_DATELINE_RE = re.compile(
+    r"^(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+    r"\d{1,2},?\s+(?:19|20)\d{2}\s*$",
+    re.I,
+)
+_MERGED_NEWS_DATELINE_WEEKDAY_RE = re.compile(
+    r"^(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+"
+    r"(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+    r"\d{1,2},?\s+(?:19|20)\d{2}\s*$",
+    re.I,
+)
+
+
+def _merged_news_line_looks_like_dateline_above_source(line: str) -> bool:
+    """Press-release date line directly above ``Source:`` (full month or weekday + full month)."""
+    s = line.strip()
+    if _MERGED_NEWS_DATELINE_RE.match(s) or _MERGED_NEWS_DATELINE_WEEKDAY_RE.match(s):
+        return True
+    return False
+
+
+def _merged_news_line_looks_like_narrative_body(line: str) -> bool:
+    """
+    A line from the *previous* article's body (PDF wrap), not part of the headline block above ``Source:``.
+    Used to bound the fallback upward scan so we do not pull ICAC boilerplate into the next case's title.
+    """
+    s = line.strip()
+    if not s:
+        return False
+    # Wrapped continuation of a paragraph (line does not start with a digit; headline may be "19-year-old …").
+    if not s[0].isdigit():
+        for c in s:
+            if c.isalpha():
+                if c.islower() and len(s) > 12:
+                    return True
+                break
+    if len(s) >= 118:
+        return True
+    nspaces = s.count(" ")
+    if len(s) >= 88 and nspaces >= 14:
+        return True
+    if len(s) >= 72 and (s.endswith(".") or s.endswith(".’") or s.endswith(".'")) and nspaces >= 8:
+        return True
+    if len(s) >= 64 and ". " in s and nspaces >= 9:
+        return True
+    low = s.lower()
+    if any(
+        p in low
+        for p in (
+            "icac program",
+            "cyber enticement",
+            "child sexual abuse material",
+            "internet crimes against children",
+            "this support encompasses",
+            "technical assistance, victim",
+            "presumed innocent until proven guilty",
+        )
+    ):
+        return True
+    if low.startswith("*all persons") or low.startswith("all persons are presumed"):
+        return True
+    return False
+
+
+def _merged_news_line_looks_like_headline(line: str) -> bool:
+    """ALL-CAPS or near-ALL-CAPS lines used as press-release titles (e.g. Arkansas DPS)."""
+    s = line.strip()
+    if len(s) < 10:
+        return False
+    letters = [c for c in s if c.isalpha()]
+    if not letters:
+        return False
+    upper_ratio = sum(1 for c in letters if c.isupper()) / len(letters)
+    return upper_ratio >= 0.58
+
+
+def _merged_news_is_likely_preface_before_date(line: str) -> bool:
+    """
+    Short org / masthead line immediately above the dateline (e.g. Illinois AG office line),
+    not narrative body (which usually has an em dash city lead or starts with 'The ').
+    """
+    s = line.strip()
+    if len(s) < 8 or len(s) > 140:
+        return False
+    if re.search(r"[—–]", s):
+        return False
+    low = s.lower()
+    if low.startswith(("the ", "this ", "chicago ", "springfield ", "morrilton,", "viola,", "amity,", "alma,")):
+        return False
+    if re.search(r"\b(office of|department of|attorney general)\b", low):
+        return True
+    return False
+
+
+def _merge_merged_news_wrapped_source_url_lines(lines: List[str]) -> List[str]:
+    """
+    Join PDF line-wrap fragments that continue a ``Source: https://...`` URL on the next line
+    (e.g. ``...targetin`` + ``g-online-child-exploitation/``).
+    """
+    out: List[str] = []
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
+        out.append(ln)
+        i += 1
+        if not re.match(r"^\s*Source:\s*https?://", ln):
+            continue
+        while i < len(lines):
+            raw = lines[i]
+            nxt = raw.strip()
+            if not nxt:
+                break
+            if re.match(r"^https?://", nxt) or re.match(r"^\s*Source:\s*", raw):
+                break
+            if len(nxt) > 140:
+                break
+            if not re.match(r"^[a-zA-Z0-9\-./_%?#&+=]+$", nxt):
+                break
+            out[-1] = out[-1].rstrip() + nxt
+            i += 1
+    return out
+
+
+def _merged_news_title_starts(lines: List[str], sources: List[int]) -> List[int]:
+    """
+    For each ``Source: https://`` line, find the first line of that article (headline / masthead / date).
+    Uses the dateline immediately above ``Source:`` and walks up for ALL-CAPS headlines and AG masthead lines.
+    """
+    title_starts: List[int] = []
+    for idx, si in enumerate(sources):
+        prev_barrier = sources[idx - 1] if idx > 0 else -1
+        lo = prev_barrier + 1
+        hi = si - 1
+        while hi > prev_barrier and not lines[hi].strip():
+            hi -= 1
+        if hi <= prev_barrier:
+            title_starts.append(max(0, lo))
+            continue
+
+        if _merged_news_line_looks_like_dateline_above_source(lines[hi]):
+            title_start = hi
+            t = hi - 1
+            while t > prev_barrier and _merged_news_line_looks_like_headline(lines[t]):
+                title_start = t
+                t -= 1
+            while t > prev_barrier and _merged_news_is_likely_preface_before_date(lines[t]):
+                title_start = t
+                t -= 1
+            title_starts.append(title_start)
+            continue
+
+        # No dateline above Source: — walk up from the last line before Source:, stopping at narrative body
+        # (KY SP, TBI byline+headline, NCSBI/LA/PA titles). Avoids grabbing the prior article's wrapped body.
+        title_start = hi
+        t = hi - 1
+        while t > prev_barrier:
+            raw = lines[t]
+            if not raw.strip():
+                t -= 1
+                continue
+            if _merged_news_line_looks_like_narrative_body(raw):
+                break
+            title_start = t
+            t -= 1
+        title_starts.append(title_start)
+    return title_starts
 
 
 def _batch_merged_icac_news_cases(
@@ -1344,7 +1581,7 @@ def _batch_merged_icac_news_cases(
     # marker is one line (matches ~85 cases vs ~77 when split).
     corpus = re.sub(r"(?m)^(\s*Source:\s*)\n(\s*https?://\S+)", r"\1\2", corpus)
 
-    lines = corpus.splitlines()
+    lines = _merge_merged_news_wrapped_source_url_lines(corpus.splitlines())
     sources = [i for i, ln in enumerate(lines) if re.match(r"^\s*Source:\s*https?://", ln)]
     if not sources:
         year_fb = str(datetime.now().year)
@@ -1361,47 +1598,30 @@ def _batch_merged_icac_news_cases(
             }
         ]
 
-    starts: List[int] = [0]
-    for j in range(1, len(sources)):
-        si, prev_si = sources[j], sources[j - 1]
-        lo, hi = prev_si + 1, si - 1
-        if lo > hi:
-            starts.append(si)
-            continue
-        br = hi
-        while br >= lo and not lines[br].strip():
-            br -= 1
-        if br < lo:
-            starts.append(lo)
-            continue
-        title_start = br
-        count = 0
-        h = br
-        while h >= lo and count < 4:
-            if lines[h].strip():
-                title_start = h
-                count += 1
-            h -= 1
-            if count >= 1 and h >= lo and not lines[h].strip():
-                break
-        starts.append(title_start)
+    title_starts = _merged_news_title_starts(lines, sources)
 
     year_case_counts: Dict[str, int] = {}
     cases: List[Dict[str, Any]] = []
 
     for i in range(len(sources)):
-        start = starts[i]
-        end = starts[i + 1] if i + 1 < len(starts) else len(lines)
+        start = title_starts[i]
+        end = title_starts[i + 1] if i + 1 < len(title_starts) else len(lines)
         chunk = "\n".join(lines[start:end]).strip()
         case_text = clean_artifacts_from_text(chunk) if chunk else ""
         if not case_text.strip() and chunk:
             case_text = clean_artifacts_from_text(chunk, remove_urls=False)
 
         url = _extract_wrapped_url_from_source_line(lines, sources[i])
-        case_date_year = _merged_news_article_year_from_url_and_text(url, chunk)
+        pre_source = _merged_news_text_before_source_line(chunk)
+        case_date_year = _merged_news_dateline_year(pre_source)
+        if not case_date_year:
+            case_date_year = _merged_news_default_year_from_source_file(source_file)
         if not case_date_year:
             # PDF body often has no digit year; avoid labeling as "current" calendar year
             case_date_year = "2022"
+
+        if source_key == "DOJ ARCHIVES":
+            case_date_year = _resolve_doj_archives_batch_year(url, case_date_year)
 
         year_case_counts.setdefault(case_date_year, 0)
         year_case_counts[case_date_year] += 1

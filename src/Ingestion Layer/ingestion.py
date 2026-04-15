@@ -52,7 +52,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         
     Returns:
         Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
-        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'UT AG', 'MS AG', 'NC SBI', 'LA AG', 'WY DCI', 'SD AG', 'KY SP', 'FBI', 'Other', or defaults to Other).
+        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'UT AG',
+        'WA AG', 'MS AG', 'NC SBI', 'LA AG', 'WY DCI', 'SD AG', 'KY SP', 'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -110,6 +111,11 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'OHIO AG'
     elif ('utag' in filename_lower or 'ut_ag' in filename_lower or 'utoag' in filename_lower) and 'icac' in filename_lower:
         return 'UT AG'
+    elif (
+        ('waag' in filename_lower or 'wa_ag' in filename_lower or 'wa_oag' in filename_lower or 'washington_atg' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'WA AG'
     elif ('msag' in filename_lower or 'ms_ag' in filename_lower or 'mississippi' in filename_lower) and 'icac' in filename_lower:
         return 'MS AG'
     elif ('ncsbi' in filename_lower or 'nc_sbi' in filename_lower) and 'icac' in filename_lower:
@@ -178,6 +184,16 @@ def detect_source_from_content(text: str, filename: str) -> str:
         re.I,
     ):
         return 'UT AG'
+
+    # Washington State Office of the Attorney General (atg.wa.gov — news search; merged ICAC news PDF)
+    if re.search(r'atg\.wa\.gov', text_sample, re.I) and re.search(
+        r'Washington\s+State|Office\s+of\s+the\s+Attorney\s+General|Attorney\s+General|'
+        r'\bICAC\b|Internet\s+Crimes\s+Against\s+Children|child\s+porn|Child\s+Predator|'
+        r'child\s+exploitation|CSAM|sexual\s+abuse\s+material',
+        text_sample,
+        re.I,
+    ):
+        return 'WA AG'
 
     # Mississippi Attorney General (attorneygenerallynnfitch.com — press; merged ICAC news PDF)
     if re.search(r'attorneygenerallynnfitch\.com', text_sample, re.I) and re.search(
@@ -393,6 +409,8 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["OHIO AG"] = url_clean
         elif "utah attorney general" in n:
             mapping["UT AG"] = url_clean
+        elif "washington state office of the attorney general" in n:
+            mapping["WA AG"] = url_clean
         elif "mississippi attorney general" in n:
             mapping["MS AG"] = url_clean
         elif "north carolina state bureau of investigation" in n:

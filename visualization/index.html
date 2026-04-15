@@ -651,7 +651,7 @@
         let platformChartData = []; // Store platform chart data for stats calculation
 
         // In-memory + sessionStorage cache - data is static, no refetch on nav/refresh
-        const CACHE_KEY = 'caselinker_viz_cases';
+        const CACHE_KEY = 'caselinker_viz_cases_v2'; // bump when summary shape changes (invalidates stale sessionStorage)
         const CACHE_MAX_AGE_MS = 10 * 60 * 1000; // 10 min - data rarely changes
 
         function getCachedCases() {

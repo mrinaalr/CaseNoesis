@@ -534,6 +534,19 @@
                     ]
                 },
                 {
+                    name: "Washington State Office of the Attorney General – Site search",
+                    url: "https://www.atg.wa.gov/news/search/Child",
+                    description: "Washington State AG news release search for ICAC-related releases and posts.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (Child)",
+                            url: "https://www.atg.wa.gov/news/search/Child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
                     name: "Wyoming Division of Criminal Investigation – News (ICAC / Computer Crime)",
                     url: "https://wyomingdci.wyo.gov/dci-homepage/news",
                     description: "Wyoming DCI news and information; filter to Internet Crimes Against Children (ICAC) and Computer Crime Unit releases.",
@@ -909,6 +922,25 @@
                         }
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = utCases.length;
+                        }
+                    } else if (staticSource.name.includes('Washington State Office of the Attorney General')) {
+                        const waCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'WA AG';
+                        });
+                        staticSource.cases = waCases;
+                        const waRange = getDateRange(waCases);
+                        if (waRange) {
+                            staticSource.dateRangeDisplay = waRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = waRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = waCases.length;
                         }
                     } else if (staticSource.name.includes('Pennsylvania Office of the Attorney General')) {
                         const paCases = cases.filter(c => {

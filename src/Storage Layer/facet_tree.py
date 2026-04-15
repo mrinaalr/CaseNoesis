@@ -53,7 +53,7 @@ DEFAULT_FACET_ORDER: Sequence[FacetStep] = (
     ("investigation_type", "Inv. type"),
     ("source", "Source"),
     ("agencies_involved", "Agency"),
-    ("organizations", "Organization"),
+    ("prosecution_outcome", "Prosecution Outcome"),
     ("locations", "Location"),
     ("severity_phrases", "Severity Phrase"),
     ("era_period", "Date range"),
@@ -132,10 +132,39 @@ def enrich_cases_with_era_period(cases: List[Dict[str, Any]]) -> None:
         c.pop("era_period", None)
         y = infer_case_year(c)
         if y is None:
-            continue
-        lab = era_period_label_for_year(y)
-        if lab:
-            c["era_period"] = [lab]
+            pass
+        else:
+            lab = era_period_label_for_year(y)
+            if lab:
+                c["era_period"] = [lab]
+
+        # Canonical single-label prosecution facet for tree partitioning/filtering.
+        # Keeps values explainable and compact (status-style buckets), avoiding raw dict JSON.
+        po = c.get("prosecution_outcome")
+        status_label: Optional[str] = None
+        if isinstance(po, dict):
+            raw = po.get("booking_status") or po.get("status")
+            if raw is not None and str(raw).strip():
+                status_label = str(raw).strip()
+            elif po.get("charges") or po.get("jail"):
+                # Match stats endpoint fallback chain: booking_status -> status -> "prosecuted"
+                status_label = "prosecuted"
+        elif isinstance(po, str):
+            s = po.strip()
+            if s:
+                try:
+                    parsed = json.loads(s)
+                    if isinstance(parsed, dict):
+                        raw = parsed.get("booking_status") or parsed.get("status")
+                        if raw is not None and str(raw).strip():
+                            status_label = str(raw).strip()
+                        elif parsed.get("charges") or parsed.get("jail"):
+                            status_label = "prosecuted"
+                except (json.JSONDecodeError, TypeError):
+                    status_label = s
+
+        if status_label:
+            c["prosecution_outcome"] = [status_label]
 
 
 def case_has_field_value(case: Dict[str, Any], field_key: str, value: str) -> bool:

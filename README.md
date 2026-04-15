@@ -76,8 +76,8 @@ Then open your browser to:
 - **Clusters**: http://localhost:8000/clusters
 - **Stats**: http://localhost:8000/stats
 - **Search**: http://localhost:8000/search
-- **Query**: http://localhost:8000/query — browser-side JS snippets against public APIs (custom analysis)
-- **Expand**: http://localhost:8000/expand — examples for building your own visualizations on the APIs
+- **Query**: http://localhost:8000/query 
+- **Expand**: http://localhost:8000/expand 
 - **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
@@ -97,9 +97,12 @@ You can process additional PDFs to add more cases to the database.
 
 ### ⚠️ Important: Data Content and Warning
 
-**This project processes sensitive case data related to child exploitation cases. The content may be disturbing and is intended for research and analysis purposes only.**
+**CaseLinker processes publicly available case reports and related records for research, analytical, and investigative workflow purposes.**
 
-**Before proceeding, please ensure you are authorized to access and process this type of sensitive case data.**
+**While all source materials are drawn from public reports, content involves descriptions of child exploitation, abuse, or other disturbing criminal case details that may be difficult to read.**
+
+**Please proceed with awareness of the sensitive nature of the material and use the project responsibly for research, academic, or authorized analytical purposes.**
+
 
 ## Two Main Entry Points
 

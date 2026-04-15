@@ -222,6 +222,8 @@ def _case_summary_slim(case: Dict[str, Any]) -> Dict[str, Any]:
         "investigation_type": case.get("investigation_type"),
         "agencies_involved": case.get("agencies_involved"),
         "organizations": case.get("organizations"),
+        # Needed by visualization/index.html Previous Perpetrator chart and stats (slim API otherwise omits it).
+        "perpetrator_registered_sex_offender": case.get("perpetrator_registered_sex_offender"),
     }
     return out
 
