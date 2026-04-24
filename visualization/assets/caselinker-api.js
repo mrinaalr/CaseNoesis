@@ -26,22 +26,65 @@
     return fetch(input, init);
   };
 
-  /** Public paginated summaries — no internal key; many small responses vs one bulk JSON. */
+  function isLocalDevHost() {
+    try {
+      var h = window.location.hostname || '';
+      return h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Load all case rows for visualization pages.
+   * - Local dev (localhost): one GET /api/cases — same data the server uses for analysis; avoids many
+   *   sequential chunk round-trips. Requires no secret (run/main.py treats localhost as internal).
+   * - Production: paginated slim summaries only (public-safe, smaller payloads).
+   */
   window.caselinkerLoadAllSummariesSequential = async function () {
-    var limit = 400;
-    var offset = 0;
+    if (isLocalDevHost()) {
+      var r = await caselinkerFetch('/api/cases?include_raw_data=false');
+      if (!r.ok) throw new Error('api/cases ' + r.status);
+      var data = await r.json();
+      return Array.isArray(data) ? data : [];
+    }
+
+    var limit = 500;
+    var concurrency = 4;
     var all = [];
-    for (;;) {
+    var baseOffset = 0;
+
+    async function fetchChunk(offset) {
       var r = await fetch(
         '/api/cases-summaries-chunk?offset=' + offset + '&limit=' + limit
       );
       if (!r.ok) throw new Error('cases-summaries-chunk ' + r.status);
       var j = await r.json();
-      var chunk = j.summaries || [];
-      for (var i = 0; i < chunk.length; i++) all.push(chunk[i]);
-      if (chunk.length < limit) break;
-      offset += limit;
+      return j.summaries || [];
     }
+
+    for (;;) {
+      var offsets = [];
+      for (var c = 0; c < concurrency; c++) {
+        offsets.push(baseOffset + c * limit);
+      }
+
+      var chunks = await Promise.all(offsets.map(fetchChunk));
+      var shouldStop = false;
+
+      for (var idx = 0; idx < chunks.length; idx++) {
+        var chunk = chunks[idx];
+        for (var i = 0; i < chunk.length; i++) all.push(chunk[i]);
+        if (chunk.length < limit) {
+          shouldStop = true;
+          break;
+        }
+      }
+
+      if (shouldStop) break;
+      baseOffset += concurrency * limit;
+    }
+
     return all;
   };
 

@@ -303,11 +303,18 @@ def _parse_facet_constraints_param(raw: Optional[str]) -> Dict[str, List[str]]:
 
 
 def _parse_include_facets_param(raw: Optional[str]) -> Optional[List[str]]:
-    """Comma-separated field keys; None / empty means use full DEFAULT order."""
-    if not raw or not str(raw).strip():
+    """Comma-separated field keys for ``/api/facet-tree``.
+
+    ``None`` (query param absent): full DEFAULT order.
+    Present but empty (e.g. ``?include_facets=``): no partition fields — one cohort.
+    """
+    if raw is None:
         return None
+    s = str(raw).strip()
+    if not s:
+        return []
     valid = {k for k, _ in DEFAULT_FACET_ORDER}
-    parts = [p.strip() for p in str(raw).split(",") if p.strip()]
+    parts = [p.strip() for p in s.split(",") if p.strip()]
     filtered = [p for p in parts if p in valid]
     return filtered or None
 
@@ -413,7 +420,12 @@ def _facet_tree_cache_key_tuple(
     constraints: Dict[str, List[str]],
     include_facets: Optional[List[str]],
 ) -> tuple:
-    inc = ",".join(sorted(include_facets)) if include_facets else "*"
+    if include_facets is None:
+        inc = "*"
+    elif len(include_facets) == 0:
+        inc = ""
+    else:
+        inc = ",".join(sorted(include_facets))
     cons = json.dumps(constraints, sort_keys=True, ensure_ascii=True)
     return (case_count, max_depth, cons, inc)
 
@@ -762,7 +774,8 @@ def get_facet_tree(
     ),
     include_facets: Optional[str] = Query(
         None,
-        description="Comma-separated facet field keys to partition on (subset, order follows DEFAULT); omit for all",
+        description="Comma-separated facet field keys (subset, order follows DEFAULT). Omit for all dimensions. "
+        "Send empty (include_facets=) for no splits — single cohort.",
     ),
 ):
     """

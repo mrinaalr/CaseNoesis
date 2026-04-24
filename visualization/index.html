@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CaseLinker - Timeline</title>
+    <title>CaseLinker - Visualization</title>
     <script src="/viz-assets/caselinker-api.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
@@ -1392,6 +1392,7 @@
                     highlightTerms.push({ term: 'facebook', category: 'platform' });
                     highlightTerms.push({ term: 'instagram', category: 'platform' });
                     highlightTerms.push({ term: 'snapchat', category: 'platform' });
+                    highlightTerms.push({ term: 'roblox', category: 'platform' });
                     highlightTerms.push({ term: 'discord', category: 'platform' });
                     highlightTerms.push({ term: 'whatsapp', category: 'platform' });
                     highlightTerms.push({ term: 'kik', category: 'platform' });
@@ -1574,13 +1575,15 @@
                     platformCases['None/Unknown'].push(c);
                 } else {
                     platforms.forEach(p => {
-                        // Normalize: Instagram / Snapchat get their own bars; other generic web/social → Online
+                        // Normalize: Instagram / Snapchat / Roblox get their own bars; other generic web/social → Online
                         let platformKey = p;
                         const platformLower = String(p).toLowerCase();
                         if (platformLower.includes('instagram')) {
                             platformKey = 'Instagram';
                         } else if (platformLower.includes('snapchat')) {
                             platformKey = 'Snapchat';
+                        } else if (platformLower.includes('roblox')) {
+                            platformKey = 'Roblox';
                         } else if (platformLower.includes('social media') ||
                             platformLower.includes('facebook') ||
                             platformLower.includes('twitter') ||
@@ -2995,6 +2998,9 @@
                 if (platformLower.includes('snapchat')) {
                     highlightTerms.push({ term: 'snapchat', category: 'platform' });
                 }
+                if (platformLower.includes('roblox')) {
+                    highlightTerms.push({ term: 'roblox', category: 'platform' });
+                }
                 if (platformLower.includes('discord')) {
                     highlightTerms.push({ term: 'discord', category: 'platform' });
                 }
@@ -3497,6 +3503,24 @@
         loadCases();
         // Preload case IDs for autocomplete
         loadAllCaseIds();
+
+        (function applyVisualizationDeepLink() {
+            const params = new URLSearchParams(window.location.search);
+            const caseParam = params.get('case');
+            const vizParam = params.get('viz') || (caseParam ? 'caseviz' : null);
+            if (!vizParam) return;
+            const sel = document.getElementById('viz-selector');
+            if (!sel || ![...sel.options].some((o) => o.value === vizParam)) return;
+            sel.value = vizParam;
+            changeVisualization(vizParam);
+            if (caseParam && vizParam === 'caseviz') {
+                const input = document.getElementById('case-id-input');
+                if (input) {
+                    input.value = caseParam;
+                    loadCaseVisualization();
+                }
+            }
+        })();
     </script>
 </body>
 </html>

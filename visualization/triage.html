@@ -1288,7 +1288,7 @@ Case 3 : …</code>
                 chk.type = 'checkbox';
                 chk.className = 'facet-prune-split';
                 chk.dataset.field = step.field;
-                chk.checked = modelTriageFacetState.splitChecked[step.field] !== false;
+                chk.checked = modelTriageFacetState.splitChecked[step.field] === true;
                 labInc.appendChild(chk);
                 labInc.appendChild(document.createTextNode(' Split on: ' + step.label));
 
@@ -1341,7 +1341,7 @@ Case 3 : …</code>
             document.querySelectorAll('#modelTriageFacetRows .facet-prune-row').forEach(function (row) {
                 row._picked = [];
                 var chk = row.querySelector('.facet-prune-split');
-                if (chk) chk.checked = true;
+                if (chk) chk.checked = false;
                 syncTriagePruneRow(row);
             });
         }

@@ -134,7 +134,7 @@ class SemanticConcepts:
         ),
         "online_platforms": (
             "Use of online platforms, apps, or services: social media, messaging "
-            "apps, chat rooms, Discord, Facebook, Instagram, Snapchat, TikTok, "
+            "apps, chat rooms, Discord, Facebook, Instagram, Roblox, Snapchat, TikTok, "
             "dating apps, gaming platforms, or other websites and apps used to "
             "contact, lure, or exchange material involving minors."
         ),

@@ -535,7 +535,7 @@ def extract_previous_conviction(case: Dict[str, Any]) -> Optional[Dict[str, Any]
 def extract_platforms(case: Dict[str, Any]) -> List[str]:
     """
     Extract platforms and online methods used.
-    Patterns: "Facebook", "Instagram", "Snapchat", "Discord", "WhatsApp", "online", "chat"
+    Patterns: "Facebook", "Instagram", "Snapchat", "Roblox", "Discord", "WhatsApp", "online", "chat"
     """
     case_text = case.get('case_text', '')
     if not case_text:
@@ -546,6 +546,7 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
         'Facebook': r'\bFacebook\b',
         'Instagram': r'\bInstagram\b',
         'Snapchat': r'\bSnapchat\b',
+        'Roblox': r'\bRoblox\b',
         'Discord': r'\bDiscord\b',
         'WhatsApp': r'\bWhatsApp\b',
         'online': r'\bonline\b',

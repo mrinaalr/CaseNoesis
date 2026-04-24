@@ -263,6 +263,35 @@
             min-height: 200px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.12);
             overflow: hidden;
+            position: relative;
+        }
+        .facet-pan-tools {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(13, 17, 23, 0.72);
+            border: 1px solid rgba(110, 118, 129, 0.7);
+            backdrop-filter: blur(1.5px);
+        }
+        .facet-pan-tools button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #3fb950;
+            border-radius: 6px;
+            background: #161b22;
+            color: #aff5b4;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .facet-pan-tools button:hover {
+            background: #1f2937;
         }
         .facet-tree-host .tree-loading,
         .facet-tree-host .tree-error {
@@ -577,6 +606,31 @@
         .cohort-modal-key-row .cohort-modal-unlock:hover {
             background: #2c974b;
         }
+        .cohort-modal-id-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 200px;
+            overflow: auto;
+            margin: 0 0 12px;
+            padding: 8px 10px;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            background: #f6f8fa;
+        }
+        .cohort-modal-id-links:empty {
+            display: none;
+        }
+        .cohort-modal-id-link {
+            font-family: ui-monospace, monospace;
+            font-size: 0.8rem;
+            color: #0969da;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .cohort-modal-id-link:hover {
+            text-decoration: underline;
+        }
         .cohort-modal-ids-wrap label {
             display: block;
             font-size: 0.85rem;
@@ -679,7 +733,7 @@
             <details class="facet-prune-panel" id="facet-prune-panel">
                 <summary>Prune &amp; focus (facet drill-down)</summary>
                 <p class="facet-prune-help">
-                    Turn off <strong>Split on</strong> to drop that dimension from the tree (fewer branches).
+                    Use <strong>Split on</strong> to include a dimension in the tree (leave unchecked to skip it; if none are checked, the tree is a single cohort).
                     For <strong>Allow values</strong>, choose from the dropdown; each pick appears on the right and disappears from the list until you remove it with ×.
                     A case matches when <strong>any</strong> of its tags on that field are among your picks (OR within a row); between rows, AND.
                     The tree <em>shape</em> follows one primary tag per case per depth (fast layout). Numbers on each box and the cohort ID list count every case that <em>includes</em> that tag on the path (any position), so sibling topic counts can add up to more than the parent.
@@ -731,7 +785,8 @@
                 <button type="button" class="cohort-modal-unlock" id="cohort-modal-unlock">Show case IDs</button>
             </div>
             <div class="cohort-modal-ids-wrap" id="cohort-modal-ids-wrap" hidden>
-                <label for="cohort-modal-ids">Case IDs (one per line — copy for visualization or notes)</label>
+                <div id="cohort-modal-id-links" class="cohort-modal-id-links" aria-label="Open case in visualization"></div>
+                <label for="cohort-modal-ids">Case IDs (one per line — copy for notes)</label>
                 <textarea id="cohort-modal-ids" class="cohort-modal-ids" readonly rows="10" spellcheck="false"></textarea>
                 <button type="button" class="cohort-modal-copy" id="cohort-modal-copy">Copy all</button>
             </div>
@@ -749,7 +804,9 @@
     const pruneRowsEl = document.getElementById('facet-prune-rows');
     const pruneStatusEl = document.getElementById('facet-prune-status');
     const cohortModalBackdrop = document.getElementById('cohort-modal-backdrop');
-    var facetZoomState = { svg: null, zoom: null, initial: null };
+    var facetZoomState = { svg: null, zoom: null, initial: null, transform: null };
+    var FACET_VERTICAL_PAN_STEP = 130;
+    var isInitialFacetTreeLoad = true;
     var cohortModalMetaBase = '';
     var cohortModalNodeData = null;
     /** facet field key → list of tag strings (from /api/facet-distinct; union of all tags per field) */
@@ -784,6 +841,42 @@
         }
     });
 
+    function panFacetTreeVertical(deltaPx) {
+        if (!facetZoomState.svg || !facetZoomState.zoom) return;
+        facetZoomState.svg
+            .transition()
+            .duration(170)
+            .call(facetZoomState.zoom.translateBy, 0, deltaPx);
+    }
+
+    function mountFacetPanTools() {
+        var wrap = document.createElement('div');
+        wrap.className = 'facet-pan-tools';
+        wrap.setAttribute('aria-label', 'Tree vertical pan controls');
+
+        var upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.title = 'Move tree up';
+        upBtn.textContent = '↑';
+        upBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            panFacetTreeVertical(FACET_VERTICAL_PAN_STEP);
+        });
+
+        var downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.title = 'Move tree down';
+        downBtn.textContent = '↓';
+        downBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            panFacetTreeVertical(-FACET_VERTICAL_PAN_STEP);
+        });
+
+        wrap.appendChild(upBtn);
+        wrap.appendChild(downBtn);
+        host.appendChild(wrap);
+    }
+
     function esc(s) {
         const d = document.createElement('div');
         d.textContent = s == null ? '' : String(s);
@@ -801,6 +894,7 @@
      */
     function drawFacetTreeSvg(rootData) {
         host.innerHTML = '';
+        mountFacetPanTools();
         var hierarchy = d3.hierarchy(rootData, function (d) {
             return d.children && d.children.length ? d.children : null;
         });
@@ -918,6 +1012,7 @@
         var zoom = d3.zoom()
             .scaleExtent([0.12, 160])
             .on('zoom', function (event) {
+                facetZoomState.transform = event.transform;
                 gZoom.attr('transform', event.transform);
             });
 
@@ -928,6 +1023,7 @@
         facetZoomState.svg = svg;
         facetZoomState.zoom = zoom;
         facetZoomState.initial = initial;
+        facetZoomState.transform = initial;
         svg.call(zoom.transform, initial);
         if (zoomTools) zoomTools.classList.add('visible');
     }
@@ -1183,7 +1279,9 @@
             params.set('facet_constraints', JSON.stringify(constraints));
         }
         var checked = getCheckedSplitFields();
-        if (checked.length > 0 && checked.length < FACET_SCHEMA.length) {
+        if (checked.length === 0 && !isInitialFacetTreeLoad) {
+            params.set('include_facets', '');
+        } else if (checked.length > 0 && checked.length < FACET_SCHEMA.length) {
             params.set('include_facets', checked.join(','));
         }
         var s = params.toString();
@@ -1208,7 +1306,7 @@
             chk.type = 'checkbox';
             chk.className = 'facet-prune-split';
             chk.dataset.field = step.field;
-            chk.checked = true;
+            chk.checked = false;
             labInc.appendChild(chk);
             labInc.appendChild(document.createTextNode(' Split on: ' + step.label));
 
@@ -1271,7 +1369,7 @@
             syncPruneRow(row);
         });
         pruneRowsEl.querySelectorAll('.facet-prune-split').forEach(function (chk) {
-            chk.checked = true;
+            chk.checked = false;
         });
         var sb = document.getElementById('facet-sentence-blanks');
         if (sb) {
@@ -1292,6 +1390,8 @@
         document.getElementById('cohort-modal-error').hidden = true;
         document.getElementById('cohort-modal-error').textContent = '';
         document.getElementById('cohort-modal-ids').value = '';
+        var idLinks = document.getElementById('cohort-modal-id-links');
+        if (idLinks) idLinks.innerHTML = '';
         document.getElementById('cohort-modal-key').value = '';
     }
 
@@ -1319,6 +1419,7 @@
         var keyRow = document.getElementById('cohort-modal-key-row');
         var idsWrap = document.getElementById('cohort-modal-ids-wrap');
         var idsTa = document.getElementById('cohort-modal-ids');
+        var idLinksEl = document.getElementById('cohort-modal-id-links');
         var errEl = document.getElementById('cohort-modal-error');
         errEl.hidden = true;
         errEl.textContent = '';
@@ -1326,6 +1427,7 @@
         keyRow.hidden = true;
         idsWrap.hidden = true;
         idsTa.value = '';
+        if (idLinksEl) idLinksEl.innerHTML = '';
         if (cohortModalMetaBase) {
             document.getElementById('cohort-modal-meta').textContent = cohortModalMetaBase + ' · loading…';
         }
@@ -1360,7 +1462,19 @@
                 return;
             }
             idsWrap.hidden = false;
-            idsTa.value = (data.case_ids || []).join('\n');
+            var idList = data.case_ids || [];
+            idsTa.value = idList.join('\n');
+            if (idLinksEl) {
+                idLinksEl.innerHTML = '';
+                idList.forEach(function (cid) {
+                    if (!cid) return;
+                    var a = document.createElement('a');
+                    a.className = 'cohort-modal-id-link';
+                    a.href = '/visualization?viz=caseviz&case=' + encodeURIComponent(cid);
+                    a.textContent = cid;
+                    idLinksEl.appendChild(a);
+                });
+            }
         } catch (e) {
             document.getElementById('cohort-modal-meta').textContent = cohortModalMetaBase;
             errEl.textContent = 'Could not load case IDs.';
@@ -1432,8 +1546,10 @@
                 return;
             }
             drawFacetTreeSvg(root);
+            isInitialFacetTreeLoad = false;
         } catch (e) {
             host.innerHTML = '<div class="tree-error">Failed to fetch /api/facet-tree (is the API running?)</div>';
+            isInitialFacetTreeLoad = false;
         }
     }
 

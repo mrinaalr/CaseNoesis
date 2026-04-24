@@ -262,10 +262,14 @@ def facet_order_subset(
 ) -> List[FacetStep]:
     """
     Restrict partition order to given field keys, preserving DEFAULT order.
-    None or empty include_fields → full base order.
+
+    ``None`` (caller omitted restriction) → full ``base`` order.
+    Empty sequence → no partition dimensions (single cohort leaf under the root).
     """
-    if not include_fields:
+    if include_fields is None:
         return list(base)
+    if len(include_fields) == 0:
+        return []
     inc = set(include_fields)
     sub = [step for step in base if step[0] in inc]
     return sub if sub else list(base)
