@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / state and regional press materials. There are currently **2,397 cases** across **28** ingestion sources: **ILLINOIS AG** (265), **NCMEC** (244), **SCAG ICAC** (207), **KY SP** (205), **DOJ ARCHIVES** (202), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **TBI ICAC** (63), **NEWYORK SP** (62), **DOJ CEOS** (49), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **ARKANSAS DPS** (31), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11), **SD AG** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required—just open the link in your browser.
+The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / state and regional press materials. There are currently **2,397 cases** across **28** ingestion sources: **ILLINOIS AG** (265), **NCMEC** (244), **SCAG ICAC** (207), **KY SP** (205), **DOJ ARCHIVES** (202), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **TBI ICAC** (63), **NEWYORK SP** (62), **DOJ CEOS** (49), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **ARKANSAS DPS** (31), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11), **SD AG** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
 
 ## Technical Reports
 
@@ -81,6 +81,7 @@ Then open your browser to:
 - **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
+- **Case Studies**: http://localhost:8000/case-studies
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
 
@@ -247,6 +248,7 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
 - **Sources Tab**: View data sources and access original case reports
 - **Clusters Tab**: View pre computed clusters, analyze case reports
 - **Stats Tab**: Shows coverage over dataset, analyze case distributions
+- **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`; optional `data/case_study_notes.json`)
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 ## Project Structure
@@ -274,11 +276,13 @@ CaseLinker/
 │   ├── ml-experimental.html     # In-app documentation for experimental ML / triage scope
 │   ├── under-the-hood.html      # Layered architecture overview
 │   ├── sources.html             # Data sources page
+│   ├── case-studies.html        # Case studies reading room (JSON-driven; access gate in-page)
 │   └── audit.html               # Data audit page (case-by-case feature review)
 ├── setup.sh                     # Automated setup script
 ├── requirements.txt             # Python dependencies
 ├── config.py                    # Configuration settings
 ├── caselinker.db                # SQLite database (created if used locally)
+├── data/                        # case_studies.json (+ optional case_study_notes.json) for /case-studies
 ├── Procfile                     # Deployment configuration for Railway/Heroku
 ├── Architecture design.md       # System architecture documentation
 ```
@@ -323,6 +327,10 @@ Each case includes structured features extracted from case narratives:
 - `GET /api/triage-model-corpus` - Saved bundle predictions over live DB; optional `facet_constraints` JSON query param (rate limited)
 - `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence
 - `GET /sources` - Data sources page
+- `GET /case-studies` - Case studies reading room (eras + studies from `data/case_studies.json`)
+- `GET /api/case-studies` - Case study content document (eras, studies, default form URL)
+- `GET /api/case-studies/notes/{case_id}` - Community notes for a study id
+- `POST /api/case-studies/notes/{case_id}` - Append a community note (rate limited)
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
 - `GET /api/cases` - Full bulk case export (internal/local only; requires localhost or `CASELINKER_INTERNAL_API_KEY`)
 - `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
@@ -357,7 +365,6 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 ## Sources and Ethics
 - **No Sensitive Data**: This system contains cases from publicly available sources (AZ, South Florida, LAPD ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, DOJ CEOS Press Releases, ICAC press releases from the Georgia Bureau of Investigation, Michigan, New York, and Kentucky State Police, Texas, Pennsylvania, New Jersey, Vermont, Louisiana, South Dakota, and Idaho Office of the Attorney General, Tennessee Bureau of Investigation, South Carolina, Utah, Mississippi, Ohio, and Illinois Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
-
 
 ## Contributing
 

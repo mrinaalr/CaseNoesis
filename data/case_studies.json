@@ -1,0 +1,365 @@
+{
+  "version": 1,
+  "_notes_for_authoring": [
+    "Add or edit case studies by editing this file. Status is 'published' or 'coming_soon'.",
+    "When status='coming_soon', only id, era, and release_window are shown on the browse + reading pages.",
+    "Each published study should have exactly 5 dimensions, in this canonical order:",
+    "  1. Platform context",
+    "  2. Perpetrator methodology",
+    "  3. Investigative approach",
+    "  4. Prosecutorial outcome",
+    "  5. Relationship to the broader technological era",
+    "The renderer accepts any number of dimensions (it numbers them 01..NN), but the framework is five.",
+    "Optional 'takeaway' is rendered as a pull-quote box after the five dimensions. Keep it short, forward-facing, and distinct from dimension 5 (don't repeat).",
+    "Optional 'linked_case_id' (e.g. 'azicac_2011_006') wires the 'View full case text' button to a record in the corpus, served at /api/cases/{linked_case_id}. The reader applies the same multi-category highlighting used in the Case Visualization tab.",
+    "google_form_url is per-study; if null, default_google_form_url is used.",
+    "Eras are aligned with the corpus era buckets defined in src/Storage Layer/facet_tree.py."
+  ],
+  "default_google_form_url": "https://docs.google.com/forms/d/e/1FAIpQLSdaGMl3gLfrjBphyabilOf_3Mn-Tnfvqy7FBZxEMOtibSxCCA/viewform",
+  "eras": [
+    {
+      "id": "I",
+      "roman": "I",
+      "label": "Era I",
+      "years": "2010–2014",
+      "subtitle": "Pre-mobile foundations",
+      "description": "The pre-mobile-dominance period. Desktop platforms, early social networks, and the first wave of ICAC task-force enforcement we will evaluate.",
+      "palette": {
+        "bg": "#f5e9d3",
+        "surface": "#fbf3e2",
+        "accent": "#a07e4a",
+        "ink": "#5b4426",
+        "muted": "#8a724f"
+      }
+    },
+    {
+      "id": "II",
+      "roman": "II",
+      "label": "Era II",
+      "years": "2015–2018",
+      "subtitle": "Mobile-first transition",
+      "description": "Smartphones become primary access. Messaging and live-streaming apps overtake desktop chat. Encryption and ephemeral messaging reshape detection.",
+      "palette": {
+        "bg": "#dfe5d4",
+        "surface": "#ecf0e2",
+        "accent": "#6b8c5e",
+        "ink": "#3d4f33",
+        "muted": "#5d7654"
+      }
+    },
+    {
+      "id": "III",
+      "roman": "III",
+      "label": "Era III",
+      "years": "2019–2022",
+      "subtitle": "Platform proliferation",
+      "description": "An explosion of platforms and overlapping ecosystems. Gaming, short-form video, and decentralized communities all become recurring vectors.",
+      "palette": {
+        "bg": "#f4cf9d",
+        "surface": "#f9dcb1",
+        "accent": "#c47028",
+        "ink": "#7a3d10",
+        "muted": "#a05826"
+      }
+    },
+    {
+      "id": "IV",
+      "roman": "IV",
+      "label": "Era IV",
+      "years": "2023–2026",
+      "subtitle": "Generative AI period",
+      "description": "Generative AI, synthetic media, and increasingly automated grooming pipelines define the current frontier of ICAC casework.",
+      "palette": {
+        "bg": "#c7b9a5",
+        "surface": "#d8ccba",
+        "accent": "#5e4c34",
+        "ink": "#2c2418",
+        "muted": "#473720"
+      }
+    }
+  ],
+  "case_studies": [
+    {
+      "id": "azicac_2011_006",
+      "era": "I",
+      "status": "published",
+      "linked_case_id": "azicac_2011_006",
+      "title": "When peer-to-peer made the abuse visible",
+      "subtitle": "A 2011 multi-agency case where federal P2P monitoring exposed in-home production that had no online surface or in-person reporting.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The technological context here is desktop peer-to-peer file sharing, the dominant CSAM trade infrastructure of the early Era I period. The offense itself was hands-on — abuse of two minor relatives of one of the suspects, occurring in a Mesa, Arizona residence. What brought it to the surface was the suspects' decision to distribute the imagery they produced through a P2P network where the FBI had ongoing proactive crawls. In Era I, P2P functioned as an inadvertent surveillance window into abuse that was already happening inside families, in physical spaces, with no online platform involvement at all. The platform did not produce the offense. It produced the visibility."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The perpetrators were two adult men sharing a residence in Mesa, Arizona. One of them — the 47-year-old — was related to the two boy victims; the 38-year-old was his housemate. The methodology combined three things in a single household: physical access to children through a relative-of-victim relationship (the entry point), in-home production of CSAM, and active redistribution of that material on P2P networks. The household was the operating unit, not a single offender. This is consistent with a recurring Era I pattern: hands-on abuse and commercial-style distribution co-existing under one roof, where redistribution is the only part of the offense the outside world can observe."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "The investigation was proactive, not reactive. It began with a Phoenix FBI Special Agent monitoring CSAM trade on a peer-to-peer file-sharing network — a routine Era I federal technique. The trade activity led to identification of the two suspects living together in Mesa. From there the case moved into a multi-agency frame: AZICAC, the Phoenix Police Department, the FBI, and the Mesa Police Department developed a joint operations plan to execute search warrants and arrest both suspects simultaneously. After extended surveillance, the 38-year-old was arrested at his Phoenix workplace and the 47-year-old at the Mesa residence where he was temporarily staying. The boy victims were identified through their mother — a downstream confirmation of relationships investigators had already inferred from the imagery. The investigative core of the case is the federal P2P crawl. Everything else is the local execution of a federally developed lead."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Prosecution was state-level, run out of the Maricopa County Attorney's Office. The 47-year-old, the relative of the victims, pled to charges falling under Arizona's Dangerous Crimes Against Children sentencing enhancement, which carries a minimum 25-year prison term and is among the most stringent state-level sentencing structures in the country for offenses against minors. As of the publicly reported snapshot in December 2011, the 38-year-old housemate was being held pretrial in Maricopa County Jail. The case did not produce notable case law. Its prosecutorial profile is a standard baseline, and that is itself the data point: in Era I, a textbook P2P-discovered intra-family abuse case resolved through standard tools — a proactive federal lead, multi-agency execution, and state-level prosecution under existing enhancement statutes."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "This case sits at the intersection of two Era I patterns. The first is peer-to-peer file sharing as the dominant CSAM trade infrastructure of the period — the technological substrate that gave federal law enforcement its strongest proactive tool of the era. The second is intra-family hands-on abuse, which has always existed and which platforms do not cause, but which P2P made discoverable in a way nothing prior to it could. Era II will narrow the visibility window as encrypted and ephemeral mobile platforms displace open P2P. Era III will fragment it across overlapping platforms. Era IV will introduce synthetic CSAM and complex, digital cases. In 2011 the system worked because the offenders' production behavior met the federal monitoring strategy on the same patch of internet. That alignment may not be available again as technology and perpetrator behavior has evolved."
+        }
+      ],
+      "takeaway": "Peer-to-peer file sharing did not cause this offense — it disclosed it. Enforcement reach in 2011 depended on offenders distributing material on networks federal investigators could monitor at scale. As the trade moves to encrypted, ephemeral, and synthetic channels in later eras, that disclosure surface narrows. This is one of the cleanest examples of how investigators can identify in-home abuse through the visibility of its distribution.",
+      "google_form_url": null
+    },
+    {
+      "id": "ICAC-2011-XXXX",
+      "era": "I",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2012-XXXX",
+      "era": "I",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2014-XXXX",
+      "era": "I",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2014-XXXY",
+      "era": "I",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2015-XXXX",
+      "era": "II",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2016-XXXX",
+      "era": "II",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "lapd_2017_001",
+      "era": "II",
+      "status": "published",
+      "linked_case_id": "lapd_2017_001",
+      "title": "Three platforms to reach one child",
+      "subtitle": "A 2017 Los Angeles case where YouTube, a children's gaming platform, and a separate file-upload service combined into a single coercion pipeline — surfaced through platform-side reporting to NCMEC rather than family discovery.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "A three-platform stack. YouTube functioned as the discovery surface — videos uploaded by the offender as bait, visible to anyone searching for Wizard 101 content. Wizard 101, a browser-based children's gaming platform, was the contact surface — its in-game messaging allowed an adult to speak to children without the friction of cross-platform onboarding. A separate file-upload service was the producer-side capture surface, and it was the only one of the three with proactive CSAM-detection reporting feeding NCMEC. None of the three platforms had visibility into the others. The offense lived in the seams between them. This three-platform handoff is the structural inheritance of Era I's grooming arc, compressed into the mobile-era reality that any single platform sees only its own slice."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "A 22-year-old Los Angeles resident. The methodology had two design choices that distinguish it from the prior era. First, age-precise bait: free Wizard 101 game cards offered through YouTube videos. Only children who played Wizard 101 would search for or respond to that content, which made the targeting self-filtering. Second, directed self-production. Once minors made contact, they were instructed to produce sexually explicit videos themselves and transmit them back. The offender did not need to be in the room. Era I's grooming arc — slow rapport, isolation, eventual handoff to a private channel — is here compressed into a transactional incentive that bypasses rapport-building entirely. Rather than in-person abuse, the offender becomes a remote requester."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "The case began at the upload side, not the contact side. NCMEC issued a CyberTip identifying that the offender was uploading apparent CSAM. LAPD Juvenile Division, working under the Los Angeles Regional ICAC Task Force, took the tip alongside Homeland Security Investigations' Child Exploitation Investigations Group. Reconstruction of the YouTube and Wizard 101 pipeline came after the arrest, on review of the offender's online activity. The investigative direction is the inverse of the offense direction: investigators started where the imagery ended up and worked backwards to the contact surface, and then to the bait. This upload-first investigative inversion is the canonical Era II shift. In Era I, cases entered the system through families and through federal peer-to-peer crawls. In Era II, they enter through electronic service provider reporting, and the methodology has to be reconstructed retrospectively."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Booked under California Penal Code §288(a), Lewd or Lascivious Acts upon a Child Under 14 — a statute that predates internet-mediated production by decades and that prosecutors continue to use because the underlying conduct it describes does not require perpetrator and child to be in the same physical space. Bail was set at one million dollars. The Los Angeles Regional ICAC Task Force publicly stated investigators believed additional victims existed and asked for tips. The disposition profile is unremarkable on its own: local-level prosecution under existing statutes, no novel case law produced. The notable finding here is not the court outcome. It is an offense whose entire mechanism lived across three platforms with no pre-internet analog, prosecuted under a statute written before any of them existed — proof that new platforms do not outrun existing law."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era II is the period in which platform-side reporting becomes the entry point for ICAC casework. Mandatory electronic-service-provider reporting under 18 U.S.C. §2258A had been in law since 2008, but Era II is when its operational footprint at the major providers consolidated into a steady upstream signal — the NCMEC CyberTip line — that local task forces could act on at volume. This case is one of the LAPD's earlier records to show that signal in finished form. The other Era II shift visible here is directed self-production: the child becomes a manipulated instrument of their own exploitation, contact compressed, physical proximity unnecessary. Era III will multiply the platforms. Era IV will introduce synthetic media on top of the same pipeline. The investigative inversion — start at upload, work back to contact — is the architecture both later eras inherit."
+        }
+      ],
+      "takeaway": "Era II made the platform's upload-side reporting the entry point of a case. The trade-off was visibility at the upload stage in exchange for invisibility at the contact and grooming stages. This case is one of the earliest LAPD records showing how that trade-off works in practice, and one of the earliest where directed self-production made physical proximity between offender and child unnecessary. The investigative architecture built around it would carry forward into Era III and Era IV largely unchanged.",
+      "google_form_url": null
+    },
+    {
+      "id": "ICAC-2017-XXXY",
+      "era": "II",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2018-XXXX",
+      "era": "II",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "gbi_2020_002",
+      "era": "III",
+      "status": "published",
+      "linked_case_id": "gbi_2020_002",
+      "title": "When the cybertip queue clears, the children appear",
+      "subtitle": "A 2020 four-day Clayton County, Georgia operation in which seventeen search warrants on cybertip-driven possession leads identified five prior victims and seven children living with possessors — a demonstration of how possession enforcement at scale surfaces hands-on abuse that would otherwise stay hidden.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "No single platform. The signals that drove this operation came through NCMEC's CyberTip line from a wide range of reporting electronic service providers under the federal mandatory-reporting requirement at 18 U.S.C. §2258A. The platform of analytical interest in this case is not any one app — it is the cybertip pipeline itself. Georgia processed roughly seven thousand cybertips in 2019 and a comparable volume through the first half of 2020. The platform context for Era III is that the volume of this upstream signal had grown faster than any single jurisdiction's capacity to act on it. Local ICAC task forces had to move from case-by-case enforcement to operation-scale enforcement to keep pace, and the unit of investigation became the cluster of tips resolving to a single county rather than the individual tip itself."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "Ten arrestees, ages nineteen to sixty-four, with no shared offense profile beyond geography and the cybertip channel. At least two had been previously accused of child molestation. At least one had been previously questioned about CSAM possession. What unifies the operation is not a singular shared offender tactic beyond possession but the task force premise stated in the public release: possession-side cybertips are used as the entry point because of the documented correlation with hands-on child sexual abuse, and clearing a county-level cluster is how that premise is operationalized. Cybertip clusters resolving to a single county, followed by multi-day saturated search-warrant execution against offenders."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "Approximately four months of planning. Four days of coordinated execution. Seventeen search warrants. Fifteen knock-and-talks. One hundred and thirty digital devices previewed on-scene. Over thirty seized for full forensic processing. The sequencing is what makes this operation analytically distinctive: on-scene data and image analysis compressed the identification timeline, surfacing children in the home during the operation rather than weeks later through digital forensic processing. Seven children were found living with possessors during the four-day execution. Five children were identified as prior victims. Investigators on this kind of operation are not only making cases. The search warrant is also a child-protection intervention."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Charges under O.C.G.A. §16-12-100, the Georgia Computer Pornography and Child Exploitation Prevention Act of 2007 — a statute that predates the platforms which generated most of the cybertips driving the operation. The GBI publicly stated that additional charges were anticipated as device forensics completed, and that one additional arrest occurred during the four-day window based on illegal narcotics discovered incidentally during a search. The disposition profile across the ten defendants is standard for Georgia ICAC casework and the cases proceed through Clayton County. The data point of this study is not the dispositions. It is the operation itself, and the GBI's public statement of its operating premise: roughly sixty children living with offenders viewing CSAM had already been identified statewide year-to-date in 2020, with at least twenty of them confirmed as victims of those offenders."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era III is the period in which the population-level link between CSAM possession and hands-on offense becomes a managed enforcement variable rather than a discovered feature of individual cases. The Vermont case shows the link surfacing through device-level forensics on a single offender. This Clayton County operation shows the same link being managed across an entire county on the same statistical premise: that a meaningful fraction of possessors referred from CyberTips are also hands-on offenders, and that the policy question is how fast the cybertip queue can be cleared to surface them. The investigative architecture of Era III is built around that premise. Era IV will inherit the architecture and apply it against new problem classes — organized network production and AI-augmented production — that the Era III cybertip pipeline was not originally designed for."
+        }
+      ],
+      "takeaway": "A cybertip backlog is a queue of unidentified victims and offenders. The Era III question is whether the queue can be cleared fast enough to reach those children in time. Clayton County's seven-children, five-prior-victims, ten-arrest, four-day operation is the visible form of that capacity — and proof that when a cybertip gets worked, children get found.",
+      "google_form_url": null
+    },
+    {
+      "id": "vt_ag_2020_011",
+      "era": "III",
+      "status": "published",
+      "linked_case_id": "vt_ag_2020_011",
+      "title": "When the file told them where it was made",
+      "subtitle": "A 2020 Vermont case where GPS data embedded in a single video recovered from a federal Kik possession case redirected the prosecution back to an in-state hands-on offense — the canonical Era III pattern of possession enforcement surfacing production after the fact.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "Kik Messenger, the dominant Era III mobile chat platform for CSAM trade, anchored on its no-phone-number-required signup and persistent group infrastructure. Functionally Kik was the backbone of CSAM trade between roughly 2018 and 2021 because the architecture made user attribution hard and group persistence high. Outside reporting could not see what was happening inside those closed group chats. To get inside, Vermont investigators went undercover — creating accounts, joining a chat group where the trade was occurring, and building the case from within it. This is the standard Era III investigative posture: when a platform's design keeps a trade out of reach of outside reporting, investigators have to become participants to see it at all. Platforms proliferate, and so does the surface area on which investigators must operate undercover."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "A 34-year-old resident of South Burlington, Vermont. The visible behavior — operation inside a Kik chat group associated with child sexual exploitation — is not the methodology that mattered analytically. Vermont investigators later determined that one of the video files in his possession was evidence of an alleged in-state hands-on offense committed by him. This was done through GPS data from one of the video files. The Kik activity is the layer above. The hands-on offense is the layer below. The second layer is legible to investigators only because of GPS data embedded in the first. Era III's recurring pattern of an offender producing his own material and circulating it through a platform that has no visibility into where it was made appears here in compressed form."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "A four-step chain. First, the Vermont ICAC Task Force identified the offender during an undercover operation inside a Kik chat group. Second, data, residential, and device search warrants were issued and executed. Third, the U.S. Attorney's Office for the District of Vermont prosecuted him federally for possession of child sexual abuse material recovered from his devices. Fourth, the National Center for Missing and Exploited Children, on reanalysis, alerted local investigators that one of the recovered videos contained GPS data resolving to South Burlington, Vermont — the same town where the offender lived. Vermont investigators then determined that the video was evidence of an alleged in-state hands-on offense, and a state Aggravated Sexual Assault charge followed. The forensic chain — undercover identification on Kik, device seizure, federal possession case, GPS extraction by NCMEC, in-state hands-on identification — is the Era III investigative signature in compressed form."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Two layered prosecutions, one federal and one state. The federal possession case was already active at the time of state arraignment. The state Aggravated Sexual Assault charge is the analytically significant one: it converted what had been a possession case into a hands-on offense case retrospectively. The defendant pleaded not guilty in the Vermont Superior Court, Chittenden Criminal Division. Because he was already in federal custody, the Vermont Attorney General's Office reserved the right to apply for bail or hold-without-bail conditions if his federal custody status changed. Standard procedural posture, not novel case law. The data point is the layering itself — an Era III case in which the state hands-on prosecution exists because the federal possession prosecution disclosed it."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era III is the period in which the investigative architecture matures. Federal possession cases routinely produce devices full of imagery, and forensic capability grows to the point where data embedded inside those files — including GPS coordinates — can be extracted, geolocated, and matched back to in-state offenses. This case is one of the cleanest examples of that maturity. A federal possession case became a state hands-on case because the investigative apparatus had become skilled enough to read videos for what they incidentally revealed about where they were made. The signal was always there in the file. Era III is when the system learned to read it."
+        }
+      ],
+      "takeaway": "Possession cases routinely contain hands-on cases inside them. The analytical question of Era III is whether the forensic apparatus is built to surface them. Vermont's was. This is also the canonical example of how federal-state cooperation works when a single piece of metadata returns a result inside one state's borders: the state hands-on charge becomes the more serious of the two, layered on top of an already-active federal possession case.",
+      "google_form_url": null
+    },
+    {
+      "id": "ICAC-2021-XXXX",
+      "era": "III",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2021-XXXY",
+      "era": "III",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2022-XXXX",
+      "era": "III",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2023-XXXX",
+      "era": "IV",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "ICAC-2024-XXXX",
+      "era": "IV",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    },
+    {
+      "id": "doj_ceos_2025_025",
+      "era": "IV",
+      "status": "published",
+      "linked_case_id": "doj_ceos_2025_025",
+      "title": "When AI augmented hands-on production",
+      "subtitle": "A 2025 federal indictment alleging a U.S. Army soldier used AI chatbots to generate child sexual abuse material from images of children he knew, while also secretly filming those same children in his home — among the earliest federal articulations of AI-augmented in-home production targeting known children.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "Three layers. First, encrypted messaging applications and network applications used to find, receive, and download existing child sexual abuse material — Era IV's standard trade infrastructure, designed in ways that keep the trade out of reach of outside reporting. Second, generative AI chatbots used to produce new CSAM from input images of known children — a platform class that did not exist as a production tool in any prior era. Third, the defendant's own residence in El Paso, Texas, used as a hands-on production environment for secret filming. The analytical observation is that Era IV's signature in this case is the coexistence of all three. The AI tooling is not where the alleged offense begins and not where it ends. It is one capability among several inside a single offender's production stack."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "A 35-year-old active-duty U.S. Army soldier, charged in two federal districts — the Western District of Texas and the District of Alaska — with alleged offense conduct beginning in 2021 and active military service overlapping portions of the charged period. According to the indictments, the methodology had three layers operating in parallel. Collection: existing CSAM acquired via encrypted apps. Generation: AI chatbots used to produce new CSAM from images of children the defendant knew. Secret filming: in-home capture of those same children in the defendant's residence in El Paso. The AI-generated material is alleged to depict known children, not synthetic strangers. That is the methodology's most analytically important property. The same children are alleged to appear in both the in-home footage and the AI-generated material. There is one victim base across two production modalities."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "Investigated by Homeland Security Investigations, with prosecutions in two federal districts. Alaska first — where the defendant had been stationed at Joint Base Elmendorf-Richardson — charging transportation, receipt, and possession of CSAM, including AI-generated CSAM. The Western District of Texas second, charging attempted sexual exploitation of a child and receipt of CSAM. The two-district structure matters analytically. Alaska is the possession and AI-generated-material posture. Texas is the in-home production posture. The case is, in effect, being prosecuted as the same offender doing two different things in two different places, with AI as the connective tissue. The investigative attribution for AI-generated material targeting known victims is, in the public record, treated as continuous with possession of conventional CSAM rather than as a separate analytical category. That posture choice will recur across Era IV federal casework."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Two federal indictments, both active. The Texas indictment charges attempted sexual exploitation of a child and receipt of CSAM. The earlier Alaska charges include transportation, receipt, and possession of CSAM, and explicitly include AI-generated CSAM as part of the possession charge. The case is at indictment stage in both districts and the presumption of innocence applies. The analytical content here is the indictment language itself. The phrase \"artificial intelligence chatbots to generate CSAM using images of children he knew\" is among the public record's earliest federal articulations of AI-augmented in-home production targeting known children — a methodologically distinct problem class from AI CSAM cases involving synthetic or unknown victims. That language may be cited in policy and statutory discussion of how Era IV charging frameworks handle hybrid AI and conventional production cases."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era IV's second signature, distinct from the organized-network case, is that AI tooling has become a routine input into the production behavior of individual offenders who already have hands-on victim access. The strongest reading of the indictment record is that AI is functioning here as an amplifier on top of conventional in-home production rather than as a substitute for it. The same children are alleged victims in the in-home footage and in the AI-generated material. This is a different problem class from purely synthetic AI CSAM, where there is no real victim, and from purely hands-on production, where there is no AI. Era IV federal casework will increasingly look like this. Hybrid stacks. The technology is still emerging, and investigators are responding to it in real time."
+        }
+      ],
+      "takeaway": "Generative AI does not always replace conventional production. In a meaningful subset of Era IV cases, including this one, it sits alongside in-home production targeting the same known children. The investigative challenge is no longer \"AI CSAM versus conventional CSAM\" but mapping how a single offender uses both, where the same victim base appears in each, and how charging frameworks treat the hybrid stack. This case's indictment language is one of the earliest public articulations of that framing — and with the technology still emerging, investigators are working through it in real time.",
+      "google_form_url": null
+    },
+    {
+      "id": "doj_ceos_2025_004",
+      "era": "IV",
+      "status": "published",
+      "linked_case_id": "doj_ceos_2025_004",
+      "title": "A network organized around production",
+      "subtitle": "A 2025 federal indictment of five men in five states alleged to have run an online group on Discord called Greggy's Cult, drawing victims from gaming platforms into coerced video calls and producing child sexual abuse material as the network's organizing activity.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "A multi-platform production environment built on Discord servers as the persistent infrastructure, with Roblox and Counter-Strike: Global Offensive functioning as the upstream contact surfaces where minors were initially identified. Production itself happened on video calls — Discord's own video conferencing or another live platform — with the offender side capturing screenshots and screen recordings. This is structurally different from every prior era's production. No physical proximity is required. No individual recording device is required. No produced file moves across platforms in the conventional sense. The production is a coordinated live capture of a video call, on a platform whose architecture supports persistent, named group identity. Discord is the platform that gave this network a home."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "Five defendants from five states, ages twenty-two to twenty-nine, alleged to have led an online group called Greggy's Cult that operated between January 2020 and January 2021. The methodology that distinguishes this case from earlier-era production is not any single tactic but the network's form. Victims were drawn from gaming platforms — Roblox and Counter-Strike: Global Offensive — into Discord servers, and from Discord servers into live video calls. The network's ritual layer — coerced \"fansigning\" in which victims were made to write Greggy's Cult member names on their bodies, and coerced acts of self-harm and degradation — produced material that doubled as group-identity content. Coercion was extended through framing of adult victims and malware deployment against minors. The offense, in the indictment's framing, is the network. The individual offenders are members of it."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "Federal investigation led by the FBI under Project Safe Childhood, with the indictment returned by a federal grand jury in the Eastern District of New York and the case prosecuted by the Department of Justice's Child Exploitation and Obscenity Section together with the U.S. Attorney's Office for the EDNY. The publicly visible operational signature is the simultaneous arrest of all five defendants across five different states on the day the indictment was unsealed, which implies coordinated multi-district FBI execution behind the case. The investigative novelty is the charge stack itself: a child exploitation enterprise charge alongside three conspiracy counts (production, receipt and distribution, and interstate threats). Charging this as an enterprise rather than as five individual production cases is itself an investigative posture statement. The network is the unit of prosecution, not the individual offender."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "Indictment returned and unsealed on December 2, 2025. Defendants arraigned in the Eastern District of New York. Charges include child exploitation enterprise, conspiracy to produce child pornography, conspiracy to receive and distribute child pornography, and conspiracy to communicate interstate threats. The case is in early procedural posture and the presumption of innocence applies. The analytical content at this stage is the prosecutorial framing — that the Department of Justice's Child Exploitation and Obscenity Section is willing and able to charge a sustained Discord-resident exploitation network as a single enterprise, with conduct dating to four years before indictment. The investigative tail length is its own data point. Conduct in 2020 and 2021. Indictment in 2025. End-to-end network prosecution timelines in Era IV run in years, not months."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era IV's first signature is that production has become what organized online networks are built around. Greggy's Cult is alleged to have predated the better-known network 764 and to have shared membership with it; the indictment record makes clear that the broader network class is now multi-year and multi-network. The platform context — Discord as persistent infrastructure, Roblox and Counter-Strike as upstream contact surfaces — is the new normal for this problem class. Era II made self-production into an operationalized threat vector. Era III scaled possession-driven enforcement against individual offenders. Era IV produces a different problem class entirely: networks that exist for production and that treat production as group-identity ritual. Investigating one offender at a time is no longer the relevant unit."
+        }
+      ],
+      "takeaway": "Era IV's organized-network cases are not larger versions of single-offender production. They are structurally different — the network provides offenders community, the platform is the persistent infrastructure, and the investigative timeline runs in years. Greggy's Cult is one of the cleanest examples of federal indictments to charge an online exploitation network as a single enterprise. Federal prosecutors are now charging these groups as networks — not as a handful of individual cases stitched together.",
+      "google_form_url": null
+    },
+    {
+      "id": "ICAC-2026-XXXX",
+      "era": "IV",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
+    }
+  ]
+}

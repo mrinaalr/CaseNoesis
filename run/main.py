@@ -2092,6 +2092,118 @@ def api_triage_live(body: LiveTriageRequest):
     }
 
 
+@app.get("/case-studies", response_class=HTMLResponse)
+async def serve_case_studies():
+    """Serve the HTML case studies page (gate + reading experience)."""
+    html_path = Path(__file__).parent.parent / "visualization" / "case-studies.html"
+    if html_path.exists():
+        with open(html_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content)
+    else:
+        return HTMLResponse(content="<h1>Case Studies page not found</h1>", status_code=404)
+
+
+# ---- Case Studies content + community notes ----------------------------------
+# Content lives in data/case_studies.json (eras + studies). Community notes live
+# in data/case_study_notes.json. Notes are best-effort persistence: on Railway's
+# default ephemeral filesystem they reset on redeploy. Mount a volume at /data
+# (or swap to the DB) for durable storage.
+
+_CASE_STUDIES_CONTENT_PATH = Path(__file__).parent.parent / "data" / "case_studies.json"
+_CASE_STUDIES_NOTES_PATH = Path(__file__).parent.parent / "data" / "case_study_notes.json"
+_CASE_STUDIES_NOTES_MAX_NAME = 80
+_CASE_STUDIES_NOTES_MAX_TEXT = 1500
+
+
+def _load_case_studies_content() -> Dict[str, Any]:
+    if not _CASE_STUDIES_CONTENT_PATH.exists():
+        return {"version": 0, "eras": [], "case_studies": [], "default_google_form_url": ""}
+    with open(_CASE_STUDIES_CONTENT_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _load_case_study_notes() -> List[Dict[str, Any]]:
+    if not _CASE_STUDIES_NOTES_PATH.exists():
+        return []
+    try:
+        with open(_CASE_STUDIES_NOTES_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        notes = data.get("notes", []) if isinstance(data, dict) else []
+        return notes if isinstance(notes, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _save_case_study_notes(notes: List[Dict[str, Any]]) -> None:
+    _CASE_STUDIES_NOTES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "_note": "Community notes for case studies. Reset on Railway redeploy unless a persistent volume is mounted at /data.",
+        "notes": notes,
+    }
+    with open(_CASE_STUDIES_NOTES_PATH, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+@app.get("/api/case-studies")
+@limiter.limit("60/minute")
+def api_case_studies_content(request: Request):
+    """Return the case-studies content document (eras + studies)."""
+    try:
+        return _load_case_studies_content()
+    except Exception as e:
+        logger.exception("case-studies content load failed: %s", e)
+        raise HTTPException(status_code=500, detail="Failed to load case studies content")
+
+
+@app.get("/api/case-studies/notes/{case_id}")
+@limiter.limit("120/minute")
+def api_case_studies_notes_get(request: Request, case_id: str):
+    """Return community notes for a single case study, oldest first."""
+    notes = _load_case_study_notes()
+    filtered = [n for n in notes if isinstance(n, dict) and n.get("case_id") == case_id]
+    filtered.sort(key=lambda n: n.get("ts", ""))
+    return {"case_id": case_id, "notes": filtered, "count": len(filtered)}
+
+
+class CaseStudyNoteRequest(BaseModel):
+    name: Optional[str] = Field(default=None, max_length=200)
+    text: str = Field(..., min_length=1, max_length=4000)
+
+
+@app.post("/api/case-studies/notes/{case_id}")
+@limiter.limit("6/minute")
+def api_case_studies_notes_post(request: Request, case_id: str, body: CaseStudyNoteRequest):
+    """Append a community note for a case study. Light validation; no auth."""
+    content = _load_case_studies_content()
+    valid_ids = {c.get("id") for c in content.get("case_studies", []) if isinstance(c, dict)}
+    if case_id not in valid_ids:
+        raise HTTPException(status_code=404, detail="Unknown case_id")
+
+    name = (body.name or "").strip()[:_CASE_STUDIES_NOTES_MAX_NAME] or "Anonymous"
+    text = body.text.strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Note text required")
+    text = text[:_CASE_STUDIES_NOTES_MAX_TEXT]
+
+    import uuid
+    note = {
+        "id": uuid.uuid4().hex,
+        "case_id": case_id,
+        "name": name,
+        "text": text,
+        "ts": datetime.utcnow().isoformat() + "Z",
+    }
+    notes = _load_case_study_notes()
+    notes.append(note)
+    try:
+        _save_case_study_notes(notes)
+    except OSError as e:
+        logger.warning("case-studies notes persist failed: %s", e)
+        raise HTTPException(status_code=500, detail="Failed to save note")
+    return note
+
+
 @app.get("/sources", response_class=HTMLResponse)
 async def serve_sources():
     """Serve the HTML sources page"""

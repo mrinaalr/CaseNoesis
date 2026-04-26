@@ -67,12 +67,19 @@ models/*
 !models/triage_bundle.joblib
 
 # JSON data dumps (corpus predictions, extract_evaluation.json, semantic exports, etc.)
-# Whitelist only standard JS/TS config files.
+# Whitelist only standard JS/TS config files and the authored Case Studies content.
 *.json
 !package.json
 !package-lock.json
 !tsconfig.json
 !jsconfig.json
+# Case Studies authored content (read by the /case-studies tab and the /api/case-studies
+# endpoint). Must ship with the deploy or Railway shows "No content yet."
+!data/case_studies.json
+# NOTE: data/case_study_notes.json is intentionally NOT whitelisted. It holds
+# user-submitted community notes; committing it would overwrite live notes on every
+# deploy. The loader returns [] when the file is absent, which is the correct default
+# on Railway's ephemeral filesystem. Mount a volume or swap to the DB for durability.
 
 # Serialized models / checkpoints (also covered by models/; these catch stray files)
 *.joblib
