@@ -44,8 +44,8 @@ def slim_extracted_features_for_storage(case: Dict[str, Any]) -> Dict[str, Any]:
     Build the JSON object stored in cases.extracted_features.
 
     Excludes raw narrative and table-duplicated fields so the blob holds only derived /
-    non-column structure (e.g. comparison_values, date_range, evidence_volume, demographics
-    objects used by merge and analysis).
+    non-column structure (e.g. comparison_values, date_range, evidence_volume, demographics,
+    investigation_technology, anonymization_network, p2p_clients) used by merge and analysis.
     """
     return {k: v for k, v in case.items() if k not in _SLIM_EXCLUDED_KEYS}
 

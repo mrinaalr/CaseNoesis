@@ -10,7 +10,8 @@ Design Ideas from Architecture:
   - id, source, date_range
   - Case Context (anonymized): victim_count, case_demographics
   - Perpetrator Context (anonymized): perpetrator_count, perpetrator_demographics, relationship_to_victim, previous_conviction
-  - Technology & Methods: platforms_used, technologies, communication_methods
+  - Technology & Methods: platforms_used (column); investigation_technology, anonymization_network,
+    p2p_clients (in extracted_features JSON)
   - Law Enforcement: prosecution_outcome (agencies/orgs in extracted_features)
   - Content Classification: severity_indicators, case_topics
   - Raw/Original Data: raw_data, extracted_features
@@ -19,7 +20,7 @@ Design Ideas from Architecture:
 
 import pandas as pd
 import re
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 # Import batching functions from shared batching module
 import sys
@@ -227,7 +228,9 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         'raw_data': raw_case,
         'case_text': case_text,
     }
-    
+    # P2P / Tor / detection tech — persisted in extracted_features (not duplicated on cases row)
+    features.update(extract_technology_signals(raw_case))
+
     return features
 
 def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
@@ -287,6 +290,11 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
         'investigation_vector': {
             'type': case_features.get('investigation_type'),
             'agencies': case_features.get('agencies_involved', []),
+        },
+        'technology_signal_vector': {
+            'investigation_technology': case_features.get('investigation_technology') or [],
+            'anonymization_network': case_features.get('anonymization_network') or [],
+            'p2p_clients': case_features.get('p2p_clients') or [],
         },
         'evidence_vector': {
             'images': evidence_vol.get('images') if isinstance(evidence_vol, dict) else None,
@@ -532,33 +540,132 @@ def extract_previous_conviction(case: Dict[str, Any]) -> Optional[Dict[str, Any]
     return prev_conviction if prev_conviction['is_registered'] or prev_conviction['age_at_first_offense'] else None
 
 
+# Ordered (most specific first): canonical label shown in viz / facets, regex against case_text.
+# Social / messaging, gaming, file hosting, early-era surfaces, livestreaming — offender or
+# contact-side environments (stored on cases.platforms_used JSON column).
+_PLATFORM_SPECS: List[Tuple[str, str]] = [
+    ("Facebook Messenger", r"Facebook\s+Messenger|\bFB\s+Messenger\b"),
+    ("Facebook", r"\bFacebook\b"),
+    ("Instagram", r"\bInstagram\b"),
+    ("Snapchat", r"\bSnapchat\b"),
+    ("TikTok", r"\bTikTok\b"),
+    ("Twitter / X", r"\bTwitter\b|\bX\s*\(\s*formerly\s+Twitter\s*\)|\btwitter\.com\b|\bx\.com\b"),
+    ("WhatsApp", r"\bWhatsApp\b"),
+    ("Telegram", r"\bTelegram\b"),
+    ("Signal", r"\bSignal\b"),
+    ("Skype", r"\bSkype\b"),
+    ("Kik", r"\bKik\b"),
+    ("Discord", r"\bDiscord\b"),
+    ("Omegle", r"\bOmegle\b"),
+    ("MeWe", r"\bMeWe\b"),
+    ("Roblox", r"\bRoblox\b"),
+    ("Minecraft", r"\bMinecraft\b"),
+    ("Xbox Live", r"\bXbox\s+Live\b|\bXbox\b"),
+    ("PlayStation Network", r"\bPSN\b|PlayStation\s+Network"),
+    ("Fortnite", r"\bFortnite\b"),
+    ("Dropbox", r"\bDropbox\b"),
+    ("Google Drive", r"Google\s+Drive|\bGDrive\b"),
+    ("Mega.nz", r"\bmega\.nz\b|\bMEGA\b"),
+    ("MediaFire", r"\bMediaFire\b"),
+    ("OneDrive", r"\bOneDrive\b"),
+    ("AOL Instant Messenger", r"\bAIM\b|AOL\s+Instant\s+Messenger"),
+    ("IRC", r"\bIRC\b|Internet\s+Relay\s+Chat"),
+    ("Yahoo Chat", r"Yahoo\s+Chat|\bYahoo!\s+Messenger\b"),
+    ("MySpace", r"\bMySpace\b"),
+    ("Craigslist", r"\bCraigslist\b"),
+    ("YouTube Live", r"YouTube\s+Live"),
+    ("YouTube", r"\bYouTube\b"),
+    ("Twitch", r"\bTwitch\b"),
+    ("Webcam platform", r"\bMyFreeCams\b|\bMFC\b(?!\s+Pennsylvania)|\bwebcam\s+platform\b"),
+    # Generics (after named brands)
+    ("online", r"\bonline\b"),
+    ("chat", r"\bchat(ting|ted|s)?\b"),
+    ("social media", r"\bsocial\s+media\b"),
+]
+
+
 def extract_platforms(case: Dict[str, Any]) -> List[str]:
     """
-    Extract platforms and online methods used.
-    Patterns: "Facebook", "Instagram", "Snapchat", "Roblox", "Discord", "WhatsApp", "online", "chat"
+    Extract platforms and online methods used (contact / distribution surfaces).
+
+    Named brands and early-era chat surfaces map to stable labels for ``platforms_used``.
+    Generic ``online`` / ``chat`` / ``social media`` are last so specific hits win visually
+    in the same list.
     """
-    case_text = case.get('case_text', '')
+    case_text = case.get("case_text", "")
     if not case_text:
         return []
-    
-    platforms = []
-    platform_patterns = {
-        'Facebook': r'\bFacebook\b',
-        'Instagram': r'\bInstagram\b',
-        'Snapchat': r'\bSnapchat\b',
-        'Roblox': r'\bRoblox\b',
-        'Discord': r'\bDiscord\b',
-        'WhatsApp': r'\bWhatsApp\b',
-        'online': r'\bonline\b',
-        'chat': r'\bchat(ting|ted|s)?\b',
-        'social media': r'\bsocial\s+media\b',
-    }
-    
-    for platform, pattern in platform_patterns.items():
+
+    found: List[str] = []
+    seen = set()
+    for label, pattern in _PLATFORM_SPECS:
+        if label in seen:
+            continue
         if re.search(pattern, case_text, re.IGNORECASE):
-            platforms.append(platform)
-    
-    return platforms
+            found.append(label)
+            seen.add(label)
+
+    return sorted(found)
+
+
+def extract_technology_signals(case: Dict[str, Any]) -> Dict[str, List[str]]:
+    """
+    Non-platform technology cues stored in ``extracted_features`` (slim blob, merged on read).
+
+    Buckets:
+    - ``investigation_technology``: LE / platform detection tooling (PhotoDNA, hashing, etc.)
+    - ``anonymization_network``: Tor, I2P, dark web phrasing, cryptocurrency as financial layer
+    - ``p2p_clients``: historical P2P / file-trading clients (distinct from cloud file *hosting*
+      labels in ``platforms_used`` where applicable)
+    """
+    case_text = case.get("case_text", "")
+    if not case_text:
+        return {}
+
+    inv: List[str] = []
+    anon: List[str] = []
+    p2p: List[str] = []
+
+    _inv_specs = [
+        ("PhotoDNA", r"PhotoDNA"),
+        ("CSAI Match", r"CSAI\s*Match|Content\s+Safety\s+API"),
+        ("hash matching", r"hash\s+match(?:ing|es)?|matched\s+against\s+known\s+hashes|perceptual\s+hash"),
+        ("CyberTipline", r"Cyber\s*Tipline|CyberTip|Cybertipline|Cyber\s*Tip\s*Line"),
+    ]
+    _anon_specs = [
+        ("Tor", r"\bTor\s+Browser\b|\bTor\s+network\b|\bvia\s+Tor\b|\bon\s+Tor\b|\bTor\s+Project\b"),
+        ("I2P", r"\bI2P\b"),
+        ("dark web", r"dark\s*web|darkweb"),
+        ("cryptocurrency", r"\bBitcoin\b|\bEthereum\b|\bcryptocurrency\b|\bcrypto\s+wallet\b"),
+    ]
+    _p2p_specs = [
+        ("LimeWire", r"\bLimeWire\b"),
+        ("BitTorrent", r"\bBitTorrent\b|\btorrent\s+file\b|\btorrenting\b"),
+        ("Kazaa", r"\bKazaa\b"),
+        ("Gigatribe", r"\bGigatribe\b"),
+    ]
+
+    def _collect(specs: List[Tuple[str, str]], bucket: List[str]) -> None:
+        sset = set()
+        for label, pat in specs:
+            if label in sset:
+                continue
+            if re.search(pat, case_text, re.IGNORECASE):
+                bucket.append(label)
+                sset.add(label)
+
+    _collect(_inv_specs, inv)
+    _collect(_anon_specs, anon)
+    _collect(_p2p_specs, p2p)
+
+    out: Dict[str, List[str]] = {}
+    if inv:
+        out["investigation_technology"] = sorted(inv)
+    if anon:
+        out["anonymization_network"] = sorted(anon)
+    if p2p:
+        out["p2p_clients"] = sorted(p2p)
+    return out
 
 
 def extract_evidence_volume(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:

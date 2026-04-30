@@ -12,6 +12,7 @@ from typing import List, Dict, Any, Optional, Tuple
 import sys
 import json
 import os
+import re
 import logging
 import time
 from datetime import datetime
@@ -920,6 +921,12 @@ _tags_cache_case_count = 0
 _cluster_groups_cache = None
 _cluster_groups_cache_case_count = None
 
+# Technology revolver: platforms_used + investigation_technology + anonymization_network + p2p_clients
+_TECHNOLOGY_REVOLVER_SNIPPET_VER = 5
+_technology_revolver_cache = None
+_technology_revolver_cache_case_count = None
+_technology_revolver_cache_snippet_ver = None
+
 @app.get("/api/tags")
 @limiter.limit("60/minute")
 def get_unique_tags(request: Request):
@@ -1640,6 +1647,360 @@ def get_detailed_stats(request: Request):
         from error_handler import handle_error
         return handle_error(e)
 
+
+_REVOLVER_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|(?<=[.!?][\"''])\s+")
+
+
+def _parse_jsonish_list(field: Any) -> List[str]:
+    if field is None:
+        return []
+    if isinstance(field, list):
+        return [str(x).strip() for x in field if x is not None and str(x).strip()]
+    if isinstance(field, str):
+        try:
+            parsed = json.loads(field)
+            if isinstance(parsed, list):
+                return [str(x).strip() for x in parsed if x is not None and str(x).strip()]
+        except (json.JSONDecodeError, TypeError):
+            pass
+        s = field.strip()
+        return [s] if s else []
+    return []
+
+
+def _platform_token_regex(platform: str) -> re.Pattern:
+    """
+    Match how a tag may appear in narrative text, not only the canonical list string.
+    Slash-separated names (e.g. 'Twitter / X') also match 'Twitter', flexible 'Twitter / X',
+    but we avoid lone '\\bX\\b' (too noisy in prose).
+    """
+    name = (platform or "").strip()
+    if not name:
+        return re.compile("$^")
+
+    alternatives: List[str] = []
+
+    if "/" in name:
+        segs = [s.strip() for s in name.split("/") if s.strip()]
+        if len(segs) >= 2:
+            alternatives.append(r"\s*/\s*".join(re.escape(s) for s in segs))
+        for s in segs:
+            if len(s) < 2:
+                continue
+            if re.search(r"\s", s):
+                alternatives.append(re.escape(s))
+            else:
+                alternatives.append(rf"\b{re.escape(s)}\b")
+
+    esc = re.escape(name)
+    if re.search(r"\s", name):
+        alternatives.append(esc)
+    else:
+        alternatives.append(rf"\b{esc}\b")
+
+    uniq = sorted(set(alternatives), key=len, reverse=True)
+    return re.compile("(?:" + "|".join(uniq) + ")", re.IGNORECASE)
+
+
+def _crop_around_match(s: str, m: re.Match, max_len: int) -> str:
+    """
+    Return a substring of s that contains the full match span and is at most max_len
+    characters, with ellipses when truncated. Avoids cutting off the platform token.
+    """
+    n = len(s)
+    if n <= max_len:
+        return s
+    a, b = m.span()
+    if b - a >= max_len:
+        piece = s[a : a + max_len].rstrip()
+        return ("…" if a > 0 else "") + piece + ("…" if a + max_len < n else "")
+
+    center = (a + b) // 2
+    half = max_len // 2
+    start = max(0, min(center - half, n - max_len))
+    end = min(n, start + max_len)
+    if start > a:
+        start = max(0, a)
+        end = min(n, start + max_len)
+    if end < b:
+        start = max(0, b - max_len)
+        end = min(n, start + max_len)
+    piece = s[start:end].strip()
+    prefix = "…" if start > 0 else ""
+    suffix = "…" if end < n else ""
+    return (prefix + piece + suffix).strip()
+
+
+def _snippet_for_platform(case_text: str, pat: re.Pattern, max_len: int = 320) -> Optional[str]:
+    """
+    Prefer a sentence that contains the platform; crop around the match so the token
+    stays visible. If no sentence matches, use the first document-level match in text.
+    """
+    if not case_text:
+        return None
+    for chunk in _REVOLVER_SENTENCE_SPLIT.split(case_text):
+        t = " ".join(chunk.split())
+        if len(t) < 4:
+            continue
+        m = pat.search(t)
+        if not m:
+            continue
+        return _crop_around_match(t, m, max_len)
+    m = pat.search(case_text)
+    if not m:
+        return None
+    return _crop_around_match(case_text, m, max_len)
+
+
+def _labels_for_tech_bucket(case: Dict[str, Any], bucket: str) -> List[str]:
+    """Values for one bucket: case column first, then extracted_features merge fallback."""
+    labs = _parse_jsonish_list(case.get(bucket))
+    if labs:
+        return labs
+    ef = case.get("extracted_features")
+    if isinstance(ef, dict):
+        return _parse_jsonish_list(ef.get(bucket))
+    return []
+
+
+_TECH_REVOLVER_BUCKETS = (
+    "platforms_used",
+    "investigation_technology",
+    "anonymization_network",
+    "p2p_clients",
+)
+
+_TECH_REVOLVER_TEXT_IDS_PER_LABEL = 15
+_TECH_REVOLVER_TEXT_IDS_CAP = 600
+
+
+def _aggregate_technology_revolver(
+    slim_cases: List[Dict[str, Any]],
+) -> Tuple[int, Dict[str, set], Dict[str, Dict[str, Dict[str, Any]]], List[str]]:
+    """
+    Scan slim case rows (no full narrative) for labels and per-label case membership.
+    """
+    total_cases = len(slim_cases)
+    label_buckets: Dict[str, set] = {}
+    label_case_map: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+    for c in slim_cases:
+        cid = c.get("id")
+        cid_key = str(cid) if cid is not None and str(cid) != "" else f"__row_{id(c)}"
+        for bucket in _TECH_REVOLVER_BUCKETS:
+            seen_in_bucket: set = set()
+            for lab in _labels_for_tech_bucket(c, bucket):
+                if not lab or lab in seen_in_bucket:
+                    continue
+                seen_in_bucket.add(lab)
+                if lab not in label_buckets:
+                    label_buckets[lab] = set()
+                label_buckets[lab].add(bucket)
+                if lab not in label_case_map:
+                    label_case_map[lab] = {}
+                label_case_map[lab][cid_key] = c
+
+    names_sorted = sorted(
+        label_case_map.keys(),
+        key=lambda lab: (-len(label_case_map[lab]), lab.lower()),
+    )
+    return total_cases, label_buckets, label_case_map, names_sorted
+
+
+def _revolver_text_case_ids(
+    label_case_map: Dict[str, Dict[str, Dict[str, Any]]],
+    names_sorted: List[str],
+    per_label: int = _TECH_REVOLVER_TEXT_IDS_PER_LABEL,
+    cap: int = _TECH_REVOLVER_TEXT_IDS_CAP,
+) -> List[str]:
+    """Case ids to load with narrative — capped batch so we never hydrate the full corpus."""
+    ids: List[str] = []
+    seen: set = set()
+    for label in names_sorted:
+        n_add = 0
+        for cid_key in label_case_map[label].keys():
+            if cid_key.startswith("__"):
+                continue
+            if cid_key in seen:
+                continue
+            seen.add(cid_key)
+            ids.append(cid_key)
+            n_add += 1
+            if n_add >= per_label:
+                break
+        if len(ids) >= cap:
+            break
+    return ids
+
+
+def _chambers_technology_revolver(
+    label_buckets: Dict[str, set],
+    label_case_map: Dict[str, Dict[str, Dict[str, Any]]],
+    names_sorted: List[str],
+    text_by_id: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    from collections import Counter
+
+    chambers_out: List[Dict[str, Any]] = []
+    for label in names_sorted:
+        subset = list(label_case_map[label].values())
+        n = len(subset)
+        pat = _platform_token_regex(label)
+        snippets: List[str] = []
+        seen_norm: set = set()
+        text_cap = 20000
+        for cid_key in label_case_map[label].keys():
+            if cid_key.startswith("__"):
+                continue
+            full = text_by_id.get(cid_key)
+            if not full:
+                continue
+            raw_txt = full.get("case_text") or ""
+            if not raw_txt and isinstance(full.get("raw_data"), dict):
+                raw_txt = str((full.get("raw_data") or {}).get("case_text") or "")
+            snippet = _snippet_for_platform(raw_txt[:text_cap], pat)
+            if not snippet:
+                continue
+            key = snippet.lower()
+            if key in seen_norm:
+                continue
+            seen_norm.add(key)
+            snippets.append(snippet)
+            if len(snippets) >= 5:
+                break
+
+        topics = Counter()
+        severities = Counter()
+        for c in subset:
+            for t in _parse_jsonish_list(c.get("case_topics")):
+                topics[t] += 1
+            for s in _parse_jsonish_list(c.get("severity_indicators")):
+                severities[s] += 1
+        cohort_tags = {
+            "case_topics": [
+                {"tag": t, "count": ct, "pct_of_platform_cases": round(100 * ct / n, 1)}
+                for t, ct in topics.most_common(5)
+                if t
+            ],
+            "severity_indicators": [
+                {"tag": s, "count": ct, "pct_of_platform_cases": round(100 * ct / n, 1)}
+                for s, ct in severities.most_common(5)
+                if s
+            ],
+        }
+
+        chambers_out.append(
+            {
+                "label": label,
+                "buckets": sorted(label_buckets.get(label, set())),
+                "case_count": n,
+                "snippets": snippets,
+                "cohort_tags": cohort_tags,
+            }
+        )
+
+    return chambers_out
+
+
+def _technology_revolver_payload_dict(total_cases: int, chambers_out: List[Dict[str, Any]]) -> Dict[str, Any]:
+    return {
+        "total_cases": total_cases,
+        "chambers": chambers_out,
+        "bucket_keys": list(_TECH_REVOLVER_BUCKETS),
+        "extraction_code_hook": (
+            "src/Processing Layer/Pattern Processing Layer/processing.py — "
+            "extract_platforms() (column platforms_used) and extract_technology_signals() "
+            "(investigation_technology, anonymization_network, p2p_clients in extracted_features)."
+        ),
+        "coverage_note": (
+            "Counts are per extracted label after re-ingest; regex gaps in either extractor still undercount."
+        ),
+        "snippet_ver": _TECHNOLOGY_REVOLVER_SNIPPET_VER,
+    }
+
+
+def _compute_technology_revolver_payload() -> Dict[str, Any]:
+    """Slim scan + batched narrative load; suitable for cold cache without reading every case_text."""
+    slim_cases = storage.get_all_cases(include_raw_data=False) or []
+    total_cases, label_buckets, label_case_map, names_sorted = _aggregate_technology_revolver(slim_cases)
+    ids = _revolver_text_case_ids(label_case_map, names_sorted)
+    loaded = storage.get_cases_by_ids(ids, include_raw_data=True) if ids else []
+    text_by_id = {str(c["id"]): c for c in loaded}
+    chambers = _chambers_technology_revolver(label_buckets, label_case_map, names_sorted, text_by_id)
+    return _technology_revolver_payload_dict(total_cases, chambers)
+
+
+@app.get("/api/technology-revolver")
+@limiter.limit("30/minute")
+def get_technology_revolver(request: Request):
+    """
+    Technology revolver: distinct labels across platforms_used and technology-signal buckets,
+    per-label case counts, text excerpts, and co-occurring case_topics / severity_indicators.
+    """
+    global _technology_revolver_cache, _technology_revolver_cache_case_count, _technology_revolver_cache_snippet_ver
+    try:
+        current_case_count = get_case_count()
+
+        if (
+            _technology_revolver_cache is not None
+            and _technology_revolver_cache_case_count == current_case_count
+            and _technology_revolver_cache_snippet_ver == _TECHNOLOGY_REVOLVER_SNIPPET_VER
+        ):
+            out = dict(_technology_revolver_cache)
+            out["cached"] = True
+            return out
+
+        cache_key = get_cache_key(
+            "technology-revolver", version=current_case_count, snippet_v=_TECHNOLOGY_REVOLVER_SNIPPET_VER
+        )
+        cached = get_cached(cache_key)
+        if cached is not None:
+            _technology_revolver_cache = cached
+            _technology_revolver_cache_case_count = current_case_count
+            _technology_revolver_cache_snippet_ver = _TECHNOLOGY_REVOLVER_SNIPPET_VER
+            out = dict(cached)
+            out["cached"] = True
+            return out
+
+        slim_row = storage.get_technology_revolver_slim(current_case_count)
+        if (
+            slim_row is not None
+            and int(slim_row.get("total_cases", -1)) == int(current_case_count)
+            and slim_row.get("snippet_ver") == _TECHNOLOGY_REVOLVER_SNIPPET_VER
+        ):
+            payload = dict(slim_row)
+            payload["cached"] = True
+            payload["source"] = "database"
+            set_cached(cache_key, payload, ttl=3600)
+            _technology_revolver_cache = payload
+            _technology_revolver_cache_case_count = current_case_count
+            _technology_revolver_cache_snippet_ver = _TECHNOLOGY_REVOLVER_SNIPPET_VER
+            return payload
+
+        payload = _compute_technology_revolver_payload()
+        payload["cached"] = False
+        storage.store_technology_revolver_slim(payload, current_case_count)
+        set_cached(cache_key, payload, ttl=3600)
+        _technology_revolver_cache = payload
+        _technology_revolver_cache_case_count = current_case_count
+        _technology_revolver_cache_snippet_ver = _TECHNOLOGY_REVOLVER_SNIPPET_VER
+        return payload
+    except Exception as e:
+        logger.exception("technology-revolver failed: %s", e)
+        return {
+            "error": str(e),
+            "total_cases": 0,
+            "chambers": [],
+            "bucket_keys": list(_TECH_REVOLVER_BUCKETS),
+            "extraction_code_hook": (
+                "src/Processing Layer/Pattern Processing Layer/processing.py — "
+                "extract_platforms() / extract_technology_signals()"
+            ),
+            "coverage_note": None,
+            "cached": False,
+        }
+
+
 @app.get("/api/cluster-groups")
 @limiter.limit("60/minute")
 async def cluster_groups_endpoint(request: Request):
@@ -2202,6 +2563,16 @@ def api_case_studies_notes_post(request: Request, case_id: str, body: CaseStudyN
         logger.warning("case-studies notes persist failed: %s", e)
         raise HTTPException(status_code=500, detail="Failed to save note")
     return note
+
+
+@app.get("/tech-landscape", response_class=HTMLResponse)
+async def serve_tech_landscape():
+    """Serve the Technology page (/tech-landscape); data from GET /api/technology-revolver."""
+    html_path = Path(__file__).parent.parent / "visualization" / "tech-landscape.html"
+    if html_path.exists():
+        with open(html_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Tech Landscape</h1><p>Page not found</p>", status_code=404)
 
 
 @app.get("/sources", response_class=HTMLResponse)

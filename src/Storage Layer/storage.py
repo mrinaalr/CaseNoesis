@@ -132,6 +132,13 @@ class CaseStorage:
                 data TEXT NOT NULL
             )
         ''')
+        # Pre-built /api/technology-revolver payload (fast cold start after first compute)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS technology_revolver_slim (
+                case_count INTEGER PRIMARY KEY,
+                data TEXT NOT NULL
+            )
+        ''')
         conn.commit()
         conn.close()
     
@@ -395,7 +402,8 @@ class CaseStorage:
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                            'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
-                           'severity_phrases', 'case_text', 'comparison_values']:
+                           'severity_phrases', 'case_text', 'comparison_values',
+                           'investigation_technology', 'anonymization_network', 'p2p_clients']:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
             
@@ -553,7 +561,8 @@ class CaseStorage:
                     for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
                                'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
                                'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
-                               'severity_phrases', 'case_text', 'comparison_values']:
+                               'severity_phrases', 'case_text', 'comparison_values',
+                               'investigation_technology', 'anonymization_network', 'p2p_clients']:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
                 
@@ -700,6 +709,9 @@ class CaseStorage:
                         "severity_phrases",
                         "case_text",
                         "comparison_values",
+                        "investigation_technology",
+                        "anonymization_network",
+                        "p2p_clients",
                     ]:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
@@ -820,6 +832,9 @@ class CaseStorage:
                         "severity_phrases",
                         "case_text",
                         "comparison_values",
+                        "investigation_technology",
+                        "anonymization_network",
+                        "p2p_clients",
                     ]:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
@@ -935,6 +950,51 @@ class CaseStorage:
                     return orjson.loads(row[0])
                 except ImportError:
                     return json.loads(row[0])
+            return None
+        except Exception as e:
+            return None
+
+    def store_technology_revolver_slim(self, payload: Dict[str, Any], case_count: int) -> bool:
+        """Persist technology revolver JSON for fast GET when case_count matches."""
+        storable = {k: v for k, v in payload.items() if k not in ("cached", "source")}
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT OR REPLACE INTO technology_revolver_slim (case_count, data)
+                VALUES (?, ?)
+                """,
+                (case_count, json.dumps(storable)),
+            )
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error storing technology_revolver_slim: {e}")
+            return False
+
+    def get_technology_revolver_slim(self, case_count: int) -> Optional[Dict[str, Any]]:
+        """Load persisted technology revolver payload if row exists for this case count."""
+        try:
+            conn = get_connection(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT data FROM technology_revolver_slim WHERE case_count = ?",
+                (case_count,),
+            )
+            row = cursor.fetchone()
+            conn.close()
+            if not row:
+                return None
+            try:
+                import orjson
+
+                data = orjson.loads(row[0])
+            except ImportError:
+                data = json.loads(row[0])
+            if isinstance(data, dict) and "chambers" in data:
+                return data
             return None
         except Exception as e:
             return None
