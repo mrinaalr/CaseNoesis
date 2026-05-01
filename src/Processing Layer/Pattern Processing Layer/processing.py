@@ -552,7 +552,6 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("Twitter / X", r"\bTwitter\b|\bX\s*\(\s*formerly\s+Twitter\s*\)|\btwitter\.com\b|\bx\.com\b"),
     ("WhatsApp", r"\bWhatsApp\b"),
     ("Telegram", r"\bTelegram\b"),
-    ("Signal", r"\bSignal\b"),
     ("Skype", r"\bSkype\b"),
     ("Kik", r"\bKik\b"),
     ("Discord", r"\bDiscord\b"),
@@ -568,7 +567,8 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("Mega.nz", r"\bmega\.nz\b|\bMEGA\b"),
     ("MediaFire", r"\bMediaFire\b"),
     ("OneDrive", r"\bOneDrive\b"),
-    ("AOL Instant Messenger", r"\bAIM\b|AOL\s+Instant\s+Messenger"),
+    # AIM must match uppercase only (IGNORECASE would hit prose "aim" = goal). Handled in extract_platforms.
+    ("AOL Instant Messenger", r"AOL\s+Instant\s+Messenger"),
     ("IRC", r"\bIRC\b|Internet\s+Relay\s+Chat"),
     ("Yahoo Chat", r"Yahoo\s+Chat|\bYahoo!\s+Messenger\b"),
     ("MySpace", r"\bMySpace\b"),
@@ -579,7 +579,8 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("Webcam platform", r"\bMyFreeCams\b|\bMFC\b(?!\s+Pennsylvania)|\bwebcam\s+platform\b"),
     # Generics (after named brands)
     ("online", r"\bonline\b"),
-    ("chat", r"\bchat(ting|ted|s)?\b"),
+    # Avoid tagging "Internet Relay Chat" / "...Relay Chat" as generic chat (IRC row handles IRC).
+    ("chat", r"(?<![Rr]elay\s)\bchat(ting|ted|s)?\b"),
     ("social media", r"\bsocial\s+media\b"),
 ]
 
@@ -600,6 +601,13 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
     seen = set()
     for label, pattern in _PLATFORM_SPECS:
         if label in seen:
+            continue
+        if label == "AOL Instant Messenger":
+            if re.search(r"\bAIM\b", case_text) or re.search(
+                pattern, case_text, re.IGNORECASE
+            ):
+                found.append(label)
+                seen.add(label)
             continue
         if re.search(pattern, case_text, re.IGNORECASE):
             found.append(label)

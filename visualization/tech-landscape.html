@@ -285,6 +285,29 @@
         .revolver-controls #btn-shuffle {
             width: 100%;
         }
+        .era-filter-box {
+            margin-top: 4px;
+            padding: 12px 0;
+            border-top: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .era-filter-select {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 42px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #bdbdbd;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #fff;
+            cursor: pointer;
+        }
+        .era-filter-select:focus {
+            outline: 2px solid rgba(46, 125, 50, 0.35);
+            border-color: #66bb6a;
+        }
+
         .chamber-lookup {
             margin-top: 4px;
             padding-top: 12px;
@@ -422,6 +445,20 @@
             margin: 18px 0 8px;
             font-weight: 700;
         }
+        .detail-section-head {
+            margin: 18px 0 8px;
+        }
+        .detail-section-head .detail-section-title {
+            margin: 0 0 5px;
+        }
+        .detail-section-subtitle {
+            font-size: 0.82em;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 500;
+            color: #777;
+            line-height: 1.45;
+        }
         .snippets {
             margin: 0;
             padding: 0;
@@ -436,6 +473,16 @@
             font-size: 0.92em;
             line-height: 1.5;
             color: #333;
+        }
+        /* Full-box link: same visual box as plain li; opens case viz in new tab */
+        .snippets li.snippet-li-link {
+            padding: 0;
+        }
+        .snippets li.snippet-li-link > a.snippet-case-link {
+            display: block;
+            padding: 12px 14px;
+            color: inherit;
+            text-decoration: none;
         }
         .snippets li .snippet-hit {
             font-weight: 700;
@@ -541,27 +588,54 @@
     }
 
     /**
-     * Escape snippet text, then wrap case-insensitive hits of label in <strong>.
+     * Terms to highlight in excerpts (canonical label + slash segments + known prose synonyms).
      */
-    function excerptWithHighlight(snippet, label) {
-        const esc = escapeHtml(snippet);
-        const name = (label || '').trim();
-        if (!name) return esc;
+    function excerptLabelVariants(name) {
+        const n = (name || '').trim();
+        if (!n) {
+            return [];
+        }
         const variants = new Set();
-        variants.add(name);
-        name.split(/\s*\/\s*/).forEach(function (p) {
+        variants.add(n);
+        n.split(/\s*\/\s*/).forEach(function (p) {
             const t = p.trim();
             if (t.length >= 3) {
                 variants.add(t);
             }
         });
-        const sorted = Array.from(variants).sort(function (a, b) {
+        if (n === 'AOL Instant Messenger') {
+            variants.add('AIM');
+        }
+        if (n === 'CyberTipline') {
+            variants.add('Cybertipline');
+            variants.add('CyberTip');
+            variants.add('Cyber Tip Line');
+        }
+        return Array.from(variants).sort(function (a, b) {
             return b.length - a.length;
         });
+    }
+
+    /**
+     * Escape snippet text, then wrap case-insensitive hits of label (and variants) in <strong>.
+     */
+    function excerptWithHighlight(snippet, label) {
+        const esc = escapeHtml(snippet);
+        const name = (label || '').trim();
+        if (!name) {
+            return esc;
+        }
+        const sorted = excerptLabelVariants(name);
         let html = esc;
         sorted.forEach(function (term) {
             try {
-                const re = new RegExp('(' + escapeRegExp(term) + ')', 'gi');
+                var pattern = escapeRegExp(term);
+                var flags = 'gi';
+                if (term === 'AIM') {
+                    pattern = '\\bAIM\\b';
+                    flags = 'g';
+                }
+                const re = new RegExp('(' + pattern + ')', flags);
                 html = html.replace(re, function (_, g1) {
                     return '<strong class="snippet-hit">' + g1 + '</strong>';
                 });
@@ -572,15 +646,43 @@
         return html;
     }
 
+    let fullPayload = null;
     let payload = null;
     let selected = 0;
+
+    function activeSlice(data, eraKey) {
+        if (!data) {
+            return { total_cases: 0, chambers: [] };
+        }
+        if (!eraKey || eraKey === 'all') {
+            return {
+                total_cases: data.total_cases || 0,
+                chambers: data.chambers || [],
+            };
+        }
+        var block = (data.eras || {})[eraKey];
+        if (!block) {
+            return {
+                total_cases: data.total_cases || 0,
+                chambers: data.chambers || [],
+            };
+        }
+        return {
+            total_cases: block.total_cases != null ? block.total_cases : 0,
+            chambers: block.chambers || [],
+        };
+    }
 
     function renderError(msg) {
         root.innerHTML = '<div class="state-error" role="alert">' + escapeHtml(msg) + '</div>';
     }
 
-    function renderEmpty() {
-        root.innerHTML = '<div class="state-empty">No technology tags were found in the loaded cases (check extraction and re-ingest).</div>';
+    function renderEmpty(eraKey) {
+        var msg = 'No technology tags were found in the loaded cases (check extraction and re-ingest).';
+        if (eraKey && eraKey !== 'all') {
+            msg = 'No technology tags in this era with the current extraction pass; try another era or All.';
+        }
+        root.innerHTML = '<div class="state-empty">' + escapeHtml(msg) + '</div>';
     }
 
     function chamberLabel(label) {
@@ -592,53 +694,149 @@
     function updateDetail() {
         const panel = document.getElementById('detail-panel');
         const chambers = payload.chambers || [];
-        if (!panel || !payload || !chambers.length) return;
+        if (!panel || !payload || !chambers.length) {
+            return;
+        }
         const p = chambers[selected];
-        const lab = p.label || p.name;
+        if (!p) {
+            return;
+        }
+        const lab = (p.label || p.name || '').trim();
         const cohort = p.cohort_tags;
         const topics = cohort && Array.isArray(cohort.case_topics) ? cohort.case_topics : [];
         const sevs = cohort && Array.isArray(cohort.severity_indicators) ? cohort.severity_indicators : [];
-        let cohortHtml = '';
-        if (cohort && (topics.length || sevs.length)) {
-            cohortHtml += '<div class="detail-section-title">Co-occurring extracted tags (this subset)</div>';
-            cohortHtml += '<div class="cohort-block">';
-            cohortHtml += '<p>Among the <strong>' + escapeHtml(String(p.case_count)) + '</strong> cases tagged with <strong>' + escapeHtml(lab) + '</strong>, these other extracted tags appear with the following frequency (same case may carry multiple tags).</p>';
-            if (topics.length) {
-                cohortHtml += '<div class="detail-section-title" style="margin-top:0">Case topics</div><ul class="cohort-list">';
-                topics.forEach(function (row) {
-                    cohortHtml += '<li><strong>' + escapeHtml(row.tag) + '</strong> - ' + row.count + ' cases (' + row.pct_of_platform_cases + '% of this subset)</li>';
-                });
-                cohortHtml += '</ul>';
-            }
-            if (sevs.length) {
-                cohortHtml += '<div class="detail-section-title">Severity indicators</div><ul class="cohort-list">';
-                sevs.forEach(function (row) {
-                    cohortHtml += '<li><strong>' + escapeHtml(row.tag) + '</strong> - ' + row.count + ' cases (' + row.pct_of_platform_cases + '%)</li>';
-                });
-                cohortHtml += '</ul>';
-            }
-            cohortHtml += '<p class="cohort-muted">These proportions describe this corpus and this extraction pass only; they are not hard claims.</p>';
-            cohortHtml += '</div>';
-        }
 
-        let snipHtml = '';
+        panel.textContent = '';
+
+        const h2 = document.createElement('h2');
+        h2.textContent = lab;
+        panel.appendChild(h2);
+
+        const bucketsEl = document.createElement('div');
+        bucketsEl.className = 'detail-buckets';
+        bucketsEl.textContent = formatBuckets(p.buckets || []);
+        panel.appendChild(bucketsEl);
+
+        const countEl = document.createElement('div');
+        countEl.className = 'detail-count';
+        countEl.appendChild(document.createTextNode('Listed in '));
+        const sn = document.createElement('strong');
+        sn.textContent = String(p.case_count != null ? p.case_count : 0);
+        countEl.appendChild(sn);
+        countEl.appendChild(document.createTextNode(
+            ' case' + (p.case_count === 1 ? '' : 's') + ' in this database (of '
+        ));
+        const st = document.createElement('strong');
+        st.textContent = String(payload.total_cases != null ? payload.total_cases : 0);
+        countEl.appendChild(st);
+        countEl.appendChild(document.createTextNode(' total).'));
+        panel.appendChild(countEl);
+
+        const snipHead = document.createElement('div');
+        snipHead.className = 'detail-section-head';
+        const snipTitle = document.createElement('div');
+        snipTitle.className = 'detail-section-title';
+        snipTitle.textContent = 'How it appears in case text (excerpts).';
+        const snipHint = document.createElement('div');
+        snipHint.className = 'detail-section-subtitle';
+        snipHint.textContent = 'Click to view full case via visualization.';
+        snipHead.appendChild(snipTitle);
+        snipHead.appendChild(snipHint);
+        panel.appendChild(snipHead);
+
+        const snipUl = document.createElement('ul');
+        snipUl.className = 'snippets';
         if (p.snippets && p.snippets.length) {
-            snipHtml = '<ul class="snippets">';
-            p.snippets.forEach(function (s) {
-                snipHtml += '<li>' + excerptWithHighlight(s, lab) + '</li>';
+            const ids = Array.isArray(p.snippet_case_ids) ? p.snippet_case_ids : [];
+            p.snippets.forEach(function (s, idx) {
+                const li = document.createElement('li');
+                const cid = ids[idx];
+                const html = excerptWithHighlight(s, lab);
+                if (cid) {
+                    li.className = 'snippet-li-link';
+                    const a = document.createElement('a');
+                    a.className = 'snippet-case-link';
+                    a.href = '/visualization?viz=caseviz&case=' + encodeURIComponent(cid);
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.innerHTML = html;
+                    li.appendChild(a);
+                } else {
+                    li.innerHTML = html;
+                }
+                snipUl.appendChild(li);
             });
-            snipHtml += '</ul>';
         } else {
-            snipHtml = '<ul class="snippets"><li class="empty-note">No excerpt in the sampled cases for this tag (narrative may use a different wording than the canonical tag, or text was not loaded for those rows).</li></ul>';
+            const li = document.createElement('li');
+            li.className = 'empty-note';
+            li.textContent =
+                'No excerpt in the sampled cases for this tag (narrative may use a different wording than the canonical tag, or text was not loaded for those rows).';
+            snipUl.appendChild(li);
         }
+        panel.appendChild(snipUl);
 
-        panel.innerHTML =
-            '<h2>' + escapeHtml(lab) + '</h2>' +
-            '<div class="detail-buckets">' + escapeHtml(formatBuckets(p.buckets || [])) + '</div>' +
-            '<div class="detail-count">Listed in <strong>' + p.case_count + '</strong> case' + (p.case_count === 1 ? '' : 's') + ' in this database (of <strong>' + payload.total_cases + '</strong> total).</div>' +
-            '<div class="detail-section-title">How it appears in case text (excerpts)</div>' +
-            snipHtml +
-            cohortHtml;
+        if (cohort && (topics.length || sevs.length)) {
+            const secTitle = document.createElement('div');
+            secTitle.className = 'detail-section-title';
+            secTitle.textContent = 'Co-occurring extracted tags (this subset)';
+            panel.appendChild(secTitle);
+
+            const block = document.createElement('div');
+            block.className = 'cohort-block';
+
+            const intro = document.createElement('p');
+            intro.appendChild(document.createTextNode('Among the '));
+            const is = document.createElement('strong');
+            is.textContent = String(p.case_count != null ? p.case_count : 0);
+            intro.appendChild(is);
+            intro.appendChild(document.createTextNode(' cases tagged with '));
+            const labStrong = document.createElement('strong');
+            labStrong.textContent = lab;
+            intro.appendChild(labStrong);
+            intro.appendChild(document.createTextNode(
+                ', these other extracted tags appear with the following frequency (same case may carry multiple tags).'
+            ));
+            block.appendChild(intro);
+
+            function appendCohortList(titleText, rows, pctSuffix) {
+                if (!rows.length) {
+                    return;
+                }
+                const stl = document.createElement('div');
+                stl.className = 'detail-section-title';
+                stl.style.marginTop = '0';
+                stl.textContent = titleText;
+                block.appendChild(stl);
+                const ul = document.createElement('ul');
+                ul.className = 'cohort-list';
+                rows.forEach(function (row) {
+                    const li = document.createElement('li');
+                    const tagStr = row.tag != null ? String(row.tag) : '';
+                    const cnt = row.count != null ? row.count : 0;
+                    let pct = row.pct_of_platform_cases;
+                    if (pct == null || pct === '' || (typeof pct === 'number' && !isFinite(pct))) {
+                        pct = '-';
+                    }
+                    const tagStrong = document.createElement('strong');
+                    tagStrong.textContent = tagStr;
+                    li.appendChild(tagStrong);
+                    li.appendChild(document.createTextNode(' - ' + cnt + ' cases (' + pct + '%' + pctSuffix));
+                    ul.appendChild(li);
+                });
+                block.appendChild(ul);
+            }
+
+            appendCohortList('Case topics', topics, ' of this subset)');
+            appendCohortList('Severity indicators', sevs, ')');
+
+            const muted = document.createElement('p');
+            muted.className = 'cohort-muted';
+            muted.textContent =
+                'These proportions describe this corpus and this extraction pass only; they are not hard claims.';
+            block.appendChild(muted);
+
+            panel.appendChild(block);
+        }
     }
 
     function setSelected(i, platformsLen) {
@@ -658,12 +856,40 @@
         updateDetail();
     }
 
-    function renderRevolver(data) {
-        payload = data;
-        const pl = data.chambers || [];
+    function renderRevolver(data, eraKey) {
+        if (root._keydownRevolver) {
+            document.removeEventListener('keydown', root._keydownRevolver);
+            root._keydownRevolver = null;
+        }
+
+        fullPayload = data;
+        var ek = eraKey || 'all';
+        var slice = activeSlice(data, ek);
+        payload = {
+            total_cases: slice.total_cases,
+            chambers: slice.chambers,
+            bucket_keys: data.bucket_keys,
+            coverage_note: data.coverage_note,
+            extraction_code_hook: data.extraction_code_hook,
+            eras: data.eras,
+        };
+
+        var eraOptionHtml = '';
+        eraOptionHtml += '<option value="all">All eras / full corpus</option>';
+        ['I', 'II', 'III', 'IV'].forEach(function (rom) {
+            var b = (data.eras || {})[rom];
+            var lab = b && b.years
+                ? ('Era ' + rom + ' (' + b.years + ')')
+                : ('Era ' + rom);
+            eraOptionHtml += '<option value="' + rom + '">' + escapeHtml(lab) + '</option>';
+        });
+
+        const pl = payload.chambers || [];
         if (!pl.length) {
-            renderEmpty();
-            meta.textContent = 'Total cases in DB: ' + (data.total_cases || 0) + '.';
+            renderEmpty(ek);
+            meta.textContent =
+                'Total cases (this era): ' + slice.total_cases +
+                '. Distinct technology tags: 0.';
             return;
         }
 
@@ -697,6 +923,12 @@
             '        <button type="button" id="btn-next">Next chamber</button>' +
             '      </div>' +
             '      <button type="button" id="btn-shuffle">Shuffle chamber</button>' +
+            '      <div class="era-filter-box">' +
+            '        <label class="chamber-lookup-label" for="era-filter-select">Era</label>' +
+            '        <select id="era-filter-select" class="era-filter-select" aria-label="Filter by case study era">' +
+            eraOptionHtml +
+            '        </select>' +
+            '      </div>' +
             '      <div class="chamber-lookup">' +
             '        <label class="chamber-lookup-label" for="chamber-lookup-input">Jump to tag</label>' +
             '        <input type="text" id="chamber-lookup-input" autocomplete="off" spellcheck="false" placeholder="Type tech here...">' +
@@ -707,6 +939,14 @@
             '  </div>' +
             '  <div class="detail-panel" id="detail-panel"></div>' +
             '</div>';
+
+        var eraSel = document.getElementById('era-filter-select');
+        if (eraSel) {
+            eraSel.value = ek;
+            eraSel.addEventListener('change', function () {
+                renderRevolver(fullPayload, eraSel.value);
+            });
+        }
 
         root.querySelectorAll('.chamber').forEach(function (btn) {
             btn.addEventListener('click', function () {
@@ -966,7 +1206,7 @@
         root._keydownRevolver = onKey;
 
         meta.textContent =
-            'Total cases: ' + data.total_cases +
+            'Total cases (this era): ' + slice.total_cases +
             '. Distinct technology tags: ' + n +
             '.';
 
@@ -981,7 +1221,8 @@
                 meta.textContent = 'Could not load technology aggregate.';
                 return;
             }
-            renderRevolver(data);
+            fullPayload = data;
+            renderRevolver(data, 'all');
         })
         .catch(function () {
             renderError('Network error while loading /api/technology-revolver.');

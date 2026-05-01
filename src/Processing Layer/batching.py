@@ -668,11 +668,13 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
         'WEST VIRGINIA', 'WISCONSIN', 'WYOMING'
     ]
     
-    # Build regex pattern to match state headers (must be at start of line)
+    # Build regex pattern to match state headers (must be at start of line).
+    # PDF extraction often leaves trailing spaces on the line (e.g. "CALIFORNIA  ");
+    # allow optional whitespace so sections still split.
     # Sort by length (longest first) to match "NEW YORK" before "NEW"
     states_sorted = sorted(states, key=len, reverse=True)
     state_pattern = '|'.join(re.escape(state) for state in states_sorted)
-    pattern = rf'^({state_pattern})$'
+    pattern = rf'^\s*({state_pattern})\s*$'
     
     # Find all state header positions
     matches = []

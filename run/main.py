@@ -40,6 +40,7 @@ else:
     print("✅ Using SQLite database (local development)")
 from facet_tree import (
     DEFAULT_FACET_ORDER,
+    ERA_PERIOD_BUCKETS,
     build_facet_tree,
     cohort_members_for_path,
     count_nodes,
@@ -47,6 +48,7 @@ from facet_tree import (
     enrich_cases_with_era_period,
     facet_order_subset,
     filter_cases_by_constraints,
+    infer_case_year,
     max_tree_depth,
 )
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
@@ -91,6 +93,28 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+def read_utf8_text_file(path: Path) -> str:
+    """
+    Read a file as UTF-8 for HTML/JSON served from disk.
+
+    Editors and paste sources often insert Windows-1252 punctuation (em dash 0x97, closing
+    quote 0x9d, etc.) into files that are otherwise UTF-8, which makes strict decoding fail
+    and previously caused 500s on routes like /tech-landscape. We decode strictly first, then
+    fall back to replacement so the site stays up; check logs and re-save the file as UTF-8.
+    """
+    raw = path.read_bytes()
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        logger.warning(
+            "Invalid UTF-8 in %s (%d bytes); decoding with errors=replace. "
+            "Re-save as UTF-8 (avoid CP1252 smart quotes pasted into UTF-8 files).",
+            path,
+            len(raw),
+        )
+        return raw.decode("utf-8", errors="replace")
 
 
 def _is_local_request(request: Request) -> bool:
@@ -580,9 +604,7 @@ async def serve_home():
     """Serve the home page"""
     html_path = Path(__file__).parent.parent / "visualization" / "home.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>CaseLinker</h1><p>Home page not found. Go to <a href='/visualization'>/visualization</a></p>", status_code=404)
 
@@ -922,7 +944,7 @@ _cluster_groups_cache = None
 _cluster_groups_cache_case_count = None
 
 # Technology revolver: platforms_used + investigation_technology + anonymization_network + p2p_clients
-_TECHNOLOGY_REVOLVER_SNIPPET_VER = 5
+_TECHNOLOGY_REVOLVER_SNIPPET_VER = 10
 _technology_revolver_cache = None
 _technology_revolver_cache_case_count = None
 _technology_revolver_cache_snippet_ver = None
@@ -1650,6 +1672,22 @@ def get_detailed_stats(request: Request):
 
 _REVOLVER_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|(?<=[.!?][\"''])\s+")
 
+# Narrative rarely spells canonical list strings verbatim; add prose synonyms for snippet finding.
+_REVOLVER_LABEL_SYNONYMS: Dict[str, Tuple[str, ...]] = {
+    "CyberTipline": (
+        r"Cyber\s*Tipline",
+        r"CyberTip\b",
+        r"Cybertipline",
+        r"Cyber\s*Tip\s*Line",
+        r"missingkids\.org/cybertipline",
+    ),
+    # PDF line wraps often split "mega." and "nz"; plain \bMega\.nz\b then misses.
+    "Mega.nz": (
+        r"mega\s*\.\s*nz",
+        r"mega\s+dot\s+nz",
+    ),
+}
+
 
 def _parse_jsonish_list(field: Any) -> List[str]:
     if field is None:
@@ -1678,6 +1716,11 @@ def _platform_token_regex(platform: str) -> re.Pattern:
     if not name:
         return re.compile("$^")
 
+    # Uppercase AIM only; (?i:...) limits case-insensitivity to the AOL phrase (revolver outer IGNORECASE
+    # would otherwise match prose "aim").
+    if name == "AOL Instant Messenger":
+        return re.compile(r"(?:\bAIM\b|(?i:AOL\s+Instant\s+Messenger))")
+
     alternatives: List[str] = []
 
     if "/" in name:
@@ -1697,6 +1740,9 @@ def _platform_token_regex(platform: str) -> re.Pattern:
         alternatives.append(esc)
     else:
         alternatives.append(rf"\b{esc}\b")
+
+    for syn in _REVOLVER_LABEL_SYNONYMS.get(name, ()):
+        alternatives.append(syn)
 
     uniq = sorted(set(alternatives), key=len, reverse=True)
     return re.compile("(?:" + "|".join(uniq) + ")", re.IGNORECASE)
@@ -1770,21 +1816,54 @@ _TECH_REVOLVER_BUCKETS = (
     "p2p_clients",
 )
 
+_TECH_REVOLVER_ERA_ROMANS: Tuple[str, ...] = ("I", "II", "III", "IV")
+
 _TECH_REVOLVER_TEXT_IDS_PER_LABEL = 15
 _TECH_REVOLVER_TEXT_IDS_CAP = 600
 
 
+def _era_roman_for_slim_case(case: Dict[str, Any]) -> Optional[str]:
+    """Map case year to Case Studies era I–IV (facet_tree buckets); None if outside ranges."""
+    y = infer_case_year(case)
+    if y is None:
+        return None
+    for i, (lo, hi, _) in enumerate(ERA_PERIOD_BUCKETS):
+        if lo <= y <= hi:
+            return _TECH_REVOLVER_ERA_ROMANS[i]
+    return None
+
+
+def _slim_cases_with_era_tag(slim_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Shallow copy each row and set _era Roman or None (not persisted)."""
+    out: List[Dict[str, Any]] = []
+    for c in slim_cases:
+        cc = dict(c)
+        cc["_era"] = _era_roman_for_slim_case(cc)
+        out.append(cc)
+    return out
+
+
 def _aggregate_technology_revolver(
     slim_cases: List[Dict[str, Any]],
+    era_filter: Optional[str] = None,
 ) -> Tuple[int, Dict[str, set], Dict[str, Dict[str, Dict[str, Any]]], List[str]]:
     """
     Scan slim case rows (no full narrative) for labels and per-label case membership.
+    If era_filter is set ("I".."IV"), only cases whose _era matches are counted and bucketed.
+    total_cases in the return value is always the denominator for this slice:
+    all rows when era_filter is None, else rows with that era (including those with no tech labels).
     """
-    total_cases = len(slim_cases)
+    if era_filter is None:
+        slice_rows = slim_cases
+        total_cases = len(slim_cases)
+    else:
+        slice_rows = [c for c in slim_cases if c.get("_era") == era_filter]
+        total_cases = len(slice_rows)
+
     label_buckets: Dict[str, set] = {}
     label_case_map: Dict[str, Dict[str, Dict[str, Any]]] = {}
 
-    for c in slim_cases:
+    for c in slice_rows:
         cid = c.get("id")
         cid_key = str(cid) if cid is not None and str(cid) != "" else f"__row_{id(c)}"
         for bucket in _TECH_REVOLVER_BUCKETS:
@@ -1813,10 +1892,20 @@ def _revolver_text_case_ids(
     per_label: int = _TECH_REVOLVER_TEXT_IDS_PER_LABEL,
     cap: int = _TECH_REVOLVER_TEXT_IDS_CAP,
 ) -> List[str]:
-    """Case ids to load with narrative — capped batch so we never hydrate the full corpus."""
+    """Case ids to load with narrative — capped batch so we never hydrate the full corpus.
+
+    Pass 1 adds up to ``per_label`` distinct ids per label while traversing labels by popularity,
+    stopping when ``cap`` ids are queued (existing behavior).
+
+    Pass 2 adds one id for any label that had **no** representative in pass 1. Otherwise rare
+    tags (e.g. single-case ``Mega.nz``) never get narrative loaded and excerpts always show empty
+    even though counts are correct from slim rows.
+    """
     ids: List[str] = []
     seen: set = set()
     for label in names_sorted:
+        if len(ids) >= cap:
+            break
         n_add = 0
         for cid_key in label_case_map[label].keys():
             if cid_key.startswith("__"):
@@ -1828,8 +1917,19 @@ def _revolver_text_case_ids(
             n_add += 1
             if n_add >= per_label:
                 break
-        if len(ids) >= cap:
-            break
+
+    for label in names_sorted:
+        cmap = label_case_map.get(label) or {}
+        label_ids = [k for k in cmap.keys() if not str(k).startswith("__")]
+        if not label_ids:
+            continue
+        if any(k in seen for k in label_ids):
+            continue
+        cid_key = label_ids[0]
+        if cid_key not in seen:
+            seen.add(cid_key)
+            ids.append(cid_key)
+
     return ids
 
 
@@ -1847,6 +1947,7 @@ def _chambers_technology_revolver(
         n = len(subset)
         pat = _platform_token_regex(label)
         snippets: List[str] = []
+        snippet_case_ids: List[str] = []
         seen_norm: set = set()
         text_cap = 20000
         for cid_key in label_case_map[label].keys():
@@ -1866,6 +1967,7 @@ def _chambers_technology_revolver(
                 continue
             seen_norm.add(key)
             snippets.append(snippet)
+            snippet_case_ids.append(cid_key)
             if len(snippets) >= 5:
                 break
 
@@ -1895,6 +1997,7 @@ def _chambers_technology_revolver(
                 "buckets": sorted(label_buckets.get(label, set())),
                 "case_count": n,
                 "snippets": snippets,
+                "snippet_case_ids": snippet_case_ids,
                 "cohort_tags": cohort_tags,
             }
         )
@@ -1902,8 +2005,12 @@ def _chambers_technology_revolver(
     return chambers_out
 
 
-def _technology_revolver_payload_dict(total_cases: int, chambers_out: List[Dict[str, Any]]) -> Dict[str, Any]:
-    return {
+def _technology_revolver_payload_dict(
+    total_cases: int,
+    chambers_out: List[Dict[str, Any]],
+    eras_block: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    out: Dict[str, Any] = {
         "total_cases": total_cases,
         "chambers": chambers_out,
         "bucket_keys": list(_TECH_REVOLVER_BUCKETS),
@@ -1917,17 +2024,38 @@ def _technology_revolver_payload_dict(total_cases: int, chambers_out: List[Dict[
         ),
         "snippet_ver": _TECHNOLOGY_REVOLVER_SNIPPET_VER,
     }
+    if eras_block is not None:
+        out["eras"] = eras_block
+    return out
 
 
 def _compute_technology_revolver_payload() -> Dict[str, Any]:
     """Slim scan + batched narrative load; suitable for cold cache without reading every case_text."""
     slim_cases = storage.get_all_cases(include_raw_data=False) or []
-    total_cases, label_buckets, label_case_map, names_sorted = _aggregate_technology_revolver(slim_cases)
+    slim_annotated = _slim_cases_with_era_tag(slim_cases)
+    total_cases, label_buckets, label_case_map, names_sorted = _aggregate_technology_revolver(
+        slim_annotated, era_filter=None
+    )
     ids = _revolver_text_case_ids(label_case_map, names_sorted)
     loaded = storage.get_cases_by_ids(ids, include_raw_data=True) if ids else []
     text_by_id = {str(c["id"]): c for c in loaded}
     chambers = _chambers_technology_revolver(label_buckets, label_case_map, names_sorted, text_by_id)
-    return _technology_revolver_payload_dict(total_cases, chambers)
+
+    eras_block: Dict[str, Any] = {}
+    for i, roman in enumerate(_TECH_REVOLVER_ERA_ROMANS):
+        lo, hi, _facet_label = ERA_PERIOD_BUCKETS[i]
+        etot, ebuckets, elcm, enames = _aggregate_technology_revolver(slim_annotated, era_filter=roman)
+        echambers = _chambers_technology_revolver(ebuckets, elcm, enames, text_by_id)
+        eras_block[roman] = {
+            "roman": roman,
+            "years": f"{lo}–{hi}",
+            "facet_label": _facet_label,
+            "total_cases": etot,
+            "distinct_tags": len(echambers),
+            "chambers": echambers,
+        }
+
+    return _technology_revolver_payload_dict(total_cases, chambers, eras_block=eras_block)
 
 
 @app.get("/api/technology-revolver")
@@ -1936,6 +2064,11 @@ def get_technology_revolver(request: Request):
     """
     Technology revolver: distinct labels across platforms_used and technology-signal buckets,
     per-label case counts, text excerpts, and co-occurring case_topics / severity_indicators.
+
+    Payload includes top-level ``total_cases`` / ``chambers`` for the full corpus and an ``eras``
+    object keyed by Roman numerals ``I``..``IV`` (years aligned with ``facet_tree.ERA_PERIOD_BUCKETS``
+    / Case Studies). Each era entry has ``total_cases``, ``distinct_tags``, ``chambers``, ``years``,
+    and ``facet_label`` for filtering the UI without a second request.
     """
     global _technology_revolver_cache, _technology_revolver_cache_case_count, _technology_revolver_cache_snippet_ver
     try:
@@ -2144,9 +2277,7 @@ async def serve_visualization():
     """Serve the HTML visualization page"""
     html_path = Path(__file__).parent.parent / "visualization" / "index.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Visualization not found</h1>", status_code=404)
 
@@ -2155,9 +2286,7 @@ async def serve_analysis():
     """Serve the HTML analysis page"""
     html_path = Path(__file__).parent.parent / "visualization" / "analysis.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Analysis page not found</h1>", status_code=404)
 
@@ -2166,9 +2295,7 @@ async def serve_clusters():
     """Serve the HTML clusters page"""
     html_path = Path(__file__).parent.parent / "visualization" / "clusters.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
 
@@ -2240,9 +2367,7 @@ async def serve_stats():
     """Serve the HTML stats page"""
     html_path = Path(__file__).parent.parent / "visualization" / "stats.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Stats page not found</h1>", status_code=404)
 
@@ -2251,9 +2376,7 @@ async def serve_search():
     """Serve the HTML search page"""
     html_path = Path(__file__).parent.parent / "visualization" / "search.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Search page not found</h1>", status_code=404)
 
@@ -2263,8 +2386,7 @@ async def serve_query():
     """Custom analysis: browser-side JS snippets calling public APIs only."""
     html_path = Path(__file__).parent.parent / "visualization" / "query.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     return HTMLResponse(content="<h1>Query page not found</h1>", status_code=404)
 
 
@@ -2273,8 +2395,7 @@ async def serve_expand():
     """Build-your-own visualization: examples using public CaseLinker APIs."""
     html_path = Path(__file__).parent.parent / "visualization" / "expand.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     return HTMLResponse(content="<h1>Expand page not found</h1>", status_code=404)
 
 
@@ -2283,8 +2404,7 @@ async def serve_triage():
     """Serve the triage ML evaluation page"""
     html_path = Path(__file__).parent.parent / "visualization" / "triage.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     return HTMLResponse(content="<h1>Triage page not found</h1>", status_code=404)
 
 
@@ -2458,9 +2578,7 @@ async def serve_case_studies():
     """Serve the HTML case studies page (gate + reading experience)."""
     html_path = Path(__file__).parent.parent / "visualization" / "case-studies.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Case Studies page not found</h1>", status_code=404)
 
@@ -2480,16 +2598,14 @@ _CASE_STUDIES_NOTES_MAX_TEXT = 1500
 def _load_case_studies_content() -> Dict[str, Any]:
     if not _CASE_STUDIES_CONTENT_PATH.exists():
         return {"version": 0, "eras": [], "case_studies": [], "default_google_form_url": ""}
-    with open(_CASE_STUDIES_CONTENT_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return json.loads(read_utf8_text_file(_CASE_STUDIES_CONTENT_PATH))
 
 
 def _load_case_study_notes() -> List[Dict[str, Any]]:
     if not _CASE_STUDIES_NOTES_PATH.exists():
         return []
     try:
-        with open(_CASE_STUDIES_NOTES_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = json.loads(read_utf8_text_file(_CASE_STUDIES_NOTES_PATH))
         notes = data.get("notes", []) if isinstance(data, dict) else []
         return notes if isinstance(notes, list) else []
     except (json.JSONDecodeError, OSError):
@@ -2570,8 +2686,7 @@ async def serve_tech_landscape():
     """Serve the Technology page (/tech-landscape); data from GET /api/technology-revolver."""
     html_path = Path(__file__).parent.parent / "visualization" / "tech-landscape.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     return HTMLResponse(content="<h1>Tech Landscape</h1><p>Page not found</p>", status_code=404)
 
 
@@ -2580,9 +2695,7 @@ async def serve_sources():
     """Serve the HTML sources page"""
     html_path = Path(__file__).parent.parent / "visualization" / "sources.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Sources page not found</h1>", status_code=404)
 
@@ -2591,9 +2704,7 @@ async def serve_audit():
     """Serve the HTML audit page"""
     html_path = Path(__file__).parent.parent / "visualization" / "audit.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Audit page not found</h1>", status_code=404)
 
@@ -2603,9 +2714,7 @@ async def serve_under_the_hood():
     """Serve the HTML under-the-hood architecture page"""
     html_path = Path(__file__).parent.parent / "visualization" / "under-the-hood.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>Under the Hood</h1><p>Page not found</p>", status_code=404)
 
@@ -2614,9 +2723,7 @@ async def serve_ml_experimental():
     """Serve the HTML ML experimental page"""
     html_path = Path(__file__).parent.parent / "visualization" / "ml-experimental.html"
     if html_path.exists():
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        return HTMLResponse(content=html_content)
+        return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
         return HTMLResponse(content="<h1>ML Experimental page not found</h1>", status_code=404)
 

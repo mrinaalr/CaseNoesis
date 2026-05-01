@@ -295,7 +295,7 @@ Each case includes structured features extracted from case narratives:
 - **Perpetrator Demographics**: Age, registration status (registered sex offender)
 - **Victim Demographics**: Age(s), count (when explicit), gender
 - **Relationship**: Relationship to victim (father, mother, brother, stranger, etc.)
-- **Platforms**: Social / messaging apps (e.g. Facebook Messenger, Instagram, Kik, Discord, Signal, TikTok, Twitter/X, Telegram, Skype, Omegle, MeWe), gaming surfaces (Roblox, Minecraft, Xbox Live, PSN, Fortnite), file hosting (Dropbox, Google Drive, Mega.nz, MediaFire, OneDrive), early-era chat (AIM, IRC, Yahoo Chat, MySpace, Craigslist), livestreaming (YouTube / YouTube Live, Twitch, generic webcam-platform phrasing), plus generic `online` / `chat` / `social media` when no named product matches.
+- **Platforms**: Social / messaging apps (e.g. Facebook Messenger, Instagram, Kik, Discord, TikTok, Twitter/X, Telegram, Skype, Omegle, MeWe), gaming surfaces (Roblox, Minecraft, Xbox Live, PSN, Fortnite), file hosting (Dropbox, Google Drive, Mega.nz, MediaFire, OneDrive), early-era chat (AIM, IRC, Yahoo Chat, MySpace, Craigslist), livestreaming (YouTube / YouTube Live, Twitch, generic webcam-platform phrasing), plus generic `online` / `chat` / `social media` when no named product matches.
 - **Technology signals**: `investigation_technology` (e.g. PhotoDNA, CSAI Match, hash-matching language, CyberTipline variants), `anonymization_network` (Tor, I2P, dark web phrasing, cryptocurrency), and `p2p_clients` (LimeWire, BitTorrent, Kazaa, Gigatribe).
 - **Charges**: Detailed prosecution charges with counts
 - **Evidence Volume**: Images, videos, storage size (TB/GB), messages
