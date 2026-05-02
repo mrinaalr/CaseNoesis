@@ -85,7 +85,7 @@
       "status": "published",
       "linked_case_id": "azicac_2011_006",
       "title": "When peer-to-peer made the abuse visible",
-      "subtitle": "A 2011 multi-agency case where federal P2P monitoring exposed in-home production that had no online surface or in-person reporting.",
+      "subtitle": "A 2011 multi-agency case where federal P2P monitoring exposed in-home production that had no other online surface or in-person reporting.",
       "release_date": "2026-06-01",
       "dimensions": [
         {
@@ -113,10 +113,37 @@
       "google_form_url": null
     },
     {
-      "id": "ICAC-2011-XXXX",
+      "id": "azicac_2011_009",
       "era": "I",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
+      "status": "published",
+      "linked_case_id": "azicac_2011_009",
+      "title": "When the cybertip opened the door",
+      "subtitle": "A November 2011 Phoenix-area AZICAC warrant driven by an NCMEC CyberTip after AOL reported an email sent by an AIM-associated user with an abusive image and entry into the residence surfaced not only the CSAM lead but a fifteen-month-old in severe neglect.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The technological context is late Era I consumer infrastructure: AOL email and AIM identity as surfaces an electronic service provider could inspect, distinct from the open peer-to-peer trade that also occurred during the same period. AOL reported an email sent in August 2011 by an AIM user with an attached image of child sexual abuse. The transmission path described in the record is deliberately narrow — an email the user sent to himself via his phone — which matters analytically because it is not redistribution into a monitored swarm or a commercial forum. It is a private mailbox move that still crossed a provider boundary where attachment scanning and reporting obligations could operate. Peer-to-peer visibility is external surveillance of shared folders. Provider-visible email is internal policy and engineering meeting mandatory reporting upstream to NCMEC. Same era, different aperture."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The suspect was a twenty-six-year-old resident of the targeted household, described in the public record as unemployed and struggling with substance use, in a residence characterized by instability and others moving through it. He admitted to sending the abusive image through his phone but investigators did not locate it during an initial preview. He stated he did not know the identity of the person depicted in the image and the physical conditions of the residence suggested a household in significant disarray — no food, extreme uncleanliness, and a 15-month-old infant in a state of severe malnourishment. This represents a canonical pattern in ICAC enforcement: the offense behavior visible to the provider was the transmission act, while the household conditions alleged at execution painted a second layer of harm centered in the home. The corpus tags hands-on, family, infant, and sexual abuse align with that two-layer frame — transmission plus on-scene child maltreatment — rather than with a trader profile built around volume and distribution."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "The case was reactive to a CyberTip Phoenix Police received from the National Center for Missing and Exploited Children. The lead Phoenix investigator used court process to identify the AIM user tied to the email-to-self transaction, then AZICAC personnel from Phoenix PD and an FBI special agent executed a search warrant at the residence in November 2011. The investigative architecture combined criminal search authority with an immediate child-safety response: investigators described living conditions as unsafe for an infant, initiated a child neglect investigation, engaged child protective services to take custody, and framed possible neglect prosecution of the mother as contingent on monitoring outcomes. That pairing — CSAM lead generation through ESP reporting and on-scene maltreatment charges — is the study's signature. It is not the surveillance-heavy P2P narrative that produced the task force's other high-profile 2011 matter."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "The public record bundled with this corpus entry stops at investigative and child-welfare interventions. It does not include charging language, pleas, or sentences, and the presumption of innocence applies to any charges filed outside the excerpt. The analytically complete observation is therefore procedural, not dispositional: the case demonstrates how a CyberTip resolved through court-ordered subscriber identification can convert into simultaneous criminal search execution and CPS-driven custody decisions within a single warrant response. For a reading-room study that normally prefers adjudicated posture, this entry is intentionally incomplete on court outcomes — the data point is the dual-track enforcement response at the investigation level, not the final judgment."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era I in Arizona is often summarized through peer-to-peer monitoring because that is where federal visibility was deepest. This record is the complementary lane — mandatory-reporting culture consolidating around major providers, NCMEC as the clearinghouse, and local ICAC execution once an ESP hands off an attachment-driven lead. It also foregrounds something Era II and III casework would operationalize at scale: the mobile transition as the device that moves abusive material through consumer mail systems investigators never see until after the report. Alongside azicac_2011_006, the pair makes a clean classroom contrast from the same task force and calendar band: P2P disclosure versus ESP disclosure; trades observable on the wire versus messages observable only after corporate review; traders versus self-senders; criminal possession networks versus child neglect surfacing at the door."
+        }
+      ],
+      "takeaway": "Not every Era I ICAC case entered through peer-to-peer crawls. When an electronic service provider flags an email attachment and NCMEC routes a CyberTip, the visibility path is corporate and policy-bound rather than federal-over-the-network in the P2P sense — and the warrant can surface maltreatment in the home that has nothing to do with platform design. Arizona's 2011 portfolio contains both stories; this one is the ESP-and-infant-neglect branch.",
+      "google_form_url": null
     },
     {
       "id": "ICAC-2012-XXXX",
@@ -127,24 +154,6 @@
     {
       "id": "ICAC-2014-XXXX",
       "era": "I",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
-    },
-    {
-      "id": "ICAC-2014-XXXY",
-      "era": "I",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
-    },
-    {
-      "id": "ICAC-2015-XXXX",
-      "era": "II",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
-    },
-    {
-      "id": "ICAC-2016-XXXX",
-      "era": "II",
       "status": "coming_soon",
       "release_window": "Summer 2026"
     },
@@ -171,21 +180,48 @@
         },
         {
           "title": "Prosecutorial outcome",
-          "body": "Booked under California Penal Code §288(a), Lewd or Lascivious Acts upon a Child Under 14 — a statute that predates internet-mediated production by decades and that prosecutors continue to use because the underlying conduct it describes does not require perpetrator and child to be in the same physical space. Bail was set at one million dollars. The Los Angeles Regional ICAC Task Force publicly stated investigators believed additional victims existed and asked for tips. The disposition profile is unremarkable on its own: local-level prosecution under existing statutes, no novel case law produced. The notable finding here is not the court outcome. It is an offense whose entire mechanism lived across three platforms with no pre-internet analog, prosecuted under a statute written before any of them existed — proof that new platforms do not outrun existing law."
+          "body": "Booked under California Penal Code —288(a), Lewd or Lascivious Acts upon a Child Under 14 — a statute that predates internet-mediated production by decades and that prosecutors continue to use because the underlying conduct it describes does not require perpetrator and child to be in the same physical space. Bail was set at one million dollars. The Los Angeles Regional ICAC Task Force publicly stated investigators believed additional victims existed and asked for tips. The disposition profile is unremarkable on its own: local-level prosecution under existing statutes, no novel case law produced. The notable finding here is not the court outcome. It is an offense whose entire mechanism lived across three platforms with no pre-internet analog, prosecuted under a statute written before any of them existed — proof that new platforms do not outrun existing law."
         },
         {
           "title": "Relationship to the broader technological era",
-          "body": "Era II is the period in which platform-side reporting becomes the entry point for ICAC casework. Mandatory electronic-service-provider reporting under 18 U.S.C. §2258A had been in law since 2008, but Era II is when its operational footprint at the major providers consolidated into a steady upstream signal — the NCMEC CyberTip line — that local task forces could act on at volume. This case is one of the LAPD's earlier records to show that signal in finished form. The other Era II shift visible here is directed self-production: the child becomes a manipulated instrument of their own exploitation, contact compressed, physical proximity unnecessary. Era III will multiply the platforms. Era IV will introduce synthetic media on top of the same pipeline. The investigative inversion — start at upload, work back to contact — is the architecture both later eras inherit."
+          "body": "Era II is the period in which platform-side reporting becomes the entry point for ICAC casework. Mandatory electronic-service-provider reporting under 18 U.S.C. —2258A had been in law since 2008, but Era II is when its operational footprint at the major providers consolidated into a steady upstream signal — the NCMEC CyberTip line — that local task forces could act on at volume. This case is one of the LAPD's earlier records to show that signal in finished form. The other Era II shift visible here is directed self-production: the child becomes a manipulated instrument of their own exploitation, contact compressed, physical proximity unnecessary. Era III will multiply the platforms. Era IV will introduce synthetic media on top of the same pipeline. The investigative inversion — start at upload, work back to contact — is the architecture both later eras inherit."
         }
       ],
       "takeaway": "Era II made the platform's upload-side reporting the entry point of a case. The trade-off was visibility at the upload stage in exchange for invisibility at the contact and grooming stages. This case is one of the earliest LAPD records showing how that trade-off works in practice, and one of the earliest where directed self-production made physical proximity between offender and child unnecessary. The investigative architecture built around it would carry forward into Era III and Era IV largely unchanged.",
       "google_form_url": null
     },
     {
-      "id": "ICAC-2017-XXXY",
+      "id": "illinois_ag_2016_001",
       "era": "II",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
+      "status": "published",
+      "linked_case_id": "illinois_ag_2016_001",
+      "title": "When the statewide initiative was the through-line",
+      "subtitle": "A 2016 Illinois AG arrest — the seventy-ninth under Operation Glass House, a statewide initiative running since 2010 — charging dissemination and possession of child sexual abuse material, with the initiative's own public framing centered on the most active traders of extremely violent material involving infants and toddlers.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The corpus tags this case with a generic online platform marker and the release does not name a specific application, network, or forum. That is analytically appropriate here because the platform is not the unit of interest — the enforcement initiative is. Operation Glass House launched in August 2010, in Era I's P2P-dominated landscape, and was still producing arrests in April 2016, well into Era II's mobile and cloud transition. The operation outlasted the platforms that originally generated its investigative leads. Whatever technical surface the 2016 conduct moved through — and the AG's language of downloading and trading online is consistent with both residual P2P activity and emerging cloud-based distribution — the enforcement architecture predated it. That continuity is the platform context: a six-year-old state initiative absorbing new cases as the underlying technology shifted beneath it, without changing its stated priority focus."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The defendant was twenty-seven years old and lived in the Aurora area at the time of the April 2016 filing described in the release. The charging stack is the methodological signature: three counts of dissemination of child pornography charged as Class X felonies — Illinois's most serious felony class short of murder — alongside ten possession counts as Class 2 felonies. That geometry signals an enforcement theory weighted toward distribution behavior as well as mere possession. The Attorney General's quoted rhetoric ties downloading and trading to perpetuating the sexual assault of children — a moral framing prosecutors use to justify aggressive charging against traders even when individual victims are not identified in the excerpt. Separately, the release describes the initiative's substantive targeting emphasis since 2010 on extremely violent videos involving very young children, including infants and toddlers. The public text here is initiative-level prioritization language, not a confirmed adjudicated finding about this defendant's collection."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "Investigators from the Attorney General's office conducted a Friday search of a residence on Broadway Avenue in Aurora with Homeland Security Investigations, the Aurora Police Department, and the Kane County State's Attorney's Office. The arrest followed alleged discovery of child pornography evidence during the search, with Kane County prosecutors designated to carry the case forward. The operational form is textbook Era II ICAC bundling — federal HSI capacity paired with municipal police and county prosecution — under a state attorney general branding layer that turns a single arrest into a public communications asset for a multi-year operation. The release notes this arrest as the seventy-ninth since Glass House began, which matters analytically only as a measure of sustained throughput: Illinois was treating trader apprehension as a production line with metrics, not as one-off investigative moments."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "At the press snapshot the defendant was held in Kane County Jail pending a bond hearing, with statutory sentencing ranges quoted for both charge classes — six to thirty years on each Class X dissemination count and three to seven years on each Class 2 possession count in the release's articulation. The public reminder of presumption of innocence is present. There is no plea, verdict, or sentence in the bundled text, and this study does not resolve disposition from outside sources. The completed analytical observation is therefore about charging posture at filing: Illinois AG communications treated dissemination counts as the spear tip and possession counts as the broad stack, and used the filing to restate Operation Glass House's mission against violent infant-and-toddler-oriented material — a prosecutorial narrative strategy as much as a description of evidence."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era II in this portfolio already contains a named-platform coercion pipeline studied through Los Angeles cybertip reconstruction. Illinois's record fills a different cell in the same era matrix — attorney-general-led initiative enforcement where the internet layer is deliberately underspecified in public messaging and the investigative sale is continuity: grant-funded ICAC, HSI partnership, county prosecution, and a multi-year operation counter that turns arrests into proof of capacity. The contrast is instructive. Where LAPD had to work backwards from upload metadata to three distinct consumer surfaces, Illinois foregrounds charge stacking and policy rhetoric over technical reconstruction — an Era II lane where traders are aggregated under initiative branding rather than sorted by app fingerprint. Era III and IV will increase fragmentation again across platforms and synthetic media; mid-decade state AG operations like Glass House are the intermediate institutional form that held possession enforcement together while the technical substrate diversified underneath it."
+        }
+      ],
+      "takeaway": "Not every Era II case study needs a brand-name app. Illinois's Operation Glass House filing is useful precisely because the internet is painted as a generic trade space while the enforcement story is organizational — ICAC grant architecture, HSI support, county prosecution, and a dissemination-versus-possession charge stack that encodes how seriously Illinois treated traders as distributors. Read against the Los Angeles three-platform study in this portfolio, you see the same era's enforcement apparatus speaking two different languages: technical reconstruction on one coast, statewide initiative branding in the Midwest.",
+      "google_form_url": null
     },
     {
       "id": "ICAC-2018-XXXX",
@@ -204,7 +240,7 @@
       "dimensions": [
         {
           "title": "Platform context",
-          "body": "No single platform. The signals that drove this operation came through NCMEC's CyberTip line from a wide range of reporting electronic service providers under the federal mandatory-reporting requirement at 18 U.S.C. §2258A. The platform of analytical interest in this case is not any one app — it is the cybertip pipeline itself. Georgia processed roughly seven thousand cybertips in 2019 and a comparable volume through the first half of 2020. The platform context for Era III is that the volume of this upstream signal had grown faster than any single jurisdiction's capacity to act on it. Local ICAC task forces had to move from case-by-case enforcement to operation-scale enforcement to keep pace, and the unit of investigation became the cluster of tips resolving to a single county rather than the individual tip itself."
+          "body": "No single platform. The signals that drove this operation came through NCMEC's CyberTip line from a wide range of reporting electronic service providers under the federal mandatory-reporting requirement at 18 U.S.C. —2258A. The platform of analytical interest in this case is not any one app — it is the cybertip pipeline itself. Georgia processed roughly seven thousand cybertips in 2019 and a comparable volume through the first half of 2020. The platform context for Era III is that the volume of this upstream signal had grown faster than any single jurisdiction's capacity to act on it. Local ICAC task forces had to move from case-by-case enforcement to operation-scale enforcement to keep pace, and the unit of investigation became the cluster of tips resolving to a single county rather than the individual tip itself."
         },
         {
           "title": "Perpetrator methodology",
@@ -216,7 +252,7 @@
         },
         {
           "title": "Prosecutorial outcome",
-          "body": "Charges under O.C.G.A. §16-12-100, the Georgia Computer Pornography and Child Exploitation Prevention Act of 2007 — a statute that predates the platforms which generated most of the cybertips driving the operation. The GBI publicly stated that additional charges were anticipated as device forensics completed, and that one additional arrest occurred during the four-day window based on illegal narcotics discovered incidentally during a search. The disposition profile across the ten defendants is standard for Georgia ICAC casework and the cases proceed through Clayton County. The data point of this study is not the dispositions. It is the operation itself, and the GBI's public statement of its operating premise: roughly sixty children living with offenders viewing CSAM had already been identified statewide year-to-date in 2020, with at least twenty of them confirmed as victims of those offenders."
+          "body": "Charges under O.C.G.A. —16-12-100, the Georgia Computer Pornography and Child Exploitation Prevention Act of 2007 — a statute that predates the platforms which generated most of the cybertips driving the operation. The GBI publicly stated that additional charges were anticipated as device forensics completed, and that one additional arrest occurred during the four-day window based on illegal narcotics discovered incidentally during a search. The disposition profile across the ten defendants is standard for Georgia ICAC casework and the cases proceed through Clayton County. The data point of this study is not the dispositions. It is the operation itself, and the GBI's public statement of its operating premise: roughly sixty children living with offenders viewing CSAM had already been identified statewide year-to-date in 2020, with at least twenty of them confirmed as victims of those offenders."
         },
         {
           "title": "Relationship to the broader technological era",
@@ -260,13 +296,40 @@
       "google_form_url": null
     },
     {
-      "id": "ICAC-2021-XXXX",
+      "id": "ut_ag_2022_010",
       "era": "III",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
+      "status": "published",
+      "linked_case_id": "ut_ag_2022_010",
+      "title": "When Virtual Reality became the contact surface",
+      "subtitle": "A March 2022 interstate recovery in which Utah Roosevelt-area investigators, working with Utah ICAC, the FBI, NCMEC, county agencies, and Meta, used phone and communication-app telemetry to locate a thirteen-year-old in Cheyenne, Wyoming — inside a commercial semi-truck — within roughly an hour of identifying a suspect; the release ties about a month of prior contact to Oculus and frames the matter as an early national enforcement visibility case for consumer VR.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The platform context in the public narrative is not messaging alone — it is Meta's Oculus ecosystem described as the sustained contact channel across roughly one month before abduction. That distinguishes this record from the Vermont portfolio case anchored on Kik's closed-group architecture: here the analytical surface is immersive social VR, where voice and avatar-mediated interaction can occur alongside conventional smartphone telemetry that investigators cited for geolocation. Oculus as the described contact layer, plus phones and unspecified communication applications as the attribution substrate, form a two-layer platform story — VR as the grooming surface, conventional mobile telemetry as the investigative one."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The suspect was a twenty-five-year-old Florida-based commercial driver; the release describes an interstate kidnapping following initial contact online and recovery of the minor from the sleeper area of a white bobtail semi-truck the suspect was operating. The methodology visible at this abstraction level is contact-first, mobility-heavy exploitation — online grooming or acquaintance compressed into physical removal across state lines — rather than a possession-trader profile or a purely platform-contained offense. The record does not establish adjudicated facts beyond law enforcement's public statements at recovery; the presumption of innocence applies to any charges later filed. What matters analytically is the convergence pattern Era III keeps producing: geographically dispersed offenders using proliferating contact stacks, with physical transportation reintroducing jurisdictional complexity that single-county cybertip clearinghouses were not designed around."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "Roosevelt City Police led with assistance from the Utah Attorney General's Office, the Uintah County Sheriff's Office, the FBI, other partner agencies, and Meta — an explicit vendor cooperation line that matters because attribution and emergency disclosure workflows for VR-adjacent accounts sit partly outside traditional ICAC-to-ESP reporting templates familiar from traditional web mail. Utah ICAC, the Utah State Bureau of Investigation, NCMEC, and Uintah County personnel contributed suspect development; investigators reported narrowing an approximate location using cell phones and communication-app data. Wyoming's Cheyenne Police Department carried out the physical recovery after that convergence. The publicly claimed temporal compression — about one hour between suspect identification and locating the minor — is an operational signal of how seriously agencies treated real-time handset telemetry in a mobile, cross-border kidnapping, distinct from the multi-day Georgia county saturation operation elsewhere in this portfolio."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "The bundled press narrative ends at successful recovery and open investigation: kidnapping and harboring-a-runaway threads were described as under investigation, with no pleas, trials, or sentences in the excerpt and no disposition sourced from outside this corpus entry. The minor was reported in apparent good health at recovery — a child-protection outcome that matters independently of later charging decisions. For the reading room's normal preference for adjudicated posture, this study therefore emphasizes threshold enforcement mechanics — multi-agency coordination, corporate partnership language, telemetry-led geolocation, and VR named as the contact layer — rather than closed criminal justice outcomes. Anything beyond that belongs in an update keyed to court records, not to the recovery-based press copy."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era III's subtitle in this collection is platform proliferation — gaming ecosystems, short-form video, decentralized communities. Consumer VR social sits squarely in that list as as a contact surface that gave offenders spatial presence, avatar-mediated anonymity, and private room architecture — properties that flat messaging platforms do not have and that existing reporting infrastructure was not built to see into. Paired against the Vermont Kik study, Utah's Oculus-forward narrative marks a different enforcement learning curve: investigators publicly claiming early national experience with VR-contact exploitation while still relying on handset and app signals to finish the geo puzzle. Era IV's synthetic-media problem class will stack on top of this substrate rather than replace it. The analytical continuity is that contact surfaces keep diversifying faster than any single reporting pipeline can describe; ICAC portfolios in late Era III already had to tell stories where the headline platform was new even though the rescue mechanics looked familiar — coordinates, warrants, and agencies on radios."
+        }
+      ],
+      "takeaway": "Era III was not only more messaging apps. It was also new embodied social layers — here, VR named explicitly as the sustained contact channel, used to build a month of contact across an immersive environment where identity was unverifiable and private rooms kept the conversation out of shared physical space, and complemented at recovery time by the same phones and account trails investigators already knew how to chase across states. This record is useful because it compresses vendor cooperation, ICAC convention, and interstate transportation into one press-visible arc: the platform story is novel; the rescue architecture is recognizably ICAC, just mapped onto a headset brand designed for gaming, not grooming.",
+      "google_form_url": null
     },
     {
-      "id": "ICAC-2021-XXXY",
+      "id": "ICAC-2021-XXXX",
       "era": "III",
       "status": "coming_soon",
       "release_window": "Summer 2026"
@@ -278,16 +341,43 @@
       "release_window": "Summer 2026"
     },
     {
-      "id": "ICAC-2023-XXXX",
+      "id": "ICAC-2024-XXXX",
       "era": "IV",
       "status": "coming_soon",
       "release_window": "Summer 2026"
     },
     {
-      "id": "ICAC-2024-XXXX",
+      "id": "idaho_icac_2024_028",
       "era": "IV",
-      "status": "coming_soon",
-      "release_window": "Summer 2026"
+      "status": "published",
+      "linked_case_id": "idaho_icac_2024_028",
+      "title": "When the statute caught up to the image",
+      "subtitle": "A July 2024 Idaho ICAC arrest in Kootenai County charging possession alongside counts under a new statute — effective July 1, 2024 — criminalizing obscene visual representations of child sexual abuse, including AI-generated and animated material, framed publicly as Idaho's first prosecution under that law.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The technological context is not a single consumer application. What matters for Era IV is Idaho's expansion of criminal liability into obscene visual representations of child sexual abuse — explicitly including AI-generated and animated imagery alongside other non-photographic forms — once House Bill 465 took effect on July 1, 2024. That statutory move treats synthetic and cartoon-adjacent representation as its own prosecution lane inside state exploitation law. It sits parallel to conventional possession of sexually exploitative material but answers a different visibility problem: material that may never have passed through a camera pointed at a child can still circulate as exploitative content. The platform layer is intentionally thin -- the generative AI tool or possession surface is not the unit of analytical interest here. The statute is."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The public record at arrest is charging geometry, not behavioral narrative. Investigators booked a thirty-three-year-old defendant from the Coeur d'Alene area on seven counts of sexual exploitation of a child by possession of sexually exploitative material and three counts of possessing visual representations of the sexual abuse of children under the new provision. The methodology visible from that stack is possession at volume plus an explicit state theory that some subset of the material qualifies as prohibited visual representation under the July 2024 law — AI-generated, animated, or otherwise within the statute's ambit as described in the Attorney General's statement. There is no grooming arc or contact-surface detail in the release excerpt itself. The analytical signal is the deliberate pairing of classic possession counts with representation counts — a new Era IV charging habit that marks a legislative change as offenders gain access to generative AI tooling."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "The Idaho ICAC Task Force ran the arrest with a familiar federal-state-local bundle: Homeland Security, the Kootenai County Sheriff's Office, the Kootenai County Prosecutor's Office, and the Coeur d'Alene Police Department. The release names a lead investigator detailed full-time from a municipal department into the Attorney General's ICAC unit — the staffing pattern task forces use when cybertip and forensic workloads stop being side assignments. That operational detail matters analytically even though it rarely makes headlines. A complementary case is Idaho's other early-2024 synthetic-material headline: corpus record idaho_icac_2024_026 — an Idaho Falls-area arrest in May 2024 for obscene visual representation involving thousands of AI-generated child sexual abuse imagery at large scale. Because Idaho's new statute was not yet effective on May 1, that matter went to the U.S. Attorney's Office for the District of Idaho for federal prosecution while the Attorney General publicly framed it as proof of the legislative gap the July law would close. This case study is the mirror image — same policy conversation months later, once the state criminal framework itself could absorb the charge."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "At the July 2024 press snapshot the case is arrest and charging only; the presumption of innocence applies. The Attorney General characterized this prosecution as the first under Idaho's new targeting of AI-generated, animated, and other obscene visual representations — a distinct contrast to conventional CSAM enforcement, where the harm framework is anchored in the documented abuse of a real child and the possession charge is understood as perpetuating that child's victimization. Synthetic and animated material presents a different prosecutorial theory: the image may depict no identifiable victim, but the state legislature has determined that its creation, possession, and circulation are themselves harmful enough to criminalize. That theory now has a charging vehicle in Idaho. Against that backdrop, idaho_icac_2024_026 illustrates the interim prosecutorial path — federal carriage of substantially similar conduct when state statutory windows had not yet opened. Together they describe a short transition interval in mid-2024 Idaho enforcement rather than a single isolated filing."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "Era IV federal casework — including the hybrid AI-and-known-child indictment discussed elsewhere in this portfolio — shows how the Department of Justice is articulating generative and augmented production at scale. State ICAC releases like idaho_icac_2024_026 show the parallel track: legislatures rewriting exploitation statutes so possession charges can explicitly reach synthetic and animated representations without pretending they are conventional photographs. The Idaho pair makes the boundary visible. When federal prosecutors carry the case because state law has not yet activated, the bottleneck is statutory timing. When state prosecutors layer representation counts on top of possession counts the month the statute goes live, the bottleneck shifts to forensic sorting and jury-ready explanation of what synthetic evidence is. Era IV is not only new federal theories of liability. It is also fifty-state statutory experimentation — and Idaho's mid-2024 sequence is one of the cleaner public illustrations of how federal and state lanes overlap while that experimentation lands."
+        }
+      ],
+      "takeaway": "A statute that took effect on July 1 and produced an arrest by July 10 is not an accident. It is a signal that investigators were ready. The Idaho case is not a landmark on the scale of a federal multi-district indictment, but it is analytically important for a different reason: it shows state-level enforcement moving in real time to close a gap the federal framework left open. AI-generated and animated CSAM are being charged alongside conventional possession, in the same filing, against the same defendant. The legal architecture of Era IV is still being built — and this arrest is among the first visible examples at the state level.",
+      "google_form_url": null
     },
     {
       "id": "doj_ceos_2025_025",
@@ -354,6 +444,12 @@
       ],
       "takeaway": "Era IV's organized-network cases are not larger versions of single-offender production. They are structurally different — the network provides offenders community, the platform is the persistent infrastructure, and the investigative timeline runs in years. Greggy's Cult is one of the cleanest examples of federal indictments to charge an online exploitation network as a single enterprise. Federal prosecutors are now charging these groups as networks — not as a handful of individual cases stitched together.",
       "google_form_url": null
+    },
+    {
+      "id": "ICAC-2025-XXXX",
+      "era": "IV",
+      "status": "coming_soon",
+      "release_window": "Summer 2026"
     },
     {
       "id": "ICAC-2026-XXXX",

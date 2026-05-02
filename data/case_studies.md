@@ -1,6 +1,6 @@
-# CaseLinker — draft pool for four new case studies (R1 / handoff)
+# CaseLinker — draft pool for additional case studies (R1 / handoff)
 
-**Purpose:** Triage four corpus IDs (`azicac_2011_009`, `ohio_ag_2017_002`, `nj_ag_2022_016`, `idaho_icac_2024_028`) against the **six case studies already authored** in `data/case_studies.json`, using the same **five analytical dimensions** the reading room uses.
+**Purpose:** Triage corpus IDs against the **case studies already authored** in `data/case_studies.json`, using the same **five analytical dimensions** the reading room uses. **Earlier batch:** `azicac_2011_009`, `ohio_ag_2017_002`, `nj_ag_2022_016`, `idaho_icac_2024_028`. **Added here:** `illinois_ag_2016_001` (Era II), `ut_ag_2022_010` (Era III).
 
 ---
 
@@ -151,6 +151,107 @@ ICACIdaho.org.
 
 ---
 
+## `illinois_ag_2016_001` (corpus: Illinois AG, April 2016) — Operation Glass House, dissemination + possession stack, infant-focused initiative frame
+
+**Era (facet year):** II (2015–2018).  
+**DB:** `case_topics` `["possession", "csam"]`; `severity_indicators` `["sexual_abuse", "infant"]`; `platforms_used` `["online"]` (generic—release emphasizes **download/trade online**, not a named consumer app).
+
+### 1) Case narrative as presented (corpus `case_text`)
+
+```
+April 15, 2016
+MADIGAN: KANE COUNTY MAN CHARGED WITH CHILD PORNOGRAPHY POSSESSION
+
+Chicago — Attorney General Lisa Madigan today announced that a Kane County man was charged with disseminating child
+pornography as part of “Operation Glass House,” a statewide initiative to apprehend the most active offenders
+who download and trade child pornography online. Omar Rojas-Martinez, 27, of Aurora, was charged in Kane County Circuit Court with three
+counts of dissemination of child pornography, Class X felonies punishable by 6 to 30 years in the Illinois
+Department of Corrections (IDOC), and 10 counts of possession of child pornography, Class 2 felonies
+punishable by three to seven years in prison. Rojas-Martinez is being held in Kane County Jail pending a bond
+hearing.
+
+“When an offender downloads or trades these horrific images, it perpetuates the sexual assault of
+children and causes further devastation to victims,” Madigan said. “We will continue to apprehend these
+offenders.”
+
+Madigan’s investigators, with the assistance of the U.S. Department of Homeland Security-Homeland Security Investigations,
+the Aurora Police Department and the Kane County State’s Attorney’s Office, conducted a search of a residence in the
+300 block of Broadway Avenue in Aurora Friday and arrested Rojas-Martinez after evidence of alleged child pornography
+was discovered. Kane County State’s Attorney Joseph McMahon’s office will prosecute the case.
+
+The public is reminded that the defendant is presumed innocent until proven guilty in a court of law.
+
+This is the 79th arrest since Madigan launched “Operation Glass House” in August 2010 to investigate the most active
+child pornography traders in Illinois. In 2010, the first year of the initiative, Madigan’s investigations revealed a
+disturbing trend of offenders trading extremely violent videos of young children being raped. As a result,
+Madigan’s office has focused on apprehending offenders who are seen trading and watching extremely violent videos
+involving children, including infants and toddlers.
+
+Madigan’s office, with a grant from the U.S. Department of Justice, runs the Illinois Internet Crimes Against Children
+(ICAC) Task Force, which investigates child exploitation crimes and trains law enforcement agencies.
+```
+
+### 2) Summary of what happened (assistant)
+
+**Statewide initiative arrest:** Illinois AG frames charges under **Operation Glass House** (since **2010**, **79th** arrest in corpus text)—**3 × dissemination** (Class **X**) + **10 × possession** (Class **2**) against a **27-year-old** Aurora defendant; **Friday** search of a **Broadway Ave** residence with **HSI**, **Aurora PD**, **Kane County SA**; **jail / bond hearing** stage only. Release explicitly ties initiative priorities to **violent** material involving **very young children, including infants and toddlers**—explains **`infant` / `sexual_abuse`** severity tags without hands-on allegations in excerpt.
+
+### 3) Five-dimension skim (draft)
+
+1. **Platform context** — **Trade/download online** as the operational story; **`online`** tag only—no named forum, messenger, or P2P brand in excerpt (contrast **`lapd_2017_001`**).
+2. **Perpetrator methodology** — **Possession + dissemination** charging stack; AG rhetoric links trading to **continued harm** to victims; **no** victim-contact narrative in excerpt.
+3. **Investigative approach** — **Illinois ICAC** (DOJ grant) + **HSI** + local PD + county prosecutor—standard **federal–state–local** bundle with **residential search**.
+4. **Prosecutorial outcome** — **Charging + custody** only; statutory ranges quoted; **presumption of innocence** boilerplate—disposition **off-corpus** for a finished study.
+5. **Broader era** — **Era II institutional** mirror: named **multi-year state operation** with **explicit infant/toddler** prioritization language—substantively thicker than a one-paragraph warrant blotter; pairs with **`ohio_ag_2017_002`** (non-app Era II) as **AG-led initiative + charge geometry** teaching material.
+
+**Pursuit note:** Solid **Era II institutional** depth—**named operation**, **charge mix**, **infant/toddler prioritization** rhetoric; still **thin on technical stack** and **final outcome**. **Dignity:** excerpt names defendant—omit or neutralize in any **published** reading-room JSON per site gate.
+
+---
+
+## `ut_ag_2022_010` (corpus: Utah AG / Roosevelt PD composite, March 2022) — Oculus contact surface, interstate recovery, VR parenting advisory
+
+**Era (facet year):** III (2019–2022).  
+**DB:** `case_topics` `["online_only", "multi_state"]`; `platforms_used` `["Kik", "Snapchat", "TikTok", "WhatsApp", "chat", "online", "social media"]` (**many entries come from the embedded “popular apps” appendix**, not only the core offense narrative—treat DB tags as **noisy** for this row).
+
+### 1) Case narrative as presented (corpus `case_text`)
+
+```
+Roosevelt 13 Year Old Returned Home After ICAC Investigation
+
+Source: — The Roosevelt Police Department led an investigation assisted by the Utah Attorney General’s Office,
+Uintah County Sheriff’s Office, the FBI, and other law enforcement and in conjunction with tech company Meta,
+in arresting 25-year-old Chris Evans, a Florida trucker who had kidnapped 13-year-old Rylie Secrest after meeting her online.
+
+MISSING CHILD HAS BEEN LOCATED RYLIE SECREST was located at 3:39 p.m. on March 10, 2022, in Cheyenne,
+Wyoming. Rylie was found by the Cheyenne City Police Department in the back of a white bobtail semi-truck being
+driven by Chris Evans, 25 of Florida. Roosevelt City Police Officers, in cooperation with the Utah Internet Crimes
+Against Children Task Force (ICAC), the Federal Bureau of Investigations (FBI), Utah State Bureau of Investigations,
+National Center for Missing and Exploited Children, and the Uintah County Sheriff’s Department obtained suspect
+information and also determined an approximate location of Evans using data from cell phones and communication apps.
+Investigators have determined Rylie communicated with Evans using Oculus, a Meta program, for approximately one month.
+This is one of the first instances of a case involving Oculus in the nation. Rylie was located by Cheyanne police within
+one hour of identifying Evans as a suspect. Rylie appears to be in good health. An investigation regarding kidnapping
+and harboring runaway charges against Evans is underway.
+
+Precautions for Parents and Teens [lengthy public-education appendix on gaming, VR chat rooms, and a catalog of
+consumer apps — MeetMe, WhatsApp, TikTok, Snapchat, Kik, etc. — continues in full corpus text]
+```
+
+### 2) Summary of what happened (assistant)
+
+**Interstate missing-child resolution:** Utah/Roosevelt-led stack (+ ICAC, FBI, NCMEC, Uintah SO, **Meta**) identifies a **Florida** suspect; **cell/app data** narrows location; **Wyoming** police recover the **13-year-old** from a **semi-truck** within **~1 hour** of suspect ID. Release highlights **~1 month** of contact via **Oculus (Meta)** and claims **early national visibility** for **VR** in this enforcement genre. **Charges described as under investigation** in excerpt—**not** a closed adjudication snapshot.
+
+### 3) Five-dimension skim (draft)
+
+1. **Platform context** — **VR / Oculus** as alleged **contact and grooming surface**—distinct from flat mobile messaging cases; DB **`platforms_used`** is **polluted** by appended **parent-warning app list** → author should **anchor** on Oculus + LE narrative, not every extracted token.
+2. **Perpetrator methodology** — **Cross-country trucker** + **online-first** meeting → **physical removal** / transport idiom; press emphasizes **speed** of geo-acuity once suspect locked.
+3. **Investigative approach** — **Multi-agency + vendor (Meta)** cooperation; **phone/app telemetry** and **ICAC** coordination across **UT → WY** (and FL resident suspect)—textbook **Era III proliferation** story (many actors, many tools).
+4. **Prosecutorial outcome** — **Open investigation** language for **kidnapping / harboring runaway**; **no** sentence—good **recovery** outcome for victim **health**, **legal outcome TBD** for study completeness.
+5. **Broader era** — Positions **gaming / VR social** as an emerging **ICAC-visible** layer in **2022**—bridges **Era III platform sprawl** toward **metaverse-adjacent** risk discourse without jumping to **Era IV synthetic CSAM** framing.
+
+**Pursuit note:** **High distinctiveness** on **Oculus** thread; **watch** **dignity** (minor named in release—CaseLinker published studies omit offender names; align minor naming with your ethics gate); **truncate** or **footnote** the **generic app glossary** when authoring JSON.
+
+---
+
 ## Quick comparison: worth pursuing on top of the six?
 
 | ID | Additive vs six? | Friction |
@@ -159,5 +260,7 @@ ICACIdaho.org.
 | `ohio_ag_2017_002` | **Yes** — only **non-app** Era II institutional story in this batch. | “Where’s the internet?” must be **argued**; **sentence** follow-up. |
 | `nj_ag_2022_016` | **Maybe** — **trafficking + Craigslist** broadens Era III. | **ICAC** is peripheral; **indictment** stage; id/date **messy** vs 2022. |
 | `idaho_icac_2024_028` | **Yes** for **state AI statute** “first” story; complements **federal** AI study. | **Pre-disposition**; “first” claim = **sourced to AG** only. |
+| `illinois_ag_2016_001` | **Yes** — **Operation Glass House** + **ICAC/HSI** stack; **dissemination vs possession** charge mix; infant-priority **policy** frame. | **Generic** `online`; defendant **named** in source; **pre-disposition** only. |
+| `ut_ag_2022_010` | **Maybe → Yes** if **Oculus / VR** angle is the spine—**rare** in corpus. | **Noisy** DB platforms from **appendix**; minor **named** in source; **open** investigation language. |
 
-**Suggested handoff string for your Claude pass:** *“Given the six published CaseLinker studies (see table above) and the five-dimension frame, which of the four candidate IDs are worth full JSON authoring, and for each what is the one-sentence **takeaway** and the biggest **factual or dignity** risk?”*
+**Suggested handoff string for your Claude pass:** *“Given the six published CaseLinker studies (see table above) and the five-dimension frame, which of the six candidate IDs are worth full JSON authoring, and for each what is the one-sentence **takeaway** and the biggest **factual or dignity** risk?”*
