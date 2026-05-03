@@ -15,6 +15,7 @@ import os
 import re
 import logging
 import time
+import requests
 from datetime import datetime
 from pathlib import Path
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -26,8 +27,18 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Anal
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
+# Load .env from repo root and run/ (optional) so GROQ_API_KEY, GEMINI_API_KEY, DATABASE_URL, etc. work locally without export.
+try:
+    from dotenv import load_dotenv
+
+    _run_dir = Path(__file__).resolve().parent
+    _repo_root = _run_dir.parent
+    load_dotenv(_repo_root / ".env", override=False)
+    load_dotenv(_run_dir / ".env", override=False)
+except ImportError:
+    pass
+
 # Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
-import os
 if os.getenv("DATABASE_URL"):
     try:
         from storage_postgres import CaseStorage
@@ -259,6 +270,14 @@ class CaseIdsBody(BaseModel):
     ids: List[str] = Field(..., min_length=1)
 
 
+class LlmChatBody(BaseModel):
+    """Public LLM assistant: natural language plus optional read-only SQL on ``cases``."""
+
+    question: str = Field(..., min_length=1, max_length=12000)
+    model: Optional[str] = Field(None, max_length=128)
+    provider: Optional[str] = Field(None, max_length=32)
+
+
 # Request logging middleware
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -298,6 +317,498 @@ else:
         db_path = Path(DATABASE_PATH)
     
     storage = CaseStorage(str(db_path))
+
+# --- NL LLM (Groq + read-only ``cases`` SELECT) --------------------------------
+
+_GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions"
+_GEMINI_CHAT_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+_NL_DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
+_NL_DEFAULT_GEMINI_MODEL = "gemini-2.0-flash"
+_NL_MAX_SQL_LEN = 4000
+_NL_MAX_TOOL_ROUNDS = 8
+_NL_MAX_ROWS_TO_MODEL = 12
+_NL_MAX_CELL_CHARS = 220
+_NL_MAX_TOOL_JSON_CHARS = 9000
+_NL_FORBIDDEN_SQL_SNIPPETS = ("--", "/*", "*/")
+_NL_FORBIDDEN_KEYWORDS = (
+    "insert ",
+    "update ",
+    "delete ",
+    "drop ",
+    "alter ",
+    "create ",
+    "truncate ",
+    "attach ",
+    "detach ",
+    "pragma ",
+    "vacuum ",
+    "replace ",
+    "grant ",
+    "revoke ",
+    "copy ",
+    "call ",
+    "execute ",
+    "merge ",
+    "upsert ",
+    "into outfile",
+    "load_file",
+    "xp_cmdshell",
+    "pg_sleep",
+    "benchmark(",
+    "waitfor delay",
+)
+_NL_FORBIDDEN_IDENTIFIERS = (
+    "sqlite_master",
+    "sqlite_temp",
+    "sqlite_schema",
+    "information_schema",
+    "pg_catalog",
+    "pg_roles",
+    "pg_user",
+    "pg_shadow",
+    "pg_authid",
+    "pg_stat_activity",
+    "victim_demographics",
+    "perpetrator_demographics",
+    "prosecution_outcomes",
+    "precomputed_clusters",
+    "cluster_groups_slim",
+    "technology_revolver_slim",
+    "dblink",
+    "lo_import",
+    "lo_export",
+)
+
+
+def _nl_pick_groq_model(provider: Optional[str], override: Optional[str]) -> str:
+    o = (override or "").strip()
+    if o and re.match(r"^[\w.\-]{1,128}$", o):
+        return o
+    _ = provider
+    return _NL_DEFAULT_GROQ_MODEL
+
+
+def _nl_reload_dotenv_for_llm() -> None:
+    """Re-read ``.env`` so keys added without restarting the server are visible (override=False)."""
+    try:
+        from dotenv import load_dotenv
+
+        run_dir = Path(__file__).resolve().parent
+        root = run_dir.parent
+        for p in (root / ".env", run_dir / ".env"):
+            if p.is_file():
+                load_dotenv(p, override=False)
+    except ImportError:
+        pass
+
+
+def _nl_strip_api_key_value(v: str) -> str:
+    s = (v or "").strip().strip("\ufeff")
+    if len(s) >= 2 and s[0] == s[-1] and s[0] in "\"'":
+        s = s[1:-1].strip()
+    return s
+
+
+def _nl_gemini_dotenv_merged() -> Dict[str, Any]:
+    """Read ``.env`` files directly so values are found even when ``os.environ`` has an empty placeholder."""
+    try:
+        from dotenv import dotenv_values
+    except ImportError:
+        return {}
+    run_dir = Path(__file__).resolve().parent
+    root = run_dir.parent
+    merged: Dict[str, Any] = {}
+    for p in (root / ".env", run_dir / ".env"):
+        if not p.is_file():
+            continue
+        d = dotenv_values(str(p))
+        if not isinstance(d, dict):
+            continue
+        for kk, vv in d.items():
+            if kk is None:
+                continue
+            key = str(kk).strip().lstrip("\ufeff")
+            if vv is None:
+                continue
+            s = str(vv).strip()
+            if s:
+                merged[key] = vv
+    return merged
+
+
+def _nl_resolve_gemini_api_key() -> str:
+    """Resolve Gemini / Google AI Studio key from env and from ``.env`` files (file wins over empty env)."""
+    _nl_reload_dotenv_for_llm()
+    names = (
+        "GEMINI_API_KEY",
+        "CASELINKER_GEMINI_API_KEY",
+        "GOOGLE_GENERATIVE_AI_API_KEY",
+        "gemini_api_key",
+        "GEMINI_KEY",
+        "GOOGLE_API_KEY",
+    )
+    file_vals = _nl_gemini_dotenv_merged()
+    for k in names:
+        v = _nl_strip_api_key_value(os.getenv(k, ""))
+        if not v:
+            v = _nl_strip_api_key_value(str(file_vals.get(k) or ""))
+        if v and not (v.startswith("${") and v.endswith("}")):
+            return v
+    return ""
+
+
+def _nl_pick_gemini_model(override: Optional[str]) -> str:
+    o = (override or "").strip()
+    if o and o.lower().startswith("gemini") and re.match(r"^[\w.\-]{1,128}$", o):
+        # Incomplete placeholders (e.g. "gemini", "gemini-") are not valid model ids on Google.
+        if re.fullmatch(r"(?i)gemini-?", o):
+            pass
+        else:
+            return o
+    env_m = (os.getenv("CASELINKER_GEMINI_MODEL") or os.getenv("GEMINI_MODEL") or "").strip()
+    if env_m and re.match(r"^[\w.\-]{1,128}$", env_m):
+        return env_m
+    return _NL_DEFAULT_GEMINI_MODEL
+
+
+def _nl_validate_select_sql(sql: str) -> str:
+    s = (sql or "").strip()
+    if not s:
+        raise ValueError("Empty SQL")
+    if len(s) > _NL_MAX_SQL_LEN:
+        raise ValueError("SQL exceeds maximum length")
+    for bad in _NL_FORBIDDEN_SQL_SNIPPETS:
+        if bad in s:
+            raise ValueError("SQL comments are not allowed")
+    core = s.rstrip().rstrip(";")
+    if ";" in core:
+        raise ValueError("Multiple SQL statements are not allowed")
+    s = core
+    if not re.match(r"(?is)^\s*select\s+", s):
+        raise ValueError("Only a single SELECT statement is allowed")
+    low = s.lower()
+    for kw in _NL_FORBIDDEN_KEYWORDS:
+        if kw in low:
+            raise ValueError(f"Disallowed SQL keyword or construct: {kw.strip()!r}")
+    for ident in _NL_FORBIDDEN_IDENTIFIERS:
+        if re.search(rf"(?i)\b{re.escape(ident)}\b", s):
+            raise ValueError(f"Disallowed identifier: {ident}")
+    if not re.search(r"(?is)\bfrom\s+cases\b", s):
+        raise ValueError("Query must read from the cases table (FROM cases)")
+    if re.search(r"(?is)\binto\s+", s):
+        raise ValueError("SELECT INTO is not allowed")
+    return _nl_ensure_outer_limit(s, cap=100)
+
+
+def _nl_ensure_outer_limit(sql: str, cap: int) -> str:
+    t = sql.strip().rstrip(";")
+    m = re.search(r"\blimit\s+(\d+)\s*$", t, flags=re.I)
+    if m:
+        n = int(m.group(1))
+        if n > cap:
+            t = re.sub(r"\blimit\s+\d+\s*$", f" LIMIT {cap}", t, count=1, flags=re.I)
+        return t
+    return t + f" LIMIT {cap}"
+
+
+def _nl_sanitize_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for r in rows[:_NL_MAX_ROWS_TO_MODEL]:
+        d: Dict[str, Any] = {}
+        for k, v in r.items():
+            if k == "raw_data":
+                d[k] = "[omitted]"
+                continue
+            if isinstance(v, str) and len(v) > _NL_MAX_CELL_CHARS:
+                v = v[:_NL_MAX_CELL_CHARS] + "..."
+            d[k] = v
+        out.append(d)
+    return out
+
+
+def _nl_json_tool_content(tool_payload: Dict[str, Any]) -> str:
+    """Keep tool messages under Groq TPM limits (on-demand tier is tight)."""
+    s = json.dumps(tool_payload, default=str)
+    if len(s) <= _NL_MAX_TOOL_JSON_CHARS:
+        return s
+    rows = tool_payload.get("rows")
+    if isinstance(rows, list) and rows:
+        n = len(rows)
+        for keep in (8, 5, 3, 1):
+            slim = {
+                **{k: v for k, v in tool_payload.items() if k != "rows"},
+                "rows": rows[:keep],
+                "_truncated": True,
+                "_note": f"Showing {keep} of {n} rows to fit token limits; use COUNT or narrower SELECT.",
+            }
+            s = json.dumps(slim, default=str)
+            if len(s) <= _NL_MAX_TOOL_JSON_CHARS:
+                return s
+    return json.dumps(
+        {
+            "error": "Tool result too large for the model context; use COUNT(*), fewer columns, or a narrower WHERE.",
+            "_truncated": True,
+        },
+        default=str,
+    )
+
+
+def _nl_execute_cases_select(sql: str, *, use_postgres: bool, sqlite_path: str) -> List[Dict[str, Any]]:
+    validated = _nl_validate_select_sql(sql)
+    if use_postgres:
+        from psycopg2.extras import RealDictCursor
+
+        from storage_postgres import get_connection, return_connection
+
+        conn = get_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        try:
+            cur.execute(validated)
+            rows = cur.fetchall() or []
+            return [dict(x) for x in rows]
+        finally:
+            try:
+                cur.close()
+            finally:
+                return_connection(conn)
+
+    import sqlite3
+
+    path = Path(sqlite_path).resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"SQLite database not found: {path}")
+    conn = sqlite3.connect(str(path), timeout=15.0)
+    conn.row_factory = sqlite3.Row
+    try:
+        cur = conn.execute(validated)
+        rows = cur.fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+def _nl_tool_schema() -> List[Dict[str, Any]]:
+    return [
+        {
+            "type": "function",
+            "function": {
+                "name": "query_cases_database",
+                "description": (
+                    "One read-only SELECT on `cases` for counts/filters/aggregates. "
+                    "Never guess counts. JSON-ish columns are TEXT: use LIKE/ILIKE."
+                ),
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "sql": {
+                            "type": "string",
+                            "description": "Single SELECT, FROM cases only.",
+                        }
+                    },
+                    "required": ["sql"],
+                },
+            },
+        }
+    ]
+
+
+def _nl_system_prompt(dialect_label: str) -> str:
+    return f"""CaseLinker assistant (journalists, law enforcement, researchers). Database: {dialect_label}.
+
+Answer directly in plain language; avoid repetitive disclaimers unless the user asks for legal advice.
+For any count, filter, or aggregate from stored cases, call query_cases_database once with a single SELECT on table cases only. Never invent numbers.
+
+Table cases (TEXT unless noted): id, source, source_url, date_start, date_end, victim_count (int), perpetrator_count (int), relationship_to_victim, platforms_used, severity_indicators, case_topics, tags, notes, raw_data, extracted_features. JSON arrays live as text—use LIKE or ILIKE (Postgres). Prefer COUNT(*) or narrow columns; avoid SELECT *; raw narrative is omitted from tool results.
+
+Tool SQL: one SELECT, must include FROM cases; no comments or multi-statement; server adds LIMIT 100.
+
+After tool results, summarize briefly. If SQL fails, suggest a simpler query."""
+
+
+def _nl_openai_compatible_chat(
+    *,
+    chat_url: str,
+    api_key: str,
+    model: str,
+    messages: List[Dict[str, Any]],
+    tools: Optional[List[Dict[str, Any]]],
+    timeout: float,
+    log_label: str,
+) -> Dict[str, Any]:
+    payload: Dict[str, Any] = {
+        "model": model,
+        "messages": messages,
+        "temperature": 0.2,
+        "max_tokens": 2048,
+    }
+    if tools:
+        payload["tools"] = tools
+        payload["tool_choice"] = "auto"
+    r = requests.post(
+        chat_url,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        json=payload,
+        timeout=timeout,
+    )
+    if not r.ok:
+        logger.warning("%s HTTP %s: %s", log_label, r.status_code, r.text[:500])
+    r.raise_for_status()
+    return r.json()
+
+
+def _nl_message_from_response(data: Dict[str, Any]) -> Dict[str, Any]:
+    choices = data.get("choices") or []
+    if not choices:
+        raise RuntimeError("LLM returned no choices")
+    return choices[0].get("message") or {}
+
+
+def nl_llm(
+    question: str,
+    *,
+    provider: Optional[str],
+    model_override: Optional[str],
+    api_key: str,
+    timeout_per_request: float = 90.0,
+) -> Dict[str, Any]:
+    """
+    Chat with function-calling (validated read-only SELECT on ``cases`` only).
+
+    **Groq** (default): leave the model field empty or set a Groq model id.
+
+    **Gemini**: set the model field to a string starting with ``gemini`` (e.g. ``gemini-`` or
+    ``gemini-2.5-flash`` for a specific id). Requires ``GEMINI_API_KEY`` / ``gemini_api_key`` /
+    ``GOOGLE_API_KEY`` on the server. No automatic fallback between providers.
+    """
+    use_pg = bool(os.getenv("DATABASE_URL"))
+    dialect_label = "postgresql" if use_pg else "sqlite"
+    mo = (model_override or "").strip()
+    use_gemini = bool(mo and mo.lower().startswith("gemini"))
+
+    if use_gemini:
+        gemini_key = _nl_resolve_gemini_api_key()
+        if not gemini_key:
+            raise RuntimeError(
+                "Gemini is selected (model field starts with gemini) but no Gemini API key was found. "
+                "Set one of: GEMINI_API_KEY, CASELINKER_GEMINI_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY, "
+                "gemini_api_key, GEMINI_KEY, or GOOGLE_API_KEY in the project root `.env` "
+                "(same directory as `run/`) or in the process environment, then try again. "
+                "If you just edited `.env`, restart the server if the key still is not picked up."
+            )
+        gemini_model = _nl_pick_gemini_model(model_override)
+        groq_model = _NL_DEFAULT_GROQ_MODEL
+    else:
+        gemini_key = ""
+        gemini_model = _NL_DEFAULT_GEMINI_MODEL
+        groq_model = _nl_pick_groq_model(provider, model_override)
+
+    def _sql_executor(sql: str) -> List[Dict[str, Any]]:
+        sp = str(db_path) if db_path is not None else ""
+        return _nl_execute_cases_select(sql, use_postgres=use_pg, sqlite_path=sp)
+
+    def _invoke_llm(msgs: List[Dict[str, Any]], tls: Optional[List[Dict[str, Any]]]) -> Dict[str, Any]:
+        if use_gemini:
+            return _nl_openai_compatible_chat(
+                chat_url=_GEMINI_CHAT_URL,
+                api_key=gemini_key,
+                model=gemini_model,
+                messages=msgs,
+                tools=tls,
+                timeout=timeout_per_request,
+                log_label="Gemini",
+            )
+        return _nl_openai_compatible_chat(
+            chat_url=_GROQ_CHAT_URL,
+            api_key=api_key,
+            model=groq_model,
+            messages=msgs,
+            tools=tls,
+            timeout=timeout_per_request,
+            log_label="Groq",
+        )
+
+    messages: List[Dict[str, Any]] = [
+        {"role": "system", "content": _nl_system_prompt(dialect_label)},
+        {"role": "user", "content": question},
+    ]
+    tools = _nl_tool_schema()
+    tool_rounds = 0
+    active_model = gemini_model if use_gemini else groq_model
+
+    for _ in range(_NL_MAX_TOOL_ROUNDS):
+        data = _invoke_llm(messages, tools)
+        active_model = gemini_model if use_gemini else groq_model
+        msg = _nl_message_from_response(data)
+        tool_calls = msg.get("tool_calls") or []
+
+        if not tool_calls:
+            content = msg.get("content")
+            if isinstance(content, str) and content.strip():
+                return {
+                    "answer": content.strip(),
+                    "model": active_model,
+                    "dialect": dialect_label,
+                    "tool_rounds": tool_rounds,
+                }
+            return {
+                "answer": "(No text reply from the model. Try rephrasing your question.)",
+                "model": active_model,
+                "dialect": dialect_label,
+                "tool_rounds": tool_rounds,
+            }
+
+        messages.append(
+            {
+                "role": "assistant",
+                "content": msg.get("content"),
+                "tool_calls": tool_calls,
+            }
+        )
+
+        for tc in tool_calls:
+            tool_rounds += 1
+            tid = tc.get("id") or "call_unknown"
+            fn = (tc.get("function") or {}).get("name")
+            raw_args = (tc.get("function") or {}).get("arguments") or "{}"
+            try:
+                args = json.loads(raw_args) if isinstance(raw_args, str) else {}
+            except json.JSONDecodeError:
+                args = {}
+            if fn != "query_cases_database":
+                tool_payload: Dict[str, Any] = {"error": f"Unknown tool {fn!r}"}
+            else:
+                sql = args.get("sql") if isinstance(args, dict) else None
+                if not isinstance(sql, str) or not sql.strip():
+                    tool_payload = {"error": "Missing sql string in tool arguments"}
+                else:
+                    try:
+                        rows = _sql_executor(sql.strip())
+                        tool_payload = {
+                            "row_count": len(rows),
+                            "rows": _nl_sanitize_rows(rows),
+                        }
+                    except Exception as ex:  # noqa: BLE001
+                        logger.info("LLM SQL tool error: %s", ex)
+                        tool_payload = {"error": str(ex)}
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tid,
+                    "name": "query_cases_database",
+                    "content": _nl_json_tool_content(tool_payload),
+                }
+            )
+
+    return {
+        "answer": "Stopped after too many tool rounds - please ask a simpler question.",
+        "model": active_model,
+        "dialect": dialect_label,
+        "tool_rounds": tool_rounds,
+    }
+
 
 # Facet tree API: rebuilt when case count changes (not persisted to disk)
 _facet_tree_cache_payload: Optional[Dict[str, Any]] = None
@@ -2388,6 +2899,52 @@ async def serve_query():
     if html_path.exists():
         return HTMLResponse(content=read_utf8_text_file(html_path))
     return HTMLResponse(content="<h1>Query page not found</h1>", status_code=404)
+
+
+@app.get("/llm", response_class=HTMLResponse)
+async def serve_llm():
+    """LLM assistant UI (Groq or Gemini + read-only DB via ``nl_llm`` / ``POST /api/llm/chat``)."""
+    html_path = Path(__file__).parent.parent / "visualization" / "LLM.html"
+    if html_path.exists():
+        return HTMLResponse(content=read_utf8_text_file(html_path))
+    return HTMLResponse(content="<h1>LLM page not found</h1>", status_code=404)
+
+
+@app.post("/api/llm/chat")
+@limiter.limit("15/minute")
+def api_llm_chat(request: Request, body: LlmChatBody):
+    """
+    Public natural-language assistant (Groq by default, or Gemini when the model field starts with ``gemini``); may run validated SELECT on ``cases`` only.
+    Requires ``GROQ_API_KEY`` for the default (Groq) path. If the model field starts with ``gemini``, only a Gemini API key is required (Groq key optional).
+    Disable with ``CASLINKER_DISABLE_LLM_CHAT=1``.
+    """
+    off = os.getenv("CASLINKER_DISABLE_LLM_CHAT", "").strip().lower()
+    if off in ("1", "true", "yes", "on"):
+        raise HTTPException(status_code=403, detail="LLM chat is disabled by the operator.")
+    mo = (body.model or "").strip()
+    use_gemini_route = mo.lower().startswith("gemini")
+    key = os.getenv("GROQ_API_KEY", "").strip()
+    if not use_gemini_route and not key:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM chat is not configured (set GROQ_API_KEY on the server).",
+        )
+    try:
+        return nl_llm(
+            body.question.strip(),
+            provider=body.provider,
+            model_override=body.model,
+            api_key=key or "unset",
+        )
+    except requests.HTTPError as e:
+        detail = str(e)
+        if e.response is not None and e.response.text:
+            detail = e.response.text[:800]
+        raise HTTPException(status_code=502, detail=f"LLM upstream error: {detail}") from e
+    except requests.RequestException as e:
+        raise HTTPException(status_code=502, detail=f"Upstream request failed: {e}") from e
+    except RuntimeError as e:
+        raise HTTPException(status_code=502, detail=str(e)) from e
 
 
 @app.get("/expand", response_class=HTMLResponse)

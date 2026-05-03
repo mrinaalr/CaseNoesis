@@ -27,6 +27,7 @@ fastapi>=0.100.0
 uvicorn>=0.23.0
 redis>=5.0.0
 slowapi>=0.1.9  # Rate limiting
+python-dotenv>=1.0.0  # Load .env for local dev (GROQ_API_KEY, DATABASE_URL, etc.)
 python-json-logger>=2.0.7  # Structured logging
 orjson>=3.9.0  # Fast JSON parsing for Redis cache (optional, falls back to json if not available)
 

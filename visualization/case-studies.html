@@ -48,12 +48,11 @@
         /* Nav (matches the rest of CaseLinker) */
         .nav {
             background: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 15px 0 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            font-family: var(--sans);
-            flex-wrap: wrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .nav a {
             color: #4CAF50;
@@ -75,6 +74,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
             margin-left: auto;
             font-weight: 600;
         }
@@ -238,26 +238,38 @@
         .gate-form {
             margin-top: 4px;
             display: flex;
-            gap: 10px;
+            gap: 12px 14px;
             flex-wrap: wrap;
-            align-items: center;
+            align-items: flex-start;
         }
-        .gate-form input {
+        .gate-ack {
             flex: 1 1 240px;
-            font-family: var(--sans);
-            font-size: 1rem;
-            padding: 13px 14px;
-            border: 1px solid var(--rule);
-            background: white;
-            border-radius: 6px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            cursor: pointer;
+            margin: 0;
+            font-weight: normal;
+        }
+        .gate-ack input[type="checkbox"] {
+            flex-shrink: 0;
+            width: 1.15rem;
+            height: 1.15rem;
+            margin: 0.32rem 0 0;
+            accent-color: var(--ink);
+            cursor: pointer;
+        }
+        .gate-ack span {
+            font-family: var(--serif);
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: var(--ink-2);
+        }
+        .gate-ack:focus-within span {
             color: var(--ink);
         }
-        .gate-form input:focus {
-            outline: none;
-            border-color: var(--ink-2);
-            box-shadow: 0 0 0 3px rgba(74, 63, 47, 0.14);
-        }
         .gate-form button {
+            flex-shrink: 0;
             font-family: var(--sans);
             font-size: 0.95rem;
             font-weight: 600;
@@ -268,8 +280,13 @@
             border-radius: 6px;
             cursor: pointer;
             letter-spacing: 0.02em;
+            align-self: center;
         }
-        .gate-form button:hover { background: var(--ink-2); }
+        .gate-form button:hover:not(:disabled) { background: var(--ink-2); }
+        .gate-form button:disabled {
+            opacity: 0.42;
+            cursor: not-allowed;
+        }
         .gate-error {
             min-height: 1.2em;
             margin-top: 12px;
@@ -899,6 +916,7 @@
         <a href="/triage">Triage</a>
         <a href="/case-studies" aria-current="page">Case Studies</a>
         <a href="/tech-landscape" class="tech-landscape-link"><span class="tls-gate--left">Tech</span><span class="tls-gate--mid"> </span><span class="tls-gate--right">Landscape</span></a>
+        <a href="/llm">LLM</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
         <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
@@ -917,15 +935,15 @@
             <div class="gate-num">01</div>
             <h3>What this is</h3>
             <p>
-                These are structured case studies drawn from public ICAC investigative records &mdash; closed,
-                adjudicated cases documented by law enforcement and released through press releases and task
+                These are structured case studies drawn from public ICAC investigative records,
+                documented by law enforcement and released through press releases and task
                 force reports. CaseLinker has processed 2,500+ of these reports across 25 U.S. task forces. The
                 20 case studies here were selected from that corpus to trace how internet-facilitated crimes
                 against children evolved across four technological eras, from early social media in 2010 through
                 the generative AI period today.
             </p>
             <p>
-                <em>This is not a crime database. It is not true crime content.</em> It is a historical and
+                <em>This is not true crime content.</em> It is a historical and
                 analytical record of how this crime has changed &mdash; and how law enforcement has responded
                 &mdash; told through 20 carefully selected cases.
             </p>
@@ -1009,17 +1027,20 @@
             <div class="gate-access-eyebrow">Access</div>
             <p>
                 These case studies are released to a practitioner and research community before public release.
-                If you&rsquo;re here from that community, enter the access key below to continue.
+                Continue after reading the disclosure above and confirm below that you understand what this material is and how it was compiled.
             </p>
             <form id="gate-form" class="gate-form" autocomplete="off">
-                <input id="gate-input" type="text" name="key" placeholder="Enter access key" aria-label="Access key" required spellcheck="false" autocapitalize="off" autocorrect="off">
-                <button type="submit">Enter</button>
+                <label class="gate-ack" for="gate-ack">
+                    <input id="gate-ack" type="checkbox" name="ack" value="1" autocomplete="off">
+                    <span>I have read the above and understand what this material is and how it was compiled.</span>
+                </label>
+                <button type="submit" id="gate-enter" disabled>Enter</button>
             </form>
             <div id="gate-error" class="gate-error" role="status" aria-live="polite"></div>
         </div>
 
         <p class="gate-fineprint">
-            Read in good faith. Route concerns through the feedback form on each study.
+
         </p>
     </main>
 
@@ -1048,7 +1069,6 @@
 
     <script>
     (function () {
-        const ACCESS_KEY = 'visible';
         const SS_GATE_FLAG = 'caselinker_case_studies_unlocked';
         const SS_KEY_VERSION = '1';
 
@@ -1057,7 +1077,8 @@
             browse:  document.getElementById('view-browse'),
             read:    document.getElementById('view-read'),
             gateForm:  document.getElementById('gate-form'),
-            gateInput: document.getElementById('gate-input'),
+            gateAck:   document.getElementById('gate-ack'),
+            gateEnter: document.getElementById('gate-enter'),
             gateError: document.getElementById('gate-error'),
             browseBody: document.getElementById('browse-body'),
             readBody:   document.getElementById('read-body'),
@@ -1091,11 +1112,11 @@
                     if (access) {
                         access.scrollIntoView({ block: 'start', behavior: 'auto' });
                     }
-                    if (els.gateInput) {
+                    if (els.gateAck) {
                         try {
-                            els.gateInput.focus({ preventScroll: true });
+                            els.gateAck.focus({ preventScroll: true });
                         } catch (_) {
-                            els.gateInput.focus();
+                            els.gateAck.focus();
                         }
                     }
                 });
@@ -1651,17 +1672,28 @@
             }
         }
 
+        function syncGateEnterButton() {
+            const ok = !!(els.gateAck && els.gateAck.checked);
+            if (els.gateEnter) {
+                els.gateEnter.disabled = !ok;
+                els.gateEnter.setAttribute('aria-disabled', ok ? 'false' : 'true');
+            }
+        }
+
+        if (els.gateAck) {
+            els.gateAck.addEventListener('change', syncGateEnterButton);
+        }
+        syncGateEnterButton();
+
         els.gateForm.addEventListener('submit', (ev) => {
             ev.preventDefault();
-            const v = (els.gateInput.value || '').trim().toLowerCase();
-            if (v === ACCESS_KEY) {
-                els.gateError.textContent = '';
-                setUnlocked();
-                dismissGate(() => routeAfterUnlock());
-            } else {
-                els.gateError.textContent = "This key doesn\u2019t match \u2014 if you\u2019re having trouble, reach out via LinkedIn.";
-                els.gateInput.select();
+            if (!els.gateAck || !els.gateAck.checked) {
+                syncGateEnterButton();
+                return;
             }
+            els.gateError.textContent = '';
+            setUnlocked();
+            dismissGate(() => routeAfterUnlock());
         });
 
         async function routeAfterUnlock() {
