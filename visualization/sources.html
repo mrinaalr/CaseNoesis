@@ -318,19 +318,19 @@
                             year: "2022", 
                             url: "https://www.missingkids.org/content/dam/missingkids/pdfs/2022-media-coverage-cybertipline-success-stories.pdf",
                             casesw: 0,  // Will be populated dynamically
-                            totalAvailable: 752
+                            totalAvailable: 605
                         },
                         { 
                             year: "2023", 
                             url: "https://www.missingkids.org/content/dam/missingkids/pdfs/2023-media-coverage-cybertipline-success-stories.pdf",
                             casesUsed: 0,  // Will be populated dynamically
-                            totalAvailable: 834
+                            totalAvailable: 668
                         },
                         { 
                             year: "2024", 
                             url: "https://www.missingkids.org/content/dam/missingkids/pdfs/cybertiplinedata2024/2024-media-coverage-cybertipline-success-stories.pdf",
                             casesUsed: 0,  // Will be populated dynamically
-                            totalAvailable: 1435
+                            totalAvailable: 1248
                         }
                     ]
                 },
@@ -495,12 +495,25 @@
                 {
                     name: "Los Angeles Police Department (LAPD) – ICAC News",
                     url: "https://www.lapdonline.org/?s=ICAC",
-                    description: "LAPD Online search results for ICAC, including Internet Crimes Against Children Task Force releases and related items.",
+                    description: "LAPD Online search results for ICAC, including Internet Crimes Against Children Task Force press releases and arrests.",
                     type: "Official website",
                     yearLinks: [
                         {
                             year: "ICAC search index",
                             url: "https://www.lapdonline.org/?s=ICAC",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Seattle Police Department (SPD) – News Search (ICAC)",
+                    url: "https://spdblotter.seattle.gov/?s=ICAC&btnSearch=Search",
+                    description: "SPD search results for ICAC, including Internet Crimes Against Children Task Force press releases and arrests",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search index",
+                            url: "https://spdblotter.seattle.gov/?s=ICAC&btnSearch=Search",
                             casesUsed: 0
                         }
                     ]
@@ -553,6 +566,32 @@
                         {
                             year: "News search (child)",
                             url: "https://attorneygenerallynnfitch.com/?s=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Montana Department of Justice – Press releases (child)",
+                    url: "https://dojmt.gov/category/press-release/?srch=child",
+                    description: "Montana DOJ press release category filtered by child-related search.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Press releases (child-related)",
+                            url: "https://dojmt.gov/category/press-release/?srch=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "New Mexico Attorney General's Office – Site search (ICAC)",
+                    url: "https://nmdoj.gov/?s=ICAC",
+                    description: "New Mexico Department of Justice search for ICAC-related press releases.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://nmdoj.gov/?s=ICAC",
                             casesUsed: 0
                         }
                     ]
@@ -664,7 +703,7 @@
                 {
                     name: "U.S. DOJ CEOS – Child Exploitation & Obscenity Section News",
                     url: "https://www.justice.gov/criminal/child-exploitation-obscenity-section-news",
-                    description: "Federal CEOS press releases (supplemental cross-jurisdiction source).",
+                    description: "Federal CEOS press releases.",
                     type: "Official website",
                     yearLinks: [
                         {
@@ -683,6 +722,19 @@
                         {
                             year: "Archive index",
                             url: "https://www.justice.gov/archives/criminal/child-exploitation-and-obscenity-section",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Alabama Law Enforcement Agency (ALEA) – News releases (ICAC / SBI)",
+                    url: "https://www.alea.gov/news?combine=child",
+                    description: "ALEA (child-related) news results, including State Bureau of Investigation (SBI) and Internet Crimes Against Children (ICAC) task force reports.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "News search (child)",
+                            url: "https://www.alea.gov/news?combine=child",
                             casesUsed: 0
                         }
                     ]
@@ -929,6 +981,47 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = msCases.length;
                         }
+                    } else if (staticSource.name.includes('Montana Department of Justice')) {
+                        const mtDojCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'MT DOJ';
+                        });
+                        staticSource.cases = mtDojCases;
+                        const mtDojRange = getDateRange(mtDojCases);
+                        if (mtDojRange) {
+                            staticSource.dateRangeDisplay = mtDojRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = mtDojRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = mtDojCases.length;
+                        }
+                    } else if (
+                        staticSource.name.includes('New Mexico Attorney General') ||
+                        staticSource.name.includes('New Mexico Department of Justice')
+                    ) {
+                        const nmCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'NM AG';
+                        });
+                        staticSource.cases = nmCases;
+                        const nmRange = getDateRange(nmCases);
+                        if (nmRange) {
+                            staticSource.dateRangeDisplay = nmRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = nmRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = nmCases.length;
+                        }
                     } else if (staticSource.name.includes('North Carolina State Bureau of Investigation')) {
                         const ncSbiCases = cases.filter(c => {
                             const s = (c.source || c.raw_data?.source || '')
@@ -1062,6 +1155,25 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = lapdCases.length;
                         }
+                    } else if (staticSource.name.includes('Seattle Police Department')) {
+                        const spdCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'SPD';
+                        });
+                        staticSource.cases = spdCases;
+                        const spdRange = getDateRange(spdCases);
+                        if (spdRange) {
+                            staticSource.dateRangeDisplay = spdRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = spdRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = spdCases.length;
+                        }
                     } else if (staticSource.name.includes('South Florida ICAC')) {
                         const sfCases = cases.filter(c => {
                             const s = (c.source || c.raw_data?.source || '')
@@ -1194,6 +1306,25 @@
                         }
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = archiveCases.length;
+                        }
+                    } else if (staticSource.name.includes('Alabama Law Enforcement Agency')) {
+                        const aleaCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'ALEA';
+                        });
+                        staticSource.cases = aleaCases;
+                        const aleaRange = getDateRange(aleaCases);
+                        if (aleaRange) {
+                            staticSource.dateRangeDisplay = aleaRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = aleaRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = aleaCases.length;
                         }
                     }
                 });

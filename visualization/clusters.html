@@ -165,8 +165,8 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 1820px;
-            min-height: 1820px;
+            height: 1960px;
+            min-height: 1960px;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
@@ -351,7 +351,7 @@
     <script>
         const width = document.getElementById('cluster-visualization').clientWidth;
         // Match #cluster-visualization height; extra room so bottom satellite bubbles are not clipped
-        const height = 1820;
+        const height = 1960;
         const margin = 42;
         
         const svg = d3.select('#cluster-visualization')
@@ -437,16 +437,20 @@
             // Position main clusters tightly together
             const mainClusterNodes = [];
             const clusterPositions = {
-                'online_only_cluster': { x: width * 0.45, y: height * 0.48 }, // Top-center
-                'possession_cluster': { x: width * 0.31, y: height * 0.25 }, // Left
-                'general_cluster': { x: width * 0.67, y: height * 0.29 }, // Right (inset from edge)
-                'severe_cluster': { x: width * 0.30, y: height * 0.68 }, // Bottom-left
-                'investigation_cluster': { x: width * 0.65, y: height * 0.70 } // Bottom-center
+                'online_only_cluster': { x: width * 0.45, y: height * 0.47 }, // Top-center
+                'possession_cluster': { x: width * 0.31, y: height * 0.28 }, // Left
+                'general_cluster': { x: width * 0.67, y: height * 0.31 }, // Right (inset from edge)
+                'severe_cluster': { x: width * 0.30, y: height * 0.65 }, // Bottom-left
+                'investigation_cluster': { x: width * 0.63, y: height * 0.65 } // Bottom-center
             };
             
             clusterData.forEach((cluster, i) => {
-                // Size based on number of cases - main cluster bubble (5% bigger)
-                const clusterSize = (Math.sqrt(cluster.size) * 2.98 + 34);
+                // Main hubs: online-only keeps original scale; other four use softer sqrt so large hubs do not dwarf the center.
+                const s = Math.sqrt(cluster.size);
+                const clusterSize =
+                    cluster.group_id === 'online_only_cluster'
+                        ? s * 2.98 + 34
+                        : s * 2.98 * 0.718 + 34;
                 
                 // Get position from predefined positions or use default
                 let clusterX, clusterY;
@@ -501,7 +505,7 @@
                     
                     // Adjust base spread buffer based on number of groups
                     // Add extra spacing for online_only_cluster to account for text label
-                    const textSpacing = cluster.group_id === 'online_only_cluster' ? 45 : 0;
+                    const textSpacing = cluster.group_id === 'online_only_cluster' ? 24 : 0;
                     let spreadBuffer;
                     if (groupCount <= 3) {
                         // Very few bubbles: keep very tight
@@ -512,6 +516,9 @@
                     } else {
                         // Many bubbles: modestly more spread
                         spreadBuffer = 10;
+                    }
+                    if (cluster.group_id === 'online_only_cluster' && groupCount > 6) {
+                        spreadBuffer = Math.min(spreadBuffer, 5);
                     }
                     const baseRadius = clusterSize + maxGroupSize + clusterTouchPadding + spreadBuffer + textSpacing;
                     
@@ -538,12 +545,16 @@
                         
                         // Special handling: position "30 cases" bubble closer for online_only_cluster
                         const minBubbleRadius = clusterSize + groupSize + clusterTouchPadding + textSpacing;
-                        let bubbleRadius = Math.max(baseRadius, minBubbleRadius);
+                        // Online-only: place each satellite at its own tight orbit (not the largest group's ring),
+                        // so small groups are not stranded far from the hub.
+                        let bubbleRadius =
+                            cluster.group_id === 'online_only_cluster'
+                                ? Math.max(minBubbleRadius, clusterSize + clusterTouchPadding + 14)
+                                : Math.max(baseRadius, minBubbleRadius);
                         if (cluster.group_id === 'online_only_cluster' && group.size === 30) {
-                            // Position the 30 cases bubble closer (reduce radius by 20px)
-                            bubbleRadius = baseRadius - 100;
+                            bubbleRadius = Math.min(bubbleRadius, baseRadius - 72);
                         }
-                        // Ensure special-cased adjustments still do not push bubbles into the cluster
+                        // Ensure adjustments never pull a bubble through the hub
                         bubbleRadius = Math.max(bubbleRadius, minBubbleRadius);
                         
                         // Calculate position around the main cluster
@@ -812,9 +823,10 @@
                             const minDistance = mainNode.r + node.r + 7; // minimum gap vs other hubs
                             
                             if (distance < minDistance) {
+                                const repel = node.clusterId === 'online_only_cluster' ? 0.22 : 0.5;
                                 const force = (minDistance - distance) / distance;
-                                node.vx += dx * force * alpha * 0.5;
-                                node.vy += dy * force * alpha * 0.5;
+                                node.vx += dx * force * alpha * repel;
+                                node.vy += dy * force * alpha * repel;
                             }
                         });
                     });
@@ -834,8 +846,13 @@
                         
                         // For clusters with few bubbles, use tighter attraction
                         const clusterGroupCount = groupNodes.filter(n => n.clusterId === node.clusterId).length;
-                        const attractionStrength = clusterGroupCount <= 5 ? 0.3 : 0.2; // Stronger for few bubbles
-                        const maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.1 : idealRadius * 1.2;
+                        const onlineTight = node.clusterId === 'online_only_cluster';
+                        let attractionStrength = clusterGroupCount <= 5 ? 0.3 : 0.2;
+                        let maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.1 : idealRadius * 1.2;
+                        if (onlineTight) {
+                            attractionStrength = clusterGroupCount <= 5 ? 0.38 : 0.34;
+                            maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.04 : idealRadius * 1.08;
+                        }
                         
                         if (distance > maxDistance) {
                             const force = (distance - maxDistance) / distance;

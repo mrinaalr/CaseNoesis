@@ -15,6 +15,7 @@ sys.path.insert(0, str(src_path / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(src_path / "Visualization Layer"))
 
 from processing import process_cases
+import difflib
 import os
 import re
 
@@ -171,8 +172,10 @@ def store_cases(cases: List[Dict[str, Any]], db_path: Optional[str]) -> int:
         storage = CaseStorage(db_path)  # SQLite
     else:
         storage = CaseStorage()  # PostgreSQL (uses DATABASE_URL)
-    
-    cases_to_store = _filter_doj_cases_by_novelty(cases, storage)
+
+    # Novelty filter (DOJ / NCMEC de-dupe before insert): off by default — uncomment to restore.
+    cases_to_store = cases
+    # cases_to_store = _filter_incoming_cases_by_novelty(cases, storage)
 
     stored_count = 0
     for case in cases_to_store:
@@ -187,91 +190,174 @@ def _normalize_text_for_exact_match(text: Any) -> str:
     return re.sub(r"\s+", " ", text.strip().lower())
 
 
-def _filter_doj_cases_by_novelty(
+def _get_case_text(case: Dict[str, Any]) -> str:
+    t = case.get("case_text")
+    if not t and isinstance(case.get("raw_data"), dict):
+        t = case.get("raw_data", {}).get("case_text")
+    return t if isinstance(t, str) else ""
+
+
+def _ncmec_novelty_corpus_year(case: Dict[str, Any]) -> Optional[int]:
+    """2022–2024 NCMEC media / state PDFs only; other years pass through without this filter."""
+    if str(case.get("source", "")).upper() != "NCMEC":
+        return None
+    sf = ""
+    if isinstance(case.get("raw_data"), dict):
+        sf = str(case.get("raw_data", {}).get("source_file") or "")
+    if not sf:
+        sf = str(case.get("source_file") or "")
+    for y in (2024, 2023, 2022):
+        if str(y) in sf:
+            return y
+    cid = str(case.get("id") or "")
+    m = re.search(r"_(202[234])_\d{3}", cid, re.I)
+    if m:
+        return int(m.group(1))
+    return None
+
+
+def _is_ncmec_novelty_target(case: Dict[str, Any]) -> bool:
+    return _ncmec_novelty_corpus_year(case) is not None
+
+
+def _norm_text_duplicate_ratio(
+    norm_candidate: str, pool_norm_texts: List[str], threshold: float
+) -> bool:
+    """True if normalized candidate is >= ``threshold`` similar to any pooled normalized text (difflib)."""
+    if not norm_candidate:
+        return False
+    ln = len(norm_candidate)
+    for other in pool_norm_texts:
+        if not other:
+            continue
+        lo = len(other)
+        if min(ln, lo) / max(ln, lo, 1) < 0.97:
+            continue
+        sm = difflib.SequenceMatcher(None, norm_candidate, other)
+        if sm.quick_ratio() < threshold:
+            continue
+        if sm.ratio() >= threshold:
+            return True
+    return False
+
+
+def _filter_incoming_cases_by_novelty(
     incoming_cases: List[Dict[str, Any]],
     storage: "CaseStorage",
-    similarity_threshold: float = 0.98,
+    *,
+    doj_similarity_threshold: float = 0.98,
+    ncmec_norm_ratio_threshold: float = 0.99,
 ) -> List[Dict[str, Any]]:
     """
-    DOJ-only guardrail:
-      a) skip exact narrative matches already in DB
-      b) skip if similarity to any existing case is >= threshold
+    Ordered novelty gate before insert:
 
-    Non-DOJ cases pass through unchanged.
+    - **DOJ CEOS / DOJ ARCHIVES**: skip empty text; skip if normalized ``case_text`` already seen (DB or earlier
+      in this batch); skip if ``calculate_case_similarity`` vs any case in the pool (DB + kept so
+      far) is >= ``doj_similarity_threshold``.
+
+    - **NCMEC (2022–2024 only)**: skip empty normalized text; skip exact normalized duplicate; skip
+      if difflib ratio on **normalized** text vs pool is >= ``ncmec_norm_ratio_threshold``.
+      Does **not** use ``calculate_case_similarity`` (NCMEC prose is structurally similar).
+
+    - **All other sources**: pass through, but each kept row is added to the pool so later DOJ/NCMEC
+      rows can match against them.
     """
     if not incoming_cases:
-        return incoming_cases
-
-    # Separate DOJ from all other sources; only DOJ gets novelty gating.
-    doj_sources = {"DOJ CEOS"}
-    doj_cases = [c for c in incoming_cases if str(c.get("source", "")).upper() in doj_sources]
-    non_doj_cases = [c for c in incoming_cases if str(c.get("source", "")).upper() not in doj_sources]
-    if not doj_cases:
         return incoming_cases
 
     try:
         from analysis import calculate_case_similarity
     except Exception:
-        # If similarity module unavailable, keep only exact-match guard.
         calculate_case_similarity = None
 
-    existing_cases = storage.get_all_cases(include_raw_data=True)
-    existing_norm_texts = set()
-    for ex in existing_cases:
-        t = ex.get("case_text")
-        if not t and isinstance(ex.get("raw_data"), dict):
-            t = ex.get("raw_data", {}).get("case_text")
-        nt = _normalize_text_for_exact_match(t)
+    DOJ_SOURCES = {"DOJ CEOS", "DOJ ARCHIVES"}
+
+    pool: List[Dict[str, Any]] = list(storage.get_all_cases(include_raw_data=True))
+    norm_seen: set[str] = set()
+    pool_norm_texts: List[str] = []
+    for ex in pool:
+        nt = _normalize_text_for_exact_match(_get_case_text(ex))
         if nt:
-            existing_norm_texts.add(nt)
+            norm_seen.add(nt)
+            pool_norm_texts.append(nt)
 
-    kept_doj: List[Dict[str, Any]] = []
-    dropped_exact = 0
-    dropped_similar = 0
+    out: List[Dict[str, Any]] = []
+    dropped_doj_empty = dropped_doj_exact = dropped_doj_sim = 0
+    dropped_ncmec_empty = dropped_ncmec_exact = dropped_ncmec_near = 0
 
-    # Include already-kept DOJ cases in similarity pool to prevent duplicates within same run.
-    similarity_pool = list(existing_cases)
-    seen_new_norm = set()
+    for c in incoming_cases:
+        src_u = str(c.get("source", "")).upper()
+        text = _get_case_text(c)
+        ntext = _normalize_text_for_exact_match(text)
 
-    for c in doj_cases:
-        c_text = c.get("case_text")
-        if not c_text and isinstance(c.get("raw_data"), dict):
-            c_text = c.get("raw_data", {}).get("case_text")
-        ntext = _normalize_text_for_exact_match(c_text)
-        if not ntext:
-            # If no text, treat as low-confidence and skip.
-            dropped_exact += 1
-            continue
-        if ntext in existing_norm_texts or ntext in seen_new_norm:
-            dropped_exact += 1
-            continue
-
-        if calculate_case_similarity is not None:
-            max_sim = 0.0
-            for ex in similarity_pool:
-                try:
-                    sim = float(calculate_case_similarity(c, ex))
-                except Exception:
-                    sim = 0.0
-                if sim > max_sim:
-                    max_sim = sim
-                if max_sim >= similarity_threshold:
-                    break
-            if max_sim >= similarity_threshold:
-                dropped_similar += 1
+        if src_u in DOJ_SOURCES:
+            if not ntext:
+                dropped_doj_empty += 1
                 continue
+            if ntext in norm_seen:
+                dropped_doj_exact += 1
+                continue
+            if calculate_case_similarity is not None:
+                max_sim = 0.0
+                for ex in pool:
+                    try:
+                        sim = float(calculate_case_similarity(c, ex))
+                    except Exception:
+                        sim = 0.0
+                    max_sim = max(max_sim, sim)
+                    if max_sim >= doj_similarity_threshold:
+                        break
+                if max_sim >= doj_similarity_threshold:
+                    dropped_doj_sim += 1
+                    continue
+            out.append(c)
+            norm_seen.add(ntext)
+            pool_norm_texts.append(ntext)
+            pool.append(c)
+            continue
 
-        kept_doj.append(c)
-        similarity_pool.append(c)
-        seen_new_norm.add(ntext)
+        if _is_ncmec_novelty_target(c):
+            if not ntext:
+                dropped_ncmec_empty += 1
+                continue
+            if ntext in norm_seen:
+                dropped_ncmec_exact += 1
+                continue
+            if _norm_text_duplicate_ratio(ntext, pool_norm_texts, ncmec_norm_ratio_threshold):
+                dropped_ncmec_near += 1
+                continue
+            out.append(c)
+            norm_seen.add(ntext)
+            pool_norm_texts.append(ntext)
+            pool.append(c)
+            continue
 
-    if dropped_exact or dropped_similar:
+        out.append(c)
+        if ntext:
+            norm_seen.add(ntext)
+            pool_norm_texts.append(ntext)
+        pool.append(c)
+
+    if dropped_doj_empty or dropped_doj_exact or dropped_doj_sim:
+        n_doj = sum(
+            1 for x in incoming_cases if str(x.get("source", "")).upper() in DOJ_SOURCES
+        )
+        kept_doj = sum(1 for x in out if str(x.get("source", "")).upper() in DOJ_SOURCES)
         print(
-            f"✓ DOJ novelty filter: kept {len(kept_doj)}/{len(doj_cases)} "
-            f"(dropped exact={dropped_exact}, similar={dropped_similar}, threshold={similarity_threshold:.2f})"
+            f"✓ DOJ novelty filter: kept {kept_doj}/{n_doj} "
+            f"(dropped empty={dropped_doj_empty}, exact={dropped_doj_exact}, "
+            f"similar={dropped_doj_sim}, threshold={doj_similarity_threshold:.2f})"
+        )
+    if dropped_ncmec_empty or dropped_ncmec_exact or dropped_ncmec_near:
+        n_nc = sum(1 for x in incoming_cases if _is_ncmec_novelty_target(x))
+        kept_nc = sum(1 for x in out if _is_ncmec_novelty_target(x))
+        print(
+            f"✓ NCMEC (2022–2024) novelty filter: kept {kept_nc}/{n_nc} "
+            f"(dropped empty={dropped_ncmec_empty}, exact={dropped_ncmec_exact}, "
+            f"norm-difflib>={ncmec_norm_ratio_threshold:.2f}={dropped_ncmec_near})"
         )
 
-    return non_doj_cases + kept_doj
+    return out
 
 
 def get_all_stored_cases(db_path: Optional[str]) -> List[Dict[str, Any]]:

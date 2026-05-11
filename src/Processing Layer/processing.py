@@ -129,6 +129,10 @@ def process_cases(df):
     """
     Process cases: batch → pattern extract → NER extract → merge → comparison values.
     
+    Expects ingestion DataFrame rows with ``extracted_text`` (or the column name your
+    ingestion step uses), ``source`` (e.g. NCMEC, AZICAC, ALEA, VT AG), ``source_file``,
+    and optional ``source_url``.
+    
     Pipeline:
     1. Batch cases using batching.py
     2. Extract pattern features using Pattern Processing Layer

@@ -11,6 +11,7 @@ Both layers can ingest the batched cases and process them independently.
 import importlib.util
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
@@ -114,7 +115,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / WA AG / MS AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / WA AG / MS AG / MT DOJ / NM AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / ALEA / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -145,6 +146,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_illinois_ag = False
     is_wcso = False
     is_lapd = False
+    is_spd = False
     is_south_florida_icac = False
     is_nj_ag = False
     is_pa_ag = False
@@ -153,12 +155,15 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_ut_ag = False
     is_wa_ag = False
     is_ms_ag = False
+    is_mt_doj = False
+    is_nm_ag = False
     is_nc_sbi = False
     is_la_ag = False
     is_wy_dci = False
     is_sd_ag = False
     is_ky_sp = False
     is_arkansas_dps = False
+    is_alea = False
     is_doj_ceos = False
     is_doj_archives = False
     is_other_external = False
@@ -189,6 +194,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_wcso = True
         elif source_upper == 'LAPD':
             is_lapd = True
+        elif source_upper == 'SPD':
+            is_spd = True
         elif source_upper == 'SOUTH FLORIDA ICAC':
             is_south_florida_icac = True
         elif source_upper == 'NJ AG':
@@ -205,6 +212,10 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_wa_ag = True
         elif source_upper == 'MS AG':
             is_ms_ag = True
+        elif source_upper == 'MT DOJ':
+            is_mt_doj = True
+        elif source_upper == 'NM AG':
+            is_nm_ag = True
         elif source_upper == 'NC SBI':
             is_nc_sbi = True
         elif source_upper == 'LA AG':
@@ -217,6 +228,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_ky_sp = True
         elif source_upper == 'ARKANSAS DPS':
             is_arkansas_dps = True
+        elif source_upper == 'ALEA':
+            is_alea = True
         elif source_upper == 'DOJ CEOS':
             is_doj_ceos = True
         elif source_upper == 'DOJ ARCHIVES':
@@ -249,6 +262,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "WCSO")
     elif is_lapd:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "LAPD")
+    elif is_spd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SPD")
     elif is_south_florida_icac:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SOUTH FLORIDA ICAC")
     elif is_nj_ag:
@@ -265,6 +280,10 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "WA AG")
     elif is_ms_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "MS AG")
+    elif is_mt_doj:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "MT DOJ")
+    elif is_nm_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NM AG")
     elif is_nc_sbi:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "NC SBI")
     elif is_la_ag:
@@ -277,6 +296,8 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "KY SP")
     elif is_arkansas_dps:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "ARKANSAS DPS")
+    elif is_alea:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ALEA")
     elif is_doj_ceos:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "DOJ CEOS")
     elif is_doj_archives:
@@ -1267,6 +1288,10 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "ILLINOIS AG": ["ILLNOISAG_ICAC_All.pdf", "ILLINOIS_AG_All.pdf", "illinois_ag/ILLINOIS_AG_All.pdf"],
     "WCSO": ["Washoe_ICAC_All.pdf", "wcso/Washoe_ICAC_All.pdf", "washoe/Washoe_ICAC_All.pdf"],
     "LAPD": ["LAPD_ICAC_ALL.pdf", "LAPD_ICAC_All.pdf", "lapd/LAPD_ICAC_All.pdf"],
+    "SPD": [
+        "SPD_Blotter_ICAC_All.pdf",
+        "data/ingestion/spd_blotter/SPD_Blotter_ICAC_All.pdf",
+    ],
     "SOUTH FLORIDA ICAC": ["SouthFlorida_ICAC_All.pdf"],
     "NJ AG": ["NJAG_ICAC_All.pdf", "NJOAG_ICAC_All.pdf", "nj_ag/NJAG_ICAC_All.pdf"],
     "PA AG": ["PAAG_ICAC_All.pdf", "PA_AG_ICAC_All.pdf", "PAOAG_ICAC_All.pdf", "pa_ag/PAAG_ICAC_All.pdf"],
@@ -1275,12 +1300,15 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "UT AG": ["UTAG_ICAC_All.pdf", "UTOAG_ICAC_All.pdf", "Utah_ICAC_All.pdf", "ut_ag/UTAG_ICAC_All.pdf"],
     "WA AG": ["WAAG_ICAC_All.pdf", "Washington_AG_ICAC_All.pdf", "wa_ag/WAAG_ICAC_All.pdf"],
     "MS AG": ["MSAG_ICAC_All.pdf", "Mississippi_ICAC_All.pdf", "ms_ag/MSAG_ICAC_All.pdf"],
+    "MT DOJ": ["MTDOJ_ICAC_All.pdf", "data/ingestion/mt_doj/MTDOJ_ICAC_All.pdf"],
+    "NM AG": ["NMAG_ICAC_All.pdf", "data/ingestion/nm_ag/NMAG_ICAC_All.pdf"],
     "NC SBI": ["NCSBI_ICAC_All.pdf", "NC_SBI_ICAC_All.pdf", "nc_sbi/NCSBI_ICAC_All.pdf"],
     "LA AG": ["LAAG_ICAC_All.pdf", "Louisiana_ICAC_All.pdf", "la_ag/LAAG_ICAC_All.pdf"],
     "WY DCI": ["WYDCI_ICAC_All.pdf", "WY_DCI_ICAC_All.pdf", "wy_dci/WYDCI_ICAC_All.pdf"],
     "SD AG": ["SDAG_ICAC_All.pdf", "South_Dakota_ICAC_All.pdf", "sd_ag/SDAG_ICAC_All.pdf"],
     "KY SP": ["KYSP_ICAC_All.pdf", "KSP_ICAC_All.pdf", "ky_sp/KYSP_ICAC_All.pdf"],
     "ARKANSAS DPS": ["ARKDPS_ICAC_All.pdf", "arkansas_dps_output/ARKDPS_ICAC_All.pdf"],
+    "ALEA": ["alea_icac_news.pdf", "data/ingestion/alea/alea_icac_news.pdf"],
     "DOJ CEOS": ["DOJ_CEOS_All.pdf", "doj_ceos_output/DOJ_CEOS_All.pdf"],
     "DOJ ARCHIVES": ["DOJ_ARCHIVES_All.pdf", "doj_archives_output/DOJ_ARCHIVES_All.pdf"],
 }
@@ -1318,6 +1346,25 @@ def _merged_news_text_before_source_line(chunk: str) -> str:
     return (chunk or "")[:8000].strip()
 
 
+def _merged_news_text_after_source_line(chunk: str) -> str:
+    """Body text after the ``Source: https://`` line (opening datelines often appear here)."""
+    m = re.search(r"(?m)^\s*Source:\s*https?://\S+", chunk)
+    if not m:
+        return ""
+    return chunk[m.end() :].strip()[:12000]
+
+
+def _merged_news_year_from_source_url(url: str) -> Optional[str]:
+    """Year from common CMS URL paths (e.g. ``/blog/2024/08/13/…``)."""
+    if not url:
+        return None
+    for m in re.finditer(r"/((?:19|20)\d{2})/(?:\d{2}/(?:\d{2}(?:/|$))?)?", url):
+        y = int(m.group(1))
+        if 1990 <= y <= 2035:
+            return str(y)
+    return None
+
+
 def _merged_news_default_year_from_source_file(source_file: Optional[str]) -> Optional[str]:
     """Optional corpus year from PDF filename (e.g. ``2024_NCMEC.pdf``)."""
     if not source_file:
@@ -1338,10 +1385,16 @@ _MERGED_NEWS_DOB_LINE_HINT_RE = re.compile(
 
 
 def _merged_news_dateline_year(text: str) -> Optional[str]:
-    """Month + day + year dateline (e.g. 'May 5, 2010') from masthead-sized text only."""
+    """Month + day + year dateline (e.g. 'May 5, 2010') or CaseLinker ``Publication date: YYYY-MM-DD``."""
     if not text:
         return None
     head = text[:4000]
+    iso_pub = re.search(
+        r"(?i)publication\s+date:\s*((?:19|20)\d{2})-(\d{2})-(\d{2})\b",
+        head,
+    )
+    if iso_pub:
+        return iso_pub.group(1)
     for m in _MERGED_NEWS_DATELINE_MONTH_DAY_YEAR_RE.finditer(head):
         pre = head[max(0, m.start() - 120) : m.start()]
         if _MERGED_NEWS_DOB_LINE_HINT_RE.search(pre):
@@ -1617,10 +1670,13 @@ def _batch_merged_icac_news_cases(
         pre_source = _merged_news_text_before_source_line(chunk)
         case_date_year = _merged_news_dateline_year(pre_source)
         if not case_date_year:
+            case_date_year = _merged_news_dateline_year(_merged_news_text_after_source_line(chunk))
+        if not case_date_year:
             case_date_year = _merged_news_default_year_from_source_file(source_file)
         if not case_date_year:
-            # PDF body often has no digit year; avoid labeling as "current" calendar year
-            case_date_year = "2022"
+            case_date_year = _merged_news_year_from_source_url(url)
+        if not case_date_year:
+            case_date_year = str(datetime.now().year)
 
         if source_key == "DOJ ARCHIVES":
             case_date_year = _resolve_doj_archives_batch_year(url, case_date_year)

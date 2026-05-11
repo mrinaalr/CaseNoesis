@@ -52,8 +52,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         
     Returns:
         Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
-        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'UT AG',
-        'WA AG', 'MS AG', 'NC SBI', 'LA AG', 'WY DCI', 'SD AG', 'KY SP', 'FBI', 'Other', or defaults to Other).
+        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'UT AG',
+        'WA AG', 'MS AG', 'MT DOJ', 'NM AG', 'NC SBI', 'LA AG', 'WY DCI', 'SD AG', 'KY SP', 'ALEA', 'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -91,6 +91,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'WCSO'
     elif 'lapd' in filename_lower:
         return 'LAPD'
+    elif ('spd_blotter' in filename_lower or 'spd blotter' in filename_lower) and 'icac' in filename_lower:
+        return 'SPD'
     elif 'southflorida' in filename_lower and 'icac' in filename_lower:
         return 'SOUTH FLORIDA ICAC'
     elif ('njoag' in filename_lower or 'njag' in filename_lower) and 'icac' in filename_lower:
@@ -118,6 +120,10 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'WA AG'
     elif ('msag' in filename_lower or 'ms_ag' in filename_lower or 'mississippi' in filename_lower) and 'icac' in filename_lower:
         return 'MS AG'
+    elif ('mtdoj' in filename_lower or 'mt_doj' in filename_lower or 'dojmt' in filename_lower) and 'icac' in filename_lower:
+        return 'MT DOJ'
+    elif ('nmag' in filename_lower or 'nm_ag' in filename_lower or 'nmdoj' in filename_lower) and 'icac' in filename_lower:
+        return 'NM AG'
     elif ('ncsbi' in filename_lower or 'nc_sbi' in filename_lower) and 'icac' in filename_lower:
         return 'NC SBI'
     elif ('laag' in filename_lower or 'la_ag' in filename_lower or 'louisiana_ag' in filename_lower) and 'icac' in filename_lower:
@@ -130,6 +136,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'KY SP'
     elif ('arkdps' in filename_lower or 'arkansas_dps' in filename_lower or 'arkansas_dps_icac' in filename_lower) and 'icac' in filename_lower:
         return 'ARKANSAS DPS'
+    elif 'alea' in filename_lower and 'icac' in filename_lower:
+        return 'ALEA'
     elif 'doj_ceos' in filename_lower or ('doj' in filename_lower and 'ceos' in filename_lower):
         return 'DOJ CEOS'
     elif 'doj_archives' in filename_lower or ('doj' in filename_lower and 'archive' in filename_lower):
@@ -148,6 +156,12 @@ def detect_source_from_content(text: str, filename: str) -> str:
         r'\bICAC\b|Internet Crimes Against Children', text_sample, re.I
     ):
         return 'LAPD'
+
+    # Seattle Police Department — SPD Blotter (WordPress; merged ICAC search PDF)
+    if re.search(r'spdblotter\.seattle\.gov', text_sample, re.I) and re.search(
+        r'\bICAC\b|Internet Crimes Against Children|Washington State ICAC|WA\s+ICAC', text_sample, re.I
+    ):
+        return 'SPD'
 
     # South Florida ICAC news index (merged external-article PDF)
     if re.search(r'southfloridaicac\.org', text_sample, re.I) and re.search(
@@ -203,6 +217,24 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'MS AG'
 
+    # Montana Department of Justice (dojmt.gov — press releases; merged ICAC news PDF)
+    if re.search(r'\bdojmt\.gov\b', text_sample, re.I) and re.search(
+        r'Montana Department of Justice|Attorney General|Knudsen|\bHELENA\b|Division of Criminal Investigation|\bDCI\b|'
+        r'Internet Crimes Against Children|\bICAC\b|sexual abuse of children|CSAM|child exploitation|child assault',
+        text_sample,
+        re.I,
+    ):
+        return 'MT DOJ'
+
+    # New Mexico Department of Justice / Attorney General (nmdoj.gov — press releases; merged ICAC news PDF)
+    if re.search(r'\bnmdoj\.gov\b', text_sample, re.I) and re.search(
+        r'New Mexico Department of Justice|\bNMDOJ\b|Attorney General|Internet Crimes Against Children|\bICAC\b|'
+        r'child exploitation|Child Predator|CSAM|child pornography|sexual abuse material',
+        text_sample,
+        re.I,
+    ):
+        return 'NM AG'
+
     # North Carolina State Bureau of Investigation (ncsbi.gov — news releases; merged ICAC news PDF)
     if re.search(r'ncsbi\.gov', text_sample, re.I) and re.search(
         r'State Bureau of Investigation|\bSBI\b|Internet Crimes Against Children|\bICAC\b|child exploitation|Child Exploitation',
@@ -252,6 +284,15 @@ def detect_source_from_content(text: str, filename: str) -> str:
         re.I,
     ):
         return 'ARKANSAS DPS'
+
+    # Alabama Law Enforcement Agency (www.alea.gov — news releases; merged SBI/ICAC news PDF)
+    if re.search(r'\balea\.gov\b', text_sample, re.I) and re.search(
+        r'\bALEA\b|Alabama Law Enforcement|State Bureau of Investigation|\bSBI\b|'
+        r'\bICAC\b|Internet Crimes Against Children|child exploitation|Child Porn|CSAM',
+        text_sample,
+        re.I,
+    ):
+        return 'ALEA'
 
     # U.S. DOJ CEOS news (federal child exploitation press releases; supplemental source)
     if re.search(r'justice\.gov', text_sample, re.I) and re.search(
@@ -397,6 +438,8 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["WCSO"] = url_clean
         elif "los angeles police department" in n:
             mapping["LAPD"] = url_clean
+        elif "seattle police department" in n:
+            mapping["SPD"] = url_clean
         elif "south florida icac" in n:
             mapping["SOUTH FLORIDA ICAC"] = url_clean
         elif "new jersey office of the attorney general" in n:
@@ -413,6 +456,10 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["WA AG"] = url_clean
         elif "mississippi attorney general" in n:
             mapping["MS AG"] = url_clean
+        elif "montana department of justice" in n:
+            mapping["MT DOJ"] = url_clean
+        elif "new mexico attorney general" in n or "new mexico department of justice" in n:
+            mapping["NM AG"] = url_clean
         elif "north carolina state bureau of investigation" in n:
             mapping["NC SBI"] = url_clean
         elif "louisiana office of the attorney general" in n:
@@ -425,6 +472,8 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["KY SP"] = url_clean
         elif "arkansas department of public safety" in n:
             mapping["ARKANSAS DPS"] = url_clean
+        elif "alabama law enforcement agency" in n:
+            mapping["ALEA"] = url_clean
         elif "child exploitation & obscenity section news" in n:
             mapping["DOJ CEOS"] = url_clean
         elif "child exploitation and obscenity section archive" in n:
