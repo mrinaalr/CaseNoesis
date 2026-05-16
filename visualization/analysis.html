@@ -1479,7 +1479,7 @@
             // If case text is missing, try to fetch it from API
             if (!caseText && caseItem.id) {
                 try {
-                    const response = await fetch(`/api/cases/${caseItem.id}`);
+                    const response = await caselinkerFetchCase(caseItem.id);
                     if (response.ok) {
                         const fullCase = await response.json();
                         const fullRawData = fullCase.raw_data;
@@ -1495,7 +1495,11 @@
                         }
                     }
                 } catch (error) {
-                    console.error('Error fetching case text:', error);
+                    if (error && error.code === 'CASELINKER_DAILY_LIMIT') {
+                        caseText = CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE;
+                    } else {
+                        console.error('Error fetching case text:', error);
+                    }
                 }
             }
             
@@ -1786,7 +1790,7 @@
             // If still not found, try fetching from API
             if (!caseItem) {
                 try {
-                    const r = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
+                    const r = await caselinkerFetchCase(caseId);
                     if (r.ok) {
                         caseItem = await r.json();
                         if (window.allCases && Array.isArray(window.allCases)) {
@@ -1795,6 +1799,10 @@
                         }
                     }
                 } catch (error) {
+                    if (error && error.code === 'CASELINKER_DAILY_LIMIT') {
+                        alert(CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE);
+                        return;
+                    }
                     console.error('Error fetching case:', error);
                 }
             }

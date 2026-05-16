@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Analyze dataset statistics and verify claims about the CaseLinker dataset.
+Analyze dataset statistics and high level insights about the CaseLinker dataset.
 
 This script provides comprehensive statistics and verification of data claims.
 """
@@ -12,7 +12,7 @@ from typing import Dict, List, Any
 import json
 
 # Add paths
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root / "src" / "Storage Layer"))
 
 # Try PostgreSQL first, fallback to SQLite

@@ -4,9 +4,9 @@
 
 ## Live Demo
 
-**Try the latest version online:** [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
+**Try the latest version online:** [https://caselinker.up.railway.app/](https://caselinker.up.railway.app/)
 
-The live deployment includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / state and regional press materials. There are currently **2,397 cases** across **28** ingestion sources: **ILLINOIS AG** (265), **NCMEC** (244), **SCAG ICAC** (207), **KY SP** (205), **DOJ ARCHIVES** (202), **VT AG** (143), **Idaho ICAC** (137), **OHIO AG** (112), **NJ AG** (98), **SOUTH FLORIDA ICAC** (85), **SVICAC** (85), **PA AG** (68), **GBI** (66), **TBI ICAC** (63), **NEWYORK SP** (62), **DOJ CEOS** (49), **AZICAC** (47), **LA AG** (46), **UT AG** (32), **ARKANSAS DPS** (31), **LAPD** (31), **Texas AG** (28), **WY DCI** (24), **NC SBI** (18), **WCSO** (16), **MS AG** (11), **Michigan ICAC** (11), **SD AG** (11). The in-app **Sources** page reflects the current database. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
+The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,086 cases** across **50** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
 
 ## Technical Reports
 
@@ -21,7 +21,7 @@ The live deployment includes all features and a processed case corpus from publi
 This project was motivated by challenges I encountered with understanding child exploitation cases, including:
 
 - **Fragmented data sources**: Cases are scattered across numerous organizations, states, and agencies
-- **Cross-case analysis**: Identifying patterns, similarities, and connections between cases becomes challenging without a unified system, even when cases share common characteristics such as abuse patterns, platforms, or victim demographics
+- **Cross-case analysis**: Identifying patterns, similarities, and connections between cases becomes challenging without a unified system, even when cases share common characteristics such as abuse patterns, platforms, or perpetrator demographics
 - **Limitations in trend analysis**: Analyzing the evolution of child exploitation, the mediums in which it occurs, and recurring case topics
 - **Emotional impact**: The challenge of repeatedly reading and processing highly disturbing case material
 
@@ -29,9 +29,9 @@ CaseLinker aims to address these challenges by serving as a tool for case analys
 
 ## Emphasis
 
-- **Clustering and linking**: Cases based on shared characteristics such as victim context, platforms used, and law enforcement actions
-- **Visualization**: Cases with particular attention to tasteful presentation of case content, and pattern analysis across investigations
 - **Feature extraction**: Robust extraction of information from cases and explainability for clusters and analysis
+- **Clustering and linking**: Cases based on shared characteristics such as victim context, platforms used, and law enforcement actions
+- **Visualization**: With particular attention to tasteful presentation of case content, and pattern analysis across investigations
 
 ## System Architecture
 
@@ -48,7 +48,7 @@ CaseLinker follows a modular, layered architecture:
 ### Option 1: Use Live Demo (Recommended for Quick Testing)
 
 **No installation required.** Visit the live deployment:
-- **Live Application**: [https://web-production-13a2.up.railway.app](https://web-production-13a2.up.railway.app)
+- **Live Application**: [https://caselinker.up.railway.app](https://caselinker.up.railway.app)
 
 The live version includes all features and a processed case corpus. Created for quick testing and demonstrations.
 
@@ -81,6 +81,8 @@ Then open your browser to:
 - **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
+- **Tech Landscape**: http://localhost:8000/tech-landscape
+- **LLM (Query assistant)**: http://localhost:8000/llm
 - **Case Studies**: http://localhost:8000/case-studies
 - **Data Audit**: http://localhost:8000/audit
 - **API Documentation**: http://localhost:8000/docs
@@ -129,39 +131,62 @@ You can process additional PDFs to add more cases to the database.
 
 ### Finding PDF Sources
 
-Visit the **Sources** page on the live demo to see where PDFs can be obtained:
-- **Live Demo Sources Page**: [https://web-production-13a2.up.railway.app/sources](https://web-production-13a2.up.railway.app/sources)
+Visit the **Sources** page to see links for collecting sources:
+- **Live Demo Sources Page**: [https://caselinker.up.railway.app/sources](https://caselinker.up.railway.app/sources)
 - Or visit `/sources` when running locally: http://localhost:8000/sources
 
-The sources page lists publicly available reports from (see `/sources` for links and disclaimers):
-- **Arizona ICAC (AZICAC)**: Annual case reports and related materials
-- **National Center for Missing & Exploited Children (NCMEC)**: Case summaries and CyberTipline-related publications
-- **Georgia Bureau of Investigation (GBI)**: Georgia CEACC / ICAC press releases
-- **Idaho ICAC (Idaho Office of Attorney General)**: ICAC press releases
-- **Texas Office of the Attorney General**: Cyber Crimes / ICAC-related press releases
-- **Michigan ICAC / Michigan State Police**: ICAC-related MSP Newsroom press releases
-- **Silicon Valley ICAC (SVICAC)**: Regional news articles (SVICAC Latest News)
-- **Tennessee Bureau of Investigation (TBI) ICAC**: TBI newsroom ICAC press coverage
-- **South Carolina Attorney General (SCAG) ICAC**: ICAC-tagged news releases
-- **Illinois Attorney General**: ICAC-related press releases
-- **Kentucky State Police (KY SP)**: News archive search (ICAC)
-- **Arkansas Department of Public Safety (ARKANSAS DPS)**: ICAC / CSAM-related press releases
-- **Vermont Attorney General (VT AG)**: ICAC-related releases
-- **Ohio Attorney General**: ICAC-related releases
-- **New Jersey Attorney General**: ICAC-related releases
-- **South Florida ICAC**: Regional ICAC news coverage
-- **Pennsylvania Attorney General**: ICAC-related releases
-- **New York State Police (NEWYORK SP)**: ICAC-related releases
-- **Louisiana Attorney General (LA AG)**: ICAC-related releases
-- **Utah Attorney General (UT AG)**: ICAC-related releases
-- **Los Angeles Police Department (LAPD)**: ICAC-related releases
-- **Wyoming Division of Criminal Investigation (WY DCI)**: ICAC-related releases
-- **North Carolina State Bureau of Investigation (NC SBI)**: ICAC-related releases
-- **South Dakota Attorney General (SD AG)**: ICAC-related releases
-- **Washoe County Sheriff's Office (WCSO, Nevada)**: ICAC-related releases
-- **Mississippi Attorney General (MS AG)**: ICAC-related releases
+Processed sources include:
+- **Arizona ICAC (AZICAC)**: Annual case reports and arrests (AZICAC)
+- **National Center for Missing & Exploited Children (NCMEC)**: Case 
+summaries and CyberTipline-related publications
+- **Georgia Bureau of Investigation (GBI)**: CEACC / Georgia ICAC press releases
+- **Idaho Office of Attorney General (Idaho ICAC)**: ICAC newsroom press releases
+- **Texas Office of the Attorney General (Texas AG)**: Cyber Crimes / ICAC-related press releases
+- **Michigan State Police (Michigan ICAC)**: MSP newsroom ICAC releases
+- **Silicon Valley ICAC (SVICAC)**: Regional "In The News" articles
+- **Tennessee Bureau of Investigation (TBI ICAC)**: TBI newsroom ICAC search results
+- **South Carolina Attorney General (SCAG ICAC)**: ICAC-tagged news releases
+- **New York State Police (NEWYORK SP)**: NYSP newsroom ICAC keyword search
+- **Illinois Attorney General (ILLINOIS AG)**: ICAC press release search
+- **Pennsylvania Office of the Attorney General (PA AG)**: Child Predator / ICAC-related releases
+- **New Jersey Office of the Attorney General (NJ AG)**: ICAC site search
+- **Washoe County Sheriff's Office (WCSO)**: Nevada ICAC newsroom search
+- **Fresno County Sheriff's Office (FRESNO SO)**: ICAC site search
+- **Osceola County Sheriff's Office (OSCEOLA SO)**: ICAC site search
+- **Las Vegas Metropolitan Police Department (LVMPD)**: ICAC site search
+- **San Jose Police Department (SJPD)**: ICAC / child exploitation press search
+- **Los Angeles Police Department (LAPD)**: ICAC news search
+- **Seattle Police Department (SPD)**: SPD Blotter ICAC search
+- **San Diego Police Department (SDPD)**: City of San Diego ICAC site search
+- **Colorado Springs Police Department (CSPD)**: ICAC site search
+- **Hawaii Department of the Attorney General (HI AG)**: HICAC media and press
+- **Cook County State's Attorney (CCSAO)**: ICAC unit news releases
+- **South Florida ICAC (SOUTH FLORIDA ICAC)**: Regional task force news index
+- **Florida Office of the Attorney General (FL AG)**: ICAC site search
+- **Vermont Office of the Attorney General (VT AG)**: Child-related / ICAC releases
+- **Rhode Island Office of the Attorney General (RI AG)**: ICAC site search
+- **Ohio Attorney General (OHIO AG)**: ICAC / child-related news search
+- **Delaware Department of Justice (DE AG)**: Child Predator Task Force / ICAC releases
+- **Sedgwick County Sheriff's Office (SEDGWICK SO)**: Child exploitation press search
+- **Anchorage Police Department (ANCHORAGE PD)**: Alaska ICAC-related releases
+- **Mississippi Attorney General (MS AG)**: ICAC media releases
+- **Montana Department of Justice (MT DOJ)**: Child-related press releases
+- **New Mexico Attorney General's Office (NM AG)**: ICAC site search
+- **North Carolina State Bureau of Investigation (NC SBI)**: ICAC news search
+- **Louisiana Office of the Attorney General (LA AG)**: ICAC news releases
+- **Utah Attorney General (UT AG)**: ICAC site search
+- **Washington State Office of the Attorney General (WA AG)**: Child-related news search
+- **Oregon Department of Justice (OREGON DOJ)**: ICAC site search
+- **Wyoming Division of Criminal Investigation (WY DCI)**: ICAC / Computer Crime news
+- **Iowa Division of Criminal Investigation (IA DCI)**: ICAC site search
+- **Arkansas Department of Public Safety (ARKANSAS DPS)**: ICAC / ASP news search
+- **Alabama Law Enforcement Agency (ALEA)**: SBI / ICAC news search
+- **South Dakota Office of the Attorney General (SD AG)**: ICAC press releases
+- **Kentucky State Police (KY SP)**: News archive ICAC search
+- **Nebraska State Patrol (NE SP)**: Child exploitation press search
+- **U.S. Army Criminal Investigation Division (ARMY CID)**: ICAC releases (USA.gov search)
 - **U.S. DOJ CEOS (DOJ CEOS)**: Child Exploitation and Obscenity Section press releases
-- **U.S. DOJ CEOS Archives (DOJ ARCHIVES)**: Archived CEOS criminal press releases
+- **U.S. DOJ CEOS Archives (DOJ ARCHIVES)**: Archived CEOS criminal press releases (2002-2008)
 
 ### Processing PDFs to Populate Database
 
@@ -178,6 +203,15 @@ python3 src/main.py "path/to/your/file.pdf"
 python3 src/main.py "2011 Cases and Arrests – AZICAC.ORG.pdf" "2020 Reports" "2024-media-coverage-cybertipline-success-stories.pdf" 
 ```
 
+**All PDFs under the repo** (e.g. after a fresh DB wipe):
+```bash
+./scripts/run/ingest_all_pdfs.sh
+
+# Skip NCMEC/DOJ on first pass if you want state feeds first:
+
+./scripts/run/ingest_all_pdfs.sh --no-aggregate
+```
+
 The system will:
 1. Extract text from each PDF
 2. Identify organization name from filename (AZICAC, NCMEC, etc.)
@@ -187,9 +221,9 @@ The system will:
 
 ## Using the Visualizations
 
-Access the visualizations via the [live demo](https://web-production-13a2.up.railway.app/visualization) or by running the server locally (`python3 run/main.py`) and navigating to http://localhost:8000/visualization.
+Access the visualizations via the [live demo](https://caselinker.up.railway.app/visualization) or locally at http://localhost:8000/visualization.
 
-1. **Case Group**: Displays cases matching specific groups (infant, very young, abuse, posession, online) 
+1. **Case Group**: Displays cases matching specific groups (infant, very young, abuse, possession, online) 
 2. **Severity Indicators**: Bar chart with color gradient showing severity levels (infant, very young, production, etc.). Click bars to view cases with highlighted severity text.
 3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
 4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.
@@ -198,28 +232,28 @@ Access the visualizations via the [live demo](https://web-production-13a2.up.rai
 
 ## Using Search
 
-Access Search via the [live demo](https://web-production-13a2.up.railway.app/search) or locally at http://localhost:8000/search
+Access Search via the [live demo](https://caselinker.up.railway.app/search) or locally at http://localhost:8000/search
 
 Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) gate ID listing behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
 
 ## Triage and Experimental ML
 
-Access Triage via the [live demo](https://web-production-13a2.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
+Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
 
-**Experimental ML** ([live](https://web-production-13a2.up.railway.app/ml-experimental), or http://localhost:8000/ml-experimental) is the in-app **documentation tab** for ML scope: what is production-adjacent (NER merge, triage model), what stays optional, and documents how ML functionality is evaluated and implemented. 
+**Experimental ML** ([live](https://caselinker.up.railway.app/ml-experimental), or http://localhost:8000/ml-experimental) is the in-app **documentation tab** for ML scope: what is production-adjacent (NER merge, triage model), what stays optional, and documents how ML functionality is evaluated and implemented. 
 
 **Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
 
 ```bash
-python3 scripts/train_triage_model.py --model rf --out models/triage_bundle.joblib
+python3 scripts/run/train_triage_model.py --model rf --out models/triage_bundle.joblib
 ```
 
-Evaluate or reproduce metrics with `scripts/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
+Evaluate or reproduce metrics with `scripts/verify/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
 
 
 ## Using Advanced Case Analysis
 
-Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or run server locally (`python3 run/main.py`) and navigate to http://localhost:8000/analysis.
+Navigate to [live demo](https://caselinker.up.railway.app/analysis) or run server locally and navigate to http://localhost:8000/analysis.
 
 
 1. **Tag-Based Analysis (Run Advanced Analysis)**:
@@ -246,8 +280,11 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
 ### Other Features
 
 - **Sources Tab**: View data sources and access original case reports
-- **Clusters Tab**: View pre computed clusters, analyze case reports
-- **Stats Tab**: Shows coverage over dataset, analyze case distributions
+- **Clusters Tab**: View pre-computed clusters and analyze case reports
+- **Stats Tab**: Coverage over the dataset and case distributions
+- **Tech Landscape**: Technology revolver (platforms, investigation tech, anonymization, P2P) by era
+- **Query / Expand**: Custom analysis lab and build-your-own viz examples (public APIs)
+- **LLM**: Natural-language queries over case statistics (SQL-backed; rate limited on production)
 - **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`; optional `data/case_study_notes.json`)
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
@@ -256,35 +293,51 @@ Navigate to [live demo](https://web-production-13a2.up.railway.app/analysis) or 
 ```
 CaseLinker/
 ├── src/
-│   ├── Ingestion Layer/          # PDF extraction, file import
-│   ├── Processing Layer/         # Feature extraction, case batching
-│   ├── Storage Layer/            # Database storage
-│   ├── Clustering & Analysis Layer/  # Case comparison, clustering
-│   ├── Visualization Layer/      # Visualization data structures
-│   └── main.py                  # CLI tool: Process PDFs and populate database
+│   ├── Ingestion Layer/              # PDF extraction, source detection, ingest_file
+│   ├── Processing Layer/             # batching.py, processing.py, merge_processing.py
+│   │   ├── Pattern Processing Layer/ # Regex / rule-based feature extraction
+│   │   └── ML Processing Layer/      # NER, semantic concepts, content sanitization
+│   ├── Storage Layer/                # SQLite + PostgreSQL storage, facet_tree.py
+│   ├── Clustering & Analysis Layer/  # analysis.py, triage.py
+│   ├── Visualization Layer/          # Server-side viz helpers
+│   └── main.py                       # CLI: ingest PDFs → process → store
 ├── run/
-│   └── main.py                  # Main application: Serves visualizations and API
+│   ├── main.py                       # FastAPI app: pages + REST API
+│   ├── redis_cache.py                # Optional Redis caching (production)
+│   └── auth.py                       # Access gates / keys for sensitive views
 ├── scripts/
-│   ├── train_triage_model.py    # Train supervised triage bundle
-│   └── test_triage.py           # Offline stratified eval (same pipeline as /api/triage-eval)
-├── visualization/
-│   ├── home.html                # Home page
-│   ├── index.html               # Interactive visualizations (Timeline, Severity, Outcomes, Perpetrator, Environment, Organizations)
-│   ├── search.html              # Facet tree search: cohort exploration, prune filters, cohort case IDs (D3)
-│   ├── analysis.html            # Advanced case analysis page (tag-based filtering and automated analysis)
-│   ├── triage.html              # Rule-based triage, model eval UI, live paste triage
-│   ├── ml-experimental.html     # In-app documentation for experimental ML / triage scope
-│   ├── under-the-hood.html      # Layered architecture overview
-│   ├── sources.html             # Data sources page
-│   ├── case-studies.html        # Case studies reading room (JSON-driven; access gate in-page)
-│   └── audit.html               # Data audit page (case-by-case feature review)
-├── setup.sh                     # Automated setup script
-├── requirements.txt             # Python dependencies
-├── config.py                    # Configuration settings
-├── caselinker.db                # SQLite database (created if used locally)
-├── data/                        # case_studies.json (+ optional case_study_notes.json) for /case-studies
-├── Procfile                     # Deployment configuration for Railway/Heroku
-├── Architecture design.md       # System architecture documentation
+│   ├── stats/                        # Corpus statistics scripts
+│   ├── verify/                       # Claims, uniqueness, ICAC TF alignment, triage tests
+│   ├── run/                          # ingest_all_pdfs.sh, clear_postgres.py, train_triage_model.py
+│   └── scraper/                      # fetch_source_urls.py, scrape_pdf.py
+├── visualization/                    # Static HTML (served by run/main.py)
+│   ├── assets/                       # caselinker-api.js, cover.png
+│   ├── home.html                     # /
+│   ├── index.html                    # /visualization
+│   ├── search.html                   # /search (facet tree)
+│   ├── analysis.html                 # /analysis
+│   ├── clusters.html                 # /clusters
+│   ├── stats.html                    # /stats
+│   ├── query.html                    # /query
+│   ├── expand.html                   # /expand
+│   ├── triage.html                   # /triage
+│   ├── ml-experimental.html          # /ml-experimental
+│   ├── tech-landscape.html           # /tech-landscape
+│   ├── LLM.html                      # /llm
+│   ├── sources.html                  # /sources
+│   ├── case-studies.html             # /case-studies
+│   ├── audit.html                    # /audit
+│   └── under-the-hood.html           # /under-the-hood
+├── models/                           # triage_bundle.joblib (optional; see /triage)
+├── data/                             # case_studies.json for /case-studies
+├── setup.sh
+├── requirements.txt                  # Core deps
+├── requirements-ml.txt               # Optional ML / NER stack
+├── config.py
+├── caselinker.db                     # SQLite (local; created on first ingest)
+├── triage.md                         # Triage rules and model docs
+├── Procfile                          # Railway / Heroku start command
+└── Architecture design.md
 ```
 
 ## Case Schema & Feature Extraction
@@ -324,7 +377,7 @@ Each case includes structured features extracted from case narratives:
 - `POST /api/facet-cohort-members` - Case IDs for a facet path (same prune semantics as tree; small cohorts gated)
 - `GET /triage` - Triage page (rules, model evaluation, corpus model tiers, live paste)
 - `GET /ml-experimental` - Experimental ML documentation page
-- `GET /api/triage-eval` - Stratified train/test metrics on live cases (same pipeline as `scripts/test_triage.py`)
+- `GET /api/triage-eval` - Stratified train/test metrics on live cases (same pipeline as `scripts/verify/test_triage.py`)
 - `GET /api/triage-model-corpus` - Saved bundle predictions over live DB; optional `facet_constraints` JSON query param (rate limited)
 - `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence
 - `GET /sources` - Data sources page
@@ -333,7 +386,7 @@ Each case includes structured features extracted from case narratives:
 - `GET /api/case-studies/notes/{case_id}` - Community notes for a study id
 - `POST /api/case-studies/notes/{case_id}` - Append a community note (rate limited)
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
-- `GET /api/cases` - Full bulk case export (internal/local only; requires localhost or `CASELINKER_INTERNAL_API_KEY`)
+- `GET /api/cases` - Full bulk case export (localhost or `CaseLinker-Key` in `CASELINKER_TRUSTED_KEYS`)
 - `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
 - `POST /api/cases-summaries-by-ids` - Public batched summaries (max 500 ids per request) for cluster membership and similar flows
 - `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
@@ -351,11 +404,9 @@ Each case includes structured features extracted from case narratives:
   - Production: Railway PostgreSQL with encrypted connections
   - Local: SQLite database auto-created on first run
 - **Visualization**: D3.js, HTML/CSS/JavaScript
-- **ML/NER**: Stanza primar NER processing model; optional Transformers/spaCy paths in code
-  - Extracts law enforcement organizations, ages, dates, and locations from case text
-  - Hybrid approach: ML/NER supplements regex-based pattern extraction via MergeProcessing layer
-  - Pattern processing takes precedence when both sources have data; NER fills gaps
-- **Supervised triage (experimental)**: scikit-learn random forest or decision tree; labels from rule-based priority scores; `joblib` bundle loaded at inference time (see `/triage` and `scripts/train_triage_model.py`)
+- **ML/NER**: 
+  - Stanza primary NER model; optional Transformers/spaCy paths in code
+  - **Supervised triage (experimental)**: scikit-learn random forest or decision tree; labels from rule-based priority scores; `joblib` bundle loaded at inference time
 - **Architecture**: Modular 5-layer design
 
 ## Deployment
@@ -364,7 +415,7 @@ CaseLinker can be deployed to cloud platforms for public access. The app include
 
 
 ## Sources and Ethics
-- **No Sensitive Data**: This system contains cases from publicly available sources (AZ, South Florida, LAPD ICAC Cases and Arrests, NCMEC CyberTipline Success Stories, DOJ CEOS Press Releases, ICAC press releases from the Georgia Bureau of Investigation, Michigan, New York, and Kentucky State Police, Texas, Pennsylvania, New Jersey, Vermont, Louisiana, South Dakota, and Idaho Office of the Attorney General, Tennessee Bureau of Investigation, South Carolina, Utah, Mississippi, Ohio, and Illinois Attorney General, and Silicon Valley ICAC aggregated news coverage). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668) confirming that the research contains no private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
+- **No Sensitive Data**: This system contains cases from publicly available sources (ICAC Task Forces Cases and Arrests, NCMEC CyberTipline Success Stories, DOJ CEOS Press Releases, and State Attorneys General's Office Press Releases). These reports are publicly available, summarize investigations, arrests, and case details, and are redacted for public release. All data was already in the public domain. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668); this research does not contain private or identifiable information under federal regulations [45 CFR 46.102(f)(1), (2)].
 - **See `/sources` page for full disclaimer regarding data usage**
 
 ## Contributing

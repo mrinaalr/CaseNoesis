@@ -755,7 +755,7 @@
             <h2>Facet tree (live)</h2>
             <p class="tree-intro">
                 Below is a facet tree built from the case database
-                (extracted labels only, no raw narratives) drawn with <strong>D3</strong> as an SVG: each box is a cohort node, lines are parent→child edges (a <em>decision tree</em> over facets). You can search via filling in the <em> I am interested in </em> box  or manual <em> prune and focus</em>.
+                (extracted labels only, no raw narratives): each box is a cohort node, lines are parent→child edges (a <em>decision tree</em> over facets). You can search via filling in the <em> I am interested in </em> box  or manual <em> prune and focus</em>.
             </p>
             <div class="facet-zoom-tools" id="facet-zoom-tools" aria-label="Tree zoom controls">
                 <button type="button" id="facet-zoom-in" title="Zoom in">+</button>
@@ -775,7 +775,7 @@
                     <span class="tree-sentence-wrap" data-sentence-slot="locations"><input type="text" class="tree-sentence-input" data-field="locations" id="facet-sent-locations" placeholder="Location" title="8. Location" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="severity_phrases"><input type="text" class="tree-sentence-input" data-field="severity_phrases" id="facet-sent-severity_phrases" placeholder="Sev. phrase" title="9. Severity phrase" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
                     <span class="tree-sentence-wrap" data-sentence-slot="era_period"><input type="text" class="tree-sentence-input" data-field="era_period" id="facet-sent-era_period" placeholder="Date range" title="10. Date range" spellcheck="false" autocomplete="off" /><span class="tree-sentence-ghost-suffix" aria-hidden="true"></span></span>
-                    <p class="tree-sentence-hint"><strong>Workflow:</strong> fill in these sentence boxes (or open <em>Prune &amp; focus</em> for more filters), set <strong>Facet depth</strong> to reduce tree size, then click <strong>Reload tree</strong>. — Type a label: <strong>grey</strong> shows the rest of the <em>first</em> matching labels (alphabetically among prefixes). Searches that don't match pre-defined labels show nothing; red border means no label starts that way. Tab accepts the grey completion. Leave blank to skip.</p>
+                    <p class="tree-sentence-hint"><strong>Live search:</strong> type a label in any box below — <strong>grey</strong> completes the first prefix match (A→Z). <strong>Tab</strong> or <strong>Enter</strong> accepts it and reloads the tree immediately. Typing a full valid label also reloads after a short pause. Red border = no label starts that way. For multi-value filters or split dimensions, use <em>Prune &amp; focus</em> or <strong>Reload tree</strong>.</p>
                 </div>
                 <button type="button" id="facet-reload">Reload tree</button>
                 <label for="facet-depth">Facet depth</label>
@@ -873,6 +873,8 @@
     var cohortModalNodeData = null;
     /** facet field key → list of tag strings (from /api/facet-distinct; union of all tags per field) */
     var sentenceFacetLists = {};
+    var sentenceLiveReloadTimer = null;
+    var SENTENCE_LIVE_RELOAD_MS = 380;
 
     var FACET_SCHEMA = [
         { field: 'case_topics', label: '1. Topic' },
@@ -1109,6 +1111,16 @@
         return out;
     }
 
+    function canonicalSentenceValue(full, typed) {
+        if (!typed) return null;
+        var t = typed.trim();
+        if (!t) return null;
+        for (var i = 0; i < full.length; i++) {
+            if (full[i].toLowerCase() === t.toLowerCase()) return full[i];
+        }
+        return full.indexOf(t) !== -1 ? t : null;
+    }
+
     function getSentenceConstraintsFromUi() {
         var out = {};
         var box = document.getElementById('facet-sentence-blanks');
@@ -1119,7 +1131,8 @@
             var t = (inp.value || '').trim();
             if (!t) return;
             var full = sentenceFacetLists[fk] || [];
-            if (full.indexOf(t) !== -1) out[fk] = [t];
+            var canon = canonicalSentenceValue(full, t);
+            if (canon) out[fk] = [canon];
         });
         return out;
     }
@@ -1221,10 +1234,32 @@
         var wrap = getSentenceWrap(inp);
         wrap.classList.remove('tree-sentence-input-invalid');
         wrap.classList.remove('tree-sentence-input-dead');
-        if (t.length > 0 && full.indexOf(t) === -1) {
+        if (t.length > 0 && !canonicalSentenceValue(full, t)) {
             wrap.classList.add('tree-sentence-input-invalid');
         }
         refreshSentenceInputVisuals(inp);
+    }
+
+    function sentenceValueIsCommitted(inp) {
+        var fk = inp.dataset.field;
+        var full = sentenceFacetLists[fk] || [];
+        var t = (inp.value || '').trim();
+        if (!t) return true;
+        return !!canonicalSentenceValue(full, t);
+    }
+
+    /** Debounced tree reload when sentence filters change (live search). */
+    function scheduleSentenceLiveReload() {
+        clearTimeout(sentenceLiveReloadTimer);
+        sentenceLiveReloadTimer = setTimeout(function () {
+            sentenceLiveReloadTimer = null;
+            loadTree();
+        }, SENTENCE_LIVE_RELOAD_MS);
+    }
+
+    function trySentenceLiveReload(inp) {
+        if (inp && !sentenceValueIsCommitted(inp)) return;
+        scheduleSentenceLiveReload();
     }
 
     function wireSentenceAutocomplete() {
@@ -1234,21 +1269,44 @@
             if (!e.target.classList || !e.target.classList.contains('tree-sentence-input')) return;
             getSentenceWrap(e.target).classList.remove('tree-sentence-input-invalid');
             refreshSentenceInputVisuals(e.target);
+            var inp = e.target;
+            var fk = inp.dataset.field;
+            var t = (inp.value || '').trim();
+            var full = sentenceFacetLists[fk] || [];
+            if (!t) {
+                trySentenceLiveReload(inp);
+                return;
+            }
+            if (full.some(function (v) { return v.toLowerCase() === t.toLowerCase(); })) {
+                trySentenceLiveReload(inp);
+            }
         });
         box.addEventListener('keydown', function (e) {
             if (!e.target.classList || !e.target.classList.contains('tree-sentence-input')) return;
-            if (e.key !== 'Tab' || e.shiftKey) return;
             var inp = e.target;
             var fk = inp.dataset.field;
             var raw = inp.value || '';
             var full = sentenceFacetLists[fk] || [];
             var match = firstSentencePrefixMatch(full, raw);
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (match) inp.value = match;
+                refreshSentenceInputVisuals(inp);
+                onSentenceInputBlur(inp);
+                trySentenceLiveReload(inp);
+                return;
+            }
+
+            if (e.key !== 'Tab' || e.shiftKey) return;
             if (!match || match.toLowerCase() === raw.toLowerCase()) return;
             var suffix = match.substring(raw.length);
             if (!suffix) return;
             e.preventDefault();
             inp.value = match;
             refreshSentenceInputVisuals(inp);
+            onSentenceInputBlur(inp);
+            trySentenceLiveReload(inp);
             var all = Array.prototype.slice.call(box.querySelectorAll('.tree-sentence-input'));
             var idx = all.indexOf(inp);
             if (idx >= 0 && idx < all.length - 1) {
@@ -1265,6 +1323,7 @@
         box.addEventListener('blur', function (e) {
             if (!e.target.classList || !e.target.classList.contains('tree-sentence-input')) return;
             onSentenceInputBlur(e.target);
+            trySentenceLiveReload(e.target);
         }, true);
         window.addEventListener('resize', function () {
             document.querySelectorAll('#facet-sentence-blanks .tree-sentence-input').forEach(function (inp) {

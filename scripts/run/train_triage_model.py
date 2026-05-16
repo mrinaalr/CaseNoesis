@@ -10,10 +10,10 @@ This is a **proof-of-concept**: the model learns to approximate the current
 rules from extracted tags, not ground truth from investigators.
 
 Usage:
-  python3 scripts/train_triage_model.py --out models/triage_bundle.joblib
-  python3 scripts/train_triage_model.py --no-agencies --out models/triage_no_agencies.joblib
-  python3 scripts/train_triage_model.py --explain
-  python3 scripts/train_triage_model.py --predict CASE_ID --bundle models/triage_bundle.joblib
+  python3 scripts/run/train_triage_model.py --out models/triage_bundle.joblib
+  python3 scripts/run/train_triage_model.py --no-agencies --out models/triage_no_agencies.joblib
+  python3 scripts/run/train_triage_model.py --explain
+  python3 scripts/run/train_triage_model.py --predict CASE_ID --bundle models/triage_bundle.joblib
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src" / "Storage Layer"))
 sys.path.insert(0, str(REPO_ROOT / "src" / "Clustering & Analysis Layer"))
 
@@ -51,6 +51,22 @@ import pandas as pd  # noqa: E402
 
 from analysis import triage_cases  # noqa: E402
 from storage import CaseStorage  # noqa: E402
+
+
+def get_case_storage(db_path: Optional[Path] = None) -> CaseStorage:
+    """SQLite by default; PostgreSQL when DATABASE_URL is set (same as the FastAPI app)."""
+    if os.getenv("DATABASE_URL"):
+        try:
+            from storage_postgres import CaseStorage as PgCaseStorage
+
+            return PgCaseStorage()
+        except ImportError as e:
+            raise SystemExit(
+                "DATABASE_URL is set but PostgreSQL storage is unavailable "
+                "(install psycopg2-binary)."
+            ) from e
+    path = db_path or Path(os.environ.get("CASELINKER_DB", REPO_ROOT / "caselinker.db"))
+    return CaseStorage(str(path.resolve()))
 
 LIST_COLS_WITH_AGENCIES = (
     "case_topics",
@@ -398,9 +414,10 @@ What does it mean to "classify a new case"?
 
 def normalize_triage_bundle_after_load(bundle: TriageModelBundle) -> None:
     """
-    Bundles trained with newer scikit-learn can unpickle under an older sklearn with
-    SimpleImputer.statistics_ as object dtype; SimpleImputer.transform then raises.
-    Coerce numeric statistics to float64 so inference works across versions.
+    Make pickled bundles usable across minor sklearn versions (train vs API venv).
+
+    - Older bundles: statistics_ may be object dtype → coerce to float64.
+    - Newer runtime (e.g. 1.8+): older pickles may lack SimpleImputer._fill_dtype.
     """
     prep = bundle.pipeline.named_steps.get("prep")
     if prep is None:
@@ -409,10 +426,12 @@ def normalize_triage_bundle_after_load(bundle: TriageModelBundle) -> None:
     if imp is None:
         return
     stats = getattr(imp, "statistics_", None)
-    if stats is None:
-        return
-    if hasattr(stats, "dtype") and stats.dtype == np.dtype("O"):
+    if stats is not None and hasattr(stats, "dtype") and stats.dtype == np.dtype("O"):
         imp.statistics_ = np.asarray(stats, dtype=np.float64)
+        stats = imp.statistics_
+    if stats is not None and not hasattr(imp, "_fill_dtype"):
+        fill_dtype = getattr(stats, "dtype", np.float64)
+        imp._fill_dtype = np.dtype(fill_dtype) if not isinstance(fill_dtype, np.dtype) else fill_dtype
 
 
 @dataclass
@@ -468,7 +487,7 @@ def main() -> None:
             raise SystemExit(1)
         bundle: TriageModelBundle = joblib.load(bundle_path)
         normalize_triage_bundle_after_load(bundle)
-        storage = CaseStorage(str(db))
+        storage = get_case_storage(db)
         case = storage.get_case(args.predict)
         if not case:
             print(f"Case not found: {args.predict}", file=sys.stderr)
@@ -486,7 +505,7 @@ def main() -> None:
             print(f"  {label}: {p:.4f}")
         return
 
-    storage = CaseStorage(str(db.resolve()))
+    storage = get_case_storage(db)
     cases = storage.get_all_cases(include_raw_data=False)
     if len(cases) < 12:
         print(f"Need at least ~12 cases for a stable split; got {len(cases)}.", file=sys.stderr)

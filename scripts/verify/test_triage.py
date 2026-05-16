@@ -3,12 +3,12 @@
 Quick triage model evaluation with an 80/20 train-test split.
 
 Uses existing CaseLinker triage labels (from `analysis.triage_cases`) and the same
-feature pipeline as `scripts/train_triage_model.py`.
+feature pipeline as `scripts/run/train_triage_model.py`.
 
 Examples:
-  python3 scripts/test_triage.py
-  python3 scripts/test_triage.py --no-agencies
-  python3 scripts/test_triage.py --model tree --seed 7
+  python3 scripts/verify/test_triage.py
+  python3 scripts/verify/test_triage.py --no-agencies
+  python3 scripts/verify/test_triage.py --model tree --seed 7
 """
 
 from __future__ import annotations
@@ -21,13 +21,13 @@ import numpy as np
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts" / "run"))
 sys.path.insert(0, str(ROOT / "src" / "Storage Layer"))
 
 from train_triage_model import (  # noqa: E402
-    CaseStorage,
     cases_to_dataframe,
+    get_case_storage,
     make_labels,
     priority_scores_by_id,
     train_pipeline,
@@ -54,7 +54,7 @@ def main() -> None:
     parser.add_argument("--no-agencies", action="store_true", help="Drop agencies feature")
     args = parser.parse_args()
 
-    storage = CaseStorage(str(args.db))
+    storage = get_case_storage(args.db)
     cases = storage.get_all_cases(include_raw_data=False)
     if len(cases) < 20:
         raise SystemExit(f"Need at least 20 cases; found {len(cases)}")

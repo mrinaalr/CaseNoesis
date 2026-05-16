@@ -5,9 +5,9 @@
 # POSIX sh (macOS /bin/sh, Railway); no bash-4 mapfile.
 #
 # Usage (from repo root):
-#   ./scripts/ingest_all_pdfs.sh
-#   ./scripts/ingest_all_pdfs.sh --no-aggregate
-#   DATABASE_URL=... ./scripts/ingest_all_pdfs.sh   # Railway Postgres
+#   ./scripts/run/ingest_all_pdfs.sh
+#   ./scripts/run/ingest_all_pdfs.sh --no-aggregate
+#   DATABASE_URL=... ./scripts/run/ingest_all_pdfs.sh   # Railway Postgres
 #
 # --no-aggregate: skip aggregate federal reports so you can load state/ICAC PDFs
 # first, then ingest NCMEC / DOJ separately. Skips when the PDF basename (case-
@@ -23,7 +23,7 @@ for arg in "$@"; do
     --no-aggregate) NO_AGGREGATE=1 ;;
     -h | --help)
       cat <<'EOF' >&2
-Usage: ingest_all_pdfs.sh [--no-aggregate]
+Usage: scripts/run/ingest_all_pdfs.sh [--no-aggregate]
 
   (default)       Ingest every PDF under the repo (including NCMEC / DOJ).
   --no-aggregate  Skip PDFs whose basename looks like NCMEC/CyberTipline or
@@ -38,7 +38,7 @@ EOF
   esac
 done
 
-REPO_ROOT=$(cd "$(dirname "$0")/.." && pwd)
+REPO_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$REPO_ROOT" || exit 1
 
 if [ -d venv ]; then
@@ -53,6 +53,8 @@ filtered_sorted_pdf_paths() {
     -not -path "*/venv/*" \
     -not -path "*/.venv/*" \
     -not -path "*/node_modules/*" \
+    -not -path "*/tmp/*" \
+    -not -path "*/scrape_output/*" \
     2>/dev/null |
     while IFS= read -r f; do
       [ -n "$f" ] || continue
@@ -88,6 +90,10 @@ while IFS= read -r f; do
   echo "  - $f" >&2
 done <"$LIST"
 
+# Avoid xargs-only pipelines (ARG_MAX-safe for typical ingest sizes; POSIX sh).
+set --
 while IFS= read -r f; do
-  printf '%s\0' "$f"
-done <"$LIST" | xargs -0 python3 src/main.py
+  [ -n "$f" ] || continue
+  set -- "$@" "$f"
+done <"$LIST"
+python3 src/main.py "$@"

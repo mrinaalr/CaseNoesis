@@ -13,7 +13,9 @@ import sys
 import json
 import os
 import re
+import hashlib
 import logging
+import threading
 import time
 import requests
 from datetime import datetime
@@ -22,10 +24,11 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Storage Layer"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Clustering & Analysis Layer"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "Visualization Layer"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO_ROOT / "src" / "Storage Layer"))
+sys.path.insert(0, str(_REPO_ROOT / "src" / "Clustering & Analysis Layer"))
+sys.path.insert(0, str(_REPO_ROOT / "src" / "Visualization Layer"))
+sys.path.insert(0, str(_REPO_ROOT / "scripts" / "run"))
 
 # Load .env from repo root and run/ (optional) so GROQ_API_KEY, GEMINI_API_KEY, DATABASE_URL, etc. work locally without export.
 try:
@@ -37,6 +40,10 @@ try:
     load_dotenv(_run_dir / ".env", override=False)
 except ImportError:
     pass
+
+# Partner API keys for exempting GET /api/cases/{case_id} from the public daily export cap.
+_trusted_raw = set(os.environ.get("CASELINKER_TRUSTED_KEYS", "").split(",")) - {""}
+CASELINKER_TRUSTED_KEYS: set = {k.strip() for k in _trusted_raw if k.strip()}
 
 # Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite
 if os.getenv("DATABASE_URL"):
@@ -134,26 +141,85 @@ def _is_local_request(request: Request) -> bool:
     return host in {"127.0.0.1", "::1", "localhost"}
 
 
-def _is_internal_api_request(request: Request) -> bool:
-    """
-    Internal API guard for sensitive endpoints.
+_BULK_CASES_FORBIDDEN_DETAIL = (
+    "Bulk corpus export is restricted to local usage and access holders. "
+    "To request full access to the corpus, please email mramachandra@umass.edu for the API key."
+)
 
-    - Allows localhost requests (dev).
-    - Allows requests with matching internal key header/query.
-    """
-    if _is_local_request(request):
-        return True
 
-    expected = os.getenv("CASELINKER_INTERNAL_API_KEY", "").strip()
-    if not expected:
+_CASE_ID_DAILY_LIMIT = 20
+_CASE_ID_DAILY_LIMIT_DETAIL = (
+    "Daily case id export limit reached (20/day). CaseLinker is open research! "
+    "If you're building on this data or need bulk access, please email mramachandra@umass.edu "
+    "to request a free API key for api/cases. Case id export resets at midnight UTC."
+)
+_case_id_daily_counts: Dict[str, int] = {}
+_case_id_daily_lock = threading.Lock()
+
+
+def _has_trusted_case_export_key(request: Request) -> bool:
+    """True when CaseLinker-Key matches a non-empty entry in CASELINKER_TRUSTED_KEYS."""
+    if not CASELINKER_TRUSTED_KEYS:
         return False
+    provided = (request.headers.get("CaseLinker-Key") or "").strip()
+    return bool(provided) and provided in CASELINKER_TRUSTED_KEYS
 
-    provided = (
-        request.headers.get("X-CaseLinker-Internal-Key")
-        or request.query_params.get("internal_key")
-        or ""
-    ).strip()
-    return bool(provided) and provided == expected
+
+def _has_bulk_corpus_access(request: Request) -> bool:
+    """Localhost or trusted partner key (bulk export and unsanitized single-case payloads)."""
+    return _is_local_request(request) or _has_trusted_case_export_key(request)
+
+
+def _enforce_case_id_daily_limit(request: Request) -> None:
+    """
+    Per-IP daily cap on GET /api/cases/{case_id} (midnight UTC reset).
+    Exempt: localhost and CaseLinker-Key in CASELINKER_TRUSTED_KEYS.
+    """
+    if _is_local_request(request) or _has_trusted_case_export_key(request):
+        return
+
+    client_ip = request.headers.get("X-Forwarded-For", request.client.host).split(",")[0].strip()
+    day = datetime.utcnow().strftime("%Y-%m-%d")
+    bucket = f"{client_ip}|{day}"
+
+    with _case_id_daily_lock:
+        stale = [k for k in _case_id_daily_counts if not k.endswith(f"|{day}")]
+        for k in stale:
+            _case_id_daily_counts.pop(k, None)
+
+        count = _case_id_daily_counts.get(bucket, 0)
+        if count >= _CASE_ID_DAILY_LIMIT:
+            raise HTTPException(status_code=429, detail=_CASE_ID_DAILY_LIMIT_DETAIL)
+        _case_id_daily_counts[bucket] = count + 1
+
+
+_LLM_DAILY_LIMIT = 50
+_LLM_DAILY_LIMIT_DETAIL = (
+    "Daily LLM chat limit reached (50/day). Resets at midnight UTC. "
+    "For higher limits, email mramachandra@umass.edu."
+)
+_llm_daily_counts: Dict[str, int] = {}
+_llm_daily_lock = threading.Lock()
+
+
+def _enforce_llm_daily_limit(request: Request) -> None:
+    """Per-IP daily cap on POST /api/llm/chat (midnight UTC). Exempt: localhost and CaseLinker-Key."""
+    if _is_local_request(request) or _has_trusted_case_export_key(request):
+        return
+
+    client_ip = request.headers.get("X-Forwarded-For", request.client.host).split(",")[0].strip()
+    day = datetime.utcnow().strftime("%Y-%m-%d")
+    bucket = f"{client_ip}|{day}"
+
+    with _llm_daily_lock:
+        stale = [k for k in _llm_daily_counts if not k.endswith(f"|{day}")]
+        for k in stale:
+            _llm_daily_counts.pop(k, None)
+
+        count = _llm_daily_counts.get(bucket, 0)
+        if count >= _LLM_DAILY_LIMIT:
+            raise HTTPException(status_code=429, detail=_LLM_DAILY_LIMIT_DETAIL)
+        _llm_daily_counts[bucket] = count + 1
 
 
 def _sanitize_case_for_public(case: Dict[str, Any]) -> Dict[str, Any]:
@@ -855,6 +921,11 @@ def _parse_include_facets_param(raw: Optional[str]) -> Optional[List[str]]:
     return filtered or None
 
 
+def _redis_cache_payload_hash(obj: Any) -> str:
+    raw = json.dumps(obj, sort_keys=True, default=str, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:48]
+
+
 def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[str, Any]:
     """
     Run the saved triage bundle on live DB cases (facet-filtered when constraints are set).
@@ -867,6 +938,7 @@ def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[
         logger.warning("triage live corpus: import failed: %s", e)
         return {
             "corpus_predictions_available": False,
+            "corpus_error": f"Triage module unavailable: {e}",
             "model_case_ids_by_tier": {},
             "corpus_class_names": [],
             "n_cases": 0,
@@ -877,19 +949,21 @@ def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[
     try:
         bundle_path = default_bundle_path()
         bundle = load_triage_bundle(bundle_path)
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         return {
             "corpus_predictions_available": False,
+            "corpus_error": str(e),
             "model_case_ids_by_tier": {},
             "corpus_class_names": [],
             "n_cases": 0,
             "facet_filter_applied": bool(constraints),
             "corpus_predictions_stale": False,
         }
-    except Exception:
+    except Exception as e:
         logger.exception("triage live corpus: bundle load failed")
         return {
             "corpus_predictions_available": False,
+            "corpus_error": f"Could not load triage bundle: {e}",
             "model_case_ids_by_tier": {},
             "corpus_class_names": [],
             "n_cases": 0,
@@ -922,10 +996,14 @@ def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[
 
     try:
         payload = build_corpus_predictions_payload(filtered, bundle, bp_resolved)
-    except Exception:
+    except Exception as e:
         logger.exception("triage live corpus: inference failed")
         return {
             "corpus_predictions_available": False,
+            "corpus_error": (
+                f"Model inference failed ({e}). Retrain with the same Python as the API: "
+                "./venv/bin/python scripts/run/train_triage_model.py --out models/triage_bundle.joblib"
+            ),
             "model_case_ids_by_tier": {},
             "corpus_class_names": [],
             "n_cases": 0,
@@ -1133,12 +1211,8 @@ def get_all_cases(request: Request, include_raw_data: bool = False):
     """
     global _cases_cache, _cases_cache_case_count
 
-    # Bulk export is intentionally internal-only.
-    if not _is_internal_api_request(request):
-        raise HTTPException(
-            status_code=403,
-            detail="Bulk case access is restricted to internal requests.",
-        )
+    if not _has_bulk_corpus_access(request):
+        raise HTTPException(status_code=403, detail=_BULK_CASES_FORBIDDEN_DETAIL)
 
     try:
         # Get current case count for cache versioning
@@ -1278,6 +1352,12 @@ def get_facet_distinct(request: Request):
     The facet tree still partitions by primary bucket per level; filters match if any tag fits.
     """
     try:
+        current_case_count = get_case_count()
+        if REDIS_AVAILABLE:
+            cache_key = get_cache_key("facet-distinct", field="all", version=current_case_count)
+            cached = get_cached(cache_key)
+            if cached is not None and "error" not in cached:
+                return cached
         cases = storage.get_all_cases(include_raw_data=False) or []
         enrich_cases_with_era_period(cases)
         options: Dict[str, Any] = {}
@@ -1286,7 +1366,14 @@ def get_facet_distinct(request: Request):
                 "label": label,
                 "values": distinct_field_values(cases, field_key),
             }
-        return {"total_cases": len(cases), "facets": options}
+        out = {"total_cases": len(cases), "facets": options}
+        if REDIS_AVAILABLE:
+            set_cached(
+                get_cache_key("facet-distinct", field="all", version=current_case_count),
+                out,
+                ttl=3600,
+            )
+        return out
     except Exception as e:
         logger.exception("facet-distinct failed: %s", e)
         return {"error": str(e), "total_cases": 0, "facets": {}}
@@ -1324,6 +1411,20 @@ def get_facet_tree(
         constraints = _parse_facet_constraints_param(facet_constraints)
         include_list = _parse_include_facets_param(include_facets)
         cache_key = _facet_tree_cache_key_tuple(current_count, max_depth, constraints, include_list)
+        tree_ph = _redis_cache_payload_hash(
+            {
+                "max_depth": max_depth,
+                "facet_constraints": facet_constraints if facet_constraints is not None else "__ABSENT__",
+                "include_facets": include_facets if include_facets is not None else "__ABSENT__",
+            }
+        )
+        if REDIS_AVAILABLE:
+            redis_tree_key = get_cache_key("facet-tree", h=tree_ph, version=current_count)
+            redis_cached = get_cached(redis_tree_key)
+            if redis_cached is not None and not redis_cached.get("error"):
+                _facet_tree_cache_payload = redis_cached
+                _facet_tree_cache_key = cache_key
+                return redis_cached
         if _facet_tree_cache_payload is not None and _facet_tree_cache_key == cache_key:
             return _facet_tree_cache_payload
 
@@ -1355,6 +1456,12 @@ def get_facet_tree(
         }
         _facet_tree_cache_payload = payload
         _facet_tree_cache_key = cache_key
+        if REDIS_AVAILABLE:
+            set_cached(
+                get_cache_key("facet-tree", h=tree_ph, version=current_count),
+                payload,
+                ttl=3600,
+            )
         return payload
     except Exception as e:
         logger.exception("facet-tree failed: %s", e)
@@ -1408,6 +1515,15 @@ def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
     small cohorts (n < 3) unless access_key matches the demo key.
     """
     try:
+        current_count = get_case_count()
+        rk = None
+        if REDIS_AVAILABLE:
+            body_payload = body.model_dump() if hasattr(body, "model_dump") else body.dict()
+            ph = _redis_cache_payload_hash(body_payload)
+            rk = get_cache_key("facet-cohort", h=ph, version=current_count)
+            cached = get_cached(rk)
+            if cached is not None and "error" not in cached:
+                return cached
         all_cases = storage.get_all_cases(include_raw_data=False) or []
         enrich_cases_with_era_period(all_cases)
         constraints = body.facet_constraints or {}
@@ -1423,7 +1539,7 @@ def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
         key_ok = (body.access_key or "").strip() == COHORT_DEMO_ACCESS_KEY
         if count < COHORT_SMALL_THRESHOLD:
             if not key_ok:
-                return {
+                out = {
                     "count": count,
                     "case_ids": None,
                     "requires_access_key": True,
@@ -1435,12 +1551,18 @@ def post_facet_cohort_members(request: Request, body: FacetCohortMembersBody):
                         "in the system (for example case visualization)."
                     ),
                 }
-        return {
+                if REDIS_AVAILABLE and rk:
+                    set_cached(rk, out, ttl=3600)
+                return out
+        out = {
             "count": count,
             "case_ids": ids,
             "requires_access_key": False,
             "threshold": COHORT_SMALL_THRESHOLD,
         }
+        if REDIS_AVAILABLE and rk:
+            set_cached(rk, out, ttl=3600)
+        return out
     except Exception as e:
         logger.exception("facet-cohort-members failed: %s", e)
         return {"error": str(e), "count": 0, "case_ids": None, "requires_access_key": False}
@@ -1550,14 +1672,14 @@ def get_unique_tags(request: Request):
 
 
 @app.get("/api/cases/{case_id}")
-@limiter.limit("100/minute")
 def get_case(request: Request, case_id: str):
-    """Get a specific case by ID"""
+    """Get a specific case by ID (20 requests per IP per day UTC; see _enforce_case_id_daily_limit)."""
+    _enforce_case_id_daily_limit(request)
     case = storage.get_case(case_id)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     # Public callers can still fetch a case, but never raw narrative payloads.
-    if not _is_internal_api_request(request):
+    if not _has_bulk_corpus_access(request):
         case = _sanitize_case_for_public(case)
     return case
 
@@ -1741,8 +1863,24 @@ def get_tag_threader(request: Request, selected_tags: List[Dict[str, str]]):
     Returns:
         Dictionary with intersection cases and tag results
     """
+    current_count = get_case_count()
+    if REDIS_AVAILABLE:
+        tags_keyed = sorted(
+            selected_tags or [],
+            key=lambda d: (
+                str((d or {}).get("tag", "")),
+                str((d or {}).get("category", "")),
+            ),
+        )
+        ph = _redis_cache_payload_hash(tags_keyed)
+        rk = get_cache_key("tag-threader", h=ph, version=current_count)
+        cached = get_cached(rk)
+        if cached is not None:
+            return cached
     cases = storage.get_all_cases()
     result = tag_threader(cases, selected_tags)
+    if REDIS_AVAILABLE:
+        set_cached(rk, result, ttl=3600)
     return result
 
 
@@ -1759,9 +1897,26 @@ def get_tagged_cases(request: Request, selected_tags: List[Dict[str, str]]):
     Returns:
         List of case dictionaries matching ALL selected tags
     """
+    current_count = get_case_count()
+    if REDIS_AVAILABLE:
+        tags_keyed = sorted(
+            selected_tags or [],
+            key=lambda d: (
+                str((d or {}).get("tag", "")),
+                str((d or {}).get("category", "")),
+            ),
+        )
+        ph = _redis_cache_payload_hash(tags_keyed)
+        rk = get_cache_key("return-tagged", h=ph, version=current_count)
+        cached = get_cached(rk)
+        if cached is not None:
+            return cached
     cases = storage.get_all_cases()
     matching_cases = return_tagged_cases(cases, selected_tags)
-    return {"cases": matching_cases}
+    out = {"cases": matching_cases}
+    if REDIS_AVAILABLE:
+        set_cached(rk, out, ttl=3600)
+    return out
 
 
 @app.get("/api/case-ids-by-filter")
@@ -1782,6 +1937,24 @@ def get_case_ids_by_filter(
     Returns just the case IDs that match the filter.
     """
     try:
+        current_count = get_case_count()
+        rk = None
+        if REDIS_AVAILABLE:
+            filter_params = {
+                "organization": organization,
+                "relationship": relationship,
+                "prosecution_status": prosecution_status,
+                "age_range": age_range,
+                "severity_indicator": severity_indicator,
+                "platform": platform,
+                "year": year,
+                "investigation_type": investigation_type,
+            }
+            ph = _redis_cache_payload_hash(filter_params)
+            rk = get_cache_key("case-ids-filter", h=ph, version=current_count)
+            cached = get_cached(rk)
+            if cached is not None and "error" not in cached:
+                return cached
         cases = storage.get_all_cases(include_raw_data=False)
         
         import json
@@ -1886,7 +2059,7 @@ def get_case_ids_by_filter(
         
         case_ids = [c.get('id') for c in filtered_cases if c.get('id')]
         
-        return {
+        out = {
             "case_ids": case_ids,
             "count": len(case_ids),
             "filter": {
@@ -1900,6 +2073,9 @@ def get_case_ids_by_filter(
                 "investigation_type": investigation_type
             }
         }
+        if REDIS_AVAILABLE and rk:
+            set_cached(rk, out, ttl=3600)
+        return out
     except Exception as e:
         from error_handler import handle_error
         return handle_error(e)
@@ -2929,6 +3105,7 @@ def api_llm_chat(request: Request, body: LlmChatBody):
             status_code=503,
             detail="LLM chat is not configured (set GROQ_API_KEY on the server).",
         )
+    _enforce_llm_daily_limit(request)
     try:
         return nl_llm(
             body.question.strip(),
@@ -2974,7 +3151,7 @@ def api_triage_eval(
     test_size: float = Query(0.2, ge=0.05, le=0.45),
 ):
     """
-    Run the same 80/20-style eval as scripts/test_triage.py on the live DB,
+    Run the same 80/20-style eval as scripts/verify/test_triage.py on the live DB,
     using train_triage_model.train_pipeline and rule-based triage labels.
     """
     try:
@@ -2996,6 +3173,23 @@ def api_triage_eval(
         raise HTTPException(status_code=400, detail="model must be rf or tree")
     if criterion not in ("gini", "entropy", "log_loss"):
         raise HTTPException(status_code=400, detail="criterion must be gini, entropy, or log_loss")
+
+    current_count = get_case_count()
+    eval_ph = None
+    if REDIS_AVAILABLE:
+        eval_ph = _redis_cache_payload_hash(
+            {
+                "model": model,
+                "criterion": criterion,
+                "no_agencies": bool(no_agencies),
+                "seed": int(seed),
+                "test_size": float(test_size),
+            }
+        )
+        eval_rk = get_cache_key("triage-eval", h=eval_ph, version=current_count)
+        cached_eval = get_cached(eval_rk)
+        if cached_eval is not None:
+            return cached_eval
 
     cases = storage.get_all_cases(include_raw_data=False)
     min_cases = max(20, int(math.ceil(1.0 / test_size)) + 5)
@@ -3058,19 +3252,12 @@ def api_triage_eval(
         "test_size": test_size,
     }
 
-    try:
-        corp = _triage_saved_bundle_corpus_live({})
-        if corp.get("corpus_predictions_available"):
-            out["corpus_predictions_available"] = True
-            out["model_case_ids_by_tier"] = corp["model_case_ids_by_tier"]
-            out["corpus_class_names"] = corp["corpus_class_names"]
-            out["corpus_predictions_meta"] = corp.get("corpus_predictions_meta") or {}
-            out["corpus_predictions_stale"] = False
-        else:
-            out["corpus_predictions_available"] = False
-    except Exception:
-        out["corpus_predictions_available"] = False
-
+    if REDIS_AVAILABLE and eval_ph is not None:
+        set_cached(
+            get_cache_key("triage-eval", h=eval_ph, version=current_count),
+            out,
+            ttl=86400,
+        )
     return out
 
 
@@ -3088,7 +3275,18 @@ def api_triage_model_corpus(
     facet filter). Does not read triage_corpus_predictions.json.
     """
     constraints = _parse_facet_constraints_param(facet_constraints)
-    return _triage_saved_bundle_corpus_live(constraints)
+    current_count = get_case_count()
+    rk = None
+    if REDIS_AVAILABLE:
+        ph = _redis_cache_payload_hash({"facet_constraints": facet_constraints or ""})
+        rk = get_cache_key("triage-corpus", h=ph, version=current_count)
+        cached = get_cached(rk)
+        if cached is not None and cached.get("corpus_predictions_available"):
+            return cached
+    out = _triage_saved_bundle_corpus_live(constraints)
+    if REDIS_AVAILABLE and rk and out.get("corpus_predictions_available"):
+        set_cached(rk, out, ttl=3600)
+    return out
 
 
 class LiveTriageRequest(BaseModel):

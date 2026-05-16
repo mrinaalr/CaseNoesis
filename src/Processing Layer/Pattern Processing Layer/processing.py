@@ -953,7 +953,11 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     # Check for sexual abuse first (excludes from online_only)
     has_sexual_abuse = re.search(r'\b(rape|raped|raping|sexual\s+assault|sexually\s+assaulted|sexual\s+abuse|sexually\s+abused|molest|molested|molesting)\b', case_text, re.IGNORECASE)
     
-    if re.search(r'\b(molest|molesting|hands?\s+on|sexually\s+abused|sexually\s+assaulted)\b', case_text, re.IGNORECASE):
+    if re.search(
+        r'\b(rape|raped|raping|molest\w*|hands?\s+on|sexually\s+abused|sexually\s+assaulted)\b',
+        case_text,
+        re.IGNORECASE,
+    ):
         topics.append('hands_on')
     elif re.search(r'\b(online|chat|trading\s+images?)\b', case_text, re.IGNORECASE) and 'hands_on' not in topics and not has_sexual_abuse:
         topics.append('online_only')

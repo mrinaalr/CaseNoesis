@@ -27,11 +27,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _PROC = _REPO_ROOT / "src" / "Processing Layer"
-_SCRIPTS = _REPO_ROOT / "scripts"
+_SCRIPTS_RUN = _REPO_ROOT / "scripts" / "run"
 if str(_PROC) not in sys.path:
     sys.path.insert(0, str(_PROC))
-if str(_SCRIPTS) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS))
+if str(_SCRIPTS_RUN) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_RUN))
 
 import joblib  # noqa: E402
 
@@ -247,25 +247,9 @@ def write_corpus_predictions_file(
     return out_path
 
 
-def load_corpus_predictions_payload(path: Optional[Path] = None) -> Optional[Dict[str, Any]]:
-    """Load offline corpus JSON; returns None if missing or invalid."""
-    p = path or default_corpus_predictions_path()
-    if not p.is_file():
-        return None
-    try:
-        data = json.loads(p.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return None
-    if not isinstance(data, dict) or data.get("version") != 1:
-        return None
-    if "model_case_ids_by_tier" not in data or "class_names" not in data:
-        return None
-    return data
-
-
 def _patch_main_for_train_triage_pickles() -> None:
     """
-    joblib bundles created by running `python scripts/train_triage_model.py` pickle
+        joblib bundles created by running `python scripts/run/train_triage_model.py` pickle
     classes as __main__.TriageModelBundle / __main__.TriageFeatures. The API process
     has a different __main__ (e.g. uvicorn / run.main), so unpickling fails unless we
     alias those names onto sys.modules['__main__'] before load.
@@ -285,7 +269,7 @@ def load_triage_bundle(path: Optional[Path] = None) -> TriageModelBundle:
     if not bundle_path.is_file():
         raise FileNotFoundError(
             f"Triage model bundle not found: {bundle_path}. "
-            "Train one with: python3 scripts/train_triage_model.py --out models/triage_bundle.joblib"
+            "Train one with: python3 scripts/run/train_triage_model.py --out models/triage_bundle.joblib"
         )
     _patch_main_for_train_triage_pickles()
     bundle: TriageModelBundle = joblib.load(bundle_path)

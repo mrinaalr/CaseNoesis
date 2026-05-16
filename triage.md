@@ -1,6 +1,6 @@
 # Triage: rule layer, supervised model, retrospective evaluation, live paste, and future work
 
-This document describes the **Triage** tab and the triage stack end-to-end: **transparent rule-based priority scoring**, optional **Random Forest** or **decision tree** classifiers trained on labels derived from those rules, **retrospective** evaluation over the live database, **live** inference on pasted text with **no persistence**, and directions for extension. Implementation lives in `src/Clustering & Analysis Layer/analysis.py` (rules), `src/Clustering & Analysis Layer/triage.py` (bundle load, live path, optional corpus export), `scripts/train_triage_model.py` (training), `run/main.py` (HTTP API), and `visualization/triage.html` (UI).
+This document describes the **Triage** tab and the triage stack end-to-end: **transparent rule-based priority scoring**, optional **Random Forest** or **decision tree** classifiers trained on labels derived from those rules, **retrospective** evaluation over the live database, **live** inference on pasted text with **no persistence**, and directions for extension. Implementation lives in `src/Clustering & Analysis Layer/analysis.py` (rules), `src/Clustering & Analysis Layer/triage.py` (bundle load, live path, optional corpus export), `scripts/run/train_triage_model.py` (training), `run/main.py` (HTTP API), and `visualization/triage.html` (UI).
 
 ---
 
@@ -30,7 +30,7 @@ This document describes the **Triage** tab and the triage stack end-to-end: **tr
 
 ### Supervised tiers (Random Forest or decision tree)
 
-- Rule scores are **binned** into a small number of **tier classes** (`make_labels` in `scripts/train_triage_model.py`).
+- Rule scores are **binned** into a small number of **tier classes** (`make_labels` in `scripts/run/train_triage_model.py`).
 - The classifier is trained on a **tabular feature matrix** built from the same **extraction pipeline** as the rest of CaseLinker (topics, counts, flags, agency features when enabled—not raw narrative text in the default sklearn path).
 - **`--model rf`** (default) or **`--model tree`** selects **RandomForestClassifier** vs **DecisionTreeClassifier**; the trained object plus metadata are saved as a **`joblib` bundle** (`TriageModelBundle`).
 - **Interpretability**: The tree model is explicitly small; the forest remains **inspectable relative to** neural baselines, and tier names stay tied to **rule bins**.
@@ -47,7 +47,7 @@ This document describes the **Triage** tab and the triage stack end-to-end: **tr
 ### Retrospective triage (accordion / sections)
 
 - **Rule-based tiers**: Case IDs grouped by **rule-derived** priority bands for the loaded corpus view.
-- **Model evaluation**: Stratified train/test **accuracy**, **classification report**, **confusion matrix**, and **per-tier case lists**—driven by **`GET /api/triage-eval`** (same statistical setup as `scripts/test_triage.py` on the **live** database).
+- **Model evaluation**: Stratified train/test **accuracy**, **classification report**, **confusion matrix**, and **per-tier case lists**—driven by **`GET /api/triage-eval`** (same statistical setup as `scripts/verify/test_triage.py` on the **live** database).
 - **Model tier tree / corpus view**: **`GET /api/triage-model-corpus`** runs the **saved bundle** on **every row** in the store (optionally **facet-filtered** via JSON query param). Inference is **on demand**; the server does **not** rely on a static `triage_corpus_predictions.json` snapshot for the web UI (that file may exist for offline backup or external validation only).
 
 ### Live triage
@@ -70,11 +70,11 @@ Precedence is implemented in `triage.py` (`default_bundle_path`); set **one** ov
 ### Training (offline)
 
 ```bash
-python3 scripts/train_triage_model.py --model rf --out models/triage_bundle.joblib
-python3 scripts/train_triage_model.py --model tree --out models/triage_bundle.joblib
+python3 scripts/run/train_triage_model.py --model rf --out models/triage_bundle.joblib
+python3 scripts/run/train_triage_model.py --model tree --out models/triage_bundle.joblib
 ```
 
-Common flags include **`--no-agencies`**, **`--seed`**, and **`--explain`**; see `scripts/train_triage_model.py --help`. Training reads cases from the configured database (same `DATABASE_URL` / SQLite config as the main app).
+Common flags include **`--no-agencies`**, **`--seed`**, and **`--explain`**; see `scripts/run/train_triage_model.py --help`. Training reads cases from the configured database (same `DATABASE_URL` / SQLite config as the main app).
 
 ### HTTP endpoints (FastAPI)
 
@@ -106,7 +106,7 @@ Common flags include **`--no-agencies`**, **`--seed`**, and **`--explain`**; see
 ## 6. Relation to existing codebase
 
 - **Rules**: `triage_cases()` and related helpers in `src/Clustering & Analysis Layer/analysis.py`.
-- **Training / bundle**: `scripts/train_triage_model.py` (`train_pipeline`, `cases_to_dataframe`, `make_labels`, `normalize_triage_bundle_after_load` for sklearn version drift).
+- **Training / bundle**: `scripts/run/train_triage_model.py` (`train_pipeline`, `cases_to_dataframe`, `make_labels`, `normalize_triage_bundle_after_load` for sklearn version drift).
 - **Live path**: `run_live_triage`, `parse_live_case_input` in `src/Clustering & Analysis Layer/triage.py` (aligns delimiter semantics with `visualization/triage.html` and external PDF batching in `batching.py`).
 - **API**: `run/main.py` (`_triage_saved_bundle_corpus_live` for live-DB corpus predictions).
 - **Docs**: `visualization/ml-experimental.html` summarizes ML and triage scope; **`triage.md`** is the **technical working contract** for behavior and APIs.
@@ -125,4 +125,4 @@ Common flags include **`--no-agencies`**, **`--seed`**, and **`--explain`**; see
 2. **Whether** to standardize on **one** bundle per deployment or support **A/B** bundles via env (currently single path).
 3. **Agency features on/off** parity between training and production (`--no-agencies` vs default).
 
-Full code implementation in `scripts/train_triage_model.py` and `run/main.py`; update it / documentation when bundle formats, env vars, or endpoint contracts change.
+Full code implementation in `scripts/run/train_triage_model.py` and `run/main.py`; update it / documentation when bundle formats, env vars, or endpoint contracts change.

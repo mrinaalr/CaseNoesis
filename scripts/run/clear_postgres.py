@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 # Add paths
-src_path = Path(__file__).parent.parent / "src" / "Storage Layer"
+src_path = Path(__file__).resolve().parents[2] / "src" / "Storage Layer"
 sys.path.insert(0, str(src_path))
 
 from storage_postgres import get_connection, return_connection

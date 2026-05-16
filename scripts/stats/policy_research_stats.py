@@ -3,8 +3,8 @@
 Policy-oriented corpus statistics for CaseLinker (SQLite ``cases`` + joins).
 
 Run from repo root:
-  python3 scripts/policy_research_stats.py
-  CASELINKER_DB=/path/to/caselinker.db python3 scripts/policy_research_stats.py
+  python3 scripts/stats/policy_research_stats.py
+  CASELINKER_DB=/path/to/caselinker.db python3 scripts/stats/policy_research_stats.py
 
 All percentages and cohorts are documented inline. This DB does **not** store
 final convictions or sentence text in ``prosecution_outcomes.sentences`` (often
@@ -23,7 +23,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB = REPO_ROOT / "caselinker.db"
 
 US_STATE_NAMES = {
@@ -234,7 +234,6 @@ _CONTACT_TOKENS = (
     "physical contact",
     "hands-on",
     "hands on",
-    "battery",
     "assault",
     "indecency with",
     "exploitation of a child",

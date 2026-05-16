@@ -941,13 +941,13 @@
                     The <strong>saved triage model</strong> (e.g. random forest) is run on <strong>every case currently in the database</strong> — same implementation as live triage (<code>triage_bundle.joblib</code>). Tiers are computed on demand.
                 </p>
                 <div id="modelBundleUnavailable" class="live-format-box" style="display:none; margin-bottom:10px;">
-                    <strong>Saved triage bundle not found.</strong> Add <code>triage_bundle.joblib</code> under <code>models/</code> at the repo root, or set <code>CASELINKER_TRIAGE_BUNDLE</code> / <code>CASELINKER_MODELS_DIR</code>. Train locally with <code>scripts/train_triage_model.py</code>.
+                    <strong>Saved triage bundle not found.</strong> Add <code>triage_bundle.joblib</code> under <code>models/</code> at the repo root, or set <code>CASELINKER_TRIAGE_BUNDLE</code> / <code>CASELINKER_MODELS_DIR</code>. Train locally with <code>scripts/run/train_triage_model.py</code>.
                 </div>
                 <div id="modelTierTreeWrap" class="model-triage-wrap" style="display:none;" aria-label="Model-predicted tier interactive tree"></div>
 
                 <h2 class="triage-eval-heading">Triage model evaluation</h2>
                 <p class="subtitle">
-                    Same pipeline as <code>scripts/test_triage.py</code> / <code>train_triage_model.py</code>:
+                    Same pipeline as <code>scripts/verify/test_triage.py</code> / <code>scripts/run/train_triage_model.py</code>:
                     rule-based priority scores from <code>triage_cases</code> are binned into tiers; a random forest or shallow tree
                     learns structured tags to predict those tiers on a held-out <strong>20%</strong> test set (80% train), with a fixed split so
                     results are comparable between runs.
@@ -1455,7 +1455,9 @@ Case 3 : …</code>
                     return;
                 }
                 if (!d.corpus_predictions_available) {
-                    if (statusEl) statusEl.textContent = 'Saved triage bundle not found.';
+                    if (statusEl) {
+                        statusEl.textContent = d.corpus_error || 'Saved triage bundle not found.';
+                    }
                     return;
                 }
                 renderModelCorpusTree(d);
@@ -1889,7 +1891,13 @@ Case 3 : …</code>
                 } else {
                     wrap.innerHTML = '';
                     wrap.style.display = 'none';
-                    if (bundleHint) bundleHint.style.display = 'block';
+                    if (bundleHint) {
+                        bundleHint.style.display = 'block';
+                        var errMsg = data.corpus_error || '';
+                        if (errMsg) {
+                            bundleHint.innerHTML = '<strong>Model corpus unavailable.</strong> ' + modelTriageEsc(errMsg);
+                        }
+                    }
                 }
             } catch (e) {
                 wrap.dataset.loading = '0';

@@ -339,7 +339,7 @@
         <p class="subtitle">
             Run small <strong>JavaScript</strong> snippets in <em>your browser</em> that calls the same <strong>public CaseLinker APIs</strong> the site uses.
             Nothing runs on the server — this is the same access model as opening DevTools and using <code>fetch</code>, with helpers and examples inspired by repo scripts like
-            <code>scripts/interesting_icac_stats.py</code> and <code>scripts/analyze_stats.py</code> (those stay Python/CLI; here you experiment over the HTTP API).
+            <code>scripts/stats/interesting_icac_stats.py</code> and <code>scripts/stats/analyze_stats.py</code> (those stay Python/CLI; here you experiment over the HTTP API).
         </p>
 
         <div class="warn">
@@ -453,10 +453,9 @@ rows.forEach(([y, n]) => {
 
 log('');
 log('Note: years marked ⚠ reflect one or two contributing sources only.');
-log('2006 spike = Illinois AG batch (94 cases, 1 source).');
-log('Meaningful trend starts ~2019 when source diversity increases.');
+log('Meaningful trend starts ~2014 when source diversity increases.');
 
-const meaningful = rows.filter(([y]) => y >= '2019' && y <= '2025');
+const meaningful = rows.filter(([y]) => y >= '2014' && y <= '2024');
 if (meaningful.length > 1) {
   const [y0, n0] = meaningful[0];
   const [y1, n1] = meaningful[meaningful.length - 1];
@@ -670,6 +669,9 @@ allTopics.forEach(t => {
             },
             async json(url) {
                 const r = await API.fetch(url);
+                if (typeof caselinkerIsDailyCaseLimitResponse === 'function' && caselinkerIsDailyCaseLimitResponse(r)) {
+                    throw caselinkerDailyCaseLimitError();
+                }
                 if (!r.ok) throw new Error(url + ' → ' + r.status);
                 return r.json();
             },
@@ -711,7 +713,12 @@ allTopics.forEach(t => {
             getClusterGroups() {
                 return API.json('/api/cluster-groups');
             },
-            getCaseById(id) {
+            async getCaseById(id) {
+                if (typeof caselinkerFetchCase === 'function') {
+                    const r = await caselinkerFetchCase(id);
+                    if (!r.ok) throw new Error('/api/cases/' + id + ' → ' + r.status);
+                    return r.json();
+                }
                 return API.json('/api/cases/' + encodeURIComponent(id));
             },
             getCaseIdsByFilter(params) {

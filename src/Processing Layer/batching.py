@@ -115,7 +115,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / UT AG / WA AG / MS AG / MT DOJ / NM AG / NC SBI / LA AG / WY DCI / SD AG / KY SP / ARKANSAS DPS / ALEA / DOJ CEOS / DOJ ARCHIVES / WCSO / LAPD / SPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / DE AG / UT AG / WA AG / OREGON DOJ / MS AG / MT DOJ / NM AG / NC SBI / LA AG / HI AG / CCSAO / IA DCI / WY DCI / SD AG / RI AG / FL AG / KY SP / NE SP / ARMY CID / LVMPD / SJPD / ARKANSAS DPS / ALEA / DOJ CEOS / DOJ ARCHIVES / WCSO / FRESNO SO / OSCEOLA SO / SEDGWICK SO / ANCHORAGE PD / LAPD / CSPD / SPD / SDPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -145,23 +145,40 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_newyork_sp = False
     is_illinois_ag = False
     is_wcso = False
+    is_fresno_so = False
+    is_osceola_so = False
+    is_sedgwick_so = False
+    is_anchorage_pd = False
     is_lapd = False
+    is_cspd = False
     is_spd = False
+    is_sdpd = False
     is_south_florida_icac = False
     is_nj_ag = False
     is_pa_ag = False
     is_vt_ag = False
     is_ohio_ag = False
+    is_de_ag = False
     is_ut_ag = False
     is_wa_ag = False
+    is_oregon_doj = False
     is_ms_ag = False
     is_mt_doj = False
     is_nm_ag = False
     is_nc_sbi = False
     is_la_ag = False
+    is_hi_ag = False
+    is_ccsao = False
+    is_ia_dci = False
     is_wy_dci = False
     is_sd_ag = False
+    is_ri_ag = False
+    is_fl_ag = False
     is_ky_sp = False
+    is_ne_sp = False
+    is_army_cid = False
+    is_lvmpd = False
+    is_sjpd = False
     is_arkansas_dps = False
     is_alea = False
     is_doj_ceos = False
@@ -192,10 +209,22 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_illinois_ag = True
         elif source_upper == 'WCSO':
             is_wcso = True
+        elif source_upper == 'FRESNO SO':
+            is_fresno_so = True
+        elif source_upper == 'OSCEOLA SO':
+            is_osceola_so = True
+        elif source_upper == 'SEDGWICK SO':
+            is_sedgwick_so = True
+        elif source_upper == 'ANCHORAGE PD':
+            is_anchorage_pd = True
         elif source_upper == 'LAPD':
             is_lapd = True
+        elif source_upper == 'CSPD':
+            is_cspd = True
         elif source_upper == 'SPD':
             is_spd = True
+        elif source_upper == 'SDPD':
+            is_sdpd = True
         elif source_upper == 'SOUTH FLORIDA ICAC':
             is_south_florida_icac = True
         elif source_upper == 'NJ AG':
@@ -206,10 +235,14 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_vt_ag = True
         elif source_upper == 'OHIO AG':
             is_ohio_ag = True
+        elif source_upper == 'DE AG':
+            is_de_ag = True
         elif source_upper == 'UT AG':
             is_ut_ag = True
         elif source_upper == 'WA AG':
             is_wa_ag = True
+        elif source_upper == 'OREGON DOJ':
+            is_oregon_doj = True
         elif source_upper == 'MS AG':
             is_ms_ag = True
         elif source_upper == 'MT DOJ':
@@ -220,12 +253,30 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_nc_sbi = True
         elif source_upper == 'LA AG':
             is_la_ag = True
+        elif source_upper == 'HI AG':
+            is_hi_ag = True
+        elif source_upper == 'CCSAO':
+            is_ccsao = True
+        elif source_upper == 'IA DCI':
+            is_ia_dci = True
         elif source_upper == 'WY DCI':
             is_wy_dci = True
         elif source_upper == 'SD AG':
             is_sd_ag = True
+        elif source_upper == 'RI AG':
+            is_ri_ag = True
+        elif source_upper == 'FL AG':
+            is_fl_ag = True
         elif source_upper == 'KY SP':
             is_ky_sp = True
+        elif source_upper == 'NE SP':
+            is_ne_sp = True
+        elif source_upper == 'ARMY CID':
+            is_army_cid = True
+        elif source_upper == 'LVMPD':
+            is_lvmpd = True
+        elif source_upper == 'SJPD':
+            is_sjpd = True
         elif source_upper == 'ARKANSAS DPS':
             is_arkansas_dps = True
         elif source_upper == 'ALEA':
@@ -260,10 +311,22 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "ILLINOIS AG")
     elif is_wcso:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "WCSO")
+    elif is_fresno_so:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "FRESNO SO")
+    elif is_osceola_so:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "OSCEOLA SO")
+    elif is_sedgwick_so:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SEDGWICK SO")
+    elif is_anchorage_pd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ANCHORAGE PD")
     elif is_lapd:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "LAPD")
+    elif is_cspd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "CSPD")
     elif is_spd:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SPD")
+    elif is_sdpd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SDPD")
     elif is_south_florida_icac:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SOUTH FLORIDA ICAC")
     elif is_nj_ag:
@@ -274,10 +337,14 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "VT AG")
     elif is_ohio_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "OHIO AG")
+    elif is_de_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "DE AG")
     elif is_ut_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "UT AG")
     elif is_wa_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "WA AG")
+    elif is_oregon_doj:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "OREGON DOJ")
     elif is_ms_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "MS AG")
     elif is_mt_doj:
@@ -288,12 +355,30 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "NC SBI")
     elif is_la_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "LA AG")
+    elif is_hi_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "HI AG")
+    elif is_ccsao:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "CCSAO")
+    elif is_ia_dci:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "IA DCI")
     elif is_wy_dci:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "WY DCI")
     elif is_sd_ag:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "SD AG")
+    elif is_ri_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "RI AG")
+    elif is_fl_ag:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "FL AG")
     elif is_ky_sp:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "KY SP")
+    elif is_ne_sp:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NE SP")
+    elif is_army_cid:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ARMY CID")
+    elif is_lvmpd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "LVMPD")
+    elif is_sjpd:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "SJPD")
     elif is_arkansas_dps:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "ARKANSAS DPS")
     elif is_alea:
@@ -1287,26 +1372,91 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
     "NEWYORK SP": ["NYSP_ICAC_All.pdf", "NEWYORK_SP_All.pdf", "newyork_sp/NEWYORK_SP_All.pdf"],
     "ILLINOIS AG": ["ILLNOISAG_ICAC_All.pdf", "ILLINOIS_AG_All.pdf", "illinois_ag/ILLINOIS_AG_All.pdf"],
     "WCSO": ["Washoe_ICAC_All.pdf", "wcso/Washoe_ICAC_All.pdf", "washoe/Washoe_ICAC_All.pdf"],
+    "FRESNO SO": [
+        "FRESNOSO_ICAC_All.pdf",
+        "FRESNO_SO_ICAC_All.pdf",
+        "fresno_so/FRESNOSO_ICAC_All.pdf",
+    ],
+    "OSCEOLA SO": [
+        "OSCEOLASO_ICAC_All.pdf",
+        "OSCEOLA_SO_ICAC_All.pdf",
+        "osceola_so/OSCEOLASO_ICAC_All.pdf",
+    ],
+    "SEDGWICK SO": ["SEDGWICKSO_ICAC_All.pdf", "sedgwick_so/SEDGWICKSO_ICAC_All.pdf"],
+    "ANCHORAGE PD": [
+        "ANCHORAGEPD_ICAC_All.pdf",
+        "anchorage_pd/ANCHORAGEPD_ICAC_All.pdf",
+    ],
     "LAPD": ["LAPD_ICAC_ALL.pdf", "LAPD_ICAC_All.pdf", "lapd/LAPD_ICAC_All.pdf"],
+    "CSPD": [
+        "CSPD_ICAC_All.pdf",
+        "COLORADO_SPRINGS_ICAC_All.pdf",
+        "cspd/CSPD_ICAC_All.pdf",
+    ],
     "SPD": [
         "SPD_Blotter_ICAC_All.pdf",
         "data/ingestion/spd_blotter/SPD_Blotter_ICAC_All.pdf",
+    ],
+    "SDPD": [
+        "SDPD_ICAC_All.pdf",
+        "data/ingestion/sdpd/SDPD_ICAC_All.pdf",
     ],
     "SOUTH FLORIDA ICAC": ["SouthFlorida_ICAC_All.pdf"],
     "NJ AG": ["NJAG_ICAC_All.pdf", "NJOAG_ICAC_All.pdf", "nj_ag/NJAG_ICAC_All.pdf"],
     "PA AG": ["PAAG_ICAC_All.pdf", "PA_AG_ICAC_All.pdf", "PAOAG_ICAC_All.pdf", "pa_ag/PAAG_ICAC_All.pdf"],
     "VT AG": ["VTAG_ICAC_All.pdf", "VTOAG_ICAC_All.pdf", "Vermont_ICAC_All.pdf", "vt_ag/VTAG_ICAC_All.pdf"],
     "OHIO AG": ["OHIOAG_ICAC_All.pdf", "Ohio_ICAC_All.pdf", "ohio_ag/OHIOAG_ICAC_All.pdf"],
+    "DE AG": ["DEAG_ICAC_All.pdf", "Delaware_ICAC_All.pdf", "de_ag/DEAG_ICAC_All.pdf"],
     "UT AG": ["UTAG_ICAC_All.pdf", "UTOAG_ICAC_All.pdf", "Utah_ICAC_All.pdf", "ut_ag/UTAG_ICAC_All.pdf"],
     "WA AG": ["WAAG_ICAC_All.pdf", "Washington_AG_ICAC_All.pdf", "wa_ag/WAAG_ICAC_All.pdf"],
+    "OREGON DOJ": [
+        "OREGON_DOJ_ICAC_All.pdf",
+        "OREGONDOJ_ICAC_All.pdf",
+        "oregon_doj/OREGON_DOJ_ICAC_All.pdf",
+    ],
     "MS AG": ["MSAG_ICAC_All.pdf", "Mississippi_ICAC_All.pdf", "ms_ag/MSAG_ICAC_All.pdf"],
     "MT DOJ": ["MTDOJ_ICAC_All.pdf", "data/ingestion/mt_doj/MTDOJ_ICAC_All.pdf"],
     "NM AG": ["NMAG_ICAC_All.pdf", "data/ingestion/nm_ag/NMAG_ICAC_All.pdf"],
     "NC SBI": ["NCSBI_ICAC_All.pdf", "NC_SBI_ICAC_All.pdf", "nc_sbi/NCSBI_ICAC_All.pdf"],
     "LA AG": ["LAAG_ICAC_All.pdf", "Louisiana_ICAC_All.pdf", "la_ag/LAAG_ICAC_All.pdf"],
+    "HI AG": ["HIAG_ICAC_All.pdf", "Hawaii_ICAC_All.pdf", "hi_ag/HIAG_ICAC_All.pdf"],
+    "CCSAO": ["CCSAO_ICAC_All.pdf", "Cook_County_SA_ICAC_All.pdf", "ccsao/CCSAO_ICAC_All.pdf"],
+    "IA DCI": [
+        "IADCI_ICAC_All.pdf",
+        "IA_DCI_ICAC_All.pdf",
+        "ia_dci/IADCI_ICAC_All.pdf",
+    ],
     "WY DCI": ["WYDCI_ICAC_All.pdf", "WY_DCI_ICAC_All.pdf", "wy_dci/WYDCI_ICAC_All.pdf"],
     "SD AG": ["SDAG_ICAC_All.pdf", "South_Dakota_ICAC_All.pdf", "sd_ag/SDAG_ICAC_All.pdf"],
+    "RI AG": [
+        "RIAG_ICAC_All.pdf",
+        "RI_AG_ICAC_All.pdf",
+        "ri_ag/RIAG_ICAC_All.pdf",
+    ],
+    "FL AG": [
+        "FLAG_ICAC_All.pdf",
+        "FL_AG_ICAC_All.pdf",
+        "fl_ag/FLAG_ICAC_All.pdf",
+    ],
     "KY SP": ["KYSP_ICAC_All.pdf", "KSP_ICAC_All.pdf", "ky_sp/KYSP_ICAC_All.pdf"],
+    "NE SP": [
+        "NESP_ICAC_All.pdf",
+        "NE_SP_ICAC_All.pdf",
+        "ne_sp/NESP_ICAC_All.pdf",
+    ],
+    "ARMY CID": [
+        "ARMYCID_ICAC_All.pdf",
+        "ARMY_CID_ICAC_All.pdf",
+        "army_cid/ARMYCID_ICAC_All.pdf",
+    ],
+    "LVMPD": [
+        "LVMPD_ICAC_All.pdf",
+        "lvmpd/LVMPD_ICAC_All.pdf",
+    ],
+    "SJPD": [
+        "SJPD_ICAC_All.pdf",
+        "sjpd/SJPD_ICAC_All.pdf",
+    ],
     "ARKANSAS DPS": ["ARKDPS_ICAC_All.pdf", "arkansas_dps_output/ARKDPS_ICAC_All.pdf"],
     "ALEA": ["alea_icac_news.pdf", "data/ingestion/alea/alea_icac_news.pdf"],
     "DOJ CEOS": ["DOJ_CEOS_All.pdf", "doj_ceos_output/DOJ_CEOS_All.pdf"],

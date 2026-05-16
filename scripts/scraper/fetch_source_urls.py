@@ -24,16 +24,26 @@ Drupal-style search (e.g. Vermont AG), stop when no results text appears::
         --stop-if-text 'your search yielded no results' \\
         -o vermont_icac_urls.txt
 
+Squarespace Universal site search **search page** URL (Anchorage PD, etc.).
+The listing HTML only exposes a first slice; pagination uses GET
+``/api/search/GeneralSearch?q=…&p=…``::
+
+    python3 scripts/scraper/fetch_source_urls.py \\
+        --squarespace-search-page 'https://www.anchoragepolice.com/search?q=child' \\
+        --path-prefix /news/ \\
+        -o scripts/scraper/anchorage_pd_child_search_urls.txt
+
 deps: pip install requests beautifulsoup4
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import time
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qs, quote, urljoin, urlparse
 
 try:
     import requests
@@ -195,14 +205,24 @@ def collect_from_regex(
 
 
 def parse_page_range(spec: str) -> range:
-    """'0:29' -> inclusive 0..29."""
+    """'0:29' -> inclusive 0..29 (step 1). '1:91:10' -> 1, 11, …, 91 (Delaware search start_rank)."""
     if ":" not in spec:
-        raise argparse.ArgumentTypeError("page-range must look like START:END (e.g. 0:29)")
-    a, b = spec.split(":", 1)
-    start, end = int(a.strip()), int(b.strip())
+        raise argparse.ArgumentTypeError(
+            "page-range must look like START:END or START:END:STEP (e.g. 0:29 or 1:91:10)"
+        )
+    parts = [p.strip() for p in spec.split(":")]
+    if len(parts) == 2:
+        start, end = int(parts[0]), int(parts[1])
+        step = 1
+    elif len(parts) == 3:
+        start, end, step = int(parts[0]), int(parts[1]), int(parts[2])
+        if step <= 0:
+            raise argparse.ArgumentTypeError("STEP must be positive")
+    else:
+        raise argparse.ArgumentTypeError("page-range: use START:END or START:END:STEP")
     if end < start:
         raise argparse.ArgumentTypeError("END must be >= START")
-    return range(start, end + 1)
+    return range(start, end + 1, step)
 
 
 def iter_page_urls(args: argparse.Namespace) -> list[str]:
@@ -215,6 +235,122 @@ def iter_page_urls(args: argparse.Namespace) -> list[str]:
     if not urls:
         raise SystemExit("Provide --url and/or --url-template with --page-range.")
     return urls
+
+
+def _filter_abs_url(
+    abs_url: str,
+    *,
+    path_prefix_l: str | None,
+    exclude_l: list[str],
+    require_l: list[str],
+    https_only: bool,
+) -> bool:
+    """Return True if the URL passes path / substring / scheme filters."""
+    abs_url = abs_url.split("#", 1)[0]
+    p = urlparse(abs_url)
+    if https_only:
+        if p.scheme != "https":
+            return False
+    elif p.scheme not in ("http", "https"):
+        return False
+    if path_prefix_l and not _path(abs_url).lower().startswith(path_prefix_l):
+        return False
+    lower = abs_url.lower()
+    if any(ex in lower for ex in exclude_l):
+        return False
+    if require_l and not any(req in lower for req in require_l):
+        return False
+    return True
+
+
+def collect_squarespace_general_search_urls(
+    search_page_url: str,
+    *,
+    timeout: int,
+    verify: bool,
+    delay: float,
+    path_prefix: str | None,
+    exclude_substrings: list[str],
+    require_any_substrings: list[str],
+    https_only: bool,
+) -> list[str]:
+    """
+    Walk ``/api/search/GeneralSearch?q=…&p=…`` pages until no items remain.
+
+    ``search_page_url`` must carry the query string Squarespace expects (typically ``q=``).
+    """
+    parsed = urlparse(search_page_url.strip())
+    if not parsed.scheme or not parsed.netloc:
+        raise SystemExit("--squarespace-search-page must be a full http(s) URL.")
+    qs = parse_qs(parsed.query or "")
+    q_vals = qs.get("q") or qs.get("query") or qs.get("keyword")
+    if not q_vals or not q_vals[0].strip():
+        raise SystemExit("--squarespace-search-page must include a non-empty ``q``, ``query``, or ``keyword`` param.")
+    q_str = q_vals[0].strip()
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    path_prefix_l = path_prefix.lower() if path_prefix else None
+    exclude_l = [x.lower() for x in exclude_substrings]
+    require_l = [x.lower() for x in require_any_substrings]
+
+    out: list[str] = []
+    seen: set[str] = set()
+    page_idx = 0
+    last_total = 0
+
+    while True:
+        api = f"{origin}/api/search/GeneralSearch?q={quote(q_str)}&p={page_idx}"
+        print(f"  [sqs] GET p={page_idx} ({api})", file=sys.stderr)
+        body, status = fetch(api, timeout, verify=verify)
+        if not body or status != 200:
+            print(f"  [stop] HTTP {status}", file=sys.stderr)
+            break
+        try:
+            data = json.loads(body)
+        except json.JSONDecodeError as e:
+            print(f"  [stop] JSON decode: {e}", file=sys.stderr)
+            break
+        if data.get("serviceError"):
+            print("  [stop] serviceError in JSON", file=sys.stderr)
+            break
+        items = data.get("items")
+        if not isinstance(items, list):
+            items = []
+        tc = data.get("totalCount")
+        if isinstance(tc, int):
+            last_total = tc
+
+        batch_n = 0
+        for it in items:
+            if not isinstance(it, dict):
+                continue
+            rel = it.get("itemUrl")
+            if not rel or not isinstance(rel, str):
+                continue
+            rel = rel.strip()
+            if not rel:
+                continue
+            abs_u = urljoin(origin + "/", rel.lstrip("/"))
+            if abs_u not in seen and _filter_abs_url(
+                abs_u,
+                path_prefix_l=path_prefix_l,
+                exclude_l=exclude_l,
+                require_l=require_l,
+                https_only=https_only,
+            ):
+                seen.add(abs_u)
+                out.append(abs_u)
+                batch_n += 1
+
+        print(f"    -> raw items {len(items)}, new urls {batch_n}, total collected {len(out)}", file=sys.stderr)
+
+        page_idx += 1
+        if not items:
+            break
+        if last_total > 0 and len(out) >= last_total:
+            break
+        time.sleep(delay)
+
+    return out
 
 
 def main() -> None:
@@ -306,10 +442,20 @@ def main() -> None:
         help="Python regex scanned against raw HTML for URLs (e.g. Search.gov JSON). "
         "Repeatable. Use a pattern that matches full https URLs.",
     )
+    ap.add_argument(
+        "--squarespace-search-page",
+        metavar="URL",
+        help="Squarespace site search HTML page carrying q= (paginates GET /api/search/GeneralSearch). "
+        "Do not combine with --url / --url-template.",
+    )
     args = ap.parse_args()
 
     if args.url_template and args.page_range is None:
         ap.error("--url-template requires --page-range START:END")
+
+    if args.squarespace_search_page:
+        if args.url or args.url_template:
+            ap.error("--squarespace-search-page cannot be combined with --url / --url-template")
 
     compiled_regexes: list[re.Pattern[str]] = []
     for pat in args.raw_url_regex or []:
@@ -327,12 +473,6 @@ def main() -> None:
     if args.also_host:
         extra_hosts = frozenset(h.lower().lstrip(".") for h in args.also_host)
 
-    page_urls = iter_page_urls(args)
-    all_urls: list[str] = []
-    seen_global: set[str] = set()
-    consecutive_empty = 0
-    stop_texts = [t.lower() for t in args.stop_if_text]
-
     verify_tls = not args.insecure
     if args.insecure:
         try:
@@ -341,6 +481,31 @@ def main() -> None:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         except Exception:
             pass
+
+    if args.squarespace_search_page:
+        all_urls = collect_squarespace_general_search_urls(
+            args.squarespace_search_page,
+            timeout=args.timeout,
+            verify=verify_tls,
+            delay=args.delay,
+            path_prefix=args.path_prefix,
+            exclude_substrings=exclude,
+            require_any_substrings=require_any,
+            https_only=https_only,
+        )
+        with open(args.out, "w", encoding="utf-8") as f:
+            for u in all_urls:
+                f.write(u + "\n")
+
+        print(f"\nTotal URLs: {len(all_urls)}", file=sys.stderr)
+        print(f"Saved -> {args.out}", file=sys.stderr)
+        return
+
+    page_urls = iter_page_urls(args)
+    all_urls = []
+    seen_global: set[str] = set()
+    consecutive_empty = 0
+    stop_texts = [t.lower() for t in args.stop_if_text]
 
     for i, page_url in enumerate(page_urls):
         print(f"  [{i + 1}/{len(page_urls)}] {page_url}", file=sys.stderr)

@@ -543,6 +543,17 @@
             border-radius: 6px;
             color: #c62828;
             margin-top: 20px;
+            white-space: pre-line;
+        }
+        .case-error.caselinker-daily-limit-msg {
+            background: #fff8e1;
+            border-left-color: #f9a825;
+            color: #856404;
+        }
+        .caselinker-daily-limit-msg {
+            white-space: pre-line;
+            color: #856404;
+            line-height: 1.55;
         }
         .case-loading {
             text-align: center;
@@ -1351,16 +1362,28 @@
             if (missing.length === 0) return;
             await Promise.all(missing.map(async (c) => {
                 try {
-                    const r = await fetch(`/api/cases/${encodeURIComponent(c.id)}`);
+                    const r = await caselinkerFetchCase(c.id);
                     if (!r.ok) return;
                     const full = await r.json();
                     const fullText = full?.raw_data?.case_text || full?.case_text || '';
                     if (fullText) c.case_text = fullText;
                     if (!c.date_range && full?.date_range) c.date_range = full.date_range;
                 } catch (e) {
-                    // Keep summary-only case if detail fetch fails
+                    if (e && e.code === 'CASELINKER_DAILY_LIMIT') {
+                        c._case_daily_limit = true;
+                        c.case_text = CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE;
+                    }
                 }
             }));
+        }
+
+        function severityCaseTextHtml(caseData, highlightedText) {
+            if (caseData && caseData._case_daily_limit) {
+                return '<div class="case-text caselinker-daily-limit-msg">' +
+                    escapeHtml(caseData.case_text || CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE) +
+                    '</div>';
+            }
+            return '<div class="case-text">' + highlightedText + '</div>';
         }
         
         async function showExpandedGroupCases(group, groupIndex, totalGroups) {
@@ -1389,7 +1412,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);
@@ -2360,7 +2383,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);
@@ -2631,7 +2654,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);
@@ -2836,7 +2859,7 @@
             document.getElementById('case-viz-display').classList.remove('active');
             
             // Fetch case from API
-            fetch(`/api/cases/${encodeURIComponent(caseId)}`)
+            caselinkerFetchCase(caseId)
                 .then(response => {
                     if (!response.ok) {
                         if (response.status === 404) {
@@ -2852,6 +2875,12 @@
                 })
                 .catch(error => {
                     document.getElementById('case-loading').style.display = 'none';
+                    const errEl = document.getElementById('case-error');
+                    if (error && error.code === 'CASELINKER_DAILY_LIMIT') {
+                        errEl.classList.add('caselinker-daily-limit-msg');
+                    } else {
+                        errEl.classList.remove('caselinker-daily-limit-msg');
+                    }
                     showCaseError(error.message || 'Error loading case data');
                 });
         }
@@ -3435,7 +3464,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);
@@ -3496,7 +3525,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);
@@ -3554,7 +3583,7 @@
                 
                 caseItem.innerHTML = `
                     <div class="case-header">${caseData.id}</div>
-                    <div class="case-text">${highlightedText}</div>
+                    ${severityCaseTextHtml(caseData, highlightedText)}
                 `;
                 
                 list.appendChild(caseItem);

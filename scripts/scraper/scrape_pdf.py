@@ -8,7 +8,7 @@ heuristic, ``<title>`` (``|`` / en-dash splits), or URL slug; publication date f
 visible date fields, URL path segments, or the first Month D, YYYY dateline in body
 text. Emits ``Publication date: YYYY-MM-DD`` before ``Source:`` for merged-PDF batching.
 
-deps:  pip install requests beautifulsoup4 reportlab pypdf
+deps:  pip install requests beautifulsoup4 reportlab pypdf pdfplumber
 usage:
     python3 scrape_pdf.py --url-file source_urls.txt --out-dir ./out --out-name batch.pdf
     python3 scrape_pdf.py --url-file source_urls.txt --limit 5
@@ -18,6 +18,7 @@ usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import sys
 import time
@@ -45,6 +46,11 @@ try:
 except ImportError:
     sys.exit("pip install pypdf")
 
+try:
+    import pdfplumber
+except ImportError:
+    pdfplumber = None  # type: ignore[assignment]
+
 DEFAULT_URL_FILE = Path.cwd() / "source_urls.txt"
 DEFAULT_OUT_DIR = Path.cwd() / "scrape_output"
 DEFAULT_OUT_NAME = "scraped_cases.pdf"
@@ -52,6 +58,75 @@ REQUEST_DELAY = 1.2
 REQUEST_TIMEOUT = 30
 JINA_READER_TIMEOUT = 90
 MIN_BODY_CHARS = 80
+
+# news.delaware.gov: breadcrumb lines vary — e.g.
+#   ``Department of Justice Press Releases | Date Posted:``
+#   ``Department of Justice | Date Posted:``
+#   ``... Press Releases | Family | Date Posted:``
+# Fusion sometimes emits the full breadcrumb + article twice.
+_DE_DOJ_DATELINE_LINE_RE = re.compile(
+    r"(?m)^[^\n]*Department\s+of\s+Justice[^\n]*\|\s*Date\s+Posted:\s*[^\n]*\s*$",
+    re.I,
+)
+
+
+def _collapse_consecutive_duplicate_paragraphs(paras: list[str]) -> list[str]:
+    """Drop back-to-back duplicate ``<p>`` text (common when themes duplicate columns)."""
+    out: list[str] = []
+    prev_key: str | None = None
+    for raw in paras:
+        key = re.sub(r"\s+", " ", raw.strip())
+        if len(key) < 30:
+            continue
+        if prev_key is not None and key == prev_key:
+            continue
+        out.append(raw.strip())
+        prev_key = key
+    return out
+
+
+def _trim_news_delaware_duplicate_press_rail(body: str) -> str:
+    """
+    news.delaware.gov (Fusion / Avada) often emits the DOJ breadcrumb +
+    ``Date Posted:`` line twice (possibly with ``| Family |`` etc. between crumbs).
+    Subscribe widgets may sit between copies. Cut before the second breadcrumb line.
+    """
+    if not body:
+        return body
+    matches = list(_DE_DOJ_DATELINE_LINE_RE.finditer(body))
+    if len(matches) < 2:
+        return body
+    second_start = matches[1].start()
+    cut = body.rfind("\n\n", 0, second_start)
+    if cut == -1:
+        cut = body.rfind("\n", 0, second_start)
+    if cut <= 0:
+        return body[:second_start].rstrip()
+    return body[:cut].rstrip()
+
+
+def _dedupe_news_delaware_paragraph_blocks(body: str, *, min_chars: int = 120) -> str:
+    """
+    Drop repeated paragraph-sized blocks (normalized whitespace). Catches duplicated
+    rails/columns where the second copy does not restart with the DOJ dateline line.
+    """
+    blocks = [b.strip() for b in re.split(r"\n\s*\n+", body.strip()) if b.strip()]
+    if len(blocks) < 2:
+        return body.strip()
+
+    seen: set[str] = set()
+    out: list[str] = []
+    for b in blocks:
+        if len(b) < min_chars:
+            out.append(b)
+            continue
+        key = re.sub(r"\s+", " ", b.strip())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(b)
+    return "\n\n".join(out)
+
 
 # Match batching._merged_news_dateline_year (month + day + year in prose).
 _DATELINE_MDY_RE = re.compile(
@@ -276,6 +351,90 @@ def fetch(url: str, headers: dict[str, str], *, verify: bool = True) -> str | No
         return None
 
 
+def fetch_bytes(url: str, headers: dict[str, str], *, verify: bool = True) -> bytes | None:
+    try:
+        r = requests.get(
+            url,
+            headers={**headers, "Accept": "application/pdf,*/*;q=0.8"},
+            timeout=REQUEST_TIMEOUT,
+            allow_redirects=True,
+            verify=verify,
+        )
+        r.raise_for_status()
+        return r.content
+    except Exception as e:
+        print(f"    [fetch error] {e}", file=sys.stderr)
+        return None
+
+
+def _publication_date_from_filename(url: str) -> date | None:
+    """Best-effort date from common city press-release PDF names."""
+    slug = url.rstrip("/").split("/")[-1]
+    stem = re.sub(r"\.pdf$", "", slug, flags=re.I)
+    stem = re.sub(r"%20", " ", stem, flags=re.I)
+    for pat, conv in (
+        (r"^(\d{4})-(\d{2})-(\d{2})", lambda m: date(int(m[1]), int(m[2]), int(m[3]))),
+        (r"^(\d{8})_", lambda m: _yyyymmdd(int(m[1]))),
+        (r"^(\d{8})(?:_|$)", lambda m: _yyyymmdd(int(m[1]))),
+        (r"^(\d{6})_", lambda m: _mmddyy(int(m[1]))),
+        (r"^nr(\d{2})(\d{2})(\d{2})", lambda m: date(2000 + int(m[1]), int(m[2]), int(m[3]))),
+        (r"^pr_(\d{2})-(\d{2})-(\d{2})", lambda m: date(2000 + int(m[3]), int(m[1]), int(m[2]))),
+        (r"^(\d{4})/(\d{2})/(\d{2})", lambda m: date(int(m[1]), int(m[2]), int(m[3]))),
+    ):
+        m = re.search(pat, stem, re.I)
+        if m:
+            try:
+                return conv(m)
+            except ValueError:
+                pass
+    m = re.search(r"/(\d{4})-(\d{2})/", url)
+    if m:
+        try:
+            return date(int(m[1]), int(m[2]), 1)
+        except ValueError:
+            pass
+    return None
+
+
+def _yyyymmdd(n: int) -> date:
+    y, mo, d = n // 10000, (n // 100) % 100, n % 100
+    return date(y, mo, d)
+
+
+def _mmddyy(n: int) -> date:
+    mo, d, y = n // 10000, (n // 100) % 100, n % 100
+    return date(2000 + y if y < 100 else y, mo, d)
+
+
+def _title_from_url(url: str) -> str:
+    slug = url.rstrip("/").split("/")[-1]
+    stem = re.sub(r"\.pdf$", "", slug, flags=re.I)
+    stem = re.sub(r"%20", " ", stem)
+    return stem.replace("-", " ").replace("_", " ").strip().title() or "Press release"
+
+
+def extract_from_native_pdf(pdf_bytes: bytes, url: str) -> tuple[str, str, str, date | None] | None:
+    """Downloaded city PDF → title, byline, body, publication date."""
+    if not pdfplumber:
+        print("    [skip] pdfplumber not installed", file=sys.stderr)
+        return None
+    import io
+
+    try:
+        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            pages = [p.extract_text() or "" for p in pdf.pages]
+    except Exception as e:
+        print(f"    [pdf extract error] {e}", file=sys.stderr)
+        return None
+    body = "\n\n".join(p.strip() for p in pages if p.strip())
+    if len(body) < MIN_BODY_CHARS:
+        return None
+    title = _title_from_url(url)
+    pub_date = _first_dateline_date_in_text(body) or _publication_date_from_filename(url)
+    byline = format_display_byline(pub_date, None)
+    return title, byline, body.strip(), pub_date
+
+
 def fetch_via_jina_reader(target_url: str, *, verify: bool = True) -> str | None:
     """Some hosts (e.g. mass.gov) block datacenter IPs; Jina Reader returns markdown + metadata."""
     jina_url = "https://r.jina.ai/" + target_url
@@ -347,6 +506,13 @@ def _trim_mass_gov_jina_postface(body: str) -> str:
 
 def _trim_nmdoj_jina_preface(body: str) -> str:
     """WordPress/Elementor shell before City, NM dateline (bold, italic, or plain)."""
+    # Torrez-era releases: long Elementor nav before "**Albuquerque, NM –**".
+    m_abq = re.search(
+        r"(?m)^\*\*(?:Albuquerque|Santa\s+Fe|Las\s+Cruces|Gallup|Roswell),?\s*NM\s*[\u2013\u2014\-]",
+        body,
+    )
+    if m_abq:
+        return body[m_abq.start() :].strip()
     patterns = (
         re.compile(
             r"(?m)^\*\*(?:[A-Z][^*\n]{0,140}),\s*NM\*\*\s*[\u2013\u2014\-]\s+\S",
@@ -385,6 +551,226 @@ def _trim_nmdoj_jina_postface(body: str) -> str:
         if m:
             return body[: m.start()].strip()
     return body
+
+
+def _trim_sjpd_jina_body(body: str) -> str:
+    """sjpd.org (CivicPlus/Granicus) via Jina: site chrome before FOR IMMEDIATE RELEASE; footer after release."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    for pat in (
+        r"(?m)^\*\*FOR IMMEDIATE RELEASE\*\*\s*$",
+        r"(?m)^FOR IMMEDIATE RELEASE\s*$",
+        r"(?m)^TYPE OF CRIME:",
+        r"(?m)^##\s+(?:SJPD|Additional|Public Notification)[^\n]{8,220}\n+\s*Post Date:",
+        r"(?m)^Post Date:\s*\d{1,2}/\d{1,2}/\d{4}",
+    ):
+        m = re.search(pat, trimmed)
+        if m:
+            trimmed = trimmed[m.start() :].strip()
+            break
+    # Drop duplicate page-title H1 when Jina leaves nav above the release block
+    trimmed = re.sub(
+        r"(?m)^#\s+[^|\n]{8,220}\|\s*News & Announcements\s*\|\s*San Jose Police Department, CA\s*$",
+        "",
+        trimmed,
+    ).strip()
+    end_markers = (
+        r"Return to full list",
+        r"(?m)^\s*Click to submit a tip anonymously",
+        r"(?m)^\s*Archived News\s*:",
+        r"(?m)^\s*Contact the Media Relations Unit",
+        r"(?m)^\s*Older News:\s*\(Prior to",
+        r"(?m)^\s*PRESS RELEASE, According to Cal Govt",
+        r"(?m)\]\(https?://nextdoor\.com/",
+        r"(?m)^\s*OUR MISSION:",
+        r"(?m)^\s*E-Government Policy",
+        r"(?m)^\s*Created By Granicus",
+        r"(?m)^\s*###\s+Stay Connected",
+        r"(?m)^\s*Powered by Translate",
+        r"(?m)^Skip to Main Content",
+        r"(?m)^\[Home\]\(",
+        r"(?m)^Online Services\s*\+",
+        r"(?m)^Join SJPD\s*$",
+        r"(?m)^Phone Directory\b",
+    )
+    end_at: int | None = None
+    for marker in end_markers:
+        m = re.search(marker, trimmed)
+        if m and m.start() > 400 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+    lines = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^!\[[^\]]*\]\([^)]+\)\s*$", s):
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if s.startswith("*   [") or (s.startswith("+") and "[" in s):
+            continue
+        lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _trim_lvmpd_jina_body(body: str) -> str:
+    """lvmpd.com (Granicus) via Jina: global nav then press release under FOR IMMEDIATE RELEASE."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    for pat in (
+        r"(?m)^\*\*FOR IMMEDIATE RELEASE\*\*\s*$",
+        r"(?m)^A multi-agency operation targeting child",
+        r"(?m)^The Nevada Internet Crimes Against Children",
+        r"(?m)^LAS VEGAS,?\s+Nevada",
+    ):
+        m = re.search(pat, trimmed)
+        if m:
+            trimmed = trimmed[m.start() :].strip()
+            break
+    for marker in (
+        r"(?m)^Anyone who may have been a victim",
+        r"(?m)^We would like to remind parents",
+        r"(?m)^###\s+Stay Connected",
+        r"(?m)^Created By Granicus",
+        r"(?m)^Loading \.\.\.",
+        r"(?m)^Office of Public Information\s*$",
+        r"(?m)^Skip to Main Content",
+        r"(?m)^\[Home\]\(",
+        r"(?m)^Online Services\s*\+",
+    ):
+        m = re.search(marker, trimmed)
+        if m and m.start() > 400:
+            trimmed = trimmed[: m.start()].strip()
+            break
+    lines = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if re.match(r"^!\[", s):
+            continue
+        if s.startswith("*   [") or s.startswith("+") and "[" in s:
+            continue
+        lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _trim_cid_army_jina_body(body: str) -> str:
+    """
+    cid.army.mil via Jina returns DOD trust banner, global nav, sidebars, and footer.
+    Keep the press-release lede through SHARE/related-stories markers.
+    """
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    # Drop duplicate breadcrumb H1 ("> Department of the Army Criminal Investigation Division > Article Display")
+    trimmed = re.sub(
+        r"(?m)^#\s+.+\>\s*Department of the Army Criminal Investigation Division\s*\>\s*Article Display\s*$",
+        "",
+        trimmed,
+    )
+    # Start at visible dateline or "News |" row above the article H1
+    start = None
+    for pat in (
+        r"(?m)^News\s*\|\s*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)",
+        r"(?m)^(?:QUANTICO|Quantico|KIRTLAND|Kirtland|FORT HOOD|Fort Hood)[^\n]{0,80}-\s+\S",
+        r"(?m)^#\s+[A-Z][^\n]{12,120}$",
+    ):
+        m = re.search(pat, trimmed)
+        if m and (start is None or m.start() < start):
+            start = m.start()
+    if start is not None and start > 0:
+        trimmed = trimmed[start:].strip()
+    # If nav chrome remains above dateline, cut from first release paragraph
+    m = re.search(
+        r"(?m)^(?:[A-Z][A-Za-z\s,\.'-]{2,50},\s*(?:Va\.|Texas|N\.M\.|Colo\.|Hawaii)\s*-\s+|\*\*Press Release\*\*\s*\n)",
+        trimmed,
+    )
+    if m and m.start() > 200:
+        trimmed = trimmed[m.start() :].strip()
+    for marker in (
+        r"(?m)^\s*SHARE\s*$",
+        r"(?m)^\s*PRINT\s*$",
+        r"(?m)^###\s+Stay Connected",
+        r"(?m)^##\s+Related Stories",
+        r"(?m)^##\s+Related Press Advisories",
+        r"(?m)^Previous Story\s*$",
+        r"(?m)^Next Story\s*$",
+        r"(?m)^Department of War\s*$",
+        r"(?m)^Thanks for sharing!",
+        r"(?m)^AddToAny\s*$",
+        r"(?m)^Hosted by Department of War",
+        r"(?m)^An official website of the United States government",
+        r"(?m)^Here's how you know",
+        r"(?m)^Skip to main content",
+        r"(?m)^Toggle navigation",
+        r"(?m)^Search Army CID:",
+    ):
+        m = re.search(marker, trimmed)
+        if m and m.start() > 300:
+            trimmed = trimmed[: m.start()].strip()
+            break
+    # Drop markdown link-only lines and image alt stubs
+    lines = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^!\[[^\]]*\]\([^)]+\)\s*$", s):
+            continue
+        if re.match(r"^\[\]\(https?://www\.cid\.army\.mil", s):
+            continue
+        if s in (")", "Home", "About Us )", "Media Resources )", "Crime Prevention )", "Contact Us )"):
+            continue
+        if re.match(r"^[-\[\]()]+$", s):
+            continue
+        lines.append(line)
+    trimmed = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    return trimmed
+
+
+def _trim_dps_iowa_jina_body(body: str) -> str:
+    """Iowa DPS (Drupal) via Jina often includes site nav, search, and footer; keep the release body."""
+    if not (body or "").strip():
+        return body
+    lines = body.splitlines()
+    start = 0
+    for i, line in enumerate(lines):
+        s = line.strip()
+        if re.match(
+            r"^(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}",
+            s,
+        ):
+            start = i
+            break
+        if re.match(r"^DES MOINES,?\s+Iowa", s, re.I):
+            start = i
+            break
+    trimmed = "\n".join(lines[start:]).strip()
+    for marker in (
+        "\n## Footer\n",
+        "\n### Footer\n",
+        "Oran Pape State Office Building",
+        "\n## Connect with",
+        "\n### Connect",
+        "Share feedback with us",
+        "© 20",
+        "Google Translate",
+    ):
+        j = trimmed.find(marker)
+        if j > 200:
+            trimmed = trimmed[:j].strip()
+            break
+    return trimmed
 
 
 def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str, str, str, date | None] | None:
@@ -431,6 +817,25 @@ def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str
         body = _trim_mass_gov_jina_postface(body)
     if "nmdoj.gov" in (original_url or "").lower():
         body = _trim_nmdoj_jina_postface(body)
+    if "dps.iowa.gov" in (original_url or "").lower():
+        body = _trim_dps_iowa_jina_body(body)
+    if "sjpd.org" in (original_url or "").lower():
+        body = _trim_sjpd_jina_body(body)
+        if "|" in title:
+            title = title.split("|", 1)[0].strip()
+    if "lvmpd.com" in (original_url or "").lower():
+        body = _trim_lvmpd_jina_body(body)
+        if title.lower().endswith("| news list") or "| las vegas" in title.lower():
+            title = title.split("|", 1)[0].strip()
+    if "cid.army.mil" in (original_url or "").lower():
+        body = _trim_cid_army_jina_body(body)
+        if title.lower().startswith("404") or "article display" in title.lower():
+            m = re.search(r"(?m)^#\s+(.+)$", body)
+            if m:
+                title = re.sub(r"\s*>.*$", "", m.group(1)).strip()
+    if "news.delaware.gov" in (original_url or "").lower():
+        body = _trim_news_delaware_duplicate_press_rail(body)
+        body = _dedupe_news_delaware_paragraph_blocks(body)
     if len(body) < MIN_BODY_CHARS:
         return None
     byline = pub.strftime("%B %d, %Y") if pub else ""
@@ -447,10 +852,12 @@ def _meta_content(soup: BeautifulSoup, *, prop: str | None = None, name: str | N
     return ""
 
 
-def format_display_byline(pub_date: date | None, soup: BeautifulSoup) -> str:
+def format_display_byline(pub_date: date | None, soup: BeautifulSoup | None) -> str:
     """Optional human date under the title (omit if we only have ISO publication line)."""
     if pub_date:
         return pub_date.strftime("%B %d, %Y")
+    if soup is None:
+        return ""
     raw = _meta_content(soup, prop="article:published_time") or _meta_content(
         soup, name="article:published_time"
     )
@@ -504,27 +911,94 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
     ):
         tag.decompose()
 
+    netloc = urlparse(url).netloc.lower()
+
     title = _html_headline_title(soup).strip()
+    if netloc == "www.fresnosheriff.org" or netloc == "fresnosheriff.org":
+        if title.lower() in ("media relations",) or len(title) < 25:
+            h2 = soup.select_one(".item-page h2") or soup.select_one(".com-content-article h2")
+            if h2:
+                title = h2.get_text(" ", strip=True)
+            elif soup.title:
+                raw = soup.title.get_text(strip=True)
+                if " - " in raw:
+                    title = raw.rsplit(" - ", 1)[-1].strip()
     if not title:
         slug = url.rstrip("/").split("/")[-1]
         title = slug.replace("-", " ").replace("_", " ").title()
 
-    container = (
-        soup.find("article")
-        or soup.find("main")
-        or soup.find(attrs={"role": "main"})
-        or soup.find(class_=re.compile(r"content|body|field-body|article-body|post-body", re.I))
-        or soup.body
-    )
+    container = None
+    if netloc == "news.delaware.gov":
+        container = soup.select_one(".fusion-post-content") or soup.select_one(".post-content")
+    elif netloc in ("www.fresnosheriff.org", "fresnosheriff.org"):
+        container = (
+            soup.select_one(".com-content-article.item-page")
+            or soup.select_one(".item-page")
+        )
+    elif netloc in ("www.osceolasheriff.org", "osceolasheriff.org"):
+        container = (
+            soup.select_one(".l-main .entry-content")
+            or soup.select_one(".entry-content")
+            or soup.select_one(".l-main")
+        )
+    elif netloc == "dps.iowa.gov":
+        container = (
+            soup.select_one(".field--name-field-news__body .field__item")
+            or soup.select_one(".field--name-field-news__body")
+            or soup.select_one("div.node__content.news__inner.text-editor-content")
+            or soup.select_one("div.node__content.news__inner")
+        )
+    elif netloc in ("www.lvmpd.com", "lvmpd.com"):
+        container = (
+            soup.select_one(".content.main-content")
+            or soup.select_one("#pagebody")
+            or soup.select_one("article")
+            or soup.select_one(".fr-view")
+        )
+    elif netloc in ("www.sjpd.org", "sjpd.org"):
+        container = (
+            soup.select_one(".content.main-content")
+            or soup.select_one("#pagebody")
+            or soup.select_one("article")
+            or soup.select_one(".fr-view")
+        )
+    elif netloc in ("riag.ri.gov", "www.riag.ri.gov"):
+        container = (
+            soup.select_one("article.press-release")
+            or soup.select_one("article")
+            or soup.select_one(".field--name-body")
+            or soup.select_one("main")
+        )
+    elif netloc in ("www.myfloridalegal.com", "myfloridalegal.com"):
+        container = (
+            soup.select_one("article.node--type-news-release")
+            or soup.select_one("article")
+            or soup.select_one(".field--name-body")
+            or soup.select_one("main")
+        )
+
+    if container is None:
+        container = (
+            soup.find("article")
+            or soup.find("main")
+            or soup.find(attrs={"role": "main"})
+            or soup.find(class_=re.compile(r"content|body|field-body|article-body|post-body", re.I))
+            or soup.body
+        )
     if not container:
         return None
 
     paras = [p.get_text(" ", strip=True) for p in container.find_all("p")]
+    paras = _collapse_consecutive_duplicate_paragraphs(paras)
     body = "\n\n".join(p for p in paras if len(p) > 30)
     if len(body) < MIN_BODY_CHARS:
         body = container.get_text("\n", strip=True)
     if len(body) < MIN_BODY_CHARS:
         return None
+
+    if netloc == "news.delaware.gov":
+        body = _trim_news_delaware_duplicate_press_rail(body)
+        body = _dedupe_news_delaware_paragraph_blocks(body)
 
     pub_date = resolve_publication_date(soup, url, body)
     byline = format_display_byline(pub_date, soup)
@@ -594,6 +1068,15 @@ def merge(pdf_paths: list[Path], out_path: Path) -> bool:
     return True
 
 
+def _per_url_cache_pdf(tmp_dir: Path, index: int, url: str) -> Path:
+    """
+    Per-URL cache filename under tmp_dir (index prefix keeps merge order).
+    Avoids reusing slot ``0001.pdf`` from a different url-file (e.g. Anchorage vs Oregon).
+    """
+    h = hashlib.sha256(url.strip().encode("utf-8")).hexdigest()[:16]
+    return tmp_dir / f"{index:04d}_{h}.pdf"
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Scrape HTML URLs from a list into one merged PDF.",
@@ -651,7 +1134,7 @@ def main():
         slug = url.rstrip("/").split("/")[-1][:65]
         print(f"  [{i}/{len(urls)}] {slug}")
 
-        out_pdf = tmp_dir / f"{i:04d}.pdf"
+        out_pdf = _per_url_cache_pdf(tmp_dir, i, url)
         if out_pdf.exists() and out_pdf.stat().st_size > 500:
             print("    [cached]")
             successes.append(out_pdf)
@@ -659,7 +1142,32 @@ def main():
 
         parsed = urlparse(url)
         ref = args.referer or f"{parsed.scheme}://{parsed.netloc}/"
-        html = fetch(url, _default_headers(referer=ref), verify=verify_tls)
+        hdrs = _default_headers(referer=ref)
+        path_lower = parsed.path.lower()
+        if path_lower.endswith(".pdf"):
+            raw = fetch_bytes(url, hdrs, verify=verify_tls)
+            if not raw:
+                failures.append(url)
+                time.sleep(args.delay)
+                continue
+            result = extract_from_native_pdf(raw, url)
+            if not result:
+                print("    [FAILED] native PDF: body too thin")
+                failures.append(url)
+                time.sleep(args.delay)
+                continue
+            title, byline, body, pub_date = result
+            ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
+            if ok:
+                kb = out_pdf.stat().st_size // 1024
+                print(f"    [ok pdf] {kb} KB - {title[:65]}")
+                successes.append(out_pdf)
+            else:
+                failures.append(url)
+            time.sleep(args.delay)
+            continue
+
+        html = fetch(url, hdrs, verify=verify_tls)
         if not html and args.jina_fallback:
             print("    [fallback] r.jina.ai reader ...")
             html = fetch_via_jina_reader(url, verify=verify_tls)
@@ -673,6 +1181,15 @@ def main():
             result = extract_from_jina_reader(html, url)
         else:
             result = extract(html, url)
+        if not result and args.jina_fallback:
+            print("    [fallback] r.jina.ai reader (thin or empty extract) ...")
+            html_j = fetch_via_jina_reader(url, verify=verify_tls)
+            if html_j:
+                is_j2 = html_j.lstrip().startswith("Title:") and "Markdown Content:" in html_j
+                if is_j2:
+                    result = extract_from_jina_reader(html_j, url)
+                else:
+                    result = extract(html_j, url)
         if not result:
             print("    [FAILED] extract: body too thin")
             failures.append(url)

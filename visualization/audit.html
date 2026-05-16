@@ -267,6 +267,13 @@
             overflow-y: auto;
             padding: 20px;
         }
+        .audit-daily-limit-msg {
+            text-align: left;
+            padding: 24px;
+            color: #856404;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
         .features-panel h2 {
             padding: 20px;
             margin: 0;
@@ -930,14 +937,18 @@
             if (auditCaseHasFullNarrative(c)) return;
             delete c._audit_raw_error;
             try {
-                const r = await fetch(`/api/cases/${encodeURIComponent(caseId)}`);
+                const r = await caselinkerFetchCase(caseId);
                 if (!r.ok) throw new Error('fetch failed');
                 const full = await r.json();
                 full._audit_full_loaded = true;
                 allCases[idx] = full;
             } catch (e) {
                 console.error('Error loading full case:', e);
-                allCases[idx] = { ...allCases[idx], _audit_raw_error: true };
+                if (e && e.code === 'CASELINKER_DAILY_LIMIT') {
+                    allCases[idx] = { ...allCases[idx], _audit_daily_limit: true };
+                } else {
+                    allCases[idx] = { ...allCases[idx], _audit_raw_error: true };
+                }
             }
         }
 
@@ -2247,6 +2258,14 @@
 
         function renderRawCaseText(caseData) {
             const rawTextContent = document.getElementById('raw-text-content');
+            if (caseData._audit_daily_limit) {
+                currentCaseText = '';
+                rawTextContent.innerHTML =
+                    '<div class="audit-daily-limit-msg">' +
+                    escapeHtml(CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE) +
+                    '</div>';
+                return;
+            }
             if (caseData._audit_raw_error) {
                 currentCaseText = '';
                 rawTextContent.innerHTML =

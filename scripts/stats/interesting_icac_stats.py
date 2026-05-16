@@ -3,8 +3,8 @@
 Interesting ICAC stats — heavy read-only queries over CaseLinker SQLite.
 
 Usage:
-  python3 scripts/interesting_icac_stats.py
-  python3 scripts/interesting_icac_stats.py --db /path/to/caselinker.db
+  python3 scripts/stats/interesting_icac_stats.py
+  python3 scripts/stats/interesting_icac_stats.py --db /path/to/caselinker.db
 
 Requires a populated caselinker.db (not committed to git). Uses the same
 CaseStorage merge rules as the API (extracted_features merged onto rows).
@@ -21,7 +21,7 @@ from pathlib import Path
 from statistics import mean, median
 from typing import Any, Dict, List, Optional
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src" / "Storage Layer"))
 
 from facet_tree import (  # noqa: E402

@@ -52,8 +52,8 @@ def detect_source_from_content(text: str, filename: str) -> str:
         
     Returns:
         Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
-        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'LAPD', 'SPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'UT AG',
-        'WA AG', 'MS AG', 'MT DOJ', 'NM AG', 'NC SBI', 'LA AG', 'WY DCI', 'SD AG', 'KY SP', 'ALEA', 'FBI', 'Other', or defaults to Other).
+        'TBI ICAC', 'SCAG ICAC', 'WCSO', 'FRESNO SO', 'OSCEOLA SO', 'ANCHORAGE PD', 'SEDGWICK SO', 'LAPD', 'CSPD', 'SPD', 'SDPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'DE AG', 'UT AG',
+        'WA AG', 'OREGON DOJ', 'MS AG', 'MT DOJ', 'NM AG', 'NC SBI', 'LA AG', 'HI AG', 'CCSAO', 'IA DCI', 'WY DCI', 'SD AG', 'RI AG', 'FL AG', 'KY SP', 'NE SP', 'ARMY CID', 'LVMPD', 'SJPD', 'ALEA', 'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -89,10 +89,31 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'WCSO'
     elif 'washoe' in filename_lower and 'icac' in filename_lower:
         return 'WCSO'
+    elif ('fresnoso' in filename_lower or 'fresno_so' in filename_lower or 'fresno' in filename_lower) and 'icac' in filename_lower:
+        return 'FRESNO SO'
+    elif (
+        ('osceolaso' in filename_lower or 'osceola_so' in filename_lower or 'osceola' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'OSCEOLA SO'
+    elif (
+        ('sedgwickso' in filename_lower or 'sedgwick_so' in filename_lower or 'sedgwick' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'SEDGWICK SO'
+    elif ('anchoragepd' in filename_lower or 'anchorage_pd' in filename_lower) and 'icac' in filename_lower:
+        return 'ANCHORAGE PD'
     elif 'lapd' in filename_lower:
         return 'LAPD'
+    elif ('cspd' in filename_lower or 'colorado_springs' in filename_lower) and 'icac' in filename_lower:
+        return 'CSPD'
     elif ('spd_blotter' in filename_lower or 'spd blotter' in filename_lower) and 'icac' in filename_lower:
         return 'SPD'
+    elif (
+        ('sdpd' in filename_lower or 'sandiego' in filename_lower or 'san_diego' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'SDPD'
     elif 'southflorida' in filename_lower and 'icac' in filename_lower:
         return 'SOUTH FLORIDA ICAC'
     elif ('njoag' in filename_lower or 'njag' in filename_lower) and 'icac' in filename_lower:
@@ -111,6 +132,11 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'VT AG'
     elif ('ohioag' in filename_lower or 'ohio_ag' in filename_lower) and 'icac' in filename_lower:
         return 'OHIO AG'
+    elif (
+        ('deag' in filename_lower or 'de_ag' in filename_lower or 'delaware' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'DE AG'
     elif ('utag' in filename_lower or 'ut_ag' in filename_lower or 'utoag' in filename_lower) and 'icac' in filename_lower:
         return 'UT AG'
     elif (
@@ -118,6 +144,11 @@ def detect_source_from_content(text: str, filename: str) -> str:
         and 'icac' in filename_lower
     ):
         return 'WA AG'
+    elif (
+        ('oregondoj' in filename_lower or 'oregon_doj' in filename_lower or 'or_doj' in filename_lower)
+        or ('oregon' in filename_lower and 'doj' in filename_lower and 'icac' in filename_lower)
+    ) and 'icac' in filename_lower:
+        return 'OREGON DOJ'
     elif ('msag' in filename_lower or 'ms_ag' in filename_lower or 'mississippi' in filename_lower) and 'icac' in filename_lower:
         return 'MS AG'
     elif ('mtdoj' in filename_lower or 'mt_doj' in filename_lower or 'dojmt' in filename_lower) and 'icac' in filename_lower:
@@ -128,12 +159,45 @@ def detect_source_from_content(text: str, filename: str) -> str:
         return 'NC SBI'
     elif ('laag' in filename_lower or 'la_ag' in filename_lower or 'louisiana_ag' in filename_lower) and 'icac' in filename_lower:
         return 'LA AG'
+    elif (
+        ('hiag' in filename_lower or 'hi_ag' in filename_lower or 'hioag' in filename_lower or 'hawaii' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'HI AG'
+    elif (
+        ('ccsao' in filename_lower or 'cook_county' in filename_lower or 'cookcounty' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'CCSAO'
     elif ('wydci' in filename_lower or 'wy_dci' in filename_lower or 'wyoming_dci' in filename_lower) and 'icac' in filename_lower:
         return 'WY DCI'
+    elif ('iadci' in filename_lower or 'ia_dci' in filename_lower or 'iowa_dci' in filename_lower) and 'icac' in filename_lower:
+        return 'IA DCI'
     elif ('sdag' in filename_lower or 'sd_ag' in filename_lower or 'south_dakota' in filename_lower) and 'icac' in filename_lower:
         return 'SD AG'
+    elif ('riag' in filename_lower or 'ri_ag' in filename_lower or 'rhode_island' in filename_lower) and 'icac' in filename_lower:
+        return 'RI AG'
+    elif (
+        ('flag' in filename_lower or 'fl_ag' in filename_lower or 'florida_ag' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'FL AG'
     elif ('kysp' in filename_lower or 'ksp_icac' in filename_lower or 'kentucky_sp' in filename_lower) and 'icac' in filename_lower:
         return 'KY SP'
+    elif (
+        ('nesp' in filename_lower or 'ne_sp' in filename_lower or 'nebraska_sp' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'NE SP'
+    elif (
+        ('armycid' in filename_lower or 'army_cid' in filename_lower or 'cid_army' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'ARMY CID'
+    elif ('lvmpd' in filename_lower or 'las_vegas_metro' in filename_lower) and 'icac' in filename_lower:
+        return 'LVMPD'
+    elif ('sjpd' in filename_lower or 'san_jose' in filename_lower) and 'icac' in filename_lower:
+        return 'SJPD'
     elif ('arkdps' in filename_lower or 'arkansas_dps' in filename_lower or 'arkansas_dps_icac' in filename_lower) and 'icac' in filename_lower:
         return 'ARKANSAS DPS'
     elif 'alea' in filename_lower and 'icac' in filename_lower:
@@ -151,17 +215,50 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'WCSO'
 
+    # Fresno County Sheriff-Coroner's Office media releases (merged ICAC search PDF)
+    if re.search(r'\bfresnosheriff\.org\b', text_sample, re.I) and re.search(
+        r'Fresno County Sheriff|Central California Internet Crimes Against Children|\bICAC\b|'
+        r'Internet Crimes Against Children|child (?:sexual abuse material|pornography)|\bCSAM\b',
+        text_sample,
+        re.I,
+    ):
+        return 'FRESNO SO'
+
+    # Osceola County Sheriff's Office site search (merged ICAC news PDF)
+    if re.search(r'\bosceolasheriff\.org\b', text_sample, re.I) and re.search(
+        r'Osceola County Sheriff|Internet Crimes Against Children|\bICAC\b|'
+        r'child (?:sexual abuse material|pornography)|\bCSAM\b',
+        text_sample,
+        re.I,
+    ):
+        return 'OSCEOLA SO'
+
     # LAPD Online site search (merged ICAC news PDF)
     if re.search(r'lapdonline\.org', text_sample, re.I) and re.search(
         r'\bICAC\b|Internet Crimes Against Children', text_sample, re.I
     ):
         return 'LAPD'
 
+    # Colorado Springs Police Department — city site search (merged ICAC news PDF)
+    if re.search(r'coloradosprings\.gov', text_sample, re.I) and re.search(
+        r'Colorado\s+Springs\s+Police|\bCSPD\b|Internet\s+Crimes\s+Against\s+Children|\bICAC\b|'
+        r'Colorado\s+(?:Springs\s+)?ICAC|City\s+of\s+Colorado\s+Springs',
+        text_sample,
+        re.I,
+    ):
+        return 'CSPD'
+
     # Seattle Police Department — SPD Blotter (WordPress; merged ICAC search PDF)
     if re.search(r'spdblotter\.seattle\.gov', text_sample, re.I) and re.search(
         r'\bICAC\b|Internet Crimes Against Children|Washington State ICAC|WA\s+ICAC', text_sample, re.I
     ):
         return 'SPD'
+
+    # San Diego Police Department — city site search / SDICAC press PDFs
+    if re.search(r'sandiego\.gov', text_sample, re.I) and re.search(
+        r'\bICAC\b|Internet Crimes Against Children|San Diego (?:Internet Crimes|ICAC)', text_sample, re.I
+    ):
+        return 'SDPD'
 
     # South Florida ICAC news index (merged external-article PDF)
     if re.search(r'southfloridaicac\.org', text_sample, re.I) and re.search(
@@ -191,6 +288,32 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'OHIO AG'
 
+    # Delaware Department of Justice (attorneygeneral.delaware.gov — press; merged ICAC news PDF)
+    if re.search(r'attorneygeneral\.delaware\.gov', text_sample, re.I) and re.search(
+        r'Delaware Department of Justice|Attorney General|Child Predator|Internet Crimes|\bICAC\b|'
+        r'child pornography|child exploitation|child solicitation',
+        text_sample,
+        re.I,
+    ):
+        return 'DE AG'
+
+    # Anchorage Police Department news (merged ReportLab scrape; AK ICAC task force host agency).
+    if re.search(r'anchoragepolice\.com', text_sample, re.I) and re.search(
+        r'Anchorage\s+Police|District\s+(?:Attorney|of\s+Alaska)|Anchorage\b|Federal\s+Bureau\s+of\s+Investigation|Internet\s+Crimes|\bICAC\b|\bminor\b|\bCSAM\b|'
+        r'child\s+porn(?:ography)?|child\s+sex|child\s+exploitation|sex\s+trafficking|sexual\s+abuse\s+of\s+a\s+minor',
+        text_sample,
+        re.I,
+    ):
+        return 'ANCHORAGE PD'
+
+    # Sedgwick County District Attorney criminal media releases (merged scrape; source key SEDGWICK SO for KS TF).
+    if re.search(r'sedgwickcounty\.org', text_sample, re.I) and re.search(
+        r'District Attorney|Sedgwick County|Criminal Division|Media Releases|FOR IMMEDIATE RELEASE',
+        text_sample,
+        re.I,
+    ):
+        return 'SEDGWICK SO'
+
     # Utah Attorney General (attorneygeneral.utah.gov — WordPress search / press; merged ICAC news PDF)
     if re.search(r'attorneygeneral\.utah\.gov', text_sample, re.I) and re.search(
         r'\bICAC\b|Internet Crimes Against Children|Attorney General|child exploitation|Child Predator',
@@ -208,6 +331,15 @@ def detect_source_from_content(text: str, filename: str) -> str:
         re.I,
     ):
         return 'WA AG'
+
+    # Oregon Department of Justice (doj.state.or.us — site search / media; merged ICAC news PDF)
+    if re.search(r'\bdoj\.state\.or\.us\b', text_sample, re.I) and re.search(
+        r'Oregon\s+Department\s+of\s+Justice|Attorney\s+General|Internet\s+Crimes\s+Against\s+Children|\bICAC\b|'
+        r'child\s+sexual|child\s+exploitation|CSAM|child\s+abuse\s+material',
+        text_sample,
+        re.I,
+    ):
+        return 'OREGON DOJ'
 
     # Mississippi Attorney General (attorneygenerallynnfitch.com — press; merged ICAC news PDF)
     if re.search(r'attorneygenerallynnfitch\.com', text_sample, re.I) and re.search(
@@ -251,6 +383,24 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'LA AG'
 
+    # Hawaii Department of the Attorney General (ag.hawaii.gov / HICAC — press; merged ICAC news PDF)
+    if re.search(r'ag\.hawaii\.gov', text_sample, re.I) and re.search(
+        r'Hawaii.*Attorney General|Department of the Attorney General|\bHICAC\b|'
+        r'Internet Crimes Against Children|\bICAC\b|Operation Keiki Shield|child exploitation|child pornography',
+        text_sample,
+        re.I,
+    ):
+        return 'HI AG'
+
+    # Cook County State's Attorney (cookcountystatesattorney.org — ICAC unit press; merged news PDF)
+    if re.search(r'cookcountystatesattorney\.org', text_sample, re.I) and re.search(
+        r"Cook County State'?s Attorney|\bCCSAO\b|Internet Crimes Against Children|\bICAC\b|"
+        r'child sexual abuse|child pornography|child exploitation',
+        text_sample,
+        re.I,
+    ):
+        return 'CCSAO'
+
     # Wyoming Division of Criminal Investigation (wyomingdci.wyo.gov — news; merged ICAC news PDF)
     if re.search(r'wyomingdci\.wyo\.gov', text_sample, re.I) and re.search(
         r'Division of Criminal Investigation|\bDCI\b|Wyoming|Computer Crime|\bICAC\b|Internet Crimes Against Children|'
@@ -259,6 +409,15 @@ def detect_source_from_content(text: str, filename: str) -> str:
         re.I,
     ):
         return 'WY DCI'
+
+    # Iowa Division of Criminal Investigation (dps.iowa.gov — DPS site search / releases; merged ICAC news PDF)
+    if re.search(r'\bdps\.iowa\.gov\b', text_sample, re.I) and re.search(
+        r'Iowa\s+Department\s+of\s+Public\s+Safety|Division\s+of\s+Criminal\s+Investigation|\bDCI\b|\bICAC\b|'
+        r'Internet\s+Crimes\s+Against\s+Children|Iowa\s+Division\s+of\s+Criminal\s+Investigation',
+        text_sample,
+        re.I,
+    ):
+        return 'IA DCI'
 
     # South Dakota Office of the Attorney General (atg.sd.gov — press releases; merged ICAC news PDF)
     if re.search(r'atg\.sd\.gov', text_sample, re.I) and re.search(
@@ -276,6 +435,60 @@ def detect_source_from_content(text: str, filename: str) -> str:
         re.I,
     ):
         return 'KY SP'
+
+    # Nebraska State Patrol (statepatrol.nebraska.gov — Drupal news; merged child-exploitation search PDF)
+    if re.search(r'statepatrol\.nebraska\.gov', text_sample, re.I) and re.search(
+        r'Nebraska State Patrol|\bNSP\b|Technical Crimes Unit|child exploitation|'
+        r'child pornography|child sexual abuse material|\bCSAM\b|\bICAC\b',
+        text_sample,
+        re.I,
+    ):
+        return 'NE SP'
+
+    # U.S. Army Criminal Investigation Division (cid.army.mil — ICAC task force releases; merged news PDF)
+    if re.search(r'\bcid\.army\.mil\b', text_sample, re.I) and re.search(
+        r'Army Criminal Investigation Division|\bArmy CID\b|Criminal Investigation Division|'
+        r'\bICAC\b|Internet Crimes Against Children|child exploitation|child sexual abuse material',
+        text_sample,
+        re.I,
+    ):
+        return 'ARMY CID'
+
+    # Las Vegas Metropolitan Police Department (lvmpd.com — ICAC task force press releases)
+    if re.search(r'\blvmpd\.com\b', text_sample, re.I) and re.search(
+        r'Las Vegas Metropolitan Police Department|\bLVMPD\b|Internet Crimes Against Children|\bICAC\b|'
+        r'child sex predator|child exploitation|Luring a Child',
+        text_sample,
+        re.I,
+    ):
+        return 'LVMPD'
+
+    # San Jose Police Department (sjpd.org — ICAC / CED press releases; merged ICAC search PDF)
+    if re.search(r'\bsjpd\.org\b', text_sample, re.I) and re.search(
+        r'San Jos[eé] Police Department|\bSJPD\b|Internet Crimes Against Children|'
+        r'Child Exploitation Detail|\bICAC\b|child sexual abuse material|\bCSAM\b|sextortion',
+        text_sample,
+        re.I,
+    ):
+        return 'SJPD'
+
+    # Rhode Island Office of the Attorney General (riag.ri.gov — ICAC press releases)
+    if re.search(r'\briag\.ri\.gov\b', text_sample, re.I) and re.search(
+        r'Rhode Island Attorney General|Attorney General Peter|Internet Crimes Against Children|\bICAC\b|'
+        r'child (?:sexual abuse material|pornography)|child sex trafficking',
+        text_sample,
+        re.I,
+    ):
+        return 'RI AG'
+
+    # Florida Office of the Attorney General (myfloridalegal.com — statewide ICAC press releases)
+    if re.search(r'\bmyfloridalegal\.com\b', text_sample, re.I) and re.search(
+        r'Florida Attorney General|Attorney General James|Office of Statewide Prosecution|'
+        r'Internet Crimes Against Children|\bICAC\b|child predator|child pornography',
+        text_sample,
+        re.I,
+    ):
+        return 'FL AG'
 
     # Arkansas Department of Public Safety (dps.arkansas.gov — ICAC / CSAM news; merged ICAC news PDF)
     if re.search(r'dps\.arkansas\.gov', text_sample, re.I) and re.search(
@@ -436,10 +649,22 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["ILLINOIS AG"] = url_clean
         elif "washoe county sheriff" in n:
             mapping["WCSO"] = url_clean
+        elif "fresno county sheriff" in n:
+            mapping["FRESNO SO"] = url_clean
+        elif "osceola county sheriff" in n:
+            mapping["OSCEOLA SO"] = url_clean
+        elif "anchorag" in n and "police" in n:
+            mapping["ANCHORAGE PD"] = url_clean
+        elif "sedgwick county sheriff" in n:
+            mapping["SEDGWICK SO"] = url_clean
         elif "los angeles police department" in n:
             mapping["LAPD"] = url_clean
+        elif "colorado springs police" in n:
+            mapping["CSPD"] = url_clean
         elif "seattle police department" in n:
             mapping["SPD"] = url_clean
+        elif "san diego police department" in n:
+            mapping["SDPD"] = url_clean
         elif "south florida icac" in n:
             mapping["SOUTH FLORIDA ICAC"] = url_clean
         elif "new jersey office of the attorney general" in n:
@@ -450,10 +675,14 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["VT AG"] = url_clean
         elif "ohio attorney general" in n:
             mapping["OHIO AG"] = url_clean
+        elif "delaware department of justice" in n or "delaware attorney general" in n:
+            mapping["DE AG"] = url_clean
         elif "utah attorney general" in n:
             mapping["UT AG"] = url_clean
         elif "washington state office of the attorney general" in n:
             mapping["WA AG"] = url_clean
+        elif "oregon department of justice" in n:
+            mapping["OREGON DOJ"] = url_clean
         elif "mississippi attorney general" in n:
             mapping["MS AG"] = url_clean
         elif "montana department of justice" in n:
@@ -464,19 +693,39 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["NC SBI"] = url_clean
         elif "louisiana office of the attorney general" in n:
             mapping["LA AG"] = url_clean
+        elif "hawaii department of the attorney general" in n or "hawaii office of the attorney general" in n:
+            mapping["HI AG"] = url_clean
+        elif "cook county state" in n and "attorney" in n:
+            mapping["CCSAO"] = url_clean
         elif "wyoming division of criminal investigation" in n:
             mapping["WY DCI"] = url_clean
+        elif "iowa division of criminal investigation" in n:
+            mapping["IA DCI"] = url_clean
         elif "south dakota office of the attorney general" in n:
             mapping["SD AG"] = url_clean
+        elif "rhode island" in n and "attorney general" in n:
+            mapping["RI AG"] = url_clean
+        elif "florida" in n and "attorney general" in n and "south florida" not in n:
+            mapping["FL AG"] = url_clean
         elif "kentucky state police" in n:
             mapping["KY SP"] = url_clean
+        elif "nebraska state patrol" in n:
+            mapping["NE SP"] = url_clean
+        elif "army criminal investigation" in n or "army cid" in n:
+            mapping["ARMY CID"] = url_clean
+        elif "las vegas metropolitan" in n or "lvmpd" in n:
+            mapping["LVMPD"] = url_clean
+        elif "san jose police" in n or "sjpd" in n:
+            mapping["SJPD"] = url_clean
         elif "arkansas department of public safety" in n:
             mapping["ARKANSAS DPS"] = url_clean
         elif "alabama law enforcement agency" in n:
             mapping["ALEA"] = url_clean
         elif "child exploitation & obscenity section news" in n:
             mapping["DOJ CEOS"] = url_clean
-        elif "child exploitation and obscenity section archive" in n:
+        elif "u.s. doj archives" in n or (
+            "doj archives" in n and "obscenity" in n
+        ) or "child exploitation and obscenity section archive" in n:
             mapping["DOJ ARCHIVES"] = url_clean
     return mapping
 

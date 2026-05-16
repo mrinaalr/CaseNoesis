@@ -165,13 +165,17 @@
         }
         #cluster-visualization {
             width: 100%;
-            height: 1960px;
-            min-height: 1960px;
+            min-height: 0;
             background: rgba(255, 193, 7, 0.02);
             border: 1px solid rgba(255, 193, 7, 0.1);
             border-radius: 10px;
             margin-bottom: 30px;
             overflow: visible;
+        }
+        #cluster-visualization svg {
+            display: block;
+            width: 100%;
+            height: auto;
         }
         .cluster-bubble {
             cursor: pointer;
@@ -349,22 +353,17 @@
     </div>
 
     <script>
-        const width = document.getElementById('cluster-visualization').clientWidth;
-        // Match #cluster-visualization height; extra room so bottom satellite bubbles are not clipped
-        const height = 1960;
-        const margin = 42;
+        const vizEl = document.getElementById('cluster-visualization');
+        const width = Math.max(vizEl.clientWidth || 1200, 960);
+        const margin = 48;
         
-        const svg = d3.select('#cluster-visualization')
-            .html('')
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height);
+        let svg = d3.select('#cluster-visualization').html('').append('svg');
         
         let clusterData = [];
         let selectedClusterId = null;
         let selectedGroupId = null;
 
-        const CLUSTER_CACHE_KEY = 'caselinker_cluster_groups';
+        const CLUSTER_CACHE_KEY = 'caselinker_cluster_groups_v3';
         const CLUSTER_CACHE_MAX_AGE_MS = 10 * 60 * 1000; // 10 min
 
         function getCachedClusters() {
@@ -387,6 +386,381 @@
                     fetchedAt: Date.now()
                 }));
             } catch (e) {}
+        }
+
+        // --- Layout (5k+ cases / 500+ satellite bubbles) ---------------------------------
+        const CLUSTER_GAP = 10;
+        const INTRA_MOON_GAP = 15;
+        const HUB_SATELLITE_GAP = 12;
+        const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+        /** Extra viewBox space so top satellites are not clipped (fixed viewBox mode). */
+        const LAYOUT_TOP_INSET = 160;
+        const LAYOUT_BOTTOM_PAD = 8;
+        const LAYOUT_SIDE_PAD = 20;
+
+        /** Hub scale: large planets; possession & general hubs trimmed a hair. */
+        function hubRadius(cluster) {
+            const s = Math.sqrt(cluster.size || 0);
+            let r = cluster.group_id === 'online_only_cluster'
+                ? s * 2.78 + 31
+                : s * 2.01 + 31;
+            if (cluster.group_id === 'possession_cluster' || cluster.group_id === 'general_cluster') {
+                r *= 0.95;
+            }
+            return r;
+        }
+
+        /** Satellite scale; 300–1000+ cases use a softer curve so moons stay smaller than the hub. */
+        function groupRadius(size, clusterId) {
+            const n = Math.max(size || 1, 1);
+            const small = (Math.sqrt(n) * 2.12 + 10.5) * 1.08;
+            if (n < 300) return small;
+            const at300 = (Math.sqrt(300) * 2.12 + 10.5) * 1.08;
+            const t = Math.min(1, Math.log10(n / 300) / Math.log10(1000 / 300));
+            const at1000 = at300 + 13;
+            let r = Math.min(at300 + t * (at1000 - at300), at1000 + 4);
+            if (n >= 300 && n <= 600) {
+                const tMid = (n - 300) / 300;
+                r *= 0.97 - tMid * 0.03;
+            } else if (n > 600 && n < 1000) {
+                r *= 0.94;
+            } else if (n >= 1000) {
+                r *= 0.93;
+            }
+            return r;
+        }
+
+        function collidesCircle(x, y, r, others, gap) {
+            for (const o of others) {
+                const dx = x - o.x;
+                const dy = y - o.y;
+                const minD = r + o.r + gap;
+                if (dx * dx + dy * dy < minD * minD) return true;
+            }
+            return false;
+        }
+
+        function collidesHub(x, y, r, hubR, gap) {
+            const minD = hubR + r + gap;
+            return x * x + y * y < minD * minD;
+        }
+
+        function relaxSatellites(placed, hubR, iterations, moonGap) {
+            const gap = moonGap != null ? moonGap : CLUSTER_GAP;
+            for (let iter = 0; iter < iterations; iter++) {
+                for (let i = 0; i < placed.length; i++) {
+                    const a = placed[i];
+                    const distHub = Math.hypot(a.x, a.y) || 0.001;
+                    const minHub = hubR + a.r + HUB_SATELLITE_GAP + 2;
+                    if (distHub < minHub) {
+                        a.x = (a.x / distHub) * minHub;
+                        a.y = (a.y / distHub) * minHub;
+                    }
+                    for (let j = i + 1; j < placed.length; j++) {
+                        const b = placed[j];
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const dist = Math.hypot(dx, dy) || 0.001;
+                        const minD = a.r + b.r + gap;
+                        if (dist < minD) {
+                            const push = ((minD - dist) / dist) * 0.55;
+                            a.x -= dx * push;
+                            a.y -= dy * push;
+                            b.x += dx * push;
+                            b.y += dy * push;
+                        }
+                    }
+                }
+            }
+        }
+
+        function packSatellitesLocal(hubR, groups, clusterId) {
+            const items = (groups || []).map((group, idx) => ({
+                group,
+                idx,
+                r: groupRadius(group.size, clusterId)
+            }));
+            if (!items.length) return [];
+
+            items.sort((a, b) => b.r - a.r);
+            const placed = [];
+            const gap = HUB_SATELLITE_GAP;
+            let relaxIters = items.length > 100 ? 110 : items.length > 50 ? 85 : 65;
+            const packGap = clusterId === 'possession_cluster' ? INTRA_MOON_GAP : CLUSTER_GAP;
+            if (clusterId === 'possession_cluster') {
+                relaxIters = Math.round(relaxIters * 1.3);
+            }
+
+            items.forEach((item, i) => {
+                let x = 0;
+                let y = 0;
+                if (i === 0) {
+                    x = hubR + item.r + gap;
+                    y = 0;
+                } else {
+                    let found = false;
+                    const maxAttempts = Math.min(3200, 900 + items.length * 14);
+                    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                        const angle = i * GOLDEN_ANGLE + attempt * 0.28;
+                        const ringStep = Math.max(item.r * 1.45, 10);
+                        const dist = hubR + item.r + gap + Math.sqrt(attempt + 1) * ringStep * 0.52;
+                        const tx = Math.cos(angle) * dist;
+                        const ty = Math.sin(angle) * dist;
+                        if (!collidesHub(tx, ty, item.r, hubR, gap) &&
+                            !collidesCircle(tx, ty, item.r, placed, packGap)) {
+                            x = tx;
+                            y = ty;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        const angle = i * GOLDEN_ANGLE;
+                        const dist = hubR + item.r + gap + i * 3.2;
+                        x = Math.cos(angle) * dist;
+                        y = Math.sin(angle) * dist;
+                    }
+                }
+                placed.push({ ...item, x, y });
+            });
+
+            relaxSatellites(placed, hubR, relaxIters, packGap);
+            return placed;
+        }
+
+        function fieldRadiusFromPack(hubR, packed) {
+            let maxD = hubR;
+            packed.forEach((p) => {
+                const d = Math.hypot(p.x, p.y) + p.r + CLUSTER_GAP;
+                if (d > maxD) maxD = d;
+            });
+            return maxD + 20;
+        }
+
+        /** When true, viewBox is 0..width × 0..layoutHeight so anchor y moves on screen (required for manual tuning). */
+        const USE_FIXED_LAYOUT_VIEWBOX = true;
+
+        /**
+         * MANUAL CLUSTER POSITIONS — edit x/y here (hub center in layout pixels).
+         * Hard-refresh /clusters after each change.
+         * With USE_FIXED_LAYOUT_VIEWBOX: smaller y = higher on screen (try 80–220 for top row).
+         * y is the big hub center; satellites extend above/below it by ~100–200px.
+         */
+        function getClusterAnchors(layoutWidth, layoutHeight) {
+            return {
+                possession_cluster: { x: layoutWidth * 0.19, y: 230 },
+                general_cluster: { x: layoutWidth * 0.75, y: 300 },
+                online_only_cluster: { x: layoutWidth * 0.44, y: layoutHeight * 0.42 },
+                severe_cluster: { x: layoutWidth * 0.13, y: layoutHeight * 0.49 },
+                investigation_cluster: { x: layoutWidth * 0.78, y: layoutHeight * 0.60 }
+            };
+        }
+
+        function layoutHubPositions(hubSpecs, layoutWidth, layoutHeight) {
+            const anchors = getClusterAnchors(layoutWidth, layoutHeight);
+            hubSpecs.forEach((spec) => {
+                const a = anchors[spec.cluster.group_id];
+                if (a) {
+                    spec.x = a.x;
+                    spec.y = a.y;
+                }
+            });
+        }
+
+        function computeLayoutBounds(nodes, pad) {
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+            nodes.forEach((n) => {
+                minX = Math.min(minX, n.x - n.r);
+                maxX = Math.max(maxX, n.x + n.r);
+                minY = Math.min(minY, n.y - n.r);
+                maxY = Math.max(maxY, n.y + n.r);
+            });
+            return {
+                minX: minX - pad,
+                minY: minY - pad,
+                maxX: maxX + pad,
+                maxY: maxY + pad,
+                width: maxX - minX + pad * 2,
+                height: maxY - minY + pad * 2
+            };
+        }
+
+        function buildClusterNodes(clusterData, layoutWidth, layoutHeight, colors) {
+            const nodes = [];
+            const hubSpecs = clusterData.map((cluster, i) => {
+                const r = hubRadius(cluster);
+                const packed = packSatellitesLocal(r, cluster.internal_groups || [], cluster.group_id);
+                return {
+                    cluster,
+                    index: i,
+                    r,
+                    packed,
+                    fieldR: fieldRadiusFromPack(r, packed),
+                    color: colors[i % colors.length]
+                };
+            });
+
+            layoutHubPositions(hubSpecs, layoutWidth, layoutHeight);
+
+            hubSpecs.forEach((spec) => {
+                const clusterX = spec.x;
+                const clusterY = spec.y;
+
+                nodes.push({
+                    id: spec.cluster.group_id,
+                    type: 'cluster',
+                    cluster: spec.cluster,
+                    r: spec.r,
+                    x: clusterX,
+                    y: clusterY,
+                    color: spec.color,
+                    fx: clusterX,
+                    fy: clusterY
+                });
+
+                spec.packed.forEach((p) => {
+                    nodes.push({
+                        id: `${spec.cluster.group_id}_group_${p.idx}`,
+                        type: 'group',
+                        clusterId: spec.cluster.group_id,
+                        group: p.group,
+                        r: p.r,
+                        x: clusterX + p.x,
+                        y: clusterY + p.y,
+                        color: spec.color,
+                        opacity: 0.8,
+                        clusterX,
+                        clusterY,
+                        clusterR: spec.r,
+                        orbitR: Math.hypot(p.x, p.y)
+                    });
+                });
+            });
+
+            globalSeparateSatellites(nodes, 18);
+            separateClusterMoons(nodes, 'possession_cluster');
+            anchorSatellitesToOrbit(nodes);
+            return nodes;
+        }
+
+        /** Enforce zero overlap among moons orbiting the same hub; hub position stays fixed. */
+        function separateClusterMoons(nodes, clusterId) {
+            const hub = nodes.find((n) => n.type === 'cluster' && n.id === clusterId);
+            const groups = nodes.filter((n) => n.type === 'group' && n.clusterId === clusterId);
+            if (!hub || groups.length < 2) return;
+
+            const gap = INTRA_MOON_GAP;
+            const iters = groups.length > 80 ? 140 : 100;
+            const pushStrength = 0.58;
+
+            for (let iter = 0; iter < iters; iter++) {
+                for (let i = 0; i < groups.length; i++) {
+                    const a = groups[i];
+                    const dxh = a.x - hub.x;
+                    const dyh = a.y - hub.y;
+                    const distH = Math.hypot(dxh, dyh) || 0.001;
+                    const minHub = hub.r + a.r + HUB_SATELLITE_GAP + 2;
+                    if (distH < minHub) {
+                        a.x = hub.x + (dxh / distH) * minHub;
+                        a.y = hub.y + (dyh / distH) * minHub;
+                    }
+                    for (let j = i + 1; j < groups.length; j++) {
+                        const b = groups[j];
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const dist = Math.hypot(dx, dy) || 0.001;
+                        const minD = a.r + b.r + gap;
+                        if (dist < minD) {
+                            const push = ((minD - dist) / dist) * pushStrength;
+                            a.x -= dx * push;
+                            a.y -= dy * push;
+                            b.x += dx * push;
+                            b.y += dy * push;
+                        }
+                    }
+                }
+            }
+        }
+
+        /** Keep moons outside hub only; allow orbit to expand outward (no max cap). */
+        function anchorClusterMoons(nodes, clusterId) {
+            const hub = nodes.find((n) => n.type === 'cluster' && n.id === clusterId);
+            if (!hub) return;
+            nodes
+                .filter((n) => n.type === 'group' && n.clusterId === clusterId)
+                .forEach((g) => {
+                    const dx = g.x - hub.x;
+                    const dy = g.y - hub.y;
+                    const dist = Math.hypot(dx, dy) || 0.001;
+                    const minOrbit = hub.r + g.r + HUB_SATELLITE_GAP + 2;
+                    if (dist < minOrbit) {
+                        g.x = hub.x + (dx / dist) * minOrbit;
+                        g.y = hub.y + (dy / dist) * minOrbit;
+                    }
+                    g.clusterX = hub.x;
+                    g.clusterY = hub.y;
+                });
+        }
+
+        /** Push apart cross-cluster overlaps only; keep moons near their planet. */
+        function globalSeparateSatellites(nodes, iterations) {
+            const groups = nodes.filter((n) => n.type === 'group');
+            const hubs = nodes.filter((n) => n.type === 'cluster');
+            if (groups.length < 2) return;
+
+            for (let iter = 0; iter < iterations; iter++) {
+                for (let i = 0; i < groups.length; i++) {
+                    const a = groups[i];
+                    for (let j = i + 1; j < groups.length; j++) {
+                        const b = groups[j];
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const dist = Math.hypot(dx, dy) || 0.001;
+                        const minD = a.r + b.r + CLUSTER_GAP;
+                        if (dist < minD) {
+                            const push = ((minD - dist) / dist) * 0.28;
+                            a.x -= dx * push;
+                            a.y -= dy * push;
+                            b.x += dx * push;
+                            b.y += dy * push;
+                        }
+                    }
+                    hubs.forEach((h) => {
+                        if (h.id === a.clusterId) return;
+                        const dx = a.x - h.x;
+                        const dy = a.y - h.y;
+                        const dist = Math.hypot(dx, dy) || 0.001;
+                        const minD = h.r + a.r + 14;
+                        if (dist < minD) {
+                            const push = ((minD - dist) / dist) * 0.35;
+                            a.x += dx * push;
+                            a.y += dy * push;
+                        }
+                    });
+                }
+            }
+        }
+
+        function anchorSatellitesToOrbit(nodes) {
+            nodes.filter((n) => n.type === 'group').forEach((g) => {
+                if (g.clusterId === 'possession_cluster') return;
+                const dx = g.x - g.clusterX;
+                const dy = g.y - g.clusterY;
+                const dist = Math.hypot(dx, dy) || 0.001;
+                const minOrbit = g.clusterR + g.r + HUB_SATELLITE_GAP;
+                const maxOrbit = Math.max(g.orbitR * 1.35, minOrbit * 1.5);
+                if (dist < minOrbit) {
+                    g.x = g.clusterX + (dx / dist) * minOrbit;
+                    g.y = g.clusterY + (dy / dist) * minOrbit;
+                } else if (dist > maxOrbit) {
+                    g.x = g.clusterX + (dx / dist) * maxOrbit;
+                    g.y = g.clusterY + (dy / dist) * maxOrbit;
+                }
+            });
+            anchorClusterMoons(nodes, 'possession_cluster');
         }
 
         // Load cluster data from cache or API
@@ -427,161 +801,59 @@
                 return;
             }
             
-            // Clear previous content
             svg.selectAll('*').remove();
-            
-            // Prepare nodes: main clusters as large bubbles
-            const nodes = [];
+
+            const layoutHeight = Math.max(width * 0.95, 1800);
             const colors = d3.schemeCategory10;
-            
-            // Position main clusters tightly together
-            const mainClusterNodes = [];
-            const clusterPositions = {
-                'online_only_cluster': { x: width * 0.45, y: height * 0.47 }, // Top-center
-                'possession_cluster': { x: width * 0.31, y: height * 0.28 }, // Left
-                'general_cluster': { x: width * 0.67, y: height * 0.31 }, // Right (inset from edge)
-                'severe_cluster': { x: width * 0.30, y: height * 0.65 }, // Bottom-left
-                'investigation_cluster': { x: width * 0.63, y: height * 0.65 } // Bottom-center
+            let nodes = buildClusterNodes(clusterData, width, layoutHeight, colors);
+            const contentBounds = computeLayoutBounds(nodes, margin);
+            let contentLeft = Infinity;
+            let contentRight = -Infinity;
+            let contentBottom = -Infinity;
+            nodes.forEach((n) => {
+                contentLeft = Math.min(contentLeft, n.x - n.r);
+                contentRight = Math.max(contentRight, n.x + n.r);
+                contentBottom = Math.max(contentBottom, n.y + n.r);
+            });
+            const viewBoxX = contentLeft - LAYOUT_SIDE_PAD;
+            const viewBoxWidth = contentRight - contentLeft + LAYOUT_SIDE_PAD * 2;
+            const viewBoxHeight = USE_FIXED_LAYOUT_VIEWBOX
+                ? LAYOUT_TOP_INSET + contentBottom + LAYOUT_BOTTOM_PAD
+                : layoutHeight + LAYOUT_TOP_INSET + LAYOUT_BOTTOM_PAD;
+            const viewH = USE_FIXED_LAYOUT_VIEWBOX
+                ? Math.ceil((viewBoxHeight / viewBoxWidth) * width)
+                : Math.max(1960, Math.min(3200, contentBounds.height));
+
+            svg = d3.select('#cluster-visualization').select('svg');
+            svg.attr('width', width)
+                .attr('height', viewH)
+                .attr(
+                    'viewBox',
+                    USE_FIXED_LAYOUT_VIEWBOX
+                        ? `${viewBoxX} ${-LAYOUT_TOP_INSET} ${viewBoxWidth} ${viewBoxHeight}`
+                        : [
+                              contentBounds.minX,
+                              contentBounds.minY,
+                              contentBounds.width,
+                              contentBounds.height
+                          ].join(' ')
+                )
+                .attr('preserveAspectRatio', 'xMidYMin meet');
+            vizEl.style.minHeight = `${Math.round(viewH)}px`;
+            vizEl.style.height = `${Math.round(viewH)}px`;
+
+            const totalSatellites = nodes.filter((n) => n.type === 'group').length;
+            window.__clusterLayoutMeta = {
+                totalSatellites,
+                bounds: contentBounds,
+                fixedViewBox: USE_FIXED_LAYOUT_VIEWBOX
             };
-            
-            clusterData.forEach((cluster, i) => {
-                // Main hubs: online-only keeps original scale; other four use softer sqrt so large hubs do not dwarf the center.
-                const s = Math.sqrt(cluster.size);
-                const clusterSize =
-                    cluster.group_id === 'online_only_cluster'
-                        ? s * 2.98 + 34
-                        : s * 2.98 * 0.718 + 34;
-                
-                // Get position from predefined positions or use default
-                let clusterX, clusterY;
-                const position = clusterPositions[cluster.group_id];
-                if (position) {
-                    clusterX = position.x;
-                    clusterY = position.y;
-                } else {
-                    // Fallback: distribute evenly
-                    const angle = (i / clusterData.length) * 2 * Math.PI - Math.PI / 2;
-                    const radius = Math.min(width, height) * 0.25;
-                    clusterX = width / 2 + Math.cos(angle) * radius;
-                    clusterY = height / 2 + Math.sin(angle) * radius;
-                }
-                
-                // Main cluster bubble - positioned first
-                const mainNode = {
-                    id: cluster.group_id,
-                    type: 'cluster',
-                    cluster: cluster,
-                    r: clusterSize,
-                    x: clusterX,
-                    y: clusterY,
-                    color: colors[i % colors.length],
-                    fx: clusterX,
-                    fy: clusterY
-                };
-                mainClusterNodes.push(mainNode);
-                nodes.push(mainNode);
-            });
-            
-            // Second pass: position sub-cluster bubbles tightly around their clusters
-            clusterData.forEach((cluster, i) => {
-                const mainNode = mainClusterNodes[i];
-                const clusterX = mainNode.x;
-                const clusterY = mainNode.y;
-                const clusterSize = mainNode.r;
-                
-                // Add group bubbles AROUND each cluster (not inside)
-                if (cluster.internal_groups && cluster.internal_groups.length > 0) {
-                    const groupCount = cluster.internal_groups.length;
-                    
-                    // Calculate sub-cluster sizes first (5% bigger)
-                    const groupSizes = cluster.internal_groups.map(group => 
-                        (Math.sqrt(group.size) * 2.12 + 10.5) * 1.08
-                    );
-                    const maxGroupSize = Math.max(...groupSizes);
-                    
-                    // Keep satellites close enough that touching the cluster is possible,
-                    // then add only a small spread buffer based on group count.
-                    const clusterTouchPadding = 2;
-                    
-                    // Adjust base spread buffer based on number of groups
-                    // Add extra spacing for online_only_cluster to account for text label
-                    const textSpacing = cluster.group_id === 'online_only_cluster' ? 24 : 0;
-                    let spreadBuffer;
-                    if (groupCount <= 3) {
-                        // Very few bubbles: keep very tight
-                        spreadBuffer = 2;
-                    } else if (groupCount <= 5) {
-                        // Few bubbles: slightly more spread
-                        spreadBuffer = 6;
-                    } else {
-                        // Many bubbles: modestly more spread
-                        spreadBuffer = 10;
-                    }
-                    if (cluster.group_id === 'online_only_cluster' && groupCount > 6) {
-                        spreadBuffer = Math.min(spreadBuffer, 5);
-                    }
-                    const baseRadius = clusterSize + maxGroupSize + clusterTouchPadding + spreadBuffer + textSpacing;
-                    
-                    // For very few bubbles (1-3), use a more compact triangular/square arrangement
-                    let angleOffset = 0;
-                    if (groupCount === 1) {
-                        // Single bubble: place it to the right
-                        angleOffset = 0;
-                    } else if (groupCount === 2) {
-                        // Two bubbles: place them horizontally
-                        angleOffset = 0;
-                    } else if (groupCount === 3) {
-                        // Three bubbles: triangular arrangement (start from top)
-                        angleOffset = -Math.PI / 2;
-                    } else if (groupCount === 4) {
-                        // Four bubbles: square arrangement (start from top-right)
-                        angleOffset = -Math.PI / 4;
-                    }
-                    
-                    cluster.internal_groups.forEach((group, groupIdx) => {
-                        const groupSize = groupSizes[groupIdx];
-                        // Even distribution around circle, with optional offset for better positioning
-                        const angle = (groupIdx / groupCount) * 2 * Math.PI + angleOffset;
-                        
-                        // Special handling: position "30 cases" bubble closer for online_only_cluster
-                        const minBubbleRadius = clusterSize + groupSize + clusterTouchPadding + textSpacing;
-                        // Online-only: place each satellite at its own tight orbit (not the largest group's ring),
-                        // so small groups are not stranded far from the hub.
-                        let bubbleRadius =
-                            cluster.group_id === 'online_only_cluster'
-                                ? Math.max(minBubbleRadius, clusterSize + clusterTouchPadding + 14)
-                                : Math.max(baseRadius, minBubbleRadius);
-                        if (cluster.group_id === 'online_only_cluster' && group.size === 30) {
-                            bubbleRadius = Math.min(bubbleRadius, baseRadius - 72);
-                        }
-                        // Ensure adjustments never pull a bubble through the hub
-                        bubbleRadius = Math.max(bubbleRadius, minBubbleRadius);
-                        
-                        // Calculate position around the main cluster
-                        const groupX = clusterX + Math.cos(angle) * bubbleRadius;
-                        const groupY = clusterY + Math.sin(angle) * bubbleRadius;
-                        
-                        nodes.push({
-                            id: `${cluster.group_id}_group_${groupIdx}`,
-                            type: 'group',
-                            clusterId: cluster.group_id,
-                            group: group,
-                            r: groupSize,
-                            x: groupX,
-                            y: groupY,
-                            color: colors[i % colors.length],
-                            opacity: 0.8,
-                            clusterX: clusterX,
-                            clusterY: clusterY,
-                            clusterR: clusterSize
-                        });
-                    });
-                }
-            });
-            
-            // Draw all bubbles first
+
+            // Paint order: large bubbles first (back), small on top (e.g. 3-case over 1000-case)
+            const drawOrder = nodes.slice().sort((a, b) => b.r - a.r);
+
             const bubbles = svg.selectAll('.bubble')
-                .data(nodes)
+                .data(drawOrder, (d) => d.id)
                 .enter()
                 .append('g')
                 .attr('class', d => {
@@ -779,163 +1051,39 @@
                     .text(`${d.cluster.size} cases`);
             });
             
-            // Add labels to sub-cluster groups - show case count inside each sub-bubble
+            // Sub-cluster labels: always show case count (original look)
             groupBubbles.each(function(d) {
                 const g = d3.select(this);
+                const label = `${d.group.size} cases`;
+                const fontPx = d.r < 16 ? Math.max(8, Math.round(d.r * 0.62)) : 11;
                 g.append('text')
                     .attr('class', 'group-label')
                     .attr('dy', 4)
-                    .text(`${d.group.size} cases`);
+                    .style('font-size', `${fontPx}px`)
+                    .text(label);
             });
-            
-            // Static force simulation to settle positions neatly - runs once then stops
-            const groupNodes = nodes.filter(n => n.type === 'group');
-            if (groupNodes.length > 0) {
-                // Custom force to repel sub-clusters from their main cluster (10px minimum distance)
-                function clusterRepulsion(alpha) {
-                    groupNodes.forEach(node => {
-                        const clusterX = node.clusterX;
-                        const clusterY = node.clusterY;
-                        const clusterR = node.clusterR;
-                        const minDistance = clusterR + node.r + 22; // minimum gap from parent hub
-                        
-                        const dx = node.x - clusterX;
-                        const dy = node.y - clusterY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        if (distance < minDistance) {
-                            const force = (minDistance - distance) / distance;
-                            node.vx += dx * force * alpha * 0.8;
-                            node.vy += dy * force * alpha * 0.8;
-                        }
-                    });
-                }
-                
-                // Custom force to repel from all other main clusters too
-                function allClusterRepulsion(alpha) {
-                    groupNodes.forEach(node => {
-                        mainClusterNodes.forEach(mainNode => {
-                            if (mainNode.id === node.clusterId) return; // Skip own cluster
-                            
-                            const dx = node.x - mainNode.x;
-                            const dy = node.y - mainNode.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            const minDistance = mainNode.r + node.r + 7; // minimum gap vs other hubs
-                            
-                            if (distance < minDistance) {
-                                const repel = node.clusterId === 'online_only_cluster' ? 0.22 : 0.5;
-                                const force = (minDistance - distance) / distance;
-                                node.vx += dx * force * alpha * repel;
-                                node.vy += dy * force * alpha * repel;
-                            }
-                        });
-                    });
-                }
-                
-                // Custom force to keep sub-clusters near their parent cluster
-                function clusterAttraction(alpha) {
-                    groupNodes.forEach(node => {
-                        const clusterX = node.clusterX;
-                        const clusterY = node.clusterY;
-                        // Calculate ideal radius based on initial positioning (adaptive)
-                        const idealRadius = node.clusterR + node.r + 18; // Base ideal distance
-                        
-                        const dx = node.x - clusterX;
-                        const dy = node.y - clusterY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        // For clusters with few bubbles, use tighter attraction
-                        const clusterGroupCount = groupNodes.filter(n => n.clusterId === node.clusterId).length;
-                        const onlineTight = node.clusterId === 'online_only_cluster';
-                        let attractionStrength = clusterGroupCount <= 5 ? 0.3 : 0.2;
-                        let maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.1 : idealRadius * 1.2;
-                        if (onlineTight) {
-                            attractionStrength = clusterGroupCount <= 5 ? 0.38 : 0.34;
-                            maxDistance = clusterGroupCount <= 5 ? idealRadius * 1.04 : idealRadius * 1.08;
-                        }
-                        
-                        if (distance > maxDistance) {
-                            const force = (distance - maxDistance) / distance;
-                            node.vx -= dx * force * alpha * attractionStrength;
-                            node.vy -= dy * force * alpha * attractionStrength;
-                        }
-                    });
-                }
-                
-                const simulation = d3.forceSimulation(groupNodes)
-                    .force('collision', d3.forceCollide().radius(d => d.r + 12).strength(0.92))
-                    .force('charge', d3.forceManyBody().strength(-175))
-                    .force('clusterRepulsion', clusterRepulsion)
-                    .force('allClusterRepulsion', allClusterRepulsion)
-                    .force('clusterAttraction', clusterAttraction)
-                    .force('x', d3.forceX().strength(0.1).x(d => {
-                        // Keep within bounds
-                        return Math.max(margin + d.r, Math.min(width - margin - d.r, d.x));
-                    }))
-                    .force('y', d3.forceY().strength(0.1).y(d => {
-                        // Keep within bounds
-                        return Math.max(margin + d.r, Math.min(height - margin - d.r, d.y));
-                    }))
-                    .alphaDecay(0.02) // Slower decay for smoother, longer animation
-                    .velocityDecay(0.4) // Less damping for smoother movement
-                    .alpha(1) // Start with full alpha
-                    .on('tick', function() {
-                        // Update positions directly for smooth animation (no transitions in tick)
-                        groupBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
-                    })
-                    .on('end', function() {
-                        // When simulation ends, fix all positions
-                        groupNodes.forEach(node => {
-                            node.fx = node.x;
-                            node.fy = node.y;
-                            // Store original position for jiggle animation
-                            node.originalX = node.x;
-                            node.originalY = node.y;
-                        });
-                        
-                        // Also store original positions for main clusters
-                        nodes.filter(n => n.type === 'cluster').forEach(node => {
-                            node.originalX = node.x;
-                            node.originalY = node.y;
-                        });
-                        
-                        // Start gentle jiggle animation
-                        startJiggleAnimation();
-                    });
-            } else {
-                // If no groups, just position clusters
-                bubbles.attr('transform', d => `translate(${d.x},${d.y})`);
-                
-                // Store original positions for all nodes
-                nodes.forEach(node => {
-                    node.originalX = node.x;
-                    node.originalY = node.y;
-                });
-                
-                // Start jiggle animation
-                startJiggleAnimation();
-            }
-            
-            // Position main clusters (they're fixed)
+
             clusterBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
-            
-            // Ensure original positions are stored for main clusters (in case simulation didn't run)
-            nodes.filter(n => n.type === 'cluster').forEach(node => {
-                if (node.originalX === undefined) {
-                    node.originalX = node.x;
-                    node.originalY = node.y;
-                }
+            groupBubbles.attr('transform', d => `translate(${d.x},${d.y})`);
+
+            nodes.forEach(node => {
+                node.originalX = node.x;
+                node.originalY = node.y;
             });
+
+            const satCount = window.__clusterLayoutMeta?.totalSatellites || 0;
+            if (satCount > 0) {
+                startJiggleAnimation(satCount);
+            }
         }
         
         // Gentle jiggle animation for bubbles
         let jiggleAnimationId = null;
-        function startJiggleAnimation() {
-            // Stop any existing animation first
+        function startJiggleAnimation(satelliteCount) {
             stopJiggleAnimation();
-            
-            const jiggleAmount = 1.5; // Maximum pixels to jiggle
-            const jiggleSpeed = 0.0018; // Speed of jiggle (lower = slower) - halved for smoother movement
+
+            const jiggleAmount = 1.5;
+            const jiggleSpeed = 0.0018;
             let startTime = Date.now();
             
             function animate() {
@@ -1005,14 +1153,17 @@
             if (missing.length === 0) return;
             await Promise.all(missing.map(async (c) => {
                 try {
-                    const r = await fetch(`/api/cases/${encodeURIComponent(c.id)}`);
+                    const r = await caselinkerFetchCase(c.id);
                     if (!r.ok) return;
                     const full = await r.json();
                     const fullText = full?.raw_data?.case_text || full?.case_text || '';
                     if (fullText) c.case_text = fullText;
                     if (!c.date_range && full?.date_range) c.date_range = full.date_range;
                 } catch (e) {
-                    // keep summary-only fallback when fetch fails
+                    if (e && e.code === 'CASELINKER_DAILY_LIMIT') {
+                        c._case_daily_limit = true;
+                        c.case_text = CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE;
+                    }
                 }
             }));
         }
@@ -1058,15 +1209,20 @@
                         continue;
                     }
                     try {
-                        const individualResponse = await fetch(
-                            `/api/cases/${encodeURIComponent(caseId)}`
-                        );
+                        const individualResponse = await caselinkerFetchCase(caseId);
                         if (individualResponse.ok) {
                             fullCases.push(await individualResponse.json());
                         } else {
                             console.warn(`Failed to fetch case ${caseId}: ${individualResponse.status}`);
                         }
                     } catch (e) {
+                        if (e && e.code === 'CASELINKER_DAILY_LIMIT') {
+                            listEl.innerHTML =
+                                '<div style="text-align: center; padding: 20px; color: #856404; line-height: 1.5; white-space: pre-line;">' +
+                                escapeHtml(CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE) +
+                                '</div>';
+                            return;
+                        }
                         console.error(`Error fetching case ${caseId}:`, e);
                     }
                 }

@@ -937,7 +937,7 @@
             <p>
                 These are structured case studies drawn from public ICAC investigative records,
                 documented by law enforcement and released through press releases and task
-                force reports. CaseLinker has processed 2,500+ of these reports across 25 U.S. task forces. The
+                force reports. CaseLinker has processed 5,000+ of these reports across 61 U.S. task forces. The
                 case studies here were selected from that corpus to trace how internet-facilitated crimes
                 against children evolved across four technological eras, from early social media in 2010 through
                 the generative AI period today.
@@ -1353,7 +1353,7 @@
 
         async function fetchCorpusCase(caseId) {
             if (_SOURCE_CASE_CACHE[caseId]) return _SOURCE_CASE_CACHE[caseId];
-            const r = await fetch('/api/cases/' + encodeURIComponent(caseId));
+            const r = await caselinkerFetchCase(caseId);
             if (!r.ok) throw new Error('case fetch failed (' + r.status + ')');
             const data = await r.json();
             _SOURCE_CASE_CACHE[caseId] = data;
@@ -1412,7 +1412,10 @@
                         renderSourceTextPanel(panel, data);
                         loaded = true;
                     } catch (e) {
-                        panel.innerHTML = '<div class="source-text-status error">Could not load case text (' + escapeHtml(e.message || 'unknown error') + ').</div>';
+                        var msg = (e && e.code === 'CASELINKER_DAILY_LIMIT')
+                            ? CASELINKER_DAILY_CASE_LIMIT_UI_MESSAGE
+                            : ('Could not load case text (' + (e.message || 'unknown error') + ').');
+                        panel.innerHTML = '<div class="source-text-status error">' + escapeHtml(msg) + '</div>';
                     } finally {
                         loading = false;
                     }
