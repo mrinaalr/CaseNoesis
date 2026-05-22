@@ -32,10 +32,10 @@
         .nav a:hover {
             text-decoration: underline;
         }
-        .nav a.ml-experimental {
+        .nav a.patterns {
             color: #dc2626;
             font-weight: 700;
-            text-transform: uppercase;
+
             letter-spacing: 0.5px;
             animation: pulseRed 8s ease-in-out infinite;
         }
@@ -385,7 +385,7 @@
         <a href="/llm">LLM</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
-        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/patterns" class="patterns">Phase 2: Patterns</a>
         <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
     </div>
 
@@ -560,7 +560,7 @@
 <span class="comment"># (navigable tag combinations + cohort case IDs from live DB)</span><br><br>
 <span class="comment"># Five cluster families + Jaccard “general”; /api/cluster-groups, /api/automated-analysis</span><br>
 <span class="keyword">triaged</span> = triage_cases(<span class="keyword">cases</span>)  <span class="comment"># rule-based 5–10 score</span><br>
-<span class="comment"># Experimental ML: saved sklearn bundle; /api/triage-model-corpus (live DB), /api/triage-live</span>
+<span class="comment"># Triage ML: saved sklearn bundle; /api/triage-model-corpus (live DB), /api/triage-live</span>
                             </div>
                         </div>
                         <ul class="detail-list">

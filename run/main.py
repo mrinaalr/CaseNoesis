@@ -3473,14 +3473,14 @@ async def serve_under_the_hood():
     else:
         return HTMLResponse(content="<h1>Under the Hood</h1><p>Page not found</p>", status_code=404)
 
-@app.get("/ml-experimental", response_class=HTMLResponse)
-async def serve_ml_experimental():
-    """Serve the HTML ML experimental page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "ml-experimental.html"
+@app.get("/patterns", response_class=HTMLResponse)
+async def serve_patterns():
+    """Serve the Patterns research documentation page"""
+    html_path = Path(__file__).parent.parent / "visualization" / "patterns.html"
     if html_path.exists():
         return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
-        return HTMLResponse(content="<h1>ML Experimental page not found</h1>", status_code=404)
+        return HTMLResponse(content="<h1>Patterns page not found</h1>", status_code=404)
 
 
 _viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets"

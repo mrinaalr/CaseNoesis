@@ -1395,6 +1395,10 @@ def group_similar_cases(all_cases: List[Dict[str, Any]], similarity_threshold: f
     return sorted(groups, key=lambda g: g['size'], reverse=True)
 
 
+# Normalized priority scores are on [5, 10]. Cases at or above this count as "high priority".
+HIGH_PRIORITY_SCORE_THRESHOLD = 6.0
+
+
 def triage_cases(all_cases: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Prioritize cases based on severity indicators, evidence volume, and urgency.
@@ -1833,7 +1837,10 @@ def run_automated_analysis(all_cases: List[Dict[str, Any]]) -> Dict[str, Any]:
         'summary': {
             'total_cases': len(all_cases),
             'total_groups': len(case_groups),
-            'high_priority_cases': len([c for c in triaged_cases if c.get('priority_score', 0) > 5.0]),
+            'high_priority_cases': len([
+                c for c in triaged_cases
+                if c.get('priority_score', 0) >= HIGH_PRIORITY_SCORE_THRESHOLD
+            ]),
             'average_priority': sum(c.get('priority_score', 0) for c in triaged_cases) / len(triaged_cases) if triaged_cases else 0.0
         }
     }

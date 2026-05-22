@@ -119,20 +119,20 @@
       "status": "published",
       "linked_case_id": "wa_ag_2010_001",
       "title": "When one arrest became five possession counts",
-      "subtitle": "A 2010 Washington case in which a new charging law let prosecutors treat large collections of child pornography as multiple offenses rather than a single count.",
+      "subtitle": "A 2010 Washington case in which a new charging law let prosecutors treat large collections of CSAM as multiple offenses rather than a single count.",
       "release_date": "2026-06-01",
       "dimensions": [
         {
           "title": "Platform context",
-          "body": "The public record describes the suspect as sharing child pornography online, but the platform itself is not the point of the case. What matters is that the offense emerged through online trading, which placed it squarely in the early-era digital distribution environment that Washington prosecutors were trying to address. In that environment, the technical medium mattered mainly because it allowed offenders to accumulate and exchange large volumes of illegal material. The platform was the medium, not the story."
+          "body": "The public record describes the suspect as sharing CSAM online, but the platform itself is not the point of the case. What matters is that the offense emerged through online trading, which placed it squarely in the early-era digital distribution environment that Washington prosecutors were trying to address. In that environment, the technical medium mattered mainly because it allowed offenders to accumulate and exchange large volumes of illegal material. The platform was the medium, not the story."
         },
         {
           "title": "Perpetrator methodology",
-          "body": "The offender was described as a previously convicted child molester and a prior child pornography possessor, which makes this a recidivist case rather than a first-contact or isolated possession matter. According to the release, he had told investigators that he had sexually abused multiple victims and had managed to avoid detection for long periods. The behavior at issue combined online trading with a long-standing pattern of child sexual abuse, which is why prosecutors framed him as one of the most dangerous sexual predators rather than merely a person caught with images. The case is important because it shows how digital offending can coexist with hands-on abuse in the same offender profile."
+          "body": "The offender was described as a previously convicted child molester and was previously convited, which makes this a recidivist case rather than a first-contact or isolated possession matter. According to the release, he had told investigators that he had sexually abused multiple victims and had managed to avoid detection for long periods. The behavior at issue combined online trading with a long-standing pattern of child sexual abuse, which is why prosecutors framed him as one of the most dangerous sexual predators rather than merely a person caught with images. The case is important because it shows how digital offending can coexist with hands-on abuse in the same offender profile."
         },
         {
           "title": "Investigative approach",
-          "body": "Seattle Police worked with the FBI to apprehend the suspect after identifying him as sharing child pornography online. That investigative lead linked a federal-monitoring posture with local enforcement, which is typical of the era. The public record does not dwell on technical details of the crawl or the exact software used, but it does make clear that online trading was the route that brought the offender back into view. The significance of the case lies less in the initial detection method than in what happened after the arrest: prosecutors were able to use a new charging framework to avoid collapsing a large image collection into a single count."
+          "body": "Seattle Police worked with the FBI to apprehend the suspect after identifying him as sharing CSAM online. That investigative lead linked a federal-monitoring posture with local enforcement, which is typical of the era. The public record does not dwell on technical details of the crawl or the exact software used, but it does make clear that online trading was the route that brought the offender back into view. The significance of the case lies less in the initial detection method than in what happened after the arrest: prosecutors were able to use a new charging framework to avoid collapsing a large image collection into a single count."
         },
         {
           "title": "Prosecutorial outcome",
@@ -188,12 +188,12 @@
       "status": "published",
       "linked_case_id": "illinois_ag_2014_010",
       "title": "When the undercover sting apprehended a trader",
-      "subtitle": "A 2014 Illinois ICAC sting in which an online chatroom lead turned into an interstate travel arrest for dissemination of child pornography and attempted contact with children.",
+      "subtitle": "A 2014 Illinois ICAC sting in which an online chatroom lead turned into an interstate travel arrest for dissemination of CSAM and attempted contact with children.",
       "release_date": "2026-06-01",
       "dimensions": [
         {
           "title": "Platform context",
-          "body": "The starting point in the public record is an online chatroom where the defendant was seen trading child pornography. The platform itself is not named, and that is fine. In Era I, the more important fact is that the offense began in a chat-based online environment where anonymity made it easier to advertise illegal material and recruit contact. The case shows a pre-mobile internet setting in which offender behavior moved from online trading into physical travel, with the internet functioning as the contact bridge rather than the destination."
+          "body": "The starting point in the public record is an online chatroom where the defendant was seen trading CSAM. The platform itself is not named, and that is fine. In Era I, the more important fact is that the offense began in a chat-based online environment where anonymity made it easier to advertise illegal material and attempt contact. The case shows a pre-mobile internet setting in which offender behavior moved from online trading into physical travel, with the internet functioning as the contact bridge rather than the destination."
         },
         {
           "title": "Perpetrator methodology",
@@ -209,7 +209,7 @@
         },
         {
           "title": "Relationship to the broader technological era",
-          "body": "This case sits at the moment when chatroom anonymity was still a major vector for child exploitation and local task forces were learning how to convert online leads into arrests before offenders could travel. It complements the other Era I studies by adding interstate mobility to the archive: not just online trading, but online trading that leads to a plane ticket and an attempted in-person offense. In the broader era, it shows the enforcement challenge before mobile apps and encrypted messaging became dominant. The offender could still be drawn out through an undercover sting, and that made the online-to-offline transition visible to investigators."
+          "body": "This case sits at the moment when chatroom anonymity was still a major vector for child exploitation and local task forces were learning how to convert online leads into arrests before offenders could escalate. It complements the other Era I studies by adding interstate mobility to the archive: not just online trading, but online trading that leads to a plane ticket and an attempted in-person offense. In the broader era, it shows the enforcement challenge before mobile apps and encrypted messaging became dominant. The offender could still be drawn out through an undercover sting, and that made the online-to-offline transition visible to investigators."
         }
       ],
       "takeaway": "Era I offenders could still be pulled from the screen into the real world through undercover work. This case shows how an online chat lead became an interstate travel-and-arrest story before mobile-era fragmentation made that path harder to track.",
@@ -522,10 +522,10 @@
     },
 
     {
-      "id": "ky_sp_2022_195",
+      "id": "ky_sp_2020_018",
       "era": "III",
       "status": "published",
-      "linked_case_id": "ky_sp_2022_195",
+      "linked_case_id": "ky_sp_2020_018",
       "title": "When HSI lit the fuse for Madisonville",
       "subtitle": "A 2020 Kentucky State Police undercover ICAC case initiated by Homeland Security Investigations, where a website-access lead led to a search warrant, device preview, and charges for possession involving infants and prepubescent children.",
       "release_date": "2026-06-01",
@@ -556,10 +556,10 @@
     },
 
     {
-      "id": "tbi_icac_2022_024",
+      "id": "tbi_icac_2025_014",
       "era": "III",
       "status": "published",
-      "linked_case_id": "tbi_icac_2022_024",
+      "linked_case_id": "tbi_icac_2025_014",
       "title": "When the matchmaking started in the game lobby",
       "subtitle": "A 2022 Tennessee ICAC case in which a California referral led investigators to a child-enticement and CSAM probe spanning Roblox, Call of Duty, and multiple online platforms.",
       "release_date": "2026-06-01",
@@ -624,10 +624,10 @@
     },
     
     {
-      "id": "south_florida_icac_2025_018",
+      "id": "south_florida_icac_2025_023",
       "era": "IV",
       "status": "published",
-      "linked_case_id": "south_florida_icac_2025_018",
+      "linked_case_id": "south_florida_icac_2025_023",
       "title": "When the stack mixed legacy messengers with random video chat",
       "subtitle": "A 2025 South Florida ICAC case beginning with Kik-originated tips and developing into a federal complaint involving video-based contact, device seizures, and cross-state victimization.",
       "release_date": "2026-06-01",
@@ -658,10 +658,10 @@
     },
 
     {
-      "id": "doj_ceos_2025_025",
+      "id": "doj_ceos_2025_002",
       "era": "IV",
       "status": "published",
-      "linked_case_id": "doj_ceos_2025_025",
+      "linked_case_id": "doj_ceos_2025_002",
       "title": "When AI augmented hands-on production",
       "subtitle": "A 2025 federal indictment alleging a U.S. Army soldier used AI chatbots to generate child sexual abuse material from images of children he knew, while also secretly filming those same children in his home; among the earliest federal articulations of AI-augmented in-home production targeting known children.",
       "release_date": "2026-06-01",
@@ -693,10 +693,10 @@
 
 
     {
-      "id": "doj_ceos_2025_004",
+      "id": "doj_ceos_2025_007",
       "era": "IV",
       "status": "published",
-      "linked_case_id": "doj_ceos_2025_004",
+      "linked_case_id": "doj_ceos_2025_007",
       "title": "When a network revolved around production",
       "subtitle": "A 2025 federal indictment of five men in five states alleged to have run an online group on Discord called Greggy's Cult, drawing victims from gaming platforms into coerced video calls and producing child sexual abuse material as the network's organizing activity.",
       "release_date": "2026-06-01",

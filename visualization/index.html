@@ -31,10 +31,10 @@
         .nav a:hover {
             text-decoration: underline;
         }
-        .nav a.ml-experimental {
+        .nav a.patterns {
             color: #dc2626;
             font-weight: 700;
-            text-transform: uppercase;
+
             letter-spacing: 0.5px;
             animation: pulseRed 8s ease-in-out infinite;
         }
@@ -158,6 +158,7 @@
         .severity-cases-panel.active {
             display: block;
             animation: fadeIn 0.3s ease-in;
+            scroll-margin-top: 100px;
         }
         .severity-cases-panel h3 {
             margin-top: 0;
@@ -441,6 +442,69 @@
         .case-autocomplete-item .non-match-text {
             color: #999;
         }
+        .agency-stat-input-wrapper {
+            position: relative;
+            margin-top: 6px;
+        }
+        .agency-stat-input-wrapper input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .agency-stat-input-wrapper input:focus {
+            outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .agency-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #4CAF50;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .agency-autocomplete.active {
+            display: block;
+        }
+        .agency-autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+        .agency-autocomplete-item:hover,
+        .agency-autocomplete-item.selected {
+            background: #e8f5e9;
+        }
+        .agency-autocomplete-item .match-text {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .agency-autocomplete-item .non-match-text {
+            color: #999;
+        }
+        .agency-autocomplete-item .agency-count {
+            float: right;
+            color: #888;
+            font-size: 11px;
+        }
+        #agency-search-stat .label {
+            margin-bottom: 0;
+        }
         .case-input-group button {
             padding: 12px 24px;
             background: #4CAF50;
@@ -638,7 +702,7 @@
                <a href="/llm">LLM</a>
                <a href="/sources">Sources</a>
                <a href="/audit">Audit</a>
-               <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+               <a href="/patterns" class="patterns">Phase 2: Patterns</a>
                <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
            </div>
     
@@ -655,9 +719,18 @@
                 <div class="number" id="victim-count">-</div>
                 <div class="label" id="victim-count-label">Number of Groups</div>
             </div>
-            <div class="stat-box" style="cursor: pointer;" onclick="window.location.href='/sources'">
-                <div class="number" id="data-sources">-</div>
-                <div class="label">Data Sources</div>
+            <div class="stat-box" id="data-sources-stat-box">
+                <div id="data-sources-default">
+                    <div class="number" id="data-sources">-</div>
+                    <div class="label">Data Sources</div>
+                </div>
+                <div id="agency-search-stat" style="display: none;">
+                    <div class="label">Go to agency</div>
+                    <div class="agency-stat-input-wrapper">
+                        <input type="text" id="agency-search-input" placeholder="Type agency name…" autocomplete="off" aria-label="Search agency" />
+                        <div class="agency-autocomplete" id="agency-autocomplete" role="listbox" aria-label="Matching agencies"></div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -722,6 +795,8 @@
         let filteredCases = [];
         let geographicChartData = []; // Store chart data for stats calculation
         let platformChartData = []; // Store platform chart data for stats calculation
+        let agencySearchWired = false;
+        let agencyAutocompleteIndex = -1;
 
         // In-memory + sessionStorage cache - data is static, no refetch on nav/refresh
         const CACHE_KEY = 'caselinker_viz_cases_v2'; // bump when summary shape changes (invalidates stale sessionStorage)
@@ -1110,13 +1185,224 @@
                 statBox.onclick = null;
             }
             
-            // Data sources
-            const sources = new Set();
-            filteredCases.forEach(c => {
-                const source = c.source || c.raw_data?.source;
-                if (source) sources.add(source);
+            // Third stat box: agency jump (geographic) or data source count (other viz)
+            const dataSourcesDefault = document.getElementById('data-sources-default');
+            const agencySearchStat = document.getElementById('agency-search-stat');
+            const dataSourcesBox = document.getElementById('data-sources-stat-box');
+            if (currentViz === 'geographic') {
+                if (dataSourcesDefault) dataSourcesDefault.style.display = 'none';
+                if (agencySearchStat) agencySearchStat.style.display = 'block';
+                if (dataSourcesBox) {
+                    dataSourcesBox.style.cursor = 'default';
+                    dataSourcesBox.onclick = null;
+                }
+                wireAgencySearch();
+            } else {
+                if (dataSourcesDefault) dataSourcesDefault.style.display = 'block';
+                if (agencySearchStat) agencySearchStat.style.display = 'none';
+                hideAgencyAutocomplete();
+                const sources = new Set();
+                filteredCases.forEach(c => {
+                    const source = c.source || c.raw_data?.source;
+                    if (source) sources.add(source);
+                });
+                document.getElementById('data-sources').textContent = sources.size;
+                if (dataSourcesBox) {
+                    dataSourcesBox.style.cursor = 'pointer';
+                    dataSourcesBox.onclick = function () { window.location.href = '/sources'; };
+                }
+            }
+        }
+
+        function resolveGeographicAgencyEntry(query) {
+            const q = (query || '').trim();
+            if (!q || !geographicChartData.length) return null;
+            const qLower = q.toLowerCase();
+            let entry = geographicChartData.find(d => d.organization.toLowerCase() === qLower);
+            if (entry) return entry;
+            const prefixMatches = geographicChartData.filter(d =>
+                d.organization.toLowerCase().startsWith(qLower)
+            );
+            if (prefixMatches.length === 1) return prefixMatches[0];
+            if (prefixMatches.length > 1) {
+                return prefixMatches.sort((a, b) => a.organization.length - b.organization.length)[0];
+            }
+            const containsMatches = geographicChartData.filter(d =>
+                d.organization.toLowerCase().includes(qLower)
+            );
+            if (containsMatches.length === 1) return containsMatches[0];
+            if (containsMatches.length > 1) {
+                return containsMatches.sort((a, b) => b.count - a.count)[0];
+            }
+            return null;
+        }
+
+        function scrollToAgencyCasesPanel() {
+            const panel = document.getElementById('severity-cases-panel');
+            if (!panel || !panel.classList.contains('active')) return;
+            const list = document.getElementById('severity-cases-list');
+            if (list) list.scrollTop = 0;
+            requestAnimationFrame(() => {
+                // Land on the cases panel header + case 1 — not the page footer / end of the list
+                const panelTop = panel.getBoundingClientRect().top + window.scrollY;
+                const offset = 100;
+                window.scrollTo({ top: Math.max(0, panelTop - offset), behavior: 'smooth' });
             });
-            document.getElementById('data-sources').textContent = sources.size;
+        }
+
+        async function goToAgencyByQuery(query) {
+            const entry = resolveGeographicAgencyEntry(query);
+            const input = document.getElementById('agency-search-input');
+            if (!entry) {
+                const panel = document.getElementById('severity-cases-panel');
+                const list = document.getElementById('severity-cases-list');
+                const title = document.getElementById('severity-cases-title');
+                if (panel && list && title) {
+                    panel.classList.add('active');
+                    title.textContent = 'Agency not found';
+                    list.innerHTML = '<p>No matching agency in this chart. Try another name or pick from suggestions.</p>';
+                    scrollToAgencyCasesPanel();
+                }
+                return;
+            }
+            if (input) input.value = entry.organization;
+            hideAgencyAutocomplete();
+            await showOrganizationCases(entry.organization, entry.cases);
+            scrollToAgencyCasesPanel();
+        }
+
+        function hideAgencyAutocomplete() {
+            const autocomplete = document.getElementById('agency-autocomplete');
+            if (autocomplete) autocomplete.classList.remove('active');
+            agencyAutocompleteIndex = -1;
+        }
+
+        function showAgencyAutocompleteMatches(query) {
+            const autocomplete = document.getElementById('agency-autocomplete');
+            const input = document.getElementById('agency-search-input');
+            if (!autocomplete || !input) return;
+            const q = (query || '').trim().toLowerCase();
+            if (!q) {
+                hideAgencyAutocomplete();
+                return;
+            }
+            const matches = geographicChartData
+                .filter(d => d.organization.toLowerCase().includes(q))
+                .sort((a, b) => {
+                    const aLow = a.organization.toLowerCase();
+                    const bLow = b.organization.toLowerCase();
+                    const aStarts = aLow.startsWith(q) ? 0 : 1;
+                    const bStarts = bLow.startsWith(q) ? 0 : 1;
+                    if (aStarts !== bStarts) return aStarts - bStarts;
+                    return b.count - a.count;
+                })
+                .slice(0, 12);
+            if (matches.length === 0) {
+                hideAgencyAutocomplete();
+                return;
+            }
+            let html = '';
+            matches.forEach((d, index) => {
+                const org = d.organization;
+                const orgLower = org.toLowerCase();
+                const startIdx = orgLower.indexOf(q);
+                let highlighted = escapeHtml(org);
+                if (startIdx >= 0) {
+                    highlighted =
+                        '<span class="non-match-text">' + escapeHtml(org.substring(0, startIdx)) + '</span>' +
+                        '<span class="match-text">' + escapeHtml(org.substring(startIdx, startIdx + q.length)) + '</span>' +
+                        '<span class="non-match-text">' + escapeHtml(org.substring(startIdx + q.length)) + '</span>';
+                }
+                html += '<div class="agency-autocomplete-item" data-agency="' + escapeHtml(org) + '" data-index="' + index + '">' +
+                    highlighted + '<span class="agency-count">' + d.count + '</span></div>';
+            });
+            autocomplete.innerHTML = html;
+            autocomplete.classList.add('active');
+            agencyAutocompleteIndex = -1;
+            autocomplete.querySelectorAll('.agency-autocomplete-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    goToAgencyByQuery(item.getAttribute('data-agency'));
+                });
+            });
+        }
+
+        function navigateAgencyAutocomplete(direction) {
+            const autocomplete = document.getElementById('agency-autocomplete');
+            if (!autocomplete || !autocomplete.classList.contains('active')) return;
+            const items = autocomplete.querySelectorAll('.agency-autocomplete-item');
+            if (!items.length) return;
+            if (agencyAutocompleteIndex >= 0 && items[agencyAutocompleteIndex]) {
+                items[agencyAutocompleteIndex].classList.remove('selected');
+            }
+            agencyAutocompleteIndex += direction;
+            if (agencyAutocompleteIndex < 0) agencyAutocompleteIndex = items.length - 1;
+            else if (agencyAutocompleteIndex >= items.length) agencyAutocompleteIndex = 0;
+            if (items[agencyAutocompleteIndex]) {
+                items[agencyAutocompleteIndex].classList.add('selected');
+                items[agencyAutocompleteIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        }
+
+        function wireAgencySearch() {
+            if (agencySearchWired) return;
+            const input = document.getElementById('agency-search-input');
+            const wrapper = input && input.closest('.agency-stat-input-wrapper');
+            if (!input || !wrapper) return;
+            agencySearchWired = true;
+
+            input.addEventListener('input', function () {
+                showAgencyAutocompleteMatches(input.value);
+            });
+
+            input.addEventListener('keydown', function (e) {
+                const autocomplete = document.getElementById('agency-autocomplete');
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (autocomplete && autocomplete.classList.contains('active') && agencyAutocompleteIndex >= 0) {
+                        const items = autocomplete.querySelectorAll('.agency-autocomplete-item');
+                        if (items[agencyAutocompleteIndex]) {
+                            goToAgencyByQuery(items[agencyAutocompleteIndex].getAttribute('data-agency'));
+                            return;
+                        }
+                    }
+                    goToAgencyByQuery(input.value);
+                    return;
+                }
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateAgencyAutocomplete(1);
+                    return;
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateAgencyAutocomplete(-1);
+                    return;
+                }
+                if (e.key === 'Escape') {
+                    hideAgencyAutocomplete();
+                    return;
+                }
+                if (e.key === 'Tab' && !e.shiftKey) {
+                    const autocomplete = document.getElementById('agency-autocomplete');
+                    if (autocomplete && autocomplete.classList.contains('active')) {
+                        const items = autocomplete.querySelectorAll('.agency-autocomplete-item');
+                        const pick = (agencyAutocompleteIndex >= 0 && items[agencyAutocompleteIndex])
+                            ? items[agencyAutocompleteIndex]
+                            : items[0];
+                        if (pick) {
+                            e.preventDefault();
+                            input.value = pick.getAttribute('data-agency');
+                            hideAgencyAutocomplete();
+                        }
+                    }
+                }
+            });
+
+            document.addEventListener('click', function (e) {
+                const ac = document.getElementById('agency-autocomplete');
+                if (!ac || !ac.classList.contains('active')) return;
+                if (!wrapper.contains(e.target)) hideAgencyAutocomplete();
+            });
         }
 
         // Track expanded group (only one at a time)
@@ -2140,6 +2426,10 @@
             
             // Store chart data for stats calculation
             geographicChartData = data;
+            const currentViz = document.getElementById('viz-selector')?.value;
+            if (currentViz === 'geographic') {
+                wireAgencySearch();
+            }
 
             if (data.length === 0) {
                 geographicChartData = []; // Reset chart data
@@ -2248,7 +2538,7 @@
                 .text("Number of Cases");
         }
 
-        async function showOrganizationCases(organizationLabel, allCases) {
+        async function showOrganizationCases(organizationLabel, chartCases) {
             // Hide case detail panel
             document.getElementById('case-detail').classList.remove('active');
             
@@ -2260,34 +2550,38 @@
             panel.classList.add('active');
             title.textContent = `Cases with Organization: "${organizationLabel}"`;
             
-            // Filter cases based on organization - check both agencies_involved AND organizations
-            let filteredCases = [];
-            if (organizationLabel === 'Unknown') {
-                filteredCases = allCases.filter(c => {
-                    const agencies = c.agencies_involved || [];
-                    const organizations = c.organizations || [];
-                    return agencies.length === 0 && organizations.length === 0;
-                });
+            let casesForOrg = [];
+            if (Array.isArray(chartCases) && chartCases.length > 0) {
+                casesForOrg = chartCases;
             } else {
-                filteredCases = allCases.filter(c => {
-                    const agencies = c.agencies_involved || [];
-                    const organizations = c.organizations || [];
-                    // Check if organization matches (case-insensitive)
+                const pool = filteredCases.length > 0 ? filteredCases : allCases;
+                if (organizationLabel === 'Unknown') {
+                    casesForOrg = pool.filter(c => {
+                        const agencies = c.agencies_involved || [];
+                        const organizations = c.organizations || [];
+                        return agencies.length === 0 && organizations.length === 0;
+                    });
+                } else {
                     const orgLower = organizationLabel.toLowerCase();
-                    return agencies.some(a => a && a.toLowerCase() === orgLower) ||
-                           organizations.some(o => o && o.toLowerCase() === orgLower);
-                });
+                    casesForOrg = pool.filter(c => {
+                        const agencies = c.agencies_involved || [];
+                        const organizations = c.organizations || [];
+                        return agencies.some(a => a && a.toLowerCase() === orgLower) ||
+                               organizations.some(o => o && o.toLowerCase() === orgLower);
+                    });
+                }
             }
             
             // Render cases
-            if (filteredCases.length === 0) {
+            if (casesForOrg.length === 0) {
                 list.innerHTML = '<p>No cases found with this organization.</p>';
+                scrollToAgencyCasesPanel();
                 return;
             }
-            await hydrateCaseTextForList(filteredCases);
+            await hydrateCaseTextForList(casesForOrg);
             
             list.innerHTML = '';
-            filteredCases.forEach(caseData => {
+            casesForOrg.forEach(caseData => {
                 const caseItem = document.createElement('div');
                 caseItem.className = 'severity-case-item';
                 
@@ -2388,6 +2682,7 @@
                 
                 list.appendChild(caseItem);
             });
+            scrollToAgencyCasesPanel();
         }
 
         function renderSeverityViz(cases) {

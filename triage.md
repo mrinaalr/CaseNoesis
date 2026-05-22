@@ -109,7 +109,7 @@ Common flags include **`--no-agencies`**, **`--seed`**, and **`--explain`**; see
 - **Training / bundle**: `scripts/run/train_triage_model.py` (`train_pipeline`, `cases_to_dataframe`, `make_labels`, `normalize_triage_bundle_after_load` for sklearn version drift).
 - **Live path**: `run_live_triage`, `parse_live_case_input` in `src/Clustering & Analysis Layer/triage.py` (aligns delimiter semantics with `visualization/triage.html` and external PDF batching in `batching.py`).
 - **API**: `run/main.py` (`_triage_saved_bundle_corpus_live` for live-DB corpus predictions).
-- **Docs**: `visualization/ml-experimental.html` summarizes ML and triage scope; **`triage.md`** is the **technical working contract** for behavior and APIs.
+- **Docs**: **`triage.md`** is the **technical working contract** for triage behavior and APIs; **`visualization/patterns.html`** (`/patterns`) documents the broader Phase 2: Patterns research program.
 
 ### Raw data and features (same as Search doc)
 

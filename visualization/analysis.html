@@ -38,10 +38,10 @@
         .nav a:hover {
             text-decoration: underline;
         }
-        .nav a.ml-experimental {
+        .nav a.patterns {
             color: #dc2626;
             font-weight: 700;
-            text-transform: uppercase;
+
             letter-spacing: 0.5px;
             animation: pulseRed 8s ease-in-out infinite;
         }
@@ -466,7 +466,7 @@
         <a href="/llm">LLM</a>
         <a href="/sources">Sources</a>
         <a href="/audit">Audit</a>
-        <a href="/ml-experimental" class="ml-experimental">Experimental ML</a>
+        <a href="/patterns" class="patterns">Phase 2: Patterns</a>
         <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
     </div>
     
@@ -1240,6 +1240,71 @@
             // No longer used, but kept for compatibility
         }
 
+        const RAILWAY_STATS_URL = 'https://caselinker.up.railway.app/api/stats';
+        const AUTOMATED_ANALYSIS_ETA_BASE_SECONDS = 2;
+        const AUTOMATED_ANALYSIS_SECONDS_PER_CASE = 0.002;
+
+        async function fetchFullDatasetCaseCount() {
+            const urls = [RAILWAY_STATS_URL, '/api/stats'];
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) continue;
+                    const data = await response.json();
+                    const total = data.total_cases;
+                    if (typeof total === 'number' && total > 0) return total;
+                } catch (_) { /* try next source */ }
+            }
+            return null;
+        }
+
+        function estimateAutomatedAnalysisEtaSeconds(caseCount) {
+            const n = caseCount || 0;
+            return Math.max(
+                3,
+                AUTOMATED_ANALYSIS_ETA_BASE_SECONDS + Math.ceil(n * AUTOMATED_ANALYSIS_SECONDS_PER_CASE)
+            );
+        }
+
+        function formatAutomatedAnalysisCountdown(seconds) {
+            if (seconds <= 0) return 'any moment';
+            if (seconds < 60) return seconds + 's';
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return secs ? minutes + 'm ' + secs + 's' : minutes + 'm';
+        }
+
+        function renderAutomatedAnalysisLoading(caseCount, remainingSeconds) {
+            const datasetLabel = caseCount != null
+                ? 'over full dataset (' + caseCount.toLocaleString('en-US') + ' cases)'
+                : 'over full dataset';
+            const etaLabel = formatAutomatedAnalysisCountdown(remainingSeconds);
+            return `
+                <div style="text-align: center; padding: 40px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 50px rgba(255, 193, 7, 0.05);">
+                    <div style="font-size: 48px; margin-bottom: 20px;">⚡</div>
+                    <h2 style="color: #ffc107; margin-bottom: 15px; font-size: 1.8em; font-weight: 700;">Running Automated Analysis</h2>
+                    <p style="color: #aaa; font-size: 1.05em; margin-bottom: 8px;">${datasetLabel}</p>
+                    <p style="color: #888; font-size: 1em;">ETA <span data-automated-analysis-eta style="color: #ffc107; font-weight: 600;">${etaLabel}</span></p>
+                </div>
+            `;
+        }
+
+        function startAutomatedAnalysisLoadingCountdown(section, caseCount, etaSeconds) {
+            let remaining = etaSeconds;
+            section.innerHTML = renderAutomatedAnalysisLoading(caseCount, remaining);
+            const intervalId = setInterval(function () {
+                remaining = Math.max(0, remaining - 1);
+                const etaEl = section.querySelector('[data-automated-analysis-eta]');
+                if (etaEl) {
+                    etaEl.textContent = formatAutomatedAnalysisCountdown(remaining);
+                }
+                if (remaining <= 0) clearInterval(intervalId);
+            }, 1000);
+            return function stopAutomatedAnalysisLoadingCountdown() {
+                clearInterval(intervalId);
+            };
+        }
+
         async function runAutomatedAnalysis() {
             // Hide tag threader section
             document.getElementById('tag-threader-section').style.display = 'none';
@@ -1269,24 +1334,18 @@
                 container.parentNode.insertBefore(automatedSection, container.nextSibling);
             }
             
-            automatedSection.innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 50px rgba(255, 193, 7, 0.05);">
-                    <div style="font-size: 48px; margin-bottom: 20px;">⚡</div>
-                    <h2 style="color: #ffc107; margin-bottom: 15px; font-size: 1.8em; font-weight: 700;">Running Automated Analysis...</h2>
-                    <p style="color: #888; font-size: 1em;">Analyzing all cases...</p>
-                </div>
-            `;
             automatedSection.style.display = 'block';
             automatedSection.scrollIntoView({ behavior: 'smooth' });
-            
+
+            const caseCount = await fetchFullDatasetCaseCount();
+            const etaSeconds = estimateAutomatedAnalysisEtaSeconds(caseCount);
+            const stopCountdown = startAutomatedAnalysisLoadingCountdown(
+                automatedSection,
+                caseCount,
+                etaSeconds
+            );
+
             try {
-                // Call API
-                // Show loading indicator for automated analysis
-                const analysisSection = document.getElementById('automated-analysis-section');
-                if (analysisSection) {
-                    analysisSection.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Running automated analysis...</div>';
-                }
-                
                 const response = await fetch('/api/automated-analysis');
                 const data = await response.json();
                 
@@ -1298,7 +1357,7 @@
                 
                 // Render results
                 automatedSection.innerHTML = renderAutomatedAnalysisResults(analysis);
-                
+
             } catch (error) {
                 automatedSection.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: #b0b0b0; background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); border: 1px solid rgba(255, 0, 0, 0.3);">
@@ -1307,6 +1366,8 @@
                         <p style="color: #888; font-size: 1em;">${error.message}</p>
                     </div>
                 `;
+            } finally {
+                stopCountdown();
             }
         }
         

@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://caselinker.up.railway.app/](https://caselinker.up.railway.app/)
 
-The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,086 cases** across **50** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
+The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,092 cases** across **50** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
 
 ## Technical Reports
 
@@ -236,11 +236,11 @@ Access Search via the [live demo](https://caselinker.up.railway.app/search) or l
 
 Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) gate ID listing behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
 
-## Triage and Experimental ML
+## Triage and Phase 2: Patterns
 
 Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
 
-**Experimental ML** ([live](https://caselinker.up.railway.app/ml-experimental), or http://localhost:8000/ml-experimental) is the in-app **documentation tab** for ML scope: what is production-adjacent (NER merge, triage model), what stays optional, and documents how ML functionality is evaluated and implemented. 
+**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns), or http://localhost:8000/patterns) is the research documentation surface for platform harm analysis, exploitation lifecycle structure, and intervention mapping via the CAC Ontology pipeline. Currently in active development.
 
 **Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
 
@@ -321,7 +321,7 @@ CaseLinker/
 │   ├── query.html                    # /query
 │   ├── expand.html                   # /expand
 │   ├── triage.html                   # /triage
-│   ├── ml-experimental.html          # /ml-experimental
+│   ├── patterns.html                 # /patterns
 │   ├── tech-landscape.html           # /tech-landscape
 │   ├── LLM.html                      # /llm
 │   ├── sources.html                  # /sources
@@ -376,7 +376,7 @@ Each case includes structured features extracted from case narratives:
 - `GET /api/facet-distinct` - Distinct primary-bucket values per facet (for Search prune UI)
 - `POST /api/facet-cohort-members` - Case IDs for a facet path (same prune semantics as tree; small cohorts gated)
 - `GET /triage` - Triage page (rules, model evaluation, corpus model tiers, live paste)
-- `GET /ml-experimental` - Experimental ML documentation page
+- `GET /patterns` - Phase 2: Patterns research documentation page
 - `GET /api/triage-eval` - Stratified train/test metrics on live cases (same pipeline as `scripts/verify/test_triage.py`)
 - `GET /api/triage-model-corpus` - Saved bundle predictions over live DB; optional `facet_constraints` JSON query param (rate limited)
 - `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence
