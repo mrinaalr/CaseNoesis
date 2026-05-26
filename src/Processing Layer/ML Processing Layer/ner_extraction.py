@@ -33,6 +33,82 @@ from typing import Dict, List, Any, Optional, Set
 import re
 
 
+# ──────────────────────────────────────────────────────────────────────────
+# Age-classification context filter
+# ──────────────────────────────────────────────────────────────────────────
+# When NER (or our regex pass) sees a small integer near a person word, it
+# is easy to mistake sentencing/legal numbers ("25 years in prison", "Count
+# 2", "$500 fine") for a person age. These constants drive a context-window
+# check (~12 words on either side of the number) that rejects any candidate
+# age which sits inside sentencing language.
+
+# Sentencing / legal-outcome vocabulary. Multi-word phrases work because we
+# do a substring match against the joined window text.
+_SENTENCING_KEYWORDS = (
+    'sentenced', 'sentence', 'sentencing',
+    'prison', 'imprisonment', 'imprisoned',
+    'probation', 'parole', 'supervised release',
+    'incarceration', 'incarcerated',
+    'jail',
+    'fine', 'fined', 'fines',
+    'mandatory minimum', 'maximum sentence', 'maximum penalty', 'maximum of',
+    'counts of', 'count of', 'count one', 'count two', 'count three',
+    'counts', 'count',
+    'charges', 'charge',
+    'indictment', 'indicted',
+    'restitution',
+    'term of', 'years to life',
+    'consecutive', 'concurrent',
+    'plea agreement', 'pleaded guilty', 'pled guilty', 'plead guilty',
+    'awaiting minimum', 'awaiting sentencing',
+    'years in', 'months in',  # "25 years in prison", "6 months in jail"
+    'mandatory life',
+)
+
+# Matches when the number is immediately preceded by an ordinal/counter
+# context such as "Count 1", "charge 2", "indictment 3", "No. 4".
+_COUNT_PREFIX_RE = re.compile(
+    r'\b(?:count|counts|charge|charges|indictment|indictments|no\.?|number)'
+    r'\s*$',
+    re.IGNORECASE,
+)
+
+# Tokenizer for context-window word counting.
+_WORD_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+
+
+def _is_sentencing_context(text: str,
+                           num_start: int,
+                           num_end: int,
+                           window_words: int = 12) -> bool:
+    """
+    Return True if the number at ``text[num_start:num_end]`` is surrounded
+    by sentencing / legal language and therefore should NOT be accepted as
+    a person age.
+
+    The check looks at roughly ``window_words`` tokens on each side of the
+    number. Multi-word sentencing phrases (e.g. "years in", "mandatory
+    minimum") are matched as substrings of the joined window text.
+
+    It also rejects numbers preceded by counter context like "Count 2".
+    """
+    if num_start < 0 or num_end > len(text) or num_start >= num_end:
+        return False
+    left_raw  = text[max(0, num_start - 240):num_start]
+    right_raw = text[num_end:min(len(text), num_end + 240)]
+
+    left_words  = _WORD_TOKEN_RE.findall(left_raw)[-window_words:]
+    right_words = _WORD_TOKEN_RE.findall(right_raw)[:window_words]
+    window = (' '.join(left_words) + ' ' + ' '.join(right_words)).lower()
+
+    for kw in _SENTENCING_KEYWORDS:
+        if kw in window:
+            return True
+    if _COUNT_PREFIX_RE.search(left_raw):
+        return True
+    return False
+
+
 class NERExtractor:
     """
     Named Entity Recognition extractor using spaCy or Transformers.
@@ -245,8 +321,15 @@ class NERExtractor:
                         age_match = re.search(r'\d+', entity_text)
                         if age_match:
                             age = int(age_match.group())
+                            # Sanity bound + sentencing-context guard.
+                            # "25 years in prison", "$10 fine", "Count 2" all
+                            # look age-shaped to the heuristics above; the
+                            # window check below rejects them.
                             if 1 <= age <= 100:
-                                entities['ages'].append(age)
+                                num_start = ent.start_char + age_match.start()
+                                num_end   = ent.start_char + age_match.end()
+                                if not _is_sentencing_context(text, num_start, num_end):
+                                    entities['ages'].append(age)
                     except:
                         pass
                 else:
@@ -411,27 +494,35 @@ class NERExtractor:
             for match in matches:
                 try:
                     age = int(match.group(1))
-                    # Validate age range
-                    if 1 <= age <= 100:
-                        # Check context to avoid false positives
-                        context_start = max(0, match.start() - 50)
-                        context_end = min(len(text), match.end() + 50)
-                        context = text[context_start:context_end].lower()
-                        
-                        # For patterns that already have context (like "teacher, 29"), trust them
-                        if any(word in pattern for word in ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim']):
-                            ages.append(age)
-                        # For comma-separated patterns, check for age-related context
-                        elif ',' in pattern:
-                            # Look for age-related words nearby
-                            age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor', 'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
-                            if any(indicator in context for indicator in age_indicators):
-                                # Make sure it's not a year (like 2022, 2014)
-                                if age < 18 or (age >= 18 and age <= 100 and not any(str(year) in context for year in range(2000, 2030))):
-                                    ages.append(age)
-                        # For standard patterns, check context
-                        elif 'year' in context or 'old' in context or 'age' in context:
-                            ages.append(age)
+                    # Validate age range (sanity bound; nobody is >100)
+                    if not (1 <= age <= 100):
+                        continue
+                    # Sentencing-context guard. Patterns like
+                    # ", 25 sentenced" or "the 25 charged" used to slip
+                    # through and pollute the age list.
+                    num_start = match.start(1)
+                    num_end   = match.end(1)
+                    if _is_sentencing_context(text, num_start, num_end):
+                        continue
+                    # Check context to avoid other false positives
+                    context_start = max(0, match.start() - 50)
+                    context_end = min(len(text), match.end() + 50)
+                    context = text[context_start:context_end].lower()
+
+                    # For patterns that already have context (like "teacher, 29"), trust them
+                    if any(word in pattern for word in ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim']):
+                        ages.append(age)
+                    # For comma-separated patterns, check for age-related context
+                    elif ',' in pattern:
+                        # Look for age-related words nearby
+                        age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor', 'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
+                        if any(indicator in context for indicator in age_indicators):
+                            # Make sure it's not a year (like 2022, 2014)
+                            if age < 18 or (age >= 18 and age <= 100 and not any(str(year) in context for year in range(2000, 2030))):
+                                ages.append(age)
+                    # For standard patterns, check context
+                    elif 'year' in context or 'old' in context or 'age' in context:
+                        ages.append(age)
                 except (ValueError, IndexError):
                     continue
         

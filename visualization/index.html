@@ -3257,14 +3257,19 @@
             }
             
             // Investigation Information
-            const investigationType = caseData.investigation_type || caseData.investigation_methods_and_teams?.type;
+            const investigationTypes = caseData.investigation_types
+                || (caseData.investigation_type ? [caseData.investigation_type] : [])
+                || (caseData.investigation_methods_and_teams?.type ? [caseData.investigation_methods_and_teams.type] : []);
             const agencies = caseData.agencies_involved || [];
-            if (investigationType || agencies.length > 0) {
+            if ((Array.isArray(investigationTypes) && investigationTypes.length > 0) || agencies.length > 0) {
+                const typeLabel = Array.isArray(investigationTypes)
+                    ? investigationTypes.map(t => String(t).replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')
+                    : '';
                 html += `
                     <div class="case-viz-card">
                         <h3>Investigation</h3>
                         <div class="card-content">
-                            ${investigationType ? `<p><strong>Type:</strong> ${investigationType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>` : ''}
+                            ${typeLabel ? `<p><strong>Type:</strong> ${typeLabel}</p>` : ''}
                             ${agencies.length > 0 ? `
                                 <p><strong>Agencies:</strong></p>
                                 <div class="tag-list">
@@ -3475,20 +3480,28 @@
                 }
             });
             
-            // Investigation type
-            const investigationType = caseData.investigation_type || caseData.investigation_methods_and_teams?.type;
-            if (investigationType) {
-                const invType = String(investigationType).toLowerCase();
-                highlightTerms.push({ term: invType.replace(/_/g, ' '), category: 'investigation' });
-                if (invType === 'proactive') {
-                    highlightTerms.push({ term: 'proactive', category: 'investigation' });
-                }
-                if (invType === 'reactive') {
-                    highlightTerms.push({ term: 'reactive', category: 'investigation' });
-                }
-                if (invType === 'undercover') {
-                    highlightTerms.push({ term: 'undercover', category: 'investigation' });
-                }
+            // Investigation type(s)
+            const investigationTypes = caseData.investigation_types
+                || (caseData.investigation_type ? [caseData.investigation_type] : [])
+                || (caseData.investigation_methods_and_teams?.type ? [caseData.investigation_methods_and_teams.type] : []);
+            if (Array.isArray(investigationTypes)) {
+                investigationTypes.forEach(rawType => {
+                    const invType = String(rawType).toLowerCase();
+                    highlightTerms.push({ term: invType.replace(/_/g, ' '), category: 'investigation' });
+                    if (invType === 'proactive') {
+                        highlightTerms.push({ term: 'proactive', category: 'investigation' });
+                    }
+                    if (invType === 'reactive') {
+                        highlightTerms.push({ term: 'reactive', category: 'investigation' });
+                    }
+                    if (invType === 'undercover') {
+                        highlightTerms.push({ term: 'undercover', category: 'investigation' });
+                    }
+                    if (invType === 'cybertip') {
+                        highlightTerms.push({ term: 'CyberTipline', category: 'investigation' });
+                        highlightTerms.push({ term: 'CyberTip', category: 'investigation' });
+                    }
+                });
             }
             
             // Relationship to victim

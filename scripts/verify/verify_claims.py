@@ -333,6 +333,8 @@ def load_cases(conn: sqlite3.Connection) -> List[Dict[str, Any]]:
             c["investigation_type"] = ex.get("investigation_type")
         else:
             c["investigation_type"] = None
+        if isinstance(ex, dict) and ex.get("investigation_types"):
+            c["investigation_types"] = ex.get("investigation_types")
     return rows
 
 

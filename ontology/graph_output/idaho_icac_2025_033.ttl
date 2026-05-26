@@ -1,0 +1,117 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-16T14:38:26.161798" ;
+    dcterms:identifier "idaho_icac_2025_033" ;
+    dcterms:modified "2026-05-16T14:38:26.161798" ;
+    dcterms:source <https://www.ag.idaho.gov/newsroom/category/icac/?showall=true>,
+        "Idaho ICAC" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> ;
+    cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/tech/cybertipline> ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/canyon-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/middleton-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/nampa-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/canyon-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Canyon County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "FBI" .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cac-core:OrganizationLikeEntity,
+        cacontology-taskforce:StateICACtaskForce ;
+    rdfs:label "ICAC" .
+
+<https://caselinker.up.railway.app/resource/agency/middleton-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Middleton Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/nampa-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Nampa Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/1> a cacontology-legal-outcomes:CSAM_Production,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label """production of child sexual
+exploitation material and 6 counts of distribution of child sexual exploitation material""" ;
+    cacontology-legal-outcomes:indictmentCounts 6 .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
+    rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "NCMEC" .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> a cac-core:Event,
+        cacontology-production:ProductionOffense ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/facet/production> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/victim/1> .
+

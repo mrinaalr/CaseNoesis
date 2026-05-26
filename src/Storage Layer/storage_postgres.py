@@ -463,7 +463,7 @@ class CaseStorage:
             extracted_features = case_dict.get('extracted_features', {})
             if isinstance(extracted_features, dict):
                 for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
-                           'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
+                           'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
                            'severity_phrases', 'case_text', 'comparison_values',
                            'investigation_technology', 'anonymization_network', 'p2p_clients']:
@@ -600,7 +600,7 @@ class CaseStorage:
                 extracted_features = case_dict.get('extracted_features', {})
                 if isinstance(extracted_features, dict):
                     for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
-                               'agencies_involved', 'organizations', 'locations', 'investigation_type', 'evidence_volume',
+                               'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                                'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
                                'severity_phrases', 'case_text', 'comparison_values',
                                'investigation_technology', 'anonymization_network', 'p2p_clients']:
@@ -737,6 +737,7 @@ class CaseStorage:
                         "organizations",
                         "locations",
                         "investigation_type",
+                        "investigation_types",
                         "evidence_volume",
                         "prosecution_outcome",
                         "case_demographics",
@@ -858,6 +859,7 @@ class CaseStorage:
                         "organizations",
                         "locations",
                         "investigation_type",
+                        "investigation_types",
                         "evidence_volume",
                         "prosecution_outcome",
                         "case_demographics",

@@ -113,7 +113,8 @@ Case:
   - platforms_used: [str] (Facebook, Instagram, Snapchat, Discord, WhatsApp, online, chat)
   
   # Law Enforcement
-  - investigation_type: str (proactive, reactive, online, undercover, unknown)
+  - investigation_type: str (primary: proactive, reactive, online, undercover, cybertip, unknown)
+  - investigation_types: list[str] (non-exclusive tags, e.g. ["undercover", "cybertip"])
   - agencies_involved: [str] (AZICAC, FBI, Phoenix Police, ICAC, HSI, MCSO, DPS, etc.)
   - prosecution_outcome: {charges: [{count: int, charge: str}], booking_status: str, jail: str}
   

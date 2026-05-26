@@ -215,6 +215,7 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         # Technology & platforms
         'platforms_used': extract_platforms(raw_case),
         # Law enforcement
+        'investigation_types': investigation.get('types', []) if isinstance(investigation, dict) else [],
         'investigation_type': investigation.get('type') if isinstance(investigation, dict) else None,
         'agencies_involved': investigation.get('agencies', []) if isinstance(investigation, dict) else [],
         'prosecution_outcome': prosecution,
@@ -288,6 +289,7 @@ def assign_comparison_values(case_features: Dict[str, Any]) -> Dict[str, Any]:
         },
         'relationship_vector': [case_features.get('relationship_to_victim')] if case_features.get('relationship_to_victim') else [],
         'investigation_vector': {
+            'types': case_features.get('investigation_types') or [],
             'type': case_features.get('investigation_type'),
             'agencies': case_features.get('agencies_involved', []),
         },
@@ -576,7 +578,7 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("YouTube Live", r"YouTube\s+Live"),
     ("YouTube", r"\bYouTube\b"),
     ("Twitch", r"\bTwitch\b"),
-    ("Webcam platform", r"\bMyFreeCams\b|\bMFC\b(?!\s+Pennsylvania)|\bwebcam\s+platform\b"),
+    ("Webcam platform", r"\bMyFreeCams\b|\bMFC\b(?!\s+Pennsylvania)|\bwebcam\s+platform\b|\bwebcam\b"),
     # Generics (after named brands)
     ("online", r"\bonline\b"),
     # Avoid tagging "Internet Relay Chat" / "...Relay Chat" as generic chat (IRC row handles IRC).
@@ -747,63 +749,107 @@ def extract_evidence_volume(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return evidence if any(evidence.values()) else None
 
 
+_INVESTIGATION_TYPE_PRIORITY = (
+    "undercover", "proactive", "reactive", "online", "unknown", "cybertip",
+)
+_CYBERTIP_PATTERN = (
+    r"Cyber\s*Tipline|CyberTip(?:line)?|Cybertipline|Cyber\s*Tip\s*Line"
+    r"|missingkids\.org/cybertipline|NCMEC\s+(?:Cyber\s*)?Tipline"
+)
+_METHOD_TYPE_KEYS = frozenset({"undercover", "proactive", "reactive", "online"})
+
+
+def _primary_investigation_type(types: List[str]) -> Optional[str]:
+    for label in _INVESTIGATION_TYPE_PRIORITY:
+        if label in types:
+            return label
+    return types[0] if types else None
+
+
 def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
-    Extract investigation type and agencies involved.
-    Types: "proactive", "reactive", "online", "undercover"
+    Extract investigation type(s) and agencies involved.
+
+    Types (non-exclusive): "proactive", "reactive", "online", "undercover", "cybertip"
+    A case may be both undercover and cybertip (e.g. CyberTipline report leading to UC work).
+
     Agencies: "AZICAC", "FBI", "Phoenix Police", "ICAC", "HSI", "MCSO", "DPS"
     """
     case_text = case.get('case_text', '')
     if not case_text:
         return None
-    
-    investigation = {
-        'type': None,
-        'agencies': []
-    }
-    
-    # Gate: need narrative signal — "investigation" or "operation(s)" (covers e.g. "proactive operation").
+
+    types: List[str] = []
+
+    if re.search(_CYBERTIP_PATTERN, case_text, re.IGNORECASE):
+        types.append("cybertip")
+
+    # Gate for method subtypes: need "investigation" or "operation(s)" in narrative.
     has_inv_signal = (
         re.search(r'\binvestigation\b', case_text, re.IGNORECASE)
         or re.search(r'\boperations?\b', case_text, re.IGNORECASE)
     )
-    if not has_inv_signal:
+    if has_inv_signal:
+        # Check "undercover" before "proactive" (e.g. "proactive undercover investigation").
+        type_patterns = {
+            "undercover": r'\bunder\s*cover\b|\bundercover\b(?:\s+(?:\S+\s+)*(?:operation|operations|investigation|detective[s]?))?',
+            "proactive": r'\bproactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+            "reactive": r'\breactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+            "online": r'\bonline\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+        }
+        for inv_type, pattern in type_patterns.items():
+            if re.search(pattern, case_text, re.IGNORECASE) and inv_type not in types:
+                types.append(inv_type)
+        if not any(t in _METHOD_TYPE_KEYS for t in types):
+            types.append("unknown")
+
+    if not types:
         return None
 
-    # Now check for specific types.
-    # IMPORTANT: Check "undercover" FIRST because it's more specific and might be missed
-    # if "proactive" is checked first (e.g., "proactive undercover investigation").
-    # Patterns allow optional words (including hyphens) between type and "investigation",
-    # e.g., "proactive joint investigation", "proactive Internet investigation",
-    # "reactive multi-agency investigation".
-    type_patterns = {
-        "undercover": r'\bunder\s*cover\b|\bundercover\b(?:\s+(?:\S+\s+)*(?:operation|operations|investigation|detective[s]?))?',
-        "proactive": r'\bproactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
-        "reactive": r'\breactive\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
-        "online": r'\bonline\b\s+(?:\S+\s+)*(?:investigation|operation[s]?)',
+    investigation = {
+        'types': types,
+        'type': _primary_investigation_type(types),
+        'agencies': [],
     }
-    
-    for inv_type, pattern in type_patterns.items():
-        if re.search(pattern, case_text, re.IGNORECASE):
-            investigation['type'] = inv_type
-            break
-    
-    # If no subtype phrase matched, set to "unknown"
-    if not investigation['type']:
-        investigation['type'] = 'unknown'
-    
+
     # Extract agencies
     agencies = [
         'AZICAC', 'FBI', 'Phoenix Police', 'ICAC', 'HSI', 'MCSO', 'DPS',
         'Maricopa County', 'Las Vegas', 'Colorado', 'Texas', 'California',
         'Australian Federal Police', 'Chandler Police', 'Buckeye'
     ]
-    
+
     for agency in agencies:
-        if re.search(r'\b' + re.escape(agency) + r'\b', case_text, re.IGNORECASE):
-            investigation['agencies'].append(agency)
-    
+        for alias_pat in _agency_aliases(agency):
+            if re.search(alias_pat, case_text, re.IGNORECASE):
+                investigation['agencies'].append(agency)
+                break
+
     return investigation
+
+
+def _agency_aliases(agency: str) -> List[str]:
+    """
+    Build the list of regex patterns that should count as a mention of
+    ``agency`` in case narrative text.
+
+    For all-uppercase abbreviations (e.g. ``FBI``, ``HSI``, ``ICAC``,
+    ``DPS``, ``MCSO``), source documents frequently spell them with
+    interleaved dots — ``F.B.I.``, ``H.S.I.``, ``I.C.A.C.``. The default
+    ``\\b<word>\\b`` regex misses those forms because ``.`` is a word
+    boundary, so we also generate a dotted-letter variant. The canonical
+    label (``FBI``) is always what gets stored.
+    """
+    patterns = [r'\b' + re.escape(agency) + r'\b']
+    if (
+        len(agency) >= 2
+        and ' ' not in agency
+        and agency.isupper()
+        and agency.isalpha()
+    ):
+        dotted = r'(?<![A-Za-z])' + r'\.?'.join(re.escape(c) for c in agency) + r'\.?(?![A-Za-z])'
+        patterns.append(dotted)
+    return patterns
 
 
 def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:

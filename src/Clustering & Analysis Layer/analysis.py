@@ -119,8 +119,13 @@ def _case_matches_tag(case: Dict[str, Any], tag: str, category: str) -> bool:
         )
     
     elif category == 'investigation_type':
-        inv_type = case.get('investigation_type', '')
-        return inv_type and inv_type.lower() == tag.lower()
+        types = case.get('investigation_types')
+        if isinstance(types, list):
+            inv_types = [str(t).strip().lower() for t in types if t is not None and str(t).strip()]
+        else:
+            inv_type = case.get('investigation_type', '')
+            inv_types = [str(inv_type).strip().lower()] if inv_type else []
+        return tag.lower() in inv_types
     
     elif category == 'relationship_to_victim':
         relationship = case.get('relationship_to_victim', '')

@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseLinker &mdash; Knowledge Graph Explorer</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f1;
+            color: #1f2937;
+            line-height: 1.65;
+        }
+        .nav {
+            background: white;
+            padding: 15px 0 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover { text-decoration: underline; }
+        .nav a.patterns {
+            color: #dc2626;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            animation: pulseRed 8s ease-in-out infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.92; }
+        }
+        .hood-link {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulseOrange 6s ease-in-out infinite;
+            position: relative;
+            margin-left: auto;
+            font-weight: 600;
+        }
+        @keyframes pulseOrange {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 0.90; }
+        }
+
+        .page-wrap {
+            max-width: 1280px;
+            margin: 16px auto 36px;
+            padding: 0 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 0.92rem;
+            color: #1b5e20;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .header-card {
+            background: white;
+            padding: 28px 32px 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 16px;
+        }
+        .header-card h1 {
+            color: #1b5e20;
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin: 0 0 8px;
+            letter-spacing: -0.02em;
+        }
+        .header-card .graph-title {
+            font-size: 1.1rem;
+            color: #374151;
+            margin: 0 0 6px;
+            font-weight: 600;
+        }
+        .header-card .subtitle {
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .case-selector {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .case-selector-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-right: 6px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .case-chip {
+            font: inherit;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+            color: #374151;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+        }
+        .case-chip:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        .case-chip.active {
+            background: #1f2937;
+            border-color: #1f2937;
+            color: white;
+        }
+        .case-chip:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+        /* Compare-mode visuals on chips */
+        .case-selector.compare-mode .case-chip {
+            padding-left: 26px;
+            position: relative;
+        }
+        .case-selector.compare-mode .case-chip::before {
+            content: '';
+            position: absolute;
+            left: 9px; top: 50%;
+            width: 11px; height: 11px;
+            transform: translateY(-50%);
+            border: 1.5px solid #9ca3af;
+            border-radius: 3px;
+            background: white;
+            transition: background 0.12s, border-color 0.12s;
+        }
+        .case-selector.compare-mode .case-chip.active {
+            background: #1e40af;
+            border-color: #1e40af;
+            color: white;
+        }
+        .case-selector.compare-mode .case-chip.active::before {
+            background: white;
+            border-color: white;
+            box-shadow: inset 0 0 0 2px #1e40af;
+        }
+
+        /* Mode toggle (Single | Compare) */
+        .mode-toggle {
+            display: inline-flex;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #f9fafb;
+            font-size: 0.78rem;
+            line-height: 1;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-right: 4px;
+        }
+        .mode-toggle button {
+            font: inherit;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .mode-toggle button.active {
+            background: #1f2937;
+            color: white;
+        }
+        .case-selector.compare-mode .mode-toggle button.active {
+            background: #1e40af;
+        }
+        .mode-toggle button:not(.active):hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        .mode-toggle button:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Bridge-count badge attached to a chip (shows how many cases share a node) */
+        .shared-badge {
+            display: inline-block;
+            min-width: 16px; height: 16px;
+            line-height: 16px;
+            padding: 0 4px;
+            border-radius: 8px;
+            background: #f59e0b;
+            color: #1f2937;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: 0.07em;
+        }
+        .empty-state {
+            padding: 60px 24px;
+            text-align: center;
+            color: rgba(255,255,255,0.75);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .empty-state code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: #fbbf24;
+        }
+
+        .graph-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 16px;
+            align-items: start;
+        }
+        @media (max-width: 960px) {
+            .graph-layout {
+                grid-template-columns: 1fr;
+            }
+            .detail-panel {
+                order: 2;
+            }
+        }
+
+        .graph-main {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 0.82rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #374151;
+        }
+        .legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1px solid rgba(0,0,0,0.12);
+        }
+
+        #graph-container {
+            position: relative;
+            width: 100%;
+            height: 620px;
+            background: #1a2332;
+            cursor: grab;
+        }
+        #graph-container:active { cursor: grabbing; }
+
+        #graph-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .graph-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 14px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.45);
+            pointer-events: none;
+        }
+
+        .edge-tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: rgba(255,255,255,0.96);
+            color: #1f2937;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            display: none;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .detail-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px 18px;
+            min-height: 200px;
+            max-height: 720px;
+            overflow-y: auto;
+        }
+        .detail-panel h3 {
+            font-size: 0.95rem;
+            color: #1b5e20;
+            margin: 0 0 12px;
+            font-weight: 600;
+        }
+        .detail-panel .placeholder {
+            font-size: 0.88rem;
+            color: #9ca3af;
+            font-style: italic;
+            margin: 0;
+        }
+        .detail-panel .node-heading {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 4px;
+        }
+        .detail-panel .node-type {
+            font-size: 0.82rem;
+            color: #6b7280;
+            margin: 0 0 14px;
+            word-break: break-all;
+        }
+        .detail-panel .spine-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            color: white;
+        }
+        .prop-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84rem;
+        }
+        .prop-table th,
+        .prop-table td {
+            text-align: left;
+            padding: 8px 6px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: top;
+        }
+        .prop-table th {
+            color: #6b7280;
+            font-weight: 500;
+            width: 38%;
+        }
+        .prop-table td {
+            color: #1f2937;
+            word-break: break-word;
+        }
+
+        .graph-footnote {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 18px 24px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.65;
+        }
+
+        .site-footer {
+            max-width: 1280px;
+            margin: 0 auto 32px;
+            padding: 0 20px;
+        }
+        .site-footer .disclaimer {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 16px 20px;
+            font-size: 0.85rem;
+            color: #5d4037;
+            line-height: 1.55;
+            border-radius: 0 4px 4px 0;
+        }
+        .site-footer .disclaimer p { margin: 0; }
+        .site-footer .disclaimer a { color: #1b5e20; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/visualization">Visualization</a>
+        <a href="/analysis">Analysis</a>
+        <a href="/clusters">Clusters</a>
+        <a href="/stats">Stats</a>
+        <a href="/search">Search</a>
+        <a href="/query">Query</a>
+        <a href="/expand">Expand</a>
+        <a href="/triage">Triage</a>
+        <a href="/case-studies">Case Studies</a>
+        <a href="/tech-landscape">Tech Landscape</a>
+        <a href="/llm">LLM</a>
+        <a href="/sources">Sources</a>
+        <a href="/audit">Audit</a>
+        <a href="/patterns" class="patterns">Phase 2: Patterns</a>
+        <a href="/under-the-hood" class="hood-link">Look Under the Hood</a>
+    </div>
+
+    <div class="page-wrap">
+        <a href="/patterns#method" class="back-link">&larr; Back to Ontology Pipeline</a>
+
+        <div class="header-card">
+            <h1>CAC Ontology Knowledge Graph</h1>
+            <p class="graph-title" id="case-title">Loading available cases…</p>
+            <p class="subtitle">Interactive view of one case expressed as JSON-LD. Drag nodes, scroll to zoom, click for details.</p>
+            <div class="case-selector" id="case-selector" hidden>
+                <span class="case-selector-label">Case</span>
+                <div class="mode-toggle" id="mode-toggle" role="tablist" aria-label="Selection mode">
+                    <button type="button" data-mode="single"  class="active" role="tab" aria-selected="true">Single</button>
+                    <button type="button" data-mode="compare"             role="tab" aria-selected="false">Compare</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="graph-layout">
+            <div class="graph-main">
+                <div class="legend" id="legend"></div>
+                <div id="graph-container">
+                    <svg id="graph-svg"></svg>
+                    <div class="graph-hint">Scroll to zoom &middot; Drag nodes to rearrange &middot; Hover edges for labels</div>
+                    <div class="edge-tooltip" id="edge-tooltip"></div>
+                </div>
+            </div>
+
+            <aside class="detail-panel" id="detail-panel">
+                <h3>Node details</h3>
+                <p class="placeholder" id="detail-placeholder">Click a node to inspect its properties.</p>
+                <div id="detail-content" style="display:none;"></div>
+            </aside>
+        </div>
+
+        <p class="graph-footnote">
+            This graph represents one ICAC case expressed in CAC Ontology. Each node is a typed entity. Edges show relationships between entities. Shared nodes (platforms, agencies) connect cases when multiple cases are loaded.
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        <div class="disclaimer">
+            <p>CaseLinker uses cases from publicly available ICAC, NCMEC, DOJ CEOS, and state attorneys general press materials. No PII was processed. This project received a determination from the University of Massachusetts Amherst Human Research Protection Office (HRPO Determination #7668). See the <a href="/sources">Sources</a> page for the full disclaimer and data usage policy.</p>
+        </div>
+    </footer>
+
+    <script>
+    /* ============================================================
+     * CAC Ontology Knowledge Graph visualizer
+     * ------------------------------------------------------------
+     * The visualizer auto-discovers every case in
+     * ontology/graph_output/ via /api/ontology/cases, then fetches
+     * each selected case's JSON-LD from /ontology/graph_output/.
+     *
+     * There is no embedded graph data. Run
+     *     python ontology/features_to_cac.py <case_id>
+     * and refresh the page to see new cases in the selector.
+     * ============================================================ */
+
+    // ---------- Endpoints (only source of truth) ----------
+    const API_CASES_URL = '/api/ontology/cases';
+
+    // ---------- Runtime state ----------
+    let AVAILABLE_CASES = [];        // [{case_id, path, ttl_path}, ...]
+    let CURRENT_CASE_ID = null;      // Single mode: the active case
+    let MODE = 'single';             // 'single' | 'compare'
+    let SELECTED_CASES = new Set();  // Compare mode: chip selection
+    const MAX_COMPARE_CASES = 10;
+    // Cache of fetched JSON-LD documents to avoid re-downloading on toggles.
+    const JSONLD_CACHE = Object.create(null);
+
+    // ---------- Vocabulary constants ----------
+    const BASE_IRI           = 'https://caselinker.up.railway.app/resource/';
+    const RDFS_LABEL         = 'http://www.w3.org/2000/01/rdf-schema#label';
+    const CAC_HAS_CONFIDENCE = 'https://cacontology.projectvic.org/core#hasConfidence';
+    const NLP_GRAPH_REGEX    = /\/graphs\/nlp$/;
+    const RESERVED_KEYS      = new Set(['@id', '@type', '@context', '_isNlp']);
+
+    const SPINE_COLORS = {
+        EnduringEntity:   { fill: '#3b82f6', label: 'Enduring Entity', stroke: '#1d4ed8' },
+        Event:            { fill: '#ef4444', label: 'Event',            stroke: '#b91c1c' },
+        Role:             { fill: '#22c55e', label: 'Role',             stroke: '#15803d' },
+        Phase:            { fill: '#a855f7', label: 'Phase',            stroke: '#7e22ce' },
+        Situation:        { fill: '#f97316', label: 'Situation',        stroke: '#c2410c' },
+        AssessmentResult: { fill: '#eab308', label: 'Assessment / NLP', stroke: '#a16207' },
+        Unknown:          { fill: '#9ca3af', label: 'Other',            stroke: '#6b7280' }
+    };
+
+    // ---------- URI helpers ----------
+    function localName(uri) {
+        if (!uri) return uri;
+        const h = uri.lastIndexOf('#'), s = uri.lastIndexOf('/');
+        return uri.slice(Math.max(h, s) + 1) || uri;
+    }
+    function shortId(uri) {
+        return uri && uri.startsWith(BASE_IRI) ? uri.slice(BASE_IRI.length) : localName(uri);
+    }
+    function shortPropKey(uri) {
+        if (!uri || uri.startsWith('@')) return uri;
+        return localName(uri);
+    }
+    function escapeHtml(s) {
+        return String(s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ---------- JSON-LD value unwrapping ----------
+    function unwrapValue(v) {
+        if (v == null) return null;
+        if (typeof v === 'object' && '@value' in v) return v['@value'];
+        if (typeof v === 'object' && '@id' in v)    return { '@id': v['@id'] };
+        return v;
+    }
+    function firstLiteral(arr) {
+        if (!Array.isArray(arr) || !arr.length) return null;
+        const v = unwrapValue(arr[0]);
+        return (v != null && typeof v !== 'object') ? v : null;
+    }
+
+    // ---------- Flatten rdflib Dataset (array of named graphs) ----------
+    function mergeNamedGraphs(jsonLd) {
+        if (!Array.isArray(jsonLd)) {
+            return jsonLd['@graph'] ? jsonLd['@graph'] : [];
+        }
+        const nodeMap = {};
+        jsonLd.forEach(namedGraph => {
+            const isNlpGraph = NLP_GRAPH_REGEX.test(namedGraph['@id'] || '');
+            (namedGraph['@graph'] || []).forEach(node => {
+                if (!node['@id']) return;
+                const id = node['@id'];
+                if (!nodeMap[id]) {
+                    nodeMap[id] = Object.assign({}, node);
+                    nodeMap[id]._isNlp = isNlpGraph;
+                    return;
+                }
+                const ex = nodeMap[id];
+                Object.keys(node).forEach(k => {
+                    if (k === '@id') return;
+                    if (k === '@type') {
+                        const ea = Array.isArray(ex[k]) ? ex[k] : (ex[k] ? [ex[k]] : []);
+                        const na = Array.isArray(node[k]) ? node[k] : (node[k] ? [node[k]] : []);
+                        ex[k] = [...new Set([...ea, ...na])];
+                    } else if (!(k in ex)) {
+                        ex[k] = node[k];
+                    } else if (Array.isArray(ex[k]) && Array.isArray(node[k])) {
+                        ex[k] = [...ex[k], ...node[k]];
+                    }
+                });
+                if (isNlpGraph) ex._isNlp = true;
+            });
+        });
+        return Object.values(nodeMap);
+    }
+
+    // ---------- Type-based helpers ----------
+    function shortType(typeVal) {
+        if (!typeVal) return 'Entity';
+        const arr = Array.isArray(typeVal) ? typeVal : [typeVal];
+        const SPINE_BASES = /^(EnduringEntity|Occurrent|Event|Role|Phase|Situation|OrganizationLikeEntity|DigitalSystemEntity|PersonLikeEntity|CustodialRelationship)$/;
+        const domain = arr.find(t => !SPINE_BASES.test(localName(t)));
+        return localName(domain || arr[0]);
+    }
+    function inferSpineBranch(node) {
+        const s = (Array.isArray(node['@type']) ? node['@type'] : [node['@type'] || ''])
+                    .map(localName).join(' ');
+        if (/Phase/i.test(s))                                                              return 'Phase';
+        if (/Role|Victim|Offender|Predator|Investigator/i.test(s))                         return 'Role';
+        if (/AssessmentResult|Confidence|Classification|Sentence|PrisonSentence/i.test(s)) return 'AssessmentResult';
+        if (/Situation|Pattern|Progression/i.test(s))                                      return 'Situation';
+        if (/Event|Action|Operation|Offense|Incident|Abuse|Violation|Grooming|Sextortion|Production|Conspiracy|Investigation|CACInvestigation/i.test(s))
+                                                                                           return 'Event';
+        return 'EnduringEntity';
+    }
+
+    // ---------- Display label for a node ----------
+    function nodeLabel(node) {
+        const lbl = firstLiteral(node[RDFS_LABEL]);
+        if (lbl) return String(lbl);
+
+        const path = shortId(node['@id']);
+        const st   = shortType(node['@type']);
+
+        const conf = firstLiteral(node[CAC_HAS_CONFIDENCE]);
+        if (conf != null) return 'Confidence: ' + conf;
+
+        const ageKey = Object.keys(node).find(k => /ageEstimate|victimAge/.test(localName(k)));
+        if (ageKey) {
+            const age = firstLiteral(node[ageKey]);
+            if (age != null) {
+                if (path.includes('victim')) return 'Victim (age ' + age + ')';
+                const n = (path.match(/offender\/(\d+)/) || [])[1] || '';
+                return 'Offender' + (n ? ' ' + n : '') + ' (age ' + age + ')';
+            }
+        }
+
+        if (path.includes('/nlp/') && !path.includes('/confidence')) return 'NLP\u2009·\u2009' + st;
+        if (path.includes('/nlp/') &&  path.includes('/confidence')) return 'Confidence result';
+        if (/^case\/[^/]+$/.test(path)) return 'Investigation: ' + path.replace('case/', '');
+
+        // Path-based readable labels (fallback)
+        const PATH_LABELS = {
+            'role/victim/1':         'Victim (role)',
+            'role/offender/1':       'Offender 1 (role)',
+            'role/offender/2':       'Offender 2 (role)',
+            'person/victim/1':       'Person: Victim',
+            'person/offender/1':     'Person: Offender 1',
+            'person/offender/2':     'Person: Offender 2',
+            'event/production':      'CSAM Production',
+            'event/csam':            'CSAM Incident',
+            'event/hands-on':        'Contact Offense',
+            'event/conspiracy':      'Conspiracy',
+            'event/trust-violation': 'Custodial Abuse',
+            'operation':             'Proactive Op.',
+            'relationship/family':   'Family Relationship',
+            'phase/convicted':       'Sentencing Phase',
+            'phase/arrested':        'Arrest Phase',
+            'facet/production':      'Content Facet',
+            'facet/csam':            'Content Facet'
+        };
+        for (const [fragment, name] of Object.entries(PATH_LABELS)) {
+            if (path.endsWith(fragment)) return name;
+        }
+        return st || path;
+    }
+
+    // ---------- Detail-panel value formatter ----------
+    function formatPropertyValue(val, idToLabel) {
+        if (val == null) return '—';
+        if (typeof val === 'object' && '@value' in val) return String(val['@value']);
+        if (typeof val === 'object' && '@id' in val) {
+            return idToLabel[val['@id']] || shortId(val['@id']);
+        }
+        if (Array.isArray(val)) {
+            return val.map(item => {
+                if (item && typeof item === 'object' && '@id' in item)
+                    return idToLabel[item['@id']] || shortId(item['@id']);
+                if (item && typeof item === 'object' && '@value' in item)
+                    return String(item['@value']);
+                return String(item);
+            }).join(', ');
+        }
+        return String(val);
+    }
+
+    // ---------- Build D3 nodes/links from a flat node array ----------
+    // ``flatNodes`` is a deduplicated array of plain JSON-LD node objects
+    // (each with @id, @type, properties). Node objects may also carry our
+    // own bookkeeping fields ``_isNlp`` / ``_isShared`` / ``_cases``.
+    function buildGraphModel(flatNodes) {
+        const idSet     = new Set(flatNodes.map(n => n['@id']).filter(Boolean));
+        const idToLabel = {};
+        flatNodes.forEach(n => { if (n['@id']) idToLabel[n['@id']] = nodeLabel(n); });
+
+        const nodes = flatNodes.filter(n => n['@id']).map(n => {
+            const types     = Array.isArray(n['@type']) ? n['@type'] : (n['@type'] ? [n['@type']] : []);
+            const isInvNode = types.some(t => /CACInvestigation/.test(localName(t)))
+                              || /\/case\/[^/]+$/.test(n['@id']);
+            return {
+                id:        n['@id'],
+                label:     nodeLabel(n),
+                spine:     inferSpineBranch(n),
+                isNlp:     !!n._isNlp || n['@id'].includes('/nlp/'),
+                isShared:  !!n._isShared,
+                cases:     Array.isArray(n._cases) ? n._cases.slice() : [],
+                isInvestigation: isInvNode,
+                raw:       n,
+                shortType: shortType(n['@type'])
+            };
+        });
+
+        const links = [];
+        flatNodes.forEach(srcNode => {
+            const sid = srcNode['@id'];
+            if (!sid) return;
+            Object.keys(srcNode).forEach(key => {
+                if (RESERVED_KEYS.has(key)) return;
+                const val = srcNode[key];
+                const refs = [];
+                if (val && typeof val === 'object' && val['@id']) refs.push(val);
+                else if (Array.isArray(val)) val.forEach(item => {
+                    if (item && typeof item === 'object' && item['@id']) refs.push(item);
+                });
+                refs.forEach(ref => {
+                    if (idSet.has(ref['@id'])) {
+                        links.push({
+                            source:   sid,
+                            target:   ref['@id'],
+                            property: shortPropKey(key),
+                            id:       sid + '|' + key + '|' + ref['@id']
+                        });
+                    }
+                });
+            });
+        });
+
+        const degree = {};
+        nodes.forEach(n => { degree[n.id] = 0; });
+        links.forEach(l => {
+            degree[l.source] = (degree[l.source] || 0) + 1;
+            degree[l.target] = (degree[l.target] || 0) + 1;
+        });
+        nodes.forEach(n => {
+            n.degree = degree[n.id] || 0;
+            // Base radius from degree, then bump for special roles.
+            let r = 7 + Math.min(n.degree * 1.8, 14);
+            if (n.isShared)         r = Math.max(r * 1.5, 16);
+            if (n.isInvestigation)  r = Math.max(r * 1.2, 14);
+            n.radius = r;
+        });
+        return { nodes, links, idToLabel };
+    }
+
+    // Legacy single-case entry: takes a single JSON-LD doc (Dataset or
+    // single-graph form), merges its named graphs, and returns the model.
+    function parseJsonLdGraph(jsonLd) {
+        return buildGraphModel(mergeNamedGraphs(jsonLd));
+    }
+
+    // ---------- Cross-case merging ----------
+    // Given { case_id: jsonLd, ... }, return a deduplicated flat node array
+    // where each node carries ``_cases`` (the case IDs that referenced it)
+    // and ``_isShared`` (true when ``_cases.length > 1``).
+    function mergeAcrossCases(perCaseJsonLd) {
+        const merged = Object.create(null);  // @id -> node
+        const order  = Object.keys(perCaseJsonLd);
+
+        for (const caseId of order) {
+            const flat = mergeNamedGraphs(perCaseJsonLd[caseId]);
+            for (const node of flat) {
+                const nid = node['@id'];
+                if (!nid) continue;
+                if (!merged[nid]) {
+                    // Clone shallowly so we don't mutate cached JSON-LD docs.
+                    const copy = Object.assign({}, node);
+                    if (Array.isArray(node['@type'])) {
+                        copy['@type'] = node['@type'].slice();
+                    }
+                    copy._cases = [caseId];
+                    copy._isNlp = !!node._isNlp;
+                    merged[nid] = copy;
+                    continue;
+                }
+                const ex = merged[nid];
+                // Track case lineage.
+                if (!ex._cases.includes(caseId)) ex._cases.push(caseId);
+                if (node._isNlp) ex._isNlp = true;
+                // Merge keys.
+                Object.keys(node).forEach(k => {
+                    if (k === '@id' || k === '_cases' || k === '_isNlp') return;
+                    if (k === '@type') {
+                        const ea = Array.isArray(ex[k]) ? ex[k] : (ex[k] ? [ex[k]] : []);
+                        const na = Array.isArray(node[k]) ? node[k] : (node[k] ? [node[k]] : []);
+                        ex[k] = [...new Set([...ea, ...na])];
+                        return;
+                    }
+                    if (!(k in ex)) { ex[k] = node[k]; return; }
+                    // Both have the key: if arrays, dedupe by id+value.
+                    if (Array.isArray(ex[k]) && Array.isArray(node[k])) {
+                        const seen = new Set(ex[k].map(serializeRdfTerm));
+                        for (const item of node[k]) {
+                            const key = serializeRdfTerm(item);
+                            if (!seen.has(key)) { ex[k].push(item); seen.add(key); }
+                        }
+                    }
+                });
+            }
+        }
+
+        const flat = Object.values(merged);
+        flat.forEach(n => { n._isShared = (n._cases.length > 1); });
+        return flat;
+    }
+
+    function serializeRdfTerm(v) {
+        if (v && typeof v === 'object') {
+            if ('@id' in v)    return 'id:' + v['@id'];
+            if ('@value' in v) return 'v:' + (v['@type'] || '') + ':' + v['@value'];
+        }
+        return 'lit:' + String(v);
+    }
+
+    // ---------- Legend ----------
+    function buildLegend() {
+        const el = document.getElementById('legend');
+        const order = ['EnduringEntity','Event','Role','Phase','Situation','AssessmentResult','Unknown'];
+        el.innerHTML = order.map(key => {
+            const c = SPINE_COLORS[key];
+            return '<span class="legend-item"><span class="legend-swatch" style="background:' + c.fill + '"></span>' + c.label + '</span>';
+        }).join('') +
+        '<span class="legend-item"><span class="legend-swatch" style="background:transparent;border:2px dashed #eab308"></span>NLP-derived</span>' +
+        '<span class="legend-item"><span class="legend-swatch" style="background:transparent;border:2.5px solid #f59e0b"></span>Shared across cases</span>';
+    }
+
+    // ---------- Detail panel ----------
+    function showNodeDetail(node, idToLabel) {
+        const placeholder = document.getElementById('detail-placeholder');
+        const content     = document.getElementById('detail-content');
+        placeholder.style.display = 'none';
+        content.style.display     = 'block';
+
+        const spine  = node.spine;
+        const colors = SPINE_COLORS[spine] || SPINE_COLORS.Unknown;
+        const raw    = node.raw;
+        const SKIP_KEYS = new Set(['@id', '@type', '_isNlp', '_isShared', '_cases']);
+        let rows = '';
+        Object.keys(raw).sort().forEach(key => {
+            if (SKIP_KEYS.has(key)) return;
+            rows += '<tr><th>' + escapeHtml(shortPropKey(key)) + '</th><td>' +
+                    escapeHtml(formatPropertyValue(raw[key], idToLabel)) + '</td></tr>';
+        });
+        const typeStr  = Array.isArray(raw['@type']) ? raw['@type'].map(shortType).join(', ') : (raw['@type'] || '');
+        const nlpBadge    = node.isNlp    ? '<span class="spine-badge" style="background:#b45309;margin-left:6px">NLP</span>' : '';
+        const sharedBadge = node.isShared
+            ? '<span class="spine-badge" style="background:#f59e0b;color:#1f2937;margin-left:6px">Shared · ' + node.cases.length + '</span>'
+            : '';
+
+        const sharedBlock = (node.isShared && node.cases && node.cases.length > 1)
+            ? '<p style="margin-top:10px;font-size:0.85rem;color:#6b7280">' +
+              '<span style="font-weight:600;color:#92400e">Shared across:</span> ' +
+              node.cases.map(escapeHtml).join(', ') + '</p>'
+            : '';
+
+        content.innerHTML =
+            '<p class="node-heading">' + escapeHtml(node.label) + '</p>' +
+            '<p class="node-type">' + escapeHtml(typeStr) + '</p>' +
+            '<span class="spine-badge" style="background:' + colors.fill + '">' +
+                escapeHtml(colors.label) + '</span>' + nlpBadge + sharedBadge +
+            sharedBlock +
+            (rows ? '<table class="prop-table"><tbody>' + rows + '</tbody></table>' : '');
+    }
+
+    // ---------- D3 force-directed render ----------
+    function ensureGraphSvg() {
+        let container = document.getElementById('graph-container');
+        // If an empty/error state replaced our SVG, rebuild the SVG element.
+        if (!document.getElementById('graph-svg')) {
+            container.innerHTML =
+                '<svg id="graph-svg"></svg>' +
+                '<div class="graph-hint">Drag nodes · scroll to zoom · click a node for details</div>' +
+                '<div id="edge-tooltip" class="edge-tooltip"></div>';
+        }
+        return container;
+    }
+
+    function renderGraph(jsonLd) {
+        // Accept either a raw JSON-LD document or a pre-merged sentinel
+        // ``{ __preMerged: flatNodes }`` produced by Compare mode.
+        const model = (jsonLd && Array.isArray(jsonLd.__preMerged))
+            ? buildGraphModel(jsonLd.__preMerged)
+            : parseJsonLdGraph(jsonLd);
+        const { nodes, links, idToLabel } = model;
+        const container = ensureGraphSvg();
+        const width  = container.clientWidth;
+        const height = container.clientHeight;
+
+        const svg = d3.select('#graph-svg');
+        svg.selectAll('*').remove();
+        svg.attr('viewBox', [0, 0, width, height]);
+
+        const g = svg.append('g');
+        svg.call(d3.zoom().scaleExtent([0.25, 4]).on('zoom', event => g.attr('transform', event.transform)));
+
+        const linkData = links.map(l => ({ ...l }));
+        const nodeData = nodes.map(n => ({ ...n }));
+
+        const simulation = d3.forceSimulation(nodeData)
+            .force('link',      d3.forceLink(linkData).id(d => d.id).distance(72).strength(0.55))
+            .force('charge',    d3.forceManyBody().strength(-420))
+            .force('center',    d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(d => d.radius + 6));
+
+        const defs = svg.append('defs');
+        linkData.forEach((link, i) => {
+            const markerId = 'arrow-' + i;
+            defs.append('marker')
+                .attr('id', markerId)
+                .attr('viewBox', '0 -4 8 8')
+                .attr('refX', 14).attr('refY', 0)
+                .attr('markerWidth', 6).attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M0,-4L8,0L0,4')
+                .attr('fill', 'rgba(148,163,184,0.75)');
+            link.markerId = markerId;
+        });
+
+        let selectedId = null;
+        function setHighlight(activeId) {
+            const neighborIds = new Set();
+            if (activeId) {
+                neighborIds.add(activeId);
+                linkData.forEach(l => {
+                    const sid = typeof l.source === 'object' ? l.source.id : l.source;
+                    const tid = typeof l.target === 'object' ? l.target.id : l.target;
+                    if (sid === activeId) neighborIds.add(tid);
+                    if (tid === activeId) neighborIds.add(sid);
+                });
+            }
+            nodeSel.attr('opacity', d => !activeId || neighborIds.has(d.id) ? 1 : 0.2);
+            linkSel.attr('stroke-opacity', d => {
+                if (!activeId) return 0.55;
+                const sid = typeof d.source === 'object' ? d.source.id : d.source;
+                const tid = typeof d.target === 'object' ? d.target.id : d.target;
+                return (sid === activeId || tid === activeId) ? 0.95 : 0.08;
+            });
+            labelSel.attr('opacity', d => !activeId || neighborIds.has(d.id) ? 1 : 0.15);
+        }
+
+        const linkSel = g.append('g').attr('class', 'links')
+            .selectAll('line').data(linkData).enter().append('line')
+            .attr('stroke', 'rgba(148,163,184,0.7)')
+            .attr('stroke-width', 1.2)
+            .attr('marker-end', d => 'url(#' + d.markerId + ')')
+            .on('mouseenter', function(event, d) {
+                const tip = document.getElementById('edge-tooltip');
+                tip.textContent = d.property;
+                tip.style.display = 'block';
+                tip.style.left = (event.offsetX + 12) + 'px';
+                tip.style.top  = (event.offsetY -  8) + 'px';
+                d3.select(this).attr('stroke', '#fbbf24').attr('stroke-width', 2);
+            })
+            .on('mousemove', function(event) {
+                const tip = document.getElementById('edge-tooltip');
+                tip.style.left = (event.offsetX + 12) + 'px';
+                tip.style.top  = (event.offsetY -  8) + 'px';
+            })
+            .on('mouseleave', function() {
+                document.getElementById('edge-tooltip').style.display = 'none';
+                d3.select(this).attr('stroke', 'rgba(148,163,184,0.7)').attr('stroke-width', 1.2);
+            });
+
+        const nodeSel = g.append('g').attr('class', 'nodes')
+            .selectAll('g').data(nodeData).enter().append('g')
+            .style('cursor', 'pointer')
+            .call(d3.drag()
+                .on('start', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x; d.fy = d.y;
+                })
+                .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+                .on('end', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null; d.fy = null;
+                }));
+
+        nodeSel.append('circle')
+            .attr('r', d => d.radius)
+            .attr('fill',   d => (SPINE_COLORS[d.spine] || SPINE_COLORS.Unknown).fill)
+            .attr('stroke', d => {
+                if (d.isShared) return '#f59e0b';
+                if (d.isNlp)    return '#fbbf24';
+                return (SPINE_COLORS[d.spine] || SPINE_COLORS.Unknown).stroke;
+            })
+            .attr('stroke-width', d => {
+                if (d.isShared) return 3.5;
+                if (d.isNlp)    return 2.5;
+                return 2;
+            })
+            .attr('stroke-dasharray', d => d.isNlp && !d.isShared ? '4 2' : null)
+            .on('click', (event, d) => {
+                event.stopPropagation();
+                selectedId = selectedId === d.id ? null : d.id;
+                setHighlight(selectedId);
+                showNodeDetail(d, idToLabel);
+            });
+
+        // Bridge badge: small circle with the share count, only on shared nodes.
+        nodeSel.filter(d => d.isShared)
+            .append('g').attr('class', 'shared-marker')
+            .each(function(d) {
+                const sel = d3.select(this);
+                const offset = d.radius * 0.78;
+                sel.append('circle')
+                    .attr('cx', offset).attr('cy', -offset)
+                    .attr('r', 8)
+                    .attr('fill', '#f59e0b')
+                    .attr('stroke', '#1a2332')
+                    .attr('stroke-width', 1.5)
+                    .attr('pointer-events', 'none');
+                sel.append('text')
+                    .text(d.cases.length)
+                    .attr('x', offset).attr('y', -offset + 3.5)
+                    .attr('text-anchor', 'middle')
+                    .attr('font-size', '10px')
+                    .attr('font-weight', '700')
+                    .attr('font-family', "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif")
+                    .attr('fill', '#1f2937')
+                    .attr('pointer-events', 'none');
+            });
+
+        const labelSel = nodeSel.append('text')
+            .text(d => d.label.length > 22 ? d.label.slice(0, 20) + '\u2026' : d.label)
+            .attr('x', d => d.radius + 5).attr('y', 4)
+            .attr('fill', 'rgba(255,255,255,0.92)')
+            .attr('font-size', '10px')
+            .attr('font-family', "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif")
+            .attr('pointer-events', 'none');
+
+        // Investigation nodes get a subtle case-id sub-label only when more
+        // than one investigation is present (Compare mode).
+        const investigationCount = nodeData.filter(d => d.isInvestigation).length;
+        if (investigationCount > 1) {
+            nodeSel.filter(d => d.isInvestigation)
+                .append('text')
+                .text(d => (d.cases && d.cases[0]) ? d.cases[0] : '')
+                .attr('x', d => d.radius + 5).attr('y', 18)
+                .attr('fill', 'rgba(251,191,36,0.85)')
+                .attr('font-size', '9px')
+                .attr('font-family', "'SFMono-Regular', Consolas, 'Liberation Mono', monospace")
+                .attr('pointer-events', 'none');
+        }
+
+        svg.on('click', () => {
+            selectedId = null;
+            setHighlight(null);
+            document.getElementById('detail-placeholder').style.display = 'block';
+            document.getElementById('detail-content').style.display = 'none';
+        });
+
+        simulation.on('tick', () => {
+            linkSel.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                   .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+            nodeSel.attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
+        });
+
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth, h = container.clientHeight;
+            svg.attr('viewBox', [0, 0, w, h]);
+            simulation.force('center', d3.forceCenter(w / 2, h / 2));
+            simulation.alpha(0.3).restart();
+        });
+    }
+
+    // ---------- Title rendering ----------
+    function setTitleSingle(jsonLd, caseId) {
+        const titleEl = document.getElementById('case-title');
+        const flat = mergeNamedGraphs(jsonLd);
+        const inv = flat.find(n => n['@id'] && /\/case\/[^/]+$/.test(n['@id']));
+        let label = caseId;
+        if (inv) {
+            const src = firstLiteral(inv['http://purl.org/dc/terms/source']);
+            const id  = firstLiteral(inv['http://purl.org/dc/terms/identifier']);
+            const yr  = firstLiteral(inv['https://cacontology.projectvic.org#hasPhaseBeginPoint']);
+            if (src || id) {
+                const year = (yr || '').slice(0, 4);
+                label = src ? src + (year ? ' ' + year : '') : (id || caseId);
+            }
+        }
+        titleEl.textContent = 'Knowledge Graph: ' + label + ' · ' + flat.length + ' nodes  (' + caseId + ')';
+    }
+
+    function setTitleCompare(flatNodes, caseIds) {
+        const titleEl = document.getElementById('case-title');
+        const sharedCount = flatNodes.filter(n => n._isShared).length;
+        titleEl.textContent =
+            'Knowledge Graph: ' + caseIds.length + ' cases · ' +
+            sharedCount + ' shared node' + (sharedCount === 1 ? '' : 's') +
+            '  (' + caseIds.join(', ') + ')';
+    }
+
+    // ---------- Selector rendering ----------
+    function renderCaseSelector(cases) {
+        const sel = document.getElementById('case-selector');
+        sel.querySelectorAll('.case-chip').forEach(c => c.remove());
+        cases.forEach(c => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'case-chip';
+            btn.textContent = c.case_id;
+            btn.dataset.caseId = c.case_id;
+            btn.addEventListener('click', () => onChipClick(c));
+            sel.appendChild(btn);
+        });
+        sel.hidden = cases.length === 0;
+        syncChipState();
+    }
+
+    // Reflects current MODE + selection state in the chip DOM.
+    function syncChipState() {
+        const sel = document.getElementById('case-selector');
+        sel.classList.toggle('compare-mode', MODE === 'compare');
+        document.querySelectorAll('#mode-toggle button').forEach(b => {
+            const active = b.dataset.mode === MODE;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        document.querySelectorAll('#case-selector .case-chip').forEach(c => {
+            const cid = c.dataset.caseId;
+            const active = (MODE === 'compare')
+                ? SELECTED_CASES.has(cid)
+                : (cid === CURRENT_CASE_ID);
+            c.classList.toggle('active', active);
+        });
+    }
+
+    function onChipClick(caseEntry) {
+        if (MODE === 'single') {
+            if (caseEntry.case_id === CURRENT_CASE_ID) return;
+            loadAndRenderSingle(caseEntry);
+            return;
+        }
+        // Compare mode: toggle membership.
+        const cid = caseEntry.case_id;
+        if (SELECTED_CASES.has(cid)) SELECTED_CASES.delete(cid);
+        else                          SELECTED_CASES.add(cid);
+        syncChipState();
+        refreshCompareView();
+    }
+
+    function setMode(newMode) {
+        if (newMode === MODE) return;
+        MODE = newMode;
+        if (newMode === 'compare') {
+            // Seed selection with the case the user was last viewing.
+            SELECTED_CASES = new Set(CURRENT_CASE_ID ? [CURRENT_CASE_ID] : []);
+            syncChipState();
+            refreshCompareView();
+        } else {
+            // Back to single-mode: reuse last current case, or fall back to first.
+            SELECTED_CASES.clear();
+            const target = AVAILABLE_CASES.find(c => c.case_id === CURRENT_CASE_ID)
+                        || AVAILABLE_CASES[0];
+            syncChipState();
+            if (target) loadAndRenderSingle(target);
+        }
+    }
+
+    // ---------- Loading ----------
+    async function fetchCase(caseEntry) {
+        if (JSONLD_CACHE[caseEntry.case_id]) {
+            return JSONLD_CACHE[caseEntry.case_id];
+        }
+        const resp = await fetch(caseEntry.path, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status + ' for ' + caseEntry.case_id);
+        const data = await resp.json();
+        JSONLD_CACHE[caseEntry.case_id] = data;
+        return data;
+    }
+
+    async function loadAndRenderSingle(caseEntry) {
+        CURRENT_CASE_ID = caseEntry.case_id;
+        syncChipState();
+        try {
+            const jsonLd = await fetchCase(caseEntry);
+            setTitleSingle(jsonLd, caseEntry.case_id);
+            renderGraph(jsonLd);
+        } catch (err) {
+            console.error('Failed to load graph', caseEntry, err);
+            showLoadError(caseEntry.case_id, err);
+        }
+    }
+
+    async function refreshCompareView() {
+        const selected = AVAILABLE_CASES.filter(c => SELECTED_CASES.has(c.case_id));
+        const titleEl = document.getElementById('case-title');
+
+        if (selected.length === 0) {
+            titleEl.textContent = 'Compare mode · select cases below';
+            showCompareEmpty('Select two or more cases to see cross-case connections.');
+            return;
+        }
+        if (selected.length === 1) {
+            titleEl.textContent = 'Compare mode · ' + selected[0].case_id + ' (select another to compare)';
+            showCompareEmpty('Select two or more cases to see cross-case connections.');
+            return;
+        }
+        if (selected.length > MAX_COMPARE_CASES) {
+            titleEl.textContent = 'Too many cases selected (' + selected.length + ')';
+            showCompareEmpty(
+                'Select up to ' + MAX_COMPARE_CASES + ' cases for comparison. ' +
+                'Currently ' + selected.length + ' selected.'
+            );
+            return;
+        }
+
+        try {
+            const docs = await Promise.all(selected.map(c => fetchCase(c)));
+            const perCase = {};
+            selected.forEach((c, i) => { perCase[c.case_id] = docs[i]; });
+            const flat = mergeAcrossCases(perCase);
+            setTitleCompare(flat, selected.map(c => c.case_id));
+            // Build model directly from the pre-merged flat nodes.
+            renderGraphFromFlat(flat);
+        } catch (err) {
+            console.error('Failed to load compare graphs', selected, err);
+            showLoadError(selected.map(c => c.case_id).join(', '), err);
+        }
+    }
+
+    // Allow renderGraph to accept either a JSON-LD doc or a pre-merged flat array.
+    function renderGraphFromFlat(flatNodes) {
+        // Stash the pre-built model on a thunk so renderGraph() can reuse its
+        // existing pipeline without re-running mergeNamedGraphs.
+        renderGraph({ __preMerged: flatNodes });
+    }
+
+    function showCompareEmpty(msg) {
+        const container = document.getElementById('graph-container');
+        container.innerHTML =
+            '<div class="empty-state">' + escapeHtml(msg) + '</div>';
+    }
+
+    function showEmptyState() {
+        const container = document.getElementById('graph-container');
+        container.innerHTML =
+            '<div class="empty-state">' +
+              'No cases have been expressed as knowledge graphs yet.<br>' +
+              'Run <code>python ontology/features_to_cac.py &lt;case_id&gt;</code> ' +
+              'to generate graphs, then refresh this page.' +
+            '</div>';
+        document.getElementById('case-title').textContent = 'No graphs available';
+    }
+
+    function showLoadError(caseId, err) {
+        const container = document.getElementById('graph-container');
+        container.innerHTML =
+            '<div class="empty-state">' +
+              'Failed to load <code>' + escapeHtml(caseId) + '</code>:<br>' +
+              escapeHtml(err && err.message ? err.message : String(err)) +
+            '</div>';
+    }
+
+    // ---------- Boot ----------
+    async function boot() {
+        buildLegend();
+        // Wire the mode toggle.
+        document.querySelectorAll('#mode-toggle button').forEach(b => {
+            b.addEventListener('click', () => setMode(b.dataset.mode));
+        });
+        let cases = [];
+        try {
+            const resp = await fetch(API_CASES_URL, { cache: 'no-store' });
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            cases = await resp.json();
+        } catch (err) {
+            console.error('Failed to fetch case list', err);
+            document.getElementById('case-title').textContent =
+                'Could not reach ' + API_CASES_URL;
+            showEmptyState();
+            return;
+        }
+        AVAILABLE_CASES = Array.isArray(cases) ? cases : [];
+        if (AVAILABLE_CASES.length === 0) {
+            renderCaseSelector([]);
+            showEmptyState();
+            return;
+        }
+        CURRENT_CASE_ID = AVAILABLE_CASES[0].case_id;
+        renderCaseSelector(AVAILABLE_CASES);
+        await loadAndRenderSingle(AVAILABLE_CASES[0]);
+    }
+
+    boot();
+    </script>
+</body>
+</html>

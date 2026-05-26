@@ -352,7 +352,7 @@ Each case includes structured features extracted from case narratives:
 - **Technology signals**: `investigation_technology` (e.g. PhotoDNA, CSAI Match, hash-matching language, CyberTipline variants), `anonymization_network` (Tor, I2P, dark web phrasing, cryptocurrency), and `p2p_clients` (LimeWire, BitTorrent, Kazaa, Gigatribe).
 - **Charges**: Detailed prosecution charges with counts
 - **Evidence Volume**: Images, videos, storage size (TB/GB), messages
-- **Investigation Type**: Proactive, reactive, online, or undercover investigations
+- **Investigation Type**: Proactive, reactive, online, undercover, and/or CyberTipline-origin
 - **Agencies**: Law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.)
 
 ### **Semantic Features (Pattern-based)**

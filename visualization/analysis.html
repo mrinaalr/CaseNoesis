@@ -777,7 +777,7 @@
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger', 'csam'];
             const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'multiple_perpetrators', 'grooming'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Roblox', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
-            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'cybertip', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
             const allStatus = ['registered_sex_offender'];
@@ -821,8 +821,10 @@
                 }
                 
                 // Investigation Type
-                if (caseData.investigation_type) {
-                    investigationSet.add(caseData.investigation_type);
+                const invTypes = caseData.investigation_types
+                    || (caseData.investigation_type ? [caseData.investigation_type] : []);
+                if (Array.isArray(invTypes)) {
+                    invTypes.forEach(t => t && investigationSet.add(t));
                 }
                 
                 // Relationship
@@ -840,7 +842,7 @@
             const allCaseTopics = ['production', 'possession', 'international', 'multi_state', 'online_only', 'family', 'stranger', 'csam'];
             const allSeverity = ['infant', 'very_young', 'sexual_abuse', 'multiple_perpetrators', 'grooming'];
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Roblox', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
-            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'unknown'];
+            const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'cybertip', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
             const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
             const allStatus = ['registered_sex_offender'];
@@ -1006,10 +1008,14 @@
                                     p && p.toLowerCase() === topic.toLowerCase()
                                 );
                                 break;
-                            case 'investigation_type':
-                                matches = caseData.investigation_type && 
-                                         caseData.investigation_type.toLowerCase() === topic.toLowerCase();
+                            case 'investigation_type': {
+                                const invTypes = caseData.investigation_types
+                                    || (caseData.investigation_type ? [caseData.investigation_type] : []);
+                                matches = Array.isArray(invTypes) && invTypes.some(t =>
+                                    t && t.toLowerCase() === topic.toLowerCase()
+                                );
                                 break;
+                            }
                             case 'relationship_to_victim':
                                 // Special handling for "stranger": show all cases NOT family-tagged
                                 if (topic === 'stranger') {
@@ -2465,6 +2471,15 @@
                                 } else if (tag === 'undercover') {
                                     // For undercover, match "undercover [optional words] (operation|investigation)"
                                     patterns = [/\bundercover\s+(?:\S+\s+)*(?:operation|investigation)\b/gi];
+                                } else if (tag === 'cybertip') {
+                                    patterns = [
+                                        /\bCyber\s*Tipline\b/gi,
+                                        /\bCyberTip(?:line)?\b/gi,
+                                        /\bCybertipline\b/gi,
+                                        /\bCyber\s*Tip\s*Line\b/gi,
+                                        /\bmissingkids\.org\/cybertipline\b/gi,
+                                        /\bNCMEC\s+(?:Cyber\s*)?Tipline\b/gi,
+                                    ];
                                 } else {
                                     // Align with processing: type + optional words + investigation OR operation(s)
                                     patterns = [

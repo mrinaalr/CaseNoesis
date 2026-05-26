@@ -287,6 +287,27 @@
             font-style: italic;
         }
 
+        .graph-explorer-link {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 0.95rem;
+            color: #1b5e20;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .graph-explorer-link:hover {
+            text-decoration: underline;
+            color: #2e7d32;
+        }
+        .graph-explorer-link .arrow {
+            display: inline-block;
+            margin-left: 2px;
+            transition: transform 0.15s ease;
+        }
+        .graph-explorer-link:hover .arrow {
+            transform: translateX(3px);
+        }
+
         .working-note {
             font-size: 0.88rem;
             color: #6b7280;
@@ -431,6 +452,7 @@
                 </tbody>
             </table>
             <p class="status-note">Live numbers will populate as the pipeline comes online.</p>
+            <a href="/patterns/graph" class="graph-explorer-link">Explore a case as a knowledge graph <span class="arrow">&rarr;</span></a>
         </section>
 
         <section class="section" id="open-records">

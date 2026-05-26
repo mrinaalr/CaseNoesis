@@ -69,6 +69,7 @@ from facet_tree import (
     infer_case_year,
     max_tree_depth,
 )
+from case_storage_utils import investigation_types_for_case
 from analysis import tag_threader, return_tagged_cases, run_automated_analysis
 # Import Redis cache helper
 try:
@@ -322,6 +323,7 @@ def _case_summary_slim(case: Dict[str, Any]) -> Dict[str, Any]:
         "case_topics": case.get("case_topics"),
         "tags": case.get("tags"),
         "investigation_type": case.get("investigation_type"),
+        "investigation_types": investigation_types_for_case(case),
         "agencies_involved": case.get("agencies_involved"),
         "organizations": case.get("organizations"),
         # Needed by visualization/index.html Previous Perpetrator chart and stats (slim API otherwise omits it).
@@ -1151,7 +1153,8 @@ try:
                             if s: severity_indicators.add(s)
                         for p in (c.get('platforms_used') or []):
                             if p: platforms_used.add(p)
-                        if c.get('investigation_type'): investigation_types.add(c['investigation_type'])
+                        for inv_t in investigation_types_for_case(c):
+                            investigation_types.add(inv_t)
                         if c.get('relationship_to_victim'): relationships.add(c['relationship_to_victim'])
                         if c.get('perpetrator_registered_sex_offender'): status.add('registered_sex_offender')
                     tags_result = {
@@ -1638,8 +1641,7 @@ def get_unique_tags(request: Request):
                 platforms_used.update(p for p in platforms if p)
             
             # Investigation Type
-            inv_type = case.get('investigation_type')
-            if inv_type:
+            for inv_type in investigation_types_for_case(case):
                 investigation_types.add(inv_type)
             
             # Relationship
@@ -2052,9 +2054,10 @@ def get_case_ids_by_filter(
         
         # Filter by investigation type
         if investigation_type:
+            inv_filter = investigation_type.lower()
             filtered_cases = [
                 c for c in filtered_cases
-                if c.get('investigation_type') == investigation_type
+                if inv_filter in investigation_types_for_case(c)
             ]
         
         case_ids = [c.get('id') for c in filtered_cases if c.get('id')]
@@ -2330,8 +2333,7 @@ def get_detailed_stats(request: Request):
         # 9. Investigation Type Distribution
         investigation_counter = Counter()
         for case in cases:
-            inv_type = case.get('investigation_type')
-            if inv_type:
+            for inv_type in investigation_types_for_case(case):
                 investigation_counter[inv_type] += 1
         investigation_type_distribution = [{"name": name.replace('_', ' ').title(), "count": count} for name, count in investigation_counter.most_common()]
         
@@ -3483,9 +3485,55 @@ async def serve_patterns():
         return HTMLResponse(content="<h1>Patterns page not found</h1>", status_code=404)
 
 
+@app.get("/patterns/graph", response_class=HTMLResponse)
+async def serve_patterns_graph():
+    """Serve the CAC Ontology knowledge graph explorer (Phase 2)"""
+    html_path = Path(__file__).parent.parent / "visualization" / "patterns-graph.html"
+    if html_path.exists():
+        return HTMLResponse(content=read_utf8_text_file(html_path))
+    else:
+        return HTMLResponse(content="<h1>Knowledge graph page not found</h1>", status_code=404)
+
+
 _viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets"
 if _viz_assets.is_dir():
     app.mount("/viz-assets", StaticFiles(directory=str(_viz_assets)), name="viz_assets")
+
+# Serve ontology/graph_output/ files (JSON-LD, Turtle) so the graph visualizer
+# can fetch('/ontology/graph_output/{case_id}.jsonld') for any case that has
+# been expressed as a CAC Ontology knowledge graph.
+_graph_output = Path(__file__).resolve().parent.parent / "ontology" / "graph_output"
+if _graph_output.is_dir():
+    app.mount(
+        "/ontology/graph_output",
+        StaticFiles(directory=str(_graph_output)),
+        name="graph_output",
+    )
+
+
+@app.get("/api/ontology/cases")
+def api_ontology_cases():
+    """
+    List every case that has been expressed as a CAC Ontology knowledge graph.
+
+    The visualizer (patterns-graph.html) uses this to auto-discover available
+    cases without any hardcoded data. New cases appear in the UI as soon as
+    `python ontology/features_to_cac.py <case_id>` writes their .jsonld file.
+
+    Returns a JSON array of {case_id, path, ttl_path} entries sorted by
+    case_id. Empty list if no graphs exist yet.
+    """
+    out: List[Dict[str, Any]] = []
+    if _graph_output.is_dir():
+        for entry in sorted(_graph_output.glob("*.jsonld")):
+            case_id = entry.stem
+            ttl = entry.with_suffix(".ttl")
+            out.append({
+                "case_id": case_id,
+                "path": f"/ontology/graph_output/{entry.name}",
+                "ttl_path": f"/ontology/graph_output/{ttl.name}" if ttl.exists() else None,
+            })
+    return out
 
 
 if __name__ == "__main__":

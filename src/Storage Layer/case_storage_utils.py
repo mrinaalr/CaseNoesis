@@ -12,7 +12,7 @@ the raw column is present (include_raw_data=True or get_case).
 from __future__ import annotations
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 # Omitted from extracted_features blob: narrative, raw duplicate, and fields already
 # persisted as columns on `cases` (avoids triplicating the same strings in SQLite/Postgres).
@@ -37,6 +37,21 @@ _SLIM_EXCLUDED_KEYS = frozenset(
         "updated_at",
     }
 )
+
+
+def investigation_types_for_case(case: Dict[str, Any]) -> List[str]:
+    """
+    All investigation type tags for a case (list field + legacy single investigation_type).
+    """
+    types = case.get("investigation_types")
+    if isinstance(types, list):
+        out = [str(t).strip().lower() for t in types if t is not None and str(t).strip()]
+        if out:
+            return out
+    t = case.get("investigation_type")
+    if t is not None and str(t).strip():
+        return [str(t).strip().lower()]
+    return []
 
 
 def slim_extracted_features_for_storage(case: Dict[str, Any]) -> Dict[str, Any]:
