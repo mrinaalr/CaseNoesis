@@ -1,0 +1,111 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-26T17:05:43.583926" ;
+    dcterms:identifier "illinois_ag_2011_009" ;
+    dcterms:modified "2026-05-26T17:05:43.583926" ;
+    dcterms:source <https://illinoisattorneygeneral.gov/News-Room/2006-2018-Press-Archive/201108-25%20MADIGAN%2025th%20and%2026th%20CHILD%20PORN%20ARRESTS%20MARK%20FIRST%20YEAR%20OF%20OPERATION%20GLASS%20HOUSE.pdf>,
+        "ILLINOIS AG" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2011-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2011-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/operation> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/victim/1> ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/charge/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/belleville-city-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/belleville-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/city-of-belleville-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/belleville-city-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Belleville City Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/belleville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Belleville Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/city-of-belleville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "City of Belleville Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Illinois Department of Corrections" .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label """possession of aggravated
+child pornography""" ;
+    cacontology-legal-outcomes:indictmentCounts 10 .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/operation> a cac-core:Event,
+        cacontology-taskforce:TaskForceOperation .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2011-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2011-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/victim/1> ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2011-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2011_009/person/victim/1> .
+

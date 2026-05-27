@@ -1,0 +1,163 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-26T17:11:17.037765" ;
+    dcterms:identifier "nj_ag_2026_040" ;
+    dcterms:modified "2026-05-26T17:11:17.037765" ;
+    dcterms:source <https://www.njoag.gov/ag-grewal-announces-arrests-of-24-men-in-operation-open-house-undercover-operation-targeted-alleged-child-predators-using-social-media-to-lure-children-for-sex/>,
+        "NJ AG" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/operation> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/victim/1> ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat>,
+        <https://caselinker.up.railway.app/resource/platform/discord>,
+        <https://caselinker.up.railway.app/resource/platform/facebook>,
+        <https://caselinker.up.railway.app/resource/platform/fortnite>,
+        <https://caselinker.up.railway.app/resource/platform/instagram>,
+        <https://caselinker.up.railway.app/resource/platform/kik>,
+        <https://caselinker.up.railway.app/resource/platform/minecraft>,
+        <https://caselinker.up.railway.app/resource/platform/omegle>,
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/twitter-x>,
+        <https://caselinker.up.railway.app/resource/platform/youtube> ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/sentence/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit>,
+        <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau>,
+        <https://caselinker.up.railway.app/resource/agency/follow-the-new-jersey-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/howell-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/trenton-police-department> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Digital Technology Investigation Unit" .
+
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/follow-the-new-jersey-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Follow the New Jersey Attorney General’'s Office" .
+
+<https://caselinker.up.railway.app/resource/agency/howell-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Howell Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/trenton-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Trenton Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/operation> a cac-core:Event,
+        cacontology-taskforce:UndercoverUnit .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 47 .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 15 .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "Ocean County Jail" .
+
+<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" .
+
+<https://caselinker.up.railway.app/resource/platform/discord> a cacontology-platforms:MessagingService ;
+    rdfs:label "Discord" .
+
+<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Facebook" .
+
+<https://caselinker.up.railway.app/resource/platform/fortnite> a cacontology-platforms:GamePlatform ;
+    rdfs:label "Fortnite" .
+
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
+
+<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+    rdfs:label "Kik" .
+
+<https://caselinker.up.railway.app/resource/platform/minecraft> a cacontology-platforms:GamePlatform ;
+    rdfs:label "Minecraft" .
+
+<https://caselinker.up.railway.app/resource/platform/omegle> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "Omegle" .
+
+<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" .
+
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
+<https://caselinker.up.railway.app/resource/platform/youtube> a cacontology-platforms:VideoStreamingPlatform ;
+    rdfs:label "YouTube" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/event/possession> ;
+    cacontology:perpetratorRegisteredSexOffender true ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/victim/1> ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_040/person/victim/1> .
+

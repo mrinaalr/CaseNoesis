@@ -120,6 +120,30 @@
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s, color 0.15s;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Tiny "open case in case-text view" link sitting inside each chip.
+           It's a span (not <a>) because chips are <button> elements and HTML
+           forbids nesting interactive content. The click handler does the
+           navigation and stopPropagation()s so the chip itself doesn't get
+           toggled when the user clicks the icon. */
+        .case-chip .chip-link {
+            color: inherit;
+            opacity: 0.55;
+            font-size: 0.95em;
+            line-height: 1;
+            padding: 0 2px;
+            border-radius: 4px;
+            transition: opacity 0.12s, background 0.12s;
+        }
+        .case-chip .chip-link:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.08);
+        }
+        .case-chip.active .chip-link:hover {
+            background: rgba(255, 255, 255, 0.18);
         }
         .case-chip:hover {
             background: #f3f4f6;
@@ -1085,6 +1109,12 @@
     }
 
     // ---------- Selector rendering ----------
+    // Build the URL that opens this case in the standalone case-text viewer.
+    // Relative path so it works locally and on the deployed Railway host.
+    function caseVizUrl(caseId) {
+        return '/visualization?viz=caseviz&case=' + encodeURIComponent(caseId);
+    }
+
     function renderCaseSelector(cases) {
         const sel = document.getElementById('case-selector');
         sel.querySelectorAll('.case-chip').forEach(c => c.remove());
@@ -1092,8 +1122,23 @@
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'case-chip';
-            btn.textContent = c.case_id;
             btn.dataset.caseId = c.case_id;
+            // Chip body: case_id text + small ↗ link to the case-text view.
+            const idSpan = document.createElement('span');
+            idSpan.className = 'chip-id';
+            idSpan.textContent = c.case_id;
+            const link = document.createElement('span');
+            link.className = 'chip-link';
+            link.textContent = '\u2197';   // ↗
+            link.setAttribute('role', 'link');
+            link.setAttribute('aria-label', 'Open ' + c.case_id + ' in case visualization');
+            link.title = 'Open ' + c.case_id + ' (case text view)';
+            link.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                window.open(caseVizUrl(c.case_id), '_blank', 'noopener');
+            });
+            btn.appendChild(idSpan);
+            btn.appendChild(link);
             btn.addEventListener('click', () => onChipClick(c));
             sel.appendChild(btn);
         });
@@ -1190,11 +1235,17 @@
             showCompareEmpty('Select two or more cases to see cross-case connections.');
             return;
         }
-        if (selected.length > MAX_COMPARE_CASES) {
+        // Honour the cap unless the user has explicitly opted into "select
+        // every available case" via the Compare-button double-click. That
+        // gesture is read as a deliberate decision to render the full corpus.
+        const isSelectAll = AVAILABLE_CASES.length > 0
+                         && selected.length === AVAILABLE_CASES.length;
+        if (selected.length > MAX_COMPARE_CASES && !isSelectAll) {
             titleEl.textContent = 'Too many cases selected (' + selected.length + ')';
             showCompareEmpty(
                 'Select up to ' + MAX_COMPARE_CASES + ' cases for comparison. ' +
-                'Currently ' + selected.length + ' selected.'
+                'Currently ' + selected.length + ' selected. ' +
+                'Tip: double-click Compare to select all anyway.'
             );
             return;
         }
@@ -1246,6 +1297,25 @@
             '</div>';
     }
 
+    // Double-click on the Compare button is a select-all / deselect-all
+    // shortcut. First double-click selects every available case (and enters
+    // Compare mode if needed); a second double-click while everything is
+    // selected clears the selection. Single-clicks still just switch modes.
+    function toggleSelectAll() {
+        if (MODE !== 'compare') {
+            MODE = 'compare';
+        }
+        const total = AVAILABLE_CASES.length;
+        if (total === 0) return;
+        if (SELECTED_CASES.size >= total) {
+            SELECTED_CASES.clear();
+        } else {
+            SELECTED_CASES = new Set(AVAILABLE_CASES.map(c => c.case_id));
+        }
+        syncChipState();
+        refreshCompareView();
+    }
+
     // ---------- Boot ----------
     async function boot() {
         buildLegend();
@@ -1253,6 +1323,14 @@
         document.querySelectorAll('#mode-toggle button').forEach(b => {
             b.addEventListener('click', () => setMode(b.dataset.mode));
         });
+        // Double-click on Compare is the select-all/deselect-all shortcut.
+        const compareBtn = document.querySelector('#mode-toggle button[data-mode="compare"]');
+        if (compareBtn) {
+            compareBtn.addEventListener('dblclick', (ev) => {
+                ev.preventDefault();
+                toggleSelectAll();
+            });
+        }
         let cases = [];
         try {
             const resp = await fetch(API_CASES_URL, { cache: 'no-store' });

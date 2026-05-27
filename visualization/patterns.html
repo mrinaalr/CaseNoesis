@@ -195,6 +195,26 @@
             text-transform: none;
             letter-spacing: 0;
         }
+        .rq-card h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .rq-card h3 a:hover { text-decoration: underline; }
+        .rq-card .view-findings {
+            display: inline-block;
+            margin: 2px 0 16px;
+            font-size: 0.92rem;
+            color: #1b5e20;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .rq-card .view-findings:hover { text-decoration: underline; }
+        .rq-card .view-findings .arrow {
+            display: inline-block;
+            margin-left: 2px;
+            transition: transform 0.15s ease;
+        }
+        .rq-card .view-findings:hover .arrow { transform: translateX(3px); }
         .rq-card .statement {
             font-size: 0.95rem;
             color: #1f2937;
@@ -370,7 +390,8 @@
             <h2>Section A &mdash; The Research Questions</h2>
             <div class="rq-grid">
                 <article class="rq-card" id="q1">
-                    <h3>Q1 &mdash; Platform Harm Analysis</h3>
+                    <h3><a href="/patterns/questions/q01">Q1 &mdash; Platform Harm Analysis</a></h3>
+                    <a class="view-findings" href="/patterns/questions/q01">View findings <span class="arrow">&rarr;</span></a>
                     <p class="statement">What is the platform and what capabilities does it have? How has it been misused in practice, and what surfaces, vectors, and avenues for exploitation does it expose? What specifically about this medium makes it usable for exploitation? Can those properties be generalized into a framework that stress-tests future platforms before abuse patterns consolidate?</p>
                     <p class="label">Why it matters</p>
                     <p class="why">Press releases name platforms. They rarely explain what about a platform enabled the offense. Across thousands of cases, platforms present different roles: grooming surface, distribution channel, payment mechanism, communication layer. An affordance-level analysis turns those scattered mentions into a transferable framework for understanding how a medium enables harm.</p>
@@ -379,7 +400,8 @@
                 </article>
 
                 <article class="rq-card" id="q2">
-                    <h3>Q2 &mdash; Exploitation Life Cycle</h3>
+                    <h3><a href="/patterns/questions/q02">Q2 &mdash; Exploitation Life Cycle</a></h3>
+                    <a class="view-findings" href="/patterns/questions/q02">View findings <span class="arrow">&rarr;</span></a>
                     <p class="statement">What does enforcement and offending actually look like at scale? Then within definable subsets: possessors with hands-on signal, online grooming, sextortion. What platforms, methods, and patterns recur across each? What is the structure of the lifecycle from contact through investigation through prosecution?</p>
                     <p class="label">Why it matters</p>
                     <p class="why">Most ICAC research works on hashing or in aggregate counts. Neither reveals how offenses unfold, how investigators respond to them, or how the cases contrast against the broader exploitation landscape. The lifecycle view, stratified by offense subset, is the layer between a single press release and a corpus-wide statistic.</p>
@@ -388,7 +410,8 @@
                 </article>
 
                 <article class="rq-card" id="q3">
-                    <h3>Q3 &mdash; Kill Chain Interventions</h3>
+                    <h3><a href="/patterns/questions/q03">Q3 &mdash; Kill Chain Interventions</a></h3>
+                    <a class="view-findings" href="/patterns/questions/q03">View findings <span class="arrow">&rarr;</span></a>
                     <p class="statement">Given Q1 and Q2, where can technology, investigation, or enforcement intervene in the lifecycle to disrupt exploitation? Which intervention points carry the most leverage given the lifecycle and platform affordances the data actually shows?</p>
                     <p class="label">Why it matters</p>
                     <p class="why">Platform mapping and lifecycle analysis are not ends in themselves. The point is identifying where intervention is most plausibly effective: at detection, at reporting, at warrant execution, at prevention. Q3 connects Q1 and Q2 to the operational question practitioners and platform safety teams actually face.</p>
@@ -435,19 +458,19 @@
                 <tbody>
                     <tr>
                         <th scope="row">Cases expressed in CAC</th>
-                        <td>&mdash;</td>
+                        <td>100</td>
                     </tr>
                     <tr>
                         <th scope="row">SHACL validation pass rate</th>
-                        <td>pending</td>
+                        <td>100% (100/100)</td>
                     </tr>
                     <tr>
                         <th scope="row">CAC classes covered</th>
-                        <td>&mdash;</td>
+                        <td>44</td>
                     </tr>
                     <tr>
-                        <th scope="row">Last validation run</th>
-                        <td>pending</td>
+                        <th scope="row">Total Nodes</th>
+                        <td>5,204</td>
                     </tr>
                 </tbody>
             </table>
@@ -460,7 +483,7 @@
             <p>Open records requests are in progress to extend the corpus with state-prosecuted cases beyond federal and ICAC press-release coverage. This section will track request status, jurisdictions, and corpus additions as the work develops.</p>
         </section>
 
-        <p class="working-note">Phase 2: Patterns is a working research surface. This page will evolve as the pipeline is built. Last updated: May 22, 2026.</p>
+        <p class="working-note">Phase 2: Patterns is a working research surface. This page will evolve as the pipeline is built. Last updated: May 26, 2026.</p>
     </div>
 
     <footer class="site-footer">

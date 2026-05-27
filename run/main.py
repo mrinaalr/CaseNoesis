@@ -3495,6 +3495,30 @@ async def serve_patterns_graph():
         return HTMLResponse(content="<h1>Knowledge graph page not found</h1>", status_code=404)
 
 
+@app.get("/patterns/questions/{question_id}", response_class=HTMLResponse)
+async def serve_patterns_question(question_id: str):
+    """
+    Serve an interactive question findings page (Q1–Q3).
+
+    Expected IDs:
+      - q01 .. q03
+      - q1  .. q3 (normalized to zero-padded)
+    """
+    q = (question_id or "").strip().lower()
+    # Normalize q1 → q01 (and q001 → q01 if someone pastes it)
+    if re.fullmatch(r"q\d{1,3}", q or ""):
+        n = int(q[1:])
+        q = f"q{n:02d}"
+
+    if not re.fullmatch(r"q0[1-3]", q):
+        return HTMLResponse(content="<h1>Question page not found</h1>", status_code=404)
+
+    html_path = Path(__file__).parent.parent / "visualization" / "questions" / f"{q}.html"
+    if html_path.exists():
+        return HTMLResponse(content=read_utf8_text_file(html_path))
+    return HTMLResponse(content="<h1>Question page not found</h1>", status_code=404)
+
+
 _viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets"
 if _viz_assets.is_dir():
     app.mount("/viz-assets", StaticFiles(directory=str(_viz_assets)), name="viz_assets")
@@ -3509,6 +3533,23 @@ if _graph_output.is_dir():
         StaticFiles(directory=str(_graph_output)),
         name="graph_output",
     )
+
+# Serve ontology/question_data/ JSON files for interactive question pages.
+_question_data = Path(__file__).resolve().parent.parent / "ontology" / "question_data"
+if _question_data.is_dir():
+    app.mount(
+        "/ontology/question_data",
+        StaticFiles(directory=str(_question_data)),
+        name="question_data",
+    )
+
+_ontology_dir = Path(__file__).resolve().parent.parent / "ontology"
+_q_results_path = _ontology_dir / "q_results.json"
+if _q_results_path.is_file():
+
+    @app.get("/ontology/q_results.json")
+    def serve_q_results():
+        return FileResponse(str(_q_results_path), media_type="application/json")
 
 
 @app.get("/api/ontology/cases")

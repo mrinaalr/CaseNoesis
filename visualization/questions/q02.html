@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaseLinker — Q02</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f0f2f1; color:#1f2937; line-height:1.65; }
+    .nav { background:#fff; padding:15px 0 15px 20px; box-shadow:0 2px 4px rgba(0,0,0,0.1); display:flex; align-items:center; }
+    .nav a { color:#4CAF50; text-decoration:none; margin-right:20px; } .nav a:hover{ text-decoration:underline; }
+    .container { max-width:820px; margin:16px auto 36px; background:#fff; padding:36px 36px 44px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .back { display:inline-block; margin-bottom:14px; color:#1b5e20; text-decoration:none; font-weight:600; font-size:0.95rem; } .back:hover{ text-decoration:underline; }
+    h1 { margin:0 0 10px; color:#1b5e20; font-size:1.7rem; letter-spacing:-0.02em; }
+    .tag { display:inline-block; font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7280; margin:0 0 18px; }
+    h2 { font-size:1.12rem; font-weight:700; margin:26px 0 10px; color:#111827; }
+    p { margin:0 0 12px; color:#374151; font-size:0.98rem; }
+    .card { border:1px solid #e5e7eb; border-radius:6px; padding:18px; background:#fafafa; margin:12px 0; }
+    table { width:100%; border-collapse:collapse; margin:10px 0 0; font-size:0.94rem; }
+    th, td { text-align:left; padding:10px 12px; border-bottom:1px solid #e5e7eb; vertical-align:top; }
+    th { font-weight:700; color:#374151; background:#f9fafb; }
+    .cases a { color:#1b5e20; text-decoration:none; font-weight:600; } .cases a:hover { text-decoration:underline; }
+    .method { font-size:0.92rem; color:#6b7280; }
+    .mini-bars { margin-top:10px; }
+    .bar-row { display:grid; grid-template-columns:1fr 4fr auto; gap:10px; align-items:center; margin:8px 0; }
+    .bar-label { font-variant-numeric:tabular-nums; color:#111827; font-size:0.92rem; }
+    .bar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; } .bar > span { display:block; height:100%; background:#1b5e20; width:0%; }
+    .bar-val { font-variant-numeric:tabular-nums; color:#6b7280; font-size:0.9rem; }
+    pre { background:#0b1020; color:#e5e7eb; padding:12px 14px; border-radius:8px; overflow:auto; font-size:0.85rem; line-height:1.45; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="/">Home</a>
+    <a href="/patterns">Patterns</a>
+    <a href="/patterns/graph">Knowledge Graph Explorer</a>
+  </div>
+
+  <div class="container">
+    <a class="back" href="/patterns">&larr; Back to Patterns</a>
+    <h1 id="title">Q02: Exploitation Life Cycle</h1>
+    <div class="tag" id="audience">Core research question</div>
+
+    <h2>The Question</h2>
+    <p id="question">What does offending + enforcement actually look like at scale in the press-release record: intake channel, investigation pathway signals, and what lifecycle steps are consistently reportable?</p>
+
+    <h2>The Finding</h2>
+    <div class="card"><p id="finding">Loading…</p></div>
+
+    <h2>The Data</h2>
+    <div class="card" id="data"><p>Loading…</p></div>
+
+    <h2>Supporting Cases</h2>
+    <div class="card cases" id="cases"></div>
+
+    <h2>Methodology Note</h2>
+    <div class="card">
+      <p class="method" id="limitations"></p>
+      <details style="margin-top:10px;">
+        <summary class="method">SPARQL / query (if applicable)</summary>
+        <pre id="sparql"></pre>
+      </details>
+    </div>
+
+    <a class="back" href="/patterns">&larr; Back to Patterns</a>
+  </div>
+
+  <script>
+    const QUESTION_ID = "q02";
+    const el = (t,a={},txt="") => { const n=document.createElement(t); Object.entries(a).forEach(([k,v])=>n.setAttribute(k,v)); if(txt) n.textContent=txt; return n; };
+    function renderBars(container, rows, labelKey, valueKey) {
+      const max = Math.max(...rows.map(r => r[valueKey] || 0), 1);
+      const wrap = el("div", { class: "mini-bars" });
+      rows.forEach(r => {
+        const row = el("div", { class: "bar-row" });
+        row.appendChild(el("div", { class: "bar-label" }, String(r[labelKey])));
+        const bar = el("div", { class: "bar" });
+        const fill = el("span");
+        fill.style.width = ((r[valueKey] || 0) / max * 100).toFixed(1) + "%";
+        bar.appendChild(fill);
+        row.appendChild(bar);
+        row.appendChild(el("div", { class: "bar-val" }, String(r[valueKey] || 0)));
+        wrap.appendChild(row);
+      });
+      container.appendChild(wrap);
+    }
+    function renderTable(container, headers, rows) {
+      const table = el("table");
+      const thead = el("thead"); const trh = el("tr");
+      headers.forEach(h => trh.appendChild(el("th", {}, h)));
+      thead.appendChild(trh); table.appendChild(thead);
+      const tbody = el("tbody");
+      rows.forEach(r => { const tr = el("tr"); r.forEach(cell => tr.appendChild(el("td", {}, cell))); tbody.appendChild(tr); });
+      table.appendChild(tbody); container.appendChild(table);
+    }
+    function caseLink(caseId) {
+      return el("a", { href: "/visualization?viz=caseviz&case=" + encodeURIComponent(caseId), target:"_blank", rel:"noopener" }, caseId);
+    }
+    async function main() {
+      const resp = await fetch("/ontology/question_data/" + QUESTION_ID + ".json", { cache:"no-store" });
+      if (!resp.ok) throw new Error("Failed to load question data: " + resp.status);
+      const q = await resp.json();
+      document.title = "CaseLinker — " + q.question_id.toUpperCase();
+      document.querySelector("#title").textContent = q.question_id.toUpperCase() + ": " + q.title;
+      document.querySelector("#audience").textContent = q.audience;
+      document.querySelector("#finding").textContent = q.finding_summary;
+      document.querySelector("#limitations").textContent = q.limitations || "";
+      document.querySelector("#sparql").textContent = (q.sparql_query || "").trim();
+
+      const data = document.querySelector("#data"); data.innerHTML = "";
+      if (q.data && q.data.event_distribution) {
+        renderTable(data, ["Event type", "Cases"], q.data.event_distribution.map(r => [r.event, String(r.cases)]));
+        renderBars(data, q.data.event_distribution.slice(0, 10).map(r => ({ event: r.event, cases: r.cases })), "event", "cases");
+      } else {
+        data.appendChild(el("pre", {}, JSON.stringify(q.data || {}, null, 2)));
+      }
+
+      const cases = document.querySelector("#cases"); cases.innerHTML = "";
+      const list = el("div");
+      (q.supporting_cases || []).forEach((cid, i) => { if (i>0) list.appendChild(document.createTextNode(" · ")); list.appendChild(caseLink(cid)); });
+      cases.appendChild(list);
+    }
+    main().catch(err => { document.querySelector("#finding").textContent = "Failed to load this question page. " + err.message; document.querySelector("#data").textContent = ""; });
+  </script>
+</body>
+</html>
+

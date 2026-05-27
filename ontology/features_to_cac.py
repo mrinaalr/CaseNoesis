@@ -288,8 +288,12 @@ PROSECUTION_STATUS_MAP: Dict[str, Optional[URIRef]] = {
     "convicted":      CAC_LEGAL.SentencingPhase,
     "charged":        CAC_LEGAL.LegalProcessPhase,
     "arrested":       CAC.InitialPhase,
+    "booked":         CAC.InitialPhase,            # processed/booked into custody
+    "indicted":       CAC_LEGAL.LegalProcessPhase,
     "pleaded_guilty": CAC_LEGAL.PleaBargaining,
+    "pled_guilty":    CAC_LEGAL.PleaBargaining,
     "acquitted":      CAC_LEGAL.TrialProceeding,
+    "sentenced":      CAC_LEGAL.SentencingPhase,
 }
 
 # Charge type patterns → CAC charge class
@@ -605,7 +609,18 @@ class CaseToCAC:
         if case.get("source"):
             g.add((inv_uri, DCTERMS.source, Literal(case["source"])))
         if case.get("source_url"):
-            g.add((inv_uri, DCTERMS.source, URIRef(case["source_url"])))
+            # source_url frequently comes back from upstream ingestion with
+            # spaces / unencoded characters (e.g. PDF filenames). RDFLib
+            # rightly refuses to serialize those as IRIs in Turtle, so
+            # percent-encode anything not already safe. If even that fails
+            # we degrade to a plain literal so the case still graphs.
+            from urllib.parse import quote
+            raw_url = str(case["source_url"]).strip()
+            try:
+                safe_url = quote(raw_url, safe=":/?#[]@!$&'()*+,;=%")
+                g.add((inv_uri, DCTERMS.source, URIRef(safe_url)))
+            except Exception:  # pragma: no cover — last-resort fallback
+                g.add((inv_uri, DCTERMS.source, Literal(raw_url)))
         if case.get("notes"):
             g.add((inv_uri, RDFS.comment, Literal(case["notes"])))
         if case.get("tags"):
@@ -822,7 +837,26 @@ class CaseToCAC:
         offender_uris: List[URIRef] = []
 
         # --- Victims ---
-        victim_count = case.get("victim_count") or 1
+        # Defensive guard: CaseLinker's upstream extractor occasionally
+        # mis-parses a year (e.g. "4/17/2007" in a press-release footer)
+        # as a victim count. Anything wildly out of range for a single
+        # press-release scope (>200) is almost certainly a parse error;
+        # clamp to 1 and emit a warning so the graph isn't polluted with
+        # thousands of phantom victim nodes.
+        raw_victim_count = case.get("victim_count")
+        try:
+            victim_count = int(raw_victim_count) if raw_victim_count else 1
+        except (TypeError, ValueError):
+            victim_count = 1
+        if victim_count > 200:
+            warnings.append(
+                f"victim_count={victim_count} for {case.get('id')!r} looks "
+                f"like an upstream extraction error (likely a year mis-parsed "
+                f"as a count). Clamping to 1."
+            )
+            victim_count = 1
+        elif victim_count < 1:
+            victim_count = 1
         case_demo = case.get("case_demographics") or {}
         if isinstance(case_demo, str):
             try:
@@ -871,7 +905,17 @@ class CaseToCAC:
         else:
             perp_ages = []
 
-        perp_count = max(1, int(case.get("perpetrator_count") or len(perp_ages) or 1))
+        try:
+            perp_count_raw = int(case.get("perpetrator_count") or 0)
+        except (TypeError, ValueError):
+            perp_count_raw = 0
+        if perp_count_raw > 200:
+            warnings.append(
+                f"perpetrator_count={perp_count_raw} for {case_id!r} looks "
+                f"like an upstream extraction error. Clamping to len(ages) or 1."
+            )
+            perp_count_raw = 0
+        perp_count = max(1, perp_count_raw or len(perp_ages) or 1)
         is_rso = bool(case.get("perpetrator_registered_sex_offender", False))
 
         for n in range(1, perp_count + 1):

@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-16T14:15:06.242862" ;
+    dcterms:created "2026-05-26T16:39:54.479392" ;
     dcterms:identifier "azicac_2011_006" ;
-    dcterms:modified "2026-05-16T14:15:06.242862" ;
+    dcterms:modified "2026-05-26T16:39:54.479392" ;
     dcterms:source <https://www.azicac.org/cases-and-arrests/>,
         "AZICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/azicac_2011_006/phase/arrested> ;
@@ -26,11 +26,11 @@
         <https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/azicac_2011_006/operation> ;
     cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/3> ;
+        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2> ;
     cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1> ;
     cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/azicac_2011_006/sentence/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/azicac>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/maricopa-county>,
         <https://caselinker.up.railway.app/resource/agency/maricopa-county-attorneys-office>,
         <https://caselinker.up.railway.app/resource/agency/mesa-police-department>,
@@ -39,6 +39,8 @@
 <https://caselinker.up.railway.app/resource/agency/azicac> a cac-core:OrganizationLikeEntity,
         cacontology-taskforce:StateICACtaskForce ;
     rdfs:label "AZICAC" .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/maricopa-county> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -58,10 +60,9 @@
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
         cac-core:Event ;
-    cacontology:conspiracyMemberCount 3 ;
+    cacontology:conspiracyMemberCount 2 ;
     cacontology:participatesInConspiracy <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/3> .
+        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2> .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -71,12 +72,9 @@
         cacontology-taskforce:ProactiveOperation .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/1> a uco-identity:Person ;
-    cacontology-detection:ageEstimate 25 .
-
-<https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/2> a uco-identity:Person ;
     cacontology-detection:ageEstimate 38 .
 
-<https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/3> a uco-identity:Person ;
+<https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/2> a uco-identity:Person ;
     cacontology-detection:ageEstimate 47 .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/victim/1> a uco-identity:Person .
@@ -85,8 +83,7 @@
         cacontology-custodial:FamilialRelationship ;
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2>,
-        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/3> ;
+        <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2> ;
     cacontology-custodial:relationshipType "mother" .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
@@ -108,12 +105,6 @@
     cacontology:hasRoleBeginPoint "2011-07-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/2> .
-
-<https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/3> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2011-07-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/3> .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
