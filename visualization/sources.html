@@ -521,7 +521,7 @@
                 {
                     name: "Las Vegas Police Department – Site search (ICAC)",
                     url: "https://www.lvmpd.com/services/advanced-components/misc-pages/search?q=ICAC",
-                    description: "LV PD site search for ICAC press releases.",
+                    description: "LV Metro PD site search for ICAC press releases.",
                     type: "Official website",
                     yearLinks: [
                         {
@@ -908,6 +908,74 @@
                         }
                     ]
                 },
+               
+                
+                {
+                    name: "U.S. Air Force Office of Special Investigations – Site search (child)",
+                    url: "https://search.usa.gov/search?query=child&affiliate=afosi",
+                    description: "AFOSI press releases on child sexual abuse material and exploitation investigations.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Child search",
+                            url: "https://search.usa.gov/search?query=child&affiliate=afosi",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+            
+                {
+                    name: "U.S. Customs and Border Protection – Site search (child)",
+                    url: "https://www.cbp.gov/search?query=child+sexual#gsc.tab=0&gsc.q=child%20sexual&gsc.page=1",
+                    description: "CBP newsroom releases on child sexual exploitation and related border enforcement.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Child sexual search",
+                            url: "https://www.cbp.gov/search?query=child+sexual#gsc.tab=0&gsc.q=child%20sexual&gsc.page=1",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "Naval Criminal Investigative Service (NCIS) – Site search (child)",
+                    url: "https://search.usa.gov/search?query=child&affiliate=navy_ncis",
+                    description: "NCIS press releases on child exploitation and related investigations.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Child search",
+                            url: "https://search.usa.gov/search?query=child&affiliate=navy_ncis",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "U.S. Marshals Service – Site search (child)",
+                    url: "https://search.usa.gov/search?affiliate=us-marshals-service&query=child+sexual",
+                    description: "U.S. Marshals press releases on child predators, sexual assault fugitives, and recovered minors.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Child search",
+                            url: "https://search.usa.gov/search?affiliate=us-marshals-service&query=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+                {
+                    name: "U.S. Immigration and Customs Enforcement (ICE) – Site search (child)",
+                    url: "https://search.usa.gov/search?affiliate=ice.gov&query=child",
+                    description: "ICE/HSI press releases (filtered for child exploitation).",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "Child search",
+                            url: "https://search.usa.gov/search?affiliate=ice.gov&query=child",
+                            casesUsed: 0
+                        }
+                    ]
+                },
                 {
                     name: "U.S. Army Criminal Investigation Division – ICAC Releases",
                     url: "https://search.usa.gov/search?query=ICAC&affiliate=army_cid",
@@ -948,7 +1016,21 @@
                     ]
                 },
                 {
-                    name: "Alabama Law Enforcement Agency (ALEA) – News releases (ICAC / SBI)",
+                    name: "U.S. Secret Service – Site search (ICAC)",
+                    url: "https://www.secretservice.gov/search?goog=ICAC#gsc.tab=0&gsc.q=ICAC&gsc.page=1",
+                    description: "U.S. Secret Service newsroom press releases mentioning ICAC task forces, CSAM, and child exploitation search results.",
+                    type: "Official website",
+                    yearLinks: [
+                        {
+                            year: "ICAC search",
+                            url: "https://www.secretservice.gov/search?goog=ICAC#gsc.tab=0&gsc.q=ICAC&gsc.page=1",
+                            casesUsed: 0
+                        }
+                    ]
+                },
+               
+                {
+                    name: "Alabama Law Enforcement Agency – News releases (ICAC / SBI)",
                     url: "https://www.alea.gov/news?combine=child",
                     description: "ALEA (child-related) news results, including State Bureau of Investigation (SBI) and Internet Crimes Against Children (ICAC) task force reports.",
                     type: "Official website",
@@ -1850,6 +1932,92 @@
                         }
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = archiveCases.length;
+                        }
+                    } else if (staticSource.name.includes('U.S. Secret Service')) {
+                        const usssCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'USSS';
+                        });
+                        staticSource.cases = usssCases;
+                        const usssRange = getDateRange(usssCases);
+                        if (usssRange) {
+                            staticSource.dateRangeDisplay = usssRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = usssRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = usssCases.length;
+                        }
+                    } else if (staticSource.name.includes('Air Force Office of Special Investigations')) {
+                        const afosiCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'AF OSI';
+                        });
+                        staticSource.cases = afosiCases;
+                        const r = getDateRange(afosiCases);
+                        if (r && staticSource.yearLinks?.length) staticSource.yearLinks[0].year = r;
+                        if (staticSource.yearLinks?.length) staticSource.yearLinks[0].casesUsed = afosiCases.length;
+                    } else if (staticSource.name.includes('Naval Criminal Investigative Service')) {
+                        const ncisCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'NCIS';
+                        });
+                        staticSource.cases = ncisCases;
+                        const r = getDateRange(ncisCases);
+                        if (r && staticSource.yearLinks?.length) staticSource.yearLinks[0].year = r;
+                        if (staticSource.yearLinks?.length) staticSource.yearLinks[0].casesUsed = ncisCases.length;
+                    } else if (staticSource.name.includes('Customs and Border Protection')) {
+                        const cbpCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'CBP';
+                        });
+                        staticSource.cases = cbpCases;
+                        const r = getDateRange(cbpCases);
+                        if (r && staticSource.yearLinks?.length) staticSource.yearLinks[0].year = r;
+                        if (staticSource.yearLinks?.length) staticSource.yearLinks[0].casesUsed = cbpCases.length;
+                    } else if (staticSource.name.includes('Marshals Service') && staticSource.name.includes('U.S.')) {
+                        const usmsCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'US MARSHALS';
+                        });
+                        staticSource.cases = usmsCases;
+                        const r = getDateRange(usmsCases);
+                        if (r && staticSource.yearLinks?.length) staticSource.yearLinks[0].year = r;
+                        if (staticSource.yearLinks?.length) staticSource.yearLinks[0].casesUsed = usmsCases.length;
+                    } else if (staticSource.name.includes('Immigration and Customs Enforcement')) {
+                        const iceCases = cases.filter(c => {
+                            const s = (c.source || c.raw_data?.source || '')
+                                .toUpperCase()
+                                .replace(/_/g, ' ')
+                                .trim();
+                            return s === 'ICE';
+                        });
+                        staticSource.cases = iceCases;
+                        const iceRange = getDateRange(iceCases);
+                        if (iceRange) {
+                            staticSource.dateRangeDisplay = iceRange;
+                            if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                                staticSource.yearLinks[0].year = iceRange;
+                            }
+                        }
+                        if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
+                            staticSource.yearLinks[0].casesUsed = iceCases.length;
                         }
                     } else if (staticSource.name.includes('Alabama Law Enforcement Agency')) {
                         const aleaCases = cases.filter(c => {

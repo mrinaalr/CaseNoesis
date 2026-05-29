@@ -46,6 +46,7 @@ Identify where the agency publishes what you care about:
 | Dedicated news index | `/news/`, `/media-relations/`, `/press-releases/` |
 | Paginated search template | `…&page={page}`, `start=0,20,40`, `start_rank=1:91:10` |
 | Squarespace search | HTML search page + `/api/search/GeneralSearch?q=…&p=…` |
+| Google Programmable Search (CSE) | Widget on `/search?goog=…#gsc.q=…` — static HTML has no hits; use `--google-cse-search-page` (Jina + sitemap slug resolve) |
 | Drupal / WordPress search | `search/node?keys=…&page={page}` |
 
 **Topic is not limited to ICAC.** Use keywords that match the future CaseLinker domain (e.g. `trafficking`, `human trafficking`, `CSAM`, task force name, statute language the agency uses in headlines).
@@ -113,6 +114,9 @@ Put working lists under `scripts/scraper/sources/<agency>_<topic>_urls.txt` (cre
 | `--url-template` + `--page-range` | Numeric pages (`0:29` or stepped `1:91:10`) |
 | `--raw-url-regex` | URLs only in JSON-LD / Search.gov HTML |
 | `--squarespace-search-page` | Anchorage-style Squarespace search API |
+| `--google-cse-search-page` | Google CSE listing (e.g. USSS `search?goog=ICAC#gsc.q=ICAC&gsc.page=1`) |
+| `--cse-sitemap` | Sitemap for expanding truncated CSE slugs (defaults to `{host}/sitemap.xml`) |
+| `--cse-max-results` | Cap harvest count after filters |
 | `--insecure` | Broken TLS chain on government host |
 | `--allow-http` | Rare legacy http links |
 
@@ -376,6 +380,34 @@ python3 scrape_pdf.py --url-file sources/foo_urls.txt --limit 3 --jina-fallback
 # Scrape (full)
 python3 scrape_pdf.py --url-file sources/foo_urls.txt \
   --out-dir ../.. --out-name FOO_All.pdf --insecure --jina-fallback
+
+# USSS — Google CSE ICAC search (page 1 only; drop program/overview noise)
+python3 fetch_source_urls.py \
+  --google-cse-search-page 'https://www.secretservice.gov/search?goog=ICAC#gsc.tab=0&gsc.q=ICAC&gsc.page=1' \
+  --cse-max-results 10 \
+  --require-any '/releases/' \
+  --exclude-from patterns/uss_cse_exclude.txt \
+  -o sources/uss_icac_urls.txt
+python3 fetch_source_urls.py \
+  --google-cse-search-page 'https://www.secretservice.gov/search?goog=CSAM#gsc.tab=0&gsc.q=CSAM&gsc.page=1' \
+  --cse-max-results 20 --require-any '/releases/' \
+  --exclude-from patterns/uss_cse_exclude.txt \
+  -o sources/uss_csam_urls.txt
+# Dedupe CSAM vs ICAC, merge lists -> sources/uss_icac_csam_urls.txt
+python3 scrape_pdf.py --url-file sources/uss_icac_urls.txt \
+  --out-dir ../.. --out-name USSS_ICAC_ALL.pdf --referer 'https://www.secretservice.gov/' --jina-fallback
+
+# ICE — search.usa.gov child query (pages 1–10 via Jina; filter noise + body keywords)
+python3 fetch_source_urls.py \
+  --usa-search --usa-affiliate ice.gov --usa-query child --usa-page-range 1:10 \
+  --usa-sitemap --path-prefix /news/releases/ \
+  -o sources/ice_child_urls_raw.txt
+python3 scrape_pdf.py --url-file sources/ice_child_urls_raw.txt \
+  --out-dir ../.. --out-name ICE_CHILD_ALL.pdf --referer 'https://www.ice.gov/' --jina-fallback
+python3 filter_merged_pdf.py \
+  --url-file sources/ice_child_urls_raw.txt --merged ../../ICE_CHILD_ALL.pdf \
+  --tmp-dir ../../tmp --exclude-from patterns/ice_child_exclude.txt \
+  --write-url-file sources/ice_child_urls.txt
 
 # Clear cache for one host
 rm -rf ../../tmp ../scrape_output/tmp  # adjust path to your --out-dir/tmp

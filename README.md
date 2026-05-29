@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://caselinker.up.railway.app/](https://caselinker.up.railway.app/)
 
-The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,092 cases** across **50** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
+The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,401 cases** across **56** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
 
 ## Technical Reports
 
@@ -184,9 +184,15 @@ summaries and CyberTipline-related publications
 - **South Dakota Office of the Attorney General (SD AG)**: ICAC press releases
 - **Kentucky State Police (KY SP)**: News archive ICAC search
 - **Nebraska State Patrol (NE SP)**: Child exploitation press search
-- **U.S. Army Criminal Investigation Division (ARMY CID)**: ICAC releases (USA.gov search)
+- **U.S. Army Criminal Investigation Division (ARMY CID)**: ICAC releases
+- **U.S. Air Force Office of Special Investigations (AF OSI)**: Child sexual abuse material and exploitation press releases 
+- **U.S. Customs and Border Protection (CBP)**: Newsroom releases on child sexual exploitation and related border enforcement (site search)
+- **U.S. Immigration and Customs Enforcement (ICE)**: HSI child-exploitation press releases
+- **Naval Criminal Investigative Service (NCIS)**: Child exploitation and related investigation press releases 
 - **U.S. DOJ CEOS (DOJ CEOS)**: Child Exploitation and Obscenity Section press releases
 - **U.S. DOJ CEOS Archives (DOJ ARCHIVES)**: Archived CEOS criminal press releases (2002-2008)
+- **U.S. Secret Service (USSS)**: ICAC-related newsroom press releases (ICAC task forces, CSAM, and child exploitation search results)
+- **U.S. Marshals Service (US MARSHALS)**: Press releases on child predators, sexual-assault fugitives, and recovered minors 
 
 ### Processing PDFs to Populate Database
 

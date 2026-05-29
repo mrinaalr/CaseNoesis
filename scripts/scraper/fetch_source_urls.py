@@ -43,7 +43,7 @@ import json
 import re
 import sys
 import time
-from urllib.parse import parse_qs, quote, urljoin, urlparse
+from urllib.parse import parse_qs, parse_qsl, quote, urlencode, urljoin, urlparse, urlunparse
 
 try:
     import requests
@@ -77,19 +77,32 @@ def _read_patterns(path: str | None) -> list[str]:
     return lines
 
 
-def fetch(url: str, timeout: int, *, verify: bool = True) -> tuple[str | None, int]:
-    try:
-        r = requests.get(
-            url,
-            headers=HEADERS,
-            timeout=timeout,
-            allow_redirects=True,
-            verify=verify,
-        )
-        return r.text, r.status_code
-    except Exception as e:
-        print(f"  [error] {url}: {e}", file=sys.stderr)
-        return None, 0
+def fetch(
+    url: str, timeout: int, *, verify: bool = True, retries: int = 4
+) -> tuple[str | None, int]:
+    last_status = 0
+    for attempt in range(retries):
+        try:
+            r = requests.get(
+                url,
+                headers=HEADERS,
+                timeout=timeout,
+                allow_redirects=True,
+                verify=verify,
+            )
+            if r.status_code == 429 and attempt + 1 < retries:
+                wait = min(60, 5 * (2**attempt))
+                print(f"  [429] waiting {wait}s …", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            return r.text, r.status_code
+        except Exception as e:
+            if attempt + 1 < retries:
+                time.sleep(min(30, 2 * (attempt + 1)))
+                continue
+            print(f"  [error] {url}: {e}", file=sys.stderr)
+            return None, 0
+    return None, last_status
 
 
 def _host(url: str) -> str:
@@ -353,6 +366,645 @@ def collect_squarespace_general_search_urls(
     return out
 
 
+def _cse_host_patterns(netloc: str) -> tuple[re.Pattern[str], re.Pattern[str]]:
+    host = netloc.lower().lstrip("www.")
+    host_esc = re.escape(host)
+    crumb = re.compile(rf"{host_esc}\s*›\s*([^\n]+)", re.I)
+    abs_url = re.compile(rf"https?://(?:www\.)?{host_esc}[/\S]+", re.I)
+    return crumb, abs_url
+
+
+def _resolve_article_id_in_sitemap(path: str, sitemap_urls: list[str]) -> str | None:
+    m = re.search(r"/Article/(\d+)", path, re.I)
+    if not m:
+        return None
+    aid = m.group(1)
+    hits = [u for u in sitemap_urls if f"/Article/{aid}/" in u or u.rstrip("/").endswith(f"/Article/{aid}")]
+    if not hits:
+        hits = [u for u in sitemap_urls if f"/{aid}/" in u]
+    return sorted(hits, key=len)[0] if hits else None
+
+
+def _load_sitemap_urls(sitemap_url: str, timeout: int, *, verify: bool) -> list[str]:
+    body, status = fetch(sitemap_url, timeout, verify=verify)
+    if not body or status != 200:
+        return []
+    return re.findall(r"<loc>([^<]+)</loc>", body)
+
+
+def _resolve_cse_crumb_to_url(crumb: str, sitemap_urls: list[str]) -> str | None:
+    """Map a Google CSE breadcrumb trail to a canonical press-release URL via sitemap."""
+    crumb = crumb.strip().lower()
+    if crumb.startswith("investigations"):
+        return None
+    if "behind-the-shades" in crumb:
+        return None
+    if "releases" not in crumb and "press" not in crumb and "newsroom" not in crumb:
+        return None
+
+    parts = [p.strip() for p in crumb.split("›")]
+    for i, part in enumerate(parts):
+        low = part.lower().rstrip(".")
+        if low in ("local-media-release", "national-media-release"):
+            slug = (parts[i + 1] if i + 1 < len(parts) else "").strip().rstrip(".")
+            if slug and len(slug) >= 6:
+                return f"https://www.cbp.gov/newsroom/{low}/{slug}"
+    slug_prefix = ""
+    year_month = ""
+
+    if parts and re.fullmatch(r"\d{4}/\d{2}", parts[0]):
+        year_month = parts[0]
+        slug_prefix = (parts[1] if len(parts) > 1 else "").rstrip(".")
+    else:
+        for i, part in enumerate(parts):
+            if part in ("press", "newsroom") and i + 2 < len(parts):
+                if re.fullmatch(r"\d{4}/\d{2}", parts[i + 2]):
+                    year_month = parts[i + 2]
+                    slug_prefix = (parts[i + 3] if i + 3 < len(parts) else "").rstrip(".")
+                    break
+            if part == "releases" and i + 2 < len(parts):
+                if re.fullmatch(r"\d{4}/\d{2}", parts[i + 1]):
+                    year_month = parts[i + 1]
+                    slug_prefix = (parts[i + 2] if i + 2 < len(parts) else "").rstrip(".")
+                    break
+
+    if not slug_prefix or len(slug_prefix) < 6:
+        return None
+
+    candidates = [
+        u
+        for u in sitemap_urls
+        if slug_prefix in u.lower()
+        and (not year_month or f"/{year_month}/" in u)
+        and (
+            "/press/releases/" in u
+            or "/newsroom/releases/" in u
+            or "/newsroom/national-media-release/" in u
+            or "/newsroom/local-media-release/" in u
+        )
+    ]
+    if not candidates:
+        if "child" in crumb or "sexual" in crumb:
+            last = (parts[-1] if parts else "").strip().rstrip(".")
+            if len(last) >= 10:
+                return f"https://www.cbp.gov/newsroom/local-media-release/{last}"
+        return None
+    return sorted(candidates, key=len)[0]
+
+
+def _google_cse_page_url(search_page_url: str, page: int) -> str:
+    """
+    Set ``gsc.page`` for Google CSE listings.
+
+    Jina Reader often ignores URL fragments, so CSE params are merged into the
+    query string and the fragment is dropped.
+    """
+    u = search_page_url.strip()
+    parsed = urlparse(u)
+    qs = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    if parsed.fragment and "=" in parsed.fragment:
+        qs.update(parse_qsl(parsed.fragment.replace("&", "&"), keep_blank_values=True))
+    qs["gsc.page"] = str(page)
+    if "gsc.q" not in qs and "query" in qs:
+        qs.setdefault("gsc.q", qs["query"].replace("+", " "))
+    return urlunparse(
+        (parsed.scheme, parsed.netloc, parsed.path, "", urlencode(qs, doseq=True), "")
+    )
+
+
+def _collect_cbp_cse_article_urls(body: str, origin: str) -> list[str]:
+    """Resolve truncated CBP Google CSE hits (Jina markdown with ``...`` paths)."""
+    cleaned = re.sub(r"\*+", "", body or "")
+    out: list[str] = []
+    seen: set[str] = set()
+
+    def _add(url: str) -> None:
+        u = url.split("#", 1)[0].rstrip("/")
+        slug = u.rsplit("/", 1)[-1]
+        if len(slug) < 20:
+            return
+        if u not in seen and "/newsroom/" in u:
+            seen.add(u)
+            out.append(u)
+
+    for m in re.finditer(
+        r"https?://(?:www\.)?cbp\.gov/newsroom/(local|national)-media-release/[a-z0-9\-]{20,}",
+        cleaned,
+        re.I,
+    ):
+        _add(m.group(0))
+
+    for m in re.finditer(
+        r"/newsroom/(local|national)-media-release/([a-z0-9][a-z0-9\-]{19,})",
+        cleaned,
+        re.I,
+    ):
+        _add(f"{origin}/newsroom/{m.group(1).lower()}/{m.group(2).lower()}")
+
+    for m in re.finditer(
+        r"newsroom\s*›\s*(local-media-release|national-media-release)\s*›\s*"
+        r"([a-z0-9][a-z0-9\-]{5,})",
+        cleaned,
+        re.I,
+    ):
+        slug = m.group(2).lower().rstrip(".")
+        prefix = slug[:40]
+        expanded = re.findall(
+            rf"(?:local|national)-media-release/({re.escape(prefix)}[a-z0-9\-]{{0,80}})",
+            cleaned.lower(),
+        )
+        if expanded:
+            slug = max(expanded, key=len).rstrip("-")
+        _add(f"{origin}/newsroom/{m.group(1).lower()}/{slug}")
+
+    for frag in re.findall(r"cbp\.gov/\.\.\.([^\s\)\]\"']+)", cleaned, re.I):
+        frag = frag.rstrip(".").strip("/")
+        if not frag:
+            continue
+        low = frag.lower()
+        if "local..." in low:
+            slug = re.sub(r".*local\.{3}/?", "", frag, flags=re.I).strip("/")
+            if slug:
+                _add(f"{origin}/newsroom/local-media-release/{slug}")
+            continue
+        if "national..." in low:
+            slug = re.sub(r".*national\.{3}/?", "", frag, flags=re.I).strip("/")
+            if slug:
+                _add(f"{origin}/newsroom/national-media-release/{slug}")
+            continue
+        slug = frag.split("/")[-1]
+        if len(slug) < 8:
+            continue
+        prefix = slug[:40]
+        expanded = re.findall(
+            rf"(?:local|national)-media-release/({re.escape(prefix)}[a-z0-9\-]{{0,80}})",
+            cleaned.lower(),
+        )
+        if expanded:
+            slug = max(expanded, key=len).rstrip("-")
+        kind = "national-media-release"
+        if not any(
+            x in slug
+            for x in (
+                "illegal-alien",
+                "national",
+                "border-wide",
+                "cbp-announces",
+            )
+        ):
+            kind = "local-media-release"
+        _add(f"{origin}/newsroom/{kind}/{slug}")
+
+    return out
+
+
+def collect_google_cse_search_urls(
+    search_page_url: str,
+    *,
+    timeout: int,
+    verify: bool,
+    path_prefix: str | None,
+    exclude_substrings: list[str],
+    require_any_substrings: list[str],
+    https_only: bool,
+    sitemap_url: str | None,
+    max_results: int | None,
+) -> list[str]:
+    """
+    Harvest Google Programmable Search (CSE) results rendered on a listing page.
+
+    Static HTML from the host usually omits CSE hits; this fetches via Jina Reader
+  (``https://r.jina.ai/{search_page_url}``), parses breadcrumb trails and absolute
+  links, and resolves truncated slugs against the site sitemap when provided.
+    """
+    parsed = urlparse(search_page_url.strip())
+    if not parsed.scheme or not parsed.netloc:
+        raise SystemExit("--google-cse-search-page must be a full http(s) URL.")
+
+    fetch_url = _google_cse_page_url(search_page_url, 1)
+    if re.search(r"gsc\.page=(\d+)", search_page_url, re.I):
+        m_pg = re.search(r"gsc\.page=(\d+)", search_page_url, re.I)
+        if m_pg:
+            fetch_url = _google_cse_page_url(search_page_url, int(m_pg.group(1)))
+    jina_url = "https://r.jina.ai/" + fetch_url
+    print(f"  [cse] Jina GET {jina_url}", file=sys.stderr)
+    body, status = fetch(jina_url, max(timeout, 60), verify=verify)
+    if not body or status not in (200, 0):
+        print(f"  [stop] Jina HTTP {status}", file=sys.stderr)
+        return []
+
+    body = re.sub(r"\*+", "", body)
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    sitemap_urls: list[str] = []
+    if sitemap_url:
+        print(f"  [cse] sitemap {sitemap_url}", file=sys.stderr)
+        sitemap_urls = _load_sitemap_urls(sitemap_url, timeout, verify=verify)
+
+    path_prefix_l = path_prefix.lower() if path_prefix else None
+    exclude_l = [x.lower() for x in exclude_substrings]
+    require_l = [x.lower() for x in require_any_substrings]
+
+    out: list[str] = []
+    seen: set[str] = set()
+
+    def _keep(abs_url: str) -> bool:
+        low = abs_url.lower()
+        if "/search?" in low or low.rstrip("/").endswith("/search"):
+            return False
+        return _filter_abs_url(
+            abs_url,
+            path_prefix_l=path_prefix_l,
+            exclude_l=exclude_l,
+            require_l=require_l,
+            https_only=https_only,
+        )
+
+    crumb_re, abs_url_re = _cse_host_patterns(parsed.netloc)
+    host_clean = parsed.netloc.lower().lstrip("www.")
+    path_re = re.compile(
+        rf"(?:https?://(?:www\.)?)?{re.escape(host_clean)}(/[^\s\)\]\"']+)",
+        re.I,
+    )
+
+    for crumb in crumb_re.findall(body):
+        resolved = _resolve_cse_crumb_to_url(crumb, sitemap_urls)
+        if resolved and resolved not in seen and _keep(resolved):
+            seen.add(resolved)
+            out.append(resolved)
+            if max_results and len(out) >= max_results:
+                return out
+
+    for raw in abs_url_re.findall(body):
+        abs_u = _normalize_regex_extracted_url(raw)
+        if not abs_u or abs_u in seen:
+            continue
+        if "..." in abs_u and sitemap_urls:
+            path = urlparse(abs_u).path
+            resolved = _resolve_article_id_in_sitemap(path, sitemap_urls)
+            if resolved:
+                abs_u = resolved
+            else:
+                continue
+        elif sitemap_urls:
+            slug = abs_u.rstrip("/").split("/")[-1]
+            if len(slug) < 12:
+                matches = [u for u in sitemap_urls if slug in u]
+                if matches:
+                    abs_u = sorted(matches, key=len)[0]
+        if _keep(abs_u):
+            seen.add(abs_u)
+            out.append(abs_u)
+            if max_results and len(out) >= max_results:
+                return out
+
+    for path_frag in path_re.findall(body):
+        if "..." in path_frag:
+            if sitemap_urls:
+                resolved = _resolve_article_id_in_sitemap(path_frag, sitemap_urls)
+                if resolved:
+                    abs_u = resolved
+                else:
+                    continue
+            else:
+                continue
+        else:
+            abs_u = f"{origin}{path_frag.split('...')[0].rstrip('.')}"
+        if abs_u not in seen and _keep(abs_u):
+            seen.add(abs_u)
+            out.append(abs_u)
+            if max_results and len(out) >= max_results:
+                return out
+
+    if "cbp.gov" in parsed.netloc.lower():
+        for abs_u in _collect_cbp_cse_article_urls(body, origin):
+            if abs_u not in seen and _keep(abs_u):
+                seen.add(abs_u)
+                out.append(abs_u)
+                if max_results and len(out) >= max_results:
+                    return out
+
+    return out
+
+
+_ICE_RELEASE_PATH_RE = re.compile(
+    r"www\.ice\.gov(/news/releases/[a-z0-9\-/]+)",
+    re.I,
+)
+
+
+def _usa_host_path_re(host: str) -> re.Pattern[str]:
+    """Match ``host`` plus a path segment in Jina search markdown (may truncate with ``...``)."""
+    host_esc = re.escape(host.lower().lstrip("."))
+    return re.compile(
+        rf"(?:https?://)?(?:www\.)?{host_esc}(/[a-z0-9\-._%/]+)",
+        re.I,
+    )
+
+
+def _load_ice_release_sitemap(timeout: int, *, verify: bool) -> list[str]:
+    """All ``/news/releases/`` URLs from paginated ice.gov Drupal sitemap."""
+    index_url = "https://www.ice.gov/sitemap.xml"
+    body, status = fetch(index_url, timeout, verify=verify)
+    if not body or status != 200:
+        return []
+    page_urls = re.findall(r"<loc>([^<]+sitemap\.xml\?page=\d+)</loc>", body)
+    if not page_urls:
+        page_urls = [index_url]
+    releases: list[str] = []
+    for page_sitemap in page_urls:
+        chunk, st = fetch(page_sitemap, timeout, verify=verify)
+        if chunk and st == 200:
+            releases.extend(
+                u for u in re.findall(r"<loc>([^<]+)</loc>", chunk) if "/news/releases/" in u
+            )
+        time.sleep(0.3)
+    return releases
+
+
+def _resolve_ice_release_path(path_fragment: str, sitemap_releases: list[str]) -> str | None:
+    """Map truncated ``/news/releases/slug...`` from Jina to canonical ice.gov URL."""
+    slug = path_fragment.split("...")[0].rstrip(".")
+    if not slug.startswith("/news/releases/"):
+        return None
+    last = slug.rstrip("/").split("/")[-1]
+    if len(last) < 10:
+        return None
+    hits = [u for u in sitemap_releases if last in u.rstrip("/").split("/")[-1]]
+    if not hits:
+        return None
+    return sorted(hits, key=len)[0]
+
+
+_USMS_PRESS_PATH_RE = re.compile(
+    r"(?:https?://)?(?:www\.)?usmarshals\.gov(/news/press-release/[a-z0-9][a-z0-9\-]*)",
+    re.I,
+)
+
+
+def _load_usmarshals_press_sitemap(timeout: int, *, verify: bool) -> list[str]:
+    """All ``/news/press-release/`` URLs (direct XML, else Jina when CloudFront blocks)."""
+    sm_url = "https://www.usmarshals.gov/sitemap.xml"
+    body, status = fetch(sm_url, timeout, verify=verify)
+    if body and status == 200:
+        urls = [u for u in re.findall(r"<loc>([^<]+)</loc>", body) if "/news/press-release/" in u]
+        if urls:
+            return urls
+    print("  [usa] usmarshals.gov sitemap blocked; loading via Jina…", file=sys.stderr)
+    jbody, jstatus = fetch("https://r.jina.ai/" + sm_url, max(timeout, 90), verify=verify)
+    if not jbody or jstatus not in (200, 0):
+        return []
+    paths = re.findall(
+        r"https?://(?:www\.)?usmarshals\.gov(/news/press-release/[a-z0-9\-]+)",
+        jbody,
+        re.I,
+    )
+    return [f"https://www.usmarshals.gov{p}" for p in sorted(set(paths))]
+
+
+def _resolve_usms_press_path(path_fragment: str, sitemap_releases: list[str]) -> str | None:
+    """Map truncated ``/news/press-release/slug`` from Jina search to canonical URL via sitemap."""
+    path_fragment = path_fragment.split("...")[0].rstrip(".")
+    if not path_fragment.startswith("/news/press-release/"):
+        return None
+    slug = path_fragment.rstrip("/").split("/")[-1].rstrip("-.").lower()
+    if len(slug) < 8:
+        return None
+    hits = [
+        u
+        for u in sitemap_releases
+        if slug in u.rstrip("/").split("/")[-1] or u.rstrip("/").split("/")[-1].startswith(slug)
+    ]
+    if not hits:
+        return None
+    return max(hits, key=len)
+
+
+def _usms_press_paths_from_usa_body(body: str) -> list[str]:
+    """Collect ``/news/press-release/…`` path prefixes from a search.usa.gov Jina page (may truncate)."""
+    paths: set[str] = set()
+    for m in _USMS_PRESS_PATH_RE.finditer(body):
+        raw = m.group(1)
+        path = raw.split("...")[0].rstrip(".")
+        if path.startswith("/news/press-release/"):
+            paths.add(path)
+    return sorted(paths)
+
+
+def collect_usmarshals_usa_search_urls(
+    affiliate: str,
+    query: str,
+    page_range: range,
+    *,
+    timeout: int,
+    verify: bool,
+    delay: float,
+    exclude_substrings: list[str],
+    require_any_substrings: list[str],
+    sitemap_releases: list[str],
+) -> list[str]:
+    """
+    Harvest USMS press releases from search.usa.gov via Jina.
+
+    Jina truncates long result URLs with ``...``; resolve full URLs against the site sitemap.
+    """
+    exclude_l = [x.lower() for x in exclude_substrings]
+    require_l = [x.lower() for x in require_any_substrings]
+    out: list[str] = []
+    seen: set[str] = set()
+
+    for page in page_range:
+        search_url = (
+            f"https://search.usa.gov/search?affiliate={quote(affiliate)}"
+            f"&query={quote(query)}&page={page}"
+        )
+        jina_url = "https://r.jina.ai/" + search_url
+        print(f"  [usa] page {page} Jina GET", file=sys.stderr)
+        body, status = fetch(jina_url, max(timeout, 60), verify=verify)
+        if not body or status not in (200, 0):
+            print(f"  [stop] page {page} HTTP {status}", file=sys.stderr)
+            continue
+
+        batch_n = 0
+        for path in _usms_press_paths_from_usa_body(body):
+            url = _resolve_usms_press_path(path, sitemap_releases)
+            if not url:
+                continue
+            low = url.lower()
+            if "/sites/default/" in low:
+                continue
+            if any(ex in low for ex in exclude_l):
+                continue
+            if require_l and not any(req in low for req in require_l):
+                continue
+            if url not in seen:
+                seen.add(url)
+                out.append(url)
+                batch_n += 1
+
+        print(f"    -> {batch_n} new (total {len(out)})", file=sys.stderr)
+        if page != page_range[-1]:
+            time.sleep(delay)
+
+    return out
+
+
+def collect_usa_search_urls(
+    affiliate: str,
+    query: str,
+    page_range: range,
+    *,
+    host: str,
+    timeout: int,
+    verify: bool,
+    delay: float,
+    path_prefix: str | None,
+    exclude_substrings: list[str],
+    require_any_substrings: list[str],
+    sitemap_releases: list[str] | None,
+) -> list[str]:
+    """
+    Harvest ``search.usa.gov`` results via Jina Reader (CloudFront blocks bare curl).
+
+    Parses paths on ``host`` (e.g. ``osi.af.mil``, ``ncis.navy.mil``). For ICE, pass
+    ``host=ice.gov`` and ``sitemap_releases`` to resolve truncated Drupal slugs.
+    """
+    path_prefix_l = path_prefix.lower() if path_prefix else None
+    exclude_l = [x.lower() for x in exclude_substrings]
+    require_l = [x.lower() for x in require_any_substrings]
+    host_clean = host.lower().lstrip(".")
+    if host_clean.endswith("usmarshals.gov"):
+        if not sitemap_releases:
+            print("  [usa] loading usmarshals.gov press sitemap…", file=sys.stderr)
+            sitemap_releases = _load_usmarshals_press_sitemap(timeout, verify=verify)
+            print(f"  [usa] {len(sitemap_releases)} press-release URLs in sitemap", file=sys.stderr)
+        if not sitemap_releases:
+            print("  [error] USMS sitemap empty; cannot resolve truncated search URLs", file=sys.stderr)
+            return []
+        return collect_usmarshals_usa_search_urls(
+            affiliate,
+            query,
+            page_range,
+            timeout=timeout,
+            verify=verify,
+            delay=delay,
+            exclude_substrings=exclude_substrings,
+            require_any_substrings=require_any_substrings,
+            sitemap_releases=sitemap_releases,
+        )
+
+    host_re = _usa_host_path_re(host_clean)
+    use_ice = host_clean.endswith("ice.gov")
+    out: list[str] = []
+    seen: set[str] = set()
+
+    for page in page_range:
+        search_url = (
+            f"https://search.usa.gov/search?affiliate={quote(affiliate)}"
+            f"&query={quote(query)}&page={page}"
+        )
+        jina_url = "https://r.jina.ai/" + search_url
+        print(f"  [usa] page {page} Jina GET", file=sys.stderr)
+        body, status = fetch(jina_url, max(timeout, 60), verify=verify)
+        if not body or status not in (200, 0):
+            print(f"  [stop] page {page} HTTP {status}", file=sys.stderr)
+            continue
+
+        batch_n = 0
+        patterns = [_ICE_RELEASE_PATH_RE] if use_ice else [host_re]
+        for rx in patterns:
+            for m in rx.finditer(body):
+                path_frag = m.group(1)
+                if use_ice and sitemap_releases:
+                    abs_u = _resolve_ice_release_path(path_frag, sitemap_releases)
+                elif use_ice:
+                    slug = path_frag.split("...")[0].rstrip(".")
+                    abs_u = f"https://www.ice.gov{slug}" if slug.startswith("/") else None
+                else:
+                    slug = path_frag.split("...")[0].rstrip(".")
+                    if not slug.startswith("/"):
+                        continue
+                    abs_u = f"https://www.{host_clean}{slug}"
+                if not abs_u:
+                    continue
+                if "..." in abs_u.split("#", 1)[0]:
+                    path_part = urlparse(abs_u).path
+                    if sitemap_releases:
+                        resolved = _resolve_article_id_in_sitemap(
+                            path_part, sitemap_releases
+                        )
+                        if resolved:
+                            abs_u = resolved
+                        else:
+                            continue
+                    else:
+                        continue
+                abs_u = abs_u.split("#", 1)[0]
+                if urlparse(abs_u).scheme != "https":
+                    continue
+                lower = abs_u.lower()
+                if path_prefix_l and not _path(abs_u).lower().startswith(path_prefix_l):
+                    continue
+                if any(ex in lower for ex in exclude_l):
+                    continue
+                if require_l and not any(req in lower for req in require_l):
+                    continue
+                if abs_u not in seen:
+                    seen.add(abs_u)
+                    out.append(abs_u)
+                    batch_n += 1
+
+        print(f"    -> {batch_n} new (total {len(out)})", file=sys.stderr)
+        if page != page_range[-1]:
+            time.sleep(delay)
+
+    return out
+
+
+def collect_google_cse_search_pages(
+    search_page_url: str,
+    page_range: range,
+    *,
+    timeout: int,
+    verify: bool,
+    delay: float,
+    path_prefix: str | None,
+    exclude_substrings: list[str],
+    require_any_substrings: list[str],
+    https_only: bool,
+    sitemap_url: str | None,
+    max_results: int | None,
+) -> list[str]:
+    """Walk ``gsc.page`` values and merge CSE harvest (order preserved, deduped)."""
+    out: list[str] = []
+    seen: set[str] = set()
+    for page in page_range:
+        page_url = _google_cse_page_url(search_page_url, page)
+        print(f"  [cse] page {page}", file=sys.stderr)
+        batch = collect_google_cse_search_urls(
+            page_url,
+            timeout=timeout,
+            verify=verify,
+            path_prefix=path_prefix,
+            exclude_substrings=exclude_substrings,
+            require_any_substrings=require_any_substrings,
+            https_only=https_only,
+            sitemap_url=sitemap_url,
+            max_results=None,
+        )
+        new = 0
+        for u in batch:
+            if u not in seen:
+                seen.add(u)
+                out.append(u)
+                new += 1
+                if max_results and len(out) >= max_results:
+                    return out
+        print(f"    -> {new} new (total {len(out)})", file=sys.stderr)
+        if page != page_range[-1]:
+            time.sleep(delay)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(
         description="Collect links from HTML pages (optionally paginated)."
@@ -448,6 +1100,54 @@ def main() -> None:
         help="Squarespace site search HTML page carrying q= (paginates GET /api/search/GeneralSearch). "
         "Do not combine with --url / --url-template.",
     )
+    ap.add_argument(
+        "--google-cse-search-page",
+        metavar="URL",
+        help="Google Programmable Search listing page (CSE widget; results via Jina Reader). "
+        "Do not combine with --url / --url-template / --squarespace-search-page.",
+    )
+    ap.add_argument(
+        "--cse-sitemap",
+        metavar="URL",
+        default=None,
+        help="Site sitemap used to expand truncated CSE result slugs (e.g. https://www.example.gov/sitemap.xml).",
+    )
+    ap.add_argument(
+        "--cse-max-results",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Stop after N press-release URLs (use with --google-cse-search-page).",
+    )
+    ap.add_argument(
+        "--cse-page-range",
+        type=parse_page_range,
+        metavar="START:END",
+        help="Paginate Google CSE via gsc.page (e.g. 1:10 with --google-cse-search-page).",
+    )
+    ap.add_argument(
+        "--usa-search",
+        action="store_true",
+        help="Harvest search.usa.gov (use with --usa-affiliate, --usa-query, --usa-page-range).",
+    )
+    ap.add_argument("--usa-affiliate", default="ice.gov", help="search.usa.gov affiliate id.")
+    ap.add_argument(
+        "--usa-host",
+        default="ice.gov",
+        help="Site hostname for path extraction (e.g. osi.af.mil, ncis.navy.mil, usmarshals.gov).",
+    )
+    ap.add_argument("--usa-query", default="child", help="search.usa.gov query string.")
+    ap.add_argument(
+        "--usa-page-range",
+        type=parse_page_range,
+        metavar="START:END",
+        help="Inclusive search.usa.gov page numbers (e.g. 1:10).",
+    )
+    ap.add_argument(
+        "--usa-sitemap",
+        action="store_true",
+        help="Resolve truncated slugs via site sitemap (ice.gov, usmarshals.gov press releases).",
+    )
     args = ap.parse_args()
 
     if args.url_template and args.page_range is None:
@@ -456,6 +1156,19 @@ def main() -> None:
     if args.squarespace_search_page:
         if args.url or args.url_template:
             ap.error("--squarespace-search-page cannot be combined with --url / --url-template")
+
+    if args.google_cse_search_page:
+        if args.url or args.url_template or args.squarespace_search_page:
+            ap.error(
+                "--google-cse-search-page cannot be combined with --url, --url-template, "
+                "or --squarespace-search-page"
+            )
+
+    if args.usa_search:
+        if args.url or args.url_template or args.squarespace_search_page or args.google_cse_search_page:
+            ap.error("--usa-search cannot be combined with other listing modes")
+        if args.usa_page_range is None:
+            ap.error("--usa-search requires --usa-page-range START:END")
 
     compiled_regexes: list[re.Pattern[str]] = []
     for pat in args.raw_url_regex or []:
@@ -482,6 +1195,40 @@ def main() -> None:
         except Exception:
             pass
 
+    if args.usa_search:
+        sitemap_releases: list[str] | None = None
+        if args.usa_sitemap:
+            host = args.usa_host.lower().lstrip(".")
+            if host.endswith("ice.gov"):
+                print("  [usa] loading ice.gov release sitemap…", file=sys.stderr)
+                sitemap_releases = _load_ice_release_sitemap(args.timeout, verify=verify_tls)
+            elif host.endswith("usmarshals.gov"):
+                sitemap_releases = _load_usmarshals_press_sitemap(args.timeout, verify=verify_tls)
+            else:
+                sm_url = f"https://www.{host}/sitemap.xml"
+                print(f"  [usa] loading {sm_url}…", file=sys.stderr)
+                sitemap_releases = _load_sitemap_urls(sm_url, args.timeout, verify=verify_tls)
+            print(f"  [usa] {len(sitemap_releases)} URLs in sitemap", file=sys.stderr)
+        all_urls = collect_usa_search_urls(
+            args.usa_affiliate,
+            args.usa_query,
+            args.usa_page_range,
+            host=args.usa_host,
+            timeout=args.timeout,
+            verify=verify_tls,
+            delay=args.delay,
+            path_prefix=args.path_prefix,
+            exclude_substrings=exclude,
+            require_any_substrings=require_any,
+            sitemap_releases=sitemap_releases,
+        )
+        with open(args.out, "w", encoding="utf-8") as f:
+            for u in all_urls:
+                f.write(u + "\n")
+        print(f"\nTotal URLs: {len(all_urls)}", file=sys.stderr)
+        print(f"Saved -> {args.out}", file=sys.stderr)
+        return
+
     if args.squarespace_search_page:
         all_urls = collect_squarespace_general_search_urls(
             args.squarespace_search_page,
@@ -493,6 +1240,46 @@ def main() -> None:
             require_any_substrings=require_any,
             https_only=https_only,
         )
+        with open(args.out, "w", encoding="utf-8") as f:
+            for u in all_urls:
+                f.write(u + "\n")
+
+        print(f"\nTotal URLs: {len(all_urls)}", file=sys.stderr)
+        print(f"Saved -> {args.out}", file=sys.stderr)
+        return
+
+    if args.google_cse_search_page:
+        sitemap = args.cse_sitemap
+        if not sitemap:
+            parsed_seed = urlparse(args.google_cse_search_page)
+            if parsed_seed.scheme and parsed_seed.netloc:
+                sitemap = f"{parsed_seed.scheme}://{parsed_seed.netloc}/sitemap.xml"
+        if args.cse_page_range is not None:
+            all_urls = collect_google_cse_search_pages(
+                args.google_cse_search_page,
+                args.cse_page_range,
+                timeout=args.timeout,
+                verify=verify_tls,
+                delay=args.delay,
+                path_prefix=args.path_prefix,
+                exclude_substrings=exclude,
+                require_any_substrings=require_any,
+                https_only=https_only,
+                sitemap_url=sitemap,
+                max_results=args.cse_max_results,
+            )
+        else:
+            all_urls = collect_google_cse_search_urls(
+                args.google_cse_search_page,
+                timeout=args.timeout,
+                verify=verify_tls,
+                path_prefix=args.path_prefix,
+                exclude_substrings=exclude,
+                require_any_substrings=require_any,
+                https_only=https_only,
+                sitemap_url=sitemap,
+                max_results=args.cse_max_results,
+            )
         with open(args.out, "w", encoding="utf-8") as f:
             for u in all_urls:
                 f.write(u + "\n")

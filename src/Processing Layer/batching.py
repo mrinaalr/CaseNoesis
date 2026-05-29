@@ -115,7 +115,7 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     - AZICAC: Split by month patterns ("In [Month]" or "[Month] [Year],")
     - GBI: Georgia Bureau of Investigation press releases split on "# # # # #" then by release date lines
     - Texas AG: Texas Attorney General CEU releases split by date-line starts and "Back to Top"
-    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / DE AG / UT AG / WA AG / OREGON DOJ / MS AG / MT DOJ / NM AG / NC SBI / LA AG / HI AG / CCSAO / IA DCI / WY DCI / SD AG / RI AG / FL AG / KY SP / NE SP / ARMY CID / LVMPD / SJPD / ARKANSAS DPS / ALEA / DOJ CEOS / DOJ ARCHIVES / WCSO / FRESNO SO / OSCEOLA SO / SEDGWICK SO / ANCHORAGE PD / LAPD / CSPD / SPD / SDPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
+    - SVICAC / TBI ICAC / SCAG ICAC / NEWYORK SP / ILLINOIS AG / NJ AG / PA AG / VT AG / OHIO AG / DE AG / UT AG / WA AG / OREGON DOJ / MS AG / MT DOJ / NM AG / NC SBI / LA AG / HI AG / CCSAO / IA DCI / WY DCI / SD AG / RI AG / FL AG / KY SP / NE SP / ARMY CID / USSS / ICE / LVMPD / SJPD / ARKANSAS DPS / ALEA / DOJ CEOS / DOJ ARCHIVES / WCSO / FRESNO SO / OSCEOLA SO / SEDGWICK SO / ANCHORAGE PD / LAPD / CSPD / SPD / SDPD / SOUTH FLORIDA ICAC / same-layout merged scrapes: split on ``Source: https://`` per article
     - Other / External: Delimited narratives: "Case 1 : ... Case 2 : ..." (news scrapes, LinkedIn, international, misc.)
     - Default: If text matches ``Case N :`` markers, falls back to external batching; otherwise AZICAC month-splitting
     
@@ -177,6 +177,12 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
     is_ky_sp = False
     is_ne_sp = False
     is_army_cid = False
+    is_usss = False
+    is_ice = False
+    is_af_osi = False
+    is_ncis = False
+    is_cbp = False
+    is_us_marshals = False
     is_lvmpd = False
     is_sjpd = False
     is_arkansas_dps = False
@@ -273,6 +279,18 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
             is_ne_sp = True
         elif source_upper == 'ARMY CID':
             is_army_cid = True
+        elif source_upper == 'USSS':
+            is_usss = True
+        elif source_upper == 'ICE':
+            is_ice = True
+        elif source_upper in ('AF OSI', 'AIR FORCE OSI'):
+            is_af_osi = True
+        elif source_upper == 'NCIS':
+            is_ncis = True
+        elif source_upper == 'CBP':
+            is_cbp = True
+        elif source_upper in ('US MARSHALS', 'USMS', 'U.S. MARSHALS'):
+            is_us_marshals = True
         elif source_upper == 'LVMPD':
             is_lvmpd = True
         elif source_upper == 'SJPD':
@@ -375,6 +393,18 @@ def case_batching(text: str, org_name: str = "case", source: str = None, source_
         return _batch_merged_icac_news_cases(text, org_name, source_file, "NE SP")
     elif is_army_cid:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "ARMY CID")
+    elif is_usss:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "USSS")
+    elif is_ice:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "ICE")
+    elif is_af_osi:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "AF OSI")
+    elif is_ncis:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "NCIS")
+    elif is_cbp:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "CBP")
+    elif is_us_marshals:
+        return _batch_merged_icac_news_cases(text, org_name, source_file, "US MARSHALS")
     elif is_lvmpd:
         return _batch_merged_icac_news_cases(text, org_name, source_file, "LVMPD")
     elif is_sjpd:
@@ -1448,6 +1478,31 @@ _MERGED_ICAC_NEWS_PDF_CANDIDATES: Dict[str, List[str]] = {
         "ARMYCID_ICAC_All.pdf",
         "ARMY_CID_ICAC_All.pdf",
         "army_cid/ARMYCID_ICAC_All.pdf",
+    ],
+    "USSS": [
+        "USSS_ICAC_ALL.pdf",
+        "USSS_ICAC_All.pdf",
+        "USSS_ICAC_CSAM_All.pdf",
+    ],
+    "ICE": [
+        "ICE_CHILD_ALL.pdf",
+        "ICE_CHILD_All.pdf",
+    ],
+    "AF OSI": [
+        "AF_OSI_CHILD_ALL.pdf",
+        "AF_OSI_CHILD_All.pdf",
+    ],
+    "NCIS": [
+        "NCIS_CHILD_ALL.pdf",
+        "NCIS_CHILD_All.pdf",
+    ],
+    "CBP": [
+        "CBP_CHILD_ALL.pdf",
+        "CBP_CHILD_All.pdf",
+    ],
+    "US MARSHALS": [
+        "USMS_CHILD_ALL.pdf",
+        "USMS_CHILD_All.pdf",
     ],
     "LVMPD": [
         "LVMPD_ICAC_All.pdf",

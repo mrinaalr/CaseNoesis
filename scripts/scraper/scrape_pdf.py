@@ -327,10 +327,15 @@ def esc(s: str) -> str:
 
 
 def load_urls(path: Path) -> list[str]:
-    urls = []
+    urls: list[str] = []
+    seen: set[str] = set()
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and line.startswith("http"):
+        line = line.strip().split("#", 1)[0].strip()
+        if not line or not line.startswith("http"):
+            continue
+        key = line.rstrip("/")
+        if key not in seen:
+            seen.add(key)
             urls.append(line)
     return urls
 
@@ -435,26 +440,37 @@ def extract_from_native_pdf(pdf_bytes: bytes, url: str) -> tuple[str, str, str, 
     return title, byline, body.strip(), pub_date
 
 
-def fetch_via_jina_reader(target_url: str, *, verify: bool = True) -> str | None:
+def fetch_via_jina_reader(target_url: str, *, verify: bool = True, retries: int = 5) -> str | None:
     """Some hosts (e.g. mass.gov) block datacenter IPs; Jina Reader returns markdown + metadata."""
     jina_url = "https://r.jina.ai/" + target_url
     hdrs = {
         "User-Agent": _default_headers(None)["User-Agent"],
         "Accept": "text/plain,text/markdown;q=0.9,*/*;q=0.8",
     }
-    try:
-        r = requests.get(
-            jina_url,
-            headers=hdrs,
-            timeout=JINA_READER_TIMEOUT,
-            allow_redirects=True,
-            verify=verify,
-        )
-        r.raise_for_status()
-        return r.text
-    except Exception as e:
-        print(f"    [jina fetch error] {e}", file=sys.stderr)
-        return None
+    last_err: Exception | None = None
+    for attempt in range(retries):
+        try:
+            r = requests.get(
+                jina_url,
+                headers=hdrs,
+                timeout=JINA_READER_TIMEOUT,
+                allow_redirects=True,
+                verify=verify,
+            )
+            if r.status_code == 429:
+                wait = min(60, 4 * (2**attempt))
+                print(f"    [jina 429] waiting {wait}s …", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            r.raise_for_status()
+            return r.text
+        except Exception as e:
+            last_err = e
+            if attempt + 1 < retries:
+                time.sleep(min(30, 2 * (attempt + 1)))
+    if last_err is not None:
+        print(f"    [jina fetch error] {last_err}", file=sys.stderr)
+    return None
 
 
 def _parse_jina_published_time(raw: str) -> date | None:
@@ -615,6 +631,468 @@ def _trim_sjpd_jina_body(body: str) -> str:
             continue
         lines.append(line)
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _trim_ice_gov_jina_body(body: str) -> str:
+    """
+    ice.gov (USWDS/Drupal) via Jina: full site nav, mega-menu, and mobile footer
+    precede the release dateline and article body.
+    """
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    start_patterns = (
+        r"(?m)^[A-Z][a-z]+ \d{1,2}, \d{4} .{2,120}United States (?:Child Exploitation|Enforcement and Removal|Human Trafficking)\s*$",
+        r"(?m)^[A-Z][A-Z\s,\.]{3,60} – ",
+        r"(?m)^[A-Z][A-Z\s,\.]{3,60} - ",
+        r"(?m)^\*\*FOR IMMEDIATE RELEASE\*\*\s*$",
+        r"(?m)^FOR IMMEDIATE RELEASE\s*$",
+        r"(?m)^#\s+[^|\n]{12,220}\|\s*ICE\s*$",
+    )
+    for pat in start_patterns:
+        m = re.search(pat, trimmed)
+        if m and m.start() > 0:
+            trimmed = trimmed[m.start() :].strip()
+            break
+    # Drop duplicate article H1 when dateline start left a trailing title line
+    trimmed = re.sub(
+        r"(?m)^#\s+[^|\n]{12,220}\|\s*ICE\s*\n+",
+        "",
+        trimmed,
+        count=1,
+    ).strip()
+    end_markers = (
+        r"(?m)^Updated:\s*\d",
+        r"(?m)^### Media Inquiries",
+        r"(?m)^## ICE USWDS Footer",
+        r"(?m)^\[Return to top\]",
+        r"(?m)^You have been selected to participate",
+        r"(?m)^## Mobile Menu",
+        r"(?m)^## Main Navigation on Mobile",
+        r"(?m)^\[Close menu\]",
+        r"(?m)^Search Search\s*$",
+        r"(?m)^\[AddToAny\]",
+    )
+    end_at: int | None = None
+    for marker in end_markers:
+        m = re.search(marker, trimmed)
+        if m and m.start() > 350 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^!\[[^\]]*\]\([^)]+\)\s*$", s):
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if s.startswith("*   [") or (s.startswith("+") and "[" in s):
+            continue
+        if re.match(r"^#{1,6}\s+(About Us|Enforcement and Removal|Homeland Security|Newsroom)\s*$", s):
+            continue
+        lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _justice_pr_url_from_blob(blob: str) -> str | None:
+    """NCIS press pages often only link to a USAO press release on justice.gov."""
+    m = re.search(r"https://www\.justice\.gov/usao-[a-z]+/pr/[a-z0-9\-]+", blob or "", re.I)
+    return m.group(0).rstrip(".,)>]") if m else None
+
+
+def _ncis_doj_follow_url(
+    page_url: str, body: str, *blobs: str | None
+) -> str | None:
+    """Return justice.gov PR URL when NCIS page is a shell or press-release stub."""
+    if "ncis.navy.mil" not in (page_url or "").lower():
+        return None
+    doj_url: str | None = None
+    for blob in blobs:
+        if blob:
+            doj_url = _justice_pr_url_from_blob(blob)
+            if doj_url:
+                break
+    if not doj_url:
+        return None
+    b = (body or "").strip()
+    if "/Press-Releases/" in page_url or len(b) < 400:
+        return doj_url
+    if re.search(
+        r"Site Map\s*\|.*Privacy|Facebook X Email Share|Read the full DOJ",
+        b,
+        re.I,
+    ):
+        return doj_url
+    return None
+
+
+def _trim_justice_gov_jina_body(body: str) -> str:
+    """USAO press releases on justice.gov: drop site chrome and related-articles rail."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    start = None
+    for pat in (
+        r"(?m)^\*\*For Immediate Release\*\*",
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s+[A-Z]{2}\.?\s*–\s",
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s+[A-Z][a-z]+\s+–\s",
+        r"(?m)^ALEXANDRIA,\s+Va\.\s*–",
+    ):
+        m = re.search(pat, trimmed)
+        if m:
+            start = m.start()
+            break
+    if start is not None and start > 0:
+        trimmed = trimmed[start:].strip()
+    for marker in (
+        "\n## Related Content",
+        "\n**Topic**",
+        "\nInformation for Victims in Large Cases",
+        "\nMain Menu",
+        "\nWhy Justice ?",
+        "\nSkip to main content",
+        "\nAn official website of the United States government",
+    ):
+        j = trimmed.find(marker)
+        if j > 200:
+            trimmed = trimmed[:j].strip()
+            break
+    m = re.search(r"(?m)^Updated\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d", trimmed)
+    if m and m.start() > 200:
+        trimmed = trimmed[: m.start()].strip()
+    return re.sub(r"\n{3,}", "\n\n", trimmed).strip()
+
+
+def _trim_ncis_jina_body(body: str) -> str:
+    """NCIS news articles: drop nav; keep quoted lede / dateline blocks."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    for pat in (
+        r'(?m)^_"',
+        r"(?m)^[A-Z][a-z]+,\s+[A-Z]{2}\.\s*–",
+        r"(?m)^\*\*[A-Z][a-z]+,\s+[A-Z]{2}\.\s*–",
+        r"(?m)^[A-Z][a-z]+ \d{1,2}, \d{4}\s*$",
+    ):
+        m = re.search(pat, trimmed)
+        if m and m.start() > 0:
+            trimmed = trimmed[m.start() :].strip()
+            break
+    return re.sub(r"\n{3,}", "\n\n", trimmed).strip()
+
+
+_CBP_NAV_MARKERS = re.compile(
+    r"(?m)^(?:### Travel|Enter Search Term|Visa Waiver Program|Trusted Traveler|"
+    r"Skip to main content|Countdown to America)",
+    re.I,
+)
+
+
+def _cbp_release_body_score(text: str) -> int:
+    """Prefer slices that look like a press release, not site chrome."""
+    head = (text or "")[:900]
+    if _CBP_NAV_MARKERS.search(head):
+        return -10_000
+    if "skip to main content" in head.lower():
+        return -10_000
+    score = min(len(text), 12_000)
+    if re.search(r"child|sexual|predator|assault|csam|molest", text, re.I):
+        score += 800
+    if re.search(
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s+(?:[A-Z]{2}|[A-Za-z]+)\s*[-–—]",
+        text,
+    ):
+        score += 400
+    return score
+
+
+def _cbp_slice_from_dateline(body: str, start: int) -> str:
+    chunk = body[start:].strip()
+    for marker in (
+        "\nLast Modified:",
+        "\nLast Updated:",
+        "\n## Media Contacts",
+        "\n### Media Contacts",
+        "\nTopics",
+        "\n### Media & Public",
+        "\nSite Map",
+        "\nCBP Seal",
+        "\nEnter Search Term",
+        "\n[Back to top]",
+        "\nFollow the Director",
+    ):
+        j = chunk.find(marker)
+        if j > 120:
+            chunk = chunk[:j].strip()
+            break
+    return chunk
+
+
+def _trim_cbp_jina_body(body: str) -> str:
+    """CBP newsroom releases: pick best dateline block (nav often precedes article)."""
+    if not (body or "").strip():
+        return body
+    candidates: list[str] = []
+    for pat in (
+        r"\*\*[A-Z][A-Za-z .'-]+,\s+[A-Za-z .'-]+\s*\*\*\s*[-–—]?\s*",
+        r"\*\*[A-Z][A-Za-z .'-]{2,40}\*\*\s*[-–—]\s*",
+        r"(?m)^\*\*[A-Z][A-Za-z .'-]+,\s+[A-Z]{2}\s*[-–—]\*\*",
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s+[A-Za-z .'-]+\s*[-–—]\s+",
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s+[A-Z]{2}\s*[-–—]\s+",
+        r"(?m)^[A-Z][A-Z .'-]{3,40},\s+[A-Z]{2}\s*[-–—]\s+",
+    ):
+        for m in re.finditer(pat, body):
+            candidates.append(_cbp_slice_from_dateline(body, m.start()))
+    rel = re.search(
+        r"(?m)^Release Date\s*\n+\w{3},\s+\d{1,2}/\d{1,2}/\d{4}\s*\n+",
+        body,
+    )
+    if rel:
+        candidates.append(_cbp_slice_from_dateline(body, rel.end()))
+    if not candidates:
+        m = re.search(
+            r"(?m)^# [^\n]{12,}(?:child|sexual|predator|assault)[^\n]*\n+"
+            r"(?:[^\n]*\n){0,8}?\*\*[A-Z]",
+            body,
+            re.I,
+        )
+        if m:
+            tail = body[m.end() - 2 :]
+            dm = re.search(
+                r"\*\*[A-Z][A-Za-z .'-]+,\s+[A-Za-z .'-]+\s*\*\*\s*[-–—]?\s*",
+                tail,
+            )
+            if dm:
+                candidates.append(_cbp_slice_from_dateline(tail, dm.start()))
+    if not candidates:
+        return body
+    best = max(candidates, key=_cbp_release_body_score)
+    return re.sub(r"\n{3,}", "\n\n", best).strip()
+
+
+def _cbp_body_ok(body: str) -> bool:
+    if len((body or "").strip()) < MIN_BODY_CHARS:
+        return False
+    if _CBP_NAV_MARKERS.search(body[:1000]):
+        return False
+    if "skip to main content" in body[:500].lower():
+        return False
+    return bool(re.search(r"child|sexual|predator|assault|csam|molest", body, re.I))
+
+
+_USMS_NAV_MARKERS = re.compile(
+    r"(?m)^(?:## Office of Public Affairs|Usms\.mediadesk@|Skip to main content|"
+    r"An official website of the United States government|Search Search\s*$)",
+    re.I,
+)
+
+
+def _usms_slice_from_start(body: str, start: int) -> str:
+    chunk = body[start:].strip()
+    for marker in (
+        "\n## Related",
+        "\n### Related",
+        "\nRelated Content",
+        "\nMedia Contact",
+        "\n## Media Contact",
+        "\n[Back to top]",
+        "\nAmerica's First Federal",
+        "\nAn official website of the United States government",
+        "\nusmarshals.gov is an official site",
+    ):
+        j = chunk.find(marker)
+        if j > 120:
+            chunk = chunk[:j].strip()
+            break
+    return chunk
+
+
+def _usms_release_body_score(text: str) -> int:
+    head = (text or "")[:900]
+    if "skip to main content" in head.lower():
+        return -10_000
+    if re.search(r"(?m)^Search Search", head):
+        return -10_000
+    score = min(len(text), 10_000)
+    if re.search(r"child|minor|kidnap|sexual|predator|exploitation|molest|abduct", text, re.I):
+        score += 800
+    if re.search(r"U\.?S\.? Marshals|Marshals Service", text, re.I):
+        score += 200
+    return score
+
+
+def _trim_usmarshals_jina_body(body: str) -> str:
+    """USMS press releases via Jina: keep dateline through body."""
+    if not (body or "").strip():
+        return body
+    candidates: list[str] = []
+    for pat in (
+        r"\*\*[A-Z][A-Za-z .'-]+,\s*[A-Z]{2}\*\*\s*[-–—]\s*",
+        r"(?m)^FOR IMMEDIATE RELEASE\s*$",
+        r"(?m)^## For immediate release\s*$",
+        r"(?m)^[A-Z][a-z .'-]+,\s+[A-Z]{2}\s*[-–—]\s",
+        r"(?m)^[A-Z][A-Z .'-]{4,60},\s+[A-Z]{2}\s*[-–—]\s",
+    ):
+        for m in re.finditer(pat, body, re.I):
+            candidates.append(_usms_slice_from_start(body, m.start()))
+    if not candidates:
+        return _trim_usmarshals_postface(body)
+    best = max(candidates, key=_usms_release_body_score)
+    dm = re.search(r"\*\*[A-Z][A-Za-z .'-]+,\s*[A-Z]{2}\*\*\s*[-–—]\s*", best)
+    if not dm:
+        dm = re.search(r"(?m)^[A-Z][a-z .'-]+,\s+[A-Z]{2}\s*[-–—]\s+", best)
+    if dm:
+        best = best[dm.start() :]
+    return _trim_usmarshals_postface(re.sub(r"\n{3,}", "\n\n", best).strip())
+
+
+def _trim_usmarshals_postface(body: str) -> str:
+    """Drop USMS site footer, share row, and nav that Jina appends after release text."""
+    if not (body or "").strip():
+        return body
+    end_markers = (
+        r"(?m)^#{2,4}\s*$",
+        r"(?m)^America['\u2019]s First Federal Law Enforcement Agency\s*$",
+        r"(?m)^Email Facebook\b",
+        r"(?m)^Back to top\s*$",
+        r"(?m)^WHO WE ARE\s*$",
+        r"(?m)^- \[x\]\s*$",
+        r"(?m)^Search Search\s*$",
+        r"(?m)^##\s+Related\b",
+        r"(?m)^###\s+Related\b",
+        r"(?m)^Related Content\s*$",
+        r"(?m)^##\s+Media Contact\b",
+        r"(?m)^Media Contact\s*$",
+        r"(?m)^An official website of the United States government\b",
+        r"(?m)^usmarshals\.gov is an official site\b",
+        r"(?m)^\[Back to top\]",
+    )
+    end_at: int | None = None
+    for marker in end_markers:
+        m = re.search(marker, body)
+        if m and m.start() > 200 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    trimmed = body[:end_at].strip() if end_at is not None else body.strip()
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^[-*]\s*\[x\]\s*$", s):
+            continue
+        if s in {
+            "Back to top",
+            "WHO WE ARE",
+            "About Us",
+            "Leadership",
+            "History",
+            "Contact Us",
+            "District Offices",
+            "Headquarters",
+            "Office of Professional Responsibility",
+            "Business with U.S. Marshals",
+        }:
+            continue
+        if re.match(r"^U\.?S\.? Marshals['\u2019]? Biographies$", s):
+            continue
+        lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _usms_body_ok(body: str) -> bool:
+    """Reject nav shells and empty Jina pages; URL lists are already topic-filtered."""
+    if len((body or "").strip()) < MIN_BODY_CHARS:
+        return False
+    if "skip to main content" in body[:500].lower():
+        return False
+    if re.search(r"(?m)^Search Search", body[:600]):
+        return False
+    if _USMS_NAV_MARKERS.search(body[:1200]):
+        return False
+    return bool(re.search(r"U\.?S\.?\s*Marshals|Marshals Service", body, re.I))
+
+
+def _trim_dod_news_jina_body(body: str) -> str:
+    """Trim DOD/USG news article chrome (OSI, NCIS, Marshals, CBP via Jina)."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    for pat in (
+        r"(?m)^\*\*FOR IMMEDIATE RELEASE\*\*\s*$",
+        r"(?m)^FOR IMMEDIATE RELEASE\s*$",
+        r"(?m)^[A-Z][a-z]+ \d{1,2}, \d{4}\s*$",
+        r"(?m)^[A-Z][A-Z\s,\.]{4,80} – ",
+        r"(?m)^[A-Z][A-Z\s,\.]{4,80} - ",
+        r"(?m)^[A-Z][a-z].{20,200}\n\n[A-Z]",
+    ):
+        m = re.search(pat, trimmed)
+        if m and m.start() > 0 and m.start() < 8000:
+            trimmed = trimmed[m.start() :].strip()
+            break
+    trimmed = re.sub(r"(?m)^#\s+[^|\n]{10,220}\|\s*[^\n]+\s*\n+", "", trimmed, count=1).strip()
+    end_markers = (
+        r"(?m)^###\s+Related",
+        r"(?m)^##\s+Related",
+        r"(?m)^Related Articles",
+        r"(?m)^Media (?:Contact|Inquiries)",
+        r"(?m)^Subscribe to",
+        r"(?m)^Connect with",
+        r"(?m)^\[Return to top\]",
+        r"(?m)^## Footer",
+        r"(?m)^An official website of the United States government",
+        r"(?m)^\[Close menu\]",
+        r"(?m)^Search Search\s*$",
+    )
+    end_at: int | None = None
+    for marker in end_markers:
+        m = re.search(marker, trimmed)
+        if m and m.start() > 300 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^!\[", s) or re.match(r"^\[\]\(https?://", s):
+            continue
+        if s.startswith("*   [") or (s.startswith("+") and "[" in s):
+            continue
+        lines.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def _trim_ice_gov_html_container(soup: BeautifulSoup) -> BeautifulSoup | None:
+    """Return a copy of the ICE release body node without breadcrumb/share chrome."""
+    root = (
+        soup.select_one(".nr-body")
+        or soup.select_one(".views-field-nothing-3 .field-content")
+        or soup.select_one(".field--name-body .field__item")
+        or soup.select_one(".field--name-body")
+        or soup.select_one("#main-content .node__content")
+        or soup.select_one("#main-content")
+    )
+    if not root:
+        return None
+    fragment = BeautifulSoup(str(root), "html.parser")
+    for sel in (
+        ".breadcrumb",
+        ".share",
+        "nav",
+        "aside",
+        ".usa-breadcrumb",
+        ".block-system-breadcrumb-block",
+    ):
+        for tag in fragment.select(sel):
+            tag.decompose()
+    return fragment
 
 
 def _trim_lvmpd_jina_body(body: str) -> str:
@@ -810,6 +1288,10 @@ def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str
     body = _unwrap_jina_markdown_links(body_raw)
     if "nmdoj.gov" in (original_url or "").lower():
         body = _trim_nmdoj_jina_preface(body)
+    if "cbp.gov" in (original_url or "").lower():
+        body = _trim_cbp_jina_body(body)
+    if "usmarshals.gov" in (original_url or "").lower():
+        body = _trim_usmarshals_jina_body(body)
     body = re.sub(r"\*\*([^*]+)\*\*", r"\1", body)
     body = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"\1", body)
     if "mass.gov" in (original_url or "").lower():
@@ -826,6 +1308,33 @@ def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str
     if "lvmpd.com" in (original_url or "").lower():
         body = _trim_lvmpd_jina_body(body)
         if title.lower().endswith("| news list") or "| las vegas" in title.lower():
+            title = title.split("|", 1)[0].strip()
+    if "ice.gov" in (original_url or "").lower():
+        body = _trim_ice_gov_jina_body(body)
+        if "|" in title:
+            title = title.split("|", 1)[0].strip()
+    if "justice.gov" in (original_url or "").lower():
+        body = _trim_justice_gov_jina_body(body)
+        if "|" in title:
+            title = title.split("|", 1)[0].strip()
+    if "cbp.gov" in (original_url or "").lower():
+        if not _cbp_body_ok(body):
+            return None
+        if "|" in title:
+            title = title.split("|", 1)[0].strip()
+    elif "usmarshals.gov" in (original_url or "").lower():
+        if not _usms_body_ok(body):
+            return None
+        if "|" in title:
+            title = title.split("|", 1)[0].strip()
+    elif any(
+        h in (original_url or "").lower()
+        for h in ("osi.af.mil", "ncis.navy.mil")
+    ):
+        body = _trim_dod_news_jina_body(body)
+        if "ncis.navy.mil" in (original_url or "").lower():
+            body = _trim_ncis_jina_body(body)
+        if "|" in title:
             title = title.split("|", 1)[0].strip()
     if "cid.army.mil" in (original_url or "").lower():
         body = _trim_cid_army_jina_body(body)
@@ -976,6 +1485,58 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
             or soup.select_one(".field--name-body")
             or soup.select_one("main")
         )
+    elif netloc in ("www.secretservice.gov", "secretservice.gov"):
+        h1 = soup.select_one("h1")
+        if h1:
+            h1_text = h1.get_text(" ", strip=True)
+            if h1_text and h1_text.lower() not in ("search this site",):
+                title = h1_text
+        container = (
+            soup.select_one("article")
+            or soup.select_one("main")
+            or soup.select_one('[role="main"]')
+        )
+    elif netloc in ("www.ice.gov", "ice.gov"):
+        og = _meta_content(soup, prop="og:title") or _meta_content(soup, name="twitter:title")
+        if og:
+            title = og.split("|", 1)[0].strip()
+        if not title or title.lower() in ("ice", "newsroom"):
+            h1 = soup.select_one("#main-content h1") or soup.select_one("main h1")
+            if h1:
+                title = h1.get_text(" ", strip=True)
+        ice_root = _trim_ice_gov_html_container(soup)
+        container = ice_root if ice_root is not None else (
+            soup.select_one(".nr-body")
+            or soup.select_one(".field--name-body .field__item")
+            or soup.select_one("#main-content")
+        )
+    elif netloc in ("www.osi.af.mil", "osi.af.mil"):
+        container = (
+            soup.select_one(".article-body")
+            or soup.select_one(".body-text")
+            or soup.select_one("article")
+            or soup.select_one("main")
+        )
+    elif netloc in ("www.ncis.navy.mil", "ncis.navy.mil"):
+        container = (
+            soup.select_one(".article-text")
+            or soup.select_one(".body-text")
+            or soup.select_one("article")
+            or soup.select_one("main")
+        )
+    elif netloc in ("www.usmarshals.gov", "usmarshals.gov"):
+        container = (
+            soup.select_one(".field--name-body")
+            or soup.select_one("article")
+            or soup.select_one("main")
+        )
+    elif netloc in ("www.cbp.gov", "cbp.gov"):
+        container = (
+            soup.select_one(".field--name-body .field__item")
+            or soup.select_one(".field--name-body")
+            or soup.select_one("article")
+            or soup.select_one("main")
+        )
 
     if container is None:
         container = (
@@ -999,6 +1560,9 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
     if netloc == "news.delaware.gov":
         body = _trim_news_delaware_duplicate_press_rail(body)
         body = _dedupe_news_delaware_paragraph_blocks(body)
+
+    if netloc in ("www.usmarshals.gov", "usmarshals.gov"):
+        body = _trim_usmarshals_postface(body)
 
     pub_date = resolve_publication_date(soup, url, body)
     byline = format_display_byline(pub_date, soup)
@@ -1167,16 +1731,25 @@ def main():
             time.sleep(args.delay)
             continue
 
-        html = fetch(url, hdrs, verify=verify_tls)
-        if not html and args.jina_fallback:
-            print("    [fallback] r.jina.ai reader ...")
+        use_jina_first = args.jina_fallback and (
+            "cbp.gov" in url.lower() or "usmarshals.gov" in url.lower()
+        )
+        if use_jina_first:
+            tag = "cbp" if "cbp.gov" in url.lower() else "usms"
+            print(f"    [{tag}] r.jina.ai reader ...")
             html = fetch_via_jina_reader(url, verify=verify_tls)
+        else:
+            html = fetch(url, hdrs, verify=verify_tls)
+            if not html and args.jina_fallback:
+                print("    [fallback] r.jina.ai reader ...")
+                html = fetch_via_jina_reader(url, verify=verify_tls)
         if not html:
             failures.append(url)
             time.sleep(args.delay)
             continue
 
         is_jina = html.lstrip().startswith("Title:") and "Markdown Content:" in html
+        html_j: str | None = None
         if is_jina:
             result = extract_from_jina_reader(html, url)
         else:
@@ -1190,6 +1763,24 @@ def main():
                     result = extract_from_jina_reader(html_j, url)
                 else:
                     result = extract(html_j, url)
+        body_so_far = ((result[2] if result else "") or "").strip()
+        doj_url = (
+            _ncis_doj_follow_url(url, body_so_far, html, html_j)
+            if args.jina_fallback
+            else None
+        )
+        if doj_url:
+            print(f"    [ncis] follow DOJ release …")
+            doj_blob = fetch_via_jina_reader(doj_url, verify=verify_tls)
+            if doj_blob:
+                if doj_blob.lstrip().startswith("Title:"):
+                    doj_result = extract_from_jina_reader(doj_blob, doj_url)
+                else:
+                    doj_result = extract(doj_blob, doj_url)
+                if doj_result and (
+                    not result or len(doj_result[2]) > len((result[2] if result else "") or "")
+                ):
+                    result = doj_result
         if not result:
             print("    [FAILED] extract: body too thin")
             failures.append(url)

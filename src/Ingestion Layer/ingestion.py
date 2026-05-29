@@ -53,7 +53,7 @@ def detect_source_from_content(text: str, filename: str) -> str:
     Returns:
         Source organization name ('NCMEC', 'AZICAC', 'Idaho ICAC', 'Michigan ICAC', 'GBI', 'Texas AG', 'SVICAC',
         'TBI ICAC', 'SCAG ICAC', 'WCSO', 'FRESNO SO', 'OSCEOLA SO', 'ANCHORAGE PD', 'SEDGWICK SO', 'LAPD', 'CSPD', 'SPD', 'SDPD', 'SOUTH FLORIDA ICAC', 'NJ AG', 'PA AG', 'VT AG', 'OHIO AG', 'DE AG', 'UT AG',
-        'WA AG', 'OREGON DOJ', 'MS AG', 'MT DOJ', 'NM AG', 'NC SBI', 'LA AG', 'HI AG', 'CCSAO', 'IA DCI', 'WY DCI', 'SD AG', 'RI AG', 'FL AG', 'KY SP', 'NE SP', 'ARMY CID', 'LVMPD', 'SJPD', 'ALEA', 'FBI', 'Other', or defaults to Other).
+        'WA AG', 'OREGON DOJ', 'MS AG', 'MT DOJ', 'NM AG', 'NC SBI', 'LA AG', 'HI AG', 'CCSAO', 'IA DCI', 'WY DCI', 'SD AG', 'RI AG', 'FL AG', 'KY SP', 'NE SP', 'ARMY CID', 'USSS', 'ICE', 'LVMPD', 'SJPD', 'ALEA', 'FBI', 'Other', or defaults to Other).
     """
     text_sample = text[:5000]  # Check first 5000 chars for efficiency
     filename_lower = filename.lower()
@@ -194,6 +194,27 @@ def detect_source_from_content(text: str, filename: str) -> str:
         and 'icac' in filename_lower
     ):
         return 'ARMY CID'
+    elif (
+        ('usss' in filename_lower or 'uss_icac' in filename_lower or 'secret_service' in filename_lower)
+        and 'icac' in filename_lower
+    ):
+        return 'USSS'
+    elif 'ice_child' in filename_lower or (
+        'ice' in filename_lower and 'child' in filename_lower
+    ):
+        return 'ICE'
+    elif 'af_osi' in filename_lower or (
+        'osi' in filename_lower and 'child' in filename_lower
+    ):
+        return 'AF OSI'
+    elif 'ncis' in filename_lower and 'child' in filename_lower:
+        return 'NCIS'
+    elif 'cbp' in filename_lower and 'child' in filename_lower:
+        return 'CBP'
+    elif 'usms' in filename_lower or (
+        'marshals' in filename_lower and 'child' in filename_lower
+    ):
+        return 'US MARSHALS'
     elif ('lvmpd' in filename_lower or 'las_vegas_metro' in filename_lower) and 'icac' in filename_lower:
         return 'LVMPD'
     elif ('sjpd' in filename_lower or 'san_jose' in filename_lower) and 'icac' in filename_lower:
@@ -454,6 +475,58 @@ def detect_source_from_content(text: str, filename: str) -> str:
     ):
         return 'ARMY CID'
 
+    # U.S. Secret Service (secretservice.gov — ICAC task force press releases; merged news PDF)
+    if re.search(r'\bsecretservice\.gov\b', text_sample, re.I) and re.search(
+        r'United States Secret Service|\bUSSS\b|Internet Crimes Against Children|\bICAC\b|'
+        r'child (?:sexual abuse material|pornography)|\bCSAM\b|Project Safe Childhood|NCMEC',
+        text_sample,
+        re.I,
+    ):
+        return 'USSS'
+
+    # U.S. Immigration and Customs Enforcement / HSI (ice.gov — child exploitation press releases)
+    if re.search(r'\bice\.gov\b', text_sample, re.I) and re.search(
+        r'Homeland Security Investigations|\bHSI\b|Immigration and Customs Enforcement|\bICE\b|'
+        r'child (?:sexual abuse material|pornography|exploitation)|\bCSAM\b|Project Safe Childhood',
+        text_sample,
+        re.I,
+    ):
+        return 'ICE'
+
+    # Air Force Office of Special Investigations (osi.af.mil)
+    if re.search(r'\bosi\.af\.mil\b', text_sample, re.I) and re.search(
+        r'Air Force Office of Special Investigations|\bAFOSI\b|\bAF OSI\b|'
+        r'child (?:sexual abuse material|pornography|exploitation)|\bCSAM\b',
+        text_sample,
+        re.I,
+    ):
+        return 'AF OSI'
+
+    # Naval Criminal Investigative Service (ncis.navy.mil)
+    if re.search(r'\bncis\.navy\.mil\b', text_sample, re.I) and re.search(
+        r'\bNCIS\b|Naval Criminal Investigative Service|child (?:exploitation|pornography|sexual abuse)',
+        text_sample,
+        re.I,
+    ):
+        return 'NCIS'
+
+    # U.S. Customs and Border Protection (cbp.gov)
+    if re.search(r'\bcbp\.gov\b', text_sample, re.I) and re.search(
+        r'Customs and Border Protection|\bCBP\b|'
+        r'child (?:sexual|exploitation|pornography|abuse)|\bCSAM\b',
+        text_sample,
+        re.I,
+    ):
+        return 'CBP'
+
+    # U.S. Marshals Service (usmarshals.gov)
+    if re.search(r'\busmarshals\.gov\b', text_sample, re.I) and re.search(
+        r'U\.?S\.? Marshals|\bUSMS\b|child (?:sex|predator|exploitation|pornography)|sexual assault.*minor',
+        text_sample,
+        re.I,
+    ):
+        return 'US MARSHALS'
+
     # Las Vegas Metropolitan Police Department (lvmpd.com — ICAC task force press releases)
     if re.search(r'\blvmpd\.com\b', text_sample, re.I) and re.search(
         r'Las Vegas Metropolitan Police Department|\bLVMPD\b|Internet Crimes Against Children|\bICAC\b|'
@@ -713,6 +786,18 @@ def _load_source_url_fallbacks_from_sources_html() -> Dict[str, str]:
             mapping["NE SP"] = url_clean
         elif "army criminal investigation" in n or "army cid" in n:
             mapping["ARMY CID"] = url_clean
+        elif "secret service" in n and "icac" in n:
+            mapping["USSS"] = url_clean
+        elif "immigration and customs enforcement" in n or ("ice" in n and "child" in n):
+            mapping["ICE"] = url_clean
+        elif "air force" in n and ("osi" in n or "special investigations" in n):
+            mapping["AF OSI"] = url_clean
+        elif "naval criminal" in n or ("ncis" in n and "child" in n):
+            mapping["NCIS"] = url_clean
+        elif "customs and border" in n or ("cbp" in n and "child" in n):
+            mapping["CBP"] = url_clean
+        elif "marshals" in n and "child" in n:
+            mapping["US MARSHALS"] = url_clean
         elif "las vegas metropolitan" in n or "lvmpd" in n:
             mapping["LVMPD"] = url_clean
         elif "san jose police" in n or "sjpd" in n:
