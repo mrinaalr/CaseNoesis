@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/nm_ag_2024_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:12:02.740723" ;
+    dcterms:created "2026-05-29T01:08:39.239663" ;
     dcterms:identifier "nm_ag_2024_001" ;
-    dcterms:modified "2026-05-26T17:12:02.740723" ;
+    dcterms:modified "2026-05-29T01:08:39.239663" ;
     dcterms:source <https://nmdoj.gov/press-release/new-mexico-attorney-general-raul-torrez-announces-arrests-of-suspected-online-predators-following-operation-metaphile/>,
         "NM AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nm_ag_2024_001/phase/arrested> ;

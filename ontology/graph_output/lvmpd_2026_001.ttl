@@ -14,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:10:12.893237" ;
+    dcterms:created "2026-05-29T01:04:22.100506" ;
     dcterms:identifier "lvmpd_2026_001" ;
-    dcterms:modified "2026-05-26T17:10:12.893237" ;
+    dcterms:modified "2026-05-29T01:04:22.100506" ;
     dcterms:source <https://www.lvmpd.com/Home/Components/News/News/2182/>,
         "LVMPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/phase/booked> ;
@@ -54,21 +54,15 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/las-vegas> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Las Vegas" .
+<https://caselinker.up.railway.app/resource/agency/las-vegas> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Metropolitan Police Department" .
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
     rdfs:label "Nevada Attorney General’s" .
 
-<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "North Las Vegas Police Department" .
+<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;

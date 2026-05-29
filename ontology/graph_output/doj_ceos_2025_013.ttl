@@ -1,0 +1,79 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:47:54.245976" ;
+    dcterms:identifier "doj_ceos_2025_013" ;
+    dcterms:modified "2026-05-29T00:47:54.245976" ;
+    dcterms:source <https://www.justice.gov/opa/pr/founder-haitian-orphanage-sentenced-210-years-prison-sexually-abusing-boys-his-care>,
+        "DOJ CEOS" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/phase/charged> ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/colorado> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/phase/charged> a cac-core:Phase,
+        cacontology-legal-outcomes:LegalProcessPhase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_013/person/victim/1> .
+

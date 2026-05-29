@@ -203,9 +203,11 @@ class SemanticConcepts:
             "sexual content or nude photos of minors."
         ),
         "ai_and_internet_tools": (
-            "Use of AI tools, deepfakes, or internet technology in the offense: "
-            "AI-generated imagery, synthetic media, image manipulation, use of "
-            "encryption, VPNs, dark web, or other online tools to commit or conceal abuse."
+            "Press release or criminal charging language about AI-generated child sexual "
+            "abuse material, computer-generated or digitally generated child pornography, "
+            "synthetic exploitative images, deepfake child abuse images, obscene visual "
+            "representations produced with artificial intelligence, or offender use of "
+            "generative AI and AI chatbots to create child exploitation images."
         ),
         "online_luring_social_engineering": (
             "Online luring or social engineering: persuading or tricking a minor "

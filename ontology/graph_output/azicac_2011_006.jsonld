@@ -14,64 +14,19 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/conspiracy",
-        "@type": [
-          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#conspiracyMemberCount": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 2
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInConspiracy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/maricopa-county",
+        "@id": "https://caselinker.up.railway.app/resource/agency/mesa-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Maricopa County"
+            "@value": "Mesa Police Department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2",
         "@type": [
           "https://cacontology.projectvic.org#OffenderRole",
           "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
@@ -89,19 +44,80 @@
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/2"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/maricopa-county-attorneys-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Maricopa County Attorney's Office"
+            "@value": "Maricopa County Jail"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/maricopa-county",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2011-07-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/relationship/mother"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#ProactiveOperation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2011-07-01T00:00:00Z"
           }
         ]
       },
@@ -131,77 +147,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2011-07-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2011-07-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/2"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2011-07-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/phoenix-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Phoenix Police Department"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -209,7 +154,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T16:39:54.479392"
+            "@value": "2026-05-29T00:12:06.926083"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -219,7 +164,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T16:39:54.479392"
+            "@value": "2026-05-29T00:12:06.926083"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -300,64 +245,66 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/sentence/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/conspiracy",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Maricopa County Jail"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/mesa-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Mesa Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#ProactiveOperation",
+          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
           "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
         ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+        "https://cacontology.projectvic.org#conspiracyMemberCount": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/relationship/mother"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 2
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInConspiracy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/2"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#involvesVictim": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
         ]
       },
       {
         "@id": "https://caselinker.up.railway.app/resource/agency/azicac",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "AZICAC"
-          }
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/maricopa-county-attorneys-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/phoenix-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -370,6 +317,35 @@
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 47
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2011-07-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_006/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       }
     ],

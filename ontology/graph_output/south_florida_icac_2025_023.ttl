@@ -16,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_023> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:17:17.907726" ;
+    dcterms:created "2026-05-29T01:21:41.772195" ;
     dcterms:identifier "south_florida_icac_2025_023" ;
-    dcterms:modified "2026-05-26T17:17:17.907726" ;
+    dcterms:modified "2026-05-29T01:21:41.772195" ;
     dcterms:source <https://www.local10.com/news/local/2025/08/27/feds-accuse-dania-beach-man-of-sexually-victimizing-10-year-old-girl-online/>,
         "SOUTH FLORIDA ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_023/phase/booked> ;

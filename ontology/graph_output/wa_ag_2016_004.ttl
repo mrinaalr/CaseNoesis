@@ -1,0 +1,58 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T01:31:58.472210" ;
+    dcterms:identifier "wa_ag_2016_004" ;
+    dcterms:modified "2026-05-29T01:31:58.472210" ;
+    dcterms:source <https://www.atg.wa.gov/news/news-releases/ag-prosecutor-wins-re-commitment-sexually-violent-predator>,
+        "WA AG" ;
+    cacontology:hasPhaseBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2016-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/event/hands-on> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/attorney-generals-sexually-violent-predator-unit>,
+        <https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-sexually-violent-predator-unit> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2016_004/person/victim/1> .
+

@@ -18,9 +18,9 @@
 
 <https://caselinker.up.railway.app/resource/case/gbi_2022_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:03:32.628692" ;
+    dcterms:created "2026-05-29T00:50:05.358324" ;
     dcterms:identifier "gbi_2022_001" ;
-    dcterms:modified "2026-05-26T17:03:32.628692" ;
+    dcterms:modified "2026-05-29T00:50:05.358324" ;
     dcterms:source <https://gbi.georgia.gov/search/results?query=CEACC>,
         "GBI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/gbi_2022_001/phase/booked> ;

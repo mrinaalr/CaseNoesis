@@ -2,59 +2,13 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/7",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/6",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "chat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/6",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/5",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
           "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
@@ -67,46 +21,42 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/6"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/5"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/kik",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/7",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@value": "Kik"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/3",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/7"
+          }
         ]
       },
       {
@@ -163,15 +113,67 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/plantation-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/9",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/4",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@value": "Plantation Police Department"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/4"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/2",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/4",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -182,7 +184,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T17:17:09.311055"
+            "@value": "2026-05-29T01:21:17.582135"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -192,7 +194,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T17:17:09.311055"
+            "@value": "2026-05-29T01:21:17.582135"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -227,10 +229,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/operation"
@@ -294,33 +296,41 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/6",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/5",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/11",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/9",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/3",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/9",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/9"
+          }
         ]
       },
       {
@@ -337,10 +347,10 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -350,13 +360,199 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/4",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/8",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/8",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/2",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/6",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/6"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/7",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "chat"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/5",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/10",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/8",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/8"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/10",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/10"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/11",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
@@ -410,177 +606,16 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/phase/arrested",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2023-01-01T00:00:00Z"
           }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/2"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/10",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/10"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/4",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/4"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/9",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/9"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/7",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/7"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/10",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/8",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/8"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
@@ -597,10 +632,10 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -610,54 +645,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/5",
+        "@id": "https://caselinker.up.railway.app/resource/agency/plantation-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/5"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/1"
+            "@value": "Plantation Police Department"
           }
         ]
       },
@@ -675,10 +670,10 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -688,9 +683,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2023_007/person/victim/2",
+        "@id": "https://caselinker.up.railway.app/resource/platform/kik",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/platforms#MessagingService"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Kik"
+          }
         ]
       }
     ],

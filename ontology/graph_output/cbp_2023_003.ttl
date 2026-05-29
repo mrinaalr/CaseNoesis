@@ -1,0 +1,66 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:39:44.997144" ;
+    dcterms:identifier "cbp_2023_003" ;
+    dcterms:modified "2026-05-29T00:39:44.997144" ;
+    dcterms:source <https://www.cbp.gov/newsroom/local-media-release/del-rio-port-entry-cbp-officers-apprehend-male-traveler-wanted-sexual>,
+        "CBP" ;
+    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2023-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2023_003/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/victim/1> ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/twitter-x> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/del-rio-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/texas> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/del-rio-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Del Rio Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/victim/1> ;
+    cacontology:severityLevel 3 ;
+    cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 20 .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2023_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2023_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2023_003/person/victim/1> .
+

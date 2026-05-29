@@ -1,0 +1,78 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:47:06.692551" ;
+    dcterms:identifier "doj_archives_2007_048" ;
+    dcterms:modified "2026-05-29T00:47:06.692551" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DMA_DIAZ-SENTENCED_05-28-08.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged> ;
+    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2007-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/boston-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/cambridge-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/boston-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/cambridge-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Cambridge Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged> a cac-core:Phase,
+        cacontology-legal-outcomes:LegalProcessPhase ;
+    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1> .
+

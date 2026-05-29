@@ -1,0 +1,82 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:40:07.361858" ;
+    dcterms:identifier "cbp_2017_001" ;
+    dcterms:modified "2026-05-29T00:40:07.361858" ;
+    dcterms:source <https://www.cbp.gov/newsroom/local-media-release/rio-grande-valley-border-patrol-captures-gang-members-child-molesters>,
+        "CBP" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2017_001/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cbp_2017_001/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2017-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/multi-jurisdiction> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/victim/1> ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/twitter-x> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/saint-paul-police-department> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/california-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "California Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Hidalgo County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/saint-paul-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Saint Paul Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2017_001/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2017_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/cbp_2017_001/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2017_001/person/victim/1> .
+

@@ -14,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2024_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:20:35.179775" ;
+    dcterms:created "2026-05-29T01:31:40.295094" ;
     dcterms:identifier "wa_ag_2024_001" ;
-    dcterms:modified "2026-05-26T17:20:35.179775" ;
+    dcterms:modified "2026-05-29T01:31:40.295094" ;
     dcterms:source <https://www.atg.wa.gov/news/news-releases/union-gap-everett-men-sentenced-maximum-terms-life-prison-following-attempted>,
         "WA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/wa_ag_2024_001/phase/arrested> ;
@@ -41,9 +41,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/washington-state-patrol-missing-and-exploited-children-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

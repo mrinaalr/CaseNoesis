@@ -10,8 +10,9 @@ Design Ideas from Architecture:
   - id, source, date_range
   - Case Context (anonymized): victim_count, case_demographics
   - Perpetrator Context (anonymized): perpetrator_count, perpetrator_demographics, relationship_to_victim, previous_conviction
-  - Technology & Methods: platforms_used (column); investigation_technology, anonymization_network,
-    p2p_clients (in extracted_features JSON)
+  - Technology & Methods: platforms_used (column; includes Gen AI tool); investigation_technology,
+    anonymization_network, p2p_clients (in extracted_features JSON)
+  - Content Classification: case_topics includes ``ai_csam`` (AI-generated / synthetic CSAM product)
   - Law Enforcement: prosecution_outcome (agencies/orgs in extracted_features)
   - Content Classification: severity_indicators, case_topics
   - Raw/Original Data: raw_data, extracted_features
@@ -105,6 +106,17 @@ _CSAM_TOPIC_RE = re.compile(
     """,
     re.IGNORECASE | re.VERBOSE,
 )
+
+from ai_extraction_patterns import (
+    AI_CSAM_IMPLIES_TOOL_RE,
+    AI_CSAM_SEMANTIC_THRESHOLD,
+    AI_CSAM_TOPIC_RE,
+    GEN_AI_TOOL_RE,
+)
+
+_AI_CSAM_TOPIC_RE = AI_CSAM_TOPIC_RE
+_GEN_AI_TOOL_RE = GEN_AI_TOOL_RE
+_AI_CSAM_IMPLIES_TOOL_RE = AI_CSAM_IMPLIES_TOOL_RE
 
 
 def process_cases(df: pd.DataFrame) -> List[Dict[str, Any]]:
@@ -231,6 +243,16 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
     }
     # P2P / Tor / detection tech — persisted in extracted_features (not duplicated on cases row)
     features.update(extract_technology_signals(raw_case))
+
+    # If offense product is tagged, infer Gen AI tool when press release names AI as instrument.
+    topics = list(features.get("case_topics") or [])
+    platforms = list(features.get("platforms_used") or [])
+    case_text = raw_case.get("case_text") or ""
+    if "ai_csam" in topics and "Gen AI" not in platforms:
+        if _AI_CSAM_IMPLIES_TOOL_RE.search(case_text) or _GEN_AI_TOOL_RE.search(case_text):
+            platforms.append("Gen AI")
+    features["platforms_used"] = sorted(set(platforms))
+    features["case_topics"] = topics
 
     return features
 
@@ -579,6 +601,11 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("YouTube", r"\bYouTube\b"),
     ("Twitch", r"\bTwitch\b"),
     ("Webcam platform", r"\bMyFreeCams\b|\bMFC\b(?!\s+Pennsylvania)|\bwebcam\s+platform\b|\bwebcam\b"),
+    # Named generative products (tool → also adds Gen AI umbrella when matched)
+    ("ChatGPT", r"\bChat\s*GPT\b|\bChatGPT\b"),
+    ("Stable Diffusion", r"\bStable\s+Diffusion\b"),
+    ("Midjourney", r"\bMidjourney\b"),
+    ("DALL-E", r"\bDALL[\s-]?E\b"),
     # Generics (after named brands)
     ("online", r"\bonline\b"),
     # Avoid tagging "Internet Relay Chat" / "...Relay Chat" as generic chat (IRC row handles IRC).
@@ -601,6 +628,9 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
 
     found: List[str] = []
     seen = set()
+    if _GEN_AI_TOOL_RE.search(case_text):
+        found.append("Gen AI")
+        seen.add("Gen AI")
     for label, pattern in _PLATFORM_SPECS:
         if label in seen:
             continue
@@ -614,6 +644,10 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
         if re.search(pattern, case_text, re.IGNORECASE):
             found.append(label)
             seen.add(label)
+            if label in ("ChatGPT", "Stable Diffusion", "Midjourney", "DALL-E"):
+                if "Gen AI" not in seen:
+                    found.append("Gen AI")
+                    seen.add("Gen AI")
 
     return sorted(found)
 
@@ -654,7 +688,6 @@ def extract_technology_signals(case: Dict[str, Any]) -> Dict[str, List[str]]:
         ("Kazaa", r"\bKazaa\b"),
         ("Gigatribe", r"\bGigatribe\b"),
     ]
-
     def _collect(specs: List[Tuple[str, str]], bucket: List[str]) -> None:
         sset = set()
         for label, pat in specs:
@@ -966,7 +999,8 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
-    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger, csam
+    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger,
+    csam, ai_csam (AI-generated / synthetic CSAM product)
 
     Production requires phrase-level cues (e.g. "production of", "minor production", "created … videos",
     "produced child …"); bare "created"/"produced" alone do not tag production.
@@ -1017,6 +1051,10 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     # CSAM material indicators (internal topic key: csam)
     if _CSAM_TOPIC_RE.search(case_text):
         topics.append('csam')
+
+    # AI-CSAM offense product (tool is Gen AI in platforms_used)
+    if _AI_CSAM_TOPIC_RE.search(case_text):
+        topics.append('ai_csam')
     
     return list(set(topics))  # Remove duplicates
 

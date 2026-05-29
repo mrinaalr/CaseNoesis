@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:04:02.622293" ;
+    dcterms:created "2026-05-29T00:51:02.428651" ;
     dcterms:identifier "ia_dci_2022_001" ;
-    dcterms:modified "2026-05-26T17:04:02.622293" ;
+    dcterms:modified "2026-05-29T00:51:02.428651" ;
     dcterms:source <https://dps.iowa.gov/press-release/2022-10-31/eight-arrests-following-operation-targeting-internet-crimes-against-children>,
         "IA DCI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/phase/arrested> ;
@@ -76,9 +76,7 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Iowa Department of Public Safety Division of Intelligence-Law Enforcement Intelligence Network" .
 
-<https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Iowa Division of Criminal Investigation" .
+<https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/iowa-state-university-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

@@ -1,0 +1,54 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:43:51.982621" ;
+    dcterms:identifier "doj_archives_2005_021" ;
+    dcterms:modified "2026-05-29T00:43:51.982621" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DMT%20Wasserman%20PR_031005.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:hasPhaseBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2005-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
+        <https://caselinker.up.railway.app/resource/agency/doj> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_021/person/victim/1> .
+

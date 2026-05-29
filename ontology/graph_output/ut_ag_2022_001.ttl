@@ -16,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ut_ag_2022_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:19:12.439604" ;
+    dcterms:created "2026-05-29T01:29:14.195222" ;
     dcterms:identifier "ut_ag_2022_001" ;
-    dcterms:modified "2026-05-26T17:19:12.439604" ;
+    dcterms:modified "2026-05-29T01:29:14.195222" ;
     dcterms:source <https://attorneygeneral.utah.gov/roosevelt-13-year-old-returned-home-after-icac-investigation/>,
         "UT AG" ;
     cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;

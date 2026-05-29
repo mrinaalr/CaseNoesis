@@ -16,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_022> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:10:58.830927" ;
+    dcterms:created "2026-05-29T01:05:57.848228" ;
     dcterms:identifier "nj_ag_2026_022" ;
-    dcterms:modified "2026-05-26T17:10:58.830927" ;
+    dcterms:modified "2026-05-29T01:05:57.848228" ;
     dcterms:source <https://www.njoag.gov/man-sentenced-to-seven-years-in-state-prison-for-traveling-from-california-to-new-jersey-in-attempt-to-sexually-assault-an-11-year-old-girl/>,
         "NJ AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/arrested> ;

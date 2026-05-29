@@ -2,25 +2,56 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/victim/1"
+            "@value": "Facebook"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@value": "stranger"
+            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/offender/1"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -31,7 +62,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T17:03:59.035018"
+            "@value": "2026-05-29T00:50:56.300868"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -41,7 +72,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T17:03:59.035018"
+            "@value": "2026-05-29T00:50:56.300868"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -104,30 +135,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/agency/department-of-the-attorney-generals-criminal-justice-division",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
@@ -136,19 +143,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "Department of the Attorney General’s Criminal Justice Division"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
           }
         ]
       },
@@ -165,38 +159,44 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2014-01-01T00:00:00Z"
           }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/hi_ag_2014_001/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Facebook"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       }
     ],

@@ -12,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/army_cid_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T16:58:30.584371" ;
+    dcterms:created "2026-05-29T00:39:09.160607" ;
     dcterms:identifier "army_cid_2026_001" ;
-    dcterms:modified "2026-05-26T16:58:30.584371" ;
+    dcterms:modified "2026-05-29T00:39:09.160607" ;
     dcterms:source <https://www.cid.army.mil/Media-Resources/Releases/Article-Display/Article/3524965/two-civilians-arrested-in-internet-crimes-against-children-task-force-multi-age/>,
         "ARMY CID" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/army_cid_2026_001/phase/arrested> ;
@@ -46,9 +46,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/texas> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Texas" .
+<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/texas-internet-crime-against-children-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

@@ -105,3 +105,6 @@ secrets/
 # Temporary files
 *.tmp
 *.temp
+
+# Ontology merged graph caches (rebuilt locally / on Railway)
+ontology/cache/

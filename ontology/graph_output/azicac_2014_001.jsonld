@@ -2,9 +2,60 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 7
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/3",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/3"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/phase/booked",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/azicac-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
@@ -15,7 +66,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T16:40:01.639316"
+            "@value": "2026-05-29T00:12:17.182021"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -25,7 +76,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T16:40:01.639316"
+            "@value": "2026-05-29T00:12:17.182021"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -54,10 +105,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -94,134 +145,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/facet/possession",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 7
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/3"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/3",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 7
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/3",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/3"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/offender/1"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -255,7 +181,51 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/2",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/phoenix-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/2",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 7
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/3",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
@@ -289,32 +259,36 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/phase/booked",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#involvesVictim": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/3"
+          }
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/facet/possession"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/phoenix-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
           "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
@@ -327,22 +301,48 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/2"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/victim/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/azicac-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_001/person/offender/1"
+          }
         ]
       }
     ],

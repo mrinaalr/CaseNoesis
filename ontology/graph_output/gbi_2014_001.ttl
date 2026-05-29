@@ -15,9 +15,9 @@
 
 <https://caselinker.up.railway.app/resource/case/gbi_2014_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:03:14.988669" ;
+    dcterms:created "2026-05-29T00:49:33.222398" ;
     dcterms:identifier "gbi_2014_001" ;
-    dcterms:modified "2026-05-26T17:03:14.988669" ;
+    dcterms:modified "2026-05-29T00:49:33.222398" ;
     dcterms:source <https://gbi.georgia.gov/search/results?query=CEACC>,
         "GBI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/gbi_2014_001/phase/arrested> ;
@@ -142,9 +142,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Sandy Springs Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "US Secret Service" .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/villa-rica-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

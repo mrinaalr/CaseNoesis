@@ -15,6 +15,9 @@ Merge logic:
 from typing import Dict, Any, List, Optional
 import re
 
+# Promote case_topics ai_csam when semantic concept ai_and_internet_tools clears this bar.
+AI_CSAM_SEMANTIC_THRESHOLD = 0.50
+
 
 class MergeProcessing:
     """
@@ -129,6 +132,13 @@ class MergeProcessing:
 
         if severity:
             merged['severity_indicators'] = list(dict.fromkeys(severity))
+
+        # AI-CSAM offense (semantic gate); Gen AI tool is regex in platforms_used
+        ai_score = float(scores.get('ai_and_internet_tools', 0.0))
+        if ai_score >= AI_CSAM_SEMANTIC_THRESHOLD:
+            if 'ai_csam' not in topics:
+                topics.append('ai_csam')
+                merged['case_topics'] = list(dict.fromkeys(topics))
 
         return merged
     

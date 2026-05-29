@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/svicac_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:17:49.010081" ;
+    dcterms:created "2026-05-29T01:22:57.964759" ;
     dcterms:identifier "svicac_2026_001" ;
-    dcterms:modified "2026-05-26T17:17:49.010081" ;
+    dcterms:modified "2026-05-29T01:22:57.964759" ;
     dcterms:source <https://www.sfchronicle.com/bayarea/article/schools-sexual-abuse-list-cases-18353656.php>,
         "SVICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/svicac_2026_001/phase/arrested> ;

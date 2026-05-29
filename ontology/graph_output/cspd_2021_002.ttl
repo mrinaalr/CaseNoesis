@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cspd_2021_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T16:58:33.064028" ;
+    dcterms:created "2026-05-29T00:40:21.975349" ;
     dcterms:identifier "cspd_2021_002" ;
-    dcterms:modified "2026-05-26T16:58:33.064028" ;
+    dcterms:modified "2026-05-29T00:40:21.975349" ;
     dcterms:source <https://coloradosprings.gov/police-department/article/news/suspects-arrested-sexual-assault-child-and>,
         "CSPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cspd_2021_002/phase/arrested> ;
@@ -36,9 +36,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/colorado> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Colorado Springs Police Department" .
+<https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/framingham-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

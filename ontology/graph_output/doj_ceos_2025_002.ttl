@@ -12,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:02:11.853021" ;
+    dcterms:created "2026-05-29T00:47:39.889927" ;
     dcterms:identifier "doj_ceos_2025_002" ;
-    dcterms:modified "2026-05-26T17:02:11.853021" ;
+    dcterms:modified "2026-05-29T00:47:39.889927" ;
     dcterms:source <https://www.justice.gov/opa/pr/army-soldier-charged-child-pornography-offenses>,
         "DOJ CEOS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_002/phase/charged> ;

@@ -1,0 +1,68 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T01:13:15.080947" ;
+    dcterms:identifier "ohio_ag_2012_002" ;
+    dcterms:modified "2026-05-29T01:13:15.080947" ;
+    dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/October-2012/Attorney-General-DeWine-Announces-Double-Life-Sent>,
+        "OHIO AG" ;
+    cacontology:hasPhaseBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2012-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/ross-county-sheriffs-office> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Ohio Attorney General's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/ross-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Ross County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_002/person/victim/1> .
+

@@ -1,0 +1,70 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T01:29:16.097548" ;
+    dcterms:identifier "ut_ag_2026_010" ;
+    dcterms:modified "2026-05-29T01:29:16.097548" ;
+    dcterms:source <https://attorneygeneral.utah.gov/request-help-locating-dustin-giles-andrus-utah-man-accused-of-rape-human-trafficking-sexual-exploitation/>,
+        "UT AG" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/phase/charged> ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/event/hands-on> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/clearfield-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/utah-attorney-generals-office> .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/clearfield-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Clearfield Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/utah-attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/phase/charged> a cac-core:Phase,
+        cacontology-legal-outcomes:LegalProcessPhase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ut_ag_2026_010/person/victim/1> .
+

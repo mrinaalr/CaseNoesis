@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:10:13.284366" ;
+    dcterms:created "2026-05-29T01:04:22.886888" ;
     dcterms:identifier "lvmpd_2026_002" ;
-    dcterms:modified "2026-05-26T17:10:13.284366" ;
+    dcterms:modified "2026-05-29T01:04:22.886888" ;
     dcterms:source <https://www.lvmpd.com/Home/Components/News/News/2394/>,
         "LVMPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/lvmpd_2026_002/phase/booked> ;

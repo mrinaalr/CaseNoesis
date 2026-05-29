@@ -1,0 +1,216 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:44:22.569051" ;
+    dcterms:identifier "doj_archives_2006_010" ;
+    dcterms:modified "2026-05-29T00:44:22.569051" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/ICE%20Regpay%20PR_080906.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2006-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/10>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/11>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/4>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/5>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/6>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/7>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/8>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/9> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security>,
+        <https://caselinker.up.railway.app/resource/agency/ice>,
+        <https://caselinker.up.railway.app/resource/agency/irs-criminal-investigation-division>,
+        <https://caselinker.up.railway.app/resource/agency/justice-departments-office-of-international-affairs>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/irs-criminal-investigation-division> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "IRS Criminal Investigation Division" .
+
+<https://caselinker.up.railway.app/resource/agency/justice-departments-office-of-international-affairs> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Justice Department's Office of International Affairs" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/10>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/11>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/4>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/5>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/6>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/7>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/8>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/9> ;
+    cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/10> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/11> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/2> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/3> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/4> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/5> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/6> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/7> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/8> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/9> a uco-identity:Person ;
+    cacontology-production:victimAge 1 .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/10> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/10> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/11> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/11> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/2> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/3> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/3> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/4> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/4> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/5> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/5> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/6> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/6> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/7> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/7> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/8> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/8> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/9> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/9> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/event/csam> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/10>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/11>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/4>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/5>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/6>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/7>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/8>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/role/victim/9> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2006_010/facet/csam> .
+

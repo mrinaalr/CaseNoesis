@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_015> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:01:31.597638" ;
+    dcterms:created "2026-05-29T00:46:29.213325" ;
     dcterms:identifier "doj_archives_2008_015" ;
-    dcterms:modified "2026-05-26T17:01:31.597638" ;
+    dcterms:modified "2026-05-29T00:46:29.213325" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/MDFL-PHYSC-SENT_11-24-08.pdf>,
         "DOJ ARCHIVES" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2008_015/phase/arrested> ;
@@ -38,9 +38,7 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2008_015/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/dea> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "DEA" .
+<https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -63,11 +61,8 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_015/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/platform/kazaa> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:FileHostingService ;
-    rdfs:label "Kazaa" ;
-    cacontology-platforms:platformType "p2p" ;
-    cacontology-platforms:platformVersion "legacy" .
+<https://caselinker.up.railway.app/resource/platform/kazaa> a cacontology-platforms:FileHostingService ;
+    rdfs:label "Kazaa" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_015/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

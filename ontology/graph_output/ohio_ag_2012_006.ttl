@@ -1,0 +1,53 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T01:13:20.234666" ;
+    dcterms:identifier "ohio_ag_2012_006" ;
+    dcterms:modified "2026-05-29T01:13:20.234666" ;
+    dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/May-2012/Attorney-General-Announces-Arrest-of-Wanted-Sex-Of>,
+        "OHIO AG" ;
+    cacontology:hasPhaseBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2012-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/event/hands-on> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/victim/1> ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2012_006/person/victim/1> .
+

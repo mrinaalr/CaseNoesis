@@ -12,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/army_cid_2023_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T16:58:29.713420" ;
+    dcterms:created "2026-05-29T00:39:07.661538" ;
     dcterms:identifier "army_cid_2023_001" ;
-    dcterms:modified "2026-05-26T16:58:29.713420" ;
+    dcterms:modified "2026-05-29T00:39:07.661538" ;
     dcterms:source <https://www.cid.army.mil/Media-Resources/Releases/Article-Display/Article/3416236/operation-keiki-shield-18-six-individuals-arrested/>,
         "ARMY CID" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/army_cid_2023_001/phase/arrested> ;

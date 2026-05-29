@@ -11,9 +11,9 @@
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:16:06.065145" ;
+    dcterms:created "2026-05-29T01:18:23.195042" ;
     dcterms:identifier "sedgwick_so_2026_001" ;
-    dcterms:modified "2026-05-26T17:16:06.065145" ;
+    dcterms:modified "2026-05-29T01:18:23.195042" ;
     dcterms:source <https://www.sedgwickcounty.org/district-attorney/criminal-division/criminal-division-media-releases/sedgwick-county-man-sentenced-for-rape-of-child-in-haysville/>,
         "SEDGWICK SO" ;
     cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;

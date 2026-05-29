@@ -14,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/spd_2015_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:17:30.598901" ;
+    dcterms:created "2026-05-29T01:22:10.810392" ;
     dcterms:identifier "spd_2015_001" ;
-    dcterms:modified "2026-05-26T17:17:30.598901" ;
+    dcterms:modified "2026-05-29T01:22:10.810392" ;
     dcterms:source <https://spdblotter.seattle.gov/2015/06/22/spd-led-taskforce-pursues-child-predators-as-part-of-nationwide-operation-broken-heart/>,
         "SPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/spd_2015_001/phase/arrested> ;
@@ -193,9 +193,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/los-angeles-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/seattle-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Seattle Police Department" .
+<https://caselinker.up.railway.app/resource/agency/seattle-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/spd_2015_001/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .

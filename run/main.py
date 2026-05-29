@@ -1579,8 +1579,8 @@ _tags_cache_case_count = 0
 _cluster_groups_cache = None
 _cluster_groups_cache_case_count = None
 
-# Technology revolver: platforms_used + investigation_technology + anonymization_network + p2p_clients
-_TECHNOLOGY_REVOLVER_SNIPPET_VER = 10
+# Technology revolver: platforms_used + technology-signal buckets in extracted_features
+_TECHNOLOGY_REVOLVER_SNIPPET_VER = 11
 _technology_revolver_cache = None
 _technology_revolver_cache_case_count = None
 _technology_revolver_cache_snippet_ver = None
@@ -2503,6 +2503,7 @@ _TECH_REVOLVER_BUCKETS = (
     "investigation_technology",
     "anonymization_network",
     "p2p_clients",
+    "offense_technology",
 )
 
 _TECH_REVOLVER_ERA_ROMANS: Tuple[str, ...] = ("I", "II", "III", "IV")
@@ -3551,30 +3552,188 @@ if _q_results_path.is_file():
     def serve_q_results():
         return FileResponse(str(_q_results_path), media_type="application/json")
 
+def _compare_pool_id_order() -> List[str]:
+    """Stratified 200 ids for Patterns demo chips (from select_cases.py output)."""
+    p = _ontology_dir / "selected_200_ids.txt"
+    if not p.is_file():
+        return []
+    return [ln.strip() for ln in p.read_text().splitlines() if ln.strip()]
+
+
+def _ontology_graph_case_entries() -> Dict[str, Dict[str, Any]]:
+    """case_id -> {case_id, path, ttl_path} for every .jsonld in graph_output."""
+    by_id: Dict[str, Dict[str, Any]] = {}
+    if not _graph_output.is_dir():
+        return by_id
+    for entry in _graph_output.glob("*.jsonld"):
+        case_id = entry.stem
+        ttl = entry.with_suffix(".ttl")
+        by_id[case_id] = {
+            "case_id": case_id,
+            "path": f"/ontology/graph_output/{entry.name}",
+            "ttl_path": f"/ontology/graph_output/{ttl.name}" if ttl.exists() else None,
+        }
+    return by_id
+
 
 @app.get("/api/ontology/cases")
-def api_ontology_cases():
+def api_ontology_cases(
+    pool: str = Query(
+        "compare",
+        description="compare = stratified 200 demo cases only; all = full corpus graphs (Big Bang)",
+    ),
+):
     """
-    List every case that has been expressed as a CAC Ontology knowledge graph.
+    Patterns graph case catalog (metadata only — no JSON-LD bodies).
 
-    The visualizer (patterns-graph.html) uses this to auto-discover available
-    cases without any hardcoded data. New cases appear in the UI as soon as
-    `python ontology/features_to_cac.py <case_id>` writes their .jsonld file.
-
-    Returns a JSON array of {case_id, path, ttl_path} entries sorted by
-    case_id. Empty list if no graphs exist yet.
+    - pool=compare (default): up to 200 curated cases that have graphs (Railway-safe boot).
+    - pool=all: every case with a graph (fetch only when user presses Big Bang).
     """
-    out: List[Dict[str, Any]] = []
-    if _graph_output.is_dir():
-        for entry in sorted(_graph_output.glob("*.jsonld")):
-            case_id = entry.stem
-            ttl = entry.with_suffix(".ttl")
-            out.append({
-                "case_id": case_id,
-                "path": f"/ontology/graph_output/{entry.name}",
-                "ttl_path": f"/ontology/graph_output/{ttl.name}" if ttl.exists() else None,
-            })
-    return out
+    from fastapi.responses import JSONResponse
+
+    pool_norm = (pool or "compare").strip().lower()
+    if pool_norm not in ("compare", "all"):
+        raise HTTPException(status_code=400, detail="pool must be 'compare' or 'all'")
+
+    if pool_norm == "compare" and pool_norm in _ontology_catalog_mem:
+        payload = _ontology_catalog_mem[pool_norm]
+        return JSONResponse(
+            content=payload,
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+
+    if str(_ontology_dir) not in sys.path:
+        sys.path.insert(0, str(_ontology_dir))
+    from merge_graph_cache import graph_manifest  # noqa: E402
+
+    manifest = graph_manifest()
+    if pool_norm == "compare":
+        redis_key = get_cache_key("ontology_catalog", pool="compare", manifest=manifest)
+        redis_hit = get_cached(redis_key)
+        if isinstance(redis_hit, dict) and redis_hit.get("graph_manifest") == manifest:
+            _ontology_catalog_mem["compare"] = redis_hit
+            return JSONResponse(
+                content=redis_hit,
+                headers={"Cache-Control": "public, max-age=3600"},
+            )
+
+    graphs = _ontology_graph_case_entries()
+    corpus_total = len(graphs)
+
+    if pool_norm == "all":
+        cases = sorted(graphs.values(), key=lambda r: r["case_id"])
+        payload = {
+            "pool": "all",
+            "cases": cases,
+            "corpus_total": corpus_total,
+            "graph_manifest": manifest,
+        }
+        return JSONResponse(
+            content=payload,
+            headers={"Cache-Control": "public, max-age=300"},
+        )
+
+    compare_ids = _compare_pool_id_order()
+    cases = [graphs[cid] for cid in compare_ids if cid in graphs]
+
+    payload = {
+        "pool": "compare",
+        "cases": cases,
+        "corpus_total": corpus_total,
+        "compare_pool_size": len(cases),
+        "graph_manifest": manifest,
+    }
+    _ontology_catalog_mem["compare"] = payload
+    set_cached(
+        get_cache_key("ontology_catalog", pool="compare", manifest=manifest),
+        payload,
+        ttl=86400 * 7,
+    )
+    return JSONResponse(
+        content=payload,
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
+
+
+_ontology_catalog_mem: Dict[str, Any] = {}
+_ontology_merged_mem: Dict[str, Dict[str, Any]] = {}
+
+
+@app.get("/api/ontology/merged")
+def api_ontology_merged(
+    pool: str = Query("compare", description="compare = 200 demo merge; all = full corpus merge"),
+):
+    """
+    Pre-merged flat RDF nodes for Patterns (Redis + disk + in-process cache).
+
+    After graph_output changes, manifest rotates and cache rebuilds on first request.
+  """
+    pool_norm = (pool or "compare").strip().lower()
+    if pool_norm not in ("compare", "all"):
+        raise HTTPException(status_code=400, detail="pool must be 'compare' or 'all'")
+
+    mem_key = pool_norm
+    if mem_key in _ontology_merged_mem:
+        out = dict(_ontology_merged_mem[mem_key])
+        out["cache"] = "memory"
+        return out
+
+    ontology_dir = Path(__file__).resolve().parent.parent / "ontology"
+    if str(ontology_dir) not in sys.path:
+        sys.path.insert(0, str(ontology_dir))
+    from merge_graph_cache import get_or_build_merged  # noqa: E402
+
+    try:
+        payload = get_or_build_merged(
+            pool_norm,
+            redis_get=get_cached,
+            redis_set=lambda k, v, ttl=604800: set_cached(k, v, ttl=ttl),
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    # Slim response for Redis round-trips; full flat_nodes always returned to client
+    _ontology_merged_mem[mem_key] = payload
+    return {
+        "pool": payload.get("pool"),
+        "manifest": payload.get("manifest"),
+        "n_cases": payload.get("n_cases"),
+        "n_nodes": payload.get("n_nodes"),
+        "flat_nodes": payload.get("flat_nodes"),
+        "cache": payload.get("cache"),
+    }
+
+
+@app.post("/api/ontology/cache/warm")
+def api_ontology_cache_warm(
+    pool: str = Query("all", description="compare, all, or both (omit pool for both)"),
+):
+    """Rebuild merged graph disk/redis caches (run after batch graph generation)."""
+    ontology_dir = Path(__file__).resolve().parent.parent / "ontology"
+    if str(ontology_dir) not in sys.path:
+        sys.path.insert(0, str(ontology_dir))
+    from merge_graph_cache import get_or_build_merged, warm_all_caches  # noqa: E402
+
+    _ontology_merged_mem.clear()
+    pools = ["compare", "all"] if pool.strip().lower() == "both" else [pool.strip().lower()]
+    results = []
+    for p in pools:
+        if p not in ("compare", "all"):
+            continue
+        payload = get_or_build_merged(
+            p,
+            redis_get=get_cached,
+            redis_set=lambda k, v, ttl=604800: set_cached(k, v, ttl=ttl),
+        )
+        results.append(
+            {
+                "pool": p,
+                "n_cases": payload.get("n_cases"),
+                "n_nodes": payload.get("n_nodes"),
+                "cache": payload.get("cache"),
+            }
+        )
+    return {"warmed": results}
 
 
 if __name__ == "__main__":

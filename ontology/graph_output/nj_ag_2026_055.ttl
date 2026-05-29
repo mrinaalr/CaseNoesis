@@ -16,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_055> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:11:31.199931" ;
+    dcterms:created "2026-05-29T01:07:16.265174" ;
     dcterms:identifier "nj_ag_2026_055" ;
-    dcterms:modified "2026-05-26T17:11:31.199931" ;
+    dcterms:modified "2026-05-29T01:07:16.265174" ;
     dcterms:source <https://www.njoag.gov/attorney-general-porrino-announces-arrests-of-79-alleged-child-predators-child-pornography-offenders-in-operation-safety-net-new-jersey-internet-crimes-against-children-tas/>,
         "NJ AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_055/phase/arrested> ;
@@ -172,9 +172,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Cumberland County Prosecutor’s Office Egg Harbor Township Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/delaware-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Delaware State Police Department" .
+<https://caselinker.up.railway.app/resource/agency/delaware-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -190,9 +188,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/indiana-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Indiana State Police Department" .
+<https://caselinker.up.railway.app/resource/agency/indiana-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/lax-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

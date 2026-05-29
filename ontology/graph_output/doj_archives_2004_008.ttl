@@ -1,0 +1,117 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:42:39.882193" ;
+    dcterms:identifier "doj_archives_2004_008" ;
+    dcterms:modified "2026-05-29T00:42:39.882193" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/WDTX%20Coil%20plea%20PR_061404.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:hasPhaseBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2004-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/trust-violation> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/4> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/austin-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/ice>,
+        <https://caselinker.up.railway.app/resource/agency/internal-revenue-service---criminal-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/texas> .
+
+<https://caselinker.up.railway.app/resource/agency/austin-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/internal-revenue-service---criminal-investigation> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Internal Revenue Service - Criminal Investigation" .
+
+<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
+        cac-core:Event ;
+    cacontology:conspiracyMemberCount 4 ;
+    cacontology:participatesInConspiracy <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/4> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/victim/1> ;
+    cacontology:severityLevel 1 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/event/trust-violation> a cacontology-custodial:CustodialAbuse,
+        cacontology-custodial:TrustViolation ;
+    cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/relationship/father> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 23 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/2> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 24 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/3> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 48 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/4> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 51 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 2 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/relationship/father> a cacontology-custodial:CustodialRelationship,
+        cacontology-custodial:FamilialRelationship ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/4> ;
+    cacontology-custodial:relationshipType "father" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/2> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/3> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/3> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/offender/4> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/offender/4> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2004-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2004_008/person/victim/1> .
+

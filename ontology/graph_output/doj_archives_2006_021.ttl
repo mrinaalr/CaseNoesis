@@ -1,0 +1,97 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:44:46.822635" ;
+    dcterms:identifier "doj_archives_2006_021" ;
+    dcterms:modified "2026-05-29T00:44:46.822635" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DC%20Brice%20PR_030106.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2006-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/event/multi-jurisdiction> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/2> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/dc-human-trafficking-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division>,
+        <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/2> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/dc-human-trafficking-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
+        cac-core:Event ;
+    cacontology:conspiracyMemberCount 2 ;
+    cacontology:participatesInConspiracy <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/victim/1> ;
+    cacontology:severityLevel 3 ;
+    cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 19 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/offender/2> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 27 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 14 .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/offender/2> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/offender/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_021/person/victim/1> .
+

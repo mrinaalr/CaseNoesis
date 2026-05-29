@@ -25,18 +25,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 17
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/trust-violation",
         "@type": [
           "https://cacontology.projectvic.org/custodial#TrustViolation",
@@ -46,12 +34,6 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/relationship/mother"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -67,6 +49,18 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/platform/xbox-live",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#GamePlatform",
+          "https://cacontology.projectvic.org/core#DigitalSystemEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Xbox Live"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -74,7 +68,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T16:51:57.826533"
+            "@value": "2026-05-29T00:27:44.789931"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -84,7 +78,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T16:51:57.826533"
+            "@value": "2026-05-29T00:27:44.789931"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -152,17 +146,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/discord",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Discord"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -186,19 +169,41 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/facet/possession",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/discord",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#MessagingService"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Discord"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/relationship/mother",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/role/victim/1"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "mother"
           }
         ]
       },
@@ -228,42 +233,37 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/xbox-live",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#GamePlatform",
-          "https://cacontology.projectvic.org/core#DigitalSystemEntity"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@value": "Xbox Live"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 17
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/possession",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/relationship/mother",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "https://cacontology.projectvic.org#involvesVictim": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "mother"
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2024_402/facet/possession"
           }
         ]
       }

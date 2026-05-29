@@ -14,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2013_011> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:07:45.729724" ;
+    dcterms:created "2026-05-29T00:59:30.911481" ;
     dcterms:identifier "illinois_ag_2013_011" ;
-    dcterms:modified "2026-05-26T17:07:45.729724" ;
+    dcterms:modified "2026-05-29T00:59:30.911481" ;
     dcterms:source <https://illinoisattorneygeneral.gov/News-Room/2006-2018-Press-Archive/201310-11%20PORNOGRAPHY%20ARRESTS%20PUSH%20TOTAL%20TO%2050%20SINCE%20STATEWIDE%20CRACKDOWN%20BEGAN%20IN%202010.pdf>,
         "ILLINOIS AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2013_011/phase/arrested> ;

@@ -1,0 +1,87 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:45:49.821093" ;
+    dcterms:identifier "doj_archives_2007_028" ;
+    dcterms:modified "2026-05-29T00:45:49.821093" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/SDMS%20Ramey%20indict%20PR_051707.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2007-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/production>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/operation> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/victim/1> ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/craigslist> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/meridian-resident-agency> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/meridian-resident-agency> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Meridian Resident Agency" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/operation> a cac-core:Event,
+        cacontology-taskforce:UndercoverUnit .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 2 .
+
+<https://caselinker.up.railway.app/resource/platform/craigslist> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Craigslist" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/victim/1> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/production> a cac-core:Event,
+        cacontology-production:ProductionOffense ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/victim/1> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/facet/production> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_028/person/victim/1> .
+

@@ -1,0 +1,60 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:12:10.186089" ;
+    dcterms:identifier "azicac_2012_007" ;
+    dcterms:modified "2026-05-29T00:12:10.186089" ;
+    dcterms:source <https://www.azicac.org/cases-and-arrests/>,
+        "AZICAC" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/azicac_2012_007/phase/booked> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/azicac_2012_007/phase/booked> ;
+    cacontology:hasPhaseBeginPoint "2012-07-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/azicac_2012_007/operation> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/azicac>,
+        <https://caselinker.up.railway.app/resource/agency/fbi> .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/azicac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/operation> a cac-core:Event,
+        cacontology-taskforce:ProactiveOperation .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 26 .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2012-07-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2012-07-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/azicac_2012_007/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/azicac_2012_007/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2012-07-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/azicac_2012_007/person/victim/1> .
+

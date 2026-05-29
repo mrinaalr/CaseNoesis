@@ -1,0 +1,75 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:40:46.086767" ;
+    dcterms:identifier "de_ag_2012_003" ;
+    dcterms:modified "2026-05-29T00:40:46.086767" ;
+    dcterms:source <https://news.delaware.gov/2012/02/01/dover-man-faces-child-pornography-charges>,
+        "DE AG" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/phase/arrested> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/phase/arrested> ;
+    cacontology:hasPhaseBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2012-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/operation> ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/delaware-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/doj> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/delaware-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/operation> a cac-core:Event,
+        cacontology-taskforce:ProactiveOperation .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 21 .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/victim/1> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2012-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/victim/1> .
+

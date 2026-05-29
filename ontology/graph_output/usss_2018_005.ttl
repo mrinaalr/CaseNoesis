@@ -1,0 +1,59 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T01:28:15.708842" ;
+    dcterms:identifier "usss_2018_005" ;
+    dcterms:modified "2026-05-29T01:28:15.708842" ;
+    dcterms:source <https://www.secretservice.gov/press/releases/2018/10/killeen-husband-and-wife-plead-guilty-federal-child-exploitation-charges>,
+        "USSS" ;
+    cacontology:hasPhaseBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2018-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/usss_2018_005/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/usss_2018_005/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/killeen-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/texas-office-of-attorney-general>,
+        <https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general>,
+        <https://caselinker.up.railway.app/resource/agency/united-states-secret-service> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005/relationship/stranger> a cacontology-custodial:CustodialRelationship,
+        cacontology-grooming:OnlinePredator ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2018_005/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2018_005/role/offender/1> ;
+    cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/agency/killeen-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Killeen Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/texas-office-of-attorney-general> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Texas Office of Attorney General" .
+
+<https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/united-states-secret-service> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2018_005/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2018_005/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2018_005/person/victim/1> .
+

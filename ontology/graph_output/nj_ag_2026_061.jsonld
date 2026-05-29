@@ -2,41 +2,60 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/facet/possession",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/platform/youtube",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/platforms#VideoStreamingPlatform"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/victim/1"
+            "@value": "YouTube"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Instagram"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Twitter / X"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
           "https://cacontology.projectvic.org/core#Event"
         ],
         "https://cacontology.projectvic.org#involvesVictim": [
@@ -49,6 +68,56 @@
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
           }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/facet/possession"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Facebook"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "social media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/webcam-platform",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#VideoStreamingPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Webcam platform"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -81,7 +150,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-26T17:11:35.608038"
+            "@value": "2026-05-29T01:07:26.156536"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -91,7 +160,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-26T17:11:35.608038"
+            "@value": "2026-05-29T01:07:26.156536"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -126,10 +195,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/operation"
@@ -184,57 +253,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Twitter / X"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/youtube",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#VideoStreamingPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "YouTube"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Instagram"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/role/offender/1",
         "@type": [
           "https://cacontology.projectvic.org#OffenderRole",
@@ -248,16 +266,22 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/offender/1"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -268,44 +292,35 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/person/victim/1"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -322,47 +337,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Facebook"
-          }
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/event/hands-on",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#involvesVictim": [
           {
-            "@value": "social media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/webcam-platform",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#VideoStreamingPlatform",
-          "https://cacontology.projectvic.org/core#DigitalSystemEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Webcam platform"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_061/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org/platforms#allowsAnonymousChat": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "true"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       }

@@ -81,6 +81,7 @@ CAC_PRODUCTION = Namespace("https://cacontology.projectvic.org/production#")
 CAC_TASKFORCE = Namespace("https://cacontology.projectvic.org/taskforce#")
 CAC_NCMEC = Namespace("https://cacontology.projectvic.org/us/ncmec#")
 CAC_MULTI = Namespace("https://cacontology.projectvic.org/multi-jurisdiction#")
+CAC_AI = Namespace("https://cacontology.projectvic.org/ai-csam#")
 
 UCO_CORE = Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
 UCO_ACTION = Namespace("https://ontology.unifiedcyberontology.org/uco/action/")
@@ -194,6 +195,12 @@ PLATFORM_MAP: Dict[str, Tuple[str, Dict[str, Any]]] = {
     "BitTorrent":               ("FileHostingService",       {"platformType": "p2p"}),
     "Kazaa":                    ("FileHostingService",       {"platformType": "p2p", "platformVersion": "legacy"}),
     "Gigatribe":                ("FileHostingService",       {"platformType": "p2p"}),
+    # --- Generative AI (offense instrument; maps to platforms# + ai-csam event typing) ---
+    "Gen AI":                   ("FileHostingService",       {"platformType": "generative-ai"}),
+    "ChatGPT":                  ("MessagingService",         {"platformType": "generative-ai"}),
+    "Stable Diffusion":         ("FileHostingService",       {"platformType": "generative-ai"}),
+    "Midjourney":               ("FileHostingService",       {"platformType": "generative-ai"}),
+    "DALL-E":                   ("FileHostingService",       {"platformType": "generative-ai"}),
     # --- Dark Web ---
     "Tor":                      ("DarkWebService",           {}),
     "I2P":                      ("DarkWebService",           {}),
@@ -266,6 +273,17 @@ TOPIC_MAP: Dict[str, Dict[str, Any]] = {
         "class": CAC_GROOMING.OnlineGrooming,
         "severity": 1,
     },
+    "ai_csam": {
+        "class": CAC.DigitallyGeneratedCSAMIncident,
+        "secondary_class": CAC_AI.AIGeneratedCSAM,
+        "severity": 3,
+    },
+    # legacy alias from earlier extracts
+    "ai_generated": {
+        "class": CAC.DigitallyGeneratedCSAMIncident,
+        "secondary_class": CAC_AI.AIGeneratedCSAM,
+        "severity": 3,
+    },
 }
 
 # ---------------------------------------------------------------------------
@@ -313,6 +331,12 @@ CHARGE_PATTERN_MAP: List[Tuple[str, URIRef]] = [
     ("traveling to meet",           CAC_LEGAL.TravelingToMeetAfterComputerLure),
     ("travel to meet",              CAC_LEGAL.TravelingToMeetAfterComputerLure),
     ("coercion",                    CAC_LEGAL.CSAM_CausingProduction),
+    ("ai-generated",                CAC.DigitallyGeneratedCSAMIncident),
+    ("ai generated",                CAC.DigitallyGeneratedCSAMIncident),
+    ("artificial intelligence",     CAC.DigitallyGeneratedCSAMIncident),
+    ("synthetic",                   CAC.DigitallyGeneratedCSAMIncident),
+    ("deepfake",                    CAC.DigitallyGeneratedCSAMIncident),
+    ("obscene visual representation", CAC.DigitallyGeneratedCSAMIncident),
 ]
 
 SENTENCE_PATTERN_MAP: List[Tuple[str, URIRef]] = [
@@ -432,6 +456,7 @@ NLP_CONCEPT_MAP: Dict[str, Tuple[float, URIRef]] = {
     "exploitive_positions":  (0.45, CAC_CUSTODIAL.PositionOfTrust),
     "registered_sex_offender":(0.45, None),   # applied as flag on OffenderRole
     "evidence_seizure":      (0.45, CAC_PRODUCTION.ProducedContent),
+    "ai_and_internet_tools": (0.50, CAC.DigitallyGeneratedCSAMIncident),
 }
 
 
@@ -810,6 +835,9 @@ class CaseToCAC:
             evt_uri = BASE[f"case/{case_id}/event/{slug_key}"]
             g.add((evt_uri, RDF.type, class_uri))
             g.add((evt_uri, RDF.type, CAC_CORE.Event))
+            secondary = config.get("secondary_class")
+            if secondary is not None:
+                g.add((evt_uri, RDF.type, secondary))
             g.add((inv_uri, CAC.hasStep, evt_uri))
             event_uris[topic] = evt_uri
 

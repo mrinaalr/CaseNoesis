@@ -1,0 +1,107 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-05-29T00:44:33.330514" ;
+    dcterms:identifier "doj_archives_2006_015" ;
+    dcterms:modified "2026-05-29T00:44:33.330514" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/NDNY%20Pearson%20Plea%20PR_060706.pdf>,
+        "DOJ ARCHIVES" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/phase/charged> ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasPhaseEndPoint "2006-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/production>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/trust-violation> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/offender/1> ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/new-york-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/niskayuna-police-department> .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-york-state-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "New York State Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/niskayuna-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Niskayuna Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/trust-violation> a cacontology-custodial:CustodialAbuse,
+        cacontology-custodial:TrustViolation ;
+    cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/relationship/father> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 45 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 3 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/relationship/father> a cacontology-custodial:CustodialRelationship,
+        cacontology-custodial:FamilialRelationship ;
+    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/offender/1> ;
+    cacontology-custodial:relationshipType "father" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/phase/charged> a cac-core:Phase,
+        cacontology-legal-outcomes:LegalProcessPhase ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/production> a cac-core:Event,
+        cacontology-production:ProductionOffense ;
+    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/facet/production> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_015/person/victim/1> .
+

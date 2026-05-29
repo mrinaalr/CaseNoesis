@@ -16,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ccsao_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T16:58:31.170503" ;
+    dcterms:created "2026-05-29T00:40:18.603964" ;
     dcterms:identifier "ccsao_2025_001" ;
-    dcterms:modified "2026-05-26T16:58:31.170503" ;
+    dcterms:modified "2026-05-29T00:40:18.603964" ;
     dcterms:source <https://www.cookcountystatesattorney.org/news/palatine-high-school-teachers-aide-indicted-charges-reproducing-and-possessing-child-sexual>,
         "CCSAO" ;
     cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;

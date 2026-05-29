@@ -428,12 +428,14 @@
 
             <h3>What is CAC Ontology</h3>
             <p>The stack is layered. <strong>gUFO</strong> provides foundational ontology primitives. <strong>UCO</strong> (Unified Cyber Ontology) models cyber investigation objects and relationships. <strong>CASE</strong> (Cyber-investigation Analysis Standard Expression) defines how investigation narratives are expressed as interoperable graphs. <strong>CAC</strong> extends that stack for crimes against children specifically &mdash; platforms, victims, offenders, investigations, and outcomes as typed entities rather than free text.</p>
-            <p>CAC is shepherded by <a href="https://projectvic.org/">Project VIC International</a> and is part of the <a href="https://lf-cyberontology.org/">Linux Foundation Cyber Domain Ontology</a> ecosystem. CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.</p>
+
+            <p>CAC is shepherded by <a href="https://www.projectvic.org/" target="_blank" rel="noopener noreferrer">Project VIC International</a>, built on the Linux Foundation's <a href="https://cyberdomainontology.org/" target="_blank" rel="noopener noreferrer">Cyber Domain Ontology</a> stack (UCO and CASE). CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.</p>
+
             <ul class="ext-links">
                 <li><a href="https://github.com/Project-VIC-International/CAC-Ontology" target="_blank" rel="noopener noreferrer">CAC Ontology repository</a></li>
                 <li><a href="https://github.com/vulnmaster/CASE-UCO-SDK" target="_blank" rel="noopener noreferrer">CASE/UCO SDK with CAC bindings</a></li>
                 <li><a href="https://caseontology.org/" target="_blank" rel="noopener noreferrer">CASE</a></li>
-                <li><a href="https://ucoontology.org/" target="_blank" rel="noopener noreferrer">UCO</a></li>
+                <li><a href="https://github.com/ucoProject/UCO" target="_blank" rel="noopener noreferrer">UCO</a></li>
                 <li><a href="https://projectvic.org/" target="_blank" rel="noopener noreferrer">Project VIC International</a></li>
             </ul>
 
@@ -458,23 +460,26 @@
                 <tbody>
                     <tr>
                         <th scope="row">Cases expressed in CAC</th>
-                        <td>100</td>
+                        <td>974 (Big Bang demo corpus) &middot; 200 stratified compare pool</td>
                     </tr>
                     <tr>
                         <th scope="row">SHACL validation pass rate</th>
-                        <td>100% (100/100)</td>
+                        <td>100% (974/974)</td>
                     </tr>
                     <tr>
                         <th scope="row">CAC classes covered</th>
-                        <td>44</td>
+                        <td>49</td>
                     </tr>
                     <tr>
-                        <th scope="row">Total Nodes</th>
-                        <td>5,204</td>
+                        <th scope="row">Merged graph nodes</th>
+                        <td>18,957</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cross-case bridges (shared &ge;2 cases)</th>
+                        <td>443 agency/platform bridges</td>
                     </tr>
                 </tbody>
             </table>
-            <p class="status-note">Live numbers will populate as the pipeline comes online.</p>
             <a href="/patterns/graph" class="graph-explorer-link">Explore a case as a knowledge graph <span class="arrow">&rarr;</span></a>
         </section>
 
@@ -483,7 +488,7 @@
             <p>Open records requests are in progress to extend the corpus with state-prosecuted cases beyond federal and ICAC press-release coverage. This section will track request status, jurisdictions, and corpus additions as the work develops.</p>
         </section>
 
-        <p class="working-note">Phase 2: Patterns is a working research surface. This page will evolve as the pipeline is built. Last updated: May 26, 2026.</p>
+        <p class="working-note">Phase 2: Patterns is a working research surface. Last updated: May 29, 2026.</p>
     </div>
 
     <footer class="site-footer">

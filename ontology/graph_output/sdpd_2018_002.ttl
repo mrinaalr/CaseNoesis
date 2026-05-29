@@ -15,9 +15,9 @@
 
 <https://caselinker.up.railway.app/resource/case/sdpd_2018_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-26T17:15:59.972764" ;
+    dcterms:created "2026-05-29T01:18:09.171663" ;
     dcterms:identifier "sdpd_2018_002" ;
-    dcterms:modified "2026-05-26T17:15:59.972764" ;
+    dcterms:modified "2026-05-29T01:18:09.171663" ;
     dcterms:source <https://www.sandiego.gov/sites/default/files/broken_heart_2018_da_final_press_release.pdf>,
         "SDPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/sdpd_2018_002/phase/arrested> ;
@@ -51,9 +51,7 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/sdpd_2018_002/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/chula-vista-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Chula Vista Police Department" .
+<https://caselinker.up.railway.app/resource/agency/chula-vista-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
@@ -75,9 +73,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "La Mesa Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/san-diego-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "San Diego Police Department" .
+<https://caselinker.up.railway.app/resource/agency/san-diego-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/san-diego-unified-school-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
