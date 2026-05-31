@@ -12,7 +12,8 @@ Design Ideas from Architecture:
   - Perpetrator Context (anonymized): perpetrator_count, perpetrator_demographics, relationship_to_victim, previous_conviction
   - Technology & Methods: platforms_used (column; includes Gen AI tool); investigation_technology,
     anonymization_network, p2p_clients (in extracted_features JSON)
-  - Content Classification: case_topics includes ``ai_csam`` (AI-generated / synthetic CSAM product)
+  - Content Classification: case_topics includes ``ai_csam`` (AI-generated / synthetic CSAM product),
+    ``sextortion`` (regex: sextort*, sexual extortion, related blackmail/threat phrasing)
   - Law Enforcement: prosecution_outcome (agencies/orgs in extracted_features)
   - Content Classification: severity_indicators, case_topics
   - Raw/Original Data: raw_data, extracted_features
@@ -112,6 +113,7 @@ from ai_extraction_patterns import (
     AI_CSAM_SEMANTIC_THRESHOLD,
     AI_CSAM_TOPIC_RE,
     GEN_AI_TOOL_RE,
+    SEXTORTION_TOPIC_RE,
 )
 
 _AI_CSAM_TOPIC_RE = AI_CSAM_TOPIC_RE
@@ -365,31 +367,80 @@ def extract_date_range(case: Dict[str, Any]) -> Optional[Dict[str, str]]:
     return None
 
 
+_VICTIM_COUNT_INT = r'(\d{1,3}(?:,\d{3})+|\d+)'
+
+_VICTIM_COUNT_POSITIVE_RES: Tuple[re.Pattern, ...] = (
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+(?:minor\s+)?victims?\b', re.I),
+    re.compile(
+        rf'{_VICTIM_COUNT_INT}\s+(?:child|children|minor|minors)\s+'
+        r'(?:were\s+)?(?:abused|exploited|harmed)\b',
+        re.I,
+    ),
+    re.compile(
+        rf'involving\s+{_VICTIM_COUNT_INT}\s+'
+        r'(?:child|children|minor|minors|juveniles)\b',
+        re.I,
+    ),
+    re.compile(
+        rf'at\s+least\s+{_VICTIM_COUNT_INT}\s+(?:child|children)\b'
+        r'(?!\s+(?:predators?|porn|charges)\b)',
+        re.I,
+    ),
+)
+
+_VICTIM_COUNT_EXCLUSION_RES: Tuple[re.Pattern, ...] = (
+    re.compile(
+        rf'{_VICTIM_COUNT_INT}\s+child\s+'
+        r'(?:predators?|offenders?|individuals|defendants|pornographers?|pedophiles?)\b',
+        re.I,
+    ),
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+child\s+porn\b', re.I),
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+child\s+porn-?related\s+charges\b', re.I),
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+child\s+exploitation\s+charges\b', re.I),
+    re.compile(rf'\bcharged\s+{_VICTIM_COUNT_INT}\b', re.I),
+    re.compile(rf'\barrested\s+{_VICTIM_COUNT_INT}\b', re.I),
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+offenders?\s+were\s+arrested\b', re.I),
+)
+
+
+def _parse_victim_count_digits(raw: str) -> Optional[int]:
+    try:
+        return int(raw.replace(',', ''))
+    except ValueError:
+        return None
+
+
+def _victim_count_match_excluded(case_text: str, start: int, end: int) -> bool:
+    """True when the match sits in offender/charge/arrest headline context."""
+    window_start = max(0, start - 30)
+    window_end = min(len(case_text), end + 90)
+    window = case_text[window_start:window_end]
+    return any(pat.search(window) for pat in _VICTIM_COUNT_EXCLUSION_RES)
+
+
 def extract_victim_count(case: Dict[str, Any]) -> Optional[int]:
     """
-    Extract victim count when explicitly mentioned.
-    Pattern: "X victims", "X children", "X minors", "at least X children"
+    Extract victim count only from explicit victim-clause phrasing.
+
+    Comma-aware integers (e.g. ``1,140``) are parsed whole; offender/charge
+    headlines and arrest counts are excluded. Returns ``None`` when no clause matches.
     """
     case_text = case.get('case_text', '')
     if not case_text:
         return None
-    
-    # Pattern: "2 victims", "4 victims", "at least 15 children"
-    patterns = [
-        r'(\d+)\s+(victim|victims)',
-        r'(\d+)\s+(child|children|minor|minors)',
-        r'at\s+least\s+(\d+)\s+(child|children)',
-    ]
-    
-    for pattern in patterns:
-        match = re.search(pattern, case_text, re.IGNORECASE)
-        if match:
-            try:
-                return int(match.group(1))
-            except (ValueError, IndexError):
+
+    counts: List[int] = []
+    for pattern in _VICTIM_COUNT_POSITIVE_RES:
+        for match in pattern.finditer(case_text):
+            if _victim_count_match_excluded(case_text, match.start(), match.end()):
                 continue
-    
-    return None
+            value = _parse_victim_count_digits(match.group(1))
+            if value is not None:
+                counts.append(value)
+
+    if not counts:
+        return None
+    return max(counts)
 
 
 def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -885,50 +936,353 @@ def _agency_aliases(agency: str) -> List[str]:
     return patterns
 
 
+def _normalize_prosecution_charge_text(charge: str) -> str:
+    """Collapse whitespace/newlines in a captured charge phrase."""
+    return re.sub(r'\s+', ' ', charge).strip()
+
+
+# Headline/byline pollution often glued to regex captures (e.g. "…pornography BY SHELLI POOLE").
+_PROSECUTION_CHARGE_BYLINE_RE = re.compile(
+    r'\bBY\s+[A-Z][A-Z\s\'\.-]{2,}(?:\s+'
+    r'(?:JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|'
+    r'SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\b)?',
+    re.IGNORECASE,
+)
+
+
+def _is_junk_prosecution_charge(charge: str) -> bool:
+    """Reject digit-only, too-short, or byline-contaminated charge captures."""
+    if not charge:
+        return True
+    if len(charge) < 4:
+        return True
+    if re.fullmatch(r'\d+', charge):
+        return True
+    alnum = re.sub(r'[^\w\s]', '', charge).strip()
+    if len(alnum) < 4:
+        return True
+    if re.match(r'^(?:By|Source|Posted|Updated)\b', charge, re.IGNORECASE):
+        return True
+    if _PROSECUTION_CHARGE_BYLINE_RE.search(charge):
+        return True
+    return False
+
+
+# Terminal-stage-wins precedence (low → high). If text mentions both
+# "arrested" and "convicted", booking_status becomes "convicted".
+#
+# "acquitted" is intentionally omitted: ICAC press releases are success stories;
+# "acquitted" usually refers to a prior case or partial acquittal, not the outcome
+# of the featured prosecution.
+_PROSECUTION_STATUS_PRECEDENCE: Tuple[Tuple[int, str, str], ...] = (
+    (1, r'\barrested\b', 'arrested'),
+    (2, r'\bbooked\b', 'booked'),
+    (3, r'\bcharged\b', 'charged'),
+    (4, r'\bindicted\b', 'indicted'),
+    (5, r'\b(?:pleaded|pled)\s+guilty\b', 'pleaded_guilty'),
+    (6, r'\bconvicted\b', 'convicted'),
+    (7, r'\bsentenced\b', 'sentenced'),
+)
+
+# "N count(s) [of] CHARGE" — stop at newline (not comma-only) to avoid swallowing bylines.
+_CHARGE_COUNT_RE = re.compile(
+    r'(\d+)\s+counts?\s+(?:of\s+)?([^\n,;]+?)(?=\s*(?:,|\.|;|\n|$))',
+    re.IGNORECASE,
+)
+
+# Bare charge phrases when no "N counts" prefix is present (longest / specific first).
+_BARE_CHARGE_PHRASES: Tuple[Tuple[re.Pattern, str], ...] = tuple(
+    (re.compile(pat, re.IGNORECASE), label)
+    for pat, label in [
+        (r'\bsexual exploitation of a minor\b', 'sexual exploitation of a minor'),
+        (r'\bsexual exploitation of\s+a\s+child\b', 'sexual exploitation of a child'),
+        (r'\bsexual exploitation of children\b', 'sexual exploitation of children'),
+        (r'\bchild sexual abuse material\b', 'child sexual abuse material'),
+        (r'\bchild pornography\b', 'child pornography'),
+        (r'\bchild porn\b', 'child porn'),
+        (r'\bpossession of child pornography\b', 'possession of child pornography'),
+        (r'\bdistribution of child pornography\b', 'distribution of child pornography'),
+        (r'\bproduction of child pornography\b', 'production of child pornography'),
+        (r'\btransmission of child pornography\b', 'transmission of child pornography'),
+        (r'\bonline enticement\b', 'online enticement'),
+        (r'\bsex trafficking\b', 'sex trafficking'),
+        (r'\bsextortion\b', 'sextortion'),
+        (r'\bpandering obscenity involving a minor\b', 'pandering obscenity involving a minor'),
+        (r'\bpandering\b', 'pandering'),
+        (r'\bobscenity involving a minor\b', 'obscenity involving a minor'),
+        (r'\bobscene material\b', 'obscene material'),
+        (r'\bsexual exploitation\b', 'sexual exploitation'),
+        (r'\bchild molestation\b', 'child molestation'),
+        (r'\bchild exploitation\b', 'child exploitation'),
+    ]
+)
+
+# Sentence *duration* outcomes (distinct from pretrial jail location in ``jail``).
+# Compound patterns run first (span-aware) so bare year/supervised fragments are not
+# re-emitted from the same phrase (Fix B).
+_SENTENCE_COMPOUND_RES: Tuple[re.Pattern, ...] = (
+    re.compile(
+        r'\b\d{1,3}\s*(?:years?|yrs?)\s+of\s+supervised\s+release\b',
+        re.I,
+    ),
+    re.compile(r'\b\d{1,3}\s*(?:years?|yrs?)\s+probation\b', re.I),
+)
+
+_SENTENCE_DURATION_RES: Tuple[re.Pattern, ...] = (
+    re.compile(r'\bsentenced\s+to\s+[^.\n]{0,80}?\blife\b', re.I),
+    re.compile(r'\blife\s+(?:in\s+)?prison(?:ment)?\b', re.I),
+    re.compile(r'\bmandatory\s+minimum(?:\s+sentence)?\b', re.I),
+    re.compile(r'\b\d{1,3}\s+(?:years?|yrs?)\b', re.I),
+    re.compile(r'\b\d{1,3}\s+months?\b', re.I),
+    re.compile(r'\$\s*[\d,]+(?:\.\d{2})?', re.I),
+    re.compile(r'\bprobation\b', re.I),
+    re.compile(r'\bsupervised\s+release\b', re.I),
+)
+
+_SENTENCING_CLAUSE_RE = re.compile(
+    r'\bsentenced\s+to\b|'
+    r'\bsentenced\b|'
+    r'\bin\s+prison\b|'
+    r'\bfederal\s+prison\b|'
+    r'\bimprisonment\b|'
+    r'\bsupervised\s+release\b|'
+    r'\bprobation\b|'
+    r'\bordered\s+today\s+to\s+serve\b|'
+    r'\bto\s+be\s+followed\s+by\b|'
+    r'\bmandatory\s+minimum\b|'
+    r'\bmonths?\s+in\s+(?:federal\s+)?prison\b',
+    re.I,
+)
+
+_SENTENCE_URL_JUNK_RE = re.compile(r'[#%]|%20|://|crime#', re.I)
+_SENTENCE_AGE_AFTER_RE = re.compile(r'^\s*old\b', re.I)
+
+
+def _extract_prosecution_status(case_text: str) -> Optional[str]:
+    """Return the highest-precedence prosecution stage mentioned in the text."""
+    best_rank = 0
+    best_status: Optional[str] = None
+    for rank, pattern, status in _PROSECUTION_STATUS_PRECEDENCE:
+        if re.search(pattern, case_text, re.IGNORECASE) and rank > best_rank:
+            best_rank = rank
+            best_status = status
+    return best_status
+
+
+def _extract_prosecution_charges(case_text: str) -> List[Dict[str, Any]]:
+    charges: List[Dict[str, Any]] = []
+    seen: set = set()
+
+    def _add(count: int, charge: str) -> None:
+        charge = _normalize_prosecution_charge_text(charge)
+        if _is_junk_prosecution_charge(charge):
+            return
+        key = (count, charge.lower())
+        if key in seen:
+            return
+        seen.add(key)
+        charges.append({'count': count, 'charge': charge})
+
+    for match in _CHARGE_COUNT_RE.finditer(case_text):
+        try:
+            _add(int(match.group(1)), match.group(2))
+        except (ValueError, IndexError):
+            continue
+
+    for pattern, label in _BARE_CHARGE_PHRASES:
+        if pattern.search(case_text):
+            _add(1, label)
+
+    return charges
+
+
+def _sentence_span_overlaps_covered(
+    start: int, end: int, covered: List[Tuple[int, int]]
+) -> bool:
+    return any(start < ce and end > cs for cs, ce in covered)
+
+
+def _sentence_match_in_sentencing_clause(
+    case_text: str, start: int, end: int, *, window: int = 140
+) -> bool:
+    """True when the match sits near explicit sentencing / prison language."""
+    window_start = max(0, start - window)
+    window_end = min(len(case_text), end + window)
+    return bool(_SENTENCING_CLAUSE_RE.search(case_text[window_start:window_end]))
+
+
+def _sentence_duration_requires_anchor(phrase: str) -> bool:
+    """Bare year/month/probation/supervised tokens need sentencing context."""
+    lower = phrase.lower()
+    if '$' in phrase or 'life' in lower or 'mandatory' in lower:
+        return False
+    if re.search(r'\d\s+years?\s+of\s+supervised\s+release', phrase, re.I):
+        return False
+    if re.search(r'\d\s+years?\s+probation', phrase, re.I):
+        return False
+    if re.search(r'\b\d{1,3}\s+(?:years?|yrs?|months?)\b', phrase, re.I):
+        return True
+    if lower in ('probation', 'supervised release'):
+        return True
+    return False
+
+
+def _sentence_match_is_url_junk(case_text: str, start: int, end: int) -> bool:
+    window_start = max(0, start - 40)
+    window_end = min(len(case_text), end + 40)
+    return bool(_SENTENCE_URL_JUNK_RE.search(case_text[window_start:window_end]))
+
+
+def _parse_sentence_months(phrase: str) -> Optional[int]:
+    m = re.search(r'(\d{1,3})\s*months?', phrase, re.I)
+    return int(m.group(1)) if m else None
+
+
+def _parse_sentence_years(phrase: str) -> Optional[int]:
+    """Custodial year count only — not supervised-release or probation compounds."""
+    lower = phrase.lower()
+    if (
+        'supervised' in lower
+        or 'probation' in lower
+        or '$' in phrase
+        or 'life' in lower
+        or 'mandatory' in lower
+    ):
+        return None
+    m = re.search(r'(\d{1,3})\s*(?:years?|yrs?)', phrase, re.I)
+    return int(m.group(1)) if m else None
+
+
+def _dedupe_sentence_same_duration_units(
+    entries: List[Tuple[str, int, int]],
+    case_text: str,
+) -> List[str]:
+    """
+    Fix A: drop redundant years when the same duration appears as months (|M − 12·Y| ≤ 1).
+    Always keep the months figure (court-precise). When several year matches equate to
+    the same months value, drop years that are not in a sentencing clause before others.
+    """
+    to_drop: set = set()
+    months_entries = [
+        (i, _parse_sentence_months(p))
+        for i, (p, _s, _e) in enumerate(entries)
+        if _parse_sentence_months(p) is not None
+    ]
+    years_entries = [
+        (i, _parse_sentence_years(p), s, e)
+        for i, (p, s, e) in enumerate(entries)
+        if _parse_sentence_years(p) is not None
+    ]
+
+    for _mi, m_val in months_entries:
+        if m_val is None:
+            continue
+        matching_year_idxs = [
+            (yi, y_val, ys, ye)
+            for yi, y_val, ys, ye in years_entries
+            if y_val is not None and abs(m_val - y_val * 12) <= 1
+        ]
+        if not matching_year_idxs:
+            continue
+        # Prefer dropping headline-only years before years in sentencing clauses.
+        matching_year_idxs.sort(
+            key=lambda t: (
+                0 if _sentence_match_in_sentencing_clause(case_text, t[2], t[3]) else 1,
+                t[2],
+            )
+        )
+        for yi, _y_val, _ys, _ye in matching_year_idxs:
+            to_drop.add(yi)
+
+    seen: set = set()
+    result: List[str] = []
+    for i, (phrase, _start, _end) in enumerate(entries):
+        if i in to_drop:
+            continue
+        key = phrase.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(phrase)
+    return result
+
+
+def _extract_sentence_durations(case_text: str) -> List[str]:
+    """Extract sentence outcome phrases (years, life, probation, fines) — not jail names."""
+    covered: List[Tuple[int, int]] = []
+    entries: List[Tuple[str, int, int]] = []
+
+    def _add_match(match: re.Match[str]) -> None:
+        start, end = match.start(), match.end()
+        if _sentence_span_overlaps_covered(start, end, covered):
+            return
+        raw = match.group(0)
+        if _sentence_match_is_url_junk(case_text, start, end):
+            return
+        if re.search(r'\d\s+years?', raw, re.I) and _SENTENCE_AGE_AFTER_RE.match(
+            case_text[end : end + 12]
+        ):
+            return
+        phrase = _normalize_prosecution_charge_text(raw)
+        if _sentence_duration_requires_anchor(phrase) and not _sentence_match_in_sentencing_clause(
+            case_text, start, end
+        ):
+            return
+        entries.append((phrase, start, end))
+        covered.append((start, end))
+
+    for pattern in _SENTENCE_COMPOUND_RES:
+        for match in pattern.finditer(case_text):
+            _add_match(match)
+
+    for pattern in _SENTENCE_DURATION_RES:
+        for match in pattern.finditer(case_text):
+            _add_match(match)
+
+    has_compound_supervised = any(
+        re.search(r'\d\s+years?\s+of\s+supervised\s+release', phrase, re.I)
+        for phrase, _start, _end in entries
+    )
+    if has_compound_supervised:
+        entries = [
+            item for item in entries if item[0].lower() != 'supervised release'
+        ]
+
+    entries.sort(key=lambda item: item[1])
+    return _dedupe_sentence_same_duration_units(entries, case_text)
+
+
 def extract_prosecution_outcome(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
-    Extract prosecution outcome: charges, booking status, jail.
-    Patterns: "10 counts of sexual exploitation of a minor", "booked", "Maricopa County Jail"
+    Extract prosecution outcome: charges, terminal booking status, pretrial jail, sentences.
+
+    ``jail`` = detention facility (e.g. "Maricopa County Jail", non-bondable).
+    ``sentences`` = list of duration/outcome phrases ("15 years", "life", "probation").
     """
     case_text = case.get('case_text', '')
     if not case_text:
         return None
-    
-    outcome = {
-        'charges': [],
-        'booking_status': None,
-        'jail': None
+
+    outcome: Dict[str, Any] = {
+        'charges': _extract_prosecution_charges(case_text),
+        'booking_status': _extract_prosecution_status(case_text),
+        'jail': None,
+        'sentences': _extract_sentence_durations(case_text),
     }
-    
-    # Extract charges: "10 counts of sexual exploitation of a minor", "32 counts Dangerous Crimes Against Children"
-    charge_pattern = r'(\d+)\s+counts?\s+of\s+([^,\.]+?)(?:,|\.|$)'
-    charge_matches = re.finditer(charge_pattern, case_text, re.IGNORECASE)
-    for match in charge_matches:
-        try:
-            count = int(match.group(1))
-            charge = match.group(2).strip()
-            outcome['charges'].append({'count': count, 'charge': charge})
-        except (ValueError, IndexError):
-            continue
-    
-    # Extract booking status: "booked", "arrested", "charged"
-    if re.search(r'\bbooked\b', case_text, re.IGNORECASE):
-        outcome['booking_status'] = 'booked'
-    elif re.search(r'\barrested\b', case_text, re.IGNORECASE):
-        outcome['booking_status'] = 'arrested'
-    elif re.search(r'\bcharged\b', case_text, re.IGNORECASE):
-        outcome['booking_status'] = 'charged'
-    
-    # Extract jail: "Maricopa County Jail", "non-bondable"
-    jail_pattern = r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+County\s+Jail)'
-    jail_match = re.search(jail_pattern, case_text)
+
+    jail_match = re.search(
+        r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+County\s+Jail)',
+        case_text,
+    )
     if jail_match:
-        outcome['jail'] = jail_match.group(1)
-    
+        outcome['jail'] = _normalize_prosecution_charge_text(jail_match.group(1))
+
     if re.search(r'non-bondable', case_text, re.IGNORECASE):
         outcome['jail'] = (outcome['jail'] or '') + ' (non-bondable)'
-    
-    return outcome if outcome['charges'] or outcome['booking_status'] or outcome['jail'] else None
+
+    if outcome['charges'] or outcome['booking_status'] or outcome['jail'] or outcome['sentences']:
+        return outcome
+    return None
 
 
 def extract_severity(case: Dict[str, Any]) -> List[str]:
@@ -1000,7 +1354,7 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
     Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger,
-    csam, ai_csam (AI-generated / synthetic CSAM product)
+    csam, ai_csam (AI-generated / synthetic CSAM product), sextortion (regex only)
 
     Production requires phrase-level cues (e.g. "production of", "minor production", "created … videos",
     "produced child …"); bare "created"/"produced" alone do not tag production.
@@ -1055,7 +1409,10 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     # AI-CSAM offense product (tool is Gen AI in platforms_used)
     if _AI_CSAM_TOPIC_RE.search(case_text):
         topics.append('ai_csam')
-    
+
+    if SEXTORTION_TOPIC_RE.search(case_text):
+        topics.append('sextortion')
+
     return list(set(topics))  # Remove duplicates
 
 
