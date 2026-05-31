@@ -371,6 +371,26 @@ _VICTIM_COUNT_INT = r'(\d{1,3}(?:,\d{3})+|\d+)'
 
 _VICTIM_COUNT_POSITIVE_RES: Tuple[re.Pattern, ...] = (
     re.compile(rf'{_VICTIM_COUNT_INT}\s+(?:minor\s+)?victims?\b', re.I),
+    re.compile(rf'{_VICTIM_COUNT_INT}\s+child\s+victims?\b', re.I),
+    re.compile(
+        rf'rescued\s+{_VICTIM_COUNT_INT}\s+(?:child|children|minor|minors)\b',
+        re.I,
+    ),
+    re.compile(
+        rf'{_VICTIM_COUNT_INT}\s+(?:child|children|minor|minors)\s+were\s+rescued\b',
+        re.I,
+    ),
+    re.compile(
+        rf'identified\s+{_VICTIM_COUNT_INT}\s+children\s+'
+        r'(?:living|residing|that were|as new victims)\b',
+        re.I,
+    ),
+    re.compile(
+        rf'(?:abused|exploited|harmed|molested|victimized)\s+{_VICTIM_COUNT_INT}\s+'
+        r'(?:child|children|minor|minors)\b',
+        re.I,
+    ),
+    re.compile(rf'involved\s+{_VICTIM_COUNT_INT}\s+child\s+victims?\b', re.I),
     re.compile(
         rf'{_VICTIM_COUNT_INT}\s+(?:child|children|minor|minors)\s+'
         r'(?:were\s+)?(?:abused|exploited|harmed)\b',
