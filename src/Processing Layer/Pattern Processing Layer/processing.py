@@ -940,19 +940,32 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
     # Extract agencies (state names alone are not agencies — use NER/full names)
     agencies = [
         'AZICAC', 'FBI', 'Phoenix Police', 'ICAC', 'HSI', 'MCSO', 'DPS',
-        'Australian Federal Police', 'Chandler Police', 'Buckeye'
+        'NCMEC', 'CEOS', 'USMS', 'USSS', 'ICE', 'DOJ',
     ]
 
     for agency in agencies:
-        for alias_pat in _agency_aliases(agency):
-            if re.search(alias_pat, case_text, re.IGNORECASE):
+        for alias_pat, alias_flags in _agency_aliases(agency):
+            if re.search(alias_pat, case_text, alias_flags):
                 investigation['agencies'].append(agency)
                 break
 
     return investigation
 
 
-def _agency_aliases(agency: str) -> List[str]:
+# Spelled-out / alternate forms → canonical regex agency label
+_AGENCY_EXTRA_PATTERNS: Dict[str, List[Tuple[str, int]]] = {
+    "NCMEC": [(r"National Center for Missing", re.I)],
+    "CEOS": [(r"Child Exploitation and Obscenity Section", re.I)],
+    "USMS": [(r"U\.?\s*S\.?\s*Marshals(?:\s+Service)?", re.I),
+              (r"United States Marshals(?:\s+Service)?", re.I)],
+    "USSS": [(r"U\.?\s*S\.?\s*Secret Service", re.I),
+             (r"United States Secret Service", re.I)],
+    "DOJ": [(r"Department of Justice", re.I)],
+    "ICE": [(r"Immigration and Customs Enforcement", re.I)],
+}
+
+
+def _agency_aliases(agency: str) -> List[Tuple[str, int]]:
     """
     Build the list of regex patterns that should count as a mention of
     ``agency`` in case narrative text.
@@ -963,16 +976,26 @@ def _agency_aliases(agency: str) -> List[str]:
     ``\\b<word>\\b`` regex misses those forms because ``.`` is a word
     boundary, so we also generate a dotted-letter variant. The canonical
     label (``FBI``) is always what gets stored.
+
+    Returns ``(pattern, flags)`` tuples. Short acronyms that double as
+    common English words (``ICE``) use case-sensitive matching only.
     """
-    patterns = [r'\b' + re.escape(agency) + r'\b']
+    # ICE lowercase is a common English word; DOJ acronym in URLs — case-sensitive.
+    case_sensitive = frozenset({"ICE", "DOJ"})
+    flags = 0 if agency in case_sensitive else re.I
+    patterns: List[Tuple[str, int]] = [
+        (r'(?<![A-Za-z])' + re.escape(agency) + r'(?![A-Za-z])', flags)
+    ]
     if (
         len(agency) >= 2
         and ' ' not in agency
         and agency.isupper()
         and agency.isalpha()
+        and agency not in case_sensitive
     ):
         dotted = r'(?<![A-Za-z])' + r'\.?'.join(re.escape(c) for c in agency) + r'\.?(?![A-Za-z])'
-        patterns.append(dotted)
+        patterns.append((dotted, re.I))
+    patterns.extend(_AGENCY_EXTRA_PATTERNS.get(agency, []))
     return patterns
 
 
