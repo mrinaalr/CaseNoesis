@@ -13,17 +13,12 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_038> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:39:46.036524" ;
+    dcterms:created "2026-05-30T20:34:01.885680" ;
     dcterms:identifier "cbp_2026_038" ;
-    dcterms:modified "2026-05-29T00:39:46.036524" ;
+    dcterms:modified "2026-05-30T20:34:01.885680" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/brownsville-cbp-officers-apprehend-man-wanted-sexual-assault-indecency>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_038/event/multi-jurisdiction> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_038/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_038/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/instagram> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cameron-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_038/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -32,11 +27,13 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_038/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
+
 <https://caselinker.up.railway.app/resource/agency/cameron-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_038/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_038/role/victim/1> ;
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
 
@@ -44,9 +41,6 @@
     cacontology-detection:ageEstimate 49 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_038/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_038/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;

@@ -11,25 +11,17 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:27:14.263284" ;
+    dcterms:created "2026-05-30T20:39:39.290512" ;
     dcterms:identifier "us_marshals_2024_011" ;
-    dcterms:modified "2026-05-29T01:27:14.263284" ;
+    dcterms:modified "2026-05-30T20:39:39.290512" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/colorado-interstate-fugitive-apprehended-new-mexico>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2024-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bernalillo-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/colorado>,
-        <https://caselinker.up.railway.app/resource/agency/colorado-bureau-of-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/marshals-service-district-of-new-mexico-southwest-investigative-fugitive-team>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado>,
         <https://caselinker.up.railway.app/resource/agency/montrose-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/new-mexico-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/united-states-marshals-service>,
         <https://caselinker.up.railway.app/resource/agency/usms> .
 
@@ -39,39 +31,22 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/bernalillo-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
 <https://caselinker.up.railway.app/resource/agency/colorado> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/colorado-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Colorado Bureau of Investigation" .
-
-<https://caselinker.up.railway.app/resource/agency/marshals-service-district-of-new-mexico-southwest-investigative-fugitive-team> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Marshals Service-District of New Mexico-Southwest Investigative Fugitive Team" .
 
 <https://caselinker.up.railway.app/resource/agency/montrose-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Montrose Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/new-mexico-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/united-states-marshals-service> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -82,4 +57,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_011/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

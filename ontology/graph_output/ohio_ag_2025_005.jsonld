@@ -2,45 +2,33 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-department-of-rehabilitation-and-corrections",
+        "@id": "https://caselinker.up.railway.app/resource/agency/noble-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Ohio Department of Rehabilitation and Corrections"
+            "@value": "Noble County Sheriff's Office"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/southeastern-ohio-human-trafficking-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/agency/marietta-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/noble-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/agency/belpre-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Belpre Police Department"
+          }
         ]
       },
       {
@@ -51,7 +39,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:10:12.937291"
+            "@value": "2026-05-30T20:37:42.342735"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -61,7 +49,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:10:12.937291"
+            "@value": "2026-05-30T20:37:42.342735"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -72,16 +60,14 @@
             "@id": "https://www.ohioattorneygeneral.gov/Media/News-Releases/July-2025/Human-Trafficking-Investigation-Leads-to-Rape-Char"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/phase/indicted"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/phase/indicted"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -97,22 +83,15 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/athens-police-department"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/belpre-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/crime-investigation"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/marietta-college-police-department"
@@ -124,9 +103,6 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/noble-county-sheriffs-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-ohio-organized-crime-investigations-commission"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/ohio-department-of-rehabilitation-and-corrections"
           },
           {
@@ -135,9 +111,118 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/athens-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Athens Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/southeastern-ohio-human-trafficking-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Southeastern Ohio Human Trafficking Task Force"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/phase/indicted",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/crime-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-department-of-rehabilitation-and-corrections",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Ohio Department of Rehabilitation and Corrections"
+          }
         ]
       },
       {
@@ -164,73 +249,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/belpre-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/marietta-college-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-ohio-organized-crime-investigations-commission",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Ohio Attorney General’s Ohio Organized Crime Investigations Commission"
+            "@value": "Marietta College Police Department"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/athens-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -254,18 +281,6 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_005/person/victim/1"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/marietta-college-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/marietta-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

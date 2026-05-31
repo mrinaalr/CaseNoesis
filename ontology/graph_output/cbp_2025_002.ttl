@@ -13,18 +13,13 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2025_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:17.476863" ;
+    dcterms:created "2026-05-30T20:34:06.762268" ;
     dcterms:identifier "cbp_2025_002" ;
-    dcterms:modified "2026-05-29T00:40:17.476863" ;
+    dcterms:modified "2026-05-30T20:34:06.762268" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/progreso-cbp-officers-apprehend-man-wanted-aggravated-sexual-assault>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2025_002/event/multi-jurisdiction> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/instagram> ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/cbp_2025_002/sentence/1> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2025_002/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/cbp_2025_002/legal-proceeding> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-department>,
         <https://caselinker.up.railway.app/resource/agency/nueces-county-sheriffs-office> .
 
@@ -33,6 +28,9 @@
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -44,20 +42,18 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2025_002/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/victim/1> ;
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2025_002/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): Hidalgo County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2025_002/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2025_002/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2025_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "Hidalgo County Jail" .
-
-<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2025_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;

@@ -2,15 +2,15 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service",
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
           "https://cacontology.projectvic.org/core#Phase"
         ],
         "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
@@ -18,42 +18,6 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -76,6 +40,12 @@
           {
             "@value": "stranger"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -103,6 +73,52 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -110,7 +126,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:27:18.162037"
+            "@value": "2026-05-30T20:39:39.590779"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -120,7 +136,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:27:18.162037"
+            "@value": "2026-05-30T20:39:39.590779"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -133,29 +149,20 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/arrested"
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/legal-step/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -163,22 +170,12 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service"
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/virginia-state-police-department"
@@ -186,15 +183,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/victim/1"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

@@ -14,29 +14,23 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:03:35.425630" ;
+    dcterms:created "2026-05-30T20:37:06.569830" ;
     dcterms:identifier "la_ag_2026_030" ;
-    dcterms:modified "2026-05-29T01:03:35.425630" ;
+    dcterms:modified "2026-05-30T20:37:06.569830" ;
     dcterms:source <https://www.ag.state.la.us/Article/415>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/cybertip>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> ;
-    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ag-murrills-louisiana-bureau-of-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/fbi>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/kenner-police-department>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-cyber-crimes-unit>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-fugitive-apprehension-unit>,
-        <https://caselinker.up.railway.app/resource/agency/murrills-louisiana-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -44,8 +38,6 @@
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/ag-murrills-louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -63,31 +55,42 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Louisiana Bureau of Investigations Fugitive Apprehension Unit" .
 
-<https://caselinker.up.railway.app/resource/agency/murrills-louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
-
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
-    rdfs:label """Possession of Child Sex…
-Source: Murrill's Louisiana Bureau of Investigation arrests Metairie man for more than 40 counts of Possession of
-Child Sexual Abuse Material
-Agents with Attorney General Liz Murrill's Louisiana Bureau of Investigation arrested a man from Metairie for
-more than 40 counts of Possession of Child Sexual Abuse Material""" ;
+    rdfs:label "Possession of Child Sex…" ;
     cacontology-legal-outcomes:indictmentCounts 40 .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "Possession of" ;
+    cacontology-legal-outcomes:indictmentCounts 40 .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/3> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "Possession of Child Sexual Abuse Material" ;
+    cacontology-legal-outcomes:indictmentCounts 40 .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/4> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/4> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -95,15 +98,20 @@ more than 40 counts of Possession of Child Sexual Abuse Material""" ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/facet/possession> .
 

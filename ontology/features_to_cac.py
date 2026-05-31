@@ -17,7 +17,7 @@ export_case(case_id, output_path, db_url=None)
     Full pipeline: load from DB → map → validate → write JSON-LD + Turtle.
 
 validate(graph)
-    Run pyshacl against cacontology-core-shapes.ttl.
+    Run pyshacl against cacontology-core-shapes.ttl
 
 CLI
 ---
@@ -82,6 +82,11 @@ CAC_TASKFORCE = Namespace("https://cacontology.projectvic.org/taskforce#")
 CAC_NCMEC = Namespace("https://cacontology.projectvic.org/us/ncmec#")
 CAC_MULTI = Namespace("https://cacontology.projectvic.org/multi-jurisdiction#")
 CAC_AI = Namespace("https://cacontology.projectvic.org/ai-csam#")
+CAC_USA_FEDERAL = Namespace("https://cacontology.projectvic.org/usa-federal-law#")
+
+# CaseLinker annotations (not in CAC ontology TTL)
+CASELINKER_CHARGE_CLUSTER = BASE["vocab/chargeCluster"]
+CASELINKER_CHARGE_OFFENSE_EVENT = BASE["vocab/chargeOffenseEvent"]
 
 UCO_CORE = Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
 UCO_ACTION = Namespace("https://ontology.unifiedcyberontology.org/uco/action/")
@@ -273,6 +278,11 @@ TOPIC_MAP: Dict[str, Dict[str, Any]] = {
         "class": CAC_GROOMING.OnlineGrooming,
         "severity": 1,
     },
+    "sextortion": {
+        "class": CAC_SEXTORTION.SextortionIncident,
+        "severity": 2,
+        "secondary_charge_class": CAC_LEGAL.SextortionCharge,
+    },
     "ai_csam": {
         "class": CAC.DigitallyGeneratedCSAMIncident,
         "secondary_class": CAC_AI.AIGeneratedCSAM,
@@ -294,49 +304,247 @@ INVESTIGATION_TYPE_MAP: Dict[str, Optional[URIRef]] = {
     "undercover": CAC_TASKFORCE.UndercoverUnit,
     "proactive":  CAC_TASKFORCE.ProactiveOperation,
     "reactive":   CAC_TASKFORCE.ReactiveOperation,
+    # NCMEC CyberTipline referral origin (tip-driven → reactive operation).
+    # Complements NCMECCybertipReport when agencies_involved includes NCMEC.
+    "cybertip":   CAC_TASKFORCE.ReactiveOperation,
     "online":     CAC_TASKFORCE.TaskForceOperation,
     "unknown":    None,  # No operation node; set investigationStatus=unknown on investigation
 }
 
 # ---------------------------------------------------------------------------
-# PROSECUTION_STATUS_MAP
+# PROSECUTION maps (phases vs legal-proceeding events — cacontology-core.ttl,
+# cacontology-legal-outcomes.ttl)
 # ---------------------------------------------------------------------------
 
-PROSECUTION_STATUS_MAP: Dict[str, Optional[URIRef]] = {
-    "convicted":      CAC_LEGAL.SentencingPhase,
-    "charged":        CAC_LEGAL.LegalProcessPhase,
+# Investigation hasPhase / currentPhase → cac-core:Phase subclasses
+PROSECUTION_PHASE_MAP: Dict[str, URIRef] = {
     "arrested":       CAC.InitialPhase,
-    "booked":         CAC.InitialPhase,            # processed/booked into custody
-    "indicted":       CAC_LEGAL.LegalProcessPhase,
-    "pleaded_guilty": CAC_LEGAL.PleaBargaining,
-    "pled_guilty":    CAC_LEGAL.PleaBargaining,
-    "acquitted":      CAC_LEGAL.TrialProceeding,
+    "booked":         CAC.InitialPhase,
+    "charged":        CAC.LegalProcessPhase,
+    "indicted":       CAC.LegalProcessPhase,
+    "pleaded_guilty": CAC_LEGAL.PreTrialPhase,
+    "pled_guilty":    CAC_LEGAL.PreTrialPhase,
+    "convicted":      CAC_LEGAL.SentencingPhase,
     "sentenced":      CAC_LEGAL.SentencingPhase,
 }
 
-# Charge type patterns → CAC charge class
-# Applied via case-insensitive substring matching on the charge string.
+# Investigation hasStep → legal-outcomes:LegalProceeding event subclasses
+PROSECUTION_STEP_MAP: Dict[str, URIRef] = {
+    "pleaded_guilty": CAC_LEGAL.PleaBargaining,
+    "pled_guilty":    CAC_LEGAL.PleaBargaining,
+    "convicted":      CAC_LEGAL.SentencingHearing,
+    "sentenced":      CAC_LEGAL.SentencingHearing,
+}
+
+# Charge patterns → (CAC charge class, optional cluster tag for generic CriminalCharge).
+# First substring match wins — specific before generic.
+CHARGE_MATCH_RULES: List[Tuple[str, URIRef, Optional[str]]] = [
+    # --- CSAM (matter portraying / performance-as-material) before bare possession ---
+    ("matter portraying a minor under the age of 12 in a sexual performance",
+     CAC_LEGAL.CSAM_Possession, None),
+    ("matter portraying a minor over the age of 12 in a sexual performance",
+     CAC_LEGAL.CSAM_Possession, None),
+    ("matter portraying a minor under the age of 12", CAC_LEGAL.CSAM_Possession, None),
+    ("matter portraying a minor over the age of 12", CAC_LEGAL.CSAM_Possession, None),
+    ("matter portraying a minor", CAC_LEGAL.CSAM_Possession, None),
+    ("possessing matter portraying a minor under the age of 12 in a sexual performance",
+     CAC_LEGAL.CSAM_Possession, None),
+    ("possessing matter portraying a minor over the age of 12 in a sexual performance",
+     CAC_LEGAL.CSAM_Possession, None),
+    ("possessing matter portraying a minor under the age of 12", CAC_LEGAL.CSAM_Possession, None),
+    ("possessing matter portraying a minor over the age of 12", CAC_LEGAL.CSAM_Possession, None),
+    ("possessing matter portraying a minor", CAC_LEGAL.CSAM_Possession, None),
+    ("possessing or viewing matter portraying a minor", CAC_LEGAL.CSAM_Possession, None),
+    ("distributing matter portraying a minor", CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing matter portraying", CAC_LEGAL.CSAM_Distribution, None),
+    ("material depicting the sexual performance of a child", CAC_LEGAL.CSAM_Possession, None),
+    ("child sexually abusive material", CAC_LEGAL.CSAM_Possession, None),
+    ("sexually exploitative material", CAC_LEGAL.CSAM_Possession, None),
+    ("manufacturing child sexual abuse images", CAC_LEGAL.CSAM_Production, None),
+    ("distributing child sex abuse materials", CAC_LEGAL.CSAM_Distribution, None),
+    # --- Sexual performance statutes (generic; not Florida DirectPromotion proxy) ---
+    ("promoting the sexual performance of a child",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("promoting a sexual performance of a child",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("promoting sexual performance",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("producing/directing sexual performance of a child",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("sexual performance of a child",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("use of a minor under 16 in a sexual performance",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("promoting a minor under the age of 16 in a sexual performance",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    ("attempted use of a child in a sexual",
+     CAC_LEGAL.CriminalCharge, "sexual_performance_of_child"),
+    # --- Sexual exploitation (StateCharge; no Georgia subclass) ---
+    ("sexual exploitation of a minor", CAC_LEGAL.StateCharge, None),
+    ("sexual exploitation of a child", CAC_LEGAL.StateCharge, None),
+    ("sexual exploitation of children", CAC_LEGAL.StateCharge, None),
+    ("second-degree sexual exploitation", CAC_LEGAL.StateCharge, None),
+    ("second-degree sex exploitation of a minor", CAC_LEGAL.StateCharge, None),
+    ("third-degree exploitation of a minor", CAC_LEGAL.StateCharge, None),
+    ("3rd-degree sexual exploitation", CAC_LEGAL.StateCharge, None),
+    ("sexual exploitation", CAC_LEGAL.CriminalCharge, "sexual_exploitation_unspecified"),
+    # --- Contact-abuse clusters → generic CriminalCharge + cluster tag ---
+    ("encouraging child sexual abuse in the first degree",
+     CAC_LEGAL.CriminalCharge, "encouraging_child_sexual_abuse"),
+    ("encouraging child sexual abuse in the second degree",
+     CAC_LEGAL.CriminalCharge, "encouraging_child_sexual_abuse"),
+    ("encouraging child sexual abuse",
+     CAC_LEGAL.CriminalCharge, "encouraging_child_sexual_abuse"),
+    ("encouraging child sex abuse",
+     CAC_LEGAL.CriminalCharge, "encouraging_child_sexual_abuse"),
+    ("child molestation", CAC_LEGAL.CriminalCharge, "child_molestation"),
+    ("gross sexual imposition", CAC_LEGAL.CriminalCharge, "gross_sexual_imposition"),
+    ("sexual conduct with a minor", CAC_LEGAL.CriminalCharge, "sexual_conduct_with_minor"),
+    ("lewd and lascivious", CAC_LEGAL.CriminalCharge, "lewd_indecent_liberties"),
+    ("indecent liberties with a minor", CAC_LEGAL.CriminalCharge, "lewd_indecent_liberties"),
+    ("indecent liberties with a", CAC_LEGAL.CriminalCharge, "lewd_indecent_liberties"),
+    ("first-degree statutory rape", CAC_LEGAL.CriminalCharge, "statutory_sex_offense"),
+    ("statutory sex offense", CAC_LEGAL.CriminalCharge, "statutory_sex_offense"),
+    ("statutory rape", CAC_LEGAL.CriminalCharge, "statutory_sex_offense"),
+    ("criminal sexual misconduct with a minor",
+     CAC_LEGAL.CriminalCharge, "criminal_sexual_misconduct_minor"),
+    ("oral copulation", CAC_LEGAL.CriminalCharge, "oral_copulation"),
+    ("sexual battery of a victim under", CAC_LEGAL.CriminalCharge, "sexual_battery"),
+    ("sexual battery", CAC_LEGAL.CriminalCharge, "sexual_battery"),
+    ("aggravated rape of a child", CAC_LEGAL.CriminalCharge, "aggravated_sexual_abuse"),
+    ("continuous sexual abuse of a child", CAC_LEGAL.CriminalCharge, "sexual_abuse_of_minor"),
+    ("sexual abuse of children", CAC_LEGAL.CriminalCharge, "sexual_abuse_of_minor"),
+    ("sexual abuse of a minor", CAC_LEGAL.CriminalCharge, "sexual_abuse_of_minor"),
+    ("child sex exploitation", CAC_LEGAL.CriminalCharge, "child_exploitation"),
+    ("child exploitation", CAC_LEGAL.CriminalCharge, "child_exploitation"),
+    ("felony child exploitation", CAC_LEGAL.CriminalCharge, "child_exploitation"),
+    ("voyeurism", CAC_LEGAL.CriminalCharge, "voyeurism"),
+    ("rape first degree", CAC_LEGAL.CriminalCharge, "rape"),
+    ("rape third degree", CAC_LEGAL.CriminalCharge, "rape"),
+    ("rape 2nd", CAC_LEGAL.CriminalCharge, "rape"),
+    ("rape", CAC_LEGAL.CriminalCharge, "rape"),
+    ("sodomy 2nd", CAC_LEGAL.CriminalCharge, "sodomy"),
+    ("sodomy", CAC_LEGAL.CriminalCharge, "sodomy"),
+    ("unlawful sexual contact", CAC_LEGAL.CriminalCharge, "unlawful_sexual_contact"),
+    ("child sexual assault", CAC_LEGAL.CriminalCharge, "child_sexual_assault"),
+    ("child sex assault", CAC_LEGAL.CriminalCharge, "child_sexual_assault"),
+    ("penal code section 288", CAC_LEGAL.CriminalCharge, "ca_penal_288"),
+    ("endangering the welfare of a child", CAC_LEGAL.CriminalCharge, "endangering_welfare"),
+    ("endangering the welfare of a", CAC_LEGAL.CriminalCharge, "endangering_welfare"),
+    ("illegal use of a minor in nudity-oriented",
+     CAC_LEGAL.CriminalCharge, "nudity_oriented_minor"),
+    ("aggravated unlawful photography", CAC_LEGAL.CriminalCharge, "unlawful_photography"),
+    ("animal sexual abuse", CAC_LEGAL.CriminalCharge, "animal_sexual_abuse"),
+    ("disseminating matter harmful to juveniles",
+     CAC_LEGAL.CriminalCharge, "disseminating_harmful_juveniles"),
+    ("soliciting a child for unlawful sexual conduct", CAC_LEGAL.OnlineEnticement, None),
+    ("enticing a child", CAC_LEGAL.OnlineEnticement, None),
+    # --- Typed CSAM / travel / AI (existing) ---
+    ("causing production", CAC_LEGAL.CSAM_CausingProduction, None),
+    ("obscene visual representation", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("ai-generated", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("ai generated", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("artificial intelligence", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("synthetic", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("deepfake", CAC.DigitallyGeneratedCSAMIncident, None),
+    ("traveling to meet", CAC_LEGAL.TravelingToMeetAfterComputerLure, None),
+    ("travel to meet", CAC_LEGAL.TravelingToMeetAfterComputerLure, None),
+    ("child sexual abuse material", CAC_LEGAL.CSAM_Possession, None),
+    ("transmission of child pornography", CAC_LEGAL.CSAM_Distribution, None),
+    ("distribution of child pornography", CAC_LEGAL.CSAM_Distribution, None),
+    ("production of child pornography", CAC_LEGAL.CSAM_Production, None),
+    ("possession of child pornography", CAC_LEGAL.CSAM_Possession, None),
+    ("child pornography", CAC_LEGAL.CSAM_Possession, None),
+    ("child porn", CAC_LEGAL.CSAM_Possession, None),
+    ("pandering obscenity", CAC_LEGAL.CSAM_Possession, None),
+    ("pandering", CAC_LEGAL.CSAM_Possession, None),
+    ("obscenity involving a minor", CAC_LEGAL.CSAM_Possession, None),
+    ("obscene material", CAC_LEGAL.CSAM_Possession, None),
+    ("obscenity", CAC_LEGAL.CSAM_Possession, None),
+    ("pornography", CAC_LEGAL.CSAM_Possession, None),
+    ("online enticement", CAC_LEGAL.OnlineEnticement, None),
+    ("enticement", CAC_LEGAL.OnlineEnticement, None),
+    ("luring", CAC_LEGAL.OnlineEnticement, None),
+    ("sex trafficking", CAC_LEGAL.SexTrafficking, None),
+    ("sextortion", CAC_LEGAL.SextortionCharge, None),
+    ("dissemination", CAC_LEGAL.CSAM_Distribution, None),
+    ("distribution", CAC_LEGAL.CSAM_Distribution, None),
+    ("transmission", CAC_LEGAL.CSAM_Distribution, None),
+    ("production", CAC_LEGAL.CSAM_Production, None),
+    ("possession", CAC_LEGAL.CSAM_Possession, None),
+    ("coercion", CAC_LEGAL.CSAM_CausingProduction, None),
+    ("trafficking", CAC_LEGAL.SexTrafficking, None),
+]
+
+# Backward-compatible alias for audits importing CHARGE_PATTERN_MAP
 CHARGE_PATTERN_MAP: List[Tuple[str, URIRef]] = [
-    ("production",                  CAC_LEGAL.CSAM_Production),
-    ("causing production",          CAC_LEGAL.CSAM_CausingProduction),
-    ("distribution",                CAC_LEGAL.CSAM_Distribution),
-    ("dissemination",               CAC_LEGAL.CSAM_Distribution),
-    ("possession",                  CAC_LEGAL.CSAM_Possession),
-    ("sex trafficking",             CAC_LEGAL.SexTrafficking),
-    ("trafficking",                 CAC_LEGAL.SexTrafficking),
-    ("sextortion",                  CAC_LEGAL.SextortionCharge),
-    ("online enticement",           CAC_LEGAL.OnlineEnticement),
-    ("enticement",                  CAC_LEGAL.OnlineEnticement),
-    ("luring",                      CAC_LEGAL.OnlineEnticement),
-    ("traveling to meet",           CAC_LEGAL.TravelingToMeetAfterComputerLure),
-    ("travel to meet",              CAC_LEGAL.TravelingToMeetAfterComputerLure),
-    ("coercion",                    CAC_LEGAL.CSAM_CausingProduction),
-    ("ai-generated",                CAC.DigitallyGeneratedCSAMIncident),
-    ("ai generated",                CAC.DigitallyGeneratedCSAMIncident),
-    ("artificial intelligence",     CAC.DigitallyGeneratedCSAMIncident),
-    ("synthetic",                   CAC.DigitallyGeneratedCSAMIncident),
-    ("deepfake",                    CAC.DigitallyGeneratedCSAMIncident),
-    ("obscene visual representation", CAC.DigitallyGeneratedCSAMIncident),
+    (pat, cls) for pat, cls, _cluster in CHARGE_MATCH_RULES
+]
+
+# Contact-abuse charge clusters → parallel usa-federal offense event (also typed ChildSexualAbuseEvent).
+CONTACT_CLUSTER_EVENT_MAP: Dict[str, URIRef] = {
+    "child_molestation": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "gross_sexual_imposition": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "sexual_conduct_with_minor": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "lewd_indecent_liberties": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "statutory_sex_offense": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "criminal_sexual_misconduct_minor": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "oral_copulation": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "sexual_battery": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "aggravated_sexual_abuse": CAC_USA_FEDERAL.AggravatedSexualAbuse,
+    "sexual_abuse_of_minor": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "rape": CAC_USA_FEDERAL.AggravatedSexualAbuse,
+    "sodomy": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "unlawful_sexual_contact": CAC_USA_FEDERAL.AbusiveContactWithMinor,
+    "child_sexual_assault": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+    "ca_penal_288": CAC_USA_FEDERAL.SexualAbuseOfMinor,
+}
+
+# All contact-abuse cluster tags that receive a parallel offense event node.
+CONTACT_ABUSE_CLUSTERS: frozenset = frozenset({
+    *CONTACT_CLUSTER_EVENT_MAP.keys(),
+    "encouraging_child_sexual_abuse",
+    "child_exploitation",
+    "voyeurism",
+    "endangering_welfare",
+    "nudity_oriented_minor",
+    "unlawful_photography",
+    "animal_sexual_abuse",
+    "disseminating_harmful_juveniles",
+})
+
+# Proposed charge→event parallels NOT implemented in this pass (for review).
+PROPOSED_CHARGE_EVENT_PARALLELS: List[Dict[str, str]] = [
+    {
+        "charge_cluster_or_class": "CSAM_Possession / CSAM_Production / CSAM_Distribution",
+        "proposed_event": "cacontology:CSAMIncident",
+        "uri": "https://cacontology.projectvic.org#CSAMIncident",
+        "note": "Topic mapper already creates CSAM events; avoid duplicate per charge.",
+    },
+    {
+        "charge_cluster_or_class": "OnlineEnticement",
+        "proposed_event": "cacontology:GroomingSolicitation",
+        "uri": "https://cacontology.projectvic.org#GroomingSolicitation",
+        "note": "Often overlaps topic-based grooming events.",
+    },
+    {
+        "charge_cluster_or_class": "SexTrafficking",
+        "proposed_event": "cacontology-usa-federal:SexTraffickingOfMinors",
+        "uri": "https://cacontology.projectvic.org/usa-federal-law#SexTraffickingOfMinors",
+        "note": "Event layer only; not committed.",
+    },
+    {
+        "charge_cluster_or_class": "sexual_performance_of_child",
+        "proposed_event": "cacontology:CSAMIncident",
+        "uri": "https://cacontology.projectvic.org#CSAMIncident",
+        "note": "NY/OH performance statutes are material-adjacent; needs jurisdictional review.",
+    },
+    {
+        "charge_cluster_or_class": "StateCharge (sexual exploitation)",
+        "proposed_event": "cacontology-usa-federal:CommercialSexualExploitation",
+        "uri": "https://cacontology.projectvic.org/usa-federal-law#CommercialSexualExploitation",
+        "note": "Broad; may not fit state-only press charges.",
+    },
 ]
 
 SENTENCE_PATTERN_MAP: List[Tuple[str, URIRef]] = [
@@ -360,6 +568,7 @@ SEVERITY_MAP: Dict[str, Tuple[int, Optional[URIRef]]] = {
     "under_12":              (2, None),
     "sexual_abuse":          (3, None),
     "physical_abuse":        (3, None),
+    "grooming":              (1, None),  # ML semantic severity; not a case_topic
     "multiple_perpetrators": (1, CAC.ConspiracyToCommitCSA),
 }
 
@@ -485,10 +694,21 @@ class CaseToCAC:
     # ------------------------------------------------------------------
 
     def map_case(
-        self, case: Dict[str, Any]
+        self,
+        case: Dict[str, Any],
+        *,
+        apply_role_temporal: bool = True,
+        apply_shacl_required_triples: bool = True,
     ) -> Tuple[ConjunctiveGraph, List[str]]:
         """
         Map one case dict to a ConjunctiveGraph.
+
+        Parameters
+        ----------
+        apply_role_temporal
+            When True, set hasRoleBeginPoint on roles from case dates (SHACL).
+        apply_shacl_required_triples
+            When True, add participatesInEvent, hasFacet stubs, etc. (SHACL).
 
         Returns
         -------
@@ -512,23 +732,34 @@ class CaseToCAC:
         inv_uri = self.build_investigation_shell(det_g, case, warnings)
 
         # --- deterministic mapping steps ---
-        platform_uris = self.map_platforms(det_g, case, inv_uri, warnings)
         event_uris = self.map_topics(det_g, case, inv_uri, warnings)
-        victim_uris, offender_uris = self.map_roles(det_g, case, inv_uri, event_uris, warnings)
+        platform_uris = self.map_platforms(det_g, case, event_uris, warnings)
+        victim_uris, offender_uris = self.map_roles(
+            det_g, case, inv_uri, event_uris, warnings
+        )
         self.map_severity(det_g, case, event_uris, offender_uris, warnings)
-        self.map_prosecution(det_g, case, inv_uri, warnings)
+        self.map_prosecution(det_g, case, inv_uri, event_uris, warnings)
+        # Contact-abuse offense events are created during prosecution (after map_roles).
+        self._link_roles_to_csa_events(
+            det_g, event_uris, victim_uris, offender_uris
+        )
+        self._backfill_uses_channel_on_csa_events(
+            det_g, case, event_uris
+        )
         self.map_agencies(det_g, case, inv_uri, warnings)
-        self.map_technology(det_g, case, inv_uri, warnings)
+        self.map_technology(det_g, case, inv_uri, event_uris, warnings)
         self.map_investigation_type(det_g, case, inv_uri, warnings)
 
-        # SHACL: set hasRoleBeginPoint on roles from case start date
-        self._apply_role_temporal(det_g, case, victim_uris, offender_uris)
+        if apply_role_temporal:
+            self._apply_role_temporal(det_g, case, victim_uris, offender_uris)
 
-        # SHACL: add participatesInEvent on roles + hasFacet on CSAMIncident
-        self._apply_shacl_required_triples(det_g, case, event_uris, victim_uris, offender_uris)
+        if apply_shacl_required_triples:
+            self._apply_shacl_required_triples(
+                det_g, case, event_uris, victim_uris, offender_uris
+            )
 
         # --- NLP mapping (separate named graph) ---
-        self.map_nlp_features(nlp_g, case, inv_uri, warnings)
+        self.map_nlp_features(nlp_g, case, inv_uri, offender_uris, warnings)
 
         return cg, warnings
 
@@ -657,17 +888,9 @@ class CaseToCAC:
         if case.get("updated_at"):
             g.add((inv_uri, DCTERMS.modified, Literal(str(case["updated_at"]))))
 
-        # Date range → phase begin/end (xsd:dateTimeStamp required by CAC SHACL)
-        date_range = case.get("date_range") or {}
-        if isinstance(date_range, dict):
-            start = _to_xsd_datetime_stamp(date_range.get("start") or case.get("date_start"))
-            end = _to_xsd_datetime_stamp(date_range.get("end") or case.get("date_end"))
-            if start:
-                g.add((inv_uri, CAC.hasPhaseBeginPoint,
-                       Literal(start, datatype=XSD.dateTimeStamp)))
-            if end:
-                g.add((inv_uri, CAC.hasPhaseEndPoint,
-                       Literal(end, datatype=XSD.dateTimeStamp)))
+        # hasPhaseBeginPoint / hasPhaseEndPoint are scoped to cac-core:Phase only
+        # (cacontology-core.ttl); coarse investigation dates belong on phase nodes
+        # or uco-core:startTime, not on CACInvestigation.
 
         return inv_uri
 
@@ -679,10 +902,10 @@ class CaseToCAC:
         self,
         g: Graph,
         case: Dict[str, Any],
-        inv_uri: URIRef,
+        event_uris: Dict[str, URIRef],
         warnings: List[str],
     ) -> List[URIRef]:
-        """Create platform nodes (shared singletons) and link to investigation."""
+        """Create platform nodes (shared singletons) and link via usesChannel on CSA events."""
         platforms_raw = case.get("platforms_used") or []
         if isinstance(platforms_raw, str):
             try:
@@ -720,8 +943,16 @@ class CaseToCAC:
 
             slug = _slug(label)
             p_uri = self._get_or_create_platform(g, slug, label, class_uri, extra_props)
-            g.add((inv_uri, CAC.usesChannel, p_uri))
             uris.append(p_uri)
+
+        csa_events = self._core_csa_event_uris(g, event_uris)
+        if uris and not csa_events:
+            warnings.append(
+                "usesChannel: no ChildSexualAbuseEvent node — platform links skipped"
+            )
+        for evt_uri in csa_events:
+            for p_uri in uris:
+                g.add((evt_uri, CAC.usesChannel, p_uri))
 
         return uris
 
@@ -908,17 +1139,11 @@ class CaseToCAC:
             g.add((role_uri, RDF.type, CAC.VictimRole))
             g.add((role_uri, RDF.type, UCO_ROLE.VictimRole))
             g.add((role_uri, CAC_CORE.hasRole, person_uri))
-            g.add((inv_uri, CAC.involvesVictim, role_uri))
 
             if age_range and isinstance(age_range, dict):
                 if age_range.get("min") is not None:
                     g.add((person_uri, CAC_PRODUCTION.victimAge,
                            Literal(age_range["min"], datatype=XSD.integer)))
-
-            # Link to event nodes
-            for evt_uri in event_uris.values():
-                if evt_uri is not None:
-                    g.add((evt_uri, CAC.involvesVictim, role_uri))
 
             victim_uris.append(role_uri)
 
@@ -954,7 +1179,6 @@ class CaseToCAC:
             g.add((role_uri, RDF.type, CAC.OffenderRole))
             g.add((role_uri, RDF.type, UCO_ROLE.OffenderRole))
             g.add((role_uri, CAC_CORE.hasRole, person_uri))
-            g.add((inv_uri, CAC.involvesOffender, role_uri))
 
             # Age (only if we have it for this index)
             if n - 1 < len(perp_ages):
@@ -1002,6 +1226,8 @@ class CaseToCAC:
                 g.add((inv_uri, CAC.hasStep, tv_uri))
         elif rel and rel not in ("stranger", "unknown", ""):
             warnings.append(f"ROLE_MAP: unmapped relationship '{rel}' — OffenderRole only")
+
+        self._link_roles_to_csa_events(g, event_uris, victim_uris, offender_uris)
 
         return victim_uris, offender_uris
 
@@ -1058,6 +1284,10 @@ class CaseToCAC:
             g.add((inv_uri, CAC.hasStep, conspiracy_uri))
             for off_uri in offender_uris:
                 g.add((conspiracy_uri, CAC.participatesInConspiracy, off_uri))
+            event_uris["conspiracy"] = conspiracy_uri
+            if max_level > 0:
+                g.add((conspiracy_uri, CAC.severityLevel,
+                       Literal(max_level, datatype=XSD.integer)))
 
     # ------------------------------------------------------------------
     # Step 5b: Investigation type → operation node
@@ -1130,13 +1360,7 @@ class CaseToCAC:
         victim_uris: List[URIRef],
         offender_uris: List[URIRef],
     ) -> None:
-        """
-        Apply SHACL-required triples that the shapes validate:
-
-        1. CSAMIncident → uco-core:hasFacet (ContentDataFacet stub)
-        2. ChildSexualAbuseEvent → victim/offender roles via
-           cacontology:participatesInEvent (SPARQL shape checks this)
-        """
+        """Apply SHACL-required triples (e.g. CSAMIncident → uco-core:hasFacet stub)."""
         case_id = case.get("id", "unknown")
         UCO_OBS = Namespace("https://ontology.unifiedcyberontology.org/uco/observable/")
 
@@ -1154,23 +1378,6 @@ class CaseToCAC:
                 g.add((facet_uri, RDF.type, UCO_OBS.ContentDataFacet))
                 g.add((evt_uri, UCO_CORE.hasFacet, facet_uri))
 
-            # ChildSexualAbuseEvent (and subclasses) → participatesInEvent on roles
-            is_csa_event = any(
-                (evt_uri, RDF.type, cls) in g
-                for cls in [
-                    CAC.ChildSexualAbuseEvent,
-                    CAC.CSAMIncident,
-                    CAC_PRODUCTION.ProductionOffense,
-                    CAC.GroomingSolicitation,
-                    CAC_SEXTORTION.SextortionIncident,
-                ]
-            )
-            if is_csa_event:
-                for v_uri in victim_uris:
-                    g.add((v_uri, CAC.participatesInEvent, evt_uri))
-                for o_uri in offender_uris:
-                    g.add((o_uri, CAC.participatesInEvent, evt_uri))
-
     # ------------------------------------------------------------------
     # Step 6: Prosecution
     # ------------------------------------------------------------------
@@ -1180,9 +1387,10 @@ class CaseToCAC:
         g: Graph,
         case: Dict[str, Any],
         inv_uri: URIRef,
+        event_uris: Dict[str, URIRef],
         warnings: List[str],
     ) -> None:
-        """Create CriminalCharge, CriminalSentence, and Phase nodes."""
+        """Create LegalProceeding, CriminalCharge, CriminalSentence, Phase, and step events."""
         case_id = case.get("id", "unknown")
 
         prosecution = case.get("prosecution_outcome")
@@ -1194,40 +1402,74 @@ class CaseToCAC:
         if not prosecution or not isinstance(prosecution, dict):
             return
 
-        # Status → phase
         status = (
             prosecution.get("booking_status")
             or prosecution.get("status")
             or ""
         ).lower().strip()
-        phase_class = PROSECUTION_STATUS_MAP.get(status)
+
+        date_range = case.get("date_range") or {}
+        start = _to_xsd_datetime_stamp(
+            (date_range.get("start") if isinstance(date_range, dict) else None)
+            or case.get("date_start")
+        )
+
+        # Status → phase (hasPhase) and/or legal event (hasStep)
+        phase_class = PROSECUTION_PHASE_MAP.get(status)
         if phase_class:
             phase_uri = BASE[f"case/{case_id}/phase/{_slug(status)}"]
             g.add((phase_uri, RDF.type, phase_class))
             g.add((phase_uri, RDF.type, CAC_CORE.Phase))
             g.add((inv_uri, CAC.hasPhase, phase_uri))
             g.add((inv_uri, CAC.currentPhase, phase_uri))
-            # SHACL: every Phase node requires a begin point. Use the case's
-            # date_start as a best-available approximation (the prosecution
-            # phase typically begins during the case lifecycle).
-            date_range = case.get("date_range") or {}
-            start = _to_xsd_datetime_stamp(
-                (date_range.get("start") if isinstance(date_range, dict) else None)
-                or case.get("date_start")
-            )
             if start:
                 g.add((phase_uri, CAC.hasPhaseBeginPoint,
                        Literal(start, datatype=XSD.dateTimeStamp)))
         elif status:
-            warnings.append(f"PROSECUTION_STATUS_MAP: unmapped status '{status}' — skipped")
+            warnings.append(f"PROSECUTION_PHASE_MAP: unmapped status '{status}' — skipped")
 
-        # Charges
+        step_class = PROSECUTION_STEP_MAP.get(status)
+        if step_class:
+            step_uri = BASE[f"case/{case_id}/legal-step/{_slug(status)}"]
+            g.add((step_uri, RDF.type, step_class))
+            g.add((step_uri, RDF.type, CAC_LEGAL.LegalProceeding))
+            g.add((step_uri, RDF.type, CAC_CORE.LegalEvent))
+            g.add((step_uri, RDF.type, CAC_CORE.Event))
+            g.add((inv_uri, CAC.hasStep, step_uri))
+            if start:
+                g.add((step_uri, CAC_LEGAL.hasProceedingBeginPoint,
+                       Literal(start, datatype=XSD.dateTimeStamp)))
+
+        # Charges and sentences → LegalProceeding (domain in legal-outcomes.ttl)
         charges_raw = prosecution.get("charges") or []
         if isinstance(charges_raw, str):
             try:
                 charges_raw = json.loads(charges_raw)
             except (json.JSONDecodeError, TypeError):
                 charges_raw = []
+
+        jail_str = str(prosecution.get("jail") or "").strip()
+        sentences_raw = prosecution.get("sentences") or []
+        if isinstance(sentences_raw, str):
+            sentences_raw = [sentences_raw] if sentences_raw.strip() else []
+        sentence_texts = [
+            str(s).strip() for s in sentences_raw if s is not None and str(s).strip()
+        ]
+
+        has_charges = bool(charges_raw)
+        has_sentence_durations = bool(sentence_texts)
+        has_jail = bool(jail_str)
+
+        proceeding_uri: Optional[URIRef] = None
+        if has_charges or has_sentence_durations or has_jail:
+            proceeding_uri = BASE[f"case/{case_id}/legal-proceeding"]
+            g.add((proceeding_uri, RDF.type, CAC_LEGAL.LegalProceeding))
+            g.add((proceeding_uri, RDF.type, CAC_CORE.LegalEvent))
+            g.add((proceeding_uri, RDF.type, CAC_CORE.Event))
+            g.add((inv_uri, CAC.hasStep, proceeding_uri))
+            if start:
+                g.add((proceeding_uri, CAC_LEGAL.hasProceedingBeginPoint,
+                       Literal(start, datatype=XSD.dateTimeStamp)))
 
         for i, charge in enumerate(charges_raw, start=1):
             if isinstance(charge, dict):
@@ -1237,28 +1479,67 @@ class CaseToCAC:
                 charge_str = str(charge)
                 count = 1
 
-            charge_class = self._match_charge(charge_str, warnings)
-            if charge_class is None:
-                continue
+            charge_class, cluster, _unmapped = self._match_charge(charge_str, warnings)
 
             charge_uri = BASE[f"case/{case_id}/charge/{i}"]
             g.add((charge_uri, RDF.type, charge_class))
-            g.add((charge_uri, RDF.type, CAC_LEGAL.CriminalCharge))
+            if charge_class != CAC_LEGAL.CriminalCharge:
+                g.add((charge_uri, RDF.type, CAC_LEGAL.CriminalCharge))
+            if cluster:
+                g.add((charge_uri, CASELINKER_CHARGE_CLUSTER, Literal(cluster)))
             if count and count != 1:
                 g.add((charge_uri, CAC_LEGAL.indictmentCounts,
                        Literal(int(count), datatype=XSD.integer)))
             g.add((charge_uri, RDFS.label, Literal(charge_str)))
-            g.add((inv_uri, CAC_LEGAL.hasCharge, charge_uri))
+            if proceeding_uri is not None:
+                g.add((proceeding_uri, CAC_LEGAL.hasCharge, charge_uri))
 
-        # Sentence
-        jail_str = str(prosecution.get("jail") or prosecution.get("sentences") or "")
-        if jail_str:
-            sentence_class = self._match_sentence(jail_str)
-            sent_uri = BASE[f"case/{case_id}/sentence/1"]
+            if cluster and cluster in CONTACT_ABUSE_CLUSTERS:
+                offense_class = CONTACT_CLUSTER_EVENT_MAP.get(
+                    cluster, CAC.ChildSexualAbuseEvent
+                )
+            else:
+                offense_class = None
+
+            if offense_class is not None:
+                evt_uri = BASE[f"case/{case_id}/offense-event/charge-{i}"]
+                g.add((evt_uri, RDF.type, offense_class))
+                g.add((evt_uri, RDF.type, CAC.ChildSexualAbuseEvent))
+                g.add((evt_uri, RDF.type, CAC_CORE.Event))
+                g.add((evt_uri, RDF.type, UCO_ACTION.Crime))
+                g.add((evt_uri, RDFS.label,
+                       Literal(f"Inferred offense from charge: {charge_str[:200]}")))
+                g.add((inv_uri, CAC.hasStep, evt_uri))
+                g.add((charge_uri, RDFS.seeAlso, evt_uri))
+                g.add((charge_uri, CASELINKER_CHARGE_OFFENSE_EVENT, evt_uri))
+                event_uris[f"charge_offense_{i}"] = evt_uri
+
+        # CriminalSentence only from duration/outcome phrases — not county-jail names.
+        for j, sent_text in enumerate(sentence_texts, start=1):
+            if proceeding_uri is None:
+                break
+            sentence_class = self._match_sentence(sent_text)
+            sent_uri = BASE[f"case/{case_id}/sentence/{j}"]
             g.add((sent_uri, RDF.type, sentence_class))
             g.add((sent_uri, RDF.type, CAC_LEGAL.CriminalSentence))
-            g.add((sent_uri, RDFS.label, Literal(jail_str)))
-            g.add((inv_uri, CAC_LEGAL.resultsSentence, sent_uri))
+            g.add((sent_uri, RDFS.label, Literal(sent_text)))
+            g.add((proceeding_uri, CAC_LEGAL.resultsSentence, sent_uri))
+
+        # Pretrial detention: legal-outcomes has bailStatus on LegalProceeding, not a
+        # dedicated pretrial-detention node class — annotate via bailStatus + comment.
+        if has_jail and proceeding_uri is not None and not has_sentence_durations:
+            if re.search(r'non-bondable', jail_str, re.I):
+                g.add((proceeding_uri, CAC_LEGAL.bailStatus,
+                       Literal("held_without_bail")))
+            g.add((proceeding_uri, RDFS.comment,
+                   Literal(f"Pretrial detention facility (not a sentence): {jail_str}")))
+            warnings.append(
+                f"PROSECUTION (info): jail location recorded as pretrial detention only "
+                f"(no CriminalSentence) — {jail_str[:80]}"
+            )
+        elif has_jail and proceeding_uri is not None:
+            g.add((proceeding_uri, RDFS.comment,
+                   Literal(f"Pretrial detention facility: {jail_str}")))
 
     # ------------------------------------------------------------------
     # Step 7: Agencies
@@ -1347,6 +1628,7 @@ class CaseToCAC:
         g: Graph,
         case: Dict[str, Any],
         inv_uri: URIRef,
+        event_uris: Dict[str, URIRef],
         warnings: List[str],
     ) -> None:
         """Create detection technology, anonymization network, and P2P nodes."""
@@ -1374,7 +1656,9 @@ class CaseToCAC:
             plat_uri = self._get_or_create_platform(
                 g, slug, net, class_uri, {}
             )
-            g.add((inv_uri, CAC.usesChannel, plat_uri))
+            csa_events = self._core_csa_event_uris(g, event_uris)
+            for evt_uri in csa_events:
+                g.add((evt_uri, CAC.usesChannel, plat_uri))
 
     # ------------------------------------------------------------------
     # Step 9: NLP features (separate named graph)
@@ -1385,6 +1669,7 @@ class CaseToCAC:
         g: Graph,
         case: Dict[str, Any],
         inv_uri: URIRef,
+        offender_uris: List[URIRef],
         warnings: List[str],
     ) -> None:
         """
@@ -1411,14 +1696,11 @@ class CaseToCAC:
             if score < threshold:
                 continue
 
-            # registered_sex_offender → flag on offender roles, not a separate node
+            # registered_sex_offender → flag on offender roles from deterministic graph
             if concept == "registered_sex_offender":
-                for n in range(1, 10):
-                    off_uri = BASE[f"case/{case_id}/role/offender/{n}"]
-                    # Add triple only if role node was already created (check existence)
-                    if (off_uri, RDF.type, None) in g:
-                        g.add((off_uri, CAC.perpetratorRegisteredSexOffender,
-                               Literal(True, datatype=XSD.boolean)))
+                for off_uri in offender_uris:
+                    g.add((off_uri, CAC.perpetratorRegisteredSexOffender,
+                           Literal(True, datatype=XSD.boolean)))
                 continue
 
             if class_uri is None:
@@ -1442,6 +1724,57 @@ class CaseToCAC:
     # Helpers
     # ------------------------------------------------------------------
 
+    # Event classes that receive participatesInEvent + usesChannel (core CSA spine).
+    # Includes all cacontology:ChildSexualAbuseEvent direct subclasses from core TTL,
+    # sextortion incidents, usa-federal contact offense events, and production offenses
+    # (cacontology-production:ProductionOffense is ExploitationEvent, not CSA subclass).
+    _CSA_EVENT_TYPES: Tuple[URIRef, ...] = (
+        CAC.ChildSexualAbuseEvent,
+        CAC.CSAMIncident,
+        CAC.DigitallyGeneratedCSAMIncident,
+        CAC.LiveStreamingCSA,
+        CAC.GroomingSolicitation,
+        CAC.Sextortion,
+        CAC.ConspiracyToCommitCSA,
+        CAC_SEXTORTION.SextortionIncident,
+        CAC_PRODUCTION.ProductionOffense,
+        CAC_PRODUCTION.LiveProductionEvent,
+        CAC_USA_FEDERAL.SexualAbuseOfMinor,
+        CAC_USA_FEDERAL.AbusiveContactWithMinor,
+        CAC_USA_FEDERAL.AggravatedSexualAbuse,
+    )
+
+    def _core_csa_event_uris(
+        self,
+        g: Graph,
+        event_uris: Dict[str, URIRef],
+    ) -> List[URIRef]:
+        """Return event URIs typed as a CSA / production offense class in _CSA_EVENT_TYPES."""
+        result: List[URIRef] = []
+        for evt_uri in event_uris.values():
+            if evt_uri is None:
+                continue
+            if any((evt_uri, RDF.type, cls) in g for cls in self._CSA_EVENT_TYPES):
+                result.append(evt_uri)
+        return result
+
+    def _link_roles_to_csa_events(
+        self,
+        g: Graph,
+        event_uris: Dict[str, URIRef],
+        victim_uris: List[URIRef],
+        offender_uris: List[URIRef],
+    ) -> None:
+        """
+        Link victim/offender roles to CSA events via participatesInEvent
+        (role → event), matching core-shapes ChildSexualAbuseEventShape.
+        """
+        for evt_uri in self._core_csa_event_uris(g, event_uris):
+            for v_uri in victim_uris:
+                g.add((v_uri, CAC.participatesInEvent, evt_uri))
+            for o_uri in offender_uris:
+                g.add((o_uri, CAC.participatesInEvent, evt_uri))
+
     @staticmethod
     def _nlp_score(case: Dict[str, Any], concept: str) -> float:
         """Safely extract a semantic concept score from ml_features."""
@@ -1456,16 +1789,84 @@ class CaseToCAC:
         )
 
     @staticmethod
-    def _match_charge(charge_str: str, warnings: List[str]) -> Optional[URIRef]:
-        """Match a charge string to a CAC charge class via pattern table."""
-        lower = charge_str.lower()
-        for pattern, class_uri in CHARGE_PATTERN_MAP:
+    def _match_charge(
+        charge_str: str, warnings: List[str]
+    ) -> Tuple[URIRef, Optional[str], bool]:
+        """
+        Match a charge string to a CAC charge class via pattern table.
+
+        Returns (class_uri, cluster_tag, is_unmapped_generic). Unmatched charges
+        are kept as CriminalCharge only (not dropped).
+        """
+        lower = re.sub(r'\s+', ' ', charge_str.lower()).strip()
+        for pattern, class_uri, cluster in CHARGE_MATCH_RULES:
             if pattern.lower() in lower:
-                return class_uri
+                return class_uri, cluster, False
         warnings.append(
-            f"CHARGE_MAP: could not classify charge '{charge_str}' — skipped"
+            f"CHARGE_MAP (info): generic CriminalCharge for "
+            f"'{charge_str[:100]}'"
         )
-        return None
+        return CAC_LEGAL.CriminalCharge, None, True
+
+    def _backfill_uses_channel_on_csa_events(
+        self,
+        g: Graph,
+        case: Dict[str, Any],
+        event_uris: Dict[str, URIRef],
+    ) -> None:
+        """Link platforms/P2P/anonymization labels to CSA events created after map_platforms."""
+        platforms_raw = case.get("platforms_used") or []
+        if isinstance(platforms_raw, str):
+            try:
+                platforms_raw = json.loads(platforms_raw)
+            except (json.JSONDecodeError, TypeError):
+                platforms_raw = [platforms_raw]
+
+        p2p = case.get("p2p_clients") or []
+        anon = case.get("anonymization_network") or []
+        all_platforms = list(platforms_raw) + list(p2p) + [
+            label for label in anon if label in PLATFORM_MAP
+        ]
+
+        seen: set = set()
+        platform_uris: List[URIRef] = []
+        for label in all_platforms:
+            if not label or label in seen:
+                continue
+            seen.add(label)
+            mapping = PLATFORM_MAP.get(label)
+            if mapping is None or mapping[0] == _SKIP:
+                continue
+            class_uri = _PLATFORM_CLASS_URI.get(mapping[0])
+            if class_uri is None:
+                continue
+            platform_uris.append(
+                self._get_or_create_platform(
+                    g, _slug(label), label, class_uri, mapping[1]
+                )
+            )
+
+        for evt_uri in self._core_csa_event_uris(g, event_uris):
+            for p_uri in platform_uris:
+                g.add((evt_uri, CAC.usesChannel, p_uri))
+
+    @classmethod
+    def classify_charge_string(cls, charge_str: str) -> Tuple[str, str]:
+        """
+        Classify a charge string for audits (no graph side effects).
+
+        Returns (short class name, match kind) where kind is 'pattern',
+        'generic_cluster', 'generic', or 'empty'.
+        """
+        if not charge_str or not str(charge_str).strip():
+            return ("—", "empty")
+        lower = re.sub(r'\s+', ' ', str(charge_str).lower()).strip()
+        for pattern, class_uri, cluster in CHARGE_MATCH_RULES:
+            if pattern.lower() in lower:
+                if cluster:
+                    return (f"CriminalCharge:{cluster}", "generic_cluster")
+                return (class_uri.split("#")[-1], "pattern")
+        return ("CriminalCharge", "generic")
 
     @staticmethod
     def _match_sentence(sent_str: str) -> URIRef:
@@ -1492,6 +1893,8 @@ class CaseToCAC:
         g.bind("cacontology-taskforce", CAC_TASKFORCE)
         g.bind("cacontology-us-ncmec", CAC_NCMEC)
         g.bind("cacontology-multi", CAC_MULTI)
+        g.bind("cacontology-usa-federal", CAC_USA_FEDERAL)
+        g.bind("uco-action", UCO_ACTION)
         g.bind("uco-core", UCO_CORE)
         g.bind("uco-identity", UCO_IDENTITY)
         g.bind("uco-role", UCO_ROLE)

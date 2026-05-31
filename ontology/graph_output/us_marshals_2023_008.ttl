@@ -2,6 +2,7 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,29 +13,21 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:27:11.620562" ;
+    dcterms:created "2026-05-30T20:39:38.871696" ;
     dcterms:identifier "us_marshals_2023_008" ;
-    dcterms:modified "2026-05-29T01:27:11.620562" ;
+    dcterms:modified "2026-05-30T20:39:38.871696" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-task-forces-apprehends-14-fugitives-wisconsin>,
         "US MARSHALS" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/arrested> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2023-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/convicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/convicted> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/legal-step/convicted> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/dane-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/great-lakes-regional-fugitive-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/marathon-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/oneida-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/usms>,
-        <https://caselinker.up.railway.app/resource/agency/wi-the-great-lakes-regional-fugitive-task-force-for-the-western-district-of-wisconsin>,
-        <https://caselinker.up.railway.app/resource/agency/wisconsin-department-of-corrections>,
-        <https://caselinker.up.railway.app/resource/agency/wisconsin-division-of-criminal-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/wood-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/wv-state-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/great-lakes-regional-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/ive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-task-forces>,
+        <https://caselinker.up.railway.app/resource/agency/wisconsin-department-of-corrections> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -42,45 +35,33 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/dane-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Dane County Sheriff's Department" .
-
 <https://caselinker.up.railway.app/resource/agency/great-lakes-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/marathon-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/ive-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-task-forces> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Marathon County Sheriff's Department" .
-
-<https://caselinker.up.railway.app/resource/agency/oneida-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Oneida County Sheriff's Department" .
-
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/wi-the-great-lakes-regional-fugitive-task-force-for-the-western-district-of-wisconsin> a cacontology-multi:LocalAgency .
+    rdfs:label "U. S. Marshals Task Forces" .
 
 <https://caselinker.up.railway.app/resource/agency/wisconsin-department-of-corrections> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/wisconsin-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/wood-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Wood County Sheriff's Department" .
-
-<https://caselinker.up.railway.app/resource/agency/wv-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "WV State Police Department" .
-
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/sentence/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/legal-step/convicted> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -88,15 +69,22 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:ProbationSentence ;
+    rdfs:label "probation" .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/phase/convicted> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/us_marshals_2023_008/facet/possession> .
 

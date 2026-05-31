@@ -9,21 +9,19 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:12:43.945258" ;
+    dcterms:created "2026-05-30T20:37:53.909369" ;
     dcterms:identifier "ohio_ag_2014_004" ;
-    dcterms:modified "2026-05-29T01:12:43.945258" ;
+    dcterms:modified "2026-05-30T20:37:53.909369" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/July-2014/Attorney-General-DeWine-Announces-Indictment-of-Fa>,
         "OHIO AG" ;
-    cacontology:hasPhaseBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2014-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/event/trust-violation> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> a cacontology-multi:LocalAgency .
 
@@ -50,4 +48,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

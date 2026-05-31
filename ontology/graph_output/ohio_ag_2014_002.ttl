@@ -1,6 +1,7 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -10,16 +11,15 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:12:41.360866" ;
+    dcterms:created "2026-05-30T20:37:53.637303" ;
     dcterms:identifier "ohio_ag_2014_002" ;
-    dcterms:modified "2026-05-29T01:12:41.360866" ;
+    dcterms:modified "2026-05-30T20:37:53.637303" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/October-2014/Ohio-Parents-to-Serve-Prison-Time-for-Assault-of-I>,
         "OHIO AG" ;
-    cacontology:hasPhaseBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2014-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/event/trust-violation> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/role/victim/1> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/phase/sentenced> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/phase/sentenced> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/event/trust-violation>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/legal-step/sentenced> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> .
 
 <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> a cac-core:OrganizationLikeEntity,
@@ -29,6 +29,12 @@
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/relationship/father> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/person/offender/1> a uco-identity:Person .
 
@@ -49,4 +55,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/phase/sentenced> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

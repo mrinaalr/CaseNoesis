@@ -2,9 +2,74 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "San Antonio Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -14,9 +79,148 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/charge/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org#perpetratorRegisteredSexOffender": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+            "@value": true
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-general-s-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-district-attorney-s-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Bexar County District Attorney ’'s Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "New Braunfels Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ice",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Iowa Department of Public Safety"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
@@ -27,7 +231,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:27:32.538282"
+            "@value": "2026-05-30T20:39:41.778947"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -37,7 +241,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:27:32.538282"
+            "@value": "2026-05-30T20:39:41.778947"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -58,21 +262,15 @@
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/phase/arrested"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-12-31T00:00:00Z"
-          }
-        ],
         "https://cacontology.projectvic.org#hasStep": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -80,240 +278,58 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-district-attorneys-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-district-attorney-s-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-sheriffs-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/cedar-rapids-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/doj"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/ice"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-correctional-services"
+            "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safetys-sex-offender-registry"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/linn-county-sheriffs-office"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/marion-police-department"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/northern-iowa-fugitive-task-force"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/sioux-city-police-department"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/texas"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-generals-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-general-s-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-northern-iowa-fugitive-task-force"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/waterloo-police-department"
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/role/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/northern-iowa-fugitive-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/waterloo-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bexar-county-district-attorneys-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Bexar County District Attorney’'s Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-generals-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ice",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-correctional-services",
+        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Iowa Department of Correctional Services"
+            "@value": "Iowa Department"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safetys-sex-offender-registry",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Iowa Department of Public Safety's Sex Offender Registry"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/sioux-city-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Sioux City Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/linn-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#perpetratorRegisteredSexOffender": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-            "@value": true
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "San Antonio Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -339,33 +355,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/marion-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-northern-iowa-fugitive-task-force",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Marion Police Department"
+            "@value": "U. S. Marshals Northern Iowa Fugitive Task Force"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Lone Star Fugitive Task Force"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -380,6 +378,11 @@
             "@value": "2022-01-01T00:00:00Z"
           }
         ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/offense-event/charge-2"
+          }
+        ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/person/victim/1"
@@ -387,44 +390,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_011/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/doj",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/cedar-rapids-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "New Braunfels Police Department"
+            "@value": "Lone Star Fugitive Task Force"
           }
         ]
       }

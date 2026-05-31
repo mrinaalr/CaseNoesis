@@ -2,55 +2,104 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@value": "chat"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child sexual abuse material"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
           "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/victim/1"
-          }
         ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
           }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/facebook"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/instagram"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/facet/possession"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/charged",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "felony charges"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 800
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
@@ -77,38 +126,80 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "Instagram"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hazleton-city-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
           {
-            "@value": "Hazleton City Police Department"
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/3"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/4"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/pa-attorney-generals-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/charge/4",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "PA Attorney General’'s Office"
+            "@value": "possession of child pornography"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -118,14 +209,24 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/operation-safe-screen-the-pennsylvania-state-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/tech/cybertipline",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Operation Safe Screen The Pennsylvania State Police Department"
+            "@value": "CyberTipline"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Instagram"
           }
         ]
       },
@@ -141,97 +242,79 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://purl.org/dc/terms/created": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
+            "@value": "2026-05-30T20:30:17.256206"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "ncmec_2023_055"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:30:17.256206"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "NCMEC"
+          },
+          {
+            "@id": "https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/operation"
+          }
+        ],
+        "https://cacontology.projectvic.org#usesMethod": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/tech/cybertipline"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/hsi"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "chat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/west-hazleton-borough-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "West Hazleton Borough Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/tech/cybertipline",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "CyberTipline"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/kingston-twp-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Kingston Twp Police Department"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -258,140 +341,25 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/operation",
+        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/relationship/stranger",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T00:17:23.712145"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "ncmec_2023_055"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T00:17:23.712145"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "NCMEC"
-          },
-          {
-            "@id": "https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/operation"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org#usesChannel": [
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/platform/facebook"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/instagram"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/role/offender/1"
           }
         ],
-        "https://cacontology.projectvic.org#usesMethod": [
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ncmec_2023_055/tech/cybertipline"
+            "@value": "stranger"
           }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/hazleton-city-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/hsi"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/icac"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/kingston-twp-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/operation-safe-screen-the-pennsylvania-state-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/pa-attorney-generals-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/west-hazleton-borough-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       }
     ],

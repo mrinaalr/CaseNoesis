@@ -253,7 +253,7 @@ def spine_node_counts(case: Dict[str, Any]) -> Tuple[int, int, int]:
     if case.get("relationship_to_victim") and str(case["relationship_to_victim"]).strip():
         n_roles = max(n_roles, 1)
     topic_set = {t.lower() for t in parse_list(case.get("case_topics"))}
-    if topic_set & {"grooming", "hands_on", "trafficking", "production", "solicitation"}:
+    if topic_set & {"grooming", "sextortion", "hands_on", "trafficking", "production", "solicitation"}:
         n_roles = max(n_roles, 1)
     if any("offender" in t.lower() or "perpetrator" in t.lower() for t in topics):
         n_roles = max(n_roles, 2)

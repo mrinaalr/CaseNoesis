@@ -2,20 +2,34 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/platform/dark-web",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#DarkWebService"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "dark web"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession",
         "@type": [
           "https://cacontology.projectvic.org#CSAMIncident",
           "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
           }
         ],
         "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
@@ -25,31 +39,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/victim/1"
+            "@value": "$10,000"
           }
         ]
       },
@@ -65,9 +62,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
         ]
       },
       {
@@ -78,7 +81,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:32:22.810879"
+            "@value": "2026-05-30T20:40:25.488856"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -88,7 +91,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:32:22.810879"
+            "@value": "2026-05-30T20:40:25.488856"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -101,24 +104,12 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/arrested"
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -126,16 +117,22 @@
             "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trust-violation"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/cybertip"
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-proceeding"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -143,33 +140,9 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/icac"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/doj"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation"
@@ -177,91 +150,41 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/4",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/relationship/mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/dark-web",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#DarkWebService"
+          "https://cacontology.projectvic.org/legal-outcomes#SexTrafficking",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "dark web"
+            "@value": "sex trafficking"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/offender/1"
+            "@value": "sexual exploitation of children"
           }
         ]
       },
@@ -272,20 +195,77 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/5",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SextortionCharge",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sextortion"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/3"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/4"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/5"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/6"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/sentence/2"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production",
         "@type": [
           "https://cacontology.projectvic.org/production#ProductionOffense",
           "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
           }
         ],
         "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
@@ -295,21 +275,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/facet/production",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 10
-          }
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -335,32 +303,210 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/cybertip",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/sextortion",
         "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+          "https://cacontology.projectvic.org/sextortion#SextortionIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/facet/production",
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/3",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/doj",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Production",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "production of child pornography"
+          }
         ]
       },
       {
         "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
           "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/relationship/mother"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "60 years"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Wyoming Division of Criminal Investigation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/6",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 10
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/offender/1"
+          }
         ]
       }
     ],

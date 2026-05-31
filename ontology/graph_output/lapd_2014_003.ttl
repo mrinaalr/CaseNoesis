@@ -2,10 +2,13 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
@@ -13,27 +16,29 @@
 
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:04:07.990344" ;
+    dcterms:created "2026-05-30T20:37:10.315542" ;
     dcterms:identifier "lapd_2014_003" ;
-    dcterms:modified "2026-05-29T01:04:07.990344" ;
+    dcterms:modified "2026-05-30T20:37:10.315542" ;
     dcterms:source <https://www.lapdonline.org/newsroom/operation-broken-heart-results-in-the-arrests-of-several-hundred-child-predators/>,
         "LAPD" ;
-    cacontology:hasPhaseBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2014-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/multi-jurisdiction>,
-        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession> ;
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/victim/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/alhambra-police-department>,
         <https://caselinker.up.railway.app/resource/agency/california>,
         <https://caselinker.up.railway.app/resource/agency/california-department-of-corrections-and-rehabilitation>,
-        <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
+        <https://caselinker.up.railway.app/resource/agency/detectives-lapd>,
         <https://caselinker.up.railway.app/resource/agency/garden-grove-police-department>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/long-beach-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/sheriffs-s-department>,
+        <https://caselinker.up.railway.app/resource/agency/los-angeles-city-attorney-s-office>,
+        <https://caselinker.up.railway.app/resource/agency/los-angeles-county-district-attorney-s-office>,
+        <https://caselinker.up.railway.app/resource/agency/los-angeles-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/police-lapd>,
+        <https://caselinker.up.railway.app/resource/agency/san-bernardino-county-sheriffs-department>,
         <https://caselinker.up.railway.app/resource/agency/torrance-police-department>,
         <https://caselinker.up.railway.app/resource/agency/upland-police-department>,
         <https://caselinker.up.railway.app/resource/agency/ventura-county-sheriffs-department> .
@@ -54,7 +59,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "California Department of Corrections and Rehabilitation" .
 
-<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/detectives-lapd> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Detectives LAPD" .
 
 <https://caselinker.up.railway.app/resource/agency/garden-grove-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -68,7 +75,23 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Long Beach Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/sheriffs-s-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/los-angeles-city-attorney-s-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Los Angeles City Attorney ’'s Office" .
+
+<https://caselinker.up.railway.app/resource/agency/los-angeles-county-district-attorney-s-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/los-angeles-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Los Angeles County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/police-lapd> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Police LAPD" .
+
+<https://caselinker.up.railway.app/resource/agency/san-bernardino-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "San Bernardino County Sheriff's Department" .
 
 <https://caselinker.up.railway.app/resource/agency/torrance-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -82,11 +105,27 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Ventura County Sheriff's Department" .
 
+<https://caselinker.up.railway.app/resource/case/lapd_2014_003/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child porn" .
+
+<https://caselinker.up.railway.app/resource/case/lapd_2014_003/charge/2> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> .
+
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/lapd_2014_003/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/lapd_2014_003/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/charge/2> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003/person/offender/1> a uco-identity:Person .
 
@@ -95,17 +134,23 @@
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lapd_2014_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/victim/1> ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/lapd_2014_003/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/lapd_2014_003/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lapd_2014_003/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/lapd_2014_003/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/lapd_2014_003/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/lapd_2014_003/offense-event/charge-2> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" .
 

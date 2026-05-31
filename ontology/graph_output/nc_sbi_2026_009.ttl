@@ -2,6 +2,7 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,21 +13,17 @@
 
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:05:12.410533" ;
+    dcterms:created "2026-05-30T20:37:18.236136" ;
     dcterms:identifier "nc_sbi_2026_009" ;
-    dcterms:modified "2026-05-29T01:05:12.410533" ;
+    dcterms:modified "2026-05-30T20:37:18.236136" ;
     dcterms:source <https://www.ncsbi.gov/Newsroom/News-Releases/Winterville-Police-Officer-Charged-with-Sending-Ob>,
         "NC SBI" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/arrested> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/charged> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ncsbi---winterville-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/state-bureau-of-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/state-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/winterville-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -35,25 +32,27 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/ncsbi---winterville-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "NCSBI - Winterville Police Department" .
-
 <https://caselinker.up.railway.app/resource/agency/state-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/winterville-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Winterville Police Department" .
 
+<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "obscene material" .
+
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -61,15 +60,18 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/nc_sbi_2026_009/facet/possession> .
 

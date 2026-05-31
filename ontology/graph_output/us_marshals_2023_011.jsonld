@@ -2,6 +2,74 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/puerto-rico-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#ProbationSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "probation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/relationship/father"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ive-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/sentence/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -20,51 +88,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-department-of-child-and-family-services",
+        "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Massachusetts Department of Child and Family Services"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/waterbury-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/springfield-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -75,7 +101,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:27:26.461478"
+            "@value": "2026-05-30T20:39:40.800036"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -85,7 +111,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:27:26.461478"
+            "@value": "2026-05-30T20:39:40.800036"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -98,24 +124,12 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/arrested"
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/charged"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/charged"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -124,6 +138,9 @@
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/event/trust-violation"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/legal-proceeding"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -131,17 +148,10 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/hamden-county-sheriffs-office"
+          },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-department-of-child-and-family-services"
           },
@@ -155,77 +165,15 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/springfield-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/waterbury-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          },
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/relationship/father"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ive-task-force"
           }
         ]
       },
       {
         "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/relationship/father",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "father"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
@@ -255,14 +203,79 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/puerto-rico-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/hamden-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Puerto Rico Police Department"
+            "@value": "Hamden County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/relationship/father",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "father"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/waterbury-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/springfield-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Springfield Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2023_011/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-department-of-child-and-family-services",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Massachusetts Department of Child and Family Services"
           }
         ]
       }

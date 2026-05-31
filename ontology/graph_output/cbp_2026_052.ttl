@@ -12,16 +12,11 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_052> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:02.212421" ;
+    dcterms:created "2026-05-30T20:34:04.556462" ;
     dcterms:identifier "cbp_2026_052" ;
-    dcterms:modified "2026-05-29T00:40:02.212421" ;
+    dcterms:modified "2026-05-30T20:34:04.556462" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/laredo-cbp-officers-apprehend-man-wanted-sexual-assault-child-warrant>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_052/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_052/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/twitter-x> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/webb-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_052/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -30,14 +25,14 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_052/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
 <https://caselinker.up.railway.app/resource/agency/webb-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_052/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_052/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Twitter / X" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_052/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;

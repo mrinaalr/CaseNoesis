@@ -4,28 +4,22 @@
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:12:08.813582" ;
+    dcterms:created "2026-05-30T20:37:49.726173" ;
     dcterms:identifier "ohio_ag_2018_011" ;
-    dcterms:modified "2026-05-29T01:12:08.813582" ;
+    dcterms:modified "2026-05-30T20:37:49.726173" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/January-2018/Meigs-County-Man-Indicted-on-Rape-Charges-Against>,
         "OHIO AG" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/arrested> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2018-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/event/hands-on> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-special-prosecutions>,
-        <https://caselinker.up.railway.app/resource/agency/generals-bureau-of-criminal-investigations-crimes-against-children-unit> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -33,21 +27,11 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-special-prosecutions> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Attorney General's Special Prosecutions" .
-
-<https://caselinker.up.railway.app/resource/agency/generals-bureau-of-criminal-investigations-crimes-against-children-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "General's Bureau of Criminal Investigation's Crimes Against Children Unit" .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -55,14 +39,17 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2018-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2018_011/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

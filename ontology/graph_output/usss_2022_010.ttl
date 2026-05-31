@@ -2,10 +2,9 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
-@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
@@ -15,34 +14,18 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_010> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:28:43.588998" ;
+    dcterms:created "2026-05-30T20:39:52.018876" ;
     dcterms:identifier "usss_2022_010" ;
-    dcterms:modified "2026-05-29T01:28:43.588998" ;
+    dcterms:modified "2026-05-30T20:39:52.018876" ;
     dcterms:source <https://www.secretservice.gov/newsroom/releases/2022/06/bronx-daycare-owner-indicted-sexually-assaulting-boy-and-possessing-child>,
         "USSS" ;
-    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2022-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2022_010/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2022_010/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
+        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_010/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/1>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/10>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/11>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/12>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/2>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/3>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/4>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/5>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/6>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/7>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/8>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/9> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/google-drive> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/child-abuse-sex-crimes-bureau>,
-        <https://caselinker.up.railway.app/resource/agency/child-abusesex-crimes-bureau>,
-        <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/u-s-secret-service> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -50,60 +33,24 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/child-abuse-sex-crimes-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Child Abuse Sex Crimes Bureau" .
+<https://caselinker.up.railway.app/resource/agency/u-s-secret-service> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/child-abusesex-crimes-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Child Abuse/Sex Crimes Bureau" .
-
-<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
-
-<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/case/usss_2022_010/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child pornography" .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
+<https://caselinker.up.railway.app/resource/case/usss_2022_010/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/usss_2022_010/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/usss_2022_010/sentence/1> .
+
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/10> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/11> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/12> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/2> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/3> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/4> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/5> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/6> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/7> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/8> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/9> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
-
-<https://caselinker.up.railway.app/resource/platform/google-drive> a cacontology-platforms:FileHostingService ;
-    rdfs:label "Google Drive" .
+<https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -112,83 +59,6 @@
         <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/10> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/10> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/11> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/11> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/12> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/12> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/2> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/2> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/3> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/3> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/4> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/4> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/5> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/5> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/6> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/6> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/7> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/7> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/8> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/8> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/9> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/9> .
-
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
@@ -196,36 +66,25 @@
         <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_010/person/victim/1> .
 
+<https://caselinker.up.railway.app/resource/case/usss_2022_010/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$500,000" .
+
+<https://caselinker.up.railway.app/resource/case/usss_2022_010/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/platform/google-drive> a cacontology-platforms:FileHostingService ;
+    rdfs:label "Google Drive" .
+
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/hands-on> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/1>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/10>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/11>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/12>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/2>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/3>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/4>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/5>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/6>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/7>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/8>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/9> ;
-    cacontology:severityLevel 3 .
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/google-drive> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_010/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/1>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/10>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/11>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/12>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/2>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/3>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/4>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/5>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/6>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/7>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/8>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_010/role/victim/9> ;
     cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/google-drive> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/usss_2022_010/facet/possession> .
 

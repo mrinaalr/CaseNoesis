@@ -5,44 +5,22 @@
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:26:59.058099" ;
+    dcterms:created "2026-05-30T20:39:37.656811" ;
     dcterms:identifier "us_marshals_2025_015" ;
-    dcterms:modified "2026-05-29T01:26:59.058099" ;
+    dcterms:modified "2026-05-30T20:39:37.656811" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-led-operation-northern-lights-results-recovery-and-location-of-43>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bay-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/crestview-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security>,
-        <https://caselinker.up.railway.app/resource/agency/escambia-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/florida-attorney-generals-office>,
-        <https://caselinker.up.railway.app/resource/agency/florida-department-of-children-and-families>,
-        <https://caselinker.up.railway.app/resource/agency/florida-department-of-juvenile-justice>,
-        <https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement>,
-        <https://caselinker.up.railway.app/resource/agency/hsi>,
-        <https://caselinker.up.railway.app/resource/agency/jackson-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/leon-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/madison-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/marshals>,
-        <https://caselinker.up.railway.app/resource/agency/pensacola-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/tallahassee-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/taylor-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/usms>,
-        <https://caselinker.up.railway.app/resource/agency/walton-county-sheriffs-office> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -50,60 +28,15 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/bay-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/crestview-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Crestview Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/escambia-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/florida-attorney-generals-office> a cacontology-multi:StateAgency .
-
-<https://caselinker.up.railway.app/resource/agency/florida-department-of-children-and-families> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/florida-department-of-juvenile-justice> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/jackson-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/leon-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/madison-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/marshals> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/pensacola-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Pensacola Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/tallahassee-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/taylor-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Taylor County Sheriff's Office" .
-
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/walton-county-sheriffs-office> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 1 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+    cacontology-production:victimAge 17 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -114,4 +47,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2025_015/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

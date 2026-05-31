@@ -25,24 +25,163 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/agency/district-attorney-s-office",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/haysville-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Haysville Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "330 months"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:38:36.896984"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "http://purl.org/dc/terms/identifier": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/offender/1"
+            "@value": "sedgwick_so_2026_001"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "http://purl.org/dc/terms/modified": [
           {
-            "@value": "stranger"
+            "@value": "2026-05-30T20:38:36.896984"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "SEDGWICK SO"
+          },
+          {
+            "@id": "https://www.sedgwickcounty.org/district-attorney/criminal-division/criminal-division-media-releases/sedgwick-county-man-sentenced-for-rape-of-child-in-haysville/"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/district-attorney-s-office"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/haysville-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
         ]
       },
@@ -70,116 +209,25 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/relationship/stranger",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/haysville-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Haysville Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:18:23.195042"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "sedgwick_so_2026_001"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:18:23.195042"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "SEDGWICK SO"
-          },
-          {
-            "@id": "https://www.sedgwickcounty.org/district-attorney/criminal-division/criminal-division-media-releases/sedgwick-county-man-sentenced-for-rape-of-child-in-haysville/"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/offender/1"
           }
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1"
+            "@value": "stranger"
           }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/district-attorneys-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/haysville-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/district-attorneys-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       }
     ],

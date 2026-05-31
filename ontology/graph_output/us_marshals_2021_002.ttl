@@ -5,6 +5,7 @@
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
@@ -13,30 +14,25 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:26:33.433054" ;
+    dcterms:created "2026-05-30T20:39:34.248383" ;
     dcterms:identifier "us_marshals_2021_002" ;
-    dcterms:modified "2026-05-29T01:26:33.433054" ;
+    dcterms:modified "2026-05-30T20:39:34.248383" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/southern-iowa-fugitive-task-force-brings-end-three-week-manhunt>,
         "US MARSHALS" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/booked> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2021-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/charged> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/role/victim/1> ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/sentence/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/council-bluffs-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security>,
+        <https://caselinker.up.railway.app/resource/agency/criminal-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/department-of>,
         <https://caselinker.up.railway.app/resource/agency/fifth-judicial-district-department-of-correctional-services>,
-        <https://caselinker.up.railway.app/resource/agency/fourth-judicial-district-department-of-correctional-services>,
-        <https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/fourth-judicial-district-department>,
         <https://caselinker.up.railway.app/resource/agency/polk-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/pottawattamie-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/southern-iowa-fugitive-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/southern-iowa-fugitive-task-forces>,
-        <https://caselinker.up.railway.app/resource/agency/usms> .
+        <https://caselinker.up.railway.app/resource/agency/southern-iowa-fugitive-task-force> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -48,17 +44,17 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Council Bluffs Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/criminal-investigation> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/department-of> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fifth-judicial-district-department-of-correctional-services> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Fifth Judicial District Department of Correctional Services" .
 
-<https://caselinker.up.railway.app/resource/agency/fourth-judicial-district-department-of-correctional-services> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/fourth-judicial-district-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Fourth Judicial District Department of Correctional Services" .
-
-<https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
+    rdfs:label "Fourth Judicial District Department" .
 
 <https://caselinker.up.railway.app/resource/agency/polk-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
@@ -70,39 +66,40 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Southern Iowa Fugitive Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/southern-iowa-fugitive-task-forces> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Southern Iowa Fugitive Task Force's" .
-
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): Polk County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 21 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "Polk County Jail" .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/sextortion> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/role/victim/1> ;
-    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/sextortion> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2021_002/event/sextortion> a cac-core:Event,
+        cacontology-sextortion:SextortionIncident ;
+    cacontology:severityLevel 3 .
 

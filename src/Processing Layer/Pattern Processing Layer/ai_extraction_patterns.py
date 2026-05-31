@@ -78,3 +78,18 @@ AI_CSAM_IMPLIES_TOOL_RE = re.compile(
 )
 
 AI_CSAM_SEMANTIC_THRESHOLD = 0.50
+
+# Sextortion offense (case_topics: sextortion) — regex only; not promoted from NLP scores.
+SEXTORTION_TOPIC_RE = re.compile(
+    r"""
+    \bsextort\w*\b
+    | \bsexual(?:ly)?\s+extort\w*\b
+    | \bsextortion\s+scheme\b
+    | \bcyber[\s-]?sextort\w*\b
+    | \b(?:blackmail|extort)\w*\b[^.]{0,70}\b(?:nude|naked|sexual|explicit|indecent)\s+(?:photos?|images?|videos?|content|material)\b
+    | \b(?:nude|naked|sexual|explicit|indecent)\s+(?:photos?|images?|videos?|content|material)\b[^.]{0,70}\b(?:blackmail|extort)\w*\b
+    | \bthreaten\w*\s+to\s+(?:share|post|send|publish|distribute|release)\b[^.]{0,60}\b(?:nude|naked|sexual|explicit|indecent)\b
+    | \b(?:share|post|send|publish|distribute|release)\b[^.]{0,40}\b(?:nude|naked|sexual|explicit|indecent)\s+(?:photos?|images?|videos?)\b[^.]{0,40}\b(?:unless|if|until)\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)

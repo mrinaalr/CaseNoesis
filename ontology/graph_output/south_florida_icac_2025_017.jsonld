@@ -2,133 +2,13 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@id": "https://caselinker.up.railway.app/resource/platform/kik",
         "@type": [
           "https://cacontology.projectvic.org/platforms#MessagingService"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Snapchat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:21:13.230162"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "south_florida_icac_2025_017"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:21:13.230162"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "SOUTH FLORIDA ICAC"
-          },
-          {
-            "@id": "https://www.local10.com//news/local/2025/11/25/tamarac-man-posed-as-15-year-old-girl-to-solicit-lewd-videos-from-teen-boys-deputies-say/"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/cybertip"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/kik"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@value": "Kik"
           }
         ]
       },
@@ -144,14 +24,70 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/legal-proceeding",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/sentence/2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/kik"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/facet/possession"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child sexual abuse material"
           }
         ]
       },
@@ -162,55 +98,49 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/offender/1"
+            "@value": "$100"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$400,000"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#MessagingService"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Snapchat"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 15
           }
         ]
       },
@@ -238,14 +168,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/kik",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Kik"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -267,6 +192,95 @@
         "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
             "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:38:48.685482"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "south_florida_icac_2025_017"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:38:48.685482"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "SOUTH FLORIDA ICAC"
+          },
+          {
+            "@id": "https://www.local10.com//news/local/2025/11/25/tamarac-man-posed-as-15-year-old-girl-to-solicit-lewd-videos-from-teen-boys-deputies-say/"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_017/person/offender/1"
           }
         ]
       }

@@ -2,6 +2,8 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,21 +14,17 @@
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:14:15.446224" ;
+    dcterms:created "2026-05-30T20:38:03.592194" ;
     dcterms:identifier "pa_ag_2025_017" ;
-    dcterms:modified "2026-05-29T01:14:15.446224" ;
+    dcterms:modified "2026-05-30T20:38:03.592194" ;
     dcterms:source <https://www.attorneygeneral.gov/taking-action/charged-luzerne-county-man-used-kik-social-media-app-to-access-possess-child-sexual-abuse-material/>,
         "PA AG" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/arrested> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/charged> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/kik>,
-        <https://caselinker.up.railway.app/resource/platform/social-media> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general> .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -34,21 +32,24 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
+
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/sentence/1> .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
-    rdfs:label "Kik" .
-
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
-
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -56,15 +57,30 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$25,000" .
+
+<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+    rdfs:label "Kik" .
+
+<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/kik>,
+        <https://caselinker.up.railway.app/resource/platform/social-media> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/pa_ag_2025_017/facet/possession> .
 

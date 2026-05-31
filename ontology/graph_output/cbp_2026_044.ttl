@@ -12,19 +12,15 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_044> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:39:52.753130" ;
+    dcterms:created "2026-05-30T20:34:02.969478" ;
     dcterms:identifier "cbp_2026_044" ;
-    dcterms:modified "2026-05-29T00:39:52.753130" ;
+    dcterms:modified "2026-05-30T20:34:02.969478" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/dulles-cbp-arrests-nebraska-man-wanted-nebraska-charges-sexual-assault>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_044/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_044/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_044/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_044/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_044/role/victim/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/douglas-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_044/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -39,7 +35,6 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_044/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_044/role/victim/1> ;
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
 
@@ -47,10 +42,6 @@
     cacontology-detection:ageEstimate 42 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_044/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_044/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_044/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -61,4 +52,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_044/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_044/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

@@ -13,20 +13,17 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:39:16.850680" ;
+    dcterms:created "2026-05-30T20:33:57.116967" ;
     dcterms:identifier "cbp_2026_009" ;
-    dcterms:modified "2026-05-29T00:39:16.850680" ;
+    dcterms:modified "2026-05-30T20:33:57.116967" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-officers-capture-man-sought-child-sexual-assault-charges>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_009/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_009/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_009/event/multi-jurisdiction> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_009/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_009/role/victim/1> ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/cbp_2026_009/sentence/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/el-paso-police-department> .
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_009/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/cbp_2026_009/legal-proceeding> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/el-paso-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -34,28 +31,29 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_009/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/agency/county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "County Sheriff's Office" .
+
 <https://caselinker.up.railway.app/resource/agency/el-paso-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "El Paso Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_009/role/victim/1> ;
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_009/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): El Paso County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 21 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_009/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "El Paso County Jail" .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_009/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_009/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -66,4 +64,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_009/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_009/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

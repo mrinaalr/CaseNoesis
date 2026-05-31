@@ -20,9 +20,36 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/coshocton-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/relationship/mother"
+          }
         ]
       },
       {
@@ -48,94 +75,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/relationship/mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:12:20.098312"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "ohio_ag_2016_005"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:12:20.098312"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "OHIO AG"
-          },
-          {
-            "@id": "https://www.ohioattorneygeneral.gov/Media/News-Releases/March-2016/Father-Sentenced-to-Seven-Years-in-Prison-for-Abus"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/event/trust-violation"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-special-prosecutions-section"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/coshocton-county-sheriffs-office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -154,21 +93,86 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-special-prosecutions-section",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@value": "Attorney General's Special Prosecutions Section"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:37:50.911293"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "ohio_ag_2016_005"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:37:50.911293"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "OHIO AG"
+          },
+          {
+            "@id": "https://www.ohioattorneygeneral.gov/Media/News-Releases/March-2016/Father-Sentenced-to-Seven-Years-in-Prison-for-Abus"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/event/trust-violation"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/legal-step/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/coshocton-county-sheriffs-office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_005/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       }
     ],

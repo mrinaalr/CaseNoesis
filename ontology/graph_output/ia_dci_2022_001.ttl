@@ -13,31 +13,25 @@
 
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:51:02.428651" ;
+    dcterms:created "2026-05-30T20:35:29.946474" ;
     dcterms:identifier "ia_dci_2022_001" ;
-    dcterms:modified "2026-05-29T00:51:02.428651" ;
+    dcterms:modified "2026-05-30T20:35:29.946474" ;
     dcterms:source <https://dps.iowa.gov/press-release/2022-10-31/eight-arrests-following-operation-targeting-internet-crimes-against-children>,
         "IA DCI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2022-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/event/possession> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/role/victim/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/altoona-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/department-of-public-safety>,
+        <https://caselinker.up.railway.app/resource/agency/cyber-crime-bureau>,
         <https://caselinker.up.railway.app/resource/agency/des-moines-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation-cyber-crime-bureau>,
+        <https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/dps>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety>,
-        <https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety-division-of-intelligence-law-enforcement-intelligence-network>,
-        <https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety-division>,
         <https://caselinker.up.railway.app/resource/agency/iowa-state-university-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/polk-county-attorneys-office>,
+        <https://caselinker.up.railway.app/resource/agency/polk-county-attorney-s-office>,
         <https://caselinker.up.railway.app/resource/agency/polk-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -50,17 +44,17 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Altoona Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-public-safety> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Department of Public Safety" .
+<https://caselinker.up.railway.app/resource/agency/cyber-crime-bureau> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Cyber Crime Bureau" .
 
 <https://caselinker.up.railway.app/resource/agency/des-moines-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Des Moines Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation-cyber-crime-bureau> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Division of Criminal Investigation-Cyber Crime Bureau" .
+    rdfs:label "Division of Criminal Investigation" .
 
 <https://caselinker.up.railway.app/resource/agency/dps> a cacontology-multi:LocalAgency .
 
@@ -68,23 +62,17 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety-division> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
-    rdfs:label "Iowa Department of Public Safety" .
-
-<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety-division-of-intelligence-law-enforcement-intelligence-network> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Iowa Department of Public Safety Division of Intelligence-Law Enforcement Intelligence Network" .
-
-<https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
+    rdfs:label "Iowa Department of Public Safety Division" .
 
 <https://caselinker.up.railway.app/resource/agency/iowa-state-university-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Iowa State University Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/polk-county-attorneys-office> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/polk-county-attorney-s-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
-    rdfs:label "Polk County Attorney’'s Office" .
+    rdfs:label "Polk County Attorney ’'s Office" .
 
 <https://caselinker.up.railway.app/resource/agency/polk-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -96,24 +84,23 @@
 
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/role/victim/1> ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ia_dci_2022_001/facet/possession> .
 

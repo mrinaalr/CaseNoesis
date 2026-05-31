@@ -7,7 +7,7 @@ or ambiguous from local context windows, then decides:
   - map-time: should this platform enter the knowledge graph?
   - corpus-time: should this whole case be excluded?
 
-Currently used at corpus selection time (`select_100.py`).
+Currently used at corpus selection time.
 
 CLI:
     python ontology/noise_filter.py <case_id> [...]   # dry-run per case

@@ -2,20 +2,199 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/cybertip",
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
         "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:39:43.299758"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "us_marshals_2022_013"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:39:43.299758"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "US MARSHALS"
+          },
+          {
+            "@id": "https://www.usmarshals.gov/news/press-release/us-marshals-mcu-operation-summer-knights-recovers-fourteen-missing-endangered"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/hsi"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-task-force"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/orleans-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-mc"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-eastern-district-of"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Vehicle Burglary in uptown New Orleans"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 14
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-mc",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "U. S. Marshals MC"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2022-01-01T00:00:00Z"
+          }
         ]
       },
       {
@@ -43,32 +222,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 12
           }
         ]
       },
@@ -84,122 +245,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
+        "@id": "https://caselinker.up.railway.app/resource/agency/orleans-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://purl.org/dc/terms/created": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "2026-05-29T01:27:42.471198"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "us_marshals_2022_013"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:27:42.471198"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "US MARSHALS"
-          },
-          {
-            "@id": "https://www.usmarshals.gov/news/press-release/us-marshals-mcu-operation-summer-knights-recovers-fourteen-missing-endangered"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/cybertip"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/hsi"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
+            "@value": "Orleans Police Department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2022-01-01T00:00:00Z"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -215,55 +275,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-orleans-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-eastern-district-of",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 12
+            "@value": "U. S. Marshals Service Eastern District of"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2022_013/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

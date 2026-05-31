@@ -8,7 +8,9 @@
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
@@ -16,26 +18,24 @@
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:50:27.329307" ;
+    dcterms:created "2026-05-30T20:35:25.608628" ;
     dcterms:identifier "gbi_2024_007" ;
-    dcterms:modified "2026-05-29T00:50:27.329307" ;
+    dcterms:modified "2026-05-30T20:35:25.608628" ;
     dcterms:source <https://gbi.georgia.gov/search/results?query=CEACC>,
         "GBI" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/booked> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/charged> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/gbi_2024_007/cybertip>,
         <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession>,
         <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5>,
         <https://caselinker.up.railway.app/resource/case/gbi_2024_007/operation> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/victim/1> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/gbi_2024_007/tech/cybertipline> ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/gbi_2024_007/sentence/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security>,
         <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-unit>,
-        <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes>,
+        <https://caselinker.up.railway.app/resource/agency/georgia-bureau>,
+        <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/hall-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
@@ -51,9 +51,11 @@
 
 <https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-unit> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Georgia Bureau" .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hall-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -63,12 +65,46 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/1> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:StateCharge ;
+    rdfs:label "Sexual Exploitation of Children in Hall County" ;
+    cacontology-legal-outcomes:indictmentCounts 5 .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/2> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:StateCharge ;
+    rdfs:label "sexual exploitation of children" .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/3> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/4> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/5> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5> .
+
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): Hall County Jail" ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/4>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/charge/5> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/operation> a cac-core:Event,
         cacontology-taskforce:TaskForceOperation .
@@ -77,42 +113,43 @@
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2024_007/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "Hall County Jail" .
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2024_007/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2024_007/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
 <https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/booked> a cacontology:InitialPhase,
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2024_007/person/offender/1> .
-
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/victim/1> ;
     cacontology:severityLevel 3 ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/gbi_2024_007/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production> a cac-core:Event,
         cacontology-production:ProductionOffense ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/victim/1> ;
     cacontology:severityLevel 3 ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/gbi_2024_007/facet/production> .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2024_007/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2024_007/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2024_007/person/victim/1> .
+<https://caselinker.up.railway.app/resource/case/gbi_2024_007/offense-event/charge-5> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" .
 

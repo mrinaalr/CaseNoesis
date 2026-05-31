@@ -1098,7 +1098,7 @@
         svg.attr('viewBox', [0, 0, width, height]);
 
         const g = svg.append('g');
-        svg.call(d3.zoom().scaleExtent([0.25, 4]).on('zoom', event => g.attr('transform', event.transform)));
+        svg.call(d3.zoom().scaleExtent([0.01, 16]).on('zoom', event => g.attr('transform', event.transform)));
 
         const linkData = links.map(l => ({ ...l }));
         const nodeData = nodes.map(n => ({ ...n }));

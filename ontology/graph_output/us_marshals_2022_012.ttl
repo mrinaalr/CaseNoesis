@@ -11,49 +11,30 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:27:39.768151" ;
+    dcterms:created "2026-05-30T20:39:42.830338" ;
     dcterms:identifier "us_marshals_2022_012" ;
-    dcterms:modified "2026-05-29T01:27:39.768151" ;
+    dcterms:modified "2026-05-30T20:39:42.830338" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-locate-missing-missouri-children-near-tucson>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2022-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/event/trust-violation> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/1>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/2>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/3> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/arizona-department-of-child-safety>,
-        <https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/midwest-violent-fugitive-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/pascua-yaqui-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/usms> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
+        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-midwest-v> .
 
-<https://caselinker.up.railway.app/resource/agency/arizona-department-of-child-safety> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/ive-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-midwest-v> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Arizona Department of Child Safety" .
-
-<https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/midwest-violent-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Midwest Violent Fugitive Task Force" .
-
-<https://caselinker.up.railway.app/resource/agency/pascua-yaqui-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Pascua Yaqui Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+    rdfs:label "U. S. Marshals Service Midwest V" .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/1>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/2>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/3> ;
     cacontology:severityLevel 2 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/event/trust-violation> a cacontology-custodial:CustodialAbuse,
@@ -63,13 +44,7 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 8 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/2> a uco-identity:Person ;
-    cacontology-production:victimAge 8 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/3> a uco-identity:Person ;
-    cacontology-production:victimAge 8 .
+    cacontology-production:victimAge 9 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;
@@ -77,27 +52,17 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/offender/1> ;
     cacontology-custodial:relationshipType "mother" .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/2> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/2> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/3> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/3> .
-
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2022_012/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

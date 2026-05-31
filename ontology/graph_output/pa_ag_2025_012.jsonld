@@ -2,26 +2,9 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/offender/1"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -47,22 +30,76 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
+            "@value": "$100,000"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/charge/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "artificially-generated child"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 22
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/ai-csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/facet/possession"
+          }
         ]
       },
       {
@@ -73,7 +110,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:14:10.304937"
+            "@value": "2026-05-30T20:38:02.938347"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -83,7 +120,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:14:10.304937"
+            "@value": "2026-05-30T20:38:02.938347"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -104,44 +141,37 @@
             "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/phase/charged"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-12-31T00:00:00Z"
-          }
-        ],
         "https://cacontology.projectvic.org#hasStep": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/ai-csam"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
+          },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/legal-proceeding"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/office-of-attorney-generals-child-predator-section"
+            "@id": "https://caselinker.up.railway.app/resource/agency/office-of-attorney-general"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -151,41 +181,15 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/ai-csam"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/office-of-attorney-generals-child-predator-section",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/offender/1"
           }
         ]
       },
@@ -196,9 +200,81 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/event/ai-csam",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#DigitallyGeneratedCSAMIncident",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://cacontology.projectvic.org/ai-csam#AIGeneratedCSAM"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/office-of-attorney-general",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_012/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child sexual abuse material"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

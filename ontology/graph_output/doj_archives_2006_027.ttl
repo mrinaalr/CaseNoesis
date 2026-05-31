@@ -2,33 +2,33 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
-@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:45:36.960637" ;
+    dcterms:created "2026-05-30T20:34:47.438586" ;
     dcterms:identifier "doj_archives_2006_027" ;
-    dcterms:modified "2026-05-29T00:45:36.960637" ;
+    dcterms:modified "2026-05-30T20:34:47.438586" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/CDCA%20Doss%20sentence%20PR_070307.pdf>,
         "DOJ ARCHIVES" ;
-    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2006-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/cybertip>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/event/multi-jurisdiction> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/phase/sentenced> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/phase/sentenced> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/legal-step/sentenced>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/role/victim/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/los-angeles-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+        <https://caselinker.up.railway.app/resource/agency/fbi> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -38,33 +38,87 @@
 
 <https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
-
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/los-angeles-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/1> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:SexTrafficking ;
+    rdfs:label "sex trafficking" .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
-    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "pandering" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/3> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/4> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/charge/4> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/4> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 14 .
 
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
-
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:LifeImprisonmentSentence ;
+    rdfs:label "SENTENCED TO LIFE" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:LifeImprisonmentSentence ;
+    rdfs:label "life in prison" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/3> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "15 months" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/sentence/4> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:LifeImprisonmentSentence ;
+    rdfs:label "sentenced to a mandatory statutory term of life" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/phase/sentenced> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2006-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2006_027/offense-event/charge-4> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" .
 

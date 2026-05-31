@@ -2,83 +2,56 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001",
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:14:41.883319"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "ri_ag_2024_001"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:14:41.883319"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "RI AG"
-          },
-          {
-            "@id": "https://riag.ri.gov/press-releases/warwick-man-charged-soliciting-minor"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged"
-          }
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
         "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-12-31T00:00:00Z"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 14
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/event/online-only"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/operation"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/icac"
-          },
+            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/rhode-island-state-police-department"
+            "@value": "stranger"
           }
         ]
       },
@@ -113,55 +86,77 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general",
+        "@id": "https://caselinker.up.railway.app/resource/agency/rhode-island-state-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://purl.org/dc/terms/created": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/victim/1"
+            "@value": "2026-05-30T20:38:06.774408"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "http://purl.org/dc/terms/identifier": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/role/offender/1"
+            "@value": "ri_ag_2024_001"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "http://purl.org/dc/terms/modified": [
           {
-            "@value": "stranger"
+            "@value": "2026-05-30T20:38:06.774408"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "RI AG"
+          },
+          {
+            "@id": "https://riag.ri.gov/press-releases/warwick-man-charged-soliciting-minor"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/event/online-only"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/operation"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/icac"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/rhode-island-state-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 14
-          }
         ]
       },
       {
@@ -185,37 +180,6 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/person/victim/1"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/rhode-island-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ri_ag_2024_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       }
     ],

@@ -102,6 +102,7 @@ class MergeProcessing:
         - Production topic: pattern/regex only (no semantic override).
         - Possession: if possession_csam is strong, ensure 'possession' tag exists.
         - Severity: add 'grooming' when the semantic concept score is present.
+        - Sextortion topic: pattern/regex only (see SEXTORTION_TOPIC_RE in processing).
         """
         ml_features = merged.get('ml_features') or {}
         semantic = ml_features.get('semantic_severity') or {}
@@ -138,7 +139,9 @@ class MergeProcessing:
         if ai_score >= AI_CSAM_SEMANTIC_THRESHOLD:
             if 'ai_csam' not in topics:
                 topics.append('ai_csam')
-                merged['case_topics'] = list(dict.fromkeys(topics))
+
+        if topics:
+            merged['case_topics'] = list(dict.fromkeys(topics))
 
         return merged
     
@@ -271,20 +274,79 @@ class MergeProcessing:
         # Only save law enforcement organizations (not tech platforms, news orgs, etc.)
         if law_enforcement_orgs:
             # Deduplicate and sort
-            all_orgs = list(dict.fromkeys(law_enforcement_orgs))  # Preserve order, remove duplicates
-            all_orgs.sort()
+            all_orgs = self._dedupe_agency_fragments(
+                list(dict.fromkeys(law_enforcement_orgs))
+            )
             merged['organizations'] = all_orgs
             
             # Merge: combine pattern and NER law enforcement agencies for agencies_involved
-            all_agencies = list(pattern_agencies | set(law_enforcement_orgs))
-            all_agencies.sort()  # Sort for consistency
-            merged['agencies_involved'] = all_agencies
+            combined = list(pattern_agencies | set(law_enforcement_orgs))
+            merged['agencies_involved'] = self._dedupe_agency_fragments(combined)
         elif pattern_agencies:
             # Even if no NER agencies, normalize pattern agencies
             merged['organizations'] = sorted(list(pattern_agencies))
-            merged['agencies_involved'] = sorted(list(pattern_agencies))
+            merged['agencies_involved'] = self._dedupe_agency_fragments(
+                sorted(list(pattern_agencies))
+            )
         
         return merged
+
+    _BARE_STATE_AGENCY_NAMES = frozenset({
+        'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado',
+        'connecticut', 'delaware', 'florida', 'georgia', 'hawaii', 'idaho',
+        'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana',
+        'maine', 'maryland', 'massachusetts', 'michigan', 'minnesota',
+        'mississippi', 'missouri', 'montana', 'nebraska', 'nevada',
+        'new hampshire', 'new jersey', 'new mexico', 'new york',
+        'north carolina', 'north dakota', 'ohio', 'oklahoma', 'oregon',
+        'pennsylvania', 'rhode island', 'south carolina', 'south dakota',
+        'tennessee', 'texas', 'utah', 'vermont', 'virginia', 'washington',
+        'west virginia', 'wisconsin', 'wyoming', 'las vegas',
+    })
+
+    _AGENCY_FRAGMENT_DROP = frozenset({
+        'investigation', 'tor task force', 'federal bureau', 'federal',
+        'police department', 'department', 'bureau', 'justice department', 'doj',
+    })
+
+    def _dedupe_agency_fragments(self, agencies: List[str]) -> List[str]:
+        """Drop NER split fragments and bare state-name agency labels."""
+        cleaned: List[str] = []
+        seen: set = set()
+        upper_blob = ' | '.join(agencies).lower()
+
+        for agency in agencies:
+            if not agency or not str(agency).strip():
+                continue
+            label = str(agency).strip()
+            low = label.lower()
+
+            if low in self._BARE_STATE_AGENCY_NAMES:
+                continue
+            if low in self._AGENCY_FRAGMENT_DROP:
+                continue
+            # "tor Task Force" when a *Predator Task Force exists
+            if low == 'tor task force' and 'predator task force' in upper_blob:
+                continue
+            # Standalone "Investigation" when FBI / full bureau name present
+            if low == 'investigation' and (
+                'fbi' in upper_blob
+                or 'federal bureau of investigation' in upper_blob
+                or 'homeland security investigations' in upper_blob
+            ):
+                continue
+            # Generic "Police Department" without a city/county prefix
+            if low == 'police department' and not re.match(
+                r'.+\s+police\s+department$', label, re.I
+            ):
+                continue
+
+            if low not in seen:
+                seen.add(low)
+                cleaned.append(label)
+
+        cleaned.sort()
+        return cleaned
     
     def _filter_law_enforcement_agencies(self, organizations: List[str]) -> List[str]:
         """

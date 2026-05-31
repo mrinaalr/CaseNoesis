@@ -2,27 +2,9 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/charged",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/canyon-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Canyon County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org#LegalProcessPhase",
           "https://cacontology.projectvic.org/core#Phase"
         ],
         "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
@@ -30,6 +12,12 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-07-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -55,43 +43,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/nampa-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Nampa Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/facet/possession"
+            "@value": "Inferred offense from charge: child exploitation"
           }
         ]
       },
@@ -109,12 +69,94 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/ai-csam"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/canyon-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Canyon County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/nampa-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Nampa Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-07-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/ai-csam",
+        "@type": [
+          "https://cacontology.projectvic.org#DigitallyGeneratedCSAMIncident",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://cacontology.projectvic.org/ai-csam#AIGeneratedCSAM"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
@@ -126,7 +168,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T00:52:21.479326"
+            "@value": "2026-05-30T20:35:40.141580"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -136,7 +178,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T00:52:21.479326"
+            "@value": "2026-05-30T20:35:40.141580"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -149,36 +191,26 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/arrested"
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/charged"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-07-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/phase/charged"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/ai-csam"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/cybertip"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/legal-proceeding"
+          },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/role/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
@@ -189,11 +221,52 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/icac"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/nampa-police-department"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -210,7 +283,13 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/ai-csam"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -220,32 +299,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/event/possession",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/idaho_icac_2025_014/facet/possession"
+          }
         ]
       }
     ],

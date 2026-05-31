@@ -2,21 +2,27 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/event/multi-jurisdiction",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2007-01-01T00:00:00Z"
+            "@value": "supervised release"
           }
         ]
       },
@@ -32,6 +38,11 @@
             "@value": "2007-01-01T00:00:00Z"
           }
         ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2"
+          }
+        ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/offender/1"
@@ -39,62 +50,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/cybertip",
+        "@id": "https://caselinker.up.railway.app/resource/agency/boston-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/cambridge-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Cambridge Police Department"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2007-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -120,27 +90,33 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/legal-proceeding",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/boston-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2007-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/sentence/2"
+          }
         ]
       },
       {
@@ -151,7 +127,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T00:47:06.692551"
+            "@value": "2026-05-30T20:34:58.795649"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -161,7 +137,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T00:47:06.692551"
+            "@value": "2026-05-30T20:34:58.795649"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -174,24 +150,12 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2007-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2007-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -199,22 +163,18 @@
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/event/multi-jurisdiction"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/cybertip"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
           {
             "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
@@ -228,10 +188,139 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/massachusetts-state-police-department"
-          },
+            "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SexTrafficking",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@value": "sex trafficking"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/cambridge-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Cambridge Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2007-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2007-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2007-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2007_048/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "51 months"
           }
         ]
       }

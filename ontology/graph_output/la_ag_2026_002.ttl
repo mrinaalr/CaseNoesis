@@ -12,39 +12,36 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:03:08.093301" ;
+    dcterms:created "2026-05-30T20:37:03.700450" ;
     dcterms:identifier "la_ag_2026_002" ;
-    dcterms:modified "2026-05-29T01:03:08.093301" ;
+    dcterms:modified "2026-05-30T20:37:03.700450" ;
     dcterms:source <https://www.ag.state.la.us/Article/475>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/trust-violation> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/trust-violation>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/role/victim/1> ;
-    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/charge/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ag-liz-murrills-louisiana-bureau-of-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/ag-murrills-louisiana-bureau-of-investigation> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> .
 
-<https://caselinker.up.railway.app/resource/agency/ag-liz-murrills-louisiana-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "AG Liz Murrill's Louisiana Bureau of Investigation" .
-
-<https://caselinker.up.railway.app/resource/agency/ag-murrills-louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/charge/1> a cacontology:DigitallyGeneratedCSAMIncident,
         cacontology-legal-outcomes:CriminalCharge ;
-    rdfs:label """Unlawful Deepfakes
-A former New Orleans teacher and coach who was previously arrested by AG Liz Murrill's Louisiana Bureau of
-Investigation on a number of charges against children has now been rearrested once again""" ;
+    rdfs:label "Unlawful Deepfakes" ;
     cacontology-legal-outcomes:indictmentCounts 60 .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/trust-violation> a cacontology-custodial:AuthorityAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/relationship/teacher> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_002/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/sentence/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 49 .
@@ -57,17 +54,27 @@ Investigation on a number of charges against children has now been rearrested on
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/role/offender/1> ;
     cacontology-custodial:relationshipType "teacher" .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_002/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/ai-csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/ai-csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$3.57" .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_002/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_002/event/ai-csam> a cacontology:DigitallyGeneratedCSAMIncident,
+        <https://cacontology.projectvic.org/ai-csam#AIGeneratedCSAM>,
+        cac-core:Event .
 

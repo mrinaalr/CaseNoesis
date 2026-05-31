@@ -2,31 +2,30 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:42:22.033018" ;
+    dcterms:created "2026-05-30T20:34:25.800000" ;
     dcterms:identifier "doj_archives_2003_006" ;
-    dcterms:modified "2026-05-29T00:42:22.033018" ;
+    dcterms:modified "2026-05-30T20:34:25.800000" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/EDKY%20Farris%20sentence%20PR_100503.pdf>,
         "DOJ ARCHIVES" ;
-    cacontology:hasPhaseBeginPoint "2003-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2003-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/department-of-justi-ce>,
-        <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/pulaski-county-sheriffs-office> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/department-of-just>,
+        <https://caselinker.up.railway.app/resource/agency/investigation>,
+        <https://caselinker.up.railway.app/resource/agency/state-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -34,21 +33,25 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-justi-ce> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/department-of-just> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Justi ce" .
+    rdfs:label "Department of Just" .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/investigation> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Kentucky State Police Department" .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> .
 
-<https://caselinker.up.railway.app/resource/agency/pulaski-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Pulaski County Sheriff's Office" .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2003-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/person/offender/1> a uco-identity:Person .
 
@@ -58,10 +61,17 @@
 <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2003-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2003-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2003_006/offense-event/charge-1> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" .
 

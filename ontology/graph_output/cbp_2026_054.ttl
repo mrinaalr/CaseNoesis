@@ -4,23 +4,18 @@
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_054> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:03.818439" ;
+    dcterms:created "2026-05-30T20:34:04.847067" ;
     dcterms:identifier "cbp_2026_054" ;
-    dcterms:modified "2026-05-29T00:40:03.818439" ;
+    dcterms:modified "2026-05-30T20:34:04.847067" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/laredo-cbp-officers-apprehend-man-wanted-sexual-assault-child-0>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_054/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_054/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/laredo-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/police-department> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_054/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -28,9 +23,7 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_054/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/laredo-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Laredo Police Department" .
+<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_054/person/offender/1> a uco-identity:Person .
 

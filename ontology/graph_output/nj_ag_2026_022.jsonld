@@ -2,33 +2,26 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/california",
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": "chat"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-cyber-crimes-bureau",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$500"
+          }
         ]
       },
       {
@@ -65,62 +58,40 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/sentence/1"
+          },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/sentence/2"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 11
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -137,10 +108,10 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -150,81 +121,38 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 11
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "chat"
+            "@value": "$701"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/bayonne-police-department",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
+            "@value": "Bayonne Police Department"
           }
         ]
       },
@@ -236,6 +164,36 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-cyber-crimes-bureau",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Division of Criminal Justice Financial & Cyber Crimes Bureau"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -243,7 +201,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:05:57.848228"
+            "@value": "2026-05-30T20:37:21.712897"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -253,7 +211,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:05:57.848228"
+            "@value": "2026-05-30T20:37:21.712897"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -266,24 +224,12 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/arrested"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -291,34 +237,19 @@
             "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/multi-jurisdiction"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/cybertip"
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/legal-proceeding"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/operation"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
@@ -338,11 +269,14 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/icac"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -352,21 +286,108 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bayonne-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/california",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "Bayonne Police Department"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/facet/possession"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2026_022/person/offender/1"
+          }
         ]
       }
     ],

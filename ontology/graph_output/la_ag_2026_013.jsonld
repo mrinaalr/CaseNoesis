@@ -2,200 +2,30 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
           {
-            "@value": "Hardin County Jail"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/facet/csam",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hardin-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Hardin County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:03:19.363734"
+            "@value": "Pretrial detention facility (not a sentence): Hardin County Jail"
           }
         ],
-        "http://purl.org/dc/terms/identifier": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
           {
-            "@value": "la_ag_2026_013"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:03:19.363734"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "LA AG"
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/charge/1"
           },
           {
-            "@id": "https://www.ag.state.la.us/Article/447"
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/charge/2"
           }
         ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/event/csam"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/cybertip"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/sentence/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/hardin-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/event/csam",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/facet/csam"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 19
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -218,6 +48,64 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/facet/csam",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "LBI Agents initially got a tip from the National Center for Missing and Exploited Children which jumpstarted"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 12
           }
         ]
       },
@@ -245,49 +133,153 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://purl.org/dc/terms/created": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/victim/1"
+            "@value": "2026-05-30T20:37:04.648128"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "http://purl.org/dc/terms/identifier": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/role/offender/1"
+            "@value": "la_ag_2026_013"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "http://purl.org/dc/terms/modified": [
           {
-            "@value": "stranger"
+            "@value": "2026-05-30T20:37:04.648128"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "LA AG"
+          },
+          {
+            "@id": "https://www.ag.state.la.us/Article/447"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/hardin-county-sheriffs-office"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/phase/booked",
+        "@id": "https://caselinker.up.railway.app/resource/agency/hardin-county-sheriffs-office",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
+            "@value": "Hardin County Sheriff's Office"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general",
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child sexual abuse material"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Texas Office of the Attorney General"
+            "@value": "Attorney General"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/event/csam",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/facet/csam"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/la_ag_2026_013/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 19
           }
         ]
       }

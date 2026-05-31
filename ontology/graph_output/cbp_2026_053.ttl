@@ -13,17 +13,12 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_053> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:03.079482" ;
+    dcterms:created "2026-05-30T20:34:04.703179" ;
     dcterms:identifier "cbp_2026_053" ;
-    dcterms:modified "2026-05-29T00:40:03.079482" ;
+    dcterms:modified "2026-05-30T20:34:04.703179" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/laredo-cbp-officers-apprehend-fugitive-sought-sexual-assault-child-2>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_053/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_053/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/instagram> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bexar-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/texas>,
         <https://caselinker.up.railway.app/resource/agency/webb-county-sheriffs-office> .
@@ -33,6 +28,9 @@
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2026_053/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_053/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
+
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/agency/bexar-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -46,9 +44,6 @@
     cacontology-detection:ageEstimate 51 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_053/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_053/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;

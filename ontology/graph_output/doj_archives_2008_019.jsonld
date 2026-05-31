@@ -2,408 +2,14 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T00:46:33.340972"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "doj_archives_2008_019"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T00:46:33.340972"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "DOJ ARCHIVES"
-          },
-          {
-            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/MDTN_RICHARDS-GUILTY_11-07-08.pdf"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/trust-violation"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/3"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/4"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/5"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/6"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/7"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/8"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/9"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/10"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/11"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/10",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/10"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/3",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/9",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/11",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/2",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/2"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/8",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/8"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/7",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/5",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/3"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/4"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/5"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/6"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/7"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/8"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/9"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/10"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/11"
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/11",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/11"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/5",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/5"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2008-01-01T00:00:00Z"
@@ -411,61 +17,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/8",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/sentence/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/6",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/9",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/9"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/4",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
+            "@value": "16 YEARS"
           }
         ]
       },
@@ -492,22 +51,10 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/trust-violation",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/relationship/mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/4",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -518,82 +65,32 @@
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/4"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/facet/possession",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/3"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/4"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/5"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/6"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/7"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/8"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/9"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/10"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/11"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-            "@value": true
-          }
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/6",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/6"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 13
           }
         ]
       },
@@ -604,78 +101,53 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/charge/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/7",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/7"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/3",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2008-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/3"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Tennessee Bureau of Investigation"
+            "@value": "child pornography"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/10",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/charge/2",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
           }
         ]
       },
@@ -686,14 +158,175 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/role/victim/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2008-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+            "@value": true
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2008-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:34:53.136612"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "doj_archives_2008_019"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:34:53.136612"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "DOJ ARCHIVES"
+          },
+          {
+            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/MDTN_RICHARDS-GUILTY_11-07-08.pdf"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/trust-violation"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2008-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/facet/possession"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2008_019/relationship/mother"
           }
         ]
       }

@@ -16,25 +16,21 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:35:44.530433" ;
+    dcterms:created "2026-05-30T20:33:29.037055" ;
     dcterms:identifier "ncmec_2024_1096" ;
-    dcterms:modified "2026-05-29T00:35:44.530433" ;
+    dcterms:modified "2026-05-30T20:33:29.037055" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/operation> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/victim/1> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/tech/cybertipline> ;
-    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/dps>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
-        <https://caselinker.up.railway.app/resource/agency/texas>,
-        <https://caselinker.up.railway.app/resource/agency/tom-green-county-sheriffs-office> .
+        <https://caselinker.up.railway.app/resource/agency/texas> .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -50,17 +46,40 @@
 
 <https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/tom-green-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Tom Green County Sheriff's Office" .
-
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
-    rdfs:label """Possession of Child
-Pornography""" ;
+    rdfs:label "Possession of Child" ;
     cacontology-legal-outcomes:indictmentCounts 10 .
 
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/3> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child porn" .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/4> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "possession of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/5> a cacontology-legal-outcomes:CSAM_Distribution,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "distribution of child pornography" .
+
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/4>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/charge/5> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/sentence/1>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/sentence/2> .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/operation> a cac-core:Event,
         cacontology-taskforce:TaskForceOperation .
@@ -70,6 +89,26 @@ Pornography""" ;
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 7 .
 
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$75,000," .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$450,000" .
+
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
@@ -77,21 +116,8 @@ Pornography""" ;
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/person/offender/1> .
-
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/victim/1> ;
     cacontology:severityLevel 3 ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/facet/possession> .
-
-<https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-05-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_1096/person/victim/1> .
 

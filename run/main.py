@@ -3527,13 +3527,16 @@ if _viz_assets.is_dir():
 # Serve ontology/graph_output/ files (JSON-LD, Turtle) so the graph visualizer
 # can fetch('/ontology/graph_output/{case_id}.jsonld') for any case that has
 # been expressed as a CAC Ontology knowledge graph.
+# Always mount (mkdir if needed): if the server starts before regen creates files,
+# skipping the mount when the dir is missing leaves /ontology/graph_output/* 404
+# until restart even after JSON-LD files exist.
 _graph_output = Path(__file__).resolve().parent.parent / "ontology" / "graph_output"
-if _graph_output.is_dir():
-    app.mount(
-        "/ontology/graph_output",
-        StaticFiles(directory=str(_graph_output)),
-        name="graph_output",
-    )
+_graph_output.mkdir(parents=True, exist_ok=True)
+app.mount(
+    "/ontology/graph_output",
+    StaticFiles(directory=str(_graph_output)),
+    name="graph_output",
+)
 
 # Serve ontology/question_data/ JSON files for interactive question pages.
 _question_data = Path(__file__).resolve().parent.parent / "ontology" / "question_data"

@@ -12,35 +12,18 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:10:48.987259" ;
+    dcterms:created "2026-05-30T20:37:43.603400" ;
     dcterms:identifier "ohio_ag_2024_006" ;
-    dcterms:modified "2026-05-29T01:10:48.987259" ;
+    dcterms:modified "2026-05-30T20:37:43.603400" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/March-2024/Ohio-Task-Force-Seeks-Tips-From-Survivors-of-Alleg>,
         "OHIO AG" ;
-    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2024-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/possession> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ashtabula-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/ashtabula-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/cleveland-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/conneaut-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/cuyahoga-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/east-cleveland-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/hsi>,
-        <https://caselinker.up.railway.app/resource/agency/metrohealth-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/middleburg-heights-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/north-olmsted-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/northeast-ohio-human-trafficking-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-organized-crime-investigations-commission>,
-        <https://caselinker.up.railway.app/resource/agency/us-department-of-housing-and-urban-development>,
-        <https://caselinker.up.railway.app/resource/agency/warrensville-heights-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/westlake-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/willoughby-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/northeast-ohio-human-trafficking-task-force> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -48,49 +31,12 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/ashtabula-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/northeast-ohio-human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Ashtabula County Sheriff's Office" .
-
-<https://caselinker.up.railway.app/resource/agency/ashtabula-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/cleveland-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/conneaut-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/cuyahoga-county-sheriffs-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/east-cleveland-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/metrohealth-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/middleburg-heights-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/north-olmsted-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/northeast-ohio-human-trafficking-task-force> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-organized-crime-investigations-commission> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Ohio Attorney General’s Organized Crime Investigations Commission" .
-
-<https://caselinker.up.railway.app/resource/agency/us-department-of-housing-and-urban-development> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "U.S. Department of Housing and Urban Development" .
-
-<https://caselinker.up.railway.app/resource/agency/warrensville-heights-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/westlake-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/willoughby-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Willoughby Police Department" .
+    rdfs:label "Northeast Ohio Human Trafficking Task Force" .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/victim/1> ;
     cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
@@ -106,21 +52,23 @@
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_006/facet/possession> .
 

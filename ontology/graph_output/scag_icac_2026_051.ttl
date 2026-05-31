@@ -3,6 +3,7 @@
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -13,22 +14,18 @@
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:15:31.463951" ;
+    dcterms:created "2026-05-30T20:38:12.746058" ;
     dcterms:identifier "scag_icac_2026_051" ;
-    dcterms:modified "2026-05-29T01:15:31.463951" ;
+    dcterms:modified "2026-05-30T20:38:12.746058" ;
     dcterms:source <https://www.scag.gov/about-the-office/news/attorney-general-announces-home-care-aide-charged-with-sexually-assaulting-minor-and-vulnerable-adult/>,
         "SCAG ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
-        <https://caselinker.up.railway.app/resource/agency/greenville-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/us-department-of-health-and-human-services> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-general-s-office>,
+        <https://caselinker.up.railway.app/resource/agency/greenville-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -36,26 +33,30 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/attorney-general-s-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/greenville-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Greenville Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/us-department-of-health-and-human-services> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "U.S. Department of Health and Human Services" .
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/charge/1> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/sentence/1>,
+        <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/sentence/2> .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 25 .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -63,15 +64,26 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/facet/possession> .
-
 <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$2,964,287" .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$988,096" .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/scag_icac_2026_051/facet/possession> .
 

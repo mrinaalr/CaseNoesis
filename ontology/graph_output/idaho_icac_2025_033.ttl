@@ -9,6 +9,7 @@
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
@@ -17,28 +18,22 @@
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:53:26.758636" ;
+    dcterms:created "2026-05-30T20:35:48.491540" ;
     dcterms:identifier "idaho_icac_2025_033" ;
-    dcterms:modified "2026-05-29T00:53:26.758636" ;
+    dcterms:modified "2026-05-30T20:35:48.491540" ;
     dcterms:source <https://www.ag.idaho.gov/newsroom/category/icac/?showall=true>,
         "Idaho ICAC" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/cybertip>,
-        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/charged> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/tech/cybertipline> ;
-    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/canyon-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/middleton-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/nampa-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+        <https://caselinker.up.railway.app/resource/agency/nampa-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -60,30 +55,36 @@
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/1> a cacontology-legal-outcomes:CSAM_Production,
         cacontology-legal-outcomes:CriminalCharge ;
-    rdfs:label """production of child sexual
-exploitation material and 6 counts of distribution of child sexual exploitation material""" ;
+    rdfs:label "production of child sexual" ;
     cacontology-legal-outcomes:indictmentCounts 6 .
 
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
-    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/2> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "distribution of child sexual exploitation material" ;
+    cacontology-legal-outcomes:indictmentCounts 6 ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/3> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:StateCharge ;
+    rdfs:label "sexual exploitation of a child" .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/4> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/charge/4> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
-    rdfs:label "CyberTipline" .
-
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
-
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -91,15 +92,25 @@ exploitation material and 6 counts of distribution of child sexual exploitation 
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> a cac-core:Event,
-        cacontology-production:ProductionOffense ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/facet/production> .
-
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
+    rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/event/production> a cac-core:Event,
+        cacontology-production:ProductionOffense ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_033/facet/production> .
 

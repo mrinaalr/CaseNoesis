@@ -294,6 +294,9 @@ class CaseStorage:
                 # Convert charges list to old format if needed
                 charges_str = json.dumps(charges)
                 
+                sentences = prosecution.get('sentences', [])
+                if isinstance(sentences, str):
+                    sentences = [sentences] if sentences.strip() else []
                 cursor.execute('''
                     INSERT OR REPLACE INTO prosecution_outcomes 
                     (case_id, status, charges, sentences)
@@ -302,7 +305,7 @@ class CaseStorage:
                     case.get('id'),
                     status,
                     charges_str,
-                    json.dumps([]),  # sentences (not extracted)
+                    json.dumps(sentences if isinstance(sentences, list) else []),
                 ))
             
             conn.commit()
@@ -412,10 +415,16 @@ class CaseStorage:
                 prosecution_rows = case_dict.get('prosecution_outcomes', [])
                 if prosecution_rows and len(prosecution_rows) > 0:
                     prosecution = prosecution_rows[0]
+                    _sent = prosecution.get('sentences')
+                    try:
+                        _sent_list = json.loads(_sent) if _sent else []
+                    except (json.JSONDecodeError, TypeError):
+                        _sent_list = []
                     case_dict['prosecution_outcome'] = {
                         'booking_status': prosecution.get('status'),
                         'charges': json.loads(prosecution.get('charges', '[]')) if prosecution.get('charges') else [],
-                        'jail': None
+                        'jail': None,
+                        'sentences': _sent_list if isinstance(_sent_list, list) else [],
                     }
             
             hydrate_case_text_from_raw_data(case_dict)

@@ -2,32 +2,6 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/platform/chat",
         "@type": [
           "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
@@ -35,85 +9,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "chat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 18
           }
         ]
       },
@@ -140,15 +35,29 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-secret-service",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1"
+          }
         ]
       },
       {
@@ -169,9 +78,84 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/gigatribe"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/jonesboro-police-department",
         "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Jonesboro Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/secret-service",
+        "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/sentence/2"
+          }
         ]
       },
       {
@@ -182,7 +166,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:28:20.919824"
+            "@value": "2026-05-30T20:39:49.100654"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -192,7 +176,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:28:20.919824"
+            "@value": "2026-05-30T20:39:49.100654"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -203,24 +187,28 @@
             "@id": "https://www.secretservice.gov/press/releases/2017/07/jonesboro-man-sentenced-more-21-years-multiple-child-pornography-charges"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/phase/sentenced"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-proceeding"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -228,14 +216,106 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/agency/jonesboro-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/secret-service"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-secret-service"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-secret-service",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "possession of child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "21 Years"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ],
         "https://cacontology.projectvic.org#usesChannel": [
@@ -246,19 +326,55 @@
             "@id": "https://caselinker.up.railway.app/resource/platform/gigatribe"
           }
         ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/jonesboro-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-secret-service"
+            "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/facet/possession"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/agency/police-department",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "supervised release"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
         ]
       }
     ],

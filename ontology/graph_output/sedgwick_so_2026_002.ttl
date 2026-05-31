@@ -11,18 +11,14 @@
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:18:23.760709" ;
+    dcterms:created "2026-05-30T20:38:36.977311" ;
     dcterms:identifier "sedgwick_so_2026_002" ;
-    dcterms:modified "2026-05-29T01:18:23.760709" ;
+    dcterms:modified "2026-05-30T20:38:36.977311" ;
     dcterms:source <https://www.sedgwickcounty.org/district-attorney/criminal-division/criminal-division-media-releases/jury-convicts-defendant-on-rape-and-child-sex-abuse-charges/>,
         "SEDGWICK SO" ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/event/hands-on> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/district-attorney-s-office>,
         <https://caselinker.up.railway.app/resource/agency/wichita-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -31,7 +27,7 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/district-attorney-s-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/wichita-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -47,14 +43,13 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

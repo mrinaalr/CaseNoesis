@@ -2,37 +2,57 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/east-palestine-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/mahoning-valley-human-trafficking-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/event/possession"
+            "@value": "pandering"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/facet/possession"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$650"
           }
         ]
       },
@@ -43,20 +63,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/mahoning-valley-human-trafficking-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/sentence/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#ProbationSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 15
+            "@value": "probation"
           }
         ]
       },
@@ -68,7 +82,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:10:17.838602"
+            "@value": "2026-05-30T20:37:42.767992"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -78,7 +92,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:10:17.838602"
+            "@value": "2026-05-30T20:37:42.767992"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -91,24 +105,12 @@
         ],
         "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/charged"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -116,84 +118,30 @@
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/event/possession"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/legal-proceeding"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/operation"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/victim/1"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/austintown-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/columbiana-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/east-palestine-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/mahoning-county-sheriffs-office"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/mahoning-valley-human-trafficking-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/salem-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/youngstown-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/salem-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@value": "obscenity involving a minor"
           }
         ]
       },
@@ -205,38 +153,66 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/victim/1"
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/facet/possession"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/austintown-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/sentence/2"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/mahoning-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 15
+          }
         ]
       },
       {
@@ -263,21 +239,48 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/columbiana-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/relationship/stranger",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
-            "@value": "Columbiana County Sheriff's Office"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/youngstown-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_001/person/offender/1"
+          }
         ]
       }
     ],

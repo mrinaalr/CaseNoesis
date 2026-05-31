@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -11,29 +10,20 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:12:10.068320" ;
+    dcterms:created "2026-05-30T20:37:49.870891" ;
     dcterms:identifier "ohio_ag_2017_001" ;
-    dcterms:modified "2026-05-29T01:12:10.068320" ;
+    dcterms:modified "2026-05-30T20:37:49.870891" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/September-2017/Couple-Indicted-on-Endangering-Children-Charges-fo>,
         "OHIO AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/phase/charged> ;
-    cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2017-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/event/trust-violation> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/montpelier-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/montpelier-police-department> .
 
 <https://caselinker.up.railway.app/resource/agency/montpelier-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Montpelier Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Ohio Attorney General's" .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -49,10 +39,6 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/role/offender/1> ;
     cacontology-custodial:relationshipType "mother" .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/phase/charged> a cac-core:Phase,
-        cacontology-legal-outcomes:LegalProcessPhase ;
-    cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
@@ -62,4 +48,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2017_001/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

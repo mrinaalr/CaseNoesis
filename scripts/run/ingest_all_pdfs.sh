@@ -41,10 +41,17 @@ done
 REPO_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$REPO_ROOT" || exit 1
 
-if [ -d venv ]; then
+if [ -d .venv ]; then
+  # shellcheck source=/dev/null
+  . .venv/bin/activate
+elif [ -d venv ]; then
   # shellcheck source=/dev/null
   . venv/bin/activate
 fi
+
+# Pattern layer modules (ai_extraction_patterns, etc.) live beside processing.py
+PATTERN_LAYER="$REPO_ROOT/src/Processing Layer/Pattern Processing Layer"
+export PYTHONPATH="$PATTERN_LAYER:$REPO_ROOT/src/Processing Layer:$REPO_ROOT/src/Ingestion Layer:$REPO_ROOT/src/Storage Layer:$REPO_ROOT/src:$PYTHONPATH"
 
 # Write one path per line (sorted) to stdout.
 filtered_sorted_pdf_paths() {

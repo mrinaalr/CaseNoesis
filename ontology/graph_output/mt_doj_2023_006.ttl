@@ -2,8 +2,8 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
@@ -11,16 +11,15 @@
 
 <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:04:49.980322" ;
+    dcterms:created "2026-05-30T20:37:15.649985" ;
     dcterms:identifier "mt_doj_2023_006" ;
-    dcterms:modified "2026-05-29T01:04:49.980322" ;
+    dcterms:modified "2026-05-30T20:37:15.649985" ;
     dcterms:source <https://dojmt.gov/attorney-generals-office-secures-guilty-plea-in-miles-city-child-sexual-abuse-case/>,
         "MT DOJ" ;
-    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2023-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/role/victim/1> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/phase/pleaded-guilty> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/phase/pleaded-guilty> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/legal-step/pleaded-guilty> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/billings-police-department>,
         <https://caselinker.up.railway.app/resource/agency/miles-city-police-department> .
 
@@ -34,10 +33,15 @@
 
 <https://caselinker.up.railway.app/resource/agency/miles-city-police-department> a cacontology-multi:LocalAgency .
 
+<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/legal-step/pleaded-guilty> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:PleaBargaining ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
 <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 12 .
+<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -45,14 +49,17 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/phase/pleaded-guilty> a cac-core:Phase,
+        cacontology-legal-outcomes:PreTrialPhase ;
+    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/mt_doj_2023_006/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

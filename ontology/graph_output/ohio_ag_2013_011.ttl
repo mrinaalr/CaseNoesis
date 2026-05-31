@@ -12,19 +12,16 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:13:05.665985" ;
+    dcterms:created "2026-05-30T20:37:55.941656" ;
     dcterms:identifier "ohio_ag_2013_011" ;
-    dcterms:modified "2026-05-29T01:13:05.665985" ;
+    dcterms:modified "2026-05-30T20:37:55.941656" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/May-2013/Attorney-General-DeWine-Announces-Arrest-of-Woman>,
         "OHIO AG" ;
-    cacontology:hasPhaseBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2013-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit>,
-        <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/vinton-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/relationship/stranger> a cacontology-custodial:CustodialRelationship,
@@ -32,8 +29,6 @@
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
@@ -52,14 +47,17 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

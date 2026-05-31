@@ -13,18 +13,13 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2023_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:39:24.303351" ;
+    dcterms:created "2026-05-30T20:33:58.421914" ;
     dcterms:identifier "cbp_2023_001" ;
-    dcterms:modified "2026-05-29T00:39:24.303351" ;
+    dcterms:modified "2026-05-30T20:33:58.421914" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/laredo-cbp-officers-apprehend-fugitive-sought-sexual-offense-against-0>,
         "CBP" ;
-    cacontology:hasPhaseBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2023-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2023_001/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2023_001/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/twitter-x> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/forney-police-department>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/police-department>,
         <https://caselinker.up.railway.app/resource/agency/texas>,
         <https://caselinker.up.railway.app/resource/agency/webb-county-sheriffs-office> .
 
@@ -34,9 +29,10 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2023_001/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/forney-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Forney Police Department" .
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
+<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
 
@@ -48,9 +44,6 @@
     cacontology-detection:ageEstimate 73 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2023_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Twitter / X" .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2023_001/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;

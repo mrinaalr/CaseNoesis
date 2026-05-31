@@ -2,26 +2,28 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:10:18.564575" ;
+    dcterms:created "2026-05-30T20:37:42.906300" ;
     dcterms:identifier "ohio_ag_2024_002" ;
-    dcterms:modified "2026-05-29T01:10:18.564575" ;
+    dcterms:modified "2026-05-30T20:37:42.906300" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/October-2024/Jackson-County-Man-Sentenced-to-Life-in-Prison-for>,
         "OHIO AG" ;
-    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2024-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/jackson-police-department> .
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/phase/sentenced> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/phase/sentenced> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/legal-step/sentenced> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/jackson-county-prosecutor-s-office>,
+        <https://caselinker.up.railway.app/resource/agency/jackson-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -29,12 +31,27 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/agency/jackson-county-prosecutor-s-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Jackson County Prosecutor ’ s Office" .
+
 <https://caselinker.up.railway.app/resource/agency/jackson-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/sentence/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 13 .
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -42,14 +59,21 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:LifeImprisonmentSentence ;
+    rdfs:label "sentenced to life" .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/phase/sentenced> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2024_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

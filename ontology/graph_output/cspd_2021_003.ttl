@@ -2,7 +2,6 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
-@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -13,19 +12,14 @@
 
 <https://caselinker.up.railway.app/resource/case/cspd_2021_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:22.459334" ;
+    dcterms:created "2026-05-30T20:34:07.589384" ;
     dcterms:identifier "cspd_2021_003" ;
-    dcterms:modified "2026-05-29T00:40:22.459334" ;
+    dcterms:modified "2026-05-30T20:34:07.589384" ;
     dcterms:source <https://coloradosprings.gov/police-department/article/news/sexual-assault-child-arrest-0>,
         "CSPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cspd_2021_003/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cspd_2021_003/phase/charged> ;
-    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2021-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/victim/1> ;
-    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado>,
         <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> .
 
@@ -35,6 +29,9 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" .
+
 <https://caselinker.up.railway.app/resource/agency/colorado> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> a cacontology-multi:LocalAgency .
@@ -42,13 +39,6 @@
 <https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
-
-<https://caselinker.up.railway.app/resource/case/cspd_2021_003/phase/charged> a cac-core:Phase,
-        cacontology-legal-outcomes:LegalProcessPhase ;
-    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -59,4 +49,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cspd_2021_003/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

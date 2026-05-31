@@ -2,9 +2,28 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/sentenced",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "77 months"
+          }
         ]
       },
       {
@@ -14,24 +33,58 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://purl.org/dc/terms/created": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1"
+            "@value": "2026-05-30T20:33:59.729009"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "http://purl.org/dc/terms/identifier": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1"
+            "@value": "cbp_2026_024"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "http://purl.org/dc/terms/modified": [
           {
-            "@value": "stranger"
+            "@value": "2026-05-30T20:33:59.729009"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "CBP"
+          },
+          {
+            "@id": "https://www.cbp.gov/newsroom/local-media-release/border-patrol-agents-arrest-two-child-predators-rio-grande-valley"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/sentenced"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/legal-step/sentenced"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/cameron-county-sheriffs-office"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/denton-county-sheriffs-office"
           }
         ]
       },
@@ -48,12 +101,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
@@ -79,88 +134,20 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T00:39:31.519078"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "cbp_2026_024"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T00:39:31.519078"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "CBP"
-          },
-          {
-            "@id": "https://www.cbp.gov/newsroom/local-media-release/border-patrol-agents-arrest-two-child-predators-rio-grande-valley"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/cameron-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/denton-county-sheriffs-office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Twitter / X"
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/victim/1"
           }
         ]
       },
@@ -177,20 +164,60 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/relationship/stranger",
+        "@type": [
+          "https://cacontology.projectvic.org/grooming#OnlinePredator",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Twitter / X"
           }
         ]
       }

@@ -2,9 +2,12 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
@@ -12,19 +15,20 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:48:06.137637" ;
+    dcterms:created "2026-05-30T20:35:07.859601" ;
     dcterms:identifier "doj_ceos_2025_024" ;
-    dcterms:modified "2026-05-29T00:48:06.137637" ;
+    dcterms:modified "2026-05-30T20:35:07.859601" ;
     dcterms:source <https://www.justice.gov/opa/pr/louisiana-woman-who-provided-child-pornographic-photoshoot-pleads-guilty>,
         "DOJ CEOS" ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/phase/sentenced> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/phase/sentenced> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/legal-step/sentenced>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/baton-rouge-resident-agency>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/new-orleans-division---baton-rouge-resident-agency> .
+        <https://caselinker.up.railway.app/resource/agency/justic-department> .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -32,15 +36,52 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/baton-rouge-resident-agency> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Baton Rouge Resident Agency" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/new-orleans-division---baton-rouge-resident-agency> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/justic-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "New Orleans Division - Baton Rouge Resident Agency" .
+    rdfs:label "Justic Department" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/3> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/4> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/charge/4> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/sentence/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/sentence/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/person/offender/1> a uco-identity:Person .
 
@@ -49,18 +90,36 @@
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/victim/1> ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MandatoryMinimumSentencing ;
+    rdfs:label "mandatory minimum" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "20 years" .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/phase/sentenced> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/event/possession> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/facet/possession> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_024/offense-event/charge-4> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" .
 

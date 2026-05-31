@@ -13,20 +13,16 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_058> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:40:08.436548" ;
+    dcterms:created "2026-05-30T20:34:05.526602" ;
     dcterms:identifier "cbp_2026_058" ;
-    dcterms:modified "2026-05-29T00:40:08.436548" ;
+    dcterms:modified "2026-05-30T20:34:05.526602" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-enforcement-activity-identifies-29-fugitives-including-man-wanted>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_058/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_058/phase/booked> ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2026-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_058/event/multi-jurisdiction> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_058/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/cbp_2026_058/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/cbp_2026_058/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_058/role/victim/1> ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/cbp_2026_058/sentence/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/el-paso-police-department>,
         <https://caselinker.up.railway.app/resource/agency/texas> .
 
@@ -42,21 +38,19 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_058/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/cbp_2026_058/role/victim/1> ;
     cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_058/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility: El Paso County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/cbp_2026_058/sentence/1> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_058/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 55 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_058/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_058/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "El Paso County Jail" .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_058/phase/booked> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_058/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -67,4 +61,12 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_058/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_058/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:MonetaryPenalty ;
+    rdfs:label "$2,525" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_058/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

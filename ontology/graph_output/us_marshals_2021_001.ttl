@@ -11,37 +11,32 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:26:28.963175" ;
+    dcterms:created "2026-05-30T20:39:33.766180" ;
     dcterms:identifier "us_marshals_2021_001" ;
-    dcterms:modified "2026-05-29T01:26:28.963175" ;
+    dcterms:modified "2026-05-30T20:39:33.766180" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-task-force-recover-abducted-child>,
         "US MARSHALS" ;
-    cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2021-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/event/trust-violation> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offenders-task-force>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ent-offenders-task-force>,
         <https://caselinker.up.railway.app/resource/agency/mesa-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/usms> .
+        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
+        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-task-force> .
 
-<https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/ent-offenders-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Arizona WANTED Violent Offender Task Force" .
-
-<https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offenders-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Arizona Wanted Violent Offenders Task Force" .
+    rdfs:label "ent Offenders Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/mesa-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/u-s-marshals-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "U. S. Marshals Task Force" .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/role/victim/1> ;
     cacontology:severityLevel 2 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_001/event/trust-violation> a cacontology-custodial:CustodialAbuse,

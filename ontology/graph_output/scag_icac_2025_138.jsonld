@@ -2,21 +2,9 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/offender/1"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -42,106 +30,10 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T01:17:41.908611"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "scag_icac_2025_138"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T01:17:41.908611"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "SCAG ICAC"
-          },
-          {
-            "@id": "https://www.scag.gov/about-the-office/news/attorney-general-alan-wilson-announces-victory-in-protecting-south-carolina-businesses-and-consumers/"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/event/multi-jurisdiction"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/us-environmental-protection-agency"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/event/multi-jurisdiction",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
           "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
         ]
       },
       {
@@ -163,14 +55,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/us-environmental-protection-agency",
+        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@value": "U.S. Environmental Protection Agency"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
           }
         ]
       },
@@ -178,6 +71,86 @@
         "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:38:31.340299"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "scag_icac_2025_138"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:38:31.340299"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "SCAG ICAC"
+          },
+          {
+            "@id": "https://www.scag.gov/about-the-office/news/attorney-general-alan-wilson-announces-victory-in-protecting-south-carolina-businesses-and-consumers/"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/event/multi-jurisdiction"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-environmental-protection-agency"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-environmental-protection-agency",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "U. S. Environmental Protection Agency"
+          }
         ]
       }
     ],

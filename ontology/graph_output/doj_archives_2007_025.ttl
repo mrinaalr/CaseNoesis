@@ -2,7 +2,6 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
-@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
@@ -11,22 +10,17 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:45:44.112884" ;
+    dcterms:created "2026-05-30T20:34:48.044598" ;
     dcterms:identifier "doj_archives_2007_025" ;
-    dcterms:modified "2026-05-29T00:45:44.112884" ;
+    dcterms:modified "2026-05-30T20:34:48.044598" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/MDFL%20Little%20indict%20PR_053107.pdf>,
         "DOJ ARCHIVES" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/charged> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/charged> ;
-    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2007-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/indicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/role/victim/1> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/fbi> .
+        <https://caselinker.up.railway.app/resource/agency/doj> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -38,19 +32,12 @@
 
 <https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
-
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/charged> a cac-core:Phase,
-        cacontology-legal-outcomes:LegalProcessPhase ;
-    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -61,4 +48,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_025/phase/indicted> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

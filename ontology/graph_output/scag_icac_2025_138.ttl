@@ -11,19 +11,15 @@
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T01:17:41.908611" ;
+    dcterms:created "2026-05-30T20:38:31.340299" ;
     dcterms:identifier "scag_icac_2025_138" ;
-    dcterms:modified "2026-05-29T01:17:41.908611" ;
+    dcterms:modified "2026-05-30T20:38:31.340299" ;
     dcterms:source <https://www.scag.gov/about-the-office/news/attorney-general-alan-wilson-announces-victory-in-protecting-south-carolina-businesses-and-consumers/>,
         "SCAG ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested> ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2025-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/event/multi-jurisdiction> ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/us-environmental-protection-agency> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/u-s-environmental-protection-agency> .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -31,21 +27,16 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/us-environmental-protection-agency> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/u-s-environmental-protection-agency> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "U.S. Environmental Protection Agency" .
+    rdfs:label "U. S. Environmental Protection Agency" .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/victim/1> .
+        cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -56,4 +47,8 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/scag_icac_2025_138/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 

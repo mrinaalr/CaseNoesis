@@ -2,6 +2,18 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/event/trust-violation",
         "@type": [
           "https://cacontology.projectvic.org/custodial#TrustViolation",
@@ -10,30 +22,6 @@
         "https://cacontology.projectvic.org/custodial#violatesRelationship": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/relationship/father"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/role/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 32
           }
         ]
       },
@@ -56,21 +44,39 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/california",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/offender/1"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigations",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@value": "Bureau of Criminal Investigation’s"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 12
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -96,9 +102,16 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/california",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
@@ -109,7 +122,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:10:56.466618"
+            "@value": "2026-05-30T20:37:44.227995"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -119,7 +132,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:10:56.466618"
+            "@value": "2026-05-30T20:37:44.227995"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -128,18 +141,6 @@
           },
           {
             "@id": "https://www.ohioattorneygeneral.gov/Media/News-Releases/June-2023/DNA-Technology-Links-Suspect-to-Second-Child-Homic"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-12-31T00:00:00Z"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
@@ -155,55 +156,15 @@
             "@value": "unknown"
           }
         ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/role/victim/1"
-          }
-        ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigations"
+            "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/california"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 12
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2023_003/person/offender/1"
           }
         ]
       }

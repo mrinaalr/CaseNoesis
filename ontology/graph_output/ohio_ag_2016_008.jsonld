@@ -2,13 +2,7 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/coshocton-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
@@ -21,7 +15,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-29T01:12:23.671034"
+            "@value": "2026-05-30T20:37:51.456354"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -31,7 +25,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-29T01:12:23.671034"
+            "@value": "2026-05-30T20:37:51.456354"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -42,31 +36,22 @@
             "@id": "https://www.ohioattorneygeneral.gov/Media/News-Releases/February-2016/Father-Pleads-Guilty-to-Endangering-Children-Felon"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#currentPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/phase/sentenced"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org#hasPhase": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/phase/sentenced"
           }
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/event/trust-violation"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
+          },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/role/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/legal-step/sentenced"
           }
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
@@ -76,15 +61,48 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/event/trust-violation",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/relationship/mother"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/coshocton-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -106,26 +124,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/event/trust-violation",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/person/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/relationship/mother"
           }
         ]
       },
@@ -148,6 +154,19 @@
         "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
             "@value": "mother"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2016_008/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
           }
         ]
       }

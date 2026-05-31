@@ -2,6 +2,7 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -12,20 +13,18 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-29T00:46:48.605655" ;
+    dcterms:created "2026-05-30T20:34:55.416840" ;
     dcterms:identifier "doj_archives_2008_031" ;
-    dcterms:modified "2026-05-29T00:46:48.605655" ;
+    dcterms:modified "2026-05-30T20:34:55.416840" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DAK_TRAFFICKER-SENTENCED_08-15-08.pdf>,
         "DOJ ARCHIVES" ;
-    cacontology:hasPhaseBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasPhaseEndPoint "2008-12-31T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on> ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/phase/sentenced> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/phase/sentenced> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology:involvesOffender <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/role/offender/1> ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/role/victim/1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/alaska-human-trafficking-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/anchorage-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/fbi> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/relationship/stranger> a cacontology-custodial:CustodialRelationship,
         cacontology-grooming:OnlinePredator ;
@@ -33,13 +32,31 @@
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/role/offender/1> ;
     cacontology-custodial:relationshipType "stranger" .
 
-<https://caselinker.up.railway.app/resource/agency/alaska-human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Alaska Human Trafficking Task Force" .
-
-<https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
-
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/charge/1> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:SexTrafficking ;
+    rdfs:label "in the first sex trafficking trial in the District of Alaska" ;
+    cacontology-legal-outcomes:indictmentCounts 28 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/charge/2> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:SexTrafficking ;
+    rdfs:label "sex trafficking" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/charge/2> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/sentence/1>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/sentence/2> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/person/offender/1> a uco-identity:Person .
 
@@ -52,14 +69,25 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on> a cacontology:ChildSexualAbuseEvent,
-        cac-core:Event ;
-    cacontology:involvesVictim <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/role/victim/1> ;
-    cacontology:severityLevel 3 .
-
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "30 YEARS" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:SupervisedRelease ;
+    rdfs:label "supervised release" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/phase/sentenced> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2008_031/event/hands-on> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:severityLevel 3 .
 

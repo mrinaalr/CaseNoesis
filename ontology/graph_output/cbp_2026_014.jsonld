@@ -2,6 +2,19 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/phase/arrested",
         "@type": [
           "https://cacontology.projectvic.org#InitialPhase",
@@ -33,75 +46,33 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-29T00:39:21.661929"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "cbp_2026_014"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T00:39:21.661929"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "CBP"
-          },
-          {
-            "@id": "https://www.cbp.gov/newsroom/local-media-release/cbp-officers-arrest-fugitive-sought-sexual-assault-child"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/phase/arrested"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-12-31T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/victim/1"
           }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/event/multi-jurisdiction"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/arapahoe-county-sheriffs-office"
-          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -139,51 +110,53 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://purl.org/dc/terms/created": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
+            "@value": "2026-05-30T20:33:57.921599"
           }
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "http://purl.org/dc/terms/identifier": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/role/victim/1"
+            "@value": "cbp_2026_014"
           }
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "http://purl.org/dc/terms/modified": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": "2026-05-30T20:33:57.921599"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "CBP"
+          },
+          {
+            "@id": "https://www.cbp.gov/newsroom/local-media-release/cbp-officers-arrest-fugitive-sought-sexual-assault-child"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/phase/arrested"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_014/event/multi-jurisdiction"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/arapahoe-county-sheriffs-office"
+          }
         ]
       }
     ],

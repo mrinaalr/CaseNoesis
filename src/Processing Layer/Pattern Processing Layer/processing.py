@@ -539,15 +539,36 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
         'is_registered': False
     }
     
-    # Extract age: "X year old [optional location] man/woman/male/female/resident"
-    # Allows for patterns like "25 year old Scottsdale man" or "21 year old Goodyear, AZ resident"
-    age_pattern = r'(\d+)\s+year\s+old\s+(?:\w+(?:\s*,\s*\w+)*\s+)?(man|woman|male|female|resident)'
-    age_match = re.search(age_pattern, case_text, re.IGNORECASE)
-    if age_match:
+    # Offender age: man/woman/male/resident only — not "female" (victim/decoy phrasing).
+    perp_age_re = re.compile(
+        r'(\d+)\s+year\s+old\s+(?:\w+(?:\s*,\s*\w+)*\s+)?(man|woman|male|resident)\b',
+        re.IGNORECASE,
+    )
+    victim_ctx_re = re.compile(
+        r'\b(?:'
+        r'victim|victims|undercover|decoy|'
+        r'profile\s+of|believed\s+(?:he|she|they)\s+was|'
+        r'communicating\s+with\s+a|pretending\s+to\s+be|'
+        r'year\s+old\s+(?:female|girl|boy)|'
+        r'(?:female|girl|boy)\s+victim'
+        r')\b',
+        re.IGNORECASE,
+    )
+
+    for age_match in perp_age_re.finditer(case_text):
         try:
-            demographics['age'] = int(age_match.group(1))
+            age = int(age_match.group(1))
         except (ValueError, IndexError):
-            pass
+            continue
+        if age < 18:
+            continue
+        window_start = max(0, age_match.start() - 90)
+        window_end = min(len(case_text), age_match.end() + 90)
+        window = case_text[window_start:window_end]
+        if victim_ctx_re.search(window):
+            continue
+        demographics['age'] = age
+        break
     
     # Check for registered sex offender
     if re.search(r'registered\s+sex\s+offender', case_text, re.IGNORECASE):
@@ -916,10 +937,9 @@ def extract_investigation_info(case: Dict[str, Any]) -> Optional[Dict[str, Any]]
         'agencies': [],
     }
 
-    # Extract agencies
+    # Extract agencies (state names alone are not agencies — use NER/full names)
     agencies = [
         'AZICAC', 'FBI', 'Phoenix Police', 'ICAC', 'HSI', 'MCSO', 'DPS',
-        'Maricopa County', 'Las Vegas', 'Colorado', 'Texas', 'California',
         'Australian Federal Police', 'Chandler Police', 'Buckeye'
     ]
 

@@ -2,10 +2,10 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -16,82 +16,68 @@
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/legal-step/convicted",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2006-01-01T00:00:00Z"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
         ],
-        "http://purl.org/dc/terms/created": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "2026-05-29T00:44:08.597094"
+            "@value": "Inferred offense from charge: child exploitation"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://purl.org/dc/terms/identifier": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "doj_archives_2006_004"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-29T00:44:08.597094"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "DOJ ARCHIVES"
-          },
-          {
-            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DMT%20Killsnight%20PR_110106.pdf"
-          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/phase/convicted",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
         "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2006-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhaseEndPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2006-12-31T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesOffender": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
           }
         ]
       },
@@ -100,11 +86,6 @@
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
           "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#involvesVictim": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/victim/1"
-          }
         ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
@@ -120,43 +101,64 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/2",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2006-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/offender/1"
+            "@value": "15 years"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/3",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#involvesVictim": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/victim/1"
+            "@value": "$250,000,"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MandatoryMinimumSentencing",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "mandatory minimum sentence"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
           }
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1"
           }
         ]
       },
@@ -185,6 +187,145 @@
         "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
             "@value": "stranger"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2006-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-05-30T20:34:38.248693"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "doj_archives_2006_004"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-05-30T20:34:38.248693"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "DOJ ARCHIVES"
+          },
+          {
+            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DMT%20Killsnight%20PR_110106.pdf"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/phase/convicted"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/phase/convicted"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/legal-step/convicted"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2006-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/3"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/4"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2006_004/sentence/4",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "supervised release"
           }
         ]
       }
