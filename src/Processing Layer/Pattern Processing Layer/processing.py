@@ -671,18 +671,52 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("Skype", r"\bSkype\b"),
     ("Kik", r"\bKik\b"),
     ("Discord", r"\bDiscord\b"),
+    # Dating / hookup surfaces
+    ("Grindr", r"\bGrindr\b"),
+    ("Skout", r"\bSkout\b"),
+    # Social / content platforms
+    ("Reddit", r"\bReddit\b"),
+    ("Tumblr", r"\bTumblr\b"),
+    ("Yubo", r"\bYubo\b"),
+    # Encrypted / anonymous messaging
+    ("Wickr", r"\bWickr\b"),
+    ("Chat Avenue", r"\bChat\s+Avenue\b"),
     ("Omegle", r"\bOmegle\b"),
+    ("Whisper", r"(?<![A-Za-z])Whisper(?![A-Za-z])"),
     ("MeWe", r"\bMeWe\b"),
     ("Roblox", r"\bRoblox\b"),
     ("Minecraft", r"\bMinecraft\b"),
+    ("Wizard 101", r"\bWizard\s*101\b"),
+    ("Call of Duty", r"\bCall\s+of\s+Duty\b"),
+    ("CS:GO", r"\bCS:GO\b|\bCSGO\b|Counter[- ]Strike(?:\s*:\s*Global\s+Offensive|\s+Global\s+Offensive)?"),
+    ("Steam", r"\bSteam\b"),
     ("Xbox Live", r"\bXbox\s+Live\b|\bXbox\b"),
     ("PlayStation Network", r"\bPSN\b|PlayStation\s+Network"),
     ("Fortnite", r"\bFortnite\b"),
+    ("Oculus", r"\bOculus\b|\bMeta\s+Quest\b"),
+    ("VRChat", r"\bVRChat\b"),
+    ("Monkey", r"\bapp called Monkey\b|\bMonkey\b(?=[^\n]{0,80}video chat with strangers)"),
+    ("Chatroulette", r"\bChatroulette\b|\bChat\s+Roulette\b"),
+    ("YouNow", r"\bYouNow\b"),
     ("Dropbox", r"\bDropbox\b"),
     ("Google Drive", r"Google\s+Drive|\bGDrive\b"),
     ("Mega.nz", r"\bmega\.nz\b|\bMEGA\b"),
     ("MediaFire", r"\bMediaFire\b"),
     ("OneDrive", r"\bOneDrive\b"),
+    ("iCloud", r"\biCloud\b"),
+    # Financial transfer
+    ("Cash App", r"\bCash\s*App\b|\bCashApp\b"),
+    # P2P distribution (also in extract_technology_signals; platforms_used for Q1 table)
+    ("BitTorrent", r"\bBitTorrent\b"),
+    ("LimeWire", r"\bLimeWire\b|\bLime\s*Wire\b"),
+    ("Kazaa", r"\bKazaa\b"),
+    # Anonymization — context-required; no bare \bTor\b (avoids senator/director/factor substrings)
+    (
+        "Tor",
+        r"\bTor\s+[Bb]rowser\b|\bTor\s+[Nn]etwork\b|\bthe\s+Tor\s+network\b"
+        r"|\bvia\s+Tor\b|\busing\s+Tor\b|\bthrough\s+Tor\b|\bTor\s+to\s+access\b",
+    ),
+    ("IMVU", r"\bIMVU\b"),
     # AIM must match uppercase only (IGNORECASE would hit prose "aim" = goal). Handled in extract_platforms.
     ("AOL Instant Messenger", r"AOL\s+Instant\s+Messenger"),
     ("IRC", r"\bIRC\b|Internet\s+Relay\s+Chat"),
@@ -730,6 +764,24 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
             if re.search(r"\bAIM\b", case_text) or re.search(
                 pattern, case_text, re.IGNORECASE
             ):
+                found.append(label)
+                seen.add(label)
+            continue
+        # Valve Steam (case-sensitive — avoids STEAM education-program acronyms).
+        if label == "Steam":
+            if re.search(pattern, case_text):
+                found.append(label)
+                seen.add(label)
+            continue
+        # Whisper app (case-sensitive — avoids prose "whisper").
+        if label == "Whisper":
+            if re.search(pattern, case_text):
+                found.append(label)
+                seen.add(label)
+            continue
+        # Tor — case-sensitive pattern only (no bare "tor" substring matches).
+        if label == "Tor":
+            if re.search(pattern, case_text):
                 found.append(label)
                 seen.add(label)
             continue

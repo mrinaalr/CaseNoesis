@@ -10,6 +10,7 @@ It re-exports all functions from the Pattern Processing Layer and Batching modul
 # Re-export everything from Pattern Processing Layer and Batching
 # Handle spaces in directory name using importlib
 import importlib.util
+import sys
 from pathlib import Path
 import pandas as pd
 import re
@@ -34,8 +35,12 @@ _batching_spec.loader.exec_module(batching)
 try_append_source_url_continuation = batching.try_append_source_url_continuation
 consume_same_line_slug_after_url = batching.consume_same_line_slug_after_url
 
-# Import from Pattern Processing Layer
-_pattern_processing_path = Path(__file__).parent / "Pattern Processing Layer" / "processing.py"
+# Import from Pattern Processing Layer (ai_extraction_patterns lives in same directory)
+_pattern_layer_dir = Path(__file__).parent / "Pattern Processing Layer"
+_pattern_processing_path = _pattern_layer_dir / "processing.py"
+_pattern_dir = str(_pattern_layer_dir.resolve())
+if _pattern_dir not in sys.path:
+    sys.path.insert(0, _pattern_dir)
 _pattern_spec = importlib.util.spec_from_file_location("pattern_processing", _pattern_processing_path)
 pattern_processing = importlib.util.module_from_spec(_pattern_spec)
 _pattern_spec.loader.exec_module(pattern_processing)

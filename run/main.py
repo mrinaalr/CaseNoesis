@@ -28,6 +28,8 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Storage Layer"))
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Visualization Layer"))
+# Processing Layer only — not Pattern Processing Layer (would shadow processing.py wrapper).
+sys.path.insert(0, str(_REPO_ROOT / "src" / "Processing Layer"))
 sys.path.insert(0, str(_REPO_ROOT / "scripts" / "run"))
 
 # Load .env from repo root and run/ (optional) so GROQ_API_KEY, GEMINI_API_KEY, DATABASE_URL, etc. work locally without export.
@@ -3545,6 +3547,15 @@ if _question_data.is_dir():
         "/ontology/question_data",
         StaticFiles(directory=str(_question_data)),
         name="question_data",
+    )
+
+# Q01 affordance table: q1_evidence.json, q1_harm_analysis.json (manual harm vectors).
+_q1_data = Path(__file__).resolve().parent.parent / "ontology" / "q1"
+if _q1_data.is_dir():
+    app.mount(
+        "/ontology/q1",
+        StaticFiles(directory=str(_q1_data)),
+        name="q1_data",
     )
 
 _ontology_dir = Path(__file__).resolve().parent.parent / "ontology"

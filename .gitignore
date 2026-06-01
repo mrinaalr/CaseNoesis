@@ -76,6 +76,9 @@ models/*
 # Case Studies authored content (read by the /case-studies tab and the /api/case-studies
 # endpoint). Must ship with the deploy or Railway shows "No content yet."
 !data/case_studies.json
+# Q1 platform harm pipeline — authored + generated artifacts ship with deploy.
+!ontology/q1/
+!ontology/q1/*.json
 # NOTE: data/case_study_notes.json is intentionally NOT whitelisted. It holds
 # user-submitted community notes; committing it would overwrite live notes on every
 # deploy. The loader returns [] when the file is absent, which is the correct default

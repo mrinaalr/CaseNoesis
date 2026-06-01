@@ -429,6 +429,8 @@ All classes ultimately root in one of five spine categories from `cacontology-co
 
 ### 3.1 PLATFORM_MAP
 
+**Fiat payment apps (no CAC platform class):** Cash App and similar fiat P2P transfer services have no `cacontology-platforms:` class in CAC v3.0.0 (`CryptocurrencyService` is crypto-only). CaseLinker still extracts them to `platforms_used` and tracks the financial-transfer misuse surface in the Q1 pipeline as `FinancialTransferService` only. In the knowledge graph, `Cash App` is listed in `PLATFORM_MAP` with the `_SKIP` sentinel (no platform node). For sextortion cases with a `SextortionCharge` in prosecution and Cash App in `platforms_used`, `features_to_cac.py` emits `cacontology-sextortion:MonetaryDemand` linked via `makesDemand` to the sextortion incident. **Gap to raise with Project VIC:** `PaymentTransferService` / digital-wallet platform class for fiat rails.
+
 **Values to map:** 35 (from `_PLATFORM_SPECS`)  
 **Mapped confidently:** 30  
 **Ambiguous / needs review:** 5 (marked †)

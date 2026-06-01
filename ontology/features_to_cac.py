@@ -148,7 +148,7 @@ def _to_xsd_datetime_stamp(value: Any) -> Optional[str]:
 
 # ---------------------------------------------------------------------------
 # PLATFORM_MAP
-# 35 canonical platform labels → (CAC class, extra properties dict)
+# 44 canonical platform labels → (CAC class, extra properties dict)
 # SKIP sentinel means: do not create a platform node.
 # ---------------------------------------------------------------------------
 
@@ -164,6 +164,14 @@ PLATFORM_MAP: Dict[str, Tuple[str, Dict[str, Any]]] = {
     "MySpace":                  ("SocialMediaPlatform",      {"platformType": "legacy"}),
     "Craigslist":               ("SocialMediaPlatform",      {"platformType": "classifieds"}),
     "social media":             ("SocialMediaPlatform",      {"platformSpecificity": "generic"}),
+    # Dating / hookup
+    "Grindr":                   ("OnlineDatingPlatform",     {}),
+    "Skout":                    ("OnlineDatingPlatform",     {}),
+    "Tinder":                   ("OnlineDatingPlatform",     {}),
+    "MeetMe":                   ("OnlineDatingPlatform",     {}),
+    "Reddit":                   ("SocialMediaPlatform",      {}),
+    "Tumblr":                   ("SocialMediaPlatform",      {}),
+    "Yubo":                     ("SocialMediaPlatform",      {"platformType": "teen-social"}),
     # --- Messaging ---
     "Facebook Messenger":       ("MessagingService",         {}),
     "WhatsApp":                 ("MessagingService",         {"encryptionLevel": "end-to-end"}),
@@ -174,8 +182,15 @@ PLATFORM_MAP: Dict[str, Tuple[str, Dict[str, Any]]] = {
     "Discord":                  ("MessagingService",         {}),
     "AOL Instant Messenger":    ("MessagingService",         {"platformType": "legacy"}),
     "Yahoo Chat":               ("MessagingService",         {"platformType": "legacy"}),
+    "Signal":                   ("MessagingService",         {"encryptionLevel": "end-to-end"}),
+    "Wickr":                    ("MessagingService",         {"encryptionLevel": "end-to-end"}),
+    "Chat Avenue":              ("MessagingService",         {"platformType": "anonymous-chat"}),
     # --- Anonymous Chat ---
     "Omegle":                   ("AnonymousChatPlatform",    {"guestAccountsAllowed": "true", "identityVerificationRequired": "false"}),
+    "Whisper":                  ("AnonymousChatPlatform",    {"guestAccountsAllowed": "true", "identityVerificationRequired": "false"}),
+    "Monkey":                   ("AnonymousChatPlatform",    {"guestAccountsAllowed": "true", "identityVerificationRequired": "false"}),
+    "Chatroulette":             ("AnonymousChatPlatform",    {"guestAccountsAllowed": "true", "identityVerificationRequired": "false"}),
+    "YouNow":                   ("AnonymousChatPlatform",    {"guestAccountsAllowed": "true"}),
     "IRC":                      ("AnonymousChatPlatform",    {"platformType": "legacy"}),
     "chat":                     ("AnonymousChatPlatform",    {"platformSpecificity": "generic"}),
     # --- Video Streaming ---
@@ -186,19 +201,29 @@ PLATFORM_MAP: Dict[str, Tuple[str, Dict[str, Any]]] = {
     # --- Gaming ---
     "Roblox":                   ("GamePlatform",             {"allowsAnonymousChat": "true"}),
     "Minecraft":                ("GamePlatform",             {}),
+    "Wizard 101":               ("GamePlatform",             {}),
+    "Call of Duty":             ("GamePlatform",             {}),
+    "CS:GO":                    ("GamePlatform",             {}),
+    "Steam":                    ("GamePlatform",             {}),
     "Xbox Live":                ("GamePlatform",             {}),
     "PlayStation Network":      ("GamePlatform",             {}),
     "Fortnite":                 ("GamePlatform",             {}),
+    # VR surfaces — no VRPlatform class in cacontology-platforms.ttl; GamePlatform is nearest parent
+    "Oculus":                   ("GamePlatform",             {"platformType": "vr"}),
+    "VRChat":                   ("GamePlatform",             {"platformType": "vr"}),
     # --- File Hosting ---
     "Dropbox":                  ("FileHostingService",       {}),
     "Google Drive":             ("FileHostingService",       {}),
     "Mega.nz":                  ("FileHostingService",       {"encryptionLevel": "end-to-end"}),
     "MediaFire":                ("FileHostingService",       {}),
     "OneDrive":                 ("FileHostingService",       {}),
-    # --- P2P (FileHostingService with platformType=p2p) ---
+    "iCloud":                   ("FileHostingService",       {"platformType": "cloud-backup"}),
+    # --- P2P (no P2PService in CAC TTL — FileHostingService + platformType=p2p) ---
     "LimeWire":                 ("FileHostingService",       {"platformType": "p2p"}),
     "BitTorrent":               ("FileHostingService",       {"platformType": "p2p"}),
     "Kazaa":                    ("FileHostingService",       {"platformType": "p2p", "platformVersion": "legacy"}),
+    # --- Messaging (legacy / avatar social) ---
+    "IMVU":                     ("MessagingService",         {"platformType": "avatar-social"}),
     "Gigatribe":                ("FileHostingService",       {"platformType": "p2p"}),
     # --- Generative AI (offense instrument; maps to platforms# + ai-csam event typing) ---
     "Gen AI":                   ("FileHostingService",       {"platformType": "generative-ai"}),
@@ -210,17 +235,23 @@ PLATFORM_MAP: Dict[str, Tuple[str, Dict[str, Any]]] = {
     "Tor":                      ("DarkWebService",           {}),
     "I2P":                      ("DarkWebService",           {}),
     "dark web":                 ("DarkWebService",           {}),
-    # --- SKIP ---
+    # --- SKIP (extracted; no CAC platform class — see MAPPING_PLAN.md) ---
+    "Cash App":                 (_SKIP,                      {}),
     "online":                   (_SKIP,                      {}),
 }
 
+# Fiat payment apps in platforms_used with no platforms# class (Q1: FinancialTransferService).
+_FIAT_PAYMENT_PLATFORM_LABELS: frozenset = frozenset({"Cash App"})
+
 _PLATFORM_CLASS_URI: Dict[str, URIRef] = {
     "SocialMediaPlatform":   CAC_PLATFORMS.SocialMediaPlatform,
+    "OnlineDatingPlatform":  CAC_PLATFORMS.OnlineDatingPlatform,
     "MessagingService":      CAC_PLATFORMS.MessagingService,
     "AnonymousChatPlatform": CAC_PLATFORMS.AnonymousChatPlatform,
     "VideoStreamingPlatform":CAC_PLATFORMS.VideoStreamingPlatform,
     "GamePlatform":          CAC_PLATFORMS.GamePlatform,
     "FileHostingService":    CAC_PLATFORMS.FileHostingService,
+    "CryptocurrencyService": CAC_PLATFORMS.CryptocurrencyService,
     "DarkWebService":        CAC_PLATFORMS.DarkWebService,
 }
 
@@ -739,6 +770,9 @@ class CaseToCAC:
         )
         self.map_severity(det_g, case, event_uris, offender_uris, warnings)
         self.map_prosecution(det_g, case, inv_uri, event_uris, warnings)
+        self.map_sextortion_monetary_demands(
+            det_g, case, inv_uri, event_uris, warnings
+        )
         # Contact-abuse offense events are created during prosecution (after map_roles).
         self._link_roles_to_csa_events(
             det_g, event_uris, victim_uris, offender_uris
@@ -955,6 +989,73 @@ class CaseToCAC:
                 g.add((evt_uri, CAC.usesChannel, p_uri))
 
         return uris
+
+    def _case_has_sextortion_charge(self, case: Dict[str, Any]) -> bool:
+        prosecution = case.get("prosecution") or {}
+        if isinstance(prosecution, str):
+            try:
+                prosecution = json.loads(prosecution)
+            except (json.JSONDecodeError, TypeError):
+                prosecution = {}
+        charges_raw = prosecution.get("charges") or []
+        if isinstance(charges_raw, str):
+            try:
+                charges_raw = json.loads(charges_raw)
+            except (json.JSONDecodeError, TypeError):
+                charges_raw = []
+        for charge in charges_raw:
+            if isinstance(charge, dict):
+                charge_str = str(charge.get("charge") or "")
+            else:
+                charge_str = str(charge)
+            charge_class, _, _ = self._match_charge(charge_str, [])
+            if charge_class == CAC_LEGAL.SextortionCharge:
+                return True
+        return False
+
+    def map_sextortion_monetary_demands(
+        self,
+        g: Graph,
+        case: Dict[str, Any],
+        inv_uri: URIRef,
+        event_uris: Dict[str, URIRef],
+        warnings: List[str],
+    ) -> None:
+        """
+        Fiat payment rails (e.g. Cash App) have no CAC platform class; on sextortion
+        cases emit MonetaryDemand linked to the sextortion incident instead.
+        """
+        platforms_raw = case.get("platforms_used") or []
+        if isinstance(platforms_raw, str):
+            try:
+                platforms_raw = json.loads(platforms_raw)
+            except (json.JSONDecodeError, TypeError):
+                platforms_raw = [platforms_raw]
+        fiat_labels = _FIAT_PAYMENT_PLATFORM_LABELS.intersection(platforms_raw)
+        if not fiat_labels:
+            return
+
+        if not self._case_has_sextortion_charge(case):
+            return
+
+        case_id = case.get("id", "unknown")
+        sextortion_uri = event_uris.get("sextortion")
+        if sextortion_uri is None:
+            sextortion_uri = BASE[f"case/{case_id}/event/sextortion"]
+            g.add((sextortion_uri, RDF.type, CAC_SEXTORTION.SextortionIncident))
+            g.add((sextortion_uri, RDF.type, CAC_CORE.Event))
+            g.add((inv_uri, CAC.hasStep, sextortion_uri))
+            event_uris["sextortion"] = sextortion_uri
+
+        for label in sorted(fiat_labels):
+            slug = _slug(label)
+            demand_uri = BASE[f"case/{case_id}/demand/monetary-{slug}"]
+            g.add((demand_uri, RDF.type, CAC_SEXTORTION.MonetaryDemand))
+            g.add((demand_uri, RDF.type, CAC_SEXTORTION.ExtortionDemand))
+            g.add((demand_uri, RDFS.label,
+                   Literal(f"Monetary demand (payment via {label})")))
+            g.add((demand_uri, CAC_SEXTORTION.demandType, Literal("money")))
+            g.add((sextortion_uri, CAC_SEXTORTION.makesDemand, demand_uri))
 
     def _get_or_create_platform(
         self,
