@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
@@ -17,26 +16,36 @@
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:52.006707" ;
+    dcterms:created "2026-06-03T16:44:59.383071" ;
     dcterms:identifier "idaho_icac_2025_036" ;
-    dcterms:modified "2026-05-30T20:35:52.006707" ;
+    dcterms:modified "2026-06-03T16:44:59.383071" ;
     dcterms:source <https://www.ag.idaho.gov/newsroom/category/icac/?showall=true>,
         "Idaho ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
         <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/possession>,
         <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-03-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-03-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -60,6 +69,9 @@
     rdfs:label "sexual exploitation" ;
     ns1:chargeCluster "sexual_exploitation_unspecified" .
 
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/legal-proceeding> a cac-core:Event,
@@ -82,24 +94,11 @@
         cacontology-legal-outcomes:SentencingHearing ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2025-03-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 64 .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 2 .
-
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-03-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
-        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-03-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/ai-csam>,
-        <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/person/victim/1> .
+    cacontology-production:victimAge 12 .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
@@ -119,6 +118,8 @@
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/idaho_icac_2025_036/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

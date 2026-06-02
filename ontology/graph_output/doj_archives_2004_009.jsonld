@@ -2,6 +2,88 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2004-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$250,000"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/federal-express",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Federal Express"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 64
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2004-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/victim/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/1",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
@@ -14,27 +96,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
           "https://cacontology.projectvic.org/core#Event"
         ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/states-attorney-district",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "States Attorney District"
           }
         ]
       },
@@ -46,7 +116,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:28.963987"
+            "@value": "2026-06-03T16:44:45.142825"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -56,7 +126,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:28.963987"
+            "@value": "2026-06-03T16:44:45.142825"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -85,6 +155,9 @@
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/distribution"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/legal-step/convicted"
           },
           {
@@ -93,91 +166,7 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/states-attorney-district"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "3 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2004-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/phase/convicted",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2004-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2004-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/agency/federal-express"
           }
         ]
       },
@@ -210,14 +199,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/4",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/3",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
           "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "supervised release"
+            "@value": "3 years"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
@@ -237,14 +239,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/event/distribution",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 64
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/phase/convicted",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2004-01-01T00:00:00Z"
           }
         ]
       },
@@ -255,36 +271,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/4",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2004_009/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
           "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "$250,000"
+            "@value": "supervised release"
           }
         ]
       }

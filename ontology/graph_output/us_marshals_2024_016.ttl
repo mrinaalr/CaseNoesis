@@ -3,6 +3,7 @@
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
@@ -11,41 +12,71 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:43.967983" ;
+    dcterms:created "2026-06-03T16:45:44.638614" ;
     dcterms:identifier "us_marshals_2024_016" ;
-    dcterms:modified "2026-05-30T20:39:43.967983" ;
+    dcterms:modified "2026-06-03T16:45:44.638614" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-new-orleans-task-force-concludes-fiscal-year-2024-operations-over>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/atf>,
+        <https://caselinker.up.railway.app/resource/agency/dea>,
+        <https://caselinker.up.railway.app/resource/agency/eastern-district-of-louisiana-new-orleans-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/ice>,
+        <https://caselinker.up.railway.app/resource/agency/kenner-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/la-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/louisiana-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/new-orleans-police-department>,
         <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-new-orleans-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
         <https://caselinker.up.railway.app/resource/agency/usms> .
+
+<https://caselinker.up.railway.app/resource/agency/atf> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/eastern-district-of-louisiana-new-orleans-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Eastern District of Louisiana New Orleans Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-new-orleans-task-force> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/kenner-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/la-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/louisiana-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "U. S. Marshals New Orleans Task Force" .
+    rdfs:label "Louisiana Fugitive Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:SexTrafficking ;
     rdfs:label "sex trafficking" .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -83,6 +114,8 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;
     rdfs:label "Probation" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_016/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

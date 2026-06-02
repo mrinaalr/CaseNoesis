@@ -5,89 +5,76 @@
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:41.981937" ;
+    dcterms:created "2026-06-03T16:45:44.299004" ;
     dcterms:identifier "us_marshals_2026_018" ;
-    dcterms:modified "2026-05-30T20:39:41.981937" ;
+    dcterms:modified "2026-06-03T16:45:44.299004" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/operation-stampede-yakima-surge-successfully-concludes-us-marshals-service-led>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/multi-jurisdiction>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/possession>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/atf>,
         <https://caselinker.up.railway.app/resource/agency/benton-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/bureau-of-alcohol-tobacco-firearms-and-explosives>,
-        <https://caselinker.up.railway.app/resource/agency/california>,
         <https://caselinker.up.railway.app/resource/agency/dea>,
-        <https://caselinker.up.railway.app/resource/agency/ent-offender-task-force>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
-        <https://caselinker.up.railway.app/resource/agency/multi---agency-e>,
-        <https://caselinker.up.railway.app/resource/agency/state-department-of-corrections>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
+        <https://caselinker.up.railway.app/resource/agency/marshals-service>,
+        <https://caselinker.up.railway.app/resource/agency/marshals-service---investigative-operations-division>,
+        <https://caselinker.up.railway.app/resource/agency/pacific-northwest-violent-offender-task-force>,
         <https://caselinker.up.railway.app/resource/agency/union-gap-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-marshals-service>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-marshals-service-pacific-northwest-v>,
+        <https://caselinker.up.railway.app/resource/agency/united-states-marshals-service-pacific-northwest-violent-offender-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/usms>,
         <https://caselinker.up.railway.app/resource/agency/wapato-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/washington-state-department-of-corrections>,
         <https://caselinker.up.railway.app/resource/agency/yakama-nation-tribal-police-department>,
         <https://caselinker.up.railway.app/resource/agency/yakima-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/yakima-police-department> .
 
 <https://caselinker.up.railway.app/resource/agency/atf> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/benton-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Benton County Sheriff's Office" .
+<https://caselinker.up.railway.app/resource/agency/benton-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/bureau-of-alcohol-tobacco-firearms-and-explosives> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Bureau of Alcohol, Tobacco, Firearms and Explosives" .
-
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-alcohol-tobacco-firearms-and-explosives> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/ent-offender-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/multi---agency-e> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Multi - Agency E" .
+<https://caselinker.up.railway.app/resource/agency/marshals-service> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/state-department-of-corrections> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/marshals-service---investigative-operations-division> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "State Department of Corrections" .
+    rdfs:label "Marshals Service - Investigative Operations Division" .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/pacific-northwest-violent-offender-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/union-gap-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Union Gap Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/united-states-attorney-s-office> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/united-states-marshals-service-pacific-northwest-violent-offender-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/united-states-marshals-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/united-states-marshals-service-pacific-northwest-v> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/wapato-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Wapato Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/washington-state-department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/yakama-nation-tribal-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -97,9 +84,11 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Yakima County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/yakima-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Yakima Police Department" .
+<https://caselinker.up.railway.app/resource/agency/yakima-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -108,8 +97,6 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/trust-violation> a cacontology-custodial:AuthorityAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/relationship/teacher> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -130,15 +117,13 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
@@ -152,9 +137,4 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/hands-on> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;
     cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/us_marshals_2026_018/facet/possession> .
 

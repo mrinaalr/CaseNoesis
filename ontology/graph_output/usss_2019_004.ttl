@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,42 +14,42 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2019_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:47.313968" ;
+    dcterms:created "2026-06-03T16:45:45.299754" ;
     dcterms:identifier "usss_2019_004" ;
-    dcterms:modified "2026-05-30T20:39:47.313968" ;
+    dcterms:modified "2026-06-03T16:45:45.299754" ;
     dcterms:source <https://www.secretservice.gov/press/releases/2019/10/kittery-man-pleads-guilty-child-sexual-exploitation-offense>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2019_004/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2019_004/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/multi-jurisdiction>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/possession>,
         <https://caselinker.up.railway.app/resource/case/usss_2019_004/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/usss_2019_004/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/maine-state-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/police-department>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-secret-service> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/maine-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2019_004/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2019_004/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2019_004/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2019_004/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2019-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/case/usss_2019_004/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2019-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/maine-state-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
     rdfs:label "Maine State Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2019_004/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -66,6 +64,9 @@
     rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2019_004/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution .
 
 <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation .
@@ -93,20 +94,6 @@
 <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/usss_2019_004/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2019-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2019_004/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2019-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2019_004/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2019_004/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2019_004/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2019_004/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

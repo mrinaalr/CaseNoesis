@@ -2,7 +2,9 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
@@ -10,30 +12,41 @@
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_017> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:14.925505" ;
+    dcterms:created "2026-06-03T16:44:42.810632" ;
     dcterms:identifier "de_ag_2012_017" ;
-    dcterms:modified "2026-05-30T20:34:14.925505" ;
+    dcterms:modified "2026-06-03T16:44:42.810632" ;
     dcterms:source <https://news.delaware.gov/2012/09/25/delaware-man-arrested-for-sexual-solicitation-of-a-child>,
         "DE AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/event/trust-violation> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/event/trust-violation> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/tor-task-force> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/child-predator-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/delaware-department-of-justice>,
+        <https://caselinker.up.railway.app/resource/agency/us-department-of-justice> .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/child-predator-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/tor-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/delaware-department-of-justice> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/us-department-of-justice> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_017/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/relationship/mother> .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/person/offender/1> a uco-identity:Person ;
-    cacontology-detection:ageEstimate 17 .
+    cacontology-detection:ageEstimate 42 .
 
-<https://caselinker.up.railway.app/resource/case/de_ag_2012_017/person/victim/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/de_ag_2012_017/person/victim/1> a uco-identity:Person ;
+    cacontology-production:victimAge 17 .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_017/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;

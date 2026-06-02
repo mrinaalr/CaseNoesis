@@ -2,6 +2,12 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/white-settlement-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
@@ -10,18 +16,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "White Settlement Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 77
           }
         ]
       },
@@ -63,58 +57,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -122,7 +64,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:04.282848"
+            "@value": "2026-06-03T16:44:40.679548"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -132,7 +74,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:04.282848"
+            "@value": "2026-06-03T16:44:40.679548"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -155,10 +97,37 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/white-settlement-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_050/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 77
           }
         ]
       }

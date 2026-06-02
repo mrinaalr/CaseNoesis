@@ -2,8 +2,10 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
@@ -13,19 +15,22 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:29:25.978914" ;
+    dcterms:created "2026-06-03T16:43:46.405650" ;
     dcterms:identifier "ncmec_2022_334" ;
-    dcterms:modified "2026-05-30T20:29:25.978914" ;
+    dcterms:modified "2026-06-03T16:43:46.405650" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/csam>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/production>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/legal-proceeding>,
-        <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/legal-step/sentenced> .
+        <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/legal-step/sentenced> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -42,6 +47,13 @@
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/charge/4> a cacontology-legal-outcomes:CSAM_Production,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "production of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2022_334/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -112,6 +124,8 @@
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/sentence/4> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;
     rdfs:label "Probation" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2022_334/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

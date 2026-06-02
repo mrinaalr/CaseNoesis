@@ -18,17 +18,19 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_048> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:31:43.370806" ;
+    dcterms:created "2026-06-03T16:44:09.558535" ;
     dcterms:identifier "ncmec_2024_048" ;
-    dcterms:modified "2026-05-30T20:31:43.370806" ;
+    dcterms:modified "2026-06-03T16:44:09.558535" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/phase/sentenced> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/cybertip>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/legal-step/sentenced>,
@@ -37,22 +39,27 @@
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/arkansas-department-of-corrections>,
         <https://caselinker.up.railway.app/resource/agency/arkansas-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/little-rock-police-department>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
-        <https://caselinker.up.railway.app/resource/agency/saline-county-sheriffs-department>,
-        <https://caselinker.up.railway.app/resource/agency/state-police-department> .
+        <https://caselinker.up.railway.app/resource/agency/saline-county-sheriffs-department> .
 
 <https://caselinker.up.railway.app/resource/agency/arkansas-department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/arkansas-state-police-department> a cacontology-multi:StateAgency .
 
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/little-rock-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Little Rock Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/saline-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Saline County Sheriff's Department" .
-
-<https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "distributing" ;
@@ -82,6 +89,14 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_048/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;

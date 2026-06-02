@@ -465,7 +465,8 @@ class CaseStorage:
             # Merge extracted_features back into case_dict
             extracted_features = case_dict.get('extracted_features', {})
             if isinstance(extracted_features, dict):
-                for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
+                for key in ['perpetrator_age', 'perpetrator_gender', 'perpetrator_registered_sex_offender',
+                           'press_digest_pollution', 'multi_defendant_operation',
                            'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
                            'severity_phrases', 'case_text', 'comparison_values',
@@ -608,7 +609,8 @@ class CaseStorage:
                 # Merge extracted_features
                 extracted_features = case_dict.get('extracted_features', {})
                 if isinstance(extracted_features, dict):
-                    for key in ['perpetrator_age', 'perpetrator_registered_sex_offender', 
+                    for key in ['perpetrator_age', 'perpetrator_registered_sex_offender',
+                               'press_digest_pollution', 'multi_defendant_operation',
                                'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                                'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
                                'severity_phrases', 'case_text', 'comparison_values',
@@ -741,7 +743,10 @@ class CaseStorage:
                 if isinstance(extracted_features, dict):
                     for key in [
                         "perpetrator_age",
+                        "perpetrator_gender",
                         "perpetrator_registered_sex_offender",
+                        "press_digest_pollution",
+                        "multi_defendant_operation",
                         "agencies_involved",
                         "organizations",
                         "locations",
@@ -864,7 +869,10 @@ class CaseStorage:
                 if isinstance(extracted_features, dict):
                     for key in [
                         "perpetrator_age",
+                        "perpetrator_gender",
                         "perpetrator_registered_sex_offender",
+                        "press_digest_pollution",
+                        "multi_defendant_operation",
                         "agencies_involved",
                         "organizations",
                         "locations",

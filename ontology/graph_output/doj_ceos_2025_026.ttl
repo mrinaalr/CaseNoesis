@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -17,9 +15,9 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:08.389436" ;
+    dcterms:created "2026-06-03T16:44:51.206876" ;
     dcterms:identifier "doj_ceos_2025_026" ;
-    dcterms:modified "2026-05-30T20:35:08.389436" ;
+    dcterms:modified "2026-06-03T16:44:51.206876" ;
     dcterms:source <https://www.justice.gov/opa/pr/maryland-man-sentenced-14-years-prison-sexually-exploiting-minor-snapchat>,
         "DOJ CEOS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/phase/sentenced> ;
@@ -30,22 +28,38 @@
         <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/justice-department>,
+        <https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division>,
         <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Child Exploitation Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/justice-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
 
@@ -83,20 +97,6 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 15 .
-
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

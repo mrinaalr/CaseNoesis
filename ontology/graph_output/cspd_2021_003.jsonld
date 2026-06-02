@@ -2,6 +2,23 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#MessagingService"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Snapchat"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/phase/charged",
         "@type": [
           "https://cacontology.projectvic.org#LegalProcessPhase",
@@ -15,48 +32,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/colorado",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -64,7 +39,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:07.589384"
+            "@value": "2026-06-03T16:44:41.263474"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -74,7 +49,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:07.589384"
+            "@value": "2026-06-03T16:44:41.263474"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -102,21 +77,31 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/colorado"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@value": "Snapchat"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/person/offender/1"
           }
         ]
       },
@@ -139,25 +124,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_003/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -18,36 +16,43 @@
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:21.202482" ;
+    dcterms:created "2026-06-03T16:45:40.852996" ;
     dcterms:identifier "tbi_icac_2024_020" ;
-    dcterms:modified "2026-05-30T20:39:21.202482" ;
+    dcterms:modified "2026-06-03T16:45:40.852996" ;
     dcterms:source <https://tbinewsroom.com/2024/04/25/three-men-arrested-following-tbi-online-child-exploitation-investigation/>,
         "TBI ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/phase/charged> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/cybertip>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/offense-event/charge-3>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/criminal-investigation-division>,
-        <https://caselinker.up.railway.app/resource/agency/drug-investigation-division>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/drug-investigation-division>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/mcminnville-police-department>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/tbis-criminal-investigation-division>,
         <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline>,
         <https://caselinker.up.railway.app/resource/agency/warren-county-sheriffs-department> .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/criminal-investigation-division> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/drug-investigation-division> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -57,17 +62,17 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/mcminnville-police-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/mcminnville-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/tbis-criminal-investigation-division> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "McMinnville Police Department" .
+    rdfs:label "TBI's Criminal Investigation Division" .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/warren-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Warren County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/warren-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -85,6 +90,10 @@
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -105,20 +114,6 @@
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_020/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;

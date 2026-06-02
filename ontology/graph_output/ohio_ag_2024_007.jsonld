@@ -2,9 +2,32 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/legal-step/sentenced",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "life in prison"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/logan-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Logan Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/legal-proceeding",
+        "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
           "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
@@ -14,6 +37,17 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -27,6 +61,18 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -52,9 +98,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/trust-violation",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/relationship/mother"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
         ]
       },
       {
@@ -65,7 +130,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:43.738521"
+            "@value": "2026-06-03T16:45:22.595710"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -75,7 +140,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:43.738521"
+            "@value": "2026-06-03T16:45:22.595710"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -117,19 +182,17 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/agency/logan-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/legal-step/sentenced",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/legal-proceeding",
-        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
           "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
           "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
@@ -138,46 +201,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/sentence/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "life in prison"
           }
         ]
       },
@@ -205,39 +228,25 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/trust-violation",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/relationship/mother"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/logan-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@value": "Logan Police Department"
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/hands-on"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_007/person/victim/1"
           }
         ]
       }

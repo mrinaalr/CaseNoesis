@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-usa-federal: <https://cacontology.projectvic.org/usa-federal-law#> .
@@ -16,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:40:19.638454" ;
+    dcterms:created "2026-06-03T16:45:51.667340" ;
     dcterms:identifier "wa_ag_2014_001" ;
-    dcterms:modified "2026-05-30T20:40:19.638454" ;
+    dcterms:modified "2026-06-03T16:45:51.667340" ;
     dcterms:source <https://www.atg.wa.gov/news/news-releases/ag-s-sex-predator-unit-seeks-prevent-release-tacoma-sex-offender-community>,
         "WA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/phase/sentenced> ;
@@ -27,20 +25,26 @@
         <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/offense-event/charge-1> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals>,
-        <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> .
 
-<https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Attorney General's" .
+<https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child molestation" ;
@@ -64,20 +68,6 @@
     cacontology-detection:ageEstimate 33 .
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2014-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2014_001/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

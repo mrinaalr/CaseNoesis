@@ -2,44 +2,39 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@id": "https://caselinker.up.railway.app/resource/agency/henderson-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "social media"
+            "@value": "Henderson Police Department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Inferred offense from charge: child exploitation"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -65,47 +60,6 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/phase/booked",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
           }
         ]
       },
@@ -136,9 +90,90 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 23
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Nevada Attorney General's"
+          }
         ]
       },
       {
@@ -149,7 +184,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:11.826958"
+            "@value": "2026-06-03T16:45:14.870056"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -159,7 +194,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:11.826958"
+            "@value": "2026-06-03T16:45:14.870056"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -199,9 +234,6 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
           },
           {
@@ -214,10 +246,10 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/icac"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/las-vegas"
+            "@id": "https://caselinker.up.railway.app/resource/agency/metropolitan-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department"
+            "@id": "https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department"
@@ -225,102 +257,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/operation",
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/phase/booked",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Child Exploitation Task Force"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child exploitation"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/las-vegas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/henderson-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Henderson Police Department"
+            "@value": "social media"
           }
         ]
       },
@@ -341,6 +297,25 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2026-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/metropolitan-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       }
     ],

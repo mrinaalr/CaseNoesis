@@ -2,31 +2,6 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/morrow-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Morrow County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -34,7 +9,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:43.313368"
+            "@value": "2026-06-03T16:45:22.508025"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -44,7 +19,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:43.313368"
+            "@value": "2026-06-03T16:45:22.508025"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -83,81 +58,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "20 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "life in prison"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/offender/1"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/phase/sentenced",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
@@ -167,35 +67,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/victim/1"
           }
         ]
       },
@@ -222,6 +93,65 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/morrow-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Morrow County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "life in prison"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/legal-step/sentenced",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
@@ -233,6 +163,54 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2024_004/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "20 years"
           }
         ]
       }

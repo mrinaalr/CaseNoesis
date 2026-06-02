@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:38.366505" ;
+    dcterms:created "2026-06-03T16:45:43.539404" ;
     dcterms:identifier "us_marshals_2025_017" ;
-    dcterms:modified "2026-05-30T20:39:38.366505" ;
+    dcterms:modified "2026-06-03T16:45:43.539404" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-new-york-new-jersey-regional-fugitive-task-force-completes-operation>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/phase/arrested> ;
@@ -22,22 +20,42 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/conspiracy>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ive-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-new> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/department-of-corrections>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-regional-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/new-yorknew-jersey-regional-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/port-authority-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/regional-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/offender/1>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/offender/2>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/offender/3> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/conspiracy> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/ive-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/department-of-corrections> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-new> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-yorknew-jersey-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "U. S. Marshals Service New" .
+    rdfs:label "New York/New Jersey Regional Fugitive Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/port-authority-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Port Authority Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Regional Fugitive Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -54,16 +72,6 @@
     cacontology-detection:ageEstimate 67 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/conspiracy> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/person/victim/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/phase/arrested> a cacontology:InitialPhase,
-        cac-core:Phase ;
-    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -82,6 +90,10 @@
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/conspiracy> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/person/offender/3> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/phase/arrested> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2025_017/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
         cac-core:Event ;

@@ -2,52 +2,15 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/charge/3",
+        "@id": "https://caselinker.up.railway.app/resource/agency/delawares-child-predator-task-force",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "child pornography"
+            "@value": "Delaware's Child Predator Task Force"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/phase/indicted",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2013-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "$600,000"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -64,27 +27,15 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "$250,000"
           }
         ]
       },
@@ -96,7 +47,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:17.364214"
+            "@value": "2026-06-03T16:44:43.359458"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -106,7 +57,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:17.364214"
+            "@value": "2026-06-03T16:44:43.359458"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -129,10 +80,13 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/distribution"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/legal-proceeding"
@@ -154,7 +108,10 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/doj"
+            "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/delawares-child-predator-task-force"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/millsboro-police-department"
@@ -163,43 +120,96 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department"
+            "@id": "https://caselinker.up.railway.app/resource/agency/task-force-detectives"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/tor-task-force"
+            "@id": "https://caselinker.up.railway.app/resource/agency/task-forces"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/cybertip",
+        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
         "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/task-force-detectives",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+            "@value": "Task Force Detectives"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/phase/indicted",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2013-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/child-predator-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/charge/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/facet/possession"
           }
         ]
       },
@@ -222,15 +232,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/sentence/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$250,000"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/child-predator-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -242,24 +264,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 49
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/doj",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "State Police Department"
           }
         ]
       },
@@ -277,10 +281,10 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -308,42 +312,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/millsboro-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Millsboro Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/event/ai-csam",
         "@type": [
           "https://cacontology.projectvic.org#DigitallyGeneratedCSAMIncident",
@@ -358,9 +326,32 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/tor-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/cybertip",
+        "@type": [
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+        ],
+        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/millsboro-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Millsboro Police Department"
+          }
         ]
       },
       {
@@ -393,6 +384,30 @@
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/sentence/2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/task-forces",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Task Force's"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2013_017/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$600,000"
           }
         ]
       }

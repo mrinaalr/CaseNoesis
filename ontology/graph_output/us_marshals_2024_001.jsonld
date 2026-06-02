@@ -2,54 +2,27 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/agency/lexington-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation of a minor"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fairfield-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-bexar-county-district-attorney-s-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "San Antonio Bexar County District Attorney ’'s Office"
+            "@value": "Lexington Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/phase/arrested",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
           }
         ]
       },
@@ -60,74 +33,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "sexual_exploitation_unspecified"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/3"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2024-01-01T00:00:00Z"
           }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/victim/1"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-carolinas-regional-fu",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/multi-jurisdiction",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "U. S. Marshals Carolinas Regional Fu"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
@@ -143,72 +70,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-general-s-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ive-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/del-rio-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/eagle-pass-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Eagle Pass Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 27
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/2",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
@@ -221,9 +82,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ice",
+        "@id": "https://caselinker.up.railway.app/resource/agency/uvalde-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Uvalde Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -234,7 +107,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:39:28.992136"
+            "@value": "2026-06-03T16:45:41.892100"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -244,7 +117,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:39:28.992136"
+            "@value": "2026-06-03T16:45:41.892100"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -270,7 +143,7 @@
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/multi-jurisdiction"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/distribution"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/legal-proceeding"
@@ -307,103 +180,89 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/lexington-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force"
+            "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force-del-rio"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force-del-rio"
+            "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force-san-antonio-bexar-county-district-attorneys-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/new-braunfels-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-bexar-county-district-attorney-s-office"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-general-s-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-generals-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-a"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-carolinas-regional-fu"
+            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/uvalde-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ive-task-force"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/agency/san-antonio-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/eagle-pass-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Eagle Pass Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ice",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/fairfield-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-a",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
           {
-            "@value": "U. S. Marshals A"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 27
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/uvalde-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Uvalde Police Department"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/phase/arrested",
+        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas-attorney-generals-office",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/facet/possession"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -418,11 +277,6 @@
             "@value": "2024-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/possession"
-          }
-        ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/offender/1"
@@ -430,44 +284,99 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/agency/del-rio-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/lexington-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/3",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force-san-antonio-bexar-county-district-attorneys-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Lexington Police Department"
+            "@value": "Lone Star Fugitive Task Force San Antonio Bexar County District Attorney's Office"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation of a minor"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/charge/3"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2024_001/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

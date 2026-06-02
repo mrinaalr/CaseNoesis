@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -12,28 +11,47 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:50.583570" ;
+    dcterms:created "2026-06-03T16:45:23.991637" ;
     dcterms:identifier "ohio_ag_2016_003" ;
-    dcterms:modified "2026-05-30T20:37:50.583570" ;
+    dcterms:modified "2026-06-03T16:45:23.991637" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/July-2016/Ohio-Woman-Sentenced-to-51-Years-to-Life-for-Traff>,
         "OHIO AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cincinnati-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cincinnati-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office> .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/cincinnati-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Cincinnati Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -49,21 +67,10 @@
         cacontology-legal-outcomes:SentencingHearing ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 42 .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2016-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2016_003/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

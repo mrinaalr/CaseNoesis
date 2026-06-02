@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -14,38 +13,33 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:49.100654" ;
+    dcterms:created "2026-06-03T16:45:45.665170" ;
     dcterms:identifier "usss_2017_002" ;
-    dcterms:modified "2026-05-30T20:39:49.100654" ;
+    dcterms:modified "2026-06-03T16:45:45.665170" ;
     dcterms:source <https://www.secretservice.gov/press/releases/2017/07/jonesboro-man-sentenced-more-21-years-multiple-child-pornography-charges>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2017_002/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2017_002/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession>,
         <https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/usss_2017_002/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/jonesboro-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/police-department>,
-        <https://caselinker.up.railway.app/resource/agency/secret-service>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-secret-service> .
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2017_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/jonesboro-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Jonesboro Police Department" .
+<https://caselinker.up.railway.app/resource/agency/jonesboro-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/secret-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/united-states-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -72,23 +66,29 @@
         cacontology-legal-outcomes:SentencingHearing ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 18 .
+
+<https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/2> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 44 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2017_002/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
+<https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/2> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2017_002/person/victim/1> .
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2017_002/person/offender/2> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
@@ -109,6 +109,15 @@
         cacontology-platforms:FileHostingService ;
     rdfs:label "Gigatribe" ;
     cacontology-platforms:platformType "p2p" .
+
+<https://caselinker.up.railway.app/resource/case/usss_2017_002/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
+        cac-core:Event ;
+    cacontology:conspiracyMemberCount 2 ;
+    cacontology:participatesInConspiracy <https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/usss_2017_002/role/offender/2> ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat>,
+        <https://caselinker.up.railway.app/resource/platform/gigatribe> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2017_002/event/hands-on> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;

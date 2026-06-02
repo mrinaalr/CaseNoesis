@@ -444,20 +444,42 @@ def _title_from_url(url: str) -> str:
     return stem.replace("-", " ").replace("_", " ").strip().title() or "Press release"
 
 
+def _extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
+    """
+    Best-effort text from a native PDF. pdfplumber first; PyMuPDF when pdfplumber
+    sees zero pages (common on older justice.gov archive press-release PDFs).
+    """
+    import io
+
+    pages: list[str] = []
+    if pdfplumber:
+        try:
+            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+                pages = [p.extract_text() or "" for p in pdf.pages]
+        except Exception:
+            pages = []
+    body = "\n\n".join(p.strip() for p in pages if p.strip())
+    if len(body) >= MIN_BODY_CHARS:
+        return body.strip()
+    try:
+        import fitz  # PyMuPDF
+
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        alt = "\n\n".join(page.get_text().strip() for page in doc if page.get_text().strip())
+        if len(alt) >= MIN_BODY_CHARS:
+            return alt.strip()
+    except Exception:
+        pass
+    return body.strip()
+
+
 def extract_from_native_pdf(pdf_bytes: bytes, url: str) -> tuple[str, str, str, date | None] | None:
     """Downloaded city PDF → title, byline, body, publication date."""
     if not pdfplumber:
         print("    [skip] pdfplumber not installed", file=sys.stderr)
         return None
-    import io
 
-    try:
-        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-            pages = [p.extract_text() or "" for p in pdf.pages]
-    except Exception as e:
-        print(f"    [pdf extract error] {e}", file=sys.stderr)
-        return None
-    body = "\n\n".join(p.strip() for p in pages if p.strip())
+    body = _extract_text_from_pdf_bytes(pdf_bytes)
     if len(body) < MIN_BODY_CHARS:
         return None
     title = _title_from_url(url)
@@ -1402,6 +1424,76 @@ def format_display_byline(pub_date: date | None, soup: BeautifulSoup | None) -> 
     return ""
 
 
+def _trim_ncsbi_news_body(raw: str) -> str:
+    """
+    ncsbi.gov press releases live in ``.NewsBody`` (div/font, rarely ``<p>``).
+    Drop contact/masthead lines before the dateline lede.
+    """
+    text = re.sub(r"\r\n?", "\n", (raw or "").strip())
+    if not text:
+        return ""
+    # Dateline may split across lines: "Raleigh, NC\\n– On Thursday..."
+    text = re.sub(
+        r"(?m)^([A-Za-z .'-]+,\s*NC)\s*\n\s*([\u2013\u2014\-]\s+)",
+        r"\1 \2",
+        text,
+    )
+    start = None
+    for pat in (
+        r"(?m)^\([A-Z][^\n]{3,120}\)\s*--\s+\S",
+        r"(?m)^Raleigh,\s*NC\s*[\u2013\u2014\-]\s+\S",
+        r"(?m)^[A-Z][A-Za-z .'-]+,\s*NC\s*[\u2013\u2014\-]\s+\S",
+        r"(?m)^MEDIA ADVISORY\b",
+        r"(?m)^FOR IMMEDIATE RELEASE\b",
+    ):
+        m = re.search(pat, text)
+        if m and (start is None or m.start() < start):
+            start = m.start()
+    if start is not None:
+        text = text[start:].strip()
+    for marker in (
+        "\nInvestigations\n",
+        "\n© North Carolina",
+        "\nDirector R.E.",
+        "\nCrime Statistics",
+    ):
+        j = text.find(marker)
+        if j > 120:
+            text = text[:j].strip()
+            break
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+def _extract_ncsbi_gov(soup: BeautifulSoup, url: str) -> tuple[str, str, str, date | None] | None:
+    """North Carolina SBI news releases (``.NewsBody`` / ``.newsItemDetail``)."""
+    title = ""
+    if soup.title:
+        raw = soup.title.get_text(strip=True)
+        if raw.lower().startswith("ncsbi - "):
+            title = raw[8:].strip()
+        elif " - " in raw:
+            title = raw.split(" - ", 1)[-1].strip()
+        else:
+            title = raw
+    og = _meta_content(soup, prop="og:title") or _meta_content(soup, name="twitter:title")
+    if og and len(og.strip()) >= 8:
+        title = og.strip()
+
+    node = soup.select_one(".NewsBody") or soup.select_one(".newsItemDetail")
+    if not node:
+        return None
+    body = _trim_ncsbi_news_body(node.get_text("\n", strip=True))
+    if len(body) < MIN_BODY_CHARS:
+        return None
+    pub_date = _first_dateline_date_in_text(body) or _first_dateline_date_in_text(
+        node.get_text(" ", strip=True)
+    )
+    byline = format_display_byline(pub_date, soup)
+    if not title:
+        title = _title_from_url(url)
+    return title.strip(), byline.strip(), body.strip(), pub_date
+
+
 def _html_headline_title(soup: BeautifulSoup) -> str:
     """
     Prefer social meta (og/twitter): many WordPress/Avada pages repeat the site name in the
@@ -1439,6 +1531,14 @@ def _html_headline_title(soup: BeautifulSoup) -> str:
 
 
 def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
+    netloc = urlparse(url).netloc.lower()
+
+    # ncsbi.gov puts release text inside a <form>; extract before form decompose below.
+    if netloc in ("www.ncsbi.gov", "ncsbi.gov"):
+        ncsbi = _extract_ncsbi_gov(BeautifulSoup(html, "html.parser"), url)
+        if ncsbi:
+            return ncsbi
+
     soup = BeautifulSoup(html, "html.parser")
 
     for tag in soup(

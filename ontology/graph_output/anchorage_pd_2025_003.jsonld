@@ -2,6 +2,23 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#MessagingService"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Snapchat"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -20,36 +37,20 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/role/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/person/offender/1"
           }
         ]
       },
@@ -71,14 +72,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Snapchat"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -89,7 +85,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:33:52.558246"
+            "@value": "2026-06-03T16:44:38.519564"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -99,7 +95,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:33:52.558246"
+            "@value": "2026-06-03T16:44:38.519564"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -118,24 +114,6 @@
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_003/person/offender/1"
           }
         ]
       }

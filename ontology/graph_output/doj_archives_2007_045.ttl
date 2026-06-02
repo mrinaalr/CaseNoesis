@@ -15,44 +15,54 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:55.074117" ;
+    dcterms:created "2026-06-03T16:44:48.323680" ;
     dcterms:identifier "doj_archives_2007_045" ;
-    dcterms:modified "2026-05-30T20:34:55.074117" ;
-    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/WDAR_BERGTHOLD-SENTENCED_08-21-08.pdf>,
+    dcterms:modified "2026-06-03T16:44:48.323680" ;
+    dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/SDWV%20Hicks%20PR_012407.pdf>,
         "DOJ ARCHIVES" ;
-    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/sentenced> ;
-    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/csam>,
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/convicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/convicted> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/possession>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/production>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/legal-proceeding>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/legal-step/sentenced>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/arkansas-department-of-human-services> .
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/legal-step/convicted>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/fbi> .
 
-<https://caselinker.up.railway.app/resource/agency/arkansas-department-of-human-services> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Arkansas Department of Human Services" .
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child pornography" .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/2> a cacontology-legal-outcomes:CriminalCharge ;
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/2> a cacontology-legal-outcomes:CSAM_Production,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "production of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/3> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child exploitation" ;
-    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> ;
     ns1:chargeCluster "child_exploitation" ;
-    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> .
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
-    cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/relationship/parent> .
+    cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/relationship/father> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -60,13 +70,15 @@
         cac-core:LegalEvent,
         cacontology-legal-outcomes:LegalProceeding ;
     cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/1>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/2> ;
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/charge/3> ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/1>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/2>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/3> .
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/3>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/4> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/legal-step/sentenced> a cac-core:Event,
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/legal-step/convicted> a cac-core:Event,
         cac-core:LegalEvent,
         cacontology-legal-outcomes:LegalProceeding,
         cacontology-legal-outcomes:SentencingHearing ;
@@ -76,53 +88,57 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/relationship/parent> a cacontology-custodial:CaregiverRelationship,
-        cacontology-custodial:CustodialRelationship ;
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/relationship/father> a cacontology-custodial:CustodialRelationship,
+        cacontology-custodial:FamilialRelationship ;
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/role/victim/1> ;
     cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/role/offender/1> ;
-    cacontology-custodial:relationshipType "parent" .
+    cacontology-custodial:relationshipType "father" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/csam>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/possession>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/production>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> ;
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/csam>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/possession>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/production>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> ;
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
-    rdfs:label "70 years" .
+    rdfs:label "15 years" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:MonetaryPenalty ;
-    rdfs:label "$75,000" .
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "30 years" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/3> a cacontology-legal-outcomes:CriminalSentence,
-        cacontology-legal-outcomes:SupervisedRelease ;
-    rdfs:label "supervised release" .
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "5 years" .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/sentenced> a cac-core:Phase,
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/sentence/4> a cacontology-legal-outcomes:CriminalSentence,
+        cacontology-legal-outcomes:PrisonSentence ;
+    rdfs:label "10 years" .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/phase/convicted> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2007-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/csam> a cacontology:CSAMIncident,
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/csam> .
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/event/production> a cac-core:Event,
         cacontology-production:ProductionOffense ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/facet/production> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-2> a cacontology:ChildSexualAbuseEvent,
+<https://caselinker.up.railway.app/resource/case/doj_archives_2007_045/offense-event/charge-3> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,
         uco-action:Crime ;
     rdfs:label "Inferred offense from charge: child exploitation" .

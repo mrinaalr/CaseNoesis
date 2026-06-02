@@ -50,9 +50,11 @@ def clean_artifacts_from_text(text: str, remove_urls: bool = True) -> str:
     # Only remove URLs if requested (for NCMEC media cases, we want to keep URLs)
     if remove_urls:
         # Pattern 1: Match full URLs (http:// or https://) - handles URLs split across lines
-        # Matches: "https://www.example.com/path" or "http://example.com"
-        # Also handles URLs that may be broken across lines with newlines
-        pattern1 = r'https?://[^\s\n]+(?:\s*\n\s*[^\s\n]+)*'
+        # Continuation lines must be URL path segments (not prose datelines starting with a capital).
+        pattern1 = (
+            r"https?://[^\s\n]+"
+            r"(?:\s*\n\s*(?![A-Z])[a-zA-Z0-9\-./_%?#&=]+)*"
+        )
         cleaned_text = re.sub(pattern1, '', cleaned_text, flags=re.IGNORECASE)
         
         # Pattern 2: Match www. URLs (without http://)

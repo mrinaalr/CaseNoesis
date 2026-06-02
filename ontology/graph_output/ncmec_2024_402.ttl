@@ -16,14 +16,15 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_402> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:32:21.791175" ;
+    dcterms:created "2026-06-03T16:44:17.935791" ;
     dcterms:identifier "ncmec_2024_402" ;
-    dcterms:modified "2026-05-30T20:32:21.791175" ;
+    dcterms:modified "2026-06-03T16:44:17.935791" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/possession>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/offense-event/charge-4> ;
@@ -56,6 +57,9 @@
     rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/offense-event/charge-4> ;
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/offense-event/charge-4> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_402/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;

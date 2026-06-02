@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:40.423248" ;
+    dcterms:created "2026-06-03T16:45:43.993856" ;
     dcterms:identifier "us_marshals_2022_009" ;
-    dcterms:modified "2026-05-30T20:39:40.423248" ;
+    dcterms:modified "2026-06-03T16:45:43.993856" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-fugitive-task-force-arrest-man-wanted-rape-of-two-children>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/phase/arrested> ;
@@ -22,24 +20,24 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/d-area-regional-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/fugitive-task-force>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fugitive-task-force>,
         <https://caselinker.up.railway.app/resource/agency/pennsylvania-department-of-corrections>,
         <https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/scranton-police-department>,
         <https://caselinker.up.railway.app/resource/agency/stroud-area-regional-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-fugitive-task-force> .
+        <https://caselinker.up.railway.app/resource/agency/usms> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/d-area-regional-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "d Area Regional Police Department" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/fugitive-task-force> a cacontology-multi:LocalAgency .
 
@@ -55,9 +53,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Stroud Area Regional Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-fugitive-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -67,18 +63,6 @@
     cacontology-detection:ageEstimate 22 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2022_009/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

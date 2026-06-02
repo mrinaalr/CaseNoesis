@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -13,9 +11,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:30.922227" ;
+    dcterms:created "2026-06-03T16:45:42.157460" ;
     dcterms:identifier "us_marshals_2023_001" ;
-    dcterms:modified "2026-05-30T20:39:30.922227" ;
+    dcterms:modified "2026-06-03T16:45:42.157460" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/alleged-pa-child-rapist-arrested-us-marshals-manchester>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/phase/charged> ;
@@ -23,31 +21,35 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/legal-proceeding> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hillsborough-county-department>,
-        <https://caselinker.up.railway.app/resource/agency/ive-task-force>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hillsborough-county-department-of-corrections>,
         <https://caselinker.up.railway.app/resource/agency/marshals-service>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-middle-district> .
+        <https://caselinker.up.railway.app/resource/agency/nh-joint-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/hands-on> ;
+    cacontology:perpetratorRegisteredSexOffender true ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/hillsborough-county-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/hillsborough-county-department-of-corrections> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Hillsborough County Department" .
-
-<https://caselinker.up.railway.app/resource/agency/ive-task-force> a cacontology-multi:LocalAgency .
+    rdfs:label "Hillsborough County Department of Corrections" .
 
 <https://caselinker.up.railway.app/resource/agency/marshals-service> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-middle-district> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/nh-joint-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "U. S. Marshals Service Middle District" .
+    rdfs:label "NH Joint Fugitive Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -63,19 +65,6 @@
     cacontology-detection:ageEstimate 37 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/hands-on> ;
-    cacontology:perpetratorRegisteredSexOffender true ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_001/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;

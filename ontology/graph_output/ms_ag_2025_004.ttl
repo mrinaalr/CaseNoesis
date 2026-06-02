@@ -15,15 +15,16 @@
 
 <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:13.866190" ;
+    dcterms:created "2026-06-03T16:45:15.316398" ;
     dcterms:identifier "ms_ag_2025_004" ;
-    dcterms:modified "2026-05-30T20:37:13.866190" ;
+    dcterms:modified "2026-06-03T16:45:15.316398" ;
     dcterms:source <https://attorneygenerallynnfitch.com/2025/11/03/ag-fitch-announces-sentencing-in-child-exploitation-case-november-3-2025/>,
         "MS AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/phase/sentenced> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/csam>,
         <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/production>,
+        <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/legal-step/sentenced>,
@@ -52,6 +53,10 @@
     rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/offense-event/charge-3> ;
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/offense-event/charge-3> .
+
+<https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ms_ag_2025_004/event/trust-violation> a cacontology-custodial:AuthorityAbuse,
         cacontology-custodial:TrustViolation ;

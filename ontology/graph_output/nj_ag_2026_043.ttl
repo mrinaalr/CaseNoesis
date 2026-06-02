@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,37 +15,52 @@
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:25.213913" ;
+    dcterms:created "2026-06-03T16:45:18.152396" ;
     dcterms:identifier "nj_ag_2026_043" ;
-    dcterms:modified "2026-05-30T20:37:25.213913" ;
+    dcterms:modified "2026-06-03T16:45:18.152396" ;
     dcterms:source <https://www.njoag.gov/two-men-who-were-arrested-in-operation-safety-net-plead-guilty-to-distributing-child-pornography-on-the-internet/>,
         "NJ AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/possession>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/lincoln-park-police-department> .
+        <https://caselinker.up.railway.app/resource/agency/lincoln-park-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/lincoln-park-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -55,6 +69,10 @@
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/charge/2> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "sexual exploitation" ;
     ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -79,23 +97,10 @@
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/operation> a cac-core:Event,
         cacontology-taskforce:ProactiveOperation .
 
-<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 36 .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_043/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MandatoryMinimumSentencing ;

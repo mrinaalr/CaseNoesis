@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -13,9 +11,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_024> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:59.729009" ;
+    dcterms:created "2026-06-03T16:44:39.893635" ;
     dcterms:identifier "cbp_2026_024" ;
-    dcterms:modified "2026-05-30T20:33:59.729009" ;
+    dcterms:modified "2026-06-03T16:44:39.893635" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/border-patrol-agents-arrest-two-child-predators-rio-grande-valley>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_024/phase/sentenced> ;
@@ -25,11 +23,15 @@
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cameron-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/denton-county-sheriffs-office> .
 
-<https://caselinker.up.railway.app/resource/case/cbp_2026_024/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Twitter / X" .
@@ -57,16 +59,6 @@
 <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_024/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_024/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_024/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

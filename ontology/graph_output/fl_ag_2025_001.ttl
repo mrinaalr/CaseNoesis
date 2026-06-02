@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -16,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:12.625015" ;
+    dcterms:created "2026-06-03T16:44:51.745458" ;
     dcterms:identifier "fl_ag_2025_001" ;
-    dcterms:modified "2026-05-30T20:35:12.625015" ;
+    dcterms:modified "2026-06-03T16:44:51.745458" ;
     dcterms:source <https://www.myfloridalegal.com/newsrelease/attorney-general-james-uthmeier-announces-six-arrests-operation-summer-hurricane>,
         "FL AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/phase/arrested> ;
@@ -28,29 +26,61 @@
         <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/offense-event/charge-1>,
         <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office-of-statewide-prosecution>,
+        <https://caselinker.up.railway.app/resource/agency/bay-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement-tallahassee-regional-operations-center-violent-crime-2-squad>,
+        <https://caselinker.up.railway.app/resource/agency/franklin-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/investigation>,
-        <https://caselinker.up.railway.app/resource/agency/police-department> .
+        <https://caselinker.up.railway.app/resource/agency/leon-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/liberty-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/tallahassee-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office-of-statewide-prosecution> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Attorney General's Office of Statewide Prosecution" .
+
+<https://caselinker.up.railway.app/resource/agency/bay-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Florida Department of Law Enforcement" .
+    rdfs:label "Bay County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement-tallahassee-regional-operations-center-violent-crime-2-squad> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Florida Department of Law Enforcement Tallahassee Regional Operations Center Violent Crime 2 Squad" .
+
+<https://caselinker.up.railway.app/resource/agency/franklin-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Franklin County Sheriff's Office" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/investigation> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/leon-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Leon County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/liberty-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Liberty County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/tallahassee-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Tallahassee Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child exploitation" ;
@@ -70,20 +100,6 @@
 <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/fl_ag_2025_001/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .

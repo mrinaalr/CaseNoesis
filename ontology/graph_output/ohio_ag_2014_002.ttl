@@ -11,9 +11,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:53.637303" ;
+    dcterms:created "2026-06-03T16:45:24.549112" ;
     dcterms:identifier "ohio_ag_2014_002" ;
-    dcterms:modified "2026-05-30T20:37:53.637303" ;
+    dcterms:modified "2026-06-03T16:45:24.549112" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/October-2014/Ohio-Parents-to-Serve-Prison-Time-for-Assault-of-I>,
         "OHIO AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_002/phase/sentenced> ;

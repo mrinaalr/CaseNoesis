@@ -14,20 +14,23 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_202> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:30:40.308490" ;
+    dcterms:created "2026-06-03T16:43:58.054082" ;
     dcterms:identifier "ncmec_2023_202" ;
-    dcterms:modified "2026-05-30T20:30:40.308490" ;
+    dcterms:modified "2026-06-03T16:43:58.054082" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/phase/convicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/phase/convicted> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/possession>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/legal-step/convicted> ;
     cacontology:investigationStatus "unknown" ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/palm-beach-county-sheriffs-office> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/palm-beach-county-sheriffs-office> .
 
 <https://caselinker.up.railway.app/resource/agency/palm-beach-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -37,6 +40,13 @@
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "possession of" ;
     cacontology-legal-outcomes:indictmentCounts 30 .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2023_202/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -92,6 +102,8 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_202/phase/convicted> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

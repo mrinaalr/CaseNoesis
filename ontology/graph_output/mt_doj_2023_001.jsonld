@@ -2,15 +2,22 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/rosebud-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@value": "Rosebud County Sheriff's Office"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -21,7 +28,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:14.800438"
+            "@value": "2026-06-03T16:45:15.591677"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -31,7 +38,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:14.800438"
+            "@value": "2026-06-03T16:45:15.591677"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -76,78 +83,8 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/3",
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "40 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "20 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/legal-step/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
           "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
           "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
@@ -157,35 +94,16 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2023-01-01T00:00:00Z"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/department-of",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
           {
-            "@value": "Department of"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/1"
+          },
           {
-            "@value": "60 years"
+            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/2"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/3"
           }
         ]
       },
@@ -213,9 +131,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/rosebud-county-sheriffs-office",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Rosebud County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/department-of",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Department of"
+          }
         ]
       },
       {
@@ -232,21 +168,56 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/phase/sentenced",
+        "@id": "https://caselinker.up.railway.app/resource/agency/department-of-health-and-human-services",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
+            "@value": "Department of Health and Human Services"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/legal-proceeding",
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/offender/1",
         "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 44
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
           "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
           "https://cacontology.projectvic.org/core#LegalEvent",
           "https://cacontology.projectvic.org/core#Event"
@@ -256,28 +227,41 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2023-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/3"
+            "@value": "40 years"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/department-of-health-and-human-services",
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Department of Health and Human Services"
+            "@value": "20 years"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/mt_doj_2023_001/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "60 years"
           }
         ]
       }

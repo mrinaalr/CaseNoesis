@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -14,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:38:34.109287" ;
+    dcterms:created "2026-06-03T16:45:32.324439" ;
     dcterms:identifier "sd_ag_2025_003" ;
-    dcterms:modified "2026-05-30T20:38:34.109287" ;
+    dcterms:modified "2026-06-03T16:45:32.324439" ;
     dcterms:source <https://atg.sd.gov/OurOffice/Media/pressreleasesdetail.aspx?id=2866>,
         "SD AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/phase/sentenced> ;
@@ -26,37 +25,9 @@
         <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/brookings-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
-        <https://caselinker.up.railway.app/resource/agency/icac> .
-
-<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/brookings-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Brookings Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
-
-<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
-
-<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/legal-step/sentenced> a cac-core:Event,
-        cac-core:LegalEvent,
-        cacontology-legal-outcomes:LegalProceeding,
-        cacontology-legal-outcomes:SentencingHearing ;
-    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
-
-<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/person/offender/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/person/victim/1> a uco-identity:Person .
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/south-dakotas-division-of-criminal-investigation> .
 
 <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -71,6 +42,29 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/brookings-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Brookings Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/south-dakotas-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/legal-step/sentenced> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 24 .
+
+<https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/sd_ag_2025_003/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

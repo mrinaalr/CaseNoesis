@@ -9,19 +9,19 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:53.909369" ;
+    dcterms:created "2026-06-03T16:45:24.619017" ;
     dcterms:identifier "ohio_ag_2014_004" ;
-    dcterms:modified "2026-05-30T20:37:53.909369" ;
+    dcterms:modified "2026-06-03T16:45:24.619017" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/July-2014/Attorney-General-DeWine-Announces-Indictment-of-Fa>,
         "OHIO AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/phase/indicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ohio_ag_2014_004/event/trust-violation> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-lexington-police-department> a cacontology-multi:LocalAgency .
 

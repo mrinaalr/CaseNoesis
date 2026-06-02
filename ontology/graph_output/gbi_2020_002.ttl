@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -18,39 +17,86 @@
 
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:23.151914" ;
+    dcterms:created "2026-06-03T16:44:53.826870" ;
     dcterms:identifier "gbi_2020_002" ;
-    dcterms:modified "2026-05-30T20:35:23.151914" ;
+    dcterms:modified "2026-06-03T16:44:53.826870" ;
     dcterms:source <https://gbi.georgia.gov/search/results?query=CEACC>,
         "GBI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/gbi_2020_002/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/gbi_2020_002/phase/charged> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/gbi_2020_002/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-5>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-6>,
         <https://caselinker.up.railway.app/resource/case/gbi_2020_002/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/gbi_2020_002/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/clayton-county-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/clayton-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/forest-park-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/ncmec> .
+        <https://caselinker.up.railway.app/resource/agency/jonesboro-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/lake-city-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/lovejoy-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/morrow-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/riverdale-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2020_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2020-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-5>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/clayton-county-police-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2020-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-5>,
+        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/clayton-county-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/clayton-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Clayton County Police Department" .
+    rdfs:label "Clayton County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/forest-park-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Forest Park Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Georgia Bureau of Investigation's Child Exploitation and Computer Crimes" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/jonesboro-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Jonesboro Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/lake-city-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/lovejoy-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Lovejoy Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/morrow-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Morrow Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/riverdale-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Riverdale Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -83,6 +129,14 @@
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
+<https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/legal-proceeding> a cac-core:Event,
@@ -99,27 +153,10 @@
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/operation> a cac-core:Event,
         cacontology-taskforce:TaskForceOperation .
 
-<https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 19 .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2020-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-5>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/gbi_2020_002/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2020-08-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-5>,
-        <https://caselinker.up.railway.app/resource/case/gbi_2020_002/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2020_002/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/gbi_2020_002/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .

@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -11,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:39.590779" ;
+    dcterms:created "2026-06-03T16:45:43.843108" ;
     dcterms:identifier "us_marshals_2026_016" ;
-    dcterms:modified "2026-05-30T20:39:39.590779" ;
+    dcterms:modified "2026-06-03T16:45:43.843108" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/michigan-sex-offender-arrested-january-george-washington-national-forest>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/sentenced> ;
@@ -21,19 +20,20 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/usms>,
         <https://caselinker.up.railway.app/resource/agency/virginia-state-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/virginia-state-police-department> a cacontology-multi:StateAgency .
 
@@ -46,19 +46,10 @@
         cacontology-legal-outcomes:SentencingHearing ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 38 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2026_016/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

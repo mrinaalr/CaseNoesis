@@ -112,6 +112,25 @@ def _slug(text: str) -> str:
     return text or "unknown"
 
 
+def _case_bool_flag(case: Dict[str, Any], key: str) -> bool:
+    """Read a boolean feature from a hoisted case dict (or extracted_features fallback)."""
+    val = case.get(key)
+    if val is None:
+        ef = case.get("extracted_features")
+        if isinstance(ef, str):
+            try:
+                ef = json.loads(ef)
+            except (json.JSONDecodeError, TypeError):
+                ef = None
+        if isinstance(ef, dict):
+            val = ef.get(key)
+    if val is True or val == 1:
+        return True
+    if isinstance(val, str) and val.strip().lower() in ("true", "1", "yes"):
+        return True
+    return False
+
+
 def _to_xsd_datetime_stamp(value: Any) -> Optional[str]:
     """
     Normalize a CaseLinker date/year string into an ``xsd:dateTimeStamp``
@@ -380,6 +399,47 @@ PROSECUTION_STEP_MAP: Dict[str, URIRef] = {
 # Charge patterns → (CAC charge class, optional cluster tag for generic CriminalCharge).
 # First substring match wins — specific before generic.
 CHARGE_MATCH_RULES: List[Tuple[str, URIRef, Optional[str]]] = [
+    # --- Distribution/production-specific before broad matter-portraying / pornography ---
+    ("distributing matter portraying a minor under the age of 12",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing matter portraying a minor over the age of 12",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing matter portraying a minor over 12 but under 18",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing matter portraying a minor over the",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing matter portraying a minor",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing pornography involving minors",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distribution of matter portraying a minor under the age of 12",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distribution of a matter portraying a minor",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distribution of matter portraying",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("dissemination of child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("distributing child porn",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("transmitting child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("with intent to distribute child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("intent to disseminate child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("possession with the intent to disseminate child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("possession with intent to disseminate child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("reproducing or distributing child pornography",
+     CAC_LEGAL.CSAM_Distribution, None),
+    ("manufacturing child pornography",
+     CAC_LEGAL.CSAM_Production, None),
+    ("production of child porn",
+     CAC_LEGAL.CSAM_Production, None),
     # --- CSAM (matter portraying / performance-as-material) before bare possession ---
     ("matter portraying a minor under the age of 12 in a sexual performance",
      CAC_LEGAL.CSAM_Possession, None),
@@ -1233,6 +1293,8 @@ class CaseToCAC:
                 case_demo = json.loads(case_demo)
             except (json.JSONDecodeError, TypeError):
                 case_demo = {}
+        # victim_gender / perpetrator_gender: no CAC Person gender property in TTL yet
+        # (MAPPING_PLAN Q7.5d). Omit RDF triples until Cory adds VictimGender / OffenderGender.
 
         age_range = None
         if isinstance(case_demo, dict):
@@ -1279,7 +1341,17 @@ class CaseToCAC:
                 f"like an upstream extraction error. Clamping to len(ages) or 1."
             )
             perp_count_raw = 0
-        perp_count = max(1, perp_count_raw or len(perp_ages) or 1)
+        press_digest = _case_bool_flag(case, "press_digest_pollution")
+        if press_digest:
+            if len(perp_ages) > 1:
+                warnings.append(
+                    f"press_digest_pollution: suppressed fan-out of {len(perp_ages)} "
+                    f"perpetrator ages to a single OffenderRole (press digest, not one "
+                    f"coordinated matter)."
+                )
+            perp_count = 1
+        else:
+            perp_count = max(1, perp_count_raw or len(perp_ages) or 1)
         is_rso = bool(case.get("perpetrator_registered_sex_offender", False))
 
         for n in range(1, perp_count + 1):
@@ -1291,8 +1363,8 @@ class CaseToCAC:
             g.add((role_uri, RDF.type, UCO_ROLE.OffenderRole))
             g.add((role_uri, CAC_CORE.hasRole, person_uri))
 
-            # Age (only if we have it for this index)
-            if n - 1 < len(perp_ages):
+            # Age (only if we have it for this index; omit on press digests)
+            if not press_digest and n - 1 < len(perp_ages):
                 g.add((person_uri, CAC_DETECTION.ageEstimate,
                        Literal(perp_ages[n - 1], datatype=XSD.integer)))
 
@@ -1384,8 +1456,12 @@ class CaseToCAC:
                     g.add((evt_uri, CAC.severityLevel,
                            Literal(max_level, datatype=XSD.integer)))
 
-        # Conspiracy node for multiple perpetrators
-        if create_conspiracy and len(offender_uris) > 1:
+        # Conspiracy node for multiple perpetrators (not press-digest roundups)
+        if (
+            create_conspiracy
+            and len(offender_uris) > 1
+            and not _case_bool_flag(case, "press_digest_pollution")
+        ):
             conspiracy_uri = BASE[f"case/{case_id}/event/conspiracy"]
             g.add((conspiracy_uri, RDF.type, CAC.ConspiracyToCommitCSA))
             g.add((conspiracy_uri, RDF.type, CAC_CORE.Event))
@@ -1680,7 +1756,15 @@ class CaseToCAC:
                 continue
             seen.add(agency_name)
 
-            slug, class_uri = self._classify_agency(agency_name)
+            case_text = ""
+            raw = case.get("raw_data")
+            if isinstance(raw, dict):
+                case_text = str(raw.get("case_text") or "")
+            if not case_text:
+                case_text = str(case.get("case_text") or "")
+            slug, class_uri = self._classify_agency(
+                agency_name, case.get("source"), case_text
+            )
             ag_uri = self._get_or_create_agency(g, slug, agency_name, class_uri)
 
             # NCMEC also triggers a CyberTipline node
@@ -1696,12 +1780,36 @@ class CaseToCAC:
         return uris
 
     def _classify_agency(
-        self, name: str
+        self, name: str, source: Optional[str] = None, case_text: str = ""
     ) -> Tuple[str, URIRef]:
         """Return (slug, CAC agency class URI) for an agency name string."""
-        for pattern, fixed_slug in _FEDERAL_PATTERNS:
-            if pattern.search(name):
-                return fixed_slug, CAC_MULTI.FederalAgency
+        import importlib.util
+        from pathlib import Path
+
+        gate_path = (
+            Path(__file__).resolve().parents[1]
+            / "src"
+            / "Processing Layer"
+            / "agency_context_gate.py"
+        )
+        spec = importlib.util.spec_from_file_location("agency_context_gate", gate_path)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader
+        spec.loader.exec_module(mod)
+        is_state_doj_label = mod.is_state_doj_label
+        pathway_bucket_for_label = mod.pathway_bucket_for_label
+
+        if is_state_doj_label(name):
+            return _slug(name), CAC_MULTI.StateAgency
+
+        bucket, _ = pathway_bucket_for_label(
+            name, source, case_text, gate_decision="keep"
+        )
+        if bucket == "federal":
+            for pattern, fixed_slug in _FEDERAL_PATTERNS:
+                if pattern.search(name):
+                    return fixed_slug, CAC_MULTI.FederalAgency
+            return _slug(name), CAC_MULTI.FederalAgency
 
         if _ICAC_PATTERN.search(name):
             return _slug(name), CAC_TASKFORCE.StateICACtaskForce
@@ -2126,8 +2234,9 @@ AZICAC_2011_006_FIXTURE: Dict[str, Any] = {
     "case_demographics": {
         "ages": [8],
         "age_range": {"min": 8, "max": 8},
-        "gender": "unknown",
+        "victim_gender": "female",
     },
+    "perpetrator_gender": "male",
     "perpetrator_age": [32, 41],
     "perpetrator_registered_sex_offender": False,
     "relationship_to_victim": "family",

@@ -2,6 +2,61 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/holmes-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "life in prison"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 44
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/role/offender/1",
         "@type": [
           "https://cacontology.projectvic.org#OffenderRole",
@@ -32,7 +87,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:42.467552"
+            "@value": "2026-06-03T16:45:22.217487"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -42,7 +97,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:42.467552"
+            "@value": "2026-06-03T16:45:22.217487"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -79,32 +134,11 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/holmes-county-sheriffs-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-general-s-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/police-department"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/wooster-police-department"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/holmes-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -127,30 +161,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-attorney-general-s-office",
+        "@id": "https://caselinker.up.railway.app/resource/agency/wooster-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@value": "Wooster Police Department"
           }
         ]
       },
@@ -178,12 +196,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/event/hands-on",
         "@type": [
           "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
@@ -208,43 +220,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/wooster-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Wooster Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2025_006/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "life in prison"
           }
         ]
       }

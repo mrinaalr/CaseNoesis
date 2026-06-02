@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -12,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:38:36.896984" ;
+    dcterms:created "2026-06-03T16:45:32.794359" ;
     dcterms:identifier "sedgwick_so_2026_001" ;
-    dcterms:modified "2026-05-30T20:38:36.896984" ;
+    dcterms:modified "2026-06-03T16:45:32.794359" ;
     dcterms:source <https://www.sedgwickcounty.org/district-attorney/criminal-division/criminal-division-media-releases/sedgwick-county-man-sentenced-for-rape-of-child-in-haysville/>,
         "SEDGWICK SO" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/phase/sentenced> ;
@@ -22,16 +20,22 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/legal-step/sentenced> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/district-attorney-s-office>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
         <https://caselinker.up.railway.app/resource/agency/haysville-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/district-attorney-s-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/haysville-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -52,18 +56,6 @@
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/event/hands-on> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/sedgwick_so_2026_001/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

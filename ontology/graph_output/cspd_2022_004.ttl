@@ -12,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cspd_2022_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:07.730113" ;
+    dcterms:created "2026-06-03T16:44:41.309700" ;
     dcterms:identifier "cspd_2022_004" ;
-    dcterms:modified "2026-05-30T20:34:07.730113" ;
+    dcterms:modified "2026-06-03T16:44:41.309700" ;
     dcterms:source <https://coloradosprings.gov/police-department/article/news/sexual-assault-child-arrest-1>,
         "CSPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cspd_2022_004/phase/arrested> ;
@@ -23,11 +23,8 @@
         <https://caselinker.up.railway.app/resource/case/cspd_2022_004/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/cspd_2022_004/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado>,
-        <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department>,
         <https://caselinker.up.railway.app/resource/agency/somerset-county-sheriffs-office> .
-
-<https://caselinker.up.railway.app/resource/agency/colorado> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> a cacontology-multi:LocalAgency .
 

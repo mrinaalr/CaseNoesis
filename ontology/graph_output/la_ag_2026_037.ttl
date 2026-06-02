@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -15,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:07.311021" ;
+    dcterms:created "2026-06-03T16:45:13.697900" ;
     dcterms:identifier "la_ag_2026_037" ;
-    dcterms:modified "2026-05-30T20:37:07.311021" ;
+    dcterms:modified "2026-06-03T16:45:13.697900" ;
     dcterms:source <https://www.ag.state.la.us/Article/398>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/phase/convicted> ;
@@ -28,14 +26,28 @@
         <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/legal-step/convicted>,
         <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bossier-marshals-office>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation>,
+        <https://caselinker.up.railway.app/resource/agency/louisiana-department-of-public-safety-corrections>,
+        <https://caselinker.up.railway.app/resource/agency/oak-grove-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ruston-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/west-monroe-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_037/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/possession> ;
+    cacontology:perpetratorRegisteredSexOffender true ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/victim/10> a cacontology:VictimRole,
         uco-role:VictimRole ;
@@ -478,9 +490,27 @@
         <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/victim/9> .
 
+<https://caselinker.up.railway.app/resource/agency/bossier-marshals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Bossier Marshals Office" .
+
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/louisiana-department-of-public-safety-corrections> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Louisiana Department of Public Safety & Corrections" .
+
+<https://caselinker.up.railway.app/resource/agency/oak-grove-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Oak Grove Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/ruston-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Ruston Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/west-monroe-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -632,21 +662,6 @@
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/victim/8> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/victim/9> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/possession> ;
-    cacontology:perpetratorRegisteredSexOffender true ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_037/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_037/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .

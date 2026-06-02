@@ -7,6 +7,7 @@
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -17,29 +18,31 @@
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:40:25.488856" ;
+    dcterms:created "2026-06-03T16:45:52.785192" ;
     dcterms:identifier "wy_dci_2024_002" ;
-    dcterms:modified "2026-05-30T20:40:25.488856" ;
+    dcterms:modified "2026-06-03T16:45:52.785192" ;
     dcterms:source <https://cowboystatedaily.com/2024/03/30/internet-crimes-against-wyoming-children-surge-up-60-so-far-this-year/>,
         "WY DCI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/possession>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/production>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Wyoming Division of Criminal Investigation" .
+<https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -64,6 +67,17 @@
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/6> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "sexual exploitation" ;
     ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -95,7 +109,7 @@
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 10 .
+    cacontology-production:victimAge 12 .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;
@@ -128,6 +142,8 @@
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/sentence/2> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "60 years" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

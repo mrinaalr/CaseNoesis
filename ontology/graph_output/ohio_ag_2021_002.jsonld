@@ -2,120 +2,14 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/agency/seattle-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/2"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general-s-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "sentenced to life"
+            "@value": "Seattle Police Department"
           }
         ]
       },
@@ -126,43 +20,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "life in prison"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -173,7 +33,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:45.787889"
+            "@value": "2026-06-03T16:45:23.070374"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -183,7 +43,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:45.787889"
+            "@value": "2026-06-03T16:45:23.070374"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -222,10 +82,10 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general-s-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/seattle-police-department"
@@ -233,9 +93,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/seattle-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/offender/1"
+          }
         ]
       },
       {
@@ -250,6 +127,113 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2021-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "life in prison"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2021_002/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sentenced to life"
           }
         ]
       }

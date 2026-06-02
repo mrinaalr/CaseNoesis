@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -14,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2021_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:57.514409" ;
+    dcterms:created "2026-06-03T16:44:39.566186" ;
     dcterms:identifier "cbp_2021_002" ;
-    dcterms:modified "2026-05-30T20:33:57.514409" ;
+    dcterms:modified "2026-06-03T16:44:39.566186" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-officers-hidalgo-snatch-fugitive-wanted-child-sexual-assault>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2021_002/phase/charged> ;
@@ -24,14 +22,17 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2021_002/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/cbp_2021_002/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/texas> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-office> .
 
-<https://caselinker.up.railway.app/resource/case/cbp_2021_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2021_002/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2021_002/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Instagram" .
@@ -40,8 +41,6 @@
     rdfs:label "Twitter / X" .
 
 <https://caselinker.up.railway.app/resource/agency/hidalgo-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2021_002/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -58,16 +57,6 @@
     cacontology-detection:ageEstimate 50 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2021_002/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2021_002/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2021_002/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2021_002/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2021_002/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;

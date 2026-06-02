@@ -1,6 +1,7 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -15,9 +16,9 @@
 
 <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:15.190821" ;
+    dcterms:created "2026-06-03T16:45:15.666374" ;
     dcterms:identifier "mt_doj_2025_001" ;
-    dcterms:modified "2026-05-30T20:37:15.190821" ;
+    dcterms:modified "2026-06-03T16:45:15.666374" ;
     dcterms:source <https://dojmt.gov/attorney-generals-office-files-sexual-abuse-of-children-charges-against-carter-county-man/>,
         "MT DOJ" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/phase/charged> ;
@@ -28,13 +29,10 @@
         <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-general-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/carter-county-sheriffs-office>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/carter-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/ncmec> .
-
-<https://caselinker.up.railway.app/resource/agency/attorney-general-s-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/carter-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -60,7 +58,8 @@
     cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/sentence/1>,
         <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/sentence/2> .
 
-<https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 31 .
 
 <https://caselinker.up.railway.app/resource/case/mt_doj_2025_001/person/victim/1> a uco-identity:Person .
 

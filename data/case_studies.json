@@ -556,36 +556,36 @@
     },
 
     {
-      "id": "tbi_icac_2025_014",
+      "id": "anchorage_pd_2022_007",
       "era": "III",
       "status": "published",
-      "linked_case_id": "tbi_icac_2025_014",
-      "title": "When the matchmaking started in the game lobby",
-      "subtitle": "A 2022 Tennessee ICAC case in which a California referral led investigators to a child-enticement and CSAM probe spanning Roblox, Call of Duty, and multiple online platforms.",
+      "linked_case_id": "anchorage_pd_2022_007",
+      "title": "When sextortion scaled into an enterprise",
+      "subtitle": "An October 2022 federal indictment of a 24-year-old Bangladeshi national alleging a Snapchat-driven sextortion and production enterprise spanning hundreds of victims in Alaska and abroad, culminating in his arrest in Kuala Lumpur after coordination between FBI Anchorage and Malaysian authorities.",
       "release_date": "2026-06-01",
       "dimensions": [
         {
           "title": "Platform context",
-          "body": "The platform context here is mainstream gaming, not a dedicated chat app or an obscure illicit forum. Roblox and Call of Duty matter because they are socially dense environments where contact can begin inside ordinary play before moving into private conversation. That makes the case analytically important for Era III: the offender did not need a specialized exploitation platform to initiate contact. He used a familiar game lobby, where the boundary between play and interpersonal access is thin and easy to cross."
+          "body": "The platform named in federal court documents is Snapchat. According to those documents, Amin used the Snapchat application to identify child victims and coerce them into producing images and videos of sexually explicit and sadistic conduct. FBI leadership's public language is slightly broader — the enterprise is described as targeting hundreds of minors through popular social media platforms — but the charging papers anchor the coercion pipeline on Snapchat specifically. That matters for Era III because this portfolio already contains Kik undercover possession work and VR contact; here the contact surface is ephemeral, camera-first social media used not to trade existing files but to manufacture new ones under threat."
         },
         {
           "title": "Perpetrator methodology",
-          "body": "The methodology combines online solicitation with later possession and distribution of CSAM. The initial behavior was to solicit a sexual relationship with a juvenile through gaming environments, which suggests a grooming pattern that begins in a setting children perceive as ordinary and low-risk. As the investigation progressed, agents found that the suspect also possessed and distributed CSAM across several online platforms. That combination makes the case more than a single-platform solicitation story: it is a broader offender profile in which contact, material exchange, and exploitation all appear within the same behavioral arc."
+          "body": "Amin, 24, a Bangladeshi national, is alleged to have run what federal leadership publicly described as one of the most malicious digitally facilitated sextortion and child pornography production schemes the FBI has investigated to date. The public record describes hundreds of minor victims in the District of Alaska and elsewhere in the United States and abroad. SAC Antony Jung's statement adds the operational detail: children were coerced into producing sexually explicit material and then terrorized with threats of exposure if they did not continue. The methodology is therefore production-forward sextortion at scale — not a single-victim threat case and not a passive possession profile."
         },
         {
           "title": "Investigative approach",
-          "body": "The case began with information from the San Bernardino Police Department, showing how a local referral in one state can trigger a task-force investigation in another. Tennessee Bureau of Investigation cybercrime agents then traced the suspect, identified him, and moved to arrest and booking. The public release is notable because it links a gaming-origin contact story to a broader forensic inquiry across multiple platforms, rather than treating the game itself as the sole evidentiary source. It also shows the value of cross-jurisdiction coordination in ICAC work: the initial report came from California, but the enforcement action occurred in Tennessee."
+          "body": "The FBI Anchorage Field Office's Child Exploitation and Human Trafficking Task Force is investigating the case. The public release is as much a victim-identification appeal as an arrest announcement: both the U.S. Attorney of the District of Alaska and the Special Agent in Charge of the FBI’s Anchorage Field Office emphasize law enforcement partners working to identify victims, and the FBI asked anyone with information to call 1-800-CALL-FBI. The operational climax that made the October 6, 2022 announcement possible was international collaboration. After coordination with FBI Anchorage, Royal Malaysia Police Unit D11 arrested Amin in Kuala Lumpur on September 19, 2022; Malaysian prosecutors with the Attorney General's Chambers subsequently charged him on twelve counts related to possession and production of child pornography. The District of Alaska credited Malaysia's Attorney General's Chambers and the Justice Department's Office of International Affairs. Supporting agencies listed in the release span Alaska state and local units, Wyoming ICAC elements, sheriff's offices in Oregon, West Virginia, and Florida, HSI Wenatchee, and numerous FBI field offices — a footprint consistent with a victim-identification and enterprise investigation rather than a single-county warrant execution."
         },
         {
           "title": "Prosecutorial outcome",
-          "body": "At the time of the release, Bonifant had been arrested, booked into the Bedford County Jail, and held on a $100,000 bond. He was charged with two counts of Sexual Exploitation of a Minor, one count of Aggravated Sexual Exploitation of a Minor, one count of Solicitation of a Minor, and two counts of Solicitation of a Minor by Electronic Means. The report is careful to note that these are allegations and that the defendant is presumed innocent. Even at that early stage, the charging stack shows how Tennessee treated the matter as a multi-offense exploitation case rather than a narrow solicitation complaint."
+          "body": "At the October 6, 2022 public snapshot, the U.S. Attorney's Office for the District of Alaska had unsealed a thirteen-count indictment charging Amin for his role in operating a child exploitation enterprise. Malaysian charges on twelve counts were already filed. The release does not report a U.S. trial, plea, or sentence; the appropriate framing is indictment and parallel foreign prosecution, with the presumption of innocence noted as in other studies at this posture. The analytically significant charging fact is the enterprise framing itself — sextortion-driven production alleged at a scale federal leadership placed among the most serious the FBI had seen."
         },
         {
           "title": "Relationship to the broader technological era",
-          "body": "This is one of the cleanest Era III examples of mainstream gaming as a contact surface for child exploitation. The broader era is defined by platform proliferation, and this case shows how the contact problem is no longer confined to closed chat groups or social media alone. Children can be approached inside ordinary games, then moved into private channels and material-based offending across other platforms. That makes the case especially valuable in the portfolio because it captures an everyday entry point that many readers would not immediately associate with ICAC enforcement."
+          "body": "The Clayton County cybertip operation elsewhere in this portfolio shows Era III possession enforcement trying to clear upstream signal at county scale. Vermont shows a single federal possession case disclosing an in-state hands-on offense through metadata. This case marks a third pressure: sextortion used to generate new material across hundreds of victims, with the offender reachable only through international apprehension. Era III's subtitle here is platform proliferation, but the enforcement problem is also coercion volume — minors identified on mainstream apps, production coerced in real time, and compliance maintained through exposure threats. Era IV will add organized network production and synthetic media on top of that baseline. This indictment is a late-Era III signal of how large the sextortion-production combination had already become."
         }
       ],
-      "takeaway": "Mainstream gaming is not just a side channel in Era III. This case shows how an ordinary game lobby can become the first step in a broader solicitation-and-CSAM investigation.",
+      "takeaway": "Sextortion here was not a single exchange that went wrong. The public record describes hundreds of victims, Snapchat as the coercion surface named in court documents, and an arrest in Malaysia before the District of Alaska unsealed a thirteen-count enterprise indictment. The case is useful because it shows Era III enforcement following digital harm wherever attribution leads — including across borders when the enterprise does.",
       "google_form_url": null
     },
 
@@ -691,6 +691,39 @@
       "google_form_url": null
     },
 
+    {
+      "id": "tbi_icac_2025_014",
+      "era": "IV",
+      "status": "published",
+      "linked_case_id": "tbi_icac_2025_014",
+      "title": "When the matchmaking started in the game lobby",
+      "subtitle": "A 2025 Tennessee ICAC case in which a California referral led investigators to a child-enticement and CSAM probe spanning Roblox, Call of Duty, and multiple online platforms.",
+      "release_date": "2026-06-01",
+      "dimensions": [
+        {
+          "title": "Platform context",
+          "body": "The platform context here is mainstream gaming, not a dedicated chat app or an obscure illicit forum. Roblox and Call of Duty matter because they are socially dense environments where contact can begin inside ordinary play before moving into private conversation. That makes the case analytically important: the offender did not need a specialized exploitation platform to initiate contact. He used a familiar game lobby, where the boundary between play and interpersonal access is thin and easy to cross."
+        },
+        {
+          "title": "Perpetrator methodology",
+          "body": "The methodology combines online solicitation with later possession and distribution of CSAM. The initial behavior was to solicit a sexual relationship with a juvenile through gaming environments, which suggests a grooming pattern that begins in a setting children perceive as ordinary and low-risk. As the investigation progressed, agents found that the suspect also possessed and distributed CSAM across several online platforms. That combination makes the case more than a single-platform solicitation story: it is a broader offender profile in which contact, material exchange, and exploitation all appear within the same behavioral arc."
+        },
+        {
+          "title": "Investigative approach",
+          "body": "The case began with information from the San Bernardino Police Department, showing how a local referral in one state can trigger a task-force investigation in another. Tennessee Bureau of Investigation cybercrime agents then traced the suspect, identified him, and moved to arrest and booking. The public release is notable because it links a gaming-origin contact story to a broader forensic inquiry across multiple platforms, rather than treating the game itself as the sole evidentiary source. It also shows the value of cross-jurisdiction coordination in ICAC work: the initial report came from California, but the enforcement action occurred in Tennessee."
+        },
+        {
+          "title": "Prosecutorial outcome",
+          "body": "At the time of the release, Bonifant had been arrested, booked into the Bedford County Jail, and held on a $100,000 bond. He was charged with two counts of Sexual Exploitation of a Minor, one count of Aggravated Sexual Exploitation of a Minor, one count of Solicitation of a Minor, and two counts of Solicitation of a Minor by Electronic Means. The report is careful to note that these are allegations and that the defendant is presumed innocent. Even at that early stage, the charging stack shows how Tennessee treated the matter as a multi-offense exploitation case rather than a narrow solicitation complaint."
+        },
+        {
+          "title": "Relationship to the broader technological era",
+          "body": "This case sits at the seam between Era III platform proliferation and Era IV's organized-network problem class. Roblox and Call of Duty function here as upstream contact surfaces — the same role gaming platforms play in federal network indictments like Greggy's Cult, where game lobbies feed offenders into persistent group infrastructure on Discord. The investigative posture is still single-offender and referral-driven, not enterprise prosecution. But the platform logic is already visible: contact begins where children play, exploitation expands across platforms, and investigation follows the victim's report rather than the offender's activity. Era IV scales that pattern into multi-state networks; this case shows the individual-offender version of the same contact architecture."
+        }
+      ],
+      "takeaway": "Gaming lobbies were contact surfaces before organized Discord networks scaled the pattern. This case shows how a California victim report can launch a Tennessee arrest when the first contact happened inside ordinary play.",
+      "google_form_url": null
+    },
 
     {
       "id": "doj_ceos_2025_007",

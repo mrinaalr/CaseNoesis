@@ -2,72 +2,6 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/role/offender/2"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 29
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/zapata-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Zapata County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Instagram"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -75,7 +9,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:33:59.969854"
+            "@value": "2026-06-03T16:44:39.931322"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -85,7 +19,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:33:59.969854"
+            "@value": "2026-06-03T16:44:39.931322"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -101,6 +35,9 @@
             "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/event/multi-jurisdiction"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/event/distribution"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/event/conspiracy"
           },
           {
@@ -109,10 +46,33 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/zapata-county-sheriffs-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/dallas-county-sheriffs-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ta-county-sheriffs-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/zapata-county-sheriffs-office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Twitter / X"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 29
           }
         ]
       },
@@ -140,14 +100,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ta-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
           {
-            "@value": "ta County Sheriff's Office"
+            "@value": "Pretrial detention facility (not a sentence): Webb County Jail"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
         ]
       },
@@ -171,18 +144,6 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/offender/2",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 59
           }
         ]
       },
@@ -222,6 +183,37 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/dallas-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/person/offender/2",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 59
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/event/multi-jurisdiction",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
@@ -237,6 +229,18 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#boolean",
             "@value": true
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/zapata-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Zapata County Sheriff's Office"
           }
         ]
       },
@@ -264,32 +268,13 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_026/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#comment": [
-          {
-            "@value": "Pretrial detention facility (not a sentence): Webb County Jail"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/twitter-x",
+        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
         "@type": [
           "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Twitter / X"
+            "@value": "Instagram"
           }
         ]
       }

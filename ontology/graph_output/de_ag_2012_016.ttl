@@ -10,19 +10,16 @@
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_016> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:14.707104" ;
+    dcterms:created "2026-06-03T16:44:42.761491" ;
     dcterms:identifier "de_ag_2012_016" ;
-    dcterms:modified "2026-05-30T20:34:14.707104" ;
+    dcterms:modified "2026-06-03T16:44:42.761491" ;
     dcterms:source <https://news.delaware.gov/2012/05/14/biden-announces-arrest-of-teacher-for-child-solicitation-2>,
         "DE AG" ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2012_016/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/de_ag_2012_016/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/tor-task-force> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/tor-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2012_016/event/trust-violation> a cacontology-custodial:AuthorityAbuse,
         cacontology-custodial:TrustViolation ;

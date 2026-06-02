@@ -4,6 +4,7 @@
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -14,43 +15,30 @@
 
 <https://caselinker.up.railway.app/resource/case/af_osi_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:48.154747" ;
+    dcterms:created "2026-06-03T16:44:37.609976" ;
     dcterms:identifier "af_osi_2025_001" ;
-    dcterms:modified "2026-05-30T20:33:48.154747" ;
+    dcterms:modified "2026-06-03T16:44:37.609976" ;
     dcterms:source <https://www.osi.af.mil/News/Article-Display/Article/4421065/afosi-investigation-leads-to-life-sentence-in-child-abuse-case/>,
         "AF OSI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/event/multi-jurisdiction>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/offense-event/charge-2>,
         <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado>,
-        <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/justice-department>,
-        <https://caselinker.up.railway.app/resource/agency/texas>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> .
-
-<https://caselinker.up.railway.app/resource/agency/colorado> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Colorado" .
 
 <https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Colorado Springs Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/justice-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Justice Department" .
-
-<https://caselinker.up.railway.app/resource/agency/texas> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Texas" .
 
 <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
@@ -65,6 +53,9 @@
     rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/offense-event/charge-2> ;
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/offense-event/charge-2> .
+
+<https://caselinker.up.railway.app/resource/case/af_osi_2025_001/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -116,6 +107,10 @@
 <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:LifeImprisonmentSentence ;
     rdfs:label "sentenced to life" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "NCMEC" .
 
 <https://caselinker.up.railway.app/resource/case/af_osi_2025_001/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
@@ -11,9 +9,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:56.130111" ;
+    dcterms:created "2026-06-03T16:44:39.336860" ;
     dcterms:identifier "cbp_2026_003" ;
-    dcterms:modified "2026-05-30T20:33:56.130111" ;
+    dcterms:modified "2026-06-03T16:44:39.336860" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-arrests-man-wanted-child-sexual-assault>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_003/phase/arrested> ;
@@ -21,11 +19,15 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_003/event/multi-jurisdiction> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> .
 
-<https://caselinker.up.railway.app/resource/case/cbp_2026_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cacontology-multi:StateAgency .
 
@@ -38,16 +40,6 @@
     cacontology-detection:ageEstimate 66 .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_003/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_003/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_003/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

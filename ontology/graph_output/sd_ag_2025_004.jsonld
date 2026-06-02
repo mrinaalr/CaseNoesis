@@ -2,27 +2,90 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/sentence/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/aurora-county-state-s-attorney-s-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Aurora County State ’ s Attorney ’'s Office"
+            "@value": "55 years"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general-s-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 24
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/charge/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "possession of child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
         ]
       },
       {
@@ -44,10 +107,37 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -57,15 +147,15 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/victim/1"
           }
         ]
       },
@@ -85,36 +175,6 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/facet/possession"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/aurora-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Aurora County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/charge/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "possession of child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -148,71 +208,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "55 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/legal-step/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -220,7 +215,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:38:34.232077"
+            "@value": "2026-06-03T16:45:32.350455"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -230,7 +225,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:38:34.232077"
+            "@value": "2026-06-03T16:45:32.350455"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -253,10 +248,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/event/hands-on"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/legal-step/sentenced"
@@ -267,14 +262,29 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-general-s-office"
+            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/aurora-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/aurora-county-state-s-attorney-s-office"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/aurora-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Aurora County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -287,47 +297,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/sd_ag_2025_004/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
           }
         ]
       }

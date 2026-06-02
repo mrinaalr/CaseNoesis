@@ -2,27 +2,217 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/usa-federal-law#SexualAbuseOfMinor",
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: Child Sex Assault"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Child Sex Assault"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 100
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_sexual_assault"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-06-03T16:45:41.990804"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "us_marshals_2025_004"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-06-03T16:45:41.990804"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "US MARSHALS"
+          },
+          {
+            "@id": "https://www.usmarshals.gov/news/press-release/us-marshals-maine-arrest-man-wanted-sexual-exploitation-of-child-colorado"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/biddeford-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ice"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/livermore-falls-maine-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/violent-offender-task-force"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/livermore-falls-maine-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Maine Department of Corrections"
+            "@value": "Livermore Falls, Maine Police Department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/colorado",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/3",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ice",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/biddeford-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Biddeford Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation of a child"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Maine Violent Offender Task Force"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -49,49 +239,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service",
+        "@id": "https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "sexual exploitation of a child"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "sexual_exploitation_unspecified"
+            "@value": "Maine Department of Corrections"
           }
         ]
       },
@@ -134,194 +289,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ent-offender-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/agency/violent-offender-task-force",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Maine Violent Offender Task Force"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-30T20:39:29.489850"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "us_marshals_2025_004"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-30T20:39:29.489850"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "US MARSHALS"
-          },
-          {
-            "@id": "https://www.usmarshals.gov/news/press-release/us-marshals-maine-arrest-man-wanted-sexual-exploitation-of-child-colorado"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/legal-proceeding"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/colorado"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/maine-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/united-states-marshals-service"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/violent-offender-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ent-offender-task-force"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/iddeford-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Child Sex Assault"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 100
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_sexual_assault"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/iddeford-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "iddeford Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/maine-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Maine Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/violent-offender-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Violent Offender Task Force"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/offense-event/charge-1",
-        "@type": [
-          "https://cacontology.projectvic.org/usa-federal-law#SexualAbuseOfMinor",
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Inferred offense from charge: Child Sex Assault"
-          }
         ]
       },
       {
@@ -344,28 +320,6 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2025_004/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
           }
         ]
       }

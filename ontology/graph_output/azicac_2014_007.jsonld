@@ -2,6 +2,24 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/production",
+        "@type": [
+          "https://cacontology.projectvic.org/production#ProductionOffense",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/production"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/hands-on",
         "@type": [
           "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
@@ -12,56 +30,6 @@
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/production",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/3"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-06-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-06-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -94,26 +62,117 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/production",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/production",
+        "@id": "https://caselinker.up.railway.app/resource/agency/mcso",
         "@type": [
-          "https://cacontology.projectvic.org/production#ProductionOffense",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": "MCSO"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "different"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/production"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 32
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-06-03T16:43:38.122630"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "azicac_2014_007"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-06-03T16:43:38.122630"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "AZICAC"
+          },
+          {
+            "@id": "https://www.azicac.org/cases-and-arrests/"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/production"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/operation"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/dps"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/icac"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/mcso"
           }
         ]
       },
@@ -154,25 +213,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
@@ -194,18 +237,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/mcso",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "MCSO"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/3",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
@@ -218,15 +249,22 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-06-01T00:00:00Z"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/facet/possession",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -242,102 +280,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://purl.org/dc/terms/created": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
           {
-            "@value": "2026-05-30T20:28:56.023046"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "azicac_2014_007"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-30T20:28:56.023046"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "AZICAC"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/1"
           },
           {
-            "@id": "https://www.azicac.org/cases-and-arrests/"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/phase/charged"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/2"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/legal-proceeding"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/operation"
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/3"
           }
         ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/buckeye"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/dps"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/icac"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/mcso"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2014_007/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "different"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 32
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/buckeye",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Buckeye"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-06-01T00:00:00Z"
           }
         ]
       },

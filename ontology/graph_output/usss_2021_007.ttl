@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
@@ -14,14 +12,15 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_007> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:52.732832" ;
+    dcterms:created "2026-06-03T16:45:46.611593" ;
     dcterms:identifier "usss_2021_007" ;
-    dcterms:modified "2026-05-30T20:39:52.732832" ;
+    dcterms:modified "2026-06-03T16:45:46.611593" ;
     dcterms:source <https://www.secretservice.gov/newsroom/releases/2021/11/irondale-missouri-man-pleads-guilty-producing-child-pornography>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2021_007/phase/indicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2021_007/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/production>,
@@ -30,11 +29,21 @@
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/oregon-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/st-francois-county-sheriffs-department> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2021_007/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2021_007/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2021_007/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2021_007/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2021_007/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/oregon-state-police-department> a cacontology-multi:StateAgency .
 
@@ -49,6 +58,10 @@
 <https://caselinker.up.railway.app/resource/case/usss_2021_007/charge/2> a cacontology-legal-outcomes:CSAM_Production,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "production of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/usss_2021_007/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -68,22 +81,6 @@
 <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/usss_2021_007/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2021_007/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_007/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_007/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_007/phase/indicted> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

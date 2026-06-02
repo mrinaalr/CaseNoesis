@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -14,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/sdpd_2023_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:38:36.248500" ;
+    dcterms:created "2026-06-03T16:45:32.647589" ;
     dcterms:identifier "sdpd_2023_001" ;
-    dcterms:modified "2026-05-30T20:38:36.248500" ;
+    dcterms:modified "2026-06-03T16:45:32.647589" ;
     dcterms:source <https://www.sandiego.gov/sites/default/files/20230223_former_sdsu_football_player_arrested_on_child_pornography_charges.pdf>,
         "SDPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/phase/booked> ;
@@ -27,11 +25,19 @@
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac> .
 
-<https://caselinker.up.railway.app/resource/case/sdpd_2023_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -51,20 +57,6 @@
 <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/sdpd_2023_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/sdpd_2023_001/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

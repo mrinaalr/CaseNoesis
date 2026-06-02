@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -13,28 +11,30 @@
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:52.186721" ;
+    dcterms:created "2026-06-03T16:44:38.427296" ;
     dcterms:identifier "anchorage_pd_2025_001" ;
-    dcterms:modified "2026-05-30T20:33:52.186721" ;
+    dcterms:modified "2026-06-03T16:44:38.427296" ;
     dcterms:source <https://www.anchoragepolice.com/news/warrant-locate-jordan-alexander-butcher>,
         "ANCHORAGE PD" ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/legal-proceeding> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/anchorage-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/chorage-police-department>,
         <https://caselinker.up.railway.app/resource/agency/police-dispatch> .
 
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/chorage-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "chorage Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/police-dispatch> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -52,6 +52,10 @@
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "possession of child pornography" .
 
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/legal-proceeding> a cac-core:Event,
@@ -65,18 +69,6 @@
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2025_001/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;

@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,50 +15,77 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_019> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:54.003196" ;
+    dcterms:created "2026-06-03T16:45:46.944992" ;
     dcterms:identifier "usss_2021_019" ;
-    dcterms:modified "2026-05-30T20:39:54.003196" ;
+    dcterms:modified "2026-06-03T16:45:46.944992" ;
     dcterms:source <https://www.secretservice.gov/newsroom/releases/2021/03/elizabethtown-man-sentenced-25-years-federal-prison-child-exploitation>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2021_019/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2021_019/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/production>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_019/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_019/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/usss_2021_019/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cliff-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigations-inves>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/dci-detective>,
+        <https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigations>,
         <https://caselinker.up.railway.app/resource/agency/elizabethtown-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/kentucky-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/kentucky-attorney-generals-office-department-of-criminal-investigations>,
+        <https://caselinker.up.railway.app/resource/agency/kentucky-office-of-attorney-generals-department-of-criminal-investigations>,
+        <https://caselinker.up.railway.app/resource/agency/radcliff-pd-detective>,
         <https://caselinker.up.railway.app/resource/agency/radcliff-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-secret-service>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-secret-service> .
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2021_019/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2021_019/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2021_019/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2021_019/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_019/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/cliff-police-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/case/usss_2021_019/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_019/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/dci-detective> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "cliff Police Department" .
+    rdfs:label "DCI Detective" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigations-inves> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigations> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Criminal Investigations Inves" .
+    rdfs:label "Department of Criminal Investigations" .
 
 <https://caselinker.up.railway.app/resource/agency/elizabethtown-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Elizabethtown Police Department" .
 
+<https://caselinker.up.railway.app/resource/agency/kentucky-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Kentucky Attorney General's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/kentucky-attorney-generals-office-department-of-criminal-investigations> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Kentucky Attorney General's Office Department of Criminal Investigations" .
+
+<https://caselinker.up.railway.app/resource/agency/kentucky-office-of-attorney-generals-department-of-criminal-investigations> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Kentucky Office of Attorney General's Department of Criminal Investigations" .
+
+<https://caselinker.up.railway.app/resource/agency/radcliff-pd-detective> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Radcliff PD Detective" .
+
 <https://caselinker.up.railway.app/resource/agency/radcliff-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Radcliff Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-secret-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/united-states-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -84,6 +110,14 @@
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/charge/6> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:SexTrafficking ;
     rdfs:label "sex trafficking" .
+
+<https://caselinker.up.railway.app/resource/case/usss_2021_019/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/usss_2021_019/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -111,24 +145,11 @@
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/operation> a cac-core:Event,
         cacontology-taskforce:TaskForceOperation .
 
-<https://caselinker.up.railway.app/resource/case/usss_2021_019/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/usss_2021_019/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 34 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 14 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2021_019/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_019/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2021_019/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2021_019/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2021_019/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2021_019/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

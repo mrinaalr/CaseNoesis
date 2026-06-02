@@ -4,8 +4,8 @@
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -16,45 +16,48 @@
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:36.302097" ;
+    dcterms:created "2026-06-03T16:44:56.664526" ;
     dcterms:identifier "ice_2017_009" ;
-    dcterms:modified "2026-05-30T20:35:36.302097" ;
+    dcterms:modified "2026-06-03T16:44:56.664526" ;
     dcterms:source <https://www.ice.gov/news/releases/west-texas-man-sentenced-10-years-attempting-entice-minor>,
         "ICE" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ice_2017_009/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ice_2017_009/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/multi-jurisdiction>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ice_2017_009/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/online-only>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/ice_2017_009/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/hsi>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/ice>,
         <https://caselinker.up.railway.app/resource/agency/laredo-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/police-department>,
+        <https://caselinker.up.railway.app/resource/agency/murrieta-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/san-diego-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/texas> .
-
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
+        <https://caselinker.up.railway.app/resource/agency/us-bureau-of-prisons> .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/laredo-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Laredo Police Department" .
+<https://caselinker.up.railway.app/resource/agency/laredo-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/murrieta-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Murrieta Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/san-diego-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "San Diego Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-bureau-of-prisons> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "U.S. Bureau of Prisons" .
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -68,9 +71,18 @@
     rdfs:label "sexual exploitation" ;
     ns1:chargeCluster "sexual_exploitation_unspecified" .
 
+<https://caselinker.up.railway.app/resource/case/ice_2017_009/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/ice_2017_009/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution .
+
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
     cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/ice_2017_009/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking .
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
@@ -100,8 +112,7 @@
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/ice_2017_009/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 14 .
+<https://caselinker.up.railway.app/resource/case/ice_2017_009/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;
@@ -134,6 +145,8 @@
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/sentence/3> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "60 years" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

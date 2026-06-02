@@ -2,6 +2,19 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -25,47 +38,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-            "@value": true
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -73,7 +45,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:33:57.799992"
+            "@value": "2026-06-03T16:44:39.608064"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -83,7 +55,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:33:57.799992"
+            "@value": "2026-06-03T16:44:39.608064"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -119,38 +91,26 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/texas-police-department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/event/multi-jurisdiction",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
           "https://cacontology.projectvic.org/core#Event"
         ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+            "@value": true
           }
         ]
       },
@@ -167,28 +127,16 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/event/hands-on",
         "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -212,6 +160,18 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/person/offender/1"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/texas-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_013/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       }
     ],

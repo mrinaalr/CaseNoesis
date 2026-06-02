@@ -15,24 +15,33 @@
 
 <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:38.182133" ;
+    dcterms:created "2026-06-03T16:45:21.236109" ;
     dcterms:identifier "newyork_sp_2025_022" ;
-    dcterms:modified "2026-05-30T20:37:38.182133" ;
+    dcterms:modified "2026-06-03T16:45:21.236109" ;
     dcterms:source <https://troopers.ny.gov/news/state-police-arrest-sexual-predator-and-former-school-teacher-after-receiving-tip-allegedly>,
         "NEWYORK SP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/multi-jurisdiction>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/possession>,
         <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/new-york-state-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/new-york-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/suffolk-county-district-attorneys-office> .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/new-york-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/suffolk-county-district-attorneys-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Suffolk County District Attorney's Office" .
 
 <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "Disseminating" ;
@@ -46,6 +55,10 @@
 <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/charge/3> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "Acting in a Manner injurious to a child under" ;
     cacontology-legal-outcomes:indictmentCounts 3 .
+
+<https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/newyork_sp_2025_022/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;

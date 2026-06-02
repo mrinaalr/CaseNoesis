@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
@@ -15,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_014> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:04.780545" ;
+    dcterms:created "2026-06-03T16:45:13.117514" ;
     dcterms:identifier "la_ag_2026_014" ;
-    dcterms:modified "2026-05-30T20:37:04.780545" ;
+    dcterms:modified "2026-06-03T16:45:13.117514" ;
     dcterms:source <https://www.ag.state.la.us/Article/446>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/phase/booked> ;
@@ -31,11 +29,21 @@
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_014/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/production> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/hammond-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -63,22 +71,6 @@
     cacontology-detection:ageEstimate 26 .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_014/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/event/production> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_014/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

@@ -15,32 +15,33 @@
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:28.004344" ;
+    dcterms:created "2026-06-03T16:45:19.177299" ;
     dcterms:identifier "nj_ag_2026_062" ;
-    dcterms:modified "2026-05-30T20:37:28.004344" ;
+    dcterms:modified "2026-06-03T16:45:19.177299" ;
     dcterms:source <https://www.njoag.gov/man-sentenced-to-six-years-in-prison-for-creating-child-pornography-by-using-online-game-to-manipulate-girls-into-sexual-conduct-on-webcam/>,
         "NJ AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/possession>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/production>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/digital-technology-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/state-police-department> .
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -49,6 +50,10 @@
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/charge/2> a cacontology-legal-outcomes:CSAM_Distribution,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "distribution of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_062/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;

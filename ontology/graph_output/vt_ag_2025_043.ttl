@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
@@ -15,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:40:10.683857" ;
+    dcterms:created "2026-06-03T16:45:50.077249" ;
     dcterms:identifier "vt_ag_2025_043" ;
-    dcterms:modified "2026-05-30T20:40:10.683857" ;
+    dcterms:modified "2026-06-03T16:45:50.077249" ;
     dcterms:source <https://ago.vermont.gov/blog/2025/03/10/monkton-resident-charged-aggravated-sexual-assault-child-and-lewd-and-lascivious-conduct>,
         "VT AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/phase/charged> ;
@@ -25,19 +24,28 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/cybertip>,
         <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-general-s-office>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-office>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/vergennes-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-general-s-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/vergennes-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -62,6 +70,10 @@
 <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
+<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/legal-proceeding> a cac-core:Event,
@@ -73,23 +85,10 @@
         <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/charge/4> ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 31 .
 
 <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/vt_ag_2025_043/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 

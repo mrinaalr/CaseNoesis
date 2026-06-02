@@ -2,6 +2,29 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2016-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/person/offender/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/phase/convicted",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
@@ -11,28 +34,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2016-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
           }
         ]
       },
@@ -49,6 +50,18 @@
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2016-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -87,12 +100,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/event/hands-on",
         "@type": [
           "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
@@ -106,6 +113,12 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -113,7 +126,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:40:21.284327"
+            "@value": "2026-06-03T16:45:51.980145"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -123,7 +136,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:40:21.284327"
+            "@value": "2026-06-03T16:45:51.980145"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -155,36 +168,10 @@
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          },
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2016-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general"
           }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/wa_ag_2016_003/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       }
     ],

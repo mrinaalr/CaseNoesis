@@ -2,6 +2,33 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1",
+        "@type": [
+          "https://cacontology.projectvic.org/usa-federal-law#AggravatedSexualAbuse",
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: rape"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2015-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/sentence/3",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
@@ -10,6 +37,42 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "life in prison"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/relationship/teacher",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#Teacher",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/offender/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "teacher"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org/usa-federal-law#AbusiveContactWithMinor",
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: sexual battery"
           }
         ]
       },
@@ -29,6 +92,25 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -36,7 +118,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:51.756605"
+            "@value": "2026-06-03T16:45:24.187475"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -46,7 +128,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:51.756605"
+            "@value": "2026-06-03T16:45:24.187475"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -94,21 +176,86 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/usa-federal-law#AggravatedSexualAbuse",
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@value": "Inferred offense from charge: rape"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2015-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 51
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2015-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/victim/1"
           }
         ]
       },
@@ -141,6 +288,68 @@
         "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/trust-violation",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#AuthorityAbuse"
+        ],
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/relationship/teacher"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual battery"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 12
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_battery"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sentenced to serve the rest of his life"
           }
         ]
       },
@@ -178,161 +387,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2",
-        "@type": [
-          "https://cacontology.projectvic.org/usa-federal-law#AbusiveContactWithMinor",
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Inferred offense from charge: sexual battery"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 51
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#AuthorityAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/relationship/teacher"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/relationship/teacher",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#Teacher",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "teacher"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2015-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2015-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LifeImprisonmentSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sentenced to serve the rest of his life"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/sentence/2",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
@@ -341,51 +395,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "145 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2015-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual battery"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 12
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "sexual_battery"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2"
           }
         ]
       }

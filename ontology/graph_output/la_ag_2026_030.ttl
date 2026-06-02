@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
@@ -14,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:06.569830" ;
+    dcterms:created "2026-06-03T16:45:13.574764" ;
     dcterms:identifier "la_ag_2026_030" ;
-    dcterms:modified "2026-05-30T20:37:06.569830" ;
+    dcterms:modified "2026-06-03T16:45:13.574764" ;
     dcterms:source <https://www.ag.state.la.us/Article/415>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/phase/booked> ;
@@ -29,31 +27,29 @@
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/kenner-police-department>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-cyber-crimes-unit>,
-        <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-fugitive-apprehension-unit>,
         <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/kenner-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/kenner-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Kenner Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
-
-<https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-cyber-crimes-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Louisiana Bureau of Investigations Cyber Crimes Unit" .
-
-<https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigations-fugitive-apprehension-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Louisiana Bureau of Investigations Fugitive Apprehension Unit" .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -91,18 +87,6 @@
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_030/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_030/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 

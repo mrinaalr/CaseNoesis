@@ -17,26 +17,33 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:31:59.654377" ;
+    dcterms:created "2026-06-03T16:44:12.882652" ;
     dcterms:identifier "ncmec_2024_182" ;
-    dcterms:modified "2026-05-30T20:31:59.654377" ;
+    dcterms:modified "2026-06-03T16:44:12.882652" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/phase/convicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/phase/convicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/possession>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/production>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/legal-step/convicted>,
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/operation> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/miami-police-department>,
         <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/miami-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Miami Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -45,8 +52,16 @@
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
     cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/event/trust-violation> a cacontology-custodial:CustodialAbuse,
@@ -81,8 +96,7 @@
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 21 .
 
-<https://caselinker.up.railway.app/resource/case/ncmec_2024_182/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 3 .
+<https://caselinker.up.railway.app/resource/case/ncmec_2024_182/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_182/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;

@@ -2,32 +2,45 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/trust-violation",
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#AuthorityAbuse"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/relationship/teacher"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 26
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/amingham-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/framingham-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "amingham Police Department"
+            "@value": "Framingham Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/offender/2",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 36
           }
         ]
       },
@@ -35,11 +48,32 @@
         "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/conspiracy",
+        "@type": [
+          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org#conspiracyMemberCount": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 15
+            "@value": 2
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInConspiracy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/2"
+          }
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
@@ -70,6 +104,57 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/relationship/teacher",
+        "@type": [
+          "https://cacontology.projectvic.org/custodial#Teacher",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/victim/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
+          {
+            "@value": "teacher"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/conspiracy"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/victim/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -77,7 +162,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:07.384144"
+            "@value": "2026-06-03T16:44:41.249448"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -87,7 +172,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:07.384144"
+            "@value": "2026-06-03T16:44:41.249448"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -127,26 +212,10 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/colorado"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/amingham-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@id": "https://caselinker.up.railway.app/resource/agency/framingham-police-department"
           }
         ]
       },
@@ -177,80 +246,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/trust-violation",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#AuthorityAbuse"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/conspiracy"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/colorado",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/conspiracy",
-        "@type": [
-          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#conspiracyMemberCount": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 2
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInConspiracy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/2"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/offender/2",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 36
+            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/relationship/teacher"
           }
         ]
       },
@@ -281,40 +284,22 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/relationship/teacher",
+        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/event/hands-on",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#Teacher",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/role/offender/2"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "teacher"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cspd_2021_002/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/colorado-springs-police-department",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 26
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

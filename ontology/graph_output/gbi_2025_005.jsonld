@@ -2,123 +2,14 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/conspiracy",
-        "@type": [
-          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#conspiracyMemberCount": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 2
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInConspiracy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/2"
-          }
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "social media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/2"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/4",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "sexual_exploitation_unspecified"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 18
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/2",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
           "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Sexual Exploitation of Children"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": "sexual exploitation of children"
           }
         ]
       },
@@ -141,31 +32,44 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/offender/2",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-03-01T00:00:00Z"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 26
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/conspiracy"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/victim/1"
+            "@value": "child sexual abuse material"
           }
         ]
       },
@@ -222,15 +126,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/doj",
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/operation",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exp",
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/cybertip",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+        ],
+        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+          }
         ]
       },
       {
@@ -254,7 +164,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:35:26.296066"
+            "@value": "2026-06-03T16:44:54.495705"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -264,7 +174,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:35:26.296066"
+            "@value": "2026-06-03T16:44:54.495705"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -290,6 +200,9 @@
             "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/possession"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/distribution"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/conspiracy"
           },
           {
@@ -297,6 +210,9 @@
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/cybertip"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/operation"
@@ -309,119 +225,19 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exp"
+            "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/icac"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/doj"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/walton-county-sheriffs-office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/walton-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Walton County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/5",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child exploitation"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation of children"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/offender/2",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 26
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/tech/cybertipline",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "CyberTipline"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child sexual abuse material"
           }
         ]
       },
@@ -451,6 +267,102 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 18
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-03-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/conspiracy"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/walton-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Walton County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/tech/cybertipline",
+        "@type": [
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "CyberTipline"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/5",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/offense-event/charge-5"
           }
         ]
       },
@@ -487,6 +399,108 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-03-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/conspiracy",
+        "@type": [
+          "https://cacontology.projectvic.org#ConspiracyToCommitCSA",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#conspiracyMemberCount": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 2
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInConspiracy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/role/offender/2"
+          }
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "social media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Sexual Exploitation of Children"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/gbi_2025_005/charge/4",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "sexual exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "sexual_exploitation_unspecified"
           }
         ]
       }

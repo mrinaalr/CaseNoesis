@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -15,38 +13,55 @@
 
 <https://caselinker.up.railway.app/resource/case/svicac_2026_004> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:03.414857" ;
+    dcterms:created "2026-06-03T16:45:38.153345" ;
     dcterms:identifier "svicac_2026_004" ;
-    dcterms:modified "2026-05-30T20:39:03.414857" ;
+    dcterms:modified "2026-06-03T16:45:38.153345" ;
     dcterms:source <https://www.sfchronicle.com/crime/article/former-bay-area-mayor-and-cannabis-entrepreneur-17749915.php>,
         "SVICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/svicac_2026_004/phase/convicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/svicac_2026_004/phase/convicted> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/svicac_2026_004/legal-proceeding>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/svicac_2026_004/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/svicac_2026_004/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/svicac_2026_004/legal-step/convicted>,
         <https://caselinker.up.railway.app/resource/case/svicac_2026_004/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
         <https://caselinker.up.railway.app/resource/agency/sebastopol-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/sonoma-county-district-attorney-s-office> .
+        <https://caselinker.up.railway.app/resource/agency/sonoma-county-sheriffs-office> .
 
-<https://caselinker.up.railway.app/resource/case/svicac_2026_004/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/svicac_2026_004/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/svicac_2026_004/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/platform/grindr> a cacontology-platforms:OnlineDatingPlatform ;
+    rdfs:label "Grindr" .
 
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Twitter / X" .
 
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/california-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "California Attorney General's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/sebastopol-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Sebastopol Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/sonoma-county-district-attorney-s-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Sonoma County District Attorney ’'s Office" .
+<https://caselinker.up.railway.app/resource/agency/sonoma-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Sonoma County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/case/svicac_2026_004/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/svicac_2026_004/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -67,16 +82,6 @@
 
 <https://caselinker.up.railway.app/resource/case/svicac_2026_004/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 16 .
-
-<https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/svicac_2026_004/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/svicac_2026_004/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/svicac_2026_004/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/svicac_2026_004/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;

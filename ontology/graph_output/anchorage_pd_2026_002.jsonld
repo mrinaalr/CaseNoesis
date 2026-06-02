@@ -2,27 +2,80 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/age-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/klawock-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "age Police Department"
+            "@value": "Klawock Police Department"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-06-03T16:44:38.497092"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "anchorage_pd_2026_002"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-06-03T16:44:38.497092"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "ANCHORAGE PD"
+          },
+          {
+            "@id": "https://www.anchoragepolice.com/news/james-williams-charged-in-sexual-abuse-of-a-minor-case-victims-being-sought"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/phase/indicted"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/phase/indicted"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/klawock-police-department"
+          }
         ]
       },
       {
@@ -62,28 +115,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/phase/indicted",
         "@type": [
           "https://cacontology.projectvic.org#LegalProcessPhase",
@@ -100,74 +131,6 @@
         "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-30T20:33:52.486243"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "anchorage_pd_2026_002"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-30T20:33:52.486243"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "ANCHORAGE PD"
-          },
-          {
-            "@id": "https://www.anchoragepolice.com/news/james-williams-charged-in-sexual-abuse-of-a-minor-case-victims-being-sought"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/phase/indicted"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2026_002/phase/indicted"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/klawock-police-department"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/age-police-department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/klawock-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Klawock Police Department"
-          }
         ]
       }
     ],

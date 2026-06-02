@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -14,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:03.623301" ;
+    dcterms:created "2026-06-03T16:45:12.876377" ;
     dcterms:identifier "la_ag_2026_001" ;
-    dcterms:modified "2026-05-30T20:37:03.623301" ;
+    dcterms:modified "2026-06-03T16:45:12.876377" ;
     dcterms:source <https://www.ag.state.la.us/Article/476>,
         "LA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/phase/booked> ;
@@ -27,11 +25,17 @@
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> .
 
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -53,18 +57,6 @@
     cacontology-detection:ageEstimate 19 .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/la_ag_2026_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_001/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

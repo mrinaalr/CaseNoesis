@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -13,34 +11,31 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:46.178046" ;
+    dcterms:created "2026-06-03T16:45:45.073544" ;
     dcterms:identifier "usss_2022_006" ;
-    dcterms:modified "2026-05-30T20:39:46.178046" ;
+    dcterms:modified "2026-06-03T16:45:45.073544" ;
     dcterms:source <https://www.secretservice.gov/newsroom/releases/2022/01/park-hills-missouri-man-pleads-guilty-possession-child-pornography>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2022_006/phase/indicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/usss_2022_006/phase/indicted> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession>,
         <https://caselinker.up.railway.app/resource/case/usss_2022_006/legal-proceeding> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/st-francis-county-prosecuting-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/states-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-secret-service> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2022_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2022_006/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2022_006/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2022_006/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/st-francis-county-prosecuting-attorney-s-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "St. Francis County Prosecuting Attorney ’'s Office" .
+<https://caselinker.up.railway.app/resource/case/usss_2022_006/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/states-attorney-s-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "States Attorney ’'s Office" .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -53,6 +48,10 @@
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/charge/3> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "possession of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/usss_2022_006/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -67,18 +66,6 @@
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_006/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_006/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_006/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_006/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_006/phase/indicted> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

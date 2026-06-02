@@ -2,43 +2,79 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SexTrafficking",
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#ProbationSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Probation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/anaheim-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/los-angeles-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/charge/2",
+        "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "sex trafficking"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/victim/1"
+            "@value": "sexual exploitation"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/offender/1"
+            "@value": "sexual_exploitation_unspecified"
           }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -69,21 +105,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/california",
+        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -100,6 +124,36 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/banning-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Banning Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/riverside-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Riverside Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/district-attorneys-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -107,7 +161,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:39:33.013780"
+            "@value": "2026-06-03T16:45:42.488460"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -117,7 +171,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:39:33.013780"
+            "@value": "2026-06-03T16:45:42.488460"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -133,7 +187,13 @@
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/event/multi-jurisdiction"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/event/trafficking"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/legal-proceeding"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/cybertip"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -143,35 +203,118 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/california"
+            "@id": "https://caselinker.up.railway.app/resource/agency/anaheim-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/banning-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/beaumont-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/usms"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/department-of-public-social-services"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/district-attorneys-office"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
           },
           {
+            "@id": "https://caselinker.up.railway.app/resource/agency/federal-law-enforcement-partners"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/hsi"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/los-angeles-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/marshals"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/murrieta-police-department"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/riverside-county-probation-department"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/agency/riverside-county-sheriffs-office"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/secret-service"
+            "@id": "https://caselinker.up.railway.app/resource/agency/riverside-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/u-s-marshals-service"
+            "@id": "https://caselinker.up.railway.app/resource/agency/sheriffs-anti-human-trafficking-task-force"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/us-secret-service"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/charge/2",
+        "@id": "https://caselinker.up.railway.app/resource/agency/beaumont-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "sexual exploitation"
+            "@value": "Beaumont Police Department"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/cybertip",
+        "@type": [
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
         ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
           {
-            "@value": "sexual_exploitation_unspecified"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/riverside-county-probation-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Riverside County Probation Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/event/trafficking",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SexTrafficking",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/murrieta-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/department-of-public-social-services",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Department of Public Social Services"
           }
         ]
       },
@@ -182,33 +325,33 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/sentence/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#ProbationSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/sheriffs-anti-human-trafficking-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Probation"
+            "@value": "Sheriff's Anti-Human Trafficking Task Force"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/victim/1"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -224,27 +367,45 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/charge/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#SexTrafficking",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/us_marshals_2026_010/person/offender/1"
+            "@value": "sex trafficking"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/secret-service",
+        "@id": "https://caselinker.up.railway.app/resource/agency/federal-law-enforcement-partners",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Federal Law Enforcement Partners"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/marshals",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/us-secret-service",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       }
     ],

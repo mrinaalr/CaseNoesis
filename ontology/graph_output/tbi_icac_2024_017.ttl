@@ -4,7 +4,6 @@
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
@@ -19,9 +18,9 @@
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:20.821649" ;
+    dcterms:created "2026-06-03T16:45:40.805137" ;
     dcterms:identifier "tbi_icac_2024_017" ;
-    dcterms:modified "2026-05-30T20:39:20.821649" ;
+    dcterms:modified "2026-06-03T16:45:40.805137" ;
     dcterms:source <https://tbinewsroom.com/2024/05/20/tbis-operation-protecting-tomorrow-yields-arrests-identifies-two-dozen-child-online-sexual-exploitation-sextortion-victims/>,
         "TBI ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/phase/charged> ;
@@ -36,10 +35,28 @@
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/offense-event/charge-5>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/athens-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/fayette-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/illinois-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/judicial-district-attorney-generals-office>,
+        <https://caselinker.up.railway.app/resource/agency/judicial-district-drug-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/maury-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/mcminn-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/mcminnville-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/meigs-county-sheriffs-department>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/sheriffs-department>,
         <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation>,
-        <https://caselinker.up.railway.app/resource/agency/texas> .
+        <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline>,
+        <https://caselinker.up.railway.app/resource/agency/texas-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/texas-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service>,
+        <https://caselinker.up.railway.app/resource/agency/warren-county-sheriffs-department> .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/role/victim/10> a cacontology:VictimRole,
         uco-role:VictimRole ;
@@ -248,11 +265,67 @@
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/9> .
 
+<https://caselinker.up.railway.app/resource/agency/athens-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fayette-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Fayette County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/illinois-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Illinois Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/judicial-district-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Judicial District Attorney General's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/judicial-district-drug-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Judicial District Drug Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/maury-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Maury County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/mcminn-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "McMinn County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/mcminnville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "McMinnville Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/meigs-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Meigs County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/texas-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/texas-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Texas Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/warren-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Warren County Sheriff's Department" .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -304,77 +377,53 @@
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/10> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/10> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/11> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/11> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/12> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/12> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/13> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/13> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/14> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/14> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/15> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/15> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/16> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/16> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/17> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/17> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/18> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/18> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/19> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/19> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/2> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/2> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/20> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/20> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/21> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/21> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/22> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/22> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/23> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/23> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/24> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/24> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/3> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/3> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/4> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/4> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/5> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/5> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/6> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/6> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/7> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/7> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/8> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/8> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/9> a uco-identity:Person ;
-    cacontology-production:victimAge 11 .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/person/victim/9> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_017/relationship/parent> a cacontology-custodial:CaregiverRelationship,
         cacontology-custodial:CustodialRelationship ;

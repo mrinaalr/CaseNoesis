@@ -13,9 +13,9 @@
 
 <https://caselinker.up.railway.app/resource/case/alea_2024_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:48.551054" ;
+    dcterms:created "2026-06-03T16:44:37.697933" ;
     dcterms:identifier "alea_2024_002" ;
-    dcterms:modified "2026-05-30T20:33:48.551054" ;
+    dcterms:modified "2026-06-03T16:44:37.697933" ;
     dcterms:source <https://www.alea.gov/news/missing-1-year-old-child-massachusetts-safely-recovered-alea-troopers-etowah-county>,
         "ALEA" ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/alea_2024_002/event/csam>,
@@ -23,16 +23,13 @@
         <https://caselinker.up.railway.app/resource/case/alea_2024_002/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/alea_2024_002/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/alabama-law-enforcement-agency>,
-        <https://caselinker.up.railway.app/resource/agency/fall-river-police-department> .
-
-<https://caselinker.up.railway.app/resource/agency/alabama-law-enforcement-agency> a cacontology-multi:LocalAgency .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fall-river-police-department> .
 
 <https://caselinker.up.railway.app/resource/agency/fall-river-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Fall River Police Department" .
 
-<https://caselinker.up.railway.app/resource/case/alea_2024_002/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
+<https://caselinker.up.railway.app/resource/case/alea_2024_002/charge/1> a cacontology-legal-outcomes:CSAM_Production,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "Production of Child Porn" ;
     cacontology-legal-outcomes:indictmentCounts 11 .

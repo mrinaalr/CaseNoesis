@@ -501,7 +501,7 @@
             }
         }
         
-        const STATS_DETAILED_CACHE_KEY = 'caselinker_stats_detailed';
+        const STATS_DETAILED_CACHE_KEY = 'caselinker_stats_detailed_v4';
         const LOCATION_STATS_CACHE_KEY = 'caselinker_location_stats';
         const STATS_CACHE_MAX_AGE_MS = 30 * 60 * 1000;
 
@@ -869,13 +869,12 @@
             yAxis.selectAll('text')
                 .attr('fill', '#e0e0e0')
                 .attr('font-size', '11px')
+                .attr('text-anchor', 'end')
                 .each(function(d) {
-                    // Truncate very long names
                     const text = d3.select(this);
-                    const name = text.text();
-                    if (name.length > 35) {
-                        text.text(name.substring(0, 32) + '...');
-                    }
+                    const name = String(d);
+                    text.text(name.length > 42 ? name.substring(0, 39) + '…' : name);
+                    if (name.length > 42) text.append('title').text(name);
                 });
             
             // X-axis

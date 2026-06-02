@@ -15,82 +15,86 @@
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:33.568476" ;
+    dcterms:created "2026-06-03T16:44:55.938422" ;
     dcterms:identifier "ice_2013_013" ;
-    dcterms:modified "2026-05-30T20:35:33.568476" ;
+    dcterms:modified "2026-06-03T16:44:55.938422" ;
     dcterms:source <https://www.ice.gov/news/releases/british-actor-sentenced-25-years-federal-prison-producing-child-pornography>,
         "ICE" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ice_2013_013/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ice_2013_013/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/multi-jurisdiction>,
-        <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/multi-jurisdiction>,
+        <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ice_2013_013/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/ice_2013_013/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/ice_2013_013/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/florida-attorney-general-s-office>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/florida-attorney-generals-office>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/ice>,
         <https://caselinker.up.railway.app/resource/agency/orange-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/osceola-county-sheriffs-office> .
+        <https://caselinker.up.railway.app/resource/agency/osceola-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/usms>,
+        <https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/10> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/10> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/2> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/2> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/3> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/3> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/4> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/4> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/5> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/5> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/6> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/6> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/7> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/7> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/8> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/8> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/9> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/9> .
 
-<https://caselinker.up.railway.app/resource/agency/florida-attorney-general-s-office> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/florida-attorney-generals-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
-    rdfs:label "Florida Attorney General ’'s Office" .
+    rdfs:label "Florida Attorney General's Office" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -101,6 +105,10 @@
     rdfs:label "Orange County Sheriff's Office" .
 
 <https://caselinker.up.railway.app/resource/agency/osceola-county-sheriffs-office> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -114,16 +122,24 @@
     rdfs:label "sexual exploitation" ;
     ns1:chargeCluster "sexual_exploitation_unspecified" .
 
+<https://caselinker.up.railway.app/resource/case/ice_2013_013/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
 
+<https://caselinker.up.railway.app/resource/case/ice_2013_013/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/ice_2013_013/relationship/parent> .
 
-<https://caselinker.up.railway.app/resource/case/ice_2013_013/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+<https://caselinker.up.railway.app/resource/case/ice_2013_013/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -175,13 +191,13 @@
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2013_013/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_013/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
@@ -199,9 +215,9 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2013-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/ice_2013_013/event/possession> a cacontology:CSAMIncident,
+<https://caselinker.up.railway.app/resource/case/ice_2013_013/event/csam> a cacontology:CSAMIncident,
         cac-core:Event ;
     cacontology:severityLevel 3 ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat> ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ice_2013_013/facet/possession> .
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/ice_2013_013/facet/csam> .
 

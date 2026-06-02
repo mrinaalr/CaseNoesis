@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -15,28 +13,45 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:31.173716" ;
+    dcterms:created "2026-06-03T16:44:45.460058" ;
     dcterms:identifier "doj_archives_2005_003" ;
-    dcterms:modified "2026-05-30T20:34:31.173716" ;
+    dcterms:modified "2026-06-03T16:44:45.460058" ;
     dcterms:source <https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/EDVA%20Whorley%20Verdict%20PR_120105.pdf>,
         "DOJ ARCHIVES" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/phase/sentenced> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
         <https://caselinker.up.railway.app/resource/agency/fbi> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/ai-csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 
@@ -56,7 +71,15 @@
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> .
 
-<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -80,24 +103,6 @@
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/ai-csam>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2005-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/ai-csam>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;
@@ -128,14 +133,14 @@
         cac-core:Event ;
     cacontology:severityLevel 3 .
 
+<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/csam> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/facet/csam> .
+
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/hands-on> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;
     cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_003/offense-event/charge-3> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

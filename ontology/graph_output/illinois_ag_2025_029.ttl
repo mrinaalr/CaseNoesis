@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
@@ -17,28 +15,40 @@
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:36:15.982073" ;
+    dcterms:created "2026-06-03T16:45:04.025268" ;
     dcterms:identifier "illinois_ag_2025_029" ;
-    dcterms:modified "2026-05-30T20:36:15.982073" ;
+    dcterms:modified "2026-06-03T16:45:04.025268" ;
     dcterms:source <https://illinoisattorneygeneral.gov/news/story/attorney-general-raoul-charges-lake-county-man-over-alleged-dissemination-possession-of-child-sexual-abuse-material-5-16-25>,
         "ILLINOIS AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau>,
         <https://caselinker.up.railway.app/resource/agency/illinois-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/libertyville-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/montgomery-county-sheriffs-office> .
+        <https://caselinker.up.railway.app/resource/agency/montgomery-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/victim/10> a cacontology:VictimRole,
         uco-role:VictimRole ;
@@ -350,6 +360,8 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
+<https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau> a cacontology-multi:LocalAgency .
+
 <https://caselinker.up.railway.app/resource/agency/illinois-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/libertyville-police-department> a cac-core:OrganizationLikeEntity,
@@ -386,6 +398,13 @@
     rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> ;
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -497,26 +516,14 @@
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/person/victim/9> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "30 years" .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_029/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

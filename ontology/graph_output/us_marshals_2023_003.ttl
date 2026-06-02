@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -13,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:35.011763" ;
+    dcterms:created "2026-06-03T16:45:42.823754" ;
     dcterms:identifier "us_marshals_2023_003" ;
-    dcterms:modified "2026-05-30T20:39:35.011763" ;
+    dcterms:modified "2026-06-03T16:45:42.823754" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-connecticut-capture-two-fugitive-sex-offenders>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/phase/arrested> ;
@@ -24,18 +23,21 @@
         <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/bridgeport-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/ent-offenders-task-force>,
         <https://caselinker.up.railway.app/resource/agency/fairfield-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/ive-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/marshals-connecticut-v>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
+        <https://caselinker.up.railway.app/resource/agency/ice>,
+        <https://caselinker.up.railway.app/resource/agency/usms>,
         <https://caselinker.up.railway.app/resource/agency/waterbury-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:perpetratorRegisteredSexOffender true ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Twitter / X" .
@@ -44,17 +46,11 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Bridgeport Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/ent-offenders-task-force> a cacontology-multi:LocalAgency .
-
 <https://caselinker.up.railway.app/resource/agency/fairfield-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/ive-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/marshals-connecticut-v> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label ". Marshals Connecticut V" .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/waterbury-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -75,20 +71,10 @@
     cacontology-legal-outcomes:hasProceedingBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/sentence/1> .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 28 .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:perpetratorRegisteredSexOffender true ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_003/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;

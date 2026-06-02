@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,34 +14,41 @@
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:58.310675" ;
+    dcterms:created "2026-06-03T16:45:25.547290" ;
     dcterms:identifier "oregon_doj_2026_003" ;
-    dcterms:modified "2026-05-30T20:37:58.310675" ;
+    dcterms:modified "2026-06-03T16:45:25.547290" ;
     dcterms:source <https://www.doj.state.or.us/media-home/news-media-releases/oregon-doj-arrests-monmouth-man-on-7-counts-of-encouraging-child-sex-abuse/>,
         "OREGON DOJ" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/phase/indicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/phase/indicted> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
-        <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/monmouth-police-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/monmouth-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> .
 
-<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/monmouth-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Monmouth Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -53,7 +58,11 @@
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child sexual abuse material" .
 
-<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -66,18 +75,6 @@
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
@@ -88,9 +85,9 @@
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession> a cacontology:CSAMIncident,
+<https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam> a cacontology:CSAMIncident,
         cac-core:Event ;
     cacontology:severityLevel 3 ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/dropbox> ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/possession> .
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/csam> .
 

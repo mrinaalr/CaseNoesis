@@ -853,10 +853,12 @@
                 // Create new demographics object with cleaned ages
                 const cleaned = { ...demo };
                 cleaned.ages = uniqueAges;
+                delete cleaned.gender;
                 return cleaned;
             }
-            
-            return demo;
+            const cleaned = { ...demo };
+            delete cleaned.gender;
+            return cleaned;
         }
 
         const CASELINKER_COUNT_KEY = 'caselinker_total_case_count_v1';
@@ -1046,6 +1048,7 @@
                     title: 'Perpetrator Context',
                     features: {
                         'Age': cleanAgeArray(Array.isArray(caseData.perpetrator_age) ? caseData.perpetrator_age : (caseData.perpetrator_age !== null && caseData.perpetrator_age !== undefined ? [caseData.perpetrator_age] : null)),
+                        'Gender': caseData.perpetrator_gender || null,
                         'Registered Sex Offender': caseData.perpetrator_registered_sex_offender,
                         'Relationship to Victim': caseData.relationship_to_victim,
                         'Previous Conviction': caseData.previous_conviction
@@ -1055,6 +1058,7 @@
                     title: 'Case Context',
                     features: {
                         'Victim Count': caseData.victim_count,
+                        'Victim Gender': (caseData.case_demographics && caseData.case_demographics.victim_gender) || null,
                         'Case Demographics': cleanCaseDemographics(caseData.case_demographics || caseData.victim_demographics)
                     }
                 },
@@ -1682,21 +1686,17 @@
                         });
                     }
                     
-                    // Highlight gender
-                    if (demo.gender) {
-                        const gender = String(demo.gender).toLowerCase();
+                    // Highlight victim gender (role-aware)
+                    if (demo.victim_gender) {
+                        const gender = String(demo.victim_gender).toLowerCase();
                         if (gender === 'female' || gender === 'f') {
                             searchPatterns.push(/\bfemale\b/gi);
                             searchPatterns.push(/\bgirl\b/gi);
                             searchPatterns.push(/\bgirls\b/gi);
-                            searchPatterns.push(/\bwoman\b/gi);
-                            searchPatterns.push(/\bwomen\b/gi);
                         } else if (gender === 'male' || gender === 'm') {
                             searchPatterns.push(/\bmale\b/gi);
                             searchPatterns.push(/\bboy\b/gi);
                             searchPatterns.push(/\bboys\b/gi);
-                            searchPatterns.push(/\bman\b/gi);
-                            searchPatterns.push(/\bmen\b/gi);
                         }
                     }
                     
@@ -1726,9 +1726,8 @@
                                 searchPatterns.push(new RegExp(`\\b${ageStr}\\s+years?\\s+old\\s+(child|children|victim|victims|boy|girl|minor|minors)\\b`, 'gi'));
                             });
                         }
-                        // Handle gender
-                        if (parsed.gender) {
-                            const gender = String(parsed.gender).toLowerCase();
+                        if (parsed.victim_gender) {
+                            const gender = String(parsed.victim_gender).toLowerCase();
                             if (gender === 'female' || gender === 'f') {
                                 searchPatterns.push(/\bfemale\b/gi);
                                 searchPatterns.push(/\bgirl\b/gi);

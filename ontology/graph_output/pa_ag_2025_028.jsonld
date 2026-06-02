@@ -2,25 +2,15 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/phase/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/person/offender/1"
           }
         ]
       },
@@ -48,43 +38,31 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/person/offender/1"
           }
         ]
       },
@@ -111,7 +89,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:38:05.798404"
+            "@value": "2026-06-03T16:45:27.083421"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -121,7 +99,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:38:05.798404"
+            "@value": "2026-06-03T16:45:27.083421"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -157,7 +135,19 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general"
+            "@id": "https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 55
           }
         ]
       },
@@ -178,12 +168,6 @@
         "@id": "https://caselinker.up.railway.app/resource/case/pa_ag_2025_028/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/pa-office-of-attorney-general",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

@@ -15,9 +15,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:51.756605" ;
+    dcterms:created "2026-06-03T16:45:24.187475" ;
     dcterms:identifier "ohio_ag_2015_002" ;
-    dcterms:modified "2026-05-30T20:37:51.756605" ;
+    dcterms:modified "2026-06-03T16:45:24.187475" ;
     dcterms:source <https://www.ohioattorneygeneral.gov/Media/News-Releases/October-2015/Ohio-Man-Sentenced-to-Four-Life-Sentences-Plus-145>,
         "OHIO AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/phase/sentenced> ;
@@ -29,7 +29,10 @@
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-1>,
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_002/offense-event/charge-2> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit>,
+        <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> .
+
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 

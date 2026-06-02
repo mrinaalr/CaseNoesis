@@ -8,126 +8,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/csam",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Felon in Possession of a Firearm"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/monmouth-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Monmouth Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/doj",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/dropbox",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#FileHostingService"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Dropbox"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/tech/cybertipline",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "CyberTipline"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/phase/indicted",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -153,9 +36,46 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/agency/monmouth-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Monmouth Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/phase/indicted",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Felon in Possession of a Firearm"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
           "https://cacontology.projectvic.org/core#Event"
         ],
         "https://cacontology.projectvic.org#severityLevel": [
@@ -163,15 +83,39 @@
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/tech/cybertipline",
+        "@type": [
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
         ],
-        "https://cacontology.projectvic.org#usesChannel": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/platform/dropbox"
+            "@value": "CyberTipline"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1"
           }
         ]
       },
@@ -183,7 +127,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:37:58.310675"
+            "@value": "2026-06-03T16:45:25.547290"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -193,7 +137,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:37:58.310675"
+            "@value": "2026-06-03T16:45:25.547290"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -216,7 +160,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/distribution"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/legal-proceeding"
@@ -240,35 +187,18 @@
             "@id": "https://caselinker.up.railway.app/resource/agency/monmouth-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/doj"
+            "@id": "https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/platform/dropbox",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/platforms#FileHostingService"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
+            "@value": "Dropbox"
           }
         ]
       },
@@ -282,6 +212,70 @@
           {
             "@value": "child sexual abuse material"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dropbox"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/facet/csam"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/event/csam"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

@@ -15,27 +15,23 @@
 
 <https://caselinker.up.railway.app/resource/case/ccsao_2025_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:06.898427" ;
+    dcterms:created "2026-06-03T16:44:41.163761" ;
     dcterms:identifier "ccsao_2025_001" ;
-    dcterms:modified "2026-05-30T20:34:06.898427" ;
+    dcterms:modified "2026-06-03T16:44:41.163761" ;
     dcterms:source <https://www.cookcountystatesattorney.org/news/palatine-high-school-teachers-aide-indicted-charges-reproducing-and-possessing-child-sexual>,
         "CCSAO" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/phase/indicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/phase/indicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/possession>,
         <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/legal-proceeding> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/cook-county-state-s-attorney>,
-        <https://caselinker.up.railway.app/resource/agency/icac>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/illinois-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/palatine-police-department> .
-
-<https://caselinker.up.railway.app/resource/agency/cook-county-state-s-attorney> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Cook County State ’ s Attorney" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -61,6 +57,10 @@
 
 <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/trust-violation> a cacontology-custodial:AuthorityAbuse,
         cacontology-custodial:TrustViolation ;
@@ -99,7 +99,8 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ccsao_2025_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/kik> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Kik" .
 
 <https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .

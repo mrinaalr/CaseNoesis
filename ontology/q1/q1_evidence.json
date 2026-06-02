@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "generated": "2026-05-31",
-    "cases_processed": 1358,
-    "offense_records": 2181,
+    "generated": "2026-06-03",
+    "cases_processed": 1376,
+    "offense_records": 2207,
     "psa_exclusions": 28,
-    "db_gaps": 3198,
+    "db_gaps": 3234,
     "text_cap_hits": 55,
     "text_cap": 6000
   },
@@ -26,7 +26,7 @@
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
       "harm": "",
-      "evidence_quote": "Source: obscene video involving a minor that went viral on social media at the end of January 2018 is still under",
+      "evidence_quote": "An obscene video involving a minor that went viral on social media at the end of January 2018 is still under",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
@@ -346,7 +346,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "CHILD SEXUAL ABUSE\nSource: SHOALS, Ark",
+      "harm": "CHILD SEXUAL ABUSE\nBULL SHOALS, Ark",
       "evidence_quote": "Parnell continued regular sexual chats with the girl for approximately two",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -519,7 +519,7 @@
       "platform": "Twitter / X",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "sexual contact\nSource: Texas\u2013 This week, agents arrested two gang members, two c",
+      "harm": "sexual contact\nEDINBURG, Texas\u2013 This week, agents arrested two gang members, two",
       "evidence_quote": "Follow us on Twitter at @CBPRGV \").",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
@@ -1215,7 +1215,7 @@
       "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"private Internet Relay Chat (IRC) channel.\""
     },
     {
-      "case_id": "doj_archives_2003_005",
+      "case_id": "doj_archives_2003_006",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1225,17 +1225,17 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2005_006",
+      "case_id": "doj_archives_2005_008",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
       "harm": "",
-      "evidence_quote": "specified internet relay chat (IRC) channels a willingness to receive or distribute files.",
+      "evidence_quote": "chat (IRC) channels a willingness to receive or distribute files.",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"specified internet relay chat (IRC) channels a willingness to recei...\""
+      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"chat (IRC) channels a willingness to receive or distribute files.\""
     },
     {
-      "case_id": "doj_archives_2005_010",
+      "case_id": "doj_archives_2005_012",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1245,47 +1245,47 @@
       "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"He also advertised on specified Internet Relay Chat (IRC) channels a\""
     },
     {
-      "case_id": "doj_archives_2005_013",
+      "case_id": "doj_archives_2005_015",
       "platform": "IRC",
       "platform_type": "MessagingService",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "HIGH-TECH DISTRIBUTION OF CHILD\nWASHINGTON, D",
-      "evidence_quote": "specified Internet Relay Chat (IRC) channels a willingness to receive or distribute files.",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "HIGH-TECH DISTRIBUTION OF CHILD\nPORNOGRAPHY WASHINGTON, D",
+      "evidence_quote": "that computer, and by advertising on specified Internet Relay Chat (IRC) channels a willingness to receive or",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"specified Internet Relay Chat (IRC) channels a willingness to recei...\""
+      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"that computer, and by advertising on specified Internet Relay Chat...\""
     },
     {
-      "case_id": "doj_archives_2005_016",
+      "case_id": "doj_archives_2005_018",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
       "harm": "",
-      "evidence_quote": "Chat (IRC) channels a willingness to receive or distribute files.",
+      "evidence_quote": "public to upload files to that computer, and by advertising on specified Internet Relay Chat (IRC) channels a",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Chat (IRC) channels a willingness to receive or distribute files.\""
+      "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"public to upload files to that computer, and by advertising on spec...\""
     },
     {
-      "case_id": "doj_archives_2005_024",
+      "case_id": "doj_archives_2005_026",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "multiple child pornography offenses and has agreed to\nplead guilty as charged",
+      "harm": "multiple child pornography offenses and has agreed to plead guilty\nas charged",
       "evidence_quote": "and by advertising on specified Internet Relay Chat (IRC) channels a willingness to receive or distribute files.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties IRC instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"and by advertising on specified Internet Relay Chat (IRC) channels...\""
     },
     {
-      "case_id": "doj_archives_2006_006",
+      "case_id": "doj_archives_2006_005",
       "platform": "chat",
       "platform_type": "MessagingService",
-      "platform_role_in_offense": "grooming / soliciting minor",
-      "harm": "a four-count Indictment charging him with\nattempted coercion and enticement of a",
-      "evidence_quote": "In a series of Internet chats, FAFARD sent her child pornography to entice",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "In a series of Internet chats, FAFARD",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2006_008",
+      "case_id": "doj_archives_2006_007",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "",
@@ -1296,7 +1296,7 @@
       "_text_not_found": true
     },
     {
-      "case_id": "doj_archives_2006_016",
+      "case_id": "doj_archives_2006_014",
       "platform": "IRC",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "",
@@ -1307,7 +1307,7 @@
       "_text_not_found": true
     },
     {
-      "case_id": "doj_archives_2006_023",
+      "case_id": "doj_archives_2006_021",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1317,7 +1317,7 @@
       "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Internet user, developed a relationship with Thomas Evered, a Monta...\""
     },
     {
-      "case_id": "doj_archives_2006_024",
+      "case_id": "doj_archives_2006_022",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1337,7 +1337,7 @@
       "your_reasoning": "'Craigslist' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2007_012",
+      "case_id": "doj_archives_2007_013",
       "platform": "Craigslist",
       "platform_type": "ClassifiedsMarketplace",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -1347,7 +1347,7 @@
       "your_reasoning": "'Craigslist' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2007_020",
+      "case_id": "doj_archives_2007_021",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1357,17 +1357,17 @@
       "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"chat rooms.\""
     },
     {
-      "case_id": "doj_archives_2007_021",
+      "case_id": "doj_archives_2007_022",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "February 22, 2007, after traveling by vehicle from his Edgewater, Maryland home",
-      "evidence_quote": "Within 15 minutes of beginning the chat, Acker asked the girl\u2019s age, what she looked",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Within 15 minutes of beginning the chat, Acker asked the girl\u2019s age...\""
+      "harm": "",
+      "evidence_quote": "computer, with the on-line chat displayed on its screen, a bottle of wine, suspected marijuana, a condom, and",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2007_027",
+      "case_id": "doj_archives_2007_029",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1377,7 +1377,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2007_027",
+      "case_id": "doj_archives_2007_029",
       "platform": "Webcam platform",
       "platform_type": "VideoStreamingPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -1387,27 +1387,37 @@
       "your_reasoning": "Sentence ties Webcam platform instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"a collector.\u201d He gave agents detailed information about the softwar...\""
     },
     {
-      "case_id": "doj_archives_2007_028",
+      "case_id": "doj_archives_2007_030",
       "platform": "Craigslist",
       "platform_type": "ClassifiedsMarketplace",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "traveling in interstate commerce with intent to engage in illicit sexual contact",
-      "evidence_quote": "RAMEY was unaware that the individual he had been communicating with via the website \u201cCraigslist\u201d to",
+      "harm": "traveling in interstate commerce\nwith intent to engage in illicit sexual contact",
+      "evidence_quote": "been communicating with via the website \u201cCraigslist\u201d to arrange the illicit rendezvous was actually an",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Craigslist instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"RAMEY was unaware that the individual he had been communicating wit...\""
+      "your_reasoning": "Sentence ties Craigslist instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"been communicating with via the website \u201cCraigslist\u201d to arrange the...\""
     },
     {
-      "case_id": "doj_archives_2008_017",
+      "case_id": "doj_archives_2008_014",
+      "platform": "Kazaa",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "two counts of possession and receipt\nrelating to the Aug",
+      "evidence_quote": "confirmed that child pornography images and videos were stored in the computer and that Kazaa logs indicated",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Kazaa' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "doj_archives_2008_016",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
       "harm": "",
-      "evidence_quote": "and the individual in Thailand were all members of an Internet chat group dedicated to men with a sexual",
+      "evidence_quote": "in Thailand were all members of an Internet chat group dedicated to men with a sexual interest in minor boys.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_018",
+      "case_id": "doj_archives_2008_017",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1427,7 +1437,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_035",
+      "case_id": "doj_archives_2008_037",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1437,27 +1447,47 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_043",
-      "platform": "chat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "one count of conspiracy to produce child pornography",
-      "evidence_quote": "messaging, video messaging, text messaging and video chat software to communicate and share sexual interests",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"messaging, video messaging, text messaging and video chat software...\""
+      "case_id": "doj_archives_2008_042",
+      "platform": "Kazaa",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "two counts of possession and\nrelating to the Aug",
+      "evidence_quote": "confirmed that child pornography images and videos were stored in the computer and that Kazaa logs indicated",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Kazaa' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_043",
+      "case_id": "doj_archives_2008_045",
+      "platform": "LimeWire",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "20, 2006, an undercover FBI agent signed on to LimeWire, a",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'LimeWire' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "doj_archives_2008_047",
+      "platform": "chat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "one count of\nconspiracy to produce child pornography",
+      "evidence_quote": "ring between 2005 and 2007 to use instant messaging, video messaging, text messaging and video chat software",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"ring between 2005 and 2007 to use instant messaging, video messagin...\""
+    },
+    {
+      "case_id": "doj_archives_2008_047",
       "platform": "Webcam platform",
       "platform_type": "VideoStreamingPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "one count of conspiracy to produce child pornography",
-      "evidence_quote": "real-time images of their crimes to one another using webcam broadcasts.",
+      "harm": "one count of\nconspiracy to produce child pornography",
+      "evidence_quote": "another using webcam broadcasts.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Webcam platform' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_047",
+      "case_id": "doj_archives_2008_053",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -1467,22 +1497,32 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_054",
-      "platform": "chat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "one count of conspiracy to produce child\npornography and one count of conspiracy",
-      "evidence_quote": "video chat software to communicate and share sexual interests in children.",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"video chat software to communicate and share sexual interests in ch...\""
+      "case_id": "doj_archives_2008_059",
+      "platform": "LimeWire",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "child pornography charges,\nAssistant Attorney General Alice S",
+      "evidence_quote": "According to plea documents, Carpenter acknowledged using \u201cLimeWire,\u201d a peer- to-peer software program, to",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'LimeWire' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "doj_archives_2008_054",
+      "case_id": "doj_archives_2008_062",
+      "platform": "chat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "one count of conspiracy to produce child\npornography and one count of conspiracy",
+      "evidence_quote": "2005 and 2007 to use instant messaging, video messaging, text messaging and video chat software to",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"2005 and 2007 to use instant messaging, video messaging, text messa...\""
+    },
+    {
+      "case_id": "doj_archives_2008_062",
       "platform": "Webcam platform",
       "platform_type": "VideoStreamingPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
       "harm": "one count of conspiracy to produce child\npornography and one count of conspiracy",
-      "evidence_quote": "using webcam broadcasts.",
+      "evidence_quote": "realntime using webcam broadcasts.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Webcam platform' named without instrumental offense role in matching sentence."
     },
@@ -1491,7 +1531,7 @@
       "platform": "Gen AI",
       "platform_type": "AIService",
       "platform_role_in_offense": "",
-      "harm": "Child Pornography Offenses\nPublication date: 2025-05-15\nSource: federal grand ju",
+      "harm": "Child Pornography Offenses\nPublication date: 2025-05-15\nA federal grand jury ret",
       "evidence_quote": "",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
@@ -1542,7 +1582,7 @@
       "platform": "Discord",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nSource",
+      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nEarlie",
       "evidence_quote": "explicit conduct and shared it to other Discord servers and amongst themselves.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"explicit conduct and shared it to other Discord servers and amongst...\""
@@ -1552,7 +1592,7 @@
       "platform": "Roblox",
       "platform_type": "GamePlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nSource",
+      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nEarlie",
       "evidence_quote": "referred to as \u201cfansigning.\u201d The group found victims in Discord servers or on gaming platforms such as Roblox",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Roblox' named without instrumental offense role in matching sentence."
@@ -1562,7 +1602,7 @@
       "platform": "CS:GO",
       "platform_type": "GamePlatform",
       "platform_role_in_offense": "",
-      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nSource",
+      "harm": "Sexually Exploiting\nChildren on the Internet\nPublication date: 2025-12-02\nEarlie",
       "evidence_quote": "",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
@@ -1619,6 +1659,26 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
+      "case_id": "doj_ceos_2025_015",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "sexual\nexploitation of a child and receipt and distribution of child pornography",
+      "evidence_quote": "Child Sexual Abuse Material from the BitTorrent File-Sharing Network",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties BitTorrent instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Child Sexual Abuse Material from the BitTorrent File-Sharing Network\""
+    },
+    {
+      "case_id": "doj_ceos_2025_016",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "analysis further confirmed that Kuttke had downloaded CSAM from BitTorrent, including videos depicting",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'BitTorrent' named without instrumental offense role in matching sentence."
+    },
+    {
       "case_id": "doj_ceos_2025_026",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
@@ -1647,6 +1707,16 @@
       "evidence_quote": "messaging applications \u2014 including WhatsApp and Kik \u2014 to attempt to meet and have sexual intercourse with",
       "stated_vs_inferred": "inferred",
       "your_reasoning": "WhatsApp and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"messaging applications \u2014 including WhatsApp and Kik \u2014 to attempt to...\""
+    },
+    {
+      "case_id": "doj_ceos_2025_028",
+      "platform": "Tor",
+      "platform_type": "AnonymizationService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Tor browser, which allows users to surf the dark web, to access images and videos of CSAM, including content",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Tor' named without instrumental offense role in matching sentence."
     },
     {
       "case_id": "doj_ceos_2025_029",
@@ -1709,6 +1779,16 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
+      "case_id": "doj_ceos_2026_002",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "receipt of CSAM on Dec",
+      "evidence_quote": "the BitTorrent peer-to-peer file sharing network, which identified an IP address traced back to Escobar\u2019s",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties BitTorrent instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"the BitTorrent peer-to-peer file sharing network, which identified...\""
+    },
+    {
       "case_id": "doj_ceos_2026_006",
       "platform": "Grindr",
       "platform_type": "OnlineDatingPlatform",
@@ -1747,6 +1827,16 @@
       "evidence_quote": "for Attempting to Coerce and Entice Minors Using WhatsApp and Kik",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties WhatsApp instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"for Attempting to Coerce and Entice Minors Using WhatsApp and Kik\""
+    },
+    {
+      "case_id": "doj_ceos_2026_009",
+      "platform": "Tor",
+      "platform_type": "AnonymizationService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Attorneys\u2019 Offices and CEOS, Project Safe Childhood marshals federal, state, and local resources to better",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Tor' named without instrumental offense role in matching sentence."
     },
     {
       "case_id": "doj_ceos_2026_010",
@@ -1804,7 +1894,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nSour",
+      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nOn M",
       "evidence_quote": "wary of the person on the other end of the chat line; many times people are not who they say they are.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -1814,7 +1904,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nSour",
+      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nOn M",
       "evidence_quote": "Ricardo Carrillo contacted the boy through apps called \u201cWhisper\u201d and \u201cKik.\u201d While using the programs,",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Ricardo Carrillo contacted the boy through apps called \u201cWhisper\u201d an...\""
@@ -1824,7 +1914,7 @@
       "platform": "Whisper",
       "platform_type": "AnonymousChatPlatform",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nSour",
+      "harm": "Multiple Sex Abuse & Child Pornography Charges\nPublication date: 2015-03-25\nOn M",
       "evidence_quote": "Ricardo Carrillo contacted the boy through apps called \u201cWhisper\u201d and \u201cKik.\u201d While using the programs,",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Whisper instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Ricardo Carrillo contacted the boy through apps called \u201cWhisper\u201d an...\""
@@ -1995,7 +2085,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "assault and battery and later r",
+      "harm": "assault and battery and later re",
       "evidence_quote": "had met through social media in mid-October.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -2005,7 +2095,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "assault and battery and later r",
+      "harm": "assault and battery and later re",
       "evidence_quote": "children to be wary of the person on the other end of the chat line; many times people are not who they say they",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -3221,7 +3311,7 @@
       "platform": "Facebook",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "4 child sex\nPublication date: 2026-04-13\nSource: \u2014 ICE has released photos of Ca",
+      "harm": "4 child sex\nPublication date: 2026-04-13\nWASHINGTON \u2014 ICE has released photos of",
       "evidence_quote": "Learn more about ICE\u2019s mission to protect children from online sexual predators on X , Facebook , Instagram ,",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Facebook' named without instrumental offense role in matching sentence."
@@ -3231,7 +3321,7 @@
       "platform": "Instagram",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "4 child sex\nPublication date: 2026-04-13\nSource: \u2014 ICE has released photos of Ca",
+      "harm": "4 child sex\nPublication date: 2026-04-13\nWASHINGTON \u2014 ICE has released photos of",
       "evidence_quote": "Learn more about ICE\u2019s mission to protect children from online sexual predators on X , Facebook , Instagram ,",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Instagram' named without instrumental offense role in matching sentence."
@@ -3305,6 +3395,16 @@
       "evidence_quote": "special agents reviewed Shannon\u2019s Snapchat account and found at least 16 additional child victims, one of",
       "stated_vs_inferred": "inferred",
       "your_reasoning": "Snapchat and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"special agents reviewed Shannon\u2019s Snapchat account and found at lea...\""
+    },
+    {
+      "case_id": "idaho_icac_2024_022",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "According to testimony at the sentencing hearing, the investigation uncovered Hammond\u2019s use of a BitTorrent network to",
+      "stated_vs_inferred": "inferred",
+      "your_reasoning": "BitTorrent and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"According to testimony at the sentencing hearing, the investigation...\""
     },
     {
       "case_id": "idaho_icac_2024_026",
@@ -4308,7 +4408,7 @@
       "_text_not_found": true
     },
     {
-      "case_id": "nc_sbi_2020_002",
+      "case_id": "nc_sbi_2020_003",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "platform-reported CSAM (distribution inferred)",
@@ -4318,7 +4418,7 @@
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"It was reported to NCMEC via a social media site that a user had\""
     },
     {
-      "case_id": "nc_sbi_2020_003",
+      "case_id": "nc_sbi_2020_004",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -4332,7 +4432,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "child sex crimes\nSource: COUNTY, NC) -- On October 22, 2025, members of the NCSB",
+      "harm": "child sex crimes\n(GUILFORD COUNTY, NC) -- On October 22, 2025, members of the NC",
       "evidence_quote": "via the SBI social media platforms, and the SBI website at .n",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -4348,7 +4448,7 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "nc_sbi_2026_007",
+      "case_id": "nc_sbi_2026_006",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -4362,7 +4462,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "CSAM production",
-      "harm": "receiving and possessing thousands of\nimages and videos of child sexual abuse\nSo",
+      "harm": "receiving and possessing thousands of\nimages and videos of child sexual abuse\nAL",
       "evidence_quote": "obtain CSAM from a CSAM trafficker on Kik, who was later convicted of production of child pornography.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"obtain CSAM from a CSAM trafficker on Kik, who was later convicted...\""
@@ -4443,7 +4543,7 @@
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
       "harm": "",
-      "evidence_quote": "Source: proactive child exploitation chat operations such as these directly support Department of",
+      "evidence_quote": "Source: \"Large-scale, proactive child exploitation chat operations such as these directly support Department of",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
@@ -4717,6 +4817,16 @@
       "evidence_quote": "Police said the chats included requests for inappropriate images or videos as well as",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "ncmec_2022_056",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Authorities were able to connect Lewis with that Gmail account, via a $25 Cash App",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Cash App' named without instrumental offense role in matching sentence."
     },
     {
       "case_id": "ncmec_2022_060",
@@ -7863,6 +7973,16 @@
       "your_reasoning": "Sentence ties Omegle instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Haglund told deputies he met young boys on Omegle, a website used to\""
     },
     {
+      "case_id": "ncmec_2023_133",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "BitTorrent Network.",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'BitTorrent' named without instrumental offense role in matching sentence."
+    },
+    {
       "case_id": "ncmec_2023_136",
       "platform": "Facebook",
       "platform_type": "SocialMediaPlatform",
@@ -8757,6 +8877,16 @@
       "your_reasoning": "'Google Drive' named without instrumental offense role in matching sentence."
     },
     {
+      "case_id": "ncmec_2023_419",
+      "platform": "iCloud",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "possession of child\nby Jennifer Weiser Thu, June 29th 2023, 4:00 PM EDT\nAn Osage",
+      "evidence_quote": "missing-and-exploited-children-manuel-fuentes-scout-street-camden-county-jail-verizon-icloud-storage",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'iCloud' named without instrumental offense role in matching sentence."
+    },
+    {
       "case_id": "ncmec_2023_429",
       "platform": "chat",
       "platform_type": "MessagingService",
@@ -9629,6 +9759,16 @@
       "stated_vs_inferred": "named_only",
       "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
       "_text_not_found": true
+    },
+    {
+      "case_id": "ncmec_2024_038",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "ALLEGEDLY SOLICITING, PURCHASING CHILD PORN\nhttps://www",
+      "evidence_quote": "in graphic detail and the exchange of money through a cash app for the purchase of the photos and videos.",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Cash App instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"in graphic detail and the exchange of money through a cash app for...\""
     },
     {
       "case_id": "ncmec_2024_039",
@@ -10970,6 +11110,16 @@
       "evidence_quote": "Missing and Exploited children in late September about a suspect\u2019s upload of possible child pornography on a Kik",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Missing and Exploited children in late September about a suspect\u2019s...\""
+    },
+    {
+      "case_id": "ncmec_2024_1257",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "",
+      "evidence_quote": "no longer had, and to exchanging screenshots and paying $5 to a Cash App user for child pornography.",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Cash App instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"no longer had, and to exchanging screenshots and paying $5 to a Cas...\""
     },
     {
       "case_id": "ncmec_2024_129",
@@ -12948,6 +13098,16 @@
       "your_reasoning": "'Facebook' named without instrumental offense role in matching sentence."
     },
     {
+      "case_id": "ncmec_2024_523",
+      "platform": "iCloud",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "",
+      "evidence_quote": "and Exploited Children (NCMEC) for images containing child pornography being uploaded to an Apple iCloud",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties iCloud instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"and Exploited Children (NCMEC) for images containing child pornogra...\""
+    },
+    {
       "case_id": "ncmec_2024_524",
       "platform": "Facebook",
       "platform_type": "SocialMediaPlatform",
@@ -13116,6 +13276,17 @@
       "evidence_quote": "\u201cKitten Server Name.\u201d Direct messages obtained from Snell\u2019s Discord account show he actively solicited illicit",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"\u201cKitten Server Name.\u201d Direct messages obtained from Snell\u2019s Discord...\""
+    },
+    {
+      "case_id": "ncmec_2024_581",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "",
+      "harm": "multiple counts related to the production of\nchild sexual abuse material and for",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
     },
     {
       "case_id": "ncmec_2024_583",
@@ -13656,6 +13827,16 @@
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"conducting an undercover chat investigation on the Kik messenger se...\""
     },
     {
+      "case_id": "ncmec_2024_676",
+      "platform": "iCloud",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "Tuesday and is being held at the Cape May County Correctional Facility pending a",
+      "evidence_quote": "possessed and distributed various images of child sexual abuse material via his iCloud account back in 2020.",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties iCloud instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"possessed and distributed various images of child sexual abuse mate...\""
+    },
+    {
       "case_id": "ncmec_2024_680",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
@@ -14098,6 +14279,17 @@
       "_text_not_found": true
     },
     {
+      "case_id": "ncmec_2024_871",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "",
+      "harm": "possessing child sexual abuse material",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
       "case_id": "ncmec_2024_874",
       "platform": "Kik",
       "platform_type": "MessagingService",
@@ -14177,6 +14369,16 @@
       "evidence_quote": "\u201cOfficers served a search warrant and determined he was downloading CSAM from Snapchat and then sharing it",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"\u201cOfficers served a search warrant and determined he was downloading...\""
+    },
+    {
+      "case_id": "ncmec_2024_891",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "",
+      "evidence_quote": "Authorities said Walker exchanged the files through BitTorrent, an internet service that allows users to",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties BitTorrent instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Authorities said Walker exchanged the files through BitTorrent, an...\""
     },
     {
       "case_id": "ncmec_2024_895",
@@ -14769,6 +14971,16 @@
       "evidence_quote": "investigators that he used another social media app, Discord, to engage in sexually explicit messaging",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"investigators that he used another social media app, Discord, to en...\""
+    },
+    {
+      "case_id": "ncmec_2024_996",
+      "platform": "IMVU",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "that an IMVU user was messaging the account of a 13-year-old female with various sexually explicit messages.",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties IMVU instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"that an IMVU user was messaging the account of a 13-year-old female...\""
     },
     {
       "case_id": "ne_sp_2018_002",
@@ -16138,6 +16350,16 @@
       "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
     },
     {
+      "case_id": "nj_ag_2026_041",
+      "platform": "iCloud",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "pornography were located in an iCloud email account maintained by Marinelli.",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'iCloud' named without instrumental offense role in matching sentence."
+    },
+    {
       "case_id": "nj_ag_2026_042",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
@@ -16733,7 +16955,7 @@
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
       "harm": "July 13, 2016, when members of the DTIU and State Police TEAMS South Unit execut",
-      "evidence_quote": "The social media links provided are for refere",
+      "evidence_quote": "The social media links provided are fo",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
@@ -16833,7 +17055,7 @@
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
       "harm": "",
-      "evidence_quote": "Detectives also conducted undercover chat investigations on social media platforms, w",
+      "evidence_quote": "Detectives also conducted undercover chat investigations on social media plat",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Detectives also conducted undercover chat investigations on social...\""
     },
@@ -16843,7 +17065,7 @@
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
       "harm": "",
-      "evidence_quote": "Detectives also conducted undercover chat investigations on social media platforms, w",
+      "evidence_quote": "Detectives also conducted undercover chat investigations on social media plat",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
@@ -17901,7 +18123,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Stalking for Repeatedly Posting Intimate\nSource: \u2014 Attorney General Dave Sunday",
+      "harm": "Stalking for Repeatedly Posting Intimate\nHARRISBURG \u2014 Attorney General Dave Sund",
       "evidence_quote": "weaponize modern technology and social media,\u201d Attorney General Sunday said.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -17911,7 +18133,7 @@
       "platform": "Twitter / X",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Stalking for Repeatedly Posting Intimate\nSource: \u2014 Attorney General Dave Sunday",
+      "harm": "Stalking for Repeatedly Posting Intimate\nHARRISBURG \u2014 Attorney General Dave Sund",
       "evidence_quote": "photographs posted by Staiger, primarily on X/Twitter.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
@@ -18062,7 +18284,7 @@
       "platform": "Twitter / X",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "possession, distribution of child\nPublication date: 2023-07-20\nSource: on Thursd",
+      "harm": "possession, distribution of child\nPublication date: 2023-07-20\nPublished on Thur",
       "evidence_quote": "The report contained information about a Twitter account that contained multiple uploaded files containing",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Twitter / X instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The report contained information about a Twitter account that conta...\""
@@ -18207,7 +18429,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Child\nPublication date: 2024-03-21\nSource: IMMEDIATE RELEASE Thursday, March 21,",
+      "harm": "Child\nPublication date: 2024-03-21\nFOR IMMEDIATE RELEASE Thursday, March 21, 202",
       "evidence_quote": "indicated that De Freitas had sent and requested illicit images via a social media app.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"indicated that De Freitas had sent and requested illicit images via...\""
@@ -18467,6 +18689,17 @@
       "case_id": "south_florida_icac_2023_011",
       "platform": "Mega.nz",
       "platform_type": "FileHostingService",
+      "platform_role_in_offense": "",
+      "harm": "eight counts of possession of child pornography and one count of tampering with",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
+      "case_id": "south_florida_icac_2023_011",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
       "platform_role_in_offense": "",
       "harm": "eight counts of possession of child pornography and one count of tampering with",
       "evidence_quote": "",
@@ -18820,7 +19053,7 @@
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
       "harm": "November 21 after\nCoral Springs Police and members of the South Florida Internet",
-      "evidence_quote": "Source: Coral Springs man is facing a series of felony charges after investigators say he used multiple social media",
+      "evidence_quote": "A Coral Springs man is facing a series of felony charges after investigators say he used multiple social media",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
@@ -18890,7 +19123,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "child pornography charges, police say\nSource: on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
       "evidence_quote": "through the Kik social media platform.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"through the Kik social media platform.\""
@@ -18900,7 +19133,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "child pornography charges, police say\nSource: on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
       "evidence_quote": "Investigators said messages from various chat groups, provided by Kik, showed Rogers referring to himself as a",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -18910,7 +19143,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "child pornography charges, police say\nSource: on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
       "evidence_quote": "The tip indicated that an individual using a Kik/Media Lab account was distributing child sexual abuse material",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The tip indicated that an individual using a Kik/Media Lab account...\""
@@ -19656,7 +19889,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "child pornography and sexual acts with a\nSource: COUNTY, Calif",
+      "harm": "child pornography and sexual acts with a\nMONTEREY COUNTY, Calif",
       "evidence_quote": "California uploaded pictures to Snapchat the contained child sex abuse.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"California uploaded pictures to Snapchat the contained child sex ab...\""
@@ -19686,7 +19919,7 @@
       "platform": "Twitter / X",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "child\nSource: cannabis entrepreneur Robert Jacob pleaded no contest to a half-do",
+      "harm": "child\nFormer cannabis entrepreneur Robert Jacob pleaded no contest to a half-doz",
       "evidence_quote": "Email: raheem.hosseini@sfchronicle.com Twitter:",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
@@ -19696,7 +19929,7 @@
       "platform": "Grindr",
       "platform_type": "OnlineDatingPlatform",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "child\nSource: cannabis entrepreneur Robert Jacob pleaded no contest to a half-do",
+      "harm": "child\nFormer cannabis entrepreneur Robert Jacob pleaded no contest to a half-doz",
       "evidence_quote": "that he met Jacob on the Grindr dating app, and that the two exchanged nude photos before Jacob escalated the",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Grindr instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"that he met Jacob on the Grindr dating app, and that the two exchan...\""
@@ -19736,7 +19969,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Suspicion Of Extorting Minor For Nude\nBay City News , News Partner\nSource: CA \u2014",
+      "harm": "Suspicion Of Extorting Minor For Nude\nBay City News , News Partner\nLIVERMORE, CA",
       "evidence_quote": "report from the victim about being extorted by a user going by the name \"Jack Lucas\" on a social media",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -19866,7 +20099,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Sexual Exploitation of a Minor\nSource: COUNTY \u2013 A joint investigation by TBI and",
+      "harm": "Sexual Exploitation of a Minor\nROBERTSON COUNTY \u2013 A joint investigation by TBI a",
       "evidence_quote": "child pornography via private message on a social media platform.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"child pornography via private message on a social media platform.\""
@@ -19937,7 +20170,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Sexual Exploitation of a Minor\nSource: COUNTY \u2013 An investigation by special agen",
+      "harm": "Sexual Exploitation of a Minor\nWARREN COUNTY \u2013 An investigation by special agent",
       "evidence_quote": "Pease engaged in this behavior on various social media platforms.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -19947,7 +20180,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Sexual Exploitation of a Minor\nSource: COUNTY \u2013 An investigation by special agen",
+      "harm": "Sexual Exploitation of a Minor\nWARREN COUNTY \u2013 An investigation by special agent",
       "evidence_quote": "Anyone who may have had communication with the username of eddiepease722 on Snapchat, or on TikTok, as",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Anyone who may have had communication with the username of eddiepea...\""
@@ -19957,7 +20190,7 @@
       "platform": "TikTok",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Sexual Exploitation of a Minor\nSource: COUNTY \u2013 An investigation by special agen",
+      "harm": "Sexual Exploitation of a Minor\nWARREN COUNTY \u2013 An investigation by special agent",
       "evidence_quote": "Anyone who may have had communication with the username of eddiepease722 on Snapchat, or on TikTok, as",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties TikTok instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Anyone who may have had communication with the username of eddiepea...\""
@@ -19967,7 +20200,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Sexual Exploitation of a Minor\nSource: COUNTY \u2013 An investigation by special agen",
+      "harm": "Sexual Exploitation of a Minor\nGRUNDY COUNTY \u2013 An investigation by special agent",
       "evidence_quote": "communication with Snapchat account t_rexbaby21 is asked to contact the TBI at 1-800-TBI-FIND.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"communication with Snapchat account t_rexbaby21 is asked to contact...\""
@@ -20138,7 +20371,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Violation of the Sex Offender\nSource: COUNTY \u2013 Special agents assigned to the Te",
+      "harm": "Violation of the Sex Offender\nFENTRESS COUNTY \u2013 Special agents assigned to the T",
       "evidence_quote": "sexual abuse material being distributed on Kik.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"sexual abuse material being distributed on Kik.\""
@@ -20268,7 +20501,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Solicitation of a Minor\nSource: COUNTY \u2013 An investigation by special agents with",
+      "harm": "Solicitation of a Minor\nMARSHALL COUNTY \u2013 An investigation by special agents wit",
       "evidence_quote": "someone using the name blakjiren on social media or on gaming platforms is encouraged to contact the TBI at",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"someone using the name blakjiren on social media or on gaming platf...\""
@@ -20278,7 +20511,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Counts of Aggravated Statutory\nSource: COUNTY \u2013Special agents assigned",
+      "harm": "Multiple Counts of Aggravated Statutory\nWILLIAMSON COUNTY \u2013Special agents assign",
       "evidence_quote": "In 2024, special agents posed as underage girls in a joint undercover internet chat operation, which resulted in",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -20288,7 +20521,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Counts of Aggravated Statutory\nSource: COUNTY \u2013Special agents assigned",
+      "harm": "Multiple Counts of Aggravated Statutory\nWILLIAMSON COUNTY \u2013Special agents assign",
       "evidence_quote": "name scofett on the KIK app or Paul Herring, (pherring37) on Snapchat, is encouraged to contact the TBI at",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"name scofett on the KIK app or Paul Herring, (pherring37) on Snapch...\""
@@ -20298,7 +20531,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Multiple Counts of Aggravated Statutory\nSource: COUNTY \u2013Special agents assigned",
+      "harm": "Multiple Counts of Aggravated Statutory\nWILLIAMSON COUNTY \u2013Special agents assign",
       "evidence_quote": "name scofett on the KIK app or Paul Herring, (pherring37) on Snapchat, is encouraged to contact the TBI at",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"name scofett on the KIK app or Paul Herring, (pherring37) on Snapch...\""
@@ -20329,7 +20562,7 @@
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "October 29 on five counts of Possession of Child\n( of College Station, arrested",
+      "harm": "October 29 on five counts of Possession of Child\n(, of College Station, arrested",
       "evidence_quote": "and Dominguez uploaded child pornography to social media applications, and Turner",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
@@ -20650,7 +20883,7 @@
       "platform": "Skype",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "Possession Of Child\nPublication date: 2020-12-07\nSource: FRANCISCO \u2013 Marc Nunez",
+      "harm": "Possession Of Child\nPublication date: 2020-12-07\nSAN FRANCISCO \u2013 Marc Nunez made",
       "evidence_quote": "The complaint further describes cell phone messages and Skype messages in which",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Skype instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The complaint further describes cell phone messages and Skype messa...\""
@@ -20744,6 +20977,17 @@
       "evidence_quote": "During the review of Lyons\u2019s iPhone, the DCI Detective also located a chat conversation from February 16,",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "usss_2022_003",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "",
+      "harm": "a criminal\ninformation charging receipt of child pornography before Magistrate J",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
     },
     {
       "case_id": "usss_2022_004",
@@ -20881,9 +21125,9 @@
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
       "harm": "",
-      "evidence_quote": "Source: - A Mansfield, Texas, man who used Snapchat to inappropriately communicate with 14-year-old boy",
+      "evidence_quote": "DALLAS - A Mansfield, Texas, man who used Snapchat to inappropriately communicate with 14-year-old boy",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Source: - A Mansfield, Texas, man who used Snapchat to inappropriat...\""
+      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"DALLAS - A Mansfield, Texas, man who used Snapchat to inappropriate...\""
     },
     {
       "case_id": "usss_2025_003",
@@ -20905,6 +21149,17 @@
       "evidence_quote": "media platform Twitter, now known as X, to advertise and sell child sexual abuse material.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "usss_2025_003",
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "platform_role_in_offense": "",
+      "harm": "",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
     },
     {
       "case_id": "usss_2026_001",
@@ -21142,7 +21397,7 @@
       "platform": "Facebook",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Sexually Abusing Child\nSource: the COVID-19 pandemic, our communities and worlds",
+      "harm": "Sexually Abusing Child\nDuring the COVID-19 pandemic, our communities and worlds",
       "evidence_quote": "pornography being distributed between Facebook accounts.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Facebook instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"pornography being distributed between Facebook accounts.\""
@@ -21172,7 +21427,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "grooming / soliciting minor",
-      "harm": "raping a child after luring her to his\napartment using Snapchat\nSource: a North",
+      "harm": "raping a child after luring her to his\napartment using Snapchat\nYesterday, a Nor",
       "evidence_quote": "Deseret News : Northern Utah man uses Snapchat to lure teen to his apartment, rape her, charges state",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Deseret News : Northern Utah man uses Snapchat to lure teen to his...\""
@@ -21207,6 +21462,16 @@
       "evidence_quote": "media website Tumblr to upload electronic files containing child pornography.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Tumblr instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"media website Tumblr to upload electronic files containing child po...\""
+    },
+    {
+      "case_id": "vt_ag_2020_006",
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "a crime are legally presumed innocent until\ntheir guilt is proven beyond a reaso",
+      "evidence_quote": "the BitTorrent network and found files of child sexual abuse materials, commonly referred to as \u201cchild",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'BitTorrent' named without instrumental offense role in matching sentence."
     },
     {
       "case_id": "vt_ag_2020_008",
@@ -21708,7 +21973,7 @@
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "possession of child pornography\nPublication date: 2021-02-12\nSource: County Sher",
+      "harm": "possession of child pornography\nPublication date: 2021-02-12\nWashoe County Sheri",
       "evidence_quote": "Cannel has been under investigation since May 2020, and this case stems from his Snapchat account.",
       "stated_vs_inferred": "inferred",
       "your_reasoning": "Snapchat and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"Cannel has been under investigation since May 2020, and this case s...\""
@@ -22050,7 +22315,7 @@
     {
       "case_id": "nj_ag_2026_017",
       "platform": "Tumblr",
-      "exclusion_reason": "PSA-only \u2014 'Tumblr' appears only after PSA boundary. Sample: \"Hot or Not, Down, and Tumblr. Arrests also have been ma\""
+      "exclusion_reason": "PSA-only \u2014 'Tumblr' appears only after PSA boundary. Sample: \"Hot or Not, Down, and Tumblr. Arrests als\""
     },
     {
       "case_id": "nj_ag_2026_017",
@@ -22167,7 +22432,7 @@
     {
       "case_id": "anchorage_pd_2022_001",
       "platform": "Tor",
-      "found_in": "Source: the District Attorney\u2019s Office:"
+      "found_in": "From the District Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2022_001",
@@ -22217,7 +22482,7 @@
     {
       "case_id": "anchorage_pd_2022_005",
       "platform": "Tor",
-      "found_in": "Source: the US Attorney\u2019s Office:"
+      "found_in": "From the US Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2022_005",
@@ -22232,7 +22497,7 @@
     {
       "case_id": "anchorage_pd_2022_007",
       "platform": "Tor",
-      "found_in": "Source: the Attorney General\u2019s Office:"
+      "found_in": "From the Attorney General\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2022_007",
@@ -22247,7 +22512,7 @@
     {
       "case_id": "anchorage_pd_2022_009",
       "platform": "Tor",
-      "found_in": "Source: the United States Attorney\u2019s Office:"
+      "found_in": "From the United States Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2022_009",
@@ -22257,7 +22522,7 @@
     {
       "case_id": "anchorage_pd_2023_002",
       "platform": "Tor",
-      "found_in": "Source: the U.S. Attorney\u2019s Office:"
+      "found_in": "From the U.S. Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2023_002",
@@ -22272,12 +22537,12 @@
     {
       "case_id": "anchorage_pd_2023_006",
       "platform": "Tor",
-      "found_in": "Source: the Office of the Attorney General:"
+      "found_in": "From the Office of the Attorney General:"
     },
     {
       "case_id": "anchorage_pd_2024_002",
       "platform": "Tor",
-      "found_in": "Source: the U.S. Attorney\u2019s Office:"
+      "found_in": "From the U.S. Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2024_002",
@@ -22287,7 +22552,7 @@
     {
       "case_id": "anchorage_pd_2024_006",
       "platform": "Tor",
-      "found_in": "Source: the U.S. Attorney\u2019s Office:"
+      "found_in": "From the U.S. Attorney\u2019s Office:"
     },
     {
       "case_id": "anchorage_pd_2024_006",
@@ -22307,7 +22572,7 @@
     {
       "case_id": "arkansas_dps_2024_002",
       "platform": "internet",
-      "found_in": "Source: Thursday, November 21, 2024, Arkansas State Police (ASP) Internet Cri..."
+      "found_in": "On Thursday, November 21, 2024, Arkansas State Police (ASP) Internet Crimes A..."
     },
     {
       "case_id": "arkansas_dps_2024_003",
@@ -22327,7 +22592,7 @@
     {
       "case_id": "arkansas_dps_2024_005",
       "platform": "internet",
-      "found_in": "Source: Ark. \u2014 On Tuesday, October 8, 2024, an Arkansas Internet Crimes Again..."
+      "found_in": "HARRISON, Ark. \u2014 On Tuesday, October 8, 2024, an Arkansas Internet Crimes Aga..."
     },
     {
       "case_id": "arkansas_dps_2024_005",
@@ -22347,7 +22612,7 @@
     {
       "case_id": "arkansas_dps_2024_011",
       "platform": "internet",
-      "found_in": "Source: Thursday, October 24, 2024, at around 6:55 a.m., Special Agents with..."
+      "found_in": "On Thursday, October 24, 2024, at around 6:55 a.m., Special Agents with the A..."
     },
     {
       "case_id": "arkansas_dps_2024_012",
@@ -22362,7 +22627,7 @@
     {
       "case_id": "arkansas_dps_2024_012",
       "platform": "internet",
-      "found_in": "Source: Ark. \u2014 An Arkansas State Police (ASP) Internet Crimes Against Childre..."
+      "found_in": "DELIGHT, Ark. \u2014 An Arkansas State Police (ASP) Internet Crimes Against Childr..."
     },
     {
       "case_id": "arkansas_dps_2024_014",
@@ -22407,7 +22672,7 @@
     {
       "case_id": "arkansas_dps_2025_009",
       "platform": "internet",
-      "found_in": "Source: Arkansas State Police (ASP) Internet Crimes Against Children (ICAC) T..."
+      "found_in": "The Arkansas State Police (ASP) Internet Crimes Against Children (ICAC) Task..."
     },
     {
       "case_id": "azicac_2011_004",
@@ -22867,7 +23132,7 @@
     {
       "case_id": "ccsao_2025_001",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Cook County State\u2019s Attorney Eileen O\u2019Neill Burke today announced t..."
+      "found_in": "CHICAGO \u2014 Cook County State\u2019s Attorney Eileen O\u2019Neill Burke today announced t..."
     },
     {
       "case_id": "ccsao_2025_001",
@@ -23032,7 +23297,7 @@
     {
       "case_id": "de_ag_2013_012",
       "platform": "email",
-      "found_in": "Read the January, 2013 press release announcing Fort\u2019s arrest at: up to date..."
+      "found_in": "Keep up to date by receiving a daily digest email, around noon, of current ne..."
     },
     {
       "case_id": "de_ag_2013_018",
@@ -23157,7 +23422,7 @@
     {
       "case_id": "doj_archives_2002_002",
       "platform": "internet",
-      "found_in": "10 foreign countries on members of a private Internet group exchanging and do..."
+      "found_in": "CUSTOMS, 10 FOREIGN COUNTRIES, SERVE MULTIPLE SEARCH WARRANTS ON INTERNET"
     },
     {
       "case_id": "doj_archives_2002_002",
@@ -23165,184 +23430,184 @@
       "found_in": "publishing company, a registered nurse, an artist, and several other individu..."
     },
     {
-      "case_id": "doj_archives_2003_005",
+      "case_id": "doj_archives_2003_006",
       "platform": "Tor",
-      "found_in": "Source: States Attorney\u2019s Office District of Alaska 222 West 7th Avenue, #9 A..."
+      "found_in": "Exploitation Obscenity Section Trial Attorney Richard D. Green. ###"
     },
     {
-      "case_id": "doj_archives_2003_005",
+      "case_id": "doj_archives_2003_006",
       "platform": "email",
       "found_in": "Internet email and live chats and through the telephone. After developing thi..."
     },
     {
-      "case_id": "doj_archives_2003_005",
+      "case_id": "doj_archives_2003_006",
       "platform": "internet",
       "found_in": "Internet email and live chats and through the telephone. After developing thi..."
     },
     {
-      "case_id": "doj_archives_2003_005",
+      "case_id": "doj_archives_2003_006",
       "platform": "other",
       "found_in": "PORNOGRAPHY AND OTHER CHILD EXPLOITATION CRIMES INVOLVING FAIRBANKS MINOR"
     },
     {
-      "case_id": "doj_archives_2005_006",
+      "case_id": "doj_archives_2005_008",
       "platform": "Tor",
-      "found_in": "Assistant Attorney General Alice S. Fisher of the Criminal Division and Kenne..."
+      "found_in": "possess child pornography, Assistant Attorney General Alice S. Fisher of the..."
     },
     {
-      "case_id": "doj_archives_2005_006",
+      "case_id": "doj_archives_2005_008",
       "platform": "chat",
-      "found_in": "specified internet relay chat (IRC) channels a willingness to receive or dist..."
+      "found_in": "chat (IRC) channels a willingness to receive or distribute files. Schiffer ad..."
     },
     {
-      "case_id": "doj_archives_2005_006",
+      "case_id": "doj_archives_2005_008",
       "platform": "internet",
-      "found_in": "specified internet relay chat (IRC) channels a willingness to receive or dist..."
+      "found_in": "and uploaded by the public from and to his computer respectively. He also adv..."
     },
     {
-      "case_id": "doj_archives_2005_010",
+      "case_id": "doj_archives_2005_012",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice KENNETH L. WAINSTEIN United States Attorney for..."
+      "found_in": "U.S. Department of Justice KENNETH L. WAINSTEIN United States Attorney for th..."
     },
     {
-      "case_id": "doj_archives_2005_010",
+      "case_id": "doj_archives_2005_012",
       "platform": "chat",
       "found_in": "public to upload files to that computer. He also advertised on specified Inte..."
     },
     {
-      "case_id": "doj_archives_2005_010",
+      "case_id": "doj_archives_2005_012",
       "platform": "internet",
       "found_in": "Force. According to the government\u2019s evidence, Gimpel distributed child porno..."
     },
     {
-      "case_id": "doj_archives_2005_010",
+      "case_id": "doj_archives_2005_012",
       "platform": "other",
       "found_in": "mother\u2019s computer as a file server which allowed selected files to be downloa..."
     },
     {
-      "case_id": "doj_archives_2005_013",
+      "case_id": "doj_archives_2005_015",
       "platform": "Tor",
-      "found_in": "WASHINGTON, D.C. \u2013 Acting Assistant Attorney General John C. Richter of the C..."
+      "found_in": "PORNOGRAPHY WASHINGTON, D.C. \u2013 Acting Assistant Attorney General John C. Rich..."
     },
     {
-      "case_id": "doj_archives_2005_013",
+      "case_id": "doj_archives_2005_015",
       "platform": "chat",
-      "found_in": "specified Internet Relay Chat (IRC) channels a willingness to receive or dist..."
+      "found_in": "that computer, and by advertising on specified Internet Relay Chat (IRC) chan..."
     },
     {
-      "case_id": "doj_archives_2005_013",
+      "case_id": "doj_archives_2005_015",
       "platform": "internet",
-      "found_in": "specified Internet Relay Chat (IRC) channels a willingness to receive or dist..."
+      "found_in": "that computer, and by advertising on specified Internet Relay Chat (IRC) chan..."
     },
     {
-      "case_id": "doj_archives_2005_016",
+      "case_id": "doj_archives_2005_018",
       "platform": "Tor",
       "found_in": "HIGH-TECH DISTRIBUTION WASHINGTON, D.C. \u2013 Assistant Attorney General Christop..."
     },
     {
-      "case_id": "doj_archives_2005_016",
+      "case_id": "doj_archives_2005_018",
       "platform": "chat",
-      "found_in": "Chat (IRC) channels a willingness to receive or distribute files. Justice adv..."
+      "found_in": "public to upload files to that computer, and by advertising on specified Inte..."
     },
     {
-      "case_id": "doj_archives_2005_016",
+      "case_id": "doj_archives_2005_018",
       "platform": "internet",
-      "found_in": "Internet Crimes Against Children Task Force, and the Child Exploitation and O..."
+      "found_in": "State Police, the Danville Police Department, the United States Marshals Serv..."
     },
     {
-      "case_id": "doj_archives_2005_024",
+      "case_id": "doj_archives_2005_026",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice United States Attorney Southern District of Ind..."
+      "found_in": "U.S. Department of Justice Southern District of Indiana United States Attorne..."
     },
     {
-      "case_id": "doj_archives_2005_024",
+      "case_id": "doj_archives_2005_026",
       "platform": "chat",
       "found_in": "and by advertising on specified Internet Relay Chat (IRC) channels a willingn..."
     },
     {
-      "case_id": "doj_archives_2005_024",
+      "case_id": "doj_archives_2005_026",
       "platform": "internet",
-      "found_in": "State Police, the Danville Police Department, the United States Marshal Servi..."
+      "found_in": "Danville Police Department, the United States Marshal Service, the Indiana In..."
     },
     {
-      "case_id": "doj_archives_2006_006",
+      "case_id": "doj_archives_2006_005",
       "platform": "IRC",
-      "found_in": "announced that ROBERT A. FAFARD, age 62, of 8 White Birch Drive, Worcester, M..."
+      "found_in": "White Birch Drive, Worcester, Massachusetts, was sentenced by U.S. District J..."
     },
     {
-      "case_id": "doj_archives_2006_006",
+      "case_id": "doj_archives_2006_005",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice Michael J. Sullivan United States Attorney Dist..."
+      "found_in": "U.S. Department of Justice Michael J. Sullivan United States Attorney Distric..."
     },
     {
-      "case_id": "doj_archives_2006_006",
+      "case_id": "doj_archives_2006_005",
       "platform": "internet",
-      "found_in": "an FBI undercover sting in which he believed he was communicating over the In..."
+      "found_in": "he was communicating over the Internet with a thirteen-year-old girl, was sen..."
     },
     {
-      "case_id": "doj_archives_2006_008",
+      "case_id": "doj_archives_2006_007",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice United States Attorney Southern District of Ind..."
+      "found_in": "U.S. Department of Justice Southern District of Indiana United States Attorne..."
     },
     {
-      "case_id": "doj_archives_2006_008",
+      "case_id": "doj_archives_2006_007",
       "platform": "chat",
       "found_in": "configured and operated. DECKER distributed the images in an Internet Relay C..."
     },
     {
-      "case_id": "doj_archives_2006_008",
+      "case_id": "doj_archives_2006_007",
       "platform": "internet",
       "found_in": "from an investigation by the Indiana Internet Crimes Against Children Task Fo..."
     },
     {
-      "case_id": "doj_archives_2006_016",
+      "case_id": "doj_archives_2006_014",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice United States Attorney Southern District of Ind..."
+      "found_in": "U.S. Department of Justice Southern District of Indiana United States Attorne..."
     },
     {
-      "case_id": "doj_archives_2006_016",
+      "case_id": "doj_archives_2006_014",
       "platform": "chat",
-      "found_in": "-2- through a file server set up in an Internet Relay Chat channel dedicated..."
+      "found_in": "through a file server set up in an Internet Relay Chat channel dedicated to s..."
     },
     {
-      "case_id": "doj_archives_2006_016",
+      "case_id": "doj_archives_2006_014",
       "platform": "internet",
       "found_in": "Indiana Internet Crimes Against Children Task Force, U.S. Immigration and Cus..."
     },
     {
-      "case_id": "doj_archives_2006_023",
+      "case_id": "doj_archives_2006_021",
       "platform": "Tor",
-      "found_in": "Sullivan\u2019s Economic Crimes Unit with assistance from Assistant Attorney Gener..."
+      "found_in": "Massachusetts Attorney General\u2019s Office. Press Contact: Christina DiIorio-Ste..."
     },
     {
-      "case_id": "doj_archives_2006_023",
+      "case_id": "doj_archives_2006_021",
       "platform": "internet",
-      "found_in": "engaging in sex with children, then we broadcast the faces of the adults over..."
+      "found_in": "broadcast the faces of the adults over the internet and on television. We emp..."
     },
     {
-      "case_id": "doj_archives_2006_023",
+      "case_id": "doj_archives_2006_021",
       "platform": "other",
-      "found_in": "life in prison will ensure that he cannot hurt another child,\" said John Fox,..."
+      "found_in": "cannot hurt another child,\" said John Fox, Assistant Special Agent- In-Charge..."
     },
     {
-      "case_id": "doj_archives_2006_024",
+      "case_id": "doj_archives_2006_022",
       "platform": "Tor",
-      "found_in": "Source: Department of Justice Michael J. Sullivan United States Attorney Dist..."
+      "found_in": "U.S. Department of Justice Michael J. Sullivan United States Attorney Distric..."
     },
     {
-      "case_id": "doj_archives_2006_024",
+      "case_id": "doj_archives_2006_022",
       "platform": "internet",
       "found_in": "believed to be a 15 year old girl in a Yahoo! internet chat room. The evidenc..."
     },
     {
       "case_id": "doj_archives_2007_002",
       "platform": "Tor",
-      "found_in": "Internet, Assistant Attorney General Alice S. Fisher of the Criminal Division..."
+      "found_in": "pornography he acquired over the Internet, Assistant Attorney General Alice S..."
     },
     {
       "case_id": "doj_archives_2007_002",
       "platform": "internet",
-      "found_in": "Internet, Assistant Attorney General Alice S. Fisher of the Criminal Division..."
+      "found_in": "pornography he acquired over the Internet, Assistant Attorney General Alice S..."
     },
     {
       "case_id": "doj_archives_2007_002",
@@ -23350,77 +23615,92 @@
       "found_in": "another child exploitation crime. In that case, Ramey traveled from his home..."
     },
     {
-      "case_id": "doj_archives_2007_012",
+      "case_id": "doj_archives_2007_013",
       "platform": "Tor",
-      "found_in": "child pornography, Assistant Attorney General Alice S. Fisher of the Criminal..."
+      "found_in": "Mississippi to possessing child pornography, Assistant Attorney General Alice..."
     },
     {
-      "case_id": "doj_archives_2007_012",
+      "case_id": "doj_archives_2007_013",
       "platform": "internet",
-      "found_in": "multiple images of child pornography that he received through the Internet."
-    },
-    {
-      "case_id": "doj_archives_2007_020",
-      "platform": "Tor",
-      "found_in": "Chuck Rosenberg, United States Attorney for the Eastern District of Virginia,..."
-    },
-    {
-      "case_id": "doj_archives_2007_020",
-      "platform": "internet",
-      "found_in": "According to court documents, Lukinoff, using the screen name \u201cTrucking01145,..."
+      "found_in": "Jackson, Miss., for possessing multiple images of child pornography that he r..."
     },
     {
       "case_id": "doj_archives_2007_021",
       "platform": "Tor",
-      "found_in": "Attorney for the Eastern District of Virginia, and Joseph Persichini, Jr., As..."
+      "found_in": "U S A \u2019 O NITED TATES TTORNEY S FFICE E D V ASTERN ISTRICT OF IRGINIA ALEXANDRIA"
     },
     {
-      "case_id": "doj_archives_2007_027",
+      "case_id": "doj_archives_2007_021",
+      "platform": "internet",
+      "found_in": "screen name \u201cTrucking01145,\u201d conducted Internet \u201cchat\u201d sessions in which he s..."
+    },
+    {
+      "case_id": "doj_archives_2007_022",
+      "platform": "Tor",
+      "found_in": "U S A \u2019 O NITED TATES TTORNEY S FFICE E D V ASTERN ISTRICT OF IRGINIA ALEXANDRIA"
+    },
+    {
+      "case_id": "doj_archives_2007_029",
       "platform": "Tor",
       "found_in": "for producing child pornography, Assistant Attorney General Alice S. Fisher o..."
     },
     {
-      "case_id": "doj_archives_2007_027",
+      "case_id": "doj_archives_2007_029",
       "platform": "internet",
       "found_in": "who exploit children via the Internet, as well as identify and rescue victims..."
     },
     {
-      "case_id": "doj_archives_2007_027",
+      "case_id": "doj_archives_2007_029",
       "platform": "other",
       "found_in": "contact with \u201cTrevor\u201d over her mother\u2019s forbiddance, Kistler lied to the unde..."
     },
     {
-      "case_id": "doj_archives_2007_028",
+      "case_id": "doj_archives_2007_030",
       "platform": "Tor",
-      "found_in": "Lampton, United States Attorney for the Southern District of Mississippi, and..."
+      "found_in": "Investigation (FBI) in Mississippi, Dunn Lampton, United States Attorney for..."
     },
     {
-      "case_id": "doj_archives_2007_028",
+      "case_id": "doj_archives_2007_030",
       "platform": "internet",
-      "found_in": "discovered that RAMEY also possessed sexually explicit images of minors he re..."
+      "found_in": "via the Internet. Page 1 of 2"
     },
     {
-      "case_id": "doj_archives_2008_017",
+      "case_id": "doj_archives_2008_014",
+      "platform": "Tor",
+      "found_in": "Assistant Attorney General for the Criminal Division Matthew Friedrich and U...."
+    },
+    {
+      "case_id": "doj_archives_2008_014",
+      "platform": "internet",
+      "found_in": "peer-to-peer file-sharing program. Peer-to-peer networks allow users connecte..."
+    },
+    {
+      "case_id": "doj_archives_2008_014",
+      "platform": "other",
+      "found_in": "computers with other computers around the world and thereby share information..."
+    },
+    {
+      "case_id": "doj_archives_2008_016",
       "platform": "Tor",
       "found_in": "with the intent to engage in illicit sexual conduct with children, Acting Ass..."
     },
     {
-      "case_id": "doj_archives_2008_017",
+      "case_id": "doj_archives_2008_016",
       "platform": "internet",
-      "found_in": "and the individual in Thailand were all members of an Internet chat group ded..."
+      "found_in": "in Thailand were all members of an Internet chat group dedicated to men with..."
+    },
+    {
+      "case_id": "doj_archives_2008_016",
+      "platform": "other",
+      "found_in": "Corliss of New Jersey. According to plea documents, Corliss himself was in co..."
     },
     {
       "case_id": "doj_archives_2008_017",
-      "platform": "other",
-      "found_in": "another individual who was a resident of Thailand. Also according to plea doc..."
-    },
-    {
-      "case_id": "doj_archives_2008_018",
       "platform": "Tor",
       "found_in": "plea to one count of possessing child pornography, Acting Assistant Attorney..."
     },
     {
-      "case_id": "doj_archives_2008_018",
+      "case_id": "doj_archives_2008_017",
       "platform": "internet",
       "found_in": "apprehend and prosecute individuals who exploit children via the Internet, as..."
     },
@@ -23440,59 +23720,104 @@
       "found_in": "distribute 15 to 150 images of child pornography to other individuals. These..."
     },
     {
-      "case_id": "doj_archives_2008_035",
+      "case_id": "doj_archives_2008_037",
       "platform": "Tor",
       "found_in": "him with possession of child pornography, Acting Assistant Attorney General M..."
     },
     {
-      "case_id": "doj_archives_2008_035",
+      "case_id": "doj_archives_2008_037",
       "platform": "internet",
       "found_in": "local resources to better locate, apprehend and prosecute individuals who exp..."
     },
     {
-      "case_id": "doj_archives_2008_043",
+      "case_id": "doj_archives_2008_042",
       "platform": "Tor",
-      "found_in": "distributed and received child pornography over the Internet, Acting Assistan..."
+      "found_in": "48, a Tampa-based physician, of child pornography receipt and possession char..."
     },
     {
-      "case_id": "doj_archives_2008_043",
+      "case_id": "doj_archives_2008_042",
       "platform": "internet",
-      "found_in": "distributed and received child pornography over the Internet, Acting Assistan..."
+      "found_in": "peer-to-peer file-sharing program. Peer-to-peer networks allow users connecte..."
     },
     {
-      "case_id": "doj_archives_2008_043",
+      "case_id": "doj_archives_2008_042",
       "platform": "other",
-      "found_in": "part of the conspiracy, he and the other ring members produced child pornogra..."
+      "found_in": "computers with other computers around the world and thereby share information..."
+    },
+    {
+      "case_id": "doj_archives_2008_045",
+      "platform": "Tor",
+      "found_in": "count of receiving child pornography through the Internet, Acting Assistant A..."
+    },
+    {
+      "case_id": "doj_archives_2008_045",
+      "platform": "internet",
+      "found_in": "PORNOGRAPHY THROUGH THE INTERNET"
+    },
+    {
+      "case_id": "doj_archives_2008_045",
+      "platform": "other",
+      "found_in": "the Internet. Peer-to-peer networks allow users connected to the Internet to..."
     },
     {
       "case_id": "doj_archives_2008_047",
       "platform": "Tor",
-      "found_in": "pornography via the Internet, Assistant Attorney General Alice S. Fisher of t..."
+      "found_in": "Attorney General Matthew Friedrich of the Criminal Division and Acting U.S. A..."
     },
     {
       "case_id": "doj_archives_2008_047",
       "platform": "internet",
-      "found_in": "pornography via the Internet, Assistant Attorney General Alice S. Fisher of t..."
+      "found_in": "ring whose members produced, distributed and received child pornography over..."
     },
     {
       "case_id": "doj_archives_2008_047",
+      "platform": "other",
+      "found_in": "conspiracy to produce child pornography. He admitted that, as part of the con..."
+    },
+    {
+      "case_id": "doj_archives_2008_053",
+      "platform": "Tor",
+      "found_in": "pornography via the Internet, Assistant Attorney General Alice S. Fisher of t..."
+    },
+    {
+      "case_id": "doj_archives_2008_053",
+      "platform": "internet",
+      "found_in": "pornography via the Internet, Assistant Attorney General Alice S. Fisher of t..."
+    },
+    {
+      "case_id": "doj_archives_2008_053",
       "platform": "other",
       "found_in": "pornography to other individuals. These images involved prepubescent children..."
     },
     {
-      "case_id": "doj_archives_2008_054",
+      "case_id": "doj_archives_2008_059",
       "platform": "Tor",
-      "found_in": "Attorney General Ali ce S. Fisher and U.S. Attorney for the Western District..."
+      "found_in": "Assistant Attorney General Alice S. Fisher of the Criminal Division and U.S...."
     },
     {
-      "case_id": "doj_archives_2008_054",
+      "case_id": "doj_archives_2008_059",
       "platform": "internet",
-      "found_in": "members produced, distributed and received child pornography over the Interne..."
+      "found_in": "used file sharing or peer-to-peer programs to trade child pornography images..."
     },
     {
-      "case_id": "doj_archives_2008_054",
+      "case_id": "doj_archives_2008_059",
       "platform": "other",
-      "found_in": "conspiracy, the indictment charges, Anderson and the others produced child po..."
+      "found_in": "Peer-to-peer networks allow users connected to the Internet to link their com..."
+    },
+    {
+      "case_id": "doj_archives_2008_062",
+      "platform": "Tor",
+      "found_in": "which members produced, distributed and received child pornography over the I..."
+    },
+    {
+      "case_id": "doj_archives_2008_062",
+      "platform": "internet",
+      "found_in": "which members produced, distributed and received child pornography over the I..."
+    },
+    {
+      "case_id": "doj_archives_2008_062",
+      "platform": "other",
+      "found_in": "and the others produced child pornography showing themselves engaged in illeg..."
     },
     {
       "case_id": "doj_ceos_2025_002",
@@ -23576,11 +23901,6 @@
     },
     {
       "case_id": "doj_ceos_2025_015",
-      "platform": "BitTorrent",
-      "found_in": "Child Sexual Abuse Material from the BitTorrent File-Sharing Network"
-    },
-    {
-      "case_id": "doj_ceos_2025_015",
       "platform": "Tor",
       "found_in": "Acting Assistant Attorney General Matthew R. Galeotti of the Justice Departme..."
     },
@@ -23593,6 +23913,16 @@
       "case_id": "doj_ceos_2025_015",
       "platform": "other",
       "found_in": "to be an 18-year-old boy to enhance his chances of connecting with minors. Ga..."
+    },
+    {
+      "case_id": "doj_ceos_2025_016",
+      "platform": "Tor",
+      "found_in": "Bit-Torrent, a file-sharing network, from a user with an IP address associate..."
+    },
+    {
+      "case_id": "doj_ceos_2025_016",
+      "platform": "internet",
+      "found_in": "apprehend, and prosecute individuals who exploit children via the internet, a..."
     },
     {
       "case_id": "doj_ceos_2025_026",
@@ -23623,6 +23953,16 @@
       "case_id": "doj_ceos_2025_027",
       "platform": "internet",
       "found_in": "apprehend, and prosecute individuals who exploit children via the internet, a..."
+    },
+    {
+      "case_id": "doj_ceos_2025_028",
+      "platform": "dark web",
+      "found_in": "Tor browser, which allows users to surf the dark web, to access images and vi..."
+    },
+    {
+      "case_id": "doj_ceos_2025_028",
+      "platform": "internet",
+      "found_in": "locate, apprehend, and prosecute individuals who exploit children via the int..."
     },
     {
       "case_id": "doj_ceos_2025_029",
@@ -23690,6 +24030,16 @@
       "found_in": "Department\u2019s Criminal Division. \u201cFor years, while hiding in another country b..."
     },
     {
+      "case_id": "doj_ceos_2026_002",
+      "platform": "Tor",
+      "found_in": "the BitTorrent peer-to-peer file sharing network, which identified an IP addr..."
+    },
+    {
+      "case_id": "doj_ceos_2026_002",
+      "platform": "internet",
+      "found_in": "The HSI D.C. Field Office investigated the case with the assistance of the No..."
+    },
+    {
       "case_id": "doj_ceos_2026_006",
       "platform": "Tor",
       "found_in": "upon and abusing children,\u201d said Assistant Attorney General A. Tysen Duva of..."
@@ -23713,6 +24063,21 @@
       "case_id": "doj_ceos_2026_008",
       "platform": "internet",
       "found_in": "apprehend, and prosecute individuals who exploit children via the internet, a..."
+    },
+    {
+      "case_id": "doj_ceos_2026_009",
+      "platform": "dark web",
+      "found_in": "promoting child sexual abuse material on the dark web."
+    },
+    {
+      "case_id": "doj_ceos_2026_009",
+      "platform": "internet",
+      "found_in": "locate, apprehend, and prosecute individuals who exploit children via the int..."
+    },
+    {
+      "case_id": "doj_ceos_2026_009",
+      "platform": "other",
+      "found_in": "voyeurism and the sexual exploitation of children while encouraging other use..."
     },
     {
       "case_id": "doj_ceos_2026_010",
@@ -23762,7 +24127,7 @@
     {
       "case_id": "fresno_so_2013_001",
       "platform": "internet",
-      "found_in": "Source: Central Valley Internet Crimes Against Children (ICAC) Task Force tod..."
+      "found_in": "The Central Valley Internet Crimes Against Children (ICAC) Task Force today a..."
     },
     {
       "case_id": "fresno_so_2014_002",
@@ -23842,7 +24207,7 @@
     {
       "case_id": "fresno_so_2020_001",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "fresno_so_2020_001",
@@ -23857,7 +24222,7 @@
     {
       "case_id": "fresno_so_2020_002",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "fresno_so_2020_002",
@@ -23872,7 +24237,7 @@
     {
       "case_id": "fresno_so_2020_003",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "fresno_so_2020_003",
@@ -23887,7 +24252,7 @@
     {
       "case_id": "fresno_so_2020_004",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "fresno_so_2020_004",
@@ -23967,7 +24332,7 @@
     {
       "case_id": "fresno_so_2021_008",
       "platform": "internet",
-      "found_in": "Source: September 14th, detectives with the Central California Internet Crime..."
+      "found_in": "On September 14th, detectives with the Central California Internet Crimes Aga..."
     },
     {
       "case_id": "fresno_so_2021_008",
@@ -23982,7 +24347,7 @@
     {
       "case_id": "fresno_so_2022_001",
       "platform": "Tor",
-      "found_in": "To view a video of the press conference, visit: \u201cH.O.O.K.\u201d Nets 19 Arrests of..."
+      "found_in": "Operation \u201cH.O.O.K.\u201d Nets 19 Arrests of Potential Sexual Predators"
     },
     {
       "case_id": "fresno_so_2022_001",
@@ -24007,7 +24372,7 @@
     {
       "case_id": "fresno_so_2022_004",
       "platform": "internet",
-      "found_in": "Source: Tuesday, July 12th, detectives with the Central California Internet C..."
+      "found_in": "On Tuesday, July 12th, detectives with the Central California Internet Crimes..."
     },
     {
       "case_id": "fresno_so_2023_001",
@@ -24027,7 +24392,7 @@
     {
       "case_id": "fresno_so_2023_001",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "fresno_so_2023_001",
@@ -24142,7 +24507,7 @@
     {
       "case_id": "fresno_so_2025_001",
       "platform": "internet",
-      "found_in": "Source: Thursday, March 6th, detectives with the Fresno Police Department and..."
+      "found_in": "On Thursday, March 6th, detectives with the Fresno Police Department and the..."
     },
     {
       "case_id": "fresno_so_2025_001",
@@ -24207,7 +24572,7 @@
     {
       "case_id": "fresno_so_2025_005",
       "platform": "internet",
-      "found_in": "Source: with the Central California Internet Crimes Against Children (ICAC) T..."
+      "found_in": "Detectives with the Central California Internet Crimes Against Children (ICAC..."
     },
     {
       "case_id": "gbi_2014_001",
@@ -24467,7 +24832,7 @@
     {
       "case_id": "hi_ag_2014_001",
       "platform": "Tor",
-      "found_in": "Source: OF THE ATTORNEY GENERAL NEIL ABERCROMBIE GOVERNOR DAVID M. LOUIE"
+      "found_in": "DEPARTMENT OF THE ATTORNEY GENERAL NEIL ABERCROMBIE GOVERNOR DAVID M. LOUIE"
     },
     {
       "case_id": "hi_ag_2014_001",
@@ -24627,7 +24992,7 @@
     {
       "case_id": "ice_2026_001",
       "platform": "Tor",
-      "found_in": "Source: \u2014 ICE has released photos of Carl Schilbe, an alleged child sex preda..."
+      "found_in": "WASHINGTON \u2014 ICE has released photos of Carl Schilbe, an alleged child sex pr..."
     },
     {
       "case_id": "ice_2026_001",
@@ -24673,6 +25038,16 @@
       "case_id": "ice_2026_007",
       "platform": "chat",
       "found_in": "Snapchat. Investigators identified the perpetrator as Shannon, then an orthod..."
+    },
+    {
+      "case_id": "idaho_icac_2024_022",
+      "platform": "Tor",
+      "found_in": "Newsroom Caldwell Attorney Sentenced to Ten Years for Child Sexual Exploitati..."
+    },
+    {
+      "case_id": "idaho_icac_2024_022",
+      "platform": "internet",
+      "found_in": "Hammond\u2019s sentence follows an extensive investigation by the Attorney General..."
     },
     {
       "case_id": "idaho_icac_2024_026",
@@ -25712,7 +26087,7 @@
     {
       "case_id": "lapd_2007_001",
       "platform": "internet",
-      "found_in": "Source: Angeles: The Los Angeles Internet Crimes Against Children (LA ICAC) T..."
+      "found_in": "Los Angeles: The Los Angeles Internet Crimes Against Children (LA ICAC) Taskf..."
     },
     {
       "case_id": "lapd_2007_001",
@@ -25722,7 +26097,7 @@
     {
       "case_id": "lapd_2010_002",
       "platform": "Tor",
-      "found_in": "Source: Angeles: A 39-year-old North Hollywood man, and Licensed Attorney wit..."
+      "found_in": "Los Angeles: A 39-year-old North Hollywood man, and Licensed Attorney with th..."
     },
     {
       "case_id": "lapd_2010_002",
@@ -25757,17 +26132,17 @@
     {
       "case_id": "lapd_2017_004",
       "platform": "internet",
-      "found_in": "Source: Angeles Regional Internet Crimes against Children Task Force"
+      "found_in": "Los Angeles Regional Internet Crimes against Children Task Force"
     },
     {
       "case_id": "lapd_2022_002",
       "platform": "Tor",
-      "found_in": "unknown address in Torrance using a social media platform. ICAC Task Force in..."
+      "found_in": "Torrance: The Los Angeles Police Department\u2019s Internet Crimes Against Childre..."
     },
     {
       "case_id": "lapd_2022_002",
       "platform": "internet",
-      "found_in": "Source: The Los Angeles Police Department\u2019s Internet Crimes Against Children..."
+      "found_in": "Torrance: The Los Angeles Police Department\u2019s Internet Crimes Against Childre..."
     },
     {
       "case_id": "lapd_2022_004",
@@ -25777,7 +26152,7 @@
     {
       "case_id": "lapd_2022_004",
       "platform": "internet",
-      "found_in": "Source: Angeles: The Internet Crimes Against Children (ICAC) Program Task For..."
+      "found_in": "Los Angeles: The Internet Crimes Against Children (ICAC) Program Task Force w..."
     },
     {
       "case_id": "lapd_2023_001",
@@ -25787,7 +26162,7 @@
     {
       "case_id": "lapd_2023_001",
       "platform": "internet",
-      "found_in": "Source: Internet Crimes Against Children (ICAC) Task Force Program was develo..."
+      "found_in": "The Internet Crimes Against Children (ICAC) Task Force Program was developed..."
     },
     {
       "case_id": "lapd_2023_002",
@@ -25797,7 +26172,7 @@
     {
       "case_id": "lapd_2023_002",
       "platform": "internet",
-      "found_in": "Source: Angeles: The Los Angeles Regional Internet Crimes Against Children (I..."
+      "found_in": "Los Angeles: The Los Angeles Regional Internet Crimes Against Children (ICAC)..."
     },
     {
       "case_id": "lapd_2024_001",
@@ -25807,7 +26182,7 @@
     {
       "case_id": "lapd_2024_001",
       "platform": "internet",
-      "found_in": "Source: Internet Crimes Against Children (ICAC) Task Force Program was develo..."
+      "found_in": "The Internet Crimes Against Children (ICAC) Task Force Program was developed..."
     },
     {
       "case_id": "lapd_2025_002",
@@ -25817,7 +26192,7 @@
     {
       "case_id": "lapd_2025_002",
       "platform": "internet",
-      "found_in": "Source: Angeles: Detectives from the Los Angeles Police Department\u2019s Juvenile..."
+      "found_in": "Los Angeles: Detectives from the Los Angeles Police Department\u2019s Juvenile Div..."
     },
     {
       "case_id": "lapd_2025_003",
@@ -25827,7 +26202,7 @@
     {
       "case_id": "lapd_2025_003",
       "platform": "internet",
-      "found_in": "Source: Internet Crimes Against Children (ICAC) Task Force Program was develo..."
+      "found_in": "The Internet Crimes Against Children (ICAC) Task Force Program was developed..."
     },
     {
       "case_id": "lapd_2025_003",
@@ -25880,29 +26255,29 @@
       "found_in": "The DCI\u2019s Internet Crimes Against Children Unit and the Carter County Sheriff..."
     },
     {
-      "case_id": "nc_sbi_2020_002",
-      "platform": "Tor",
-      "found_in": "Source: Grube Public Information Director agrube@ncsbi.gov"
-    },
-    {
       "case_id": "nc_sbi_2020_003",
       "platform": "Tor",
-      "found_in": "Source: Angie Grube Public Info. Director agrube@ncsbi.gov"
+      "found_in": "Angie Grube Public Information Director agrube@ncsbi.gov"
     },
     {
-      "case_id": "nc_sbi_2020_003",
+      "case_id": "nc_sbi_2020_004",
+      "platform": "Tor",
+      "found_in": "Contact: Angie Grube Public Info. Director agrube@ncsbi.gov"
+    },
+    {
+      "case_id": "nc_sbi_2020_004",
       "platform": "internet",
       "found_in": "Crimes Unit and the Internet Crimes Against Children (ICAC) Task Force have e..."
     },
     {
-      "case_id": "nc_sbi_2020_003",
+      "case_id": "nc_sbi_2020_004",
       "platform": "other",
       "found_in": "other time in history. Much of that time has been spent online, and unfortuna..."
     },
     {
       "case_id": "nc_sbi_2025_001",
       "platform": "Tor",
-      "found_in": "Angie Grube Public Information Director agrube@ncsbi.gov"
+      "found_in": "Minor, two (2) counts of Statutory Sex Offense w/ Minor by an Adult, two (2)..."
     },
     {
       "case_id": "nc_sbi_2025_001",
@@ -25915,12 +26290,12 @@
       "found_in": "Using electronic and other advanced surveillance techniques, CAT agents gathe..."
     },
     {
-      "case_id": "nc_sbi_2026_007",
+      "case_id": "nc_sbi_2026_006",
       "platform": "chat",
       "found_in": "Siler City Police Department, the FBI, the Chatham County Sheriff's Departmen..."
     },
     {
-      "case_id": "nc_sbi_2026_007",
+      "case_id": "nc_sbi_2026_006",
       "platform": "other",
       "found_in": "Child Victim, Solicit Child by Computer, and several other charges. The AMBER..."
     },
@@ -25957,7 +26332,7 @@
     {
       "case_id": "ncis_2023_001",
       "platform": "Tor",
-      "found_in": "Source: Florida \u2013 United States Attorney Roger B. Handberg announces the retu..."
+      "found_in": "Jacksonville, Florida \u2013 United States Attorney Roger B. Handberg announces th..."
     },
     {
       "case_id": "ncis_2023_001",
@@ -26208,6 +26583,16 @@
       "case_id": "ncmec_2022_051",
       "platform": "other",
       "found_in": "or solicited child pornography amongst more than 50 other individuals."
+    },
+    {
+      "case_id": "ncmec_2022_056",
+      "platform": "email",
+      "found_in": "The criminal complaint says that authorities also located several notable ema..."
+    },
+    {
+      "case_id": "ncmec_2022_056",
+      "platform": "other",
+      "found_in": "been sent to Flick. These emails had each been sent from another Gmail accoun..."
     },
     {
       "case_id": "ncmec_2022_060",
@@ -28270,6 +28655,16 @@
       "found_in": "the internet to talk to minors. Deputies say these conversations were of a se..."
     },
     {
+      "case_id": "ncmec_2023_133",
+      "platform": "Tor",
+      "found_in": "BitTorrent Network. Alderman was registered as a sex offender in 2017 after"
+    },
+    {
+      "case_id": "ncmec_2023_133",
+      "platform": "internet",
+      "found_in": "Sheriff\u2019s Office, Internet Crimes Against Children, (ICAC) Task Force, arrested"
+    },
+    {
       "case_id": "ncmec_2023_136",
       "platform": "internet",
       "found_in": "On September 8th, The JPD Internet Crimes Against Children Division was sent"
@@ -29075,6 +29470,11 @@
       "found_in": "2022, an Austin Police Department detective received 19 Internet Crimes"
     },
     {
+      "case_id": "ncmec_2023_419",
+      "platform": "Tor",
+      "found_in": "explicit pictures to a Verizon iCloud storage account."
+    },
+    {
       "case_id": "ncmec_2023_429",
       "platform": "Tor",
       "found_in": "sent a report of a user storing child abuse material on their platform via th..."
@@ -29673,11 +30073,6 @@
       "case_id": "ncmec_2024_037",
       "platform": "chat",
       "found_in": "from the National Center for Missing and Exploited Children \u201cthat was generat..."
-    },
-    {
-      "case_id": "ncmec_2024_038",
-      "platform": "Cash App",
-      "found_in": "in graphic detail and the exchange of money through a cash app for the purcha..."
     },
     {
       "case_id": "ncmec_2024_038",
@@ -30588,11 +30983,6 @@
       "case_id": "ncmec_2024_1256",
       "platform": "internet",
       "found_in": "the Internet, as well as to identify and rescue victims."
-    },
-    {
-      "case_id": "ncmec_2024_1257",
-      "platform": "Cash App",
-      "found_in": "a Kik and Cash App account associated with Hatch, according to an evidentiary..."
     },
     {
       "case_id": "ncmec_2024_1257",
@@ -31870,6 +32260,21 @@
       "found_in": "identifying those involved in child pornography via the Internet and other re..."
     },
     {
+      "case_id": "ncmec_2024_523",
+      "platform": "IRC",
+      "found_in": "Arundel County Circuit Court in Annapolis."
+    },
+    {
+      "case_id": "ncmec_2024_523",
+      "platform": "Tor",
+      "found_in": "State\u2019s Attorney Press Release"
+    },
+    {
+      "case_id": "ncmec_2024_523",
+      "platform": "internet",
+      "found_in": "any internet accessible device, have no contact with a minor child, and compl..."
+    },
+    {
       "case_id": "ncmec_2024_524",
       "platform": "Tor",
       "found_in": "https://www.facebook.com/permalink.php/?story_fbid=934136212077175&id=1000644..."
@@ -32365,6 +32770,11 @@
       "found_in": "This investigation was the result of a referral from the New Jersey State Pol..."
     },
     {
+      "case_id": "ncmec_2024_676",
+      "platform": "Tor",
+      "found_in": "PA. DEPUTY DISTRIBUTED CHILD PORN FROM WILDWOOD, N.J. VACATION HOME: PROSECUTORS"
+    },
+    {
       "case_id": "ncmec_2024_680",
       "platform": "Tor",
       "found_in": "During the investigation, detectives from the Warren County Prosecutor\u2019s Offi..."
@@ -32665,6 +33075,11 @@
       "found_in": "The kids were in various stages of nudity and being sexually assaulted by oth..."
     },
     {
+      "case_id": "ncmec_2024_871",
+      "platform": "Tor",
+      "found_in": "On Sept. 22, Synchronoss Technologies, Inc., a provider of cloud storage serv..."
+    },
+    {
       "case_id": "ncmec_2024_874",
       "platform": "Tor",
       "found_in": "PROSECUTOR: 2ND-GRADE TEACHER ACCUSED OF POSSESSING, DISTRIBUTING CHILD"
@@ -32713,6 +33128,16 @@
       "case_id": "ncmec_2024_883",
       "platform": "other",
       "found_in": "with others,\u201d said Greg Flannagan."
+    },
+    {
+      "case_id": "ncmec_2024_891",
+      "platform": "Tor",
+      "found_in": "https://www.beaconjournal.com/story/news/local/2024/08/09/david-walker-39-of-..."
+    },
+    {
+      "case_id": "ncmec_2024_891",
+      "platform": "internet",
+      "found_in": "Authorities said Walker exchanged the files through BitTorrent, an internet s..."
     },
     {
       "case_id": "ncmec_2024_895",
@@ -33051,11 +33476,6 @@
     },
     {
       "case_id": "ncmec_2024_996",
-      "platform": "IMVU",
-      "found_in": "that an IMVU user was messaging the account of a 13-year-old female with vari..."
-    },
-    {
-      "case_id": "ncmec_2024_996",
       "platform": "Tor",
       "found_in": "BENSALEM POLICE ARREST CHILD PREDATOR FOR THE SECOND TIME"
     },
@@ -33187,7 +33607,7 @@
     {
       "case_id": "nj_ag_2020_002",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal today announced arrests of 21 indi..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal today announced arrests of 21 indi..."
     },
     {
       "case_id": "nj_ag_2020_002",
@@ -33207,7 +33627,7 @@
     {
       "case_id": "nj_ag_2026_001",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal and Acting Bergen County Prosecuto..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal and Acting Bergen County Prosecuto..."
     },
     {
       "case_id": "nj_ag_2026_001",
@@ -33227,7 +33647,7 @@
     {
       "case_id": "nj_ag_2026_002",
       "platform": "Tor",
-      "found_in": "Source: of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisi..."
+      "found_in": "Office of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisio..."
     },
     {
       "case_id": "nj_ag_2026_002",
@@ -33242,7 +33662,7 @@
     {
       "case_id": "nj_ag_2026_003",
       "platform": "Tor",
-      "found_in": "Source: of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisi..."
+      "found_in": "Office of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisio..."
     },
     {
       "case_id": "nj_ag_2026_003",
@@ -33262,7 +33682,7 @@
     {
       "case_id": "nj_ag_2026_004",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Matthew J. Platkin, Attorney General Divisi..."
+      "found_in": "Office of The Attorney General \u2013 Matthew J. Platkin, Attorney General Divisio..."
     },
     {
       "case_id": "nj_ag_2026_004",
@@ -33277,7 +33697,7 @@
     {
       "case_id": "nj_ag_2026_005",
       "platform": "Tor",
-      "found_in": "Source: Highlight Attorney General Platkin\u2019s Commitment to Supporting Law Enf..."
+      "found_in": "Charges Highlight Attorney General Platkin\u2019s Commitment to Supporting Law Enf..."
     },
     {
       "case_id": "nj_ag_2026_005",
@@ -33292,7 +33712,7 @@
     {
       "case_id": "nj_ag_2026_007",
       "platform": "Tor",
-      "found_in": "Source: of the Attorney General \u2013 Matthew J. Platkin, Attorney General Office..."
+      "found_in": "Office of the Attorney General \u2013 Matthew J. Platkin, Attorney General Office..."
     },
     {
       "case_id": "nj_ag_2026_007",
@@ -33312,7 +33732,7 @@
     {
       "case_id": "nj_ag_2026_008",
       "platform": "Tor",
-      "found_in": "Source: of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisi..."
+      "found_in": "Office of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisio..."
     },
     {
       "case_id": "nj_ag_2026_008",
@@ -33327,7 +33747,7 @@
     {
       "case_id": "nj_ag_2026_009",
       "platform": "Tor",
-      "found_in": "Source: of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisi..."
+      "found_in": "Office of the Attorney General \u2013 Matthew J. Platkin, Attorney General Divisio..."
     },
     {
       "case_id": "nj_ag_2026_009",
@@ -33342,7 +33762,7 @@
     {
       "case_id": "nj_ag_2026_011",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Matthew J. Platkin, Acting Attorney General..."
+      "found_in": "Office of The Attorney General \u2013 Matthew J. Platkin, Acting Attorney General..."
     },
     {
       "case_id": "nj_ag_2026_011",
@@ -33357,7 +33777,7 @@
     {
       "case_id": "nj_ag_2026_013",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Di..."
+      "found_in": "Office of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Div..."
     },
     {
       "case_id": "nj_ag_2026_013",
@@ -33377,7 +33797,7 @@
     {
       "case_id": "nj_ag_2026_014",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Di..."
+      "found_in": "Office of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Div..."
     },
     {
       "case_id": "nj_ag_2026_014",
@@ -33392,7 +33812,7 @@
     {
       "case_id": "nj_ag_2026_015",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Di..."
+      "found_in": "Office of The Attorney General \u2013 Andrew J. Bruck, Acting Attorney General Div..."
     },
     {
       "case_id": "nj_ag_2026_015",
@@ -33422,7 +33842,7 @@
     {
       "case_id": "nj_ag_2026_018",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
+      "found_in": "Office of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
     },
     {
       "case_id": "nj_ag_2026_018",
@@ -33437,7 +33857,7 @@
     {
       "case_id": "nj_ag_2026_019",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
+      "found_in": "Office of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
     },
     {
       "case_id": "nj_ag_2026_019",
@@ -33452,7 +33872,7 @@
     {
       "case_id": "nj_ag_2026_020",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
+      "found_in": "Office of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
     },
     {
       "case_id": "nj_ag_2026_020",
@@ -33462,7 +33882,7 @@
     {
       "case_id": "nj_ag_2026_021",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Gurbir S. Grewal, Attorney General New Jers..."
+      "found_in": "Office of The Attorney General \u2013 Gurbir S. Grewal, Attorney General New Jerse..."
     },
     {
       "case_id": "nj_ag_2026_021",
@@ -33477,7 +33897,7 @@
     {
       "case_id": "nj_ag_2026_022",
       "platform": "Tor",
-      "found_in": "Source: of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
+      "found_in": "Office of The Attorney General \u2013 Gurbir S. Grewal, Attorney General Division..."
     },
     {
       "case_id": "nj_ag_2026_022",
@@ -33502,7 +33922,7 @@
     {
       "case_id": "nj_ag_2026_025",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a California man p..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a California man p..."
     },
     {
       "case_id": "nj_ag_2026_025",
@@ -33522,7 +33942,7 @@
     {
       "case_id": "nj_ag_2026_026",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a sex offender fro..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a sex offender fro..."
     },
     {
       "case_id": "nj_ag_2026_026",
@@ -33532,7 +33952,7 @@
     {
       "case_id": "nj_ag_2026_029",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_029",
@@ -33542,7 +33962,7 @@
     {
       "case_id": "nj_ag_2026_031",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that a man who possessed..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that a man who possessed..."
     },
     {
       "case_id": "nj_ag_2026_031",
@@ -33557,7 +33977,7 @@
     {
       "case_id": "nj_ag_2026_033",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that a Union County man..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that a Union County man..."
     },
     {
       "case_id": "nj_ag_2026_033",
@@ -33572,7 +33992,7 @@
     {
       "case_id": "nj_ag_2026_036",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_036",
@@ -33592,7 +34012,7 @@
     {
       "case_id": "nj_ag_2026_037",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that an IT professional..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that an IT professional..."
     },
     {
       "case_id": "nj_ag_2026_037",
@@ -33612,7 +34032,7 @@
     {
       "case_id": "nj_ag_2026_038",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that a man who had more..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that a man who had more..."
     },
     {
       "case_id": "nj_ag_2026_038",
@@ -33632,7 +34052,7 @@
     {
       "case_id": "nj_ag_2026_039",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that a man who was arres..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that a man who was arres..."
     },
     {
       "case_id": "nj_ag_2026_039",
@@ -33652,7 +34072,7 @@
     {
       "case_id": "nj_ag_2026_040",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal today announced arrests of 24 all..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal today announced arrests of 24 all..."
     },
     {
       "case_id": "nj_ag_2026_040",
@@ -33667,7 +34087,7 @@
     {
       "case_id": "nj_ag_2026_041",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a suspended Trento..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a suspended Trento..."
     },
     {
       "case_id": "nj_ag_2026_041",
@@ -33678,11 +34098,6 @@
       "case_id": "nj_ag_2026_041",
       "platform": "email",
       "found_in": "The investigation began when the New Jersey State Police received information..."
-    },
-    {
-      "case_id": "nj_ag_2026_041",
-      "platform": "iCloud",
-      "found_in": "pornography were located in an iCloud email account maintained by Marinelli...."
     },
     {
       "case_id": "nj_ag_2026_041",
@@ -33697,7 +34112,7 @@
     {
       "case_id": "nj_ag_2026_042",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_042",
@@ -33717,7 +34132,7 @@
     {
       "case_id": "nj_ag_2026_043",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that two men who were a..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that two men who were a..."
     },
     {
       "case_id": "nj_ag_2026_043",
@@ -33737,7 +34152,7 @@
     {
       "case_id": "nj_ag_2026_044",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_044",
@@ -33762,7 +34177,7 @@
     {
       "case_id": "nj_ag_2026_045",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that an Ocean County ma..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that an Ocean County ma..."
     },
     {
       "case_id": "nj_ag_2026_045",
@@ -33787,7 +34202,7 @@
     {
       "case_id": "nj_ag_2026_046",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_046",
@@ -33807,7 +34222,7 @@
     {
       "case_id": "nj_ag_2026_047",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that an IT professional..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that an IT professional..."
     },
     {
       "case_id": "nj_ag_2026_047",
@@ -33827,7 +34242,7 @@
     {
       "case_id": "nj_ag_2026_048",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Middlesex County..."
     },
     {
       "case_id": "nj_ag_2026_048",
@@ -33842,7 +34257,7 @@
     {
       "case_id": "nj_ag_2026_049",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a former president..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a former president..."
     },
     {
       "case_id": "nj_ag_2026_049",
@@ -33857,7 +34272,7 @@
     {
       "case_id": "nj_ag_2026_050",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Union County man..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Union County man..."
     },
     {
       "case_id": "nj_ag_2026_050",
@@ -33877,7 +34292,7 @@
     {
       "case_id": "nj_ag_2026_051",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Gurbir S. Grewal announced that a Morris County ma..."
+      "found_in": "TRENTON \u2013 Attorney General Gurbir S. Grewal announced that a Morris County ma..."
     },
     {
       "case_id": "nj_ag_2026_051",
@@ -33907,7 +34322,7 @@
     {
       "case_id": "nj_ag_2026_052",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Gurbir S. Grewal announced that an Ocean County man..."
+      "found_in": "TRENTON \u2013Attorney General Gurbir S. Grewal announced that an Ocean County man..."
     },
     {
       "case_id": "nj_ag_2026_052",
@@ -33932,7 +34347,7 @@
     {
       "case_id": "nj_ag_2026_053",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Christopher S. Porrino announced that a Gloucester..."
+      "found_in": "TRENTON \u2013Attorney General Christopher S. Porrino announced that a Gloucester..."
     },
     {
       "case_id": "nj_ag_2026_053",
@@ -33952,7 +34367,7 @@
     {
       "case_id": "nj_ag_2026_054",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Christopher S. Porrino announced that a Middlesex C..."
+      "found_in": "TRENTON \u2013Attorney General Christopher S. Porrino announced that a Middlesex C..."
     },
     {
       "case_id": "nj_ag_2026_054",
@@ -33972,7 +34387,7 @@
     {
       "case_id": "nj_ag_2026_055",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Christopher S. Porrino today announced arrests of..."
+      "found_in": "TRENTON \u2013 Attorney General Christopher S. Porrino today announced arrests of..."
     },
     {
       "case_id": "nj_ag_2026_055",
@@ -33992,7 +34407,7 @@
     {
       "case_id": "nj_ag_2026_056",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Christopher S. Porrino announced that an Ocean Coun..."
+      "found_in": "TRENTON \u2013Attorney General Christopher S. Porrino announced that an Ocean Coun..."
     },
     {
       "case_id": "nj_ag_2026_056",
@@ -34017,7 +34432,7 @@
     {
       "case_id": "nj_ag_2026_057",
       "platform": "Tor",
-      "found_in": "Source: \u2013Attorney General Christopher S. Porrino announced that a Gloucester..."
+      "found_in": "TRENTON \u2013Attorney General Christopher S. Porrino announced that a Gloucester..."
     },
     {
       "case_id": "nj_ag_2026_057",
@@ -34247,7 +34662,7 @@
     {
       "case_id": "nj_ag_2026_082",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Acting Attorney General John J. Hoffman announced that a New Jersey..."
+      "found_in": "TRENTON \u2013 Acting Attorney General John J. Hoffman announced that a New Jersey..."
     },
     {
       "case_id": "nj_ag_2026_082",
@@ -34262,7 +34677,7 @@
     {
       "case_id": "nj_ag_2026_083",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Acting Attorney General John J. Hoffman announced that a Union Coun..."
+      "found_in": "TRENTON \u2013 Acting Attorney General John J. Hoffman announced that a Union Coun..."
     },
     {
       "case_id": "nj_ag_2026_083",
@@ -34307,7 +34722,7 @@
     {
       "case_id": "nm_ag_2026_002",
       "platform": "internet",
-      "found_in": "Source: NM \u2013 Cellebrite\u2019s technology has been a crucial asset to our Internet..."
+      "found_in": "Albuquerque, NM \u2013 Cellebrite\u2019s technology has been a crucial asset to our Int..."
     },
     {
       "case_id": "nm_ag_2026_003",
@@ -34337,7 +34752,7 @@
     {
       "case_id": "ohio_ag_2014_006",
       "platform": "Tor",
-      "found_in": "Source: Ohio)\u2014 Ohio Attorney General Mike DeWine and the Buckeye State Sherif..."
+      "found_in": "(COLUMBUS, Ohio)\u2014 Ohio Attorney General Mike DeWine and the Buckeye State She..."
     },
     {
       "case_id": "ohio_ag_2014_006",
@@ -34357,7 +34772,7 @@
     {
       "case_id": "ohio_ag_2018_004",
       "platform": "Tor",
-      "found_in": "Source: Ohio)\u2014Ohio Attorney General Mike DeWine and Mahoning County Sheriff J..."
+      "found_in": "(YOUNGSTOWN, Ohio)\u2014Ohio Attorney General Mike DeWine and Mahoning County Sher..."
     },
     {
       "case_id": "ohio_ag_2018_004",
@@ -34392,7 +34807,7 @@
     {
       "case_id": "ohio_ag_2020_007",
       "platform": "Tor",
-      "found_in": "Source: Ohio) \u2014 Ohio Attorney General Dave Yost today announced the indictmen..."
+      "found_in": "(DAYTON, Ohio) \u2014 Ohio Attorney General Dave Yost today announced the indictme..."
     },
     {
       "case_id": "ohio_ag_2020_007",
@@ -34422,7 +34837,7 @@
     {
       "case_id": "ohio_ag_2022_003",
       "platform": "Tor",
-      "found_in": "Source: Ohio) \u2014 Ohio Attorney General Dave Yost, Morgan County Sheriff Dougla..."
+      "found_in": "(MCCONNELSVILLE, Ohio) \u2014 Ohio Attorney General Dave Yost, Morgan County Sheri..."
     },
     {
       "case_id": "ohio_ag_2022_003",
@@ -34472,7 +34887,7 @@
     {
       "case_id": "oregon_doj_2025_002",
       "platform": "internet",
-      "found_in": "Source: week, the Oregon Department of Justice\u2019s Internet Crimes Against Chil..."
+      "found_in": "This week, the Oregon Department of Justice\u2019s Internet Crimes Against Childre..."
     },
     {
       "case_id": "oregon_doj_2026_003",
@@ -34512,7 +34927,7 @@
     {
       "case_id": "pa_ag_2025_008",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced that a York County man has b..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced that a York County man ha..."
     },
     {
       "case_id": "pa_ag_2025_008",
@@ -34532,7 +34947,7 @@
     {
       "case_id": "pa_ag_2025_016",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced that a Wayne County man has..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced that a Wayne County man h..."
     },
     {
       "case_id": "pa_ag_2025_016",
@@ -34547,7 +34962,7 @@
     {
       "case_id": "pa_ag_2025_017",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced charges against a Luzerne Co..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced charges against a Luzerne..."
     },
     {
       "case_id": "pa_ag_2025_017",
@@ -34577,7 +34992,7 @@
     {
       "case_id": "pa_ag_2025_030",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced that a Fayette County man ha..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced that a Fayette County man..."
     },
     {
       "case_id": "pa_ag_2025_030",
@@ -34602,7 +35017,7 @@
     {
       "case_id": "pa_ag_2026_004",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday, along with law enforcement partners,..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday, along with law enforcement partner..."
     },
     {
       "case_id": "pa_ag_2026_004",
@@ -34622,7 +35037,7 @@
     {
       "case_id": "pa_ag_2026_005",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced charges against a 59-year-ol..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced charges against a 59-year..."
     },
     {
       "case_id": "pa_ag_2026_005",
@@ -34642,7 +35057,7 @@
     {
       "case_id": "pa_ag_2026_012",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced charges against a Blair Coun..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced charges against a Blair C..."
     },
     {
       "case_id": "pa_ag_2026_012",
@@ -34657,7 +35072,7 @@
     {
       "case_id": "pa_ag_2026_014",
       "platform": "Tor",
-      "found_in": "Source: \u2014 Attorney General Dave Sunday announced charges against a Butler Cou..."
+      "found_in": "HARRISBURG \u2014 Attorney General Dave Sunday announced charges against a Butler..."
     },
     {
       "case_id": "pa_ag_2026_014",
@@ -34747,7 +35162,7 @@
     {
       "case_id": "pa_ag_2026_026",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Attorney General Dave Sunday announced that a Schuylkill County man..."
+      "found_in": "HARRISBURG \u2013 Attorney General Dave Sunday announced that a Schuylkill County..."
     },
     {
       "case_id": "pa_ag_2026_026",
@@ -34817,7 +35232,7 @@
     {
       "case_id": "scag_icac_2025_018",
       "platform": "Tor",
-      "found_in": "Source: S.C.) - South Carolina Attorney General Alan Wilson announced the arr..."
+      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
     },
     {
       "case_id": "scag_icac_2025_018",
@@ -34832,7 +35247,7 @@
     {
       "case_id": "scag_icac_2025_019",
       "platform": "Tor",
-      "found_in": "Source: S.C.) - South Carolina Attorney General Alan Wilson announced the arr..."
+      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
     },
     {
       "case_id": "scag_icac_2025_019",
@@ -34847,7 +35262,7 @@
     {
       "case_id": "scag_icac_2025_091",
       "platform": "Tor",
-      "found_in": "Source: S.C.) \u2013 Attorney General Alan Wilson announced that, on April 15, two..."
+      "found_in": "(COLUMBIA, S.C.) \u2013 Attorney General Alan Wilson announced that, on April 15,..."
     },
     {
       "case_id": "scag_icac_2025_091",
@@ -34862,7 +35277,7 @@
     {
       "case_id": "scag_icac_2025_102",
       "platform": "Tor",
-      "found_in": "Source: S.C.) \u2013 Attorney General Alan Wilson announced that, on March 26, 202..."
+      "found_in": "(COLUMBIA, S.C.) \u2013 Attorney General Alan Wilson announced that, on March 26,..."
     },
     {
       "case_id": "scag_icac_2025_102",
@@ -34877,7 +35292,7 @@
     {
       "case_id": "scag_icac_2025_104",
       "platform": "Tor",
-      "found_in": "Source: S.C.) \u2013 South Carolina Attorney General Alan Wilson announced that on..."
+      "found_in": "(COLUMBIA, S.C.) \u2013 South Carolina Attorney General Alan Wilson announced that..."
     },
     {
       "case_id": "scag_icac_2025_104",
@@ -34892,7 +35307,7 @@
     {
       "case_id": "scag_icac_2025_130",
       "platform": "Tor",
-      "found_in": "Source: S.C.) \u2013 South Carolina Attorney General Alan Wilson announced that Al..."
+      "found_in": "(COLUMBIA, S.C.) \u2013 South Carolina Attorney General Alan Wilson announced that..."
     },
     {
       "case_id": "scag_icac_2025_130",
@@ -34902,7 +35317,7 @@
     {
       "case_id": "scag_icac_2026_013",
       "platform": "Tor",
-      "found_in": "Source: S.C.) - South Carolina Attorney General Alan Wilson announced the arr..."
+      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
     },
     {
       "case_id": "scag_icac_2026_013",
@@ -34917,12 +35332,12 @@
     {
       "case_id": "scag_icac_2026_013",
       "platform": "other",
-      "found_in": "Source: S.C.) - South Carolina Attorney General Alan Wilson announced the arr..."
+      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
     },
     {
       "case_id": "scag_icac_2026_028",
       "platform": "Tor",
-      "found_in": "Source: S.C.) - South Carolina Attorney General Alan Wilson announced the arr..."
+      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
     },
     {
       "case_id": "scag_icac_2026_028",
@@ -34937,7 +35352,7 @@
     {
       "case_id": "sd_ag_2026_002",
       "platform": "Tor",
-      "found_in": "Source: Jan. 23, 2026 Tony Mangan , Communications Director, 605-773-6878 PIE..."
+      "found_in": "Friday, Jan. 23, 2026 Tony Mangan , Communications Director, 605-773-6878 PIE..."
     },
     {
       "case_id": "sd_ag_2026_002",
@@ -35252,7 +35667,7 @@
     {
       "case_id": "south_florida_icac_2023_011",
       "platform": "other",
-      "found_in": "Source: alarming arrests. An 18-year-old was arrested after police say he thr..."
+      "found_in": "Two alarming arrests. An 18-year-old was arrested after police say he threate..."
     },
     {
       "case_id": "south_florida_icac_2024_001",
@@ -35342,7 +35757,7 @@
     {
       "case_id": "south_florida_icac_2024_007",
       "platform": "other",
-      "found_in": "Source: an effort to keep ICE.gov current, the archive contains content from..."
+      "found_in": "In an effort to keep ICE.gov current, the archive contains content from a pre..."
     },
     {
       "case_id": "south_florida_icac_2024_008",
@@ -35522,7 +35937,7 @@
     {
       "case_id": "south_florida_icac_2025_008",
       "platform": "Tor",
-      "found_in": "Source: Coral Springs man is facing a series of felony charges after investig..."
+      "found_in": "A Coral Springs man is facing a series of felony charges after investigators..."
     },
     {
       "case_id": "south_florida_icac_2025_008",
@@ -35697,7 +36112,7 @@
     {
       "case_id": "south_florida_icac_2026_004",
       "platform": "internet",
-      "found_in": "Source: collaborative investigation by the South Florida Internet Crimes Agai..."
+      "found_in": "A collaborative investigation by the South Florida Internet Crimes Against Ch..."
     },
     {
       "case_id": "south_florida_icac_2026_007",
@@ -35777,7 +36192,7 @@
     {
       "case_id": "spd_2020_001",
       "platform": "internet",
-      "found_in": "Source: Seattle Police Department Internet Crimes Against Children Task Force..."
+      "found_in": "The Seattle Police Department Internet Crimes Against Children Task Force (SP..."
     },
     {
       "case_id": "spd_2020_001",
@@ -35792,7 +36207,7 @@
     {
       "case_id": "spd_2023_001",
       "platform": "internet",
-      "found_in": "Source: with Seattle Police Department\u2019s Internet Crimes Against Children Uni..."
+      "found_in": "Detectives with Seattle Police Department\u2019s Internet Crimes Against Children..."
     },
     {
       "case_id": "spd_2023_001",
@@ -36182,7 +36597,7 @@
     {
       "case_id": "svicac_2026_025",
       "platform": "Tor",
-      "found_in": "Source: CA \u2014 A multi-agency investigation targeting distributors of child por..."
+      "found_in": "DANVILLE, CA \u2014 A multi-agency investigation targeting distributors of child p..."
     },
     {
       "case_id": "svicac_2026_025",
@@ -36202,12 +36617,12 @@
     {
       "case_id": "tbi_icac_2020_002",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 A joint investigation by TBI and FBI Special Agents with the..."
+      "found_in": "ROBERTSON COUNTY \u2013 A joint investigation by TBI and FBI Special Agents with t..."
     },
     {
       "case_id": "tbi_icac_2020_004",
       "platform": "Tor",
-      "found_in": "Source: \u2013 Working alongside investigators from the Frederick County (MD) Sher..."
+      "found_in": "DAYTON \u2013 Working alongside investigators from the Frederick County (MD) Sheri..."
     },
     {
       "case_id": "tbi_icac_2020_004",
@@ -36252,12 +36667,12 @@
     {
       "case_id": "tbi_icac_2023_001",
       "platform": "internet",
-      "found_in": "Source: \u2013 Special agents assigned to TBI\u2019s Internet Crimes Against Children (..."
+      "found_in": "LEWISBURG \u2013 Special agents assigned to TBI\u2019s Internet Crimes Against Children..."
     },
     {
       "case_id": "tbi_icac_2023_002",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 Special agents from the Tennessee Bureau of Investigation\u2019s..."
+      "found_in": "LINCOLN COUNTY \u2013 Special agents from the Tennessee Bureau of Investigation\u2019s..."
     },
     {
       "case_id": "tbi_icac_2023_002",
@@ -36277,7 +36692,7 @@
     {
       "case_id": "tbi_icac_2023_003",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 An investigation by special agents with the Tennessee Bureau..."
+      "found_in": "WARREN COUNTY \u2013 An investigation by special agents with the Tennessee Bureau..."
     },
     {
       "case_id": "tbi_icac_2023_006",
@@ -36292,7 +36707,7 @@
     {
       "case_id": "tbi_icac_2023_006",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 An investigation by special agents with the Tennessee Bureau..."
+      "found_in": "GRUNDY COUNTY \u2013 An investigation by special agents with the Tennessee Bureau..."
     },
     {
       "case_id": "tbi_icac_2024_001",
@@ -36307,7 +36722,7 @@
     {
       "case_id": "tbi_icac_2024_001",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investiga..."
+      "found_in": "MCMINN COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investigat..."
     },
     {
       "case_id": "tbi_icac_2024_004",
@@ -36337,7 +36752,7 @@
     {
       "case_id": "tbi_icac_2024_013",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 TBI special agents with the Internet Crimes Against Children..."
+      "found_in": "DAVIDSON COUNTY \u2013 TBI special agents with the Internet Crimes Against Childre..."
     },
     {
       "case_id": "tbi_icac_2024_017",
@@ -36362,12 +36777,12 @@
     {
       "case_id": "tbi_icac_2024_019",
       "platform": "internet",
-      "found_in": "Source: \u2013 Special agents assigned to the Tennessee Bureau of Investigation\u2019s..."
+      "found_in": "PARIS \u2013 Special agents assigned to the Tennessee Bureau of Investigation\u2019s In..."
     },
     {
       "case_id": "tbi_icac_2024_020",
       "platform": "internet",
-      "found_in": "Source: \u2013 Special agents assigned to TBI\u2019s Internet Crimes Against Children T..."
+      "found_in": "MCMINNVILLE \u2013 Special agents assigned to TBI\u2019s Internet Crimes Against Childr..."
     },
     {
       "case_id": "tbi_icac_2024_020",
@@ -36397,7 +36812,7 @@
     {
       "case_id": "tbi_icac_2025_006",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investiga..."
+      "found_in": "FENTRESS COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investig..."
     },
     {
       "case_id": "tbi_icac_2025_006",
@@ -36427,12 +36842,12 @@
     {
       "case_id": "tbi_icac_2025_009",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 A joint investigation by special agents with TBI\u2019s Internet..."
+      "found_in": "WASHINGTON COUNTY \u2013 A joint investigation by special agents with TBI\u2019s Intern..."
     },
     {
       "case_id": "tbi_icac_2025_010",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investiga..."
+      "found_in": "LINCOLN COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investiga..."
     },
     {
       "case_id": "tbi_icac_2025_010",
@@ -36467,7 +36882,7 @@
     {
       "case_id": "tbi_icac_2025_012",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investiga..."
+      "found_in": "WHITE COUNTY \u2013 Special agents assigned to the Tennessee Bureau of Investigati..."
     },
     {
       "case_id": "tbi_icac_2025_012",
@@ -36532,7 +36947,7 @@
     {
       "case_id": "tbi_icac_2026_004",
       "platform": "internet",
-      "found_in": "Source: COUNTY \u2013Special agents assigned to the Tennessee Bureau of Investigat..."
+      "found_in": "WILLIAMSON COUNTY \u2013Special agents assigned to the Tennessee Bureau of Investi..."
     },
     {
       "case_id": "texas_ag_2019_003",
@@ -36588,6 +37003,11 @@
       "case_id": "texas_ag_2019_013",
       "platform": "Tor",
       "found_in": "Attorney General Ken Paxton recently"
+    },
+    {
+      "case_id": "texas_ag_2019_013",
+      "platform": "email",
+      "found_in": "utm_content=&utm_medium=email&utm_name=&utm_source=govdelivery&utm_term="
     },
     {
       "case_id": "texas_ag_2019_013",
@@ -36737,7 +37157,7 @@
     {
       "case_id": "usss_2017_002",
       "platform": "Tor",
-      "found_in": "Source: ROCK\u2014Patrick C. Harris, Acting United States Attorney for the Eastern..."
+      "found_in": "LITTLE ROCK\u2014Patrick C. Harris, Acting United States Attorney for the Eastern..."
     },
     {
       "case_id": "usss_2017_002",
@@ -36862,7 +37282,7 @@
     {
       "case_id": "usss_2021_001",
       "platform": "Tor",
-      "found_in": "Source: South Carolina --- Acting United States Attorney M. Rhett DeHart anno..."
+      "found_in": "Florence, South Carolina --- Acting United States Attorney M. Rhett DeHart an..."
     },
     {
       "case_id": "usss_2021_001",
@@ -36882,7 +37302,7 @@
     {
       "case_id": "usss_2021_006",
       "platform": "Tor",
-      "found_in": "Source: South Carolina --- Acting United States Attorney M. Rhett DeHart anno..."
+      "found_in": "Columbia, South Carolina --- Acting United States Attorney M. Rhett DeHart an..."
     },
     {
       "case_id": "usss_2021_006",
@@ -36945,6 +37365,16 @@
       "found_in": "Internet Crimes Against Children Task Force (ICAC), and Wichita Police Depart..."
     },
     {
+      "case_id": "usss_2022_003",
+      "platform": "Tor",
+      "found_in": "pornography, announced U.S. Attorney Chad E. Meacham."
+    },
+    {
+      "case_id": "usss_2022_003",
+      "platform": "internet",
+      "found_in": "Department of Public Safety\u2019s Hurst Special Investigations Unit, the Fort Wor..."
+    },
+    {
       "case_id": "usss_2022_004",
       "platform": "Tor",
       "found_in": "Corrections. After obtaining a search warrant for his residence, Shawnee inve..."
@@ -36982,7 +37412,7 @@
     {
       "case_id": "usss_2022_010",
       "platform": "Tor",
-      "found_in": "Source: District Attorney Darcel D. Clark today announced that a Bronx man wh..."
+      "found_in": "Bronx District Attorney Darcel D. Clark today announced that a Bronx man who..."
     },
     {
       "case_id": "usss_2022_010",
@@ -37082,7 +37512,7 @@
     {
       "case_id": "usss_2023_006",
       "platform": "Tor",
-      "found_in": "Source: Florida \u2013 U.S. Attorney Roger B. Handberg announces that a federal ju..."
+      "found_in": "Ocala, Florida \u2013 U.S. Attorney Roger B. Handberg announces that a federal jur..."
     },
     {
       "case_id": "usss_2023_006",
@@ -37107,7 +37537,7 @@
     {
       "case_id": "usss_2024_004",
       "platform": "chat",
-      "found_in": "Source: - A Mansfield, Texas, man who used Snapchat to inappropriately commun..."
+      "found_in": "DALLAS - A Mansfield, Texas, man who used Snapchat to inappropriately communi..."
     },
     {
       "case_id": "usss_2025_003",
@@ -37147,7 +37577,7 @@
     {
       "case_id": "ut_ag_2019_001",
       "platform": "Tor",
-      "found_in": "Source: Utah Attorney General\u2019s Office Internet Crimes Against Children (ICAC..."
+      "found_in": "The Utah Attorney General\u2019s Office Internet Crimes Against Children (ICAC) Ta..."
     },
     {
       "case_id": "ut_ag_2019_001",
@@ -37157,7 +37587,7 @@
     {
       "case_id": "ut_ag_2019_001",
       "platform": "internet",
-      "found_in": "Source: Utah Attorney General\u2019s Office Internet Crimes Against Children (ICAC..."
+      "found_in": "The Utah Attorney General\u2019s Office Internet Crimes Against Children (ICAC) Ta..."
     },
     {
       "case_id": "ut_ag_2019_002",
@@ -37177,12 +37607,12 @@
     {
       "case_id": "ut_ag_2020_001",
       "platform": "Tor",
-      "found_in": "Source: week, the Utah Attorney General\u2019s Office Internet Crimes Against Chil..."
+      "found_in": "Last week, the Utah Attorney General\u2019s Office Internet Crimes Against Childre..."
     },
     {
       "case_id": "ut_ag_2020_001",
       "platform": "internet",
-      "found_in": "Source: week, the Utah Attorney General\u2019s Office Internet Crimes Against Chil..."
+      "found_in": "Last week, the Utah Attorney General\u2019s Office Internet Crimes Against Childre..."
     },
     {
       "case_id": "ut_ag_2020_001",
@@ -37192,12 +37622,12 @@
     {
       "case_id": "ut_ag_2021_001",
       "platform": "Tor",
-      "found_in": "Source: JORDAN \u2014 The Attorney General\u2019s Internet Crimes Against Children Task..."
+      "found_in": "WEST JORDAN \u2014 The Attorney General\u2019s Internet Crimes Against Children Task Fo..."
     },
     {
       "case_id": "ut_ag_2021_001",
       "platform": "internet",
-      "found_in": "Source: JORDAN \u2014 The Attorney General\u2019s Internet Crimes Against Children Task..."
+      "found_in": "WEST JORDAN \u2014 The Attorney General\u2019s Internet Crimes Against Children Task Fo..."
     },
     {
       "case_id": "ut_ag_2021_001",
@@ -37207,7 +37637,7 @@
     {
       "case_id": "ut_ag_2022_001",
       "platform": "Tor",
-      "found_in": "Source: \u2014 The Roosevelt Police Department led an investigation assisted by th..."
+      "found_in": "ROOSEVELT \u2014 The Roosevelt Police Department led an investigation assisted by..."
     },
     {
       "case_id": "ut_ag_2022_001",
@@ -37227,7 +37657,7 @@
     {
       "case_id": "ut_ag_2023_001",
       "platform": "internet",
-      "found_in": "Source: Utah Internet Crimes Against Children (ICAC) Task Force has charged 1..."
+      "found_in": "The Utah Internet Crimes Against Children (ICAC) Task Force has charged 19 in..."
     },
     {
       "case_id": "ut_ag_2026_002",
@@ -37242,7 +37672,7 @@
     {
       "case_id": "ut_ag_2026_002",
       "platform": "internet",
-      "found_in": "Source: LAKE CITY\u2014 The Utah Internet Crimes Against Children (ICAC) Task Forc..."
+      "found_in": "SALT LAKE CITY\u2014 The Utah Internet Crimes Against Children (ICAC) Task Force e..."
     },
     {
       "case_id": "ut_ag_2026_002",
@@ -37252,7 +37682,7 @@
     {
       "case_id": "ut_ag_2026_003",
       "platform": "Tor",
-      "found_in": "Source: early December, the Utah Attorney General\u2019s Office charged nine offen..."
+      "found_in": "In early December, the Utah Attorney General\u2019s Office charged nine offenders..."
     },
     {
       "case_id": "ut_ag_2026_003",
@@ -37262,7 +37692,7 @@
     {
       "case_id": "ut_ag_2026_004",
       "platform": "Tor",
-      "found_in": "Source: the Utah Attorney General\u2019s Office released the results of a statewid..."
+      "found_in": "Today the Utah Attorney General\u2019s Office released the results of a statewide..."
     },
     {
       "case_id": "ut_ag_2026_004",
@@ -37363,6 +37793,21 @@
       "case_id": "vt_ag_2020_004",
       "platform": "other",
       "found_in": "State Police, and other federal, state, county, and municipal law enforcement..."
+    },
+    {
+      "case_id": "vt_ag_2020_006",
+      "platform": "Tor",
+      "found_in": "Attorney General T.J. Donovan announced that Matthew Vince, 42, of Woodstock,..."
+    },
+    {
+      "case_id": "vt_ag_2020_006",
+      "platform": "internet",
+      "found_in": "of the Vermont Internet Crimes Against Children Task Force, including personn..."
+    },
+    {
+      "case_id": "vt_ag_2020_006",
+      "platform": "other",
+      "found_in": "and other county and municipal law enforcement and prosecutorial agencies are..."
     },
     {
       "case_id": "vt_ag_2020_008",
@@ -37492,7 +37937,7 @@
     {
       "case_id": "vt_ag_2022_003",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Chase A. Skinner, 27, of Ess..."
+      "found_in": "The Attorney General\u2019s Office announced that Chase A. Skinner, 27, of Essex J..."
     },
     {
       "case_id": "vt_ag_2022_003",
@@ -37542,7 +37987,7 @@
     {
       "case_id": "vt_ag_2022_006",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Levi Gamble, 40, of Wolcott,..."
+      "found_in": "The Attorney General\u2019s Office announced that Levi Gamble, 40, of Wolcott, Ver..."
     },
     {
       "case_id": "vt_ag_2022_006",
@@ -37572,7 +38017,7 @@
     {
       "case_id": "vt_ag_2022_008",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that David Green, 23, of South Bu..."
+      "found_in": "The Attorney General\u2019s Office announced that David Green, 23, of South Burlin..."
     },
     {
       "case_id": "vt_ag_2022_008",
@@ -37592,7 +38037,7 @@
     {
       "case_id": "vt_ag_2023_005",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that, in separate incidents, two..."
+      "found_in": "The Attorney General\u2019s Office announced that, in separate incidents, two Verm..."
     },
     {
       "case_id": "vt_ag_2023_005",
@@ -37607,7 +38052,7 @@
     {
       "case_id": "vt_ag_2023_008",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Luke Lanfear, 43, of B..."
+      "found_in": "The Attorney General\u2019s Office today announced that Luke Lanfear, 43, of Burli..."
     },
     {
       "case_id": "vt_ag_2023_008",
@@ -37617,7 +38062,7 @@
     {
       "case_id": "vt_ag_2024_001",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Jason Benn, 35, of Derby, Ve..."
+      "found_in": "The Attorney General\u2019s Office announced that Jason Benn, 35, of Derby, Vermon..."
     },
     {
       "case_id": "vt_ag_2024_001",
@@ -37632,7 +38077,7 @@
     {
       "case_id": "vt_ag_2024_004",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Mark Bissonnette, 54, of Gro..."
+      "found_in": "The Attorney General\u2019s Office announced that Mark Bissonnette, 54, of Groton,..."
     },
     {
       "case_id": "vt_ag_2024_004",
@@ -37642,7 +38087,7 @@
     {
       "case_id": "vt_ag_2024_021",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Christopher Camp, 33, of Mor..."
+      "found_in": "The Attorney General\u2019s Office announced that Christopher Camp, 33, of Moretow..."
     },
     {
       "case_id": "vt_ag_2024_021",
@@ -37652,7 +38097,7 @@
     {
       "case_id": "vt_ag_2024_031",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that James Beam, 29, of Springfie..."
+      "found_in": "The Attorney General\u2019s Office announced that James Beam, 29, of Springfield,..."
     },
     {
       "case_id": "vt_ag_2024_031",
@@ -37662,7 +38107,7 @@
     {
       "case_id": "vt_ag_2024_032",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Robert Charbonneau, 50, of B..."
+      "found_in": "The Attorney General\u2019s Office announced that Robert Charbonneau, 50, of Burli..."
     },
     {
       "case_id": "vt_ag_2024_032",
@@ -37672,7 +38117,7 @@
     {
       "case_id": "vt_ag_2024_033",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Andrew Moffitt, 21, of Hartl..."
+      "found_in": "The Attorney General\u2019s Office announced that Andrew Moffitt, 21, of Hartland,..."
     },
     {
       "case_id": "vt_ag_2024_033",
@@ -37682,7 +38127,7 @@
     {
       "case_id": "vt_ag_2024_034",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Stephen Lane, 55, of Winoosk..."
+      "found_in": "The Attorney General\u2019s Office announced that Stephen Lane, 55, of Winooski, V..."
     },
     {
       "case_id": "vt_ag_2024_034",
@@ -37692,7 +38137,7 @@
     {
       "case_id": "vt_ag_2024_035",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Robert Lavallee, 31, of Bris..."
+      "found_in": "The Attorney General\u2019s Office announced that Robert Lavallee, 31, of Bristol,..."
     },
     {
       "case_id": "vt_ag_2024_035",
@@ -37702,7 +38147,7 @@
     {
       "case_id": "vt_ag_2024_037",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Nicholas Badger, 20, of Fair..."
+      "found_in": "The Attorney General\u2019s Office announced that Nicholas Badger, 20, of Fairfax,..."
     },
     {
       "case_id": "vt_ag_2024_037",
@@ -37712,7 +38157,7 @@
     {
       "case_id": "vt_ag_2025_003",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Daniel Ciofreddi, 39,..."
+      "found_in": "The Attorney General\u2019s Office today announced that Daniel Ciofreddi, 39, of M..."
     },
     {
       "case_id": "vt_ag_2025_003",
@@ -37722,7 +38167,7 @@
     {
       "case_id": "vt_ag_2025_009",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Adam Ranslow, 40, of W..."
+      "found_in": "The Attorney General\u2019s Office today announced that Adam Ranslow, 40, of Whiti..."
     },
     {
       "case_id": "vt_ag_2025_009",
@@ -37732,7 +38177,7 @@
     {
       "case_id": "vt_ag_2025_010",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Bryant Keene, 36, of B..."
+      "found_in": "The Attorney General\u2019s Office today announced that Bryant Keene, 36, of Barre..."
     },
     {
       "case_id": "vt_ag_2025_010",
@@ -37742,7 +38187,7 @@
     {
       "case_id": "vt_ag_2025_011",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Ricky Sanville, Jr., 23, of..."
+      "found_in": "The Attorney General\u2019s Office announced that Ricky Sanville, Jr., 23, of Hart..."
     },
     {
       "case_id": "vt_ag_2025_011",
@@ -37752,7 +38197,7 @@
     {
       "case_id": "vt_ag_2025_013",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Joshua Pierce, 34, of Northf..."
+      "found_in": "The Attorney General\u2019s Office announced that Joshua Pierce, 34, of Northfield..."
     },
     {
       "case_id": "vt_ag_2025_013",
@@ -37762,7 +38207,7 @@
     {
       "case_id": "vt_ag_2025_016",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Mark McClintock, 64, o..."
+      "found_in": "The Attorney General\u2019s Office today announced that Mark McClintock, 64, of Ha..."
     },
     {
       "case_id": "vt_ag_2025_016",
@@ -37772,7 +38217,7 @@
     {
       "case_id": "vt_ag_2025_041",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office announced that Brian Wood, 22, of Hartford,..."
+      "found_in": "The Attorney General\u2019s Office announced that Brian Wood, 22, of Hartford, Ver..."
     },
     {
       "case_id": "vt_ag_2025_041",
@@ -37787,7 +38232,7 @@
     {
       "case_id": "vt_ag_2026_003",
       "platform": "Tor",
-      "found_in": "Source: Attorney General\u2019s Office today announced that Alysha Devoe, 23, of C..."
+      "found_in": "The Attorney General\u2019s Office today announced that Alysha Devoe, 23, of Charl..."
     },
     {
       "case_id": "vt_ag_2026_003",
@@ -37827,7 +38272,7 @@
     {
       "case_id": "wa_ag_2026_001",
       "platform": "Tor",
-      "found_in": "Source: successful prosecutions by the Attorney General's Office, Yakima Coun..."
+      "found_in": "After successful prosecutions by the Attorney General's Office, Yakima County..."
     },
     {
       "case_id": "wa_ag_2026_001",
@@ -37852,7 +38297,7 @@
     {
       "case_id": "wcso_2021_005",
       "platform": "internet",
-      "found_in": "Source: County Sheriff\u2019s Office detectives, along with partners of the Intern..."
+      "found_in": "Washoe County Sheriff\u2019s Office detectives, along with partners of the Interne..."
     },
     {
       "case_id": "wcso_2022_002",
@@ -37877,7 +38322,7 @@
     {
       "case_id": "wcso_2022_004",
       "platform": "internet",
-      "found_in": "Source: December of 2021, the Northern Nevada Internet Crimes Against Childre..."
+      "found_in": "In December of 2021, the Northern Nevada Internet Crimes Against Children\u2019s T..."
     },
     {
       "case_id": "wcso_2024_001",
@@ -37897,7 +38342,7 @@
     {
       "case_id": "wcso_2024_001",
       "platform": "internet",
-      "found_in": "Source: October 29, 2024, the Internet Crimes Against Children Task Force (IC..."
+      "found_in": "On October 29, 2024, the Internet Crimes Against Children Task Force (ICAC) a..."
     },
     {
       "case_id": "wcso_2024_002",
@@ -37912,7 +38357,7 @@
     {
       "case_id": "wcso_2024_002",
       "platform": "internet",
-      "found_in": "Source: April 25, 2024, the Internet Crimes Against Children Task Force (ICAC..."
+      "found_in": "On April 25, 2024, the Internet Crimes Against Children Task Force (ICAC) arr..."
     },
     {
       "case_id": "wcso_2024_002",
@@ -37937,7 +38382,7 @@
     {
       "case_id": "wcso_2024_003",
       "platform": "internet",
-      "found_in": "Source: August 22, 2024, the Internet Crimes Against Children Task Force (ICA..."
+      "found_in": "On August 22, 2024, the Internet Crimes Against Children Task Force (ICAC) ar..."
     },
     {
       "case_id": "wcso_2024_004",
@@ -37987,7 +38432,7 @@
     {
       "case_id": "wy_dci_2024_002",
       "platform": "Tor",
-      "found_in": "Source: number of predators abusing children continues to be on the rise in W..."
+      "found_in": "The number of predators abusing children continues to be on the rise in Wyomi..."
     },
     {
       "case_id": "wy_dci_2024_002",
@@ -38012,7 +38457,7 @@
     {
       "case_id": "wy_dci_2024_003",
       "platform": "Tor",
-      "found_in": "Source: Note: This story includes disturbing allegations of sexual crimes aga..."
+      "found_in": "Editor\u2019s Note: This story includes disturbing allegations of sexual crimes ag..."
     },
     {
       "case_id": "wy_dci_2024_003",
@@ -38062,7 +38507,7 @@
     {
       "case_id": "wy_dci_2025_003",
       "platform": "Tor",
-      "found_in": "Source: note: This story contains allegations and descriptions of evidence ma..."
+      "found_in": "Editor\u2019s note: This story contains allegations and descriptions of evidence m..."
     },
     {
       "case_id": "wy_dci_2025_003",
@@ -38077,7 +38522,7 @@
     {
       "case_id": "wy_dci_2025_004",
       "platform": "Tor",
-      "found_in": "Source: note: This story contains graphic details some readers may find distu..."
+      "found_in": "Editor\u2019s note: This story contains graphic details some readers may find dist..."
     },
     {
       "case_id": "wy_dci_2025_004",
@@ -38087,7 +38532,7 @@
     {
       "case_id": "wy_dci_2026_001",
       "platform": "Tor",
-      "found_in": "Source: note: This story includes allegations of sexual abuse involving young..."
+      "found_in": "Editor\u2019s note: This story includes allegations of sexual abuse involving youn..."
     },
     {
       "case_id": "wy_dci_2026_001",

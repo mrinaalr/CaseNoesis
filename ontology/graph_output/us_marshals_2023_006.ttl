@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:37.478704" ;
+    dcterms:created "2026-06-03T16:45:43.365534" ;
     dcterms:identifier "us_marshals_2023_006" ;
-    dcterms:modified "2026-05-30T20:39:37.478704" ;
+    dcterms:modified "2026-06-03T16:45:43.365534" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-galveston-arrest-california-fugitive-run-35-years-multiple-sex>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/phase/booked> ;
@@ -22,35 +20,8 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/huntington-park-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/texas>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/huntington-park-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Huntington Park Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/person/offender/1> a uco-identity:Person ;
-    cacontology-detection:ageEstimate 62 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/person/victim/1> a uco-identity:Person .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/huntington-park-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -63,6 +34,21 @@
     cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/huntington-park-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Huntington Park Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 62 .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_006/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

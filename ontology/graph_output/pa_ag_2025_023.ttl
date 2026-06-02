@@ -1,11 +1,8 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
@@ -15,27 +12,38 @@
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:38:04.655588" ;
+    dcterms:created "2026-06-03T16:45:26.785561" ;
     dcterms:identifier "pa_ag_2025_023" ;
-    dcterms:modified "2026-05-30T20:38:04.655588" ;
+    dcterms:modified "2026-06-03T16:45:26.785561" ;
     dcterms:source <https://www.attorneygeneral.gov/taking-action/ag-sunday-charges-luzerne-county-man-with-sexual-assault-of-child-while-exchanging-thousands-of-facebook-messages/>,
         "PA AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession>,
         <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" .
 
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child sexual abuse material" .
+
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -55,20 +63,7 @@
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/offender/1> a uco-identity:Person ;
     cacontology-detection:ageEstimate 30 .
 
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 15 .
-
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/victim/1> .
+<https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/pa_ag_2025_023/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;

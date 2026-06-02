@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -14,9 +12,9 @@
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:12.026565" ;
+    dcterms:created "2026-06-03T16:44:51.658544" ;
     dcterms:identifier "doj_ceos_2026_011" ;
-    dcterms:modified "2026-05-30T20:35:12.026565" ;
+    dcterms:modified "2026-06-03T16:44:51.658544" ;
     dcterms:source <https://www.justice.gov/opa/pr/west-virginia-man-found-guilty-aggravated-sexual-abuse-child-abroad>,
         "DOJ CEOS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/phase/sentenced> ;
@@ -27,18 +25,37 @@
         <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/offense-event/charge-2> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/justice-department> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
+        <https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division>,
+        <https://caselinker.up.railway.app/resource/agency/us-armys-criminal-investigation-division> .
 
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/offense-event/charge-2> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/offense-event/charge-2> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/justice-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/us-armys-criminal-investigation-division> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "U.S. Army's Criminal Investigation Division" .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "sexual exploitation" ;
@@ -73,20 +90,6 @@
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/offense-event/charge-2> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/offense-event/charge-2> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_011/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MandatoryMinimumSentencing ;

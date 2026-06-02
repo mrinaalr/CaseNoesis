@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,9 +10,9 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_010> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:57.231065" ;
+    dcterms:created "2026-06-03T16:44:39.527460" ;
     dcterms:identifier "cbp_2026_010" ;
-    dcterms:modified "2026-05-30T20:33:57.231065" ;
+    dcterms:modified "2026-06-03T16:44:39.527460" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-officers-arrest-two-men-wanted-sexual-assault-child>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2026_010/phase/arrested> ;
@@ -22,36 +20,7 @@
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2026_010/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/el-paso-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/las-vegas>,
-        <https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/texas> .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_010/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2026_010/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2026_010/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/el-paso-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/las-vegas> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Las Vegas" .
-
-<https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Las Vegas Metropolitan Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_010/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_010/person/offender/1> a uco-identity:Person ;
-    cacontology-detection:ageEstimate 68 .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2026_010/person/victim/1> a uco-identity:Person .
+        <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_010/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -62,6 +31,21 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2026_010/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/el-paso-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Metropolitan Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_010/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_010/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 68 .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2026_010/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2026_010/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

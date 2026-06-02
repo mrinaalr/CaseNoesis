@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
@@ -18,33 +16,47 @@
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:36:17.697026" ;
+    dcterms:created "2026-06-03T16:45:04.370304" ;
     dcterms:identifier "illinois_ag_2025_040" ;
-    dcterms:modified "2026-05-30T20:36:17.697026" ;
+    dcterms:modified "2026-06-03T16:45:04.370304" ;
     dcterms:source <https://illinoisattorneygeneral.gov/news/story/attorney-general-raoul-charges-johnson-county-man-over-alleged-sexual-assault-of-a-minor-production-of-child-sexual-abuse-material>,
         "ILLINOIS AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/phase/charged> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/legal-proceeding>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/operation> ;
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
+    cacontology:investigationStatus "unknown" ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau>,
         <https://caselinker.up.railway.app/resource/agency/illinois-state-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department> .
+        <https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
+        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/10> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/10> .
@@ -52,7 +64,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/11> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/11> .
@@ -60,7 +72,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/12> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/12> .
@@ -68,7 +80,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/13> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/13> .
@@ -76,7 +88,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/14> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/14> .
@@ -84,7 +96,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/15> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/15> .
@@ -92,7 +104,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/16> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/16> .
@@ -100,7 +112,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/17> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/17> .
@@ -108,7 +120,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/18> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/18> .
@@ -116,7 +128,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/19> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/19> .
@@ -124,7 +136,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/2> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/2> .
@@ -132,7 +144,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/20> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/20> .
@@ -140,7 +152,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/21> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/21> .
@@ -148,7 +160,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/22> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/22> .
@@ -156,7 +168,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/23> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/23> .
@@ -164,7 +176,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/24> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/24> .
@@ -172,7 +184,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/25> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/25> .
@@ -180,7 +192,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/26> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/26> .
@@ -188,7 +200,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/27> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/27> .
@@ -196,7 +208,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/28> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/28> .
@@ -204,7 +216,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/29> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/29> .
@@ -212,7 +224,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/3> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/3> .
@@ -220,7 +232,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/30> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/30> .
@@ -228,7 +240,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/31> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/31> .
@@ -236,7 +248,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/32> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/32> .
@@ -244,7 +256,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/33> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/33> .
@@ -252,7 +264,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/34> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/34> .
@@ -260,7 +272,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/35> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/35> .
@@ -268,7 +280,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/36> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/36> .
@@ -276,7 +288,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/37> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/37> .
@@ -284,7 +296,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/38> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/38> .
@@ -292,7 +304,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/39> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/39> .
@@ -300,7 +312,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/4> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/4> .
@@ -308,7 +320,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/40> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/40> .
@@ -316,7 +328,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/41> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/41> .
@@ -324,7 +336,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/42> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/42> .
@@ -332,7 +344,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/43> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/43> .
@@ -340,7 +352,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/44> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/44> .
@@ -348,7 +360,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/45> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/45> .
@@ -356,7 +368,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/5> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/5> .
@@ -364,7 +376,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/6> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/6> .
@@ -372,7 +384,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/7> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/7> .
@@ -380,7 +392,7 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/8> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/8> .
@@ -388,12 +400,14 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/9> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/9> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/illinois-state-police-department> a cacontology-multi:StateAgency .
 
@@ -423,7 +437,14 @@
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -438,9 +459,6 @@
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/charge/5> ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/sentence/1> .
-
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/operation> a cac-core:Event,
-        cacontology-taskforce:ReactiveOperation .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/offender/1> a uco-identity:Person .
 
@@ -534,22 +552,6 @@
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/9> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production>,
-        <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/offense-event/charge-5> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "30 years" .
@@ -557,14 +559,16 @@
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/possession> a cacontology:CSAMIncident,
+<https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/csam> a cacontology:CSAMIncident,
         cac-core:Event ;
     cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/facet/possession> .
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/facet/csam> .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_040/event/production> a cac-core:Event,
         cacontology-production:ProductionOffense ;

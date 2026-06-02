@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
@@ -14,34 +12,38 @@
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:40:26.822889" ;
+    dcterms:created "2026-06-03T16:45:53.112177" ;
     dcterms:identifier "wy_dci_2024_006" ;
-    dcterms:modified "2026-05-30T20:40:26.822889" ;
+    dcterms:modified "2026-06-03T16:45:53.112177" ;
     dcterms:source <https://k2radio.com/horrifying-details-emerge-in-casper-child-pornography-arrest-case/>,
         "WY DCI" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/phase/convicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/phase/convicted> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/possession>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/legal-step/convicted> ;
     cacontology:investigationStatus "unknown" ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security>,
-        <https://caselinker.up.railway.app/resource/agency/federal-summons>,
         <https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> .
 
-<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/federal-summons> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Federal Summons" .
 
 <https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
@@ -52,6 +54,10 @@
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "possession of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -71,20 +77,6 @@
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_006/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .

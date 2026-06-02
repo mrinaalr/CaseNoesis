@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -13,42 +11,16 @@
 
 <https://caselinker.up.railway.app/resource/case/cbp_2022_002> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:02.543481" ;
+    dcterms:created "2026-06-03T16:44:40.399300" ;
     dcterms:identifier "cbp_2022_002" ;
-    dcterms:modified "2026-05-30T20:34:02.543481" ;
+    dcterms:modified "2026-06-03T16:44:40.399300" ;
     dcterms:source <https://www.cbp.gov/newsroom/local-media-release/cbp-officers-apprehend-fugitive-wanted-aggravated-sexual-assault-1>,
         "CBP" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/cbp_2022_002/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/cbp_2022_002/phase/charged> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/cbp_2022_002/event/multi-jurisdiction> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/callen-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/texas> .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2022_002/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/cbp_2022_002/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/cbp_2022_002/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Twitter / X" .
-
-<https://caselinker.up.railway.app/resource/agency/callen-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "cAllen Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2022_002/event/multi-jurisdiction> a cac-core:Event,
-        cacontology-multi:MultiJurisdictionalInvestigation ;
-    cacontology:severityLevel 3 ;
-    cacontology-multi:crossesBorders true .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2022_002/person/offender/1> a uco-identity:Person ;
-    cacontology-detection:ageEstimate 47 .
-
-<https://caselinker.up.railway.app/resource/case/cbp_2022_002/person/victim/1> a uco-identity:Person .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/mcallen-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2022_002/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -59,6 +31,23 @@
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/cbp_2022_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Twitter / X" .
+
+<https://caselinker.up.railway.app/resource/agency/mcallen-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "McAllen Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2022_002/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:severityLevel 3 ;
+    cacontology-multi:crossesBorders true .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2022_002/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 47 .
+
+<https://caselinker.up.railway.app/resource/case/cbp_2022_002/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/cbp_2022_002/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

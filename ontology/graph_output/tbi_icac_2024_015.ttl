@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
@@ -18,15 +16,16 @@
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:20.517953" ;
+    dcterms:created "2026-06-03T16:45:40.746912" ;
     dcterms:identifier "tbi_icac_2024_015" ;
-    dcterms:modified "2026-05-30T20:39:20.517953" ;
+    dcterms:modified "2026-06-03T16:45:40.746912" ;
     dcterms:source <https://tbinewsroom.com/2024/05/31/columbia-man-charged-with-aggravated-sexual-exploitation-of-a-minor/>,
         "TBI ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/phase/charged> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/phase/charged> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/cybertip>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/sextortion>,
@@ -40,14 +39,25 @@
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-secret-service>,
         <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/offense-event/charge-5> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -59,13 +69,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Tennessee Bureau of Investigation Tipline" .
+<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/united-states-secret-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -92,6 +98,10 @@
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
     cacontology:severityLevel 3 .
@@ -116,24 +126,6 @@
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/sextortion>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/offense-event/charge-5> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/csam>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/event/sextortion>,
-        <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/offense-event/charge-5> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_015/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;

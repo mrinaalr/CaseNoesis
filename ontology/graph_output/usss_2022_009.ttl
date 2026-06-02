@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -18,9 +17,9 @@
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:51.933944" ;
+    dcterms:created "2026-06-03T16:45:46.348754" ;
     dcterms:identifier "usss_2022_009" ;
-    dcterms:modified "2026-05-30T20:39:51.933944" ;
+    dcterms:modified "2026-06-03T16:45:46.348754" ;
     dcterms:source <https://www.secretservice.gov/newsroom/releases/2022/09/bonner-springs-man-pleads-guilty-child-sexual-exploitation>,
         "USSS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/usss_2022_009/phase/pleaded-guilty> ;
@@ -32,17 +31,30 @@
         <https://caselinker.up.railway.app/resource/case/usss_2022_009/legal-step/pleaded-guilty>,
         <https://caselinker.up.railway.app/resource/case/usss_2022_009/offense-event/charge-6> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigation>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/ceos>,
+        <https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigation>,
         <https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigations>,
         <https://caselinker.up.railway.app/resource/agency/ncmec>,
         <https://caselinker.up.railway.app/resource/agency/secret-service>,
-        <https://caselinker.up.railway.app/resource/agency/united-states-attorney-s-office> .
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service> .
 
-<https://caselinker.up.railway.app/resource/case/usss_2022_009/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/usss_2022_009/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/usss_2022_009/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/usss_2022_009/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/production>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_009/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_009/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/usss_2022_009/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/production>,
+        <https://caselinker.up.railway.app/resource/case/usss_2022_009/offense-event/charge-6> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_009/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
@@ -54,7 +66,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/secret-service> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/united-states-attorney-s-office> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_009/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -108,26 +120,11 @@
         cacontology-legal-outcomes:PleaBargaining ;
     cacontology-legal-outcomes:hasProceedingBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/case/usss_2022_009/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/usss_2022_009/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 35 .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_009/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 10 .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_009/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/production>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_009/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_009/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/usss_2022_009/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_009/event/production>,
-        <https://caselinker.up.railway.app/resource/case/usss_2022_009/offense-event/charge-6> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_009/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_009/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

@@ -6,36 +6,44 @@
 @prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:39.480484" ;
+    dcterms:created "2026-06-03T16:45:43.816480" ;
     dcterms:identifier "us_marshals_2021_005" ;
-    dcterms:modified "2026-05-30T20:39:39.480484" ;
+    dcterms:modified "2026-06-03T16:45:43.816480" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/fall-operation-boo-dat-2021-recovers-five-missing-endangered-teens-and-makes>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/phase/convicted> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/phase/convicted> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/multi-jurisdiction>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/legal-step/convicted> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/baton-rouge-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/department-of-corrections-parole>,
+        <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/la-department-of-child-and-family-services>,
         <https://caselinker.up.railway.app/resource/agency/louisiana-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/new-orleans-police-department>,
         <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/texas>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-new-orleans-task-force> .
+        <https://caselinker.up.railway.app/resource/agency/southern-texas-corpus-christi-gulf-coast-violent-offenders-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
+
+<https://caselinker.up.railway.app/resource/agency/baton-rouge-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Baton Rouge Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/department-of-corrections-parole> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Department of Corrections Parole" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -47,19 +55,15 @@
 
 <https://caselinker.up.railway.app/resource/agency/louisiana-state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "New Orleans Police Department" .
+<https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/texas> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service-new-orleans-task-force> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/southern-texas-corpus-christi-gulf-coast-violent-offenders-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "U. S. Marshals Service New Orleans Task Force" .
+    rdfs:label "Southern Texas Corpus Christi Gulf Coast Violent Offenders Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:SexTrafficking ;
@@ -70,11 +74,13 @@
     cacontology:severityLevel 3 ;
     cacontology-multi:crossesBorders true .
 
+<https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/trust-violation> a cacontology-custodial:CustodialAbuse,
         cacontology-custodial:TrustViolation ;
     cacontology-custodial:violatesRelationship <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/relationship/sister> .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,
@@ -103,15 +109,13 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
     cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
@@ -125,9 +129,4 @@
 <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/hands-on> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;
     cacontology:severityLevel 3 .
-
-<https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/event/possession> a cacontology:CSAMIncident,
-        cac-core:Event ;
-    cacontology:severityLevel 3 ;
-    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/us_marshals_2021_005/facet/possession> .
 

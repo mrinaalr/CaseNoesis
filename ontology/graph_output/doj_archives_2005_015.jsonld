@@ -15,16 +15,13 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/online-only"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -34,107 +31,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/agency/ceos",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Inferred offense from charge: child exploitation"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/possession",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/possession"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/hands-on",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MandatoryMinimumSentencing",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "mandatory minimum sentence"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/5",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "sexual_exploitation_unspecified"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/6",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child exploitation"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -151,16 +50,13 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/online-only"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
@@ -170,192 +66,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/relationship/mother",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/production",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/possession",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/2",
+        "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/production",
-        "@type": [
-          "https://cacontology.projectvic.org/production#ProductionOffense",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/production"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-            "@value": true
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/3",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "possession of child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 10
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/4",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Production",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "production of child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/relationship/mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/california",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/legal-step/convicted",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2005-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "25 years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/phase/convicted",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2005-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#StateCharge",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation of children"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -371,18 +90,6 @@
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/2"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/3"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/4"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/5"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/6"
           }
         ],
         "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
@@ -401,6 +108,74 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/legal-step/convicted",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2005-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/irc"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/facet/possession"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MandatoryMinimumSentencing",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "mandatory minimum sentence"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -408,7 +183,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:34:35.416145"
+            "@value": "2026-06-03T16:44:45.829369"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -418,7 +193,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:34:35.416145"
+            "@value": "2026-06-03T16:44:45.829369"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -426,7 +201,7 @@
             "@value": "DOJ ARCHIVES"
           },
           {
-            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DOR%20Weber%20PR_042605.pdf"
+            "@id": "https://www.justice.gov/archive/criminal/ceos/pressreleases/downloads/DC%20Schiffer%20PR_061305.pdf"
           }
         ],
         "https://cacontology.projectvic.org#currentPhase": [
@@ -444,16 +219,13 @@
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/multi-jurisdiction"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/hands-on"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/distribution"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/online-only"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/production"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/trust-violation"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/legal-step/convicted"
@@ -462,7 +234,7 @@
             "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/legal-proceeding"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-6"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2"
           }
         ],
         "https://cacontology.projectvic.org#investigationStatus": [
@@ -472,7 +244,131 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/california"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ceos"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/irc"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/irc",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "IRC"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MandatoryMinimumSentencing",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "mandatory minimum"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/phase/convicted",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2005-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/offense-event/charge-2"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/irc"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_archives_2005_015/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 34
           }
         ]
       }

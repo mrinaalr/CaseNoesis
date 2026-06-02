@@ -1,12 +1,10 @@
 {
   "summary": {
-    "total_candidate_cases": 1358,
-    "total_platform_case_pairs": 2209,
-    "platforms_with_named_label": 47,
+    "total_candidate_cases": 1376,
+    "total_platform_case_pairs": 2235,
+    "platforms_with_named_label": 54,
     "skipped_generic_labels": {
-      "online": 1913,
-      "MeetMe": 20,
-      "Tinder": 6
+      "online": 1913
     }
   },
   "by_platform_type": {
@@ -134,11 +132,11 @@
           "lvmpd_2026_002",
           "michigan_icac_2026_006",
           "mt_doj_2025_001",
-          "nc_sbi_2020_002",
           "nc_sbi_2020_003",
+          "nc_sbi_2020_004",
           "nc_sbi_2025_001",
           "nc_sbi_2025_002",
-          "nc_sbi_2026_007",
+          "nc_sbi_2026_006",
           "ncis_2022_002",
           "ncis_2023_001",
           "ncis_2023_002",
@@ -1094,35 +1092,6 @@
         ]
       },
       {
-        "platform": "Grindr",
-        "platform_type": "SocialMediaPlatform",
-        "case_count": 9,
-        "case_ids": [
-          "doj_ceos_2026_006",
-          "ncmec_2022_126",
-          "nj_ag_2020_002",
-          "nj_ag_2026_001",
-          "nj_ag_2026_017",
-          "nj_ag_2026_040",
-          "svicac_2026_004",
-          "ut_ag_2022_001",
-          "vt_ag_2024_031"
-        ]
-      },
-      {
-        "platform": "Skout",
-        "platform_type": "SocialMediaPlatform",
-        "case_count": 6,
-        "case_ids": [
-          "ncmec_2022_062",
-          "nj_ag_2020_002",
-          "nj_ag_2026_001",
-          "nj_ag_2026_017",
-          "nj_ag_2026_040",
-          "ut_ag_2022_001"
-        ]
-      },
-      {
         "platform": "Yubo",
         "platform_type": "SocialMediaPlatform",
         "case_count": 4,
@@ -1170,20 +1139,20 @@
           "de_ag_2015_001",
           "de_ag_2016_001",
           "de_ag_2016_005",
-          "doj_archives_2003_005",
-          "doj_archives_2006_006",
-          "doj_archives_2006_023",
-          "doj_archives_2006_024",
-          "doj_archives_2007_020",
+          "doj_archives_2003_006",
+          "doj_archives_2006_005",
+          "doj_archives_2006_021",
+          "doj_archives_2006_022",
           "doj_archives_2007_021",
-          "doj_archives_2007_027",
+          "doj_archives_2007_022",
+          "doj_archives_2007_029",
+          "doj_archives_2008_016",
           "doj_archives_2008_017",
-          "doj_archives_2008_018",
           "doj_archives_2008_028",
-          "doj_archives_2008_035",
-          "doj_archives_2008_043",
+          "doj_archives_2008_037",
           "doj_archives_2008_047",
-          "doj_archives_2008_054",
+          "doj_archives_2008_053",
+          "doj_archives_2008_062",
           "doj_ceos_2025_034",
           "doj_ceos_2025_038",
           "doj_ceos_2026_001",
@@ -2067,13 +2036,13 @@
         "case_count": 8,
         "case_ids": [
           "doj_archives_2002_002",
-          "doj_archives_2005_006",
-          "doj_archives_2005_010",
-          "doj_archives_2005_013",
-          "doj_archives_2005_016",
-          "doj_archives_2005_024",
-          "doj_archives_2006_008",
-          "doj_archives_2006_016"
+          "doj_archives_2005_008",
+          "doj_archives_2005_012",
+          "doj_archives_2005_015",
+          "doj_archives_2005_018",
+          "doj_archives_2005_026",
+          "doj_archives_2006_007",
+          "doj_archives_2006_014"
         ]
       },
       {
@@ -2121,6 +2090,14 @@
         "case_count": 1,
         "case_ids": [
           "ncmec_2022_235"
+        ]
+      },
+      {
+        "platform": "IMVU",
+        "platform_type": "MessagingService",
+        "case_count": 1,
+        "case_ids": [
+          "ncmec_2024_996"
         ]
       }
     ],
@@ -2253,6 +2230,17 @@
         ]
       },
       {
+        "platform": "iCloud",
+        "platform_type": "FileHostingService",
+        "case_count": 4,
+        "case_ids": [
+          "ncmec_2023_419",
+          "ncmec_2024_523",
+          "ncmec_2024_676",
+          "nj_ag_2026_041"
+        ]
+      },
+      {
         "platform": "OneDrive",
         "platform_type": "FileHostingService",
         "case_count": 3,
@@ -2324,9 +2312,9 @@
           "de_ag_2012_023",
           "de_ag_2012_026",
           "de_ag_2013_012",
-          "doj_archives_2007_027",
-          "doj_archives_2008_043",
-          "doj_archives_2008_054",
+          "doj_archives_2007_029",
+          "doj_archives_2008_047",
+          "doj_archives_2008_062",
           "doj_ceos_2025_029",
           "nj_ag_2014_001",
           "nj_ag_2026_061",
@@ -2455,8 +2443,8 @@
         "case_count": 10,
         "case_ids": [
           "doj_archives_2007_002",
-          "doj_archives_2007_012",
-          "doj_archives_2007_028",
+          "doj_archives_2007_013",
+          "doj_archives_2007_030",
           "ice_2013_011",
           "ice_2013_014",
           "ice_2017_009",
@@ -2464,6 +2452,88 @@
           "nj_ag_2026_051",
           "nj_ag_2026_082",
           "wa_ag_2026_001"
+        ]
+      }
+    ],
+    "OnlineDatingPlatform": [
+      {
+        "platform": "Grindr",
+        "platform_type": "OnlineDatingPlatform",
+        "case_count": 9,
+        "case_ids": [
+          "doj_ceos_2026_006",
+          "ncmec_2022_126",
+          "nj_ag_2020_002",
+          "nj_ag_2026_001",
+          "nj_ag_2026_017",
+          "nj_ag_2026_040",
+          "svicac_2026_004",
+          "ut_ag_2022_001",
+          "vt_ag_2024_031"
+        ]
+      },
+      {
+        "platform": "Skout",
+        "platform_type": "OnlineDatingPlatform",
+        "case_count": 6,
+        "case_ids": [
+          "ncmec_2022_062",
+          "nj_ag_2020_002",
+          "nj_ag_2026_001",
+          "nj_ag_2026_017",
+          "nj_ag_2026_040",
+          "ut_ag_2022_001"
+        ]
+      }
+    ],
+    "P2PService": [
+      {
+        "platform": "BitTorrent",
+        "platform_type": "P2PService",
+        "case_count": 8,
+        "case_ids": [
+          "doj_ceos_2025_015",
+          "doj_ceos_2025_016",
+          "doj_ceos_2026_002",
+          "idaho_icac_2024_022",
+          "ncmec_2023_133",
+          "ncmec_2024_891",
+          "usss_2022_003",
+          "vt_ag_2020_006"
+        ]
+      },
+      {
+        "platform": "Kazaa",
+        "platform_type": "P2PService",
+        "case_count": 2,
+        "case_ids": [
+          "doj_archives_2008_014",
+          "doj_archives_2008_042"
+        ]
+      },
+      {
+        "platform": "LimeWire",
+        "platform_type": "P2PService",
+        "case_count": 2,
+        "case_ids": [
+          "doj_archives_2008_045",
+          "doj_archives_2008_059"
+        ]
+      }
+    ],
+    "FinancialTransferService": [
+      {
+        "platform": "Cash App",
+        "platform_type": "FinancialTransferService",
+        "case_count": 7,
+        "case_ids": [
+          "ncmec_2022_056",
+          "ncmec_2024_038",
+          "ncmec_2024_1257",
+          "ncmec_2024_581",
+          "ncmec_2024_871",
+          "south_florida_icac_2023_011",
+          "usss_2025_003"
         ]
       }
     ],
@@ -2561,6 +2631,17 @@
         "case_count": 1,
         "case_ids": [
           "ut_ag_2022_001"
+        ]
+      }
+    ],
+    "AnonymizationService": [
+      {
+        "platform": "Tor",
+        "platform_type": "AnonymizationService",
+        "case_count": 2,
+        "case_ids": [
+          "doj_ceos_2025_028",
+          "doj_ceos_2026_009"
         ]
       }
     ]
@@ -2689,11 +2770,11 @@
         "lvmpd_2026_002",
         "michigan_icac_2026_006",
         "mt_doj_2025_001",
-        "nc_sbi_2020_002",
         "nc_sbi_2020_003",
+        "nc_sbi_2020_004",
         "nc_sbi_2025_001",
         "nc_sbi_2025_002",
-        "nc_sbi_2026_007",
+        "nc_sbi_2026_006",
         "ncis_2022_002",
         "ncis_2023_001",
         "ncis_2023_002",
@@ -3155,20 +3236,20 @@
         "de_ag_2015_001",
         "de_ag_2016_001",
         "de_ag_2016_005",
-        "doj_archives_2003_005",
-        "doj_archives_2006_006",
-        "doj_archives_2006_023",
-        "doj_archives_2006_024",
-        "doj_archives_2007_020",
+        "doj_archives_2003_006",
+        "doj_archives_2006_005",
+        "doj_archives_2006_021",
+        "doj_archives_2006_022",
         "doj_archives_2007_021",
-        "doj_archives_2007_027",
+        "doj_archives_2007_022",
+        "doj_archives_2007_029",
+        "doj_archives_2008_016",
         "doj_archives_2008_017",
-        "doj_archives_2008_018",
         "doj_archives_2008_028",
-        "doj_archives_2008_035",
-        "doj_archives_2008_043",
+        "doj_archives_2008_037",
         "doj_archives_2008_047",
-        "doj_archives_2008_054",
+        "doj_archives_2008_053",
+        "doj_archives_2008_062",
         "doj_ceos_2025_034",
         "doj_ceos_2025_038",
         "doj_ceos_2026_001",
@@ -4718,9 +4799,9 @@
         "de_ag_2012_023",
         "de_ag_2012_026",
         "de_ag_2013_012",
-        "doj_archives_2007_027",
-        "doj_archives_2008_043",
-        "doj_archives_2008_054",
+        "doj_archives_2007_029",
+        "doj_archives_2008_047",
+        "doj_archives_2008_062",
         "doj_ceos_2025_029",
         "nj_ag_2014_001",
         "nj_ag_2026_061",
@@ -4836,8 +4917,8 @@
       "case_count": 10,
       "case_ids": [
         "doj_archives_2007_002",
-        "doj_archives_2007_012",
-        "doj_archives_2007_028",
+        "doj_archives_2007_013",
+        "doj_archives_2007_030",
         "ice_2013_011",
         "ice_2013_014",
         "ice_2017_009",
@@ -4849,7 +4930,7 @@
     },
     {
       "platform": "Grindr",
-      "platform_type": "SocialMediaPlatform",
+      "platform_type": "OnlineDatingPlatform",
       "case_count": 9,
       "case_ids": [
         "doj_ceos_2026_006",
@@ -4864,18 +4945,47 @@
       ]
     },
     {
+      "platform": "BitTorrent",
+      "platform_type": "P2PService",
+      "case_count": 8,
+      "case_ids": [
+        "doj_ceos_2025_015",
+        "doj_ceos_2025_016",
+        "doj_ceos_2026_002",
+        "idaho_icac_2024_022",
+        "ncmec_2023_133",
+        "ncmec_2024_891",
+        "usss_2022_003",
+        "vt_ag_2020_006"
+      ]
+    },
+    {
       "platform": "IRC",
       "platform_type": "MessagingService",
       "case_count": 8,
       "case_ids": [
         "doj_archives_2002_002",
-        "doj_archives_2005_006",
-        "doj_archives_2005_010",
-        "doj_archives_2005_013",
-        "doj_archives_2005_016",
-        "doj_archives_2005_024",
-        "doj_archives_2006_008",
-        "doj_archives_2006_016"
+        "doj_archives_2005_008",
+        "doj_archives_2005_012",
+        "doj_archives_2005_015",
+        "doj_archives_2005_018",
+        "doj_archives_2005_026",
+        "doj_archives_2006_007",
+        "doj_archives_2006_014"
+      ]
+    },
+    {
+      "platform": "Cash App",
+      "platform_type": "FinancialTransferService",
+      "case_count": 7,
+      "case_ids": [
+        "ncmec_2022_056",
+        "ncmec_2024_038",
+        "ncmec_2024_1257",
+        "ncmec_2024_581",
+        "ncmec_2024_871",
+        "south_florida_icac_2023_011",
+        "usss_2025_003"
       ]
     },
     {
@@ -4894,7 +5004,7 @@
     },
     {
       "platform": "Skout",
-      "platform_type": "SocialMediaPlatform",
+      "platform_type": "OnlineDatingPlatform",
       "case_count": 6,
       "case_ids": [
         "ncmec_2022_062",
@@ -4926,6 +5036,17 @@
         "ncmec_2024_1195",
         "ncmec_2024_402",
         "ncmec_2024_626"
+      ]
+    },
+    {
+      "platform": "iCloud",
+      "platform_type": "FileHostingService",
+      "case_count": 4,
+      "case_ids": [
+        "ncmec_2023_419",
+        "ncmec_2024_523",
+        "ncmec_2024_676",
+        "nj_ag_2026_041"
       ]
     },
     {
@@ -5023,12 +5144,39 @@
       ]
     },
     {
+      "platform": "Kazaa",
+      "platform_type": "P2PService",
+      "case_count": 2,
+      "case_ids": [
+        "doj_archives_2008_014",
+        "doj_archives_2008_042"
+      ]
+    },
+    {
+      "platform": "LimeWire",
+      "platform_type": "P2PService",
+      "case_count": 2,
+      "case_ids": [
+        "doj_archives_2008_045",
+        "doj_archives_2008_059"
+      ]
+    },
+    {
       "platform": "Wickr",
       "platform_type": "MessagingService",
       "case_count": 2,
       "case_ids": [
         "doj_ceos_2025_003",
         "doj_ceos_2025_014"
+      ]
+    },
+    {
+      "platform": "Tor",
+      "platform_type": "AnonymizationService",
+      "case_count": 2,
+      "case_ids": [
+        "doj_ceos_2025_028",
+        "doj_ceos_2026_009"
       ]
     },
     {
@@ -5054,6 +5202,14 @@
       "case_count": 1,
       "case_ids": [
         "ncmec_2022_235"
+      ]
+    },
+    {
+      "platform": "IMVU",
+      "platform_type": "MessagingService",
+      "case_count": 1,
+      "case_ids": [
+        "ncmec_2024_996"
       ]
     },
     {

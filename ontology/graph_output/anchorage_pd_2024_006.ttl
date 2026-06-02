@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -18,14 +16,15 @@
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:51.427412" ;
+    dcterms:created "2026-06-03T16:44:38.295927" ;
     dcterms:identifier "anchorage_pd_2024_006" ;
-    dcterms:modified "2026-05-30T20:33:51.427412" ;
+    dcterms:modified "2026-06-03T16:44:38.295927" ;
     dcterms:source <https://www.anchoragepolice.com/news/michael-whitmore-sentenced-to-over-17-years-for-child-pornography-charges>,
         "ANCHORAGE PD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/phase/sentenced> ;
     cacontology:hasStep <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/distribution>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/possession>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/legal-proceeding>,
@@ -35,20 +34,25 @@
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/anchorage-police-department>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/ncmec>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office> .
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -66,6 +70,10 @@
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -95,20 +103,6 @@
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/offense-event/charge-3> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "17 years" .
@@ -120,9 +114,7 @@
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "NCMEC" .
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2024_006/phase/sentenced> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

@@ -1061,6 +1061,16 @@ def _perpetrator_age_bin_label(age: int) -> str:
     return f"{lo}-{lo + 4}"
 
 
+def _agencies_involved_for_case(case: Dict[str, Any], parse_field) -> set:
+    """Unique stored agency labels for one case (agencies_involved only; no read-path rewrite)."""
+    agencies = parse_field(case.get("agencies_involved", []))
+    out: set = set()
+    for org in agencies:
+        if org and isinstance(org, str) and org.strip():
+            out.add(org.strip())
+    return out
+
+
 def get_case_count() -> int:
     """
     Lightweight helper for counting cases.
@@ -1807,10 +1817,16 @@ def get_stats(request: Request):
                 if prosecution.get('booking_status') or prosecution.get('charges') or prosecution.get('jail'):
                     total_features += 1
             
-            victim_demo = case.get('victim_demographics')
+            victim_demo = case.get('case_demographics') or case.get('victim_demographics')
             if victim_demo and isinstance(victim_demo, dict):
-                if victim_demo.get('ages') or victim_demo.get('age_range') or victim_demo.get('gender'):
+                if (
+                    victim_demo.get('ages')
+                    or victim_demo.get('age_range')
+                    or victim_demo.get('victim_gender')
+                ):
                     total_features += 1
+            if case.get('perpetrator_gender'):
+                total_features += 1
         
         result = {
             "total_cases": len(cases),
@@ -1972,13 +1988,12 @@ def get_case_ids_by_filter(
         
         filtered_cases = cases
         
-        # Filter by organization (organizations already normalized at ingestion time)
+        # Filter by organization (exact match on stored agencies_involved)
         if organization:
             org_search = organization.strip()
             filtered_cases = [
                 c for c in filtered_cases
-                if org_search in [org.strip() for org in parse_field(c.get('agencies_involved', []))] or
-                   org_search in [org.strip() for org in parse_field(c.get('organizations', []))]
+                if org_search in _agencies_involved_for_case(c, parse_field)
             ]
         
         # Filter by relationship
@@ -2253,22 +2268,12 @@ def get_detailed_stats(request: Request):
         for year in platform_trends["years"]:
             platform_trends["data"][year] = {platform: platform_by_year[year][platform] for platform in top_platforms}
         
-        # 3. Top Organizations
-        # Organizations are already normalized at ingestion time, just count them
-        # Count each organization once per case (deduplicate within case)
+        # 3. Top Organizations (stored agencies_involved; normalized at ingest only)
         org_counter = Counter()
         for case in cases:
-            agencies = parse_field(case.get('agencies_involved', []))
-            organizations = parse_field(case.get('organizations', []))
-            # Combine and deduplicate within this case
-            case_orgs = set()
-            for org in agencies + organizations:
-                if org and isinstance(org, str) and org.strip():
-                    case_orgs.add(org.strip())
-            # Count each org once per case
-            for org in case_orgs:
+            for org in _agencies_involved_for_case(case, parse_field):
                 org_counter[org] += 1
-        
+
         top_organizations = [{"name": name, "count": count} for name, count in org_counter.most_common(15)]
         
         # 4. Agency Frequency Distribution

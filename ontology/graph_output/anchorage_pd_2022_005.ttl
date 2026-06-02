@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -18,36 +16,43 @@
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:33:50.450049" ;
+    dcterms:created "2026-06-03T16:44:38.100223" ;
     dcterms:identifier "anchorage_pd_2022_005" ;
-    dcterms:modified "2026-05-30T20:33:50.450049" ;
+    dcterms:modified "2026-06-03T16:44:38.100223" ;
     dcterms:source <https://www.anchoragepolice.com/news/anchorage-child-sex-offender-alex-asino-sentenced-to-275-years-in-prison>,
         "ANCHORAGE PD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/legal-step/sentenced>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8>,
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/operation> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/anchorage-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/usao> .
+        <https://caselinker.up.railway.app/resource/agency/fbi> .
 
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production>,
+        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/usao> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "US Attorney ’'s Office" .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -83,6 +88,14 @@
     ns1:chargeCluster "child_exploitation" ;
     ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> .
 
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
@@ -116,22 +129,6 @@
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 15 .
 
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/possession>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production>,
-        <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "5 Years" .
@@ -148,28 +145,35 @@
         cac-core:Event ;
     cacontology:severityLevel 3 ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat>,
-        <https://caselinker.up.railway.app/resource/platform/social-media> ;
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/whisper> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/facet/possession> .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/event/production> a cac-core:Event,
         cacontology-production:ProductionOffense ;
     cacontology:severityLevel 3 ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat>,
-        <https://caselinker.up.railway.app/resource/platform/social-media> ;
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/whisper> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/facet/production> .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" ;
-    cacontology-platforms:encryptionLevel "end-to-end" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" .
 
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .
+
+<https://caselinker.up.railway.app/resource/platform/whisper> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "Whisper" ;
+    cacontology-platforms:guestAccountsAllowed "true" ;
+    cacontology-platforms:identityVerificationRequired "false" .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_005/offense-event/charge-8> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,
         uco-action:Crime ;
     rdfs:label "Inferred offense from charge: child exploitation" ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat>,
-        <https://caselinker.up.railway.app/resource/platform/social-media> .
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/whisper> .
 

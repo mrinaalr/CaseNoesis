@@ -2,62 +2,32 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+          "https://cacontology.projectvic.org/platforms#MessagingService"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Inferred offense from charge: child exploitation"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
+            "@value": "Snapchat"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/legal-step/sentenced",
+        "@id": "https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/facet/csam",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ceos",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
         ]
       },
       {
@@ -68,7 +38,7 @@
         ],
         "http://purl.org/dc/terms/created": [
           {
-            "@value": "2026-05-30T20:35:08.389436"
+            "@value": "2026-06-03T16:44:51.206876"
           }
         ],
         "http://purl.org/dc/terms/identifier": [
@@ -78,7 +48,7 @@
         ],
         "http://purl.org/dc/terms/modified": [
           {
-            "@value": "2026-05-30T20:35:08.389436"
+            "@value": "2026-06-03T16:44:51.206876"
           }
         ],
         "http://purl.org/dc/terms/source": [
@@ -123,17 +93,84 @@
         ],
         "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
           {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ceos"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force"
+          },
+          {
             "@id": "https://caselinker.up.railway.app/resource/agency/fbi"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/agency/justice-department"
+            "@id": "https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/metropolitan-police-department"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/facet/csam"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -163,30 +200,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 15
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "sexual exploitation"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
           }
         ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@value": "sexual_exploitation_unspecified"
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1"
           }
         ]
       },
@@ -194,6 +229,30 @@
         "@id": "https://caselinker.up.railway.app/resource/agency/fbi",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Child Exploitation Task Force"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "14 Years"
+          }
         ]
       },
       {
@@ -224,108 +283,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/metropolitan-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/facet/csam",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/csam",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
-          }
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/facet/csam"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#PrisonSentence",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "14 Years"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/snapchat",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#MessagingService"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Snapchat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/justice-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/charge/2",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
@@ -352,25 +309,70 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/relationship/stranger",
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/charge/1",
         "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/victim/1"
+            "@value": "sexual exploitation"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/role/offender/1"
+            "@value": "sexual_exploitation_unspecified"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 15
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "https://cacontology.projectvic.org#usesChannel": [
           {
-            "@value": "stranger"
+            "@id": "https://caselinker.up.railway.app/resource/platform/snapchat"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/legal-step/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/metropolitan-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       }
     ],

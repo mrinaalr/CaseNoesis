@@ -1,7 +1,5 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,9 +14,9 @@
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_488> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:31:14.573546" ;
+    dcterms:created "2026-06-03T16:44:04.453126" ;
     dcterms:identifier "ncmec_2023_488" ;
-    dcterms:modified "2026-05-30T20:31:14.573546" ;
+    dcterms:modified "2026-06-03T16:44:04.453126" ;
     dcterms:source <https://www.missingkids.org/gethelpnow/cybertipline/cybertiplinedata>,
         "NCMEC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/phase/sentenced> ;
@@ -31,11 +29,19 @@
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/hailey-police-department>,
         <https://caselinker.up.railway.app/resource/agency/icac> .
 
-<https://caselinker.up.railway.app/resource/case/ncmec_2023_488/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2020-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2020-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/hailey-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -81,20 +87,6 @@
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/offender/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2020-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/ncmec_2023_488/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2020-10-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:PrisonSentence ;

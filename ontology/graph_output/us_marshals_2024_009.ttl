@@ -2,18 +2,18 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
-@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
 @prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:39:35.793208" ;
+    dcterms:created "2026-06-03T16:45:42.971298" ;
     dcterms:identifier "us_marshals_2024_009" ;
-    dcterms:modified "2026-05-30T20:39:35.793208" ;
+    dcterms:modified "2026-06-03T16:45:42.971298" ;
     dcterms:source <https://www.usmarshals.gov/news/press-release/us-marshals-operation-boo-dat-concludes-recovery-of-3-missing-endangered>,
         "US MARSHALS" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/phase/arrested> ;
@@ -22,15 +22,23 @@
         <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/event/multi-jurisdiction>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/new-orleans-police-department>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/louisiana-state-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/louisiana-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/new-orleans-police-department>,
         <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> .
+        <https://caselinker.up.railway.app/resource/agency/usms> .
+
+<https://caselinker.up.railway.app/resource/agency/louisiana-state-police-department> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/louisiana-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Louisiana Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/u-s-marshals-service> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;
@@ -45,8 +53,7 @@
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/person/offender/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/person/victim/1> a uco-identity:Person ;
-    cacontology-production:victimAge 7 .
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/person/victim/1> a uco-identity:Person .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2024_009/relationship/mother> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;

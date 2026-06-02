@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,103 +15,33 @@
 
 <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:35:14.863691" ;
+    dcterms:created "2026-06-03T16:44:52.107915" ;
     dcterms:identifier "fresno_so_2022_001" ;
-    dcterms:modified "2026-05-30T20:35:14.863691" ;
+    dcterms:modified "2026-06-03T16:44:52.107915" ;
     dcterms:source <https://www.fresnosheriff.org/media-relations/operation-h-o-o-k-nets-19-arrests-of-potential-sexual-predators.html>,
         "FRESNO SO" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/phase/booked> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/phase/booked> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/possession>,
+        <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/trafficking>,
         <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/tech/cybertipline> ;
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/atascadero-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/california>,
-        <https://caselinker.up.railway.app/resource/agency/doj>,
+        <https://caselinker.up.railway.app/resource/agency/district-attorneys-office>,
         <https://caselinker.up.railway.app/resource/agency/fbi>,
-        <https://caselinker.up.railway.app/resource/agency/fresno-county-district-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/fresno-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/fresno-police-department>,
         <https://caselinker.up.railway.app/resource/agency/hanford-police-department>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
         <https://caselinker.up.railway.app/resource/agency/kerman-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/madera-county-sheriffs-office>,
-        <https://caselinker.up.railway.app/resource/agency/merced-county-district-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/multi---agency-gang-enforcement-consortium>,
-        <https://caselinker.up.railway.app/resource/agency/paso-robles-police-department>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office>,
-        <https://caselinker.up.railway.app/resource/agency/u-s-secret-service> .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
-
-<https://caselinker.up.railway.app/resource/agency/atascadero-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Atascadero Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/california> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/fresno-county-district-attorney-s-office> a cacontology-multi:StateAgency .
-
-<https://caselinker.up.railway.app/resource/agency/fresno-county-sheriffs-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/fresno-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/hanford-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Hanford Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
-
-<https://caselinker.up.railway.app/resource/agency/kerman-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Kerman Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/madera-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Madera County Sheriff's Office" .
-
-<https://caselinker.up.railway.app/resource/agency/merced-county-district-attorney-s-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Merced County District Attorney ’'s Office" .
-
-<https://caselinker.up.railway.app/resource/agency/multi---agency-gang-enforcement-consortium> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/paso-robles-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Paso Robles Police Department" .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-attorney-s-office> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/u-s-secret-service> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/legal-proceeding> a cac-core:Event,
-        cac-core:LegalEvent,
-        cacontology-legal-outcomes:LegalProceeding ;
-    rdfs:comment "Pretrial detention facility: Fresno County Jail" ;
-    cacontology-legal-outcomes:hasProceedingBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/sentence/1> .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/operation> a cac-core:Event,
-        cacontology-taskforce:UndercoverUnit .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/person/offender/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/person/victim/1> a uco-identity:Person .
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/task-force--fresno-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service>,
+        <https://caselinker.up.railway.app/resource/agency/us-secret-service--paso-robles-police-department> .
 
 <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/role/offender/1> a cacontology:OffenderRole,
         uco-role:OffenderRole ;
@@ -128,12 +57,74 @@
         <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/person/victim/1> .
 
+<https://caselinker.up.railway.app/resource/agency/atascadero-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Atascadero Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/fresno-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/hanford-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Hanford Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+
+<https://caselinker.up.railway.app/resource/agency/kerman-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Kerman Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/task-force--fresno-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Task Force -Fresno County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/us-secret-service--paso-robles-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "U.S. Secret Service -Paso Robles Police Department" .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/event/trafficking> a cac-core:Event,
+        cacontology-legal-outcomes:SexTrafficking ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility: Fresno County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology-legal-outcomes:resultsSentence <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/sentence/1> .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/operation> a cac-core:Event,
+        cacontology-taskforce:UndercoverUnit .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 31 .
+
+<https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/person/victim/1> a uco-identity:Person .
+
 <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:ProbationSentence ;
     rdfs:label "Probation" .
 
 <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/fresno_so_2022_001/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

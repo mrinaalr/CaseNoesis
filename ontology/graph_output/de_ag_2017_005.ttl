@@ -13,22 +13,23 @@
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:34:09.595994" ;
+    dcterms:created "2026-06-03T16:44:41.778080" ;
     dcterms:identifier "de_ag_2017_005" ;
-    dcterms:modified "2026-05-30T20:34:09.595994" ;
+    dcterms:modified "2026-06-03T16:44:41.778080" ;
     dcterms:source <https://news.delaware.gov/2017/10/20/convictions-sentences>,
         "DE AG" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/phase/sentenced> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/phase/sentenced> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession>,
         <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/trust-violation>,
         <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/legal-step/sentenced> ;
     cacontology:investigationStatus "unknown" ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/doj>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/child-predator-task-force>,
         <https://caselinker.up.railway.app/resource/agency/new-castle-county-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/child-predator-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-castle-county-police-department> a cacontology-multi:LocalAgency .
 
@@ -72,6 +73,9 @@
     cacontology-legal-outcomes:hasProceedingBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 42 .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/offender/2> a uco-identity:Person ;
     cacontology-detection:ageEstimate 57 .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/victim/1> a uco-identity:Person .
@@ -79,19 +83,15 @@
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/relationship/father> a cacontology-custodial:CustodialRelationship,
         cacontology-custodial:FamilialRelationship ;
     cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/1> ;
+    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/2> ;
     cacontology-custodial:relationshipType "father" .
-
-<https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/offender/1> .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/victim/1> a cacontology:VictimRole,
         uco-role:VictimRole ;
     cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
@@ -122,7 +122,29 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
+<https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/2> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/conspiracy>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/person/offender/2> .
+
+<https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
+        cac-core:Event ;
+    cacontology:conspiracyMemberCount 2 ;
+    cacontology:participatesInConspiracy <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/1>,
+        <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/role/offender/2> ;
+    cacontology:severityLevel 1 .
+
 <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;
+    cacontology:severityLevel 1 ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/de_ag_2017_005/facet/possession> .
 

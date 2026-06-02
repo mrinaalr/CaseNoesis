@@ -1,8 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
 @prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -18,25 +16,36 @@
 
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:38:53.302583" ;
+    dcterms:created "2026-06-03T16:45:35.804763" ;
     dcterms:identifier "south_florida_icac_2025_025" ;
-    dcterms:modified "2026-05-30T20:38:53.302583" ;
+    dcterms:modified "2026-06-03T16:45:35.804763" ;
     dcterms:source <https://www.local10.com/news/local/2025/11/13/tamarac-man-accused-of-possessing-child-porn-videos-of-girl-appearing-to-be-under-the-age-of-6/>,
         "SOUTH FLORIDA ICAC" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/phase/arrested> ;
     cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/phase/arrested> ;
-    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/distribution>,
+        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
         <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/possession>,
         <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/operation> ;
     cacontology:usesMethod <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/tech/cybertipline> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac> .
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/icac>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec> .
 
-<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
+        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/possession> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -51,6 +60,13 @@
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/charge/3> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "possession of child pornography" .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/distribution> a cac-core:Event,
+        cacontology-legal-outcomes:CSAM_Distribution ;
+    cacontology:severityLevel 3 .
 
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/facet/possession> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
 
@@ -72,26 +88,14 @@
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/person/victim/1> a uco-identity:Person ;
     cacontology-production:victimAge 7 .
 
-<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/hands-on>,
-        <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/event/possession> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/person/victim/1> .
-
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/sentence/1> a cacontology-legal-outcomes:CriminalSentence,
         cacontology-legal-outcomes:MonetaryPenalty ;
     rdfs:label "$25,000" .
 
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_025/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

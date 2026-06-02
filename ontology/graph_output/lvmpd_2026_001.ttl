@@ -1,7 +1,6 @@
 @prefix cac-core: <https://cacontology.projectvic.org/core#> .
 @prefix cacontology: <https://cacontology.projectvic.org#> .
-@prefix cacontology-custodial: <https://cacontology.projectvic.org/custodial#> .
-@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
 @prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
@@ -16,9 +15,9 @@
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001> a cacontology:CACInvestigation,
         cac-core:EnduringEntity ;
-    dcterms:created "2026-05-30T20:37:11.826958" ;
+    dcterms:created "2026-06-03T16:45:14.870056" ;
     dcterms:identifier "lvmpd_2026_001" ;
-    dcterms:modified "2026-05-30T20:37:11.826958" ;
+    dcterms:modified "2026-06-03T16:45:14.870056" ;
     dcterms:source <https://www.lvmpd.com/Home/Components/News/News/2182/>,
         "LVMPD" ;
     cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/phase/booked> ;
@@ -28,24 +27,27 @@
         <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/legal-proceeding>,
         <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1>,
         <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/operation> ;
-    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force>,
-        <https://caselinker.up.railway.app/resource/agency/fbi>,
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/fbi>,
         <https://caselinker.up.railway.app/resource/agency/henderson-police-department>,
         <https://caselinker.up.railway.app/resource/agency/hsi>,
         <https://caselinker.up.railway.app/resource/agency/icac>,
-        <https://caselinker.up.railway.app/resource/agency/las-vegas>,
-        <https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals>,
         <https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> .
 
-<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/relationship/stranger> a cacontology-custodial:CustodialRelationship,
-        cacontology-grooming:OnlinePredator ;
-    cacontology-custodial:involvesChild <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/victim/1> ;
-    cacontology-custodial:involvesCustodian <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/offender/1> ;
-    cacontology-custodial:relationshipType "stranger" .
+<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1> .
 
-<https://caselinker.up.railway.app/resource/agency/child-exploitation-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Child Exploitation Task Force" .
+<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -57,9 +59,11 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/las-vegas> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/las-vegas-metropolitan-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Nevada Attorney General's" .
 
 <https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cacontology-multi:LocalAgency .
 
@@ -81,23 +85,10 @@
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/operation> a cac-core:Event,
         cacontology-taskforce:UndercoverUnit .
 
-<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1> a uco-identity:Person .
+<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 23 .
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/victim/1> a uco-identity:Person .
-
-<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/offender/1> a cacontology:OffenderRole,
-        uco-role:OffenderRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/offender/1> .
-
-<https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/role/victim/1> a cacontology:VictimRole,
-        uco-role:VictimRole ;
-    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
-    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/event/online-only>,
-        <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/offense-event/charge-1> ;
-    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/person/victim/1> .
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/phase/booked> a cacontology:InitialPhase,
         cac-core:Phase ;

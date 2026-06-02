@@ -2,10 +2,116 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/multi-jurisdiction",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/distribution",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
           "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-06-03T16:45:34.120647"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "south_florida_icac_2025_005"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-06-03T16:45:34.120647"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "SOUTH FLORIDA ICAC"
+          },
+          {
+            "@id": "https://cbs12.com/news/local/florida-deputy-arrested-for-exchanging-explicit-photos-with-10-year-old-on-tiktok-charlotte-county-sheriffs-office-texas-deputy-november-2-2025"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasStep": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/multi-jurisdiction"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/distribution"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/legal-proceeding"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/charlotte-county-sheriffs-office"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/coryell-county-sheriffs-office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/charlotte-county-sheriffs-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Charlotte County Sheriff's Office"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -27,18 +133,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/charlotte-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Charlotte County Sheriff's Office"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
         "@type": [
           "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
@@ -50,13 +144,33 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/tiktok",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
         "@type": [
           "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "TikTok"
+            "@value": "social media"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
           }
         ]
       },
@@ -91,114 +205,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005",
-        "@type": [
-          "https://cacontology.projectvic.org#CACInvestigation",
-          "https://cacontology.projectvic.org/core#EnduringEntity"
-        ],
-        "http://purl.org/dc/terms/created": [
-          {
-            "@value": "2026-05-30T20:38:44.017187"
-          }
-        ],
-        "http://purl.org/dc/terms/identifier": [
-          {
-            "@value": "south_florida_icac_2025_005"
-          }
-        ],
-        "http://purl.org/dc/terms/modified": [
-          {
-            "@value": "2026-05-30T20:38:44.017187"
-          }
-        ],
-        "http://purl.org/dc/terms/source": [
-          {
-            "@value": "SOUTH FLORIDA ICAC"
-          },
-          {
-            "@id": "https://cbs12.com/news/local/florida-deputy-arrested-for-exchanging-explicit-photos-with-10-year-old-on-tiktok-charlotte-county-sheriffs-office-texas-deputy-november-2-2025"
-          }
-        ],
-        "https://cacontology.projectvic.org#currentPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasPhase": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked"
-          }
-        ],
-        "https://cacontology.projectvic.org#hasStep": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/event/multi-jurisdiction"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/legal-proceeding"
-          }
-        ],
-        "https://cacontology.projectvic.org#investigationStatus": [
-          {
-            "@value": "unknown"
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/charlotte-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/coryell-county-sheriffs-office"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/texas"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@id": "https://caselinker.up.railway.app/resource/platform/tiktok",
         "@type": [
           "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "social media"
+            "@value": "TikTok"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/texas",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -210,41 +224,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "Coryell County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/relationship/stranger",
-        "@type": [
-          "https://cacontology.projectvic.org/grooming#OnlinePredator",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/role/victim/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/role/offender/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
-          {
-            "@value": "stranger"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_005/phase/booked",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
           }
         ]
       }
