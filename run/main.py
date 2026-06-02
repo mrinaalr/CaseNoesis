@@ -1006,7 +1006,7 @@ def _triage_saved_bundle_corpus_live(constraints: Dict[str, List[str]]) -> Dict[
             "corpus_predictions_available": False,
             "corpus_error": (
                 f"Model inference failed ({e}). Retrain with the same Python as the API: "
-                "./venv/bin/python scripts/run/train_triage_model.py --out models/triage_bundle.joblib"
+                "./.venv/bin/python scripts/run/train_triage_model.py --out models/triage_bundle.joblib"
             ),
             "model_case_ids_by_tier": {},
             "corpus_class_names": [],

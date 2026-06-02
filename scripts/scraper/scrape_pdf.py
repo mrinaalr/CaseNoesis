@@ -70,6 +70,32 @@ _DE_DOJ_DATELINE_LINE_RE = re.compile(
 )
 
 
+def _ordered_body_blocks_from_container(container) -> list[str]:
+    """
+    Document-order ``<p>`` and list blocks. Skips ``<p>`` inside lists; flattens
+    ``<ul>``/``<ol>`` to numbered lines (matches merged ICAC PDF style).
+    """
+    blocks: list[str] = []
+    for el in container.find_all(["p", "ul", "ol"]):
+        if el.name == "p":
+            if el.find_parent(["ul", "ol"]):
+                continue
+            t = el.get_text(" ", strip=True)
+            if t:
+                blocks.append(t)
+        elif el.name in ("ul", "ol"):
+            if el.find_parent(["ul", "ol"]):
+                continue
+            items = [
+                li.get_text(" ", strip=True)
+                for li in el.find_all("li", recursive=False)
+                if li.get_text(strip=True)
+            ]
+            if items:
+                blocks.append(" ".join(f"{i + 1}. {t}" for i, t in enumerate(items)))
+    return blocks
+
+
 def _collapse_consecutive_duplicate_paragraphs(paras: list[str]) -> list[str]:
     """Drop back-to-back duplicate ``<p>`` text (common when themes duplicate columns)."""
     out: list[str] = []
@@ -1549,7 +1575,7 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
     if not container:
         return None
 
-    paras = [p.get_text(" ", strip=True) for p in container.find_all("p")]
+    paras = _ordered_body_blocks_from_container(container)
     paras = _collapse_consecutive_duplicate_paragraphs(paras)
     body = "\n\n".join(p for p in paras if len(p) > 30)
     if len(body) < MIN_BODY_CHARS:

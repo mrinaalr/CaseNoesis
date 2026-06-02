@@ -21,10 +21,9 @@ wheels/
 *.egg
 
 # Virtual Environment
-venv/
 env/
 ENV/
-.venv
+.venv/
 
 # Case Files - DO NOT COMMIT SENSITIVE DATA
 *.pdf

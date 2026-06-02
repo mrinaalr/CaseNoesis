@@ -28,9 +28,11 @@ Usage:
     enhanced_case = ner.enhance_case_with_entities(case_with_features)
 """
 
+import os
 import warnings
 from typing import Dict, List, Any, Optional, Set
 import re
+import traceback
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -138,23 +140,39 @@ class NERExtractor:
         self.nlp = nlp_model
         self.transformer_pipeline = None
         self.stanza_pipeline = None
+        # Stanza diagnostics (filled only when backend == 'stanza')
+        self._stanza_imported = False
+        self._stanza_pipeline_loaded = False
+        self._stanza_import_error: Optional[str] = None
+        self._stanza_load_error: Optional[str] = None
+        self._stanza_import_traceback: Optional[str] = None
+        self._stanza_load_traceback: Optional[str] = None
         
         if backend == 'stanza':
             try:
                 import stanza
-                # Stanza extracts DATE entities (includes dates and sometimes ages)
-                self.stanza_pipeline = stanza.Pipeline('en', processors='tokenize,ner', download_method=None)
-            except ImportError:
-                warnings.warn("stanza library not installed. Install with: pip install stanza")
+                self._stanza_imported = True
+            except ImportError as e:
+                self._stanza_import_error = str(e)
+                self._stanza_import_traceback = traceback.format_exc()
+                warnings.warn(
+                    "stanza library not installed. Install with: pip install stanza"
+                )
                 self.stanza_pipeline = None
-            except Exception as e:
-                # If model not downloaded, try downloading it
+            else:
+                # Stanza extracts DATE entities (includes dates and sometimes ages)
+                # Important: do NOT set download_method=None here; in ingest we want a
+                # deterministic primary stanza backend even when models are missing.
                 try:
-                    import stanza
-                    warnings.warn("Stanza model not found, downloading...")
-                    self.stanza_pipeline = stanza.Pipeline('en', processors='tokenize,ner')
-                except Exception as e2:
-                    warnings.warn(f"Error loading stanza model: {e2}")
+                    self.stanza_pipeline = stanza.Pipeline(
+                        'en',
+                        processors='tokenize,ner',
+                    )
+                    self._stanza_pipeline_loaded = self.stanza_pipeline is not None
+                except Exception as e:
+                    self._stanza_load_error = str(e)
+                    self._stanza_load_traceback = traceback.format_exc()
+                    warnings.warn(f"Error loading stanza model: {e}")
                     self.stanza_pipeline = None
         elif backend == 'transformers':
             try:
@@ -177,6 +195,13 @@ class NERExtractor:
                 warnings.warn("No spaCy model provided. NER extraction will not work.")
         else:
             raise ValueError(f"Unknown backend: {backend}. Use 'stanza', 'transformers', or 'spacy'")
+
+        self._stanza_batch_size = int(os.environ.get("STANZA_NER_BATCH_SIZE", "16"))
+        self._stanza_use_bulk = os.environ.get("STANZA_NER_BATCH", "").lower() in (
+            "1",
+            "true",
+            "yes",
+        )
     
     def process_batched_cases_with_ner(
         self,
@@ -269,89 +294,105 @@ class NERExtractor:
                 'ages': []
             }
     
-    def _extract_entities_stanza(self, text: str) -> Dict[str, List[str]]:
-        """Extract entities using Stanza pipeline (extracts DATE, ORG, LOC, PER, etc.)."""
+    def _entities_from_stanza_doc(self, doc: Any, text: str) -> Dict[str, List[str]]:
+        """Post-process one Stanza doc (shared by serial and bulk_process paths)."""
         entities = {
             'organizations': [],
             'locations': [],
             'dates': [],
             'ages': []
         }
-        
-        if not self.stanza_pipeline:
-            return entities
-        
-        doc = self.stanza_pipeline(text)
-        
-        # Stanza entity types: DATE, ORG, LOC, PERSON, MISC, etc.
+
         for ent in doc.ents:
             entity_text = ent.text.strip()
             entity_type = ent.type
-            
+
             if entity_type == 'ORG':
                 entities['organizations'].append(entity_text)
             elif entity_type in ['LOC', 'GPE']:
                 entities['locations'].append(entity_text)
             elif entity_type == 'DATE':
-                # Stanza labels both dates and ages as DATE
-                # Use heuristics to distinguish:
                 entity_lower = entity_text.lower()
                 context = text[max(0, ent.start_char-30):min(len(text), ent.end_char+30)].lower()
-                
-                # Check if it's likely an age
+
                 is_age = False
-                
-                # Pattern 1: Contains age-related words
                 if any(word in entity_lower for word in ['year', 'old', 'aged', 'age']):
                     is_age = True
-                # Pattern 2: Just a number 1-100 with age context nearby
                 elif entity_text.isdigit():
                     age_num = int(entity_text)
                     if 1 <= age_num <= 100:
-                        # Check for age context words nearby
-                        age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 
+                        age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect',
                                         'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor',
                                         'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
                         if any(indicator in context for indicator in age_indicators):
                             is_age = True
-                
+
                 if is_age:
-                    # Extract numeric age
                     try:
                         age_match = re.search(r'\d+', entity_text)
                         if age_match:
                             age = int(age_match.group())
-                            # Sanity bound + sentencing-context guard.
-                            # "25 years in prison", "$10 fine", "Count 2" all
-                            # look age-shaped to the heuristics above; the
-                            # window check below rejects them.
                             if 1 <= age <= 100:
                                 num_start = ent.start_char + age_match.start()
                                 num_end   = ent.start_char + age_match.end()
                                 if not _is_sentencing_context(text, num_start, num_end):
                                     entities['ages'].append(age)
-                    except:
+                    except Exception:
                         pass
                 else:
-                    # Likely a date - filter out standalone day names (Monday, Tuesday, etc.) without dates
                     if entity_text.lower() in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-                        # Only include if there's a date nearby
                         if not re.search(r'\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}', context):
-                            continue  # Skip standalone day names
+                            continue
                     entities['dates'].append(entity_text)
-        
-        # Also use regex to catch ages that Stanza might have missed or mislabeled
+
         ages = self._extract_ages_with_context(None, text)
         entities['ages'].extend(ages)
-        
-        # Remove duplicates while preserving order
+
         for key in entities:
             if key == 'ages':
                 entities[key] = sorted(list(set(entities[key])))
             else:
                 entities[key] = list(dict.fromkeys(entities[key]))
-        
+
         return entities
+
+    def _extract_entities_stanza(self, text: str) -> Dict[str, List[str]]:
+        """Extract entities using Stanza pipeline (extracts DATE, ORG, LOC, PER, etc.)."""
+        if not self.stanza_pipeline:
+            return {
+                'organizations': [],
+                'locations': [],
+                'dates': [],
+                'ages': []
+            }
+        doc = self.stanza_pipeline(text)
+        return self._entities_from_stanza_doc(doc, text)
+
+    def extract_entities_bulk(self, texts: List[str]) -> List[Dict[str, List[str]]]:
+        """
+        Same output as ``[extract_entities(t) for t in texts]``.
+        Uses Stanza ``bulk_process`` when ``STANZA_NER_BATCH=1``; otherwise serial.
+        """
+        if not texts:
+            return []
+        if not (
+            self._stanza_use_bulk
+            and self.backend == 'stanza'
+            and self.stanza_pipeline
+        ):
+            return [self.extract_entities(t) for t in texts]
+
+        out: List[Dict[str, List[str]]] = []
+        for start in range(0, len(texts), self._stanza_batch_size):
+            chunk = texts[start : start + self._stanza_batch_size]
+            docs = self.stanza_pipeline.bulk_process(chunk)
+            if len(docs) != len(chunk):
+                raise RuntimeError(
+                    f"Stanza bulk_process returned {len(docs)} docs for {len(chunk)} texts"
+                )
+            for text, doc in zip(chunk, docs):
+                out.append(self._entities_from_stanza_doc(doc, text))
+        return out
     
     def _extract_entities_transformers(self, text: str) -> Dict[str, List[str]]:
         """Extract entities using Transformers pipeline."""
@@ -654,3 +695,74 @@ class NERExtractor:
     def is_available(self) -> bool:
         """Check if NER extraction is available."""
         return self._is_available()
+
+    @property
+    def active_backend(self) -> str:
+        """Resolved backend name (``stanza``, ``transformers``, ``spacy``, or ``none``)."""
+        if self._is_available():
+            return self.backend
+        return "none"
+
+
+def create_primary_ner_extractor() -> Optional["NERExtractor"]:
+    """
+    Ingest-time NER: Stanza first, Hugging Face transformers only if Stanza unavailable.
+
+    Returns:
+        Configured ``NERExtractor``, or ``None`` if no backend loads.
+    """
+    stanza_ext: Optional[NERExtractor] = None
+    transformers_ext: Optional[NERExtractor] = None
+
+    # Attempt stanza first (primary backend)
+    try:
+        stanza_ext = NERExtractor(backend="stanza")
+        stanza_ok = stanza_ext.is_available()
+
+        # Loud-ish diagnostics: we only emit these when stanza is not available,
+        # or when an exception exists. This is meant for debugging ingest-time
+        # backend selection issues.
+        if not stanza_ok:
+            import sys as _sys
+            print(
+                "NER backend probe: stanza constructed but unavailable. "
+                f"imported={getattr(stanza_ext, '_stanza_imported', None)} "
+                f"loaded={getattr(stanza_ext, '_stanza_pipeline_loaded', None)} "
+                f"import_error={getattr(stanza_ext, '_stanza_import_error', None)!r} "
+                f"load_error={getattr(stanza_ext, '_stanza_load_error', None)!r} "
+                f"cwd={os.getcwd()!r} "
+                f"home={os.environ.get('HOME', '')!r} "
+                f"stanza_resources_dir={os.environ.get('STANZA_RESOURCES_DIR', '')!r}",
+                file=_sys.stderr,
+            )
+            import_tb = getattr(stanza_ext, "_stanza_import_traceback", None)
+            load_tb = getattr(stanza_ext, "_stanza_load_traceback", None)
+            if import_tb:
+                print("NER backend probe: stanza import traceback:", file=_sys.stderr)
+                print(import_tb, file=_sys.stderr)
+            if load_tb:
+                print("NER backend probe: stanza load traceback:", file=_sys.stderr)
+                print(load_tb, file=_sys.stderr)
+    except Exception as e:
+        # If construction itself fails, capture that too.
+        import sys as _sys
+        print(f"NER backend probe: stanza construction threw exception: {e!r}", file=_sys.stderr)
+        stanza_ext = None
+
+    if stanza_ext is not None and stanza_ext.is_available():
+        return stanza_ext
+
+    # Fallback to transformers (only if stanza isn't available)
+    try:
+        transformers_ext = NERExtractor(backend="transformers")
+        if transformers_ext.is_available():
+            import sys as _sys
+            print(
+                "WARNING: Stanza unavailable, falling back to transformers. "
+                "Location NER fragmentation may increase; please verify.",
+                file=_sys.stderr,
+            )
+            return transformers_ext
+    except Exception:
+        pass
+    return None

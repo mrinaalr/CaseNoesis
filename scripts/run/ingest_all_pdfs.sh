@@ -44,9 +44,6 @@ cd "$REPO_ROOT" || exit 1
 if [ -d .venv ]; then
   # shellcheck source=/dev/null
   . .venv/bin/activate
-elif [ -d venv ]; then
-  # shellcheck source=/dev/null
-  . venv/bin/activate
 fi
 
 # Pattern layer modules (ai_extraction_patterns, etc.) live beside processing.py

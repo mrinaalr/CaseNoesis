@@ -272,6 +272,16 @@ TOPIC_MAP: Dict[str, Dict[str, Any]] = {
         "severity": 2,
         "secondary_charge_class": CAC_LEGAL.CSAM_Possession,
     },
+    "distribution": {
+        "class": CAC_LEGAL.CSAM_Distribution,
+        "severity": 2,
+        "secondary_charge_class": CAC_LEGAL.CSAM_Distribution,
+    },
+    "trafficking": {
+        "class": CAC_LEGAL.SexTrafficking,
+        "severity": 3,
+        "secondary_charge_class": CAC_LEGAL.SexTrafficking,
+    },
     "csam": {
         "class": CAC.CSAMIncident,
         "severity": 2,

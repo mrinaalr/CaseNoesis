@@ -2,7 +2,7 @@
 
 ## Overview
 
-CaseLinker is designed as a system for ingesting, processing, clustering, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) news/success reports from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
+CaseLinker is designed as a system for ingesting, processing, analyzing, and visualizing case related data, specifically cases related to CSEA. This means often cases will be a) news/success reports from websites b) not cleanly formatted c) have sensitive components d) have varing levels of details (think azicac vs fbi cases vs ncmec reports) 
 
 
 ## System Architecture
@@ -84,6 +84,8 @@ CaseLinker is designed as a system for ingesting, processing, clustering, and vi
 - **Feature Extraction**: Hybrid approach:
   - **Regex-based** (high accuracy): Demographics, platforms, evidence, prosecution, investigation
   - **Pattern-based** (semantic): Severity indicators, case topics, severity phrases
+- **NER Backend Selection (ingest path)**: Stanza is primary; transformers is true fallback only if Stanza is unavailable (`create_primary_ner_extractor()`).
+- **Age Routing and Gate**: Perp/victim ages are routed by extraction pattern context; victim ages pass through KEEP/REJECT/REVIEW gating with optional override file for reviewed cases.
 - **Case ID Generation**: Creates unique case IDs in format `org_name_year_month_number` (e.g., `azicac_2013_january_001`)
 - **Comparison Values**: Assigns normalized feature vectors for similarity calculation
 
@@ -155,13 +157,16 @@ Case:
   - Fast JSON parsing with orjson (2-3x faster than standard json)
 
 **Current Implementation**:
-- **Production**: PostgreSQL database with 265 processed cases (2011-2014 AZICAC, 2022-2024 NCMEC)
+- **Production**: PostgreSQL database with full multi-source corpus (see live `/sources` page for current counts and per-source coverage).
 - **Local**: SQLite database (`caselinker.db`) - created automatically, not tracked in git
 - Tables: `cases`, `victim_demographics`, `perpetrator_demographics`, `prosecution_outcomes`, `precomputed_clusters`
 - Full raw data preservation in `raw_data` and `extracted_features` fields
 - Fast retrieval with proper indexing
 - Pre-computed cluster storage for fast analysis responses
 - Redis caching layer for frequently accessed endpoints (24-hour TTL for pre-computed data)
+
+**Environment Note**:
+- Runtime scripts and docs standardize on `.venv` for reproducible local execution.
 
 **Performance**:
 - API endpoints: 70-500ms response times (most endpoints <200ms)

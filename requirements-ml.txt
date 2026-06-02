@@ -10,8 +10,10 @@
 #
 # The system gracefully degrades if these are not installed.
 
-sentence-transformers>=2.2.0
-spacy>=3.7.0
-transformers>=4.30.0
-torch>=2.0.0
-scikit-learn>=1.3.0
+sentence-transformers==5.5.1
+spacy==3.8.11
+# Pin NER stack used by ingest to avoid env drift:
+stanza==1.12.1
+transformers==5.9.0
+torch==2.12.0
+scikit-learn==1.8.0

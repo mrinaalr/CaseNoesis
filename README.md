@@ -63,7 +63,7 @@ cd CaseLinker
 ./setup.sh
 
 # Activate virtual environment
-source venv/bin/activate
+source .venv/bin/activate
 
 # Start the main application
 python3 run/main.py
@@ -200,7 +200,7 @@ Once you have PDF files, process them using the CLI tool:
 
 **Single PDF:**
 ```bash
-source venv/bin/activate
+source .venv/bin/activate
 python3 src/main.py "path/to/your/file.pdf"
 ```
 

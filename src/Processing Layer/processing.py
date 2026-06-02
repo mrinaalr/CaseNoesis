@@ -84,6 +84,7 @@ ner_module = importlib.util.module_from_spec(_ner_spec)
 _ner_spec.loader.exec_module(ner_module)
 
 NERExtractor = ner_module.NERExtractor
+create_primary_ner_extractor = ner_module.create_primary_ner_extractor
 
 # Import semantic concept detector from ML Processing Layer
 _semantic_path = Path(__file__).parent / "ML Processing Layer" / "semantic_concepts.py"
@@ -152,19 +153,20 @@ def process_cases(df):
     Returns:
         List of structured case dictionaries ready for storage
     """
-    # Initialize NER extractor (gracefully handles if models not available)
+    # NER: Stanza primary; transformers only when Stanza cannot load (see create_primary_ner_extractor)
     ner_extractor = None
+    ner_backend = "none"
     try:
-        # NERExtractor handles its own initialization and model loading
-        ner_extractor = NERExtractor(backend='stanza')  # Try Stanza first
-        if not ner_extractor.is_available():
-            # Fallback to transformers if Stanza not available
-            ner_extractor = NERExtractor(backend='transformers')
-            if not ner_extractor.is_available():
-                ner_extractor = None
+        ner_extractor = create_primary_ner_extractor()
+        if ner_extractor is not None:
+            ner_backend = ner_extractor.active_backend
     except Exception:
-        # NER not available - continue without it
         ner_extractor = None
+        ner_backend = "none"
+    if HAS_TQDM and ner_backend != "none":
+        tqdm.write(f"NER backend: {ner_backend}")
+    elif ner_backend != "none":
+        print(f"NER backend: {ner_backend}", file=sys.stderr)
 
     # Initialize semantic concepts detector (optional; ML deps may be missing)
     semantic_detector = None
@@ -218,6 +220,38 @@ def process_cases(df):
         )
     else:
         case_iterator = all_case_batches
+
+    ner_by_case_id: Dict[str, Any] = {}
+    if (
+        ner_extractor
+        and ner_extractor.is_available()
+        and getattr(ner_extractor, "backend", None) == "stanza"
+        and getattr(ner_extractor, "_stanza_use_bulk", False)
+    ):
+        prefetch_texts: List[str] = []
+        prefetch_ids: List[str] = []
+        for batch_info in all_case_batches:
+            case_batch = batch_info["case_batch"]
+            text = (case_batch.get("case_text") or "").strip()
+            cid = case_batch.get("case_id")
+            if text and cid:
+                prefetch_texts.append(text)
+                prefetch_ids.append(cid)
+        if prefetch_texts:
+            if HAS_TQDM:
+                tqdm.write(
+                    f"Stanza NER bulk prefetch: {len(prefetch_texts)} cases "
+                    f"(batch_size={getattr(ner_extractor, '_stanza_batch_size', 16)})"
+                )
+            else:
+                print(
+                    f"Stanza NER bulk prefetch: {len(prefetch_texts)} cases",
+                    file=sys.stderr,
+                )
+            for cid, entities in zip(
+                prefetch_ids, ner_extractor.extract_entities_bulk(prefetch_texts)
+            ):
+                ner_by_case_id[cid] = entities
     
     for batch_info in case_iterator:
         case_batch = batch_info['case_batch']
@@ -260,9 +294,13 @@ def process_cases(df):
         ner_entities = None
         if ner_extractor and ner_extractor.is_available():
             case_text = raw_case.get('case_text', '')
+            cid = raw_case.get('case_id')
             if case_text:
                 try:
-                    ner_entities = ner_extractor.extract_entities(case_text)
+                    if cid and cid in ner_by_case_id:
+                        ner_entities = ner_by_case_id[cid]
+                    else:
+                        ner_entities = ner_extractor.extract_entities(case_text)
                 except Exception:
                     # NER extraction failed - continue without NER
                     ner_entities = None

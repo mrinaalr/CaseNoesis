@@ -22,7 +22,7 @@ Design Ideas from Architecture:
 
 import pandas as pd
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Import batching functions from shared batching module
 import sys
@@ -93,6 +93,166 @@ _PRODUCTION_TOPIC_RE = re.compile(
     | \bmade\s+(?:\S+\s+){0,5}(?:movies?|videos?|images?|photos?)\b
     | \btook\s+(?:\S+\s+){0,5}photos?\b
     """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+# CSAM/media object tail (aligned with _PRODUCTION_TOPIC_RE); used for context-gated distribution cues.
+_CSAM_MEDIA_OBJECT = (
+    r"movies?|videos?|images?|photos?|child|csam|material|"
+    r"child\s+porn(?:ography)?|child\s+sexual\s+abuse\s+material|pornograph\w*"
+)
+
+# Distribution topic: safe stems fire freely; trad* only with CSAM/exchange context (see _TRAFFICKING_TOPIC_RE).
+_DISTRIBUTION_TOPIC_RE = re.compile(
+    rf"""
+    \bdistribut\w*\b
+    | \bdisseminat\w*\b
+    | \bexchang\w*\b
+    | \b(?:trad(?:e|ed|ing)|traded)\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b
+    | (?:{_CSAM_MEDIA_OBJECT})\b(?:\s+\S+){{0,5}}\s+(?:trad(?:e|ed|ing)|traded)\b
+    | \b(?:trad(?:e|ed|ing)|traded)\b[^\n]{{0,50}}\bexchang\w*\b
+    | \bexchang\w*\b[^\n]{{0,50}}\b(?:trad(?:e|ed|ing)|traded)\b
+    | \btransmission\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b
+    | \bshar(?:e|ed|ing)\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b
+    | \bupload(?:ed|ing)\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+# Sex/child trafficking only (maps to SexTrafficking) — not drug/weapon trafficking or unit-name boilerplate.
+_DRUG_WEAPON_TRAFFICK_RE = re.compile(
+    r"\b(?:drug|narcotic|meth(?:amphetamine)?|heroin|fentanyl|marijuana|cannabis|cocaine|"
+    r"firearms?|weapons?|guns?)\s+traffick\w*\b"
+    r"|\btraffick\w*\s+(?:in\s+)?(?:meth(?:amphetamine)?|heroin|fentanyl|marijuana|cannabis|"
+    r"cocaine|narcotics?)\b",
+    re.IGNORECASE,
+)
+
+# Organizational spans: traffick* here is investigating unit credit, not the charged offense.
+_ORG_TRAFFICKING_UNIT_RE = re.compile(
+    r"(?:"
+    r"(?:human\s+)?traffick(?:ing)?\s+(?:task\s+force|taskforce|unit|units|division|section|"
+    r"initiative|program|squad)|"
+    r"anti[- ]?traffick(?:ing)?\s+(?:unit|task\s+force|initiative)|"
+    r"combating\s+human\s+traffick(?:ing)?|"
+    r"(?:child\s+exploitation\s+(?:and\s+)?)?human\s+traffick(?:ing)?\s+(?:task\s+force|division)|"
+    r"fbi(?:['\u2019]s)?\s+(?:child\s+exploitation\s+(?:and\s+)?)?human\s+traffick(?:ing)?|"
+    r"successes\s+of\s+traffick(?:ing)?\s+task\s+force|"
+    r"traffick(?:ing)?\s+task\s+force"
+    r")",
+    re.IGNORECASE,
+)
+
+# Charged-offense / victim phrasing (sex, child, human w/ person victim — not unit names).
+_TRAFFICKING_OFFENSE_RE = re.compile(
+    r"""
+    \b(?:sex|child(?:\s+sex)?)\s+traffick\w*\b
+    | \bhuman\s+traffick\w*(?!\s+(?:task\s+force|taskforce|unit|units|division|section|program|initiative|squad))\b
+    | \btraffick\w*\s+of\s+(?:a\s+)?(?:minor|minors?|child|children|person|persons|victim|victims)\b
+    | \btraffick\w*\s+in\s+(?:persons?|minors?|children|victims?)\b
+    | \b(?:minor|minors?|child|children|person|persons|victim|victims)\s+(?:of\s+)?(?:human\s+)?traffick\w*\b
+    | \btraffick\w*\s+victims?\b
+    | \btrad(?:e|ed|ing)\s+(?:\S+\s+){0,5}(?:persons?|minors?|children|victims?|women|girls|boys|humans?|slaves?)\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+_TRAFFICK_STEM_RE = re.compile(r"\btraffick\w*\b", re.IGNORECASE)
+
+# Legacy broad regex (audit / diff only).
+_TRAFFICKING_TOPIC_RE_LEGACY = re.compile(
+    r"""
+    \btraffick\w*\b
+    | \b(?:human|sex|child|minor)\s+trad\w*\b
+    | \btrad\w*\s+(?:in|of)\s+(?:persons?|minors?|children|victims?|women|girls|boys|humans?|slaves?)\b
+    | \billegal\s+trad\w*\b
+    | \btrad(?:e|ed|ing)\s+(?:\S+\s+){0,5}(?:persons?|minors?|children|victims?|women|girls|boys|humans?|slaves?)\b
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+
+def _drug_weapon_before_traffick(case_text: str, traffick_start: int) -> bool:
+    before = case_text[max(0, traffick_start - 35):traffick_start].lower()
+    return bool(
+        re.search(
+            r"\b(?:drug|narcotic|meth(?:amphetamine)?|heroin|fentanyl|marijuana|cannabis|cocaine|"
+            r"firearms?|weapons?|guns?)\s+$",
+            before,
+        )
+    )
+
+
+def _traffick_span_in_org_unit(case_text: str, start: int, end: int) -> bool:
+    """True when this traffick* occurrence sits inside a task-force / unit-name phrase."""
+    win_start = max(0, start - 90)
+    win_end = min(len(case_text), end + 90)
+    window = case_text[win_start:win_end]
+    for om in _ORG_TRAFFICKING_UNIT_RE.finditer(window):
+        abs_start = win_start + om.start()
+        abs_end = win_start + om.end()
+        if start >= abs_start and end <= abs_end:
+            return True
+    return False
+
+
+def should_tag_trafficking(case_text: str) -> bool:
+    """
+    Sex/child trafficking topic gate for SexTrafficking ontology mapping.
+
+    - Excludes drug/weapon + traffick* (e.g. drug trafficking, firearms trafficking).
+    - Excludes traffick* hits that appear only inside organizational unit names unless
+      separate offense language (sex/child/human trafficking of persons) appears elsewhere.
+    """
+    if not case_text:
+        return False
+
+    drug_weapon_spans = [
+        (dm.start(), dm.end()) for dm in _DRUG_WEAPON_TRAFFICK_RE.finditer(case_text)
+    ]
+
+    def _inside_drug_weapon_span(start: int, end: int) -> bool:
+        return any(ds <= start and end <= de for ds, de in drug_weapon_spans)
+
+    # Offense phrasing anywhere (not org-name human trafficking task force).
+    for m in _TRAFFICKING_OFFENSE_RE.finditer(case_text):
+        if _inside_drug_weapon_span(m.start(), m.end()):
+            continue
+        chunk = m.group(0)
+        stem = _TRAFFICK_STEM_RE.search(chunk)
+        if stem and _drug_weapon_before_traffick(case_text, m.start() + stem.start()):
+            continue
+        if _traffick_span_in_org_unit(case_text, m.start(), m.end()):
+            continue
+        return True
+
+    # Residual traffick* stems: allow only if not drug/weapon phrase and not org-unit-only.
+    saw_org_only = False
+    saw_qualifying_stem = False
+    for m in _TRAFFICK_STEM_RE.finditer(case_text):
+        if _inside_drug_weapon_span(m.start(), m.end()):
+            continue
+        if _drug_weapon_before_traffick(case_text, m.start()):
+            continue
+        if _traffick_span_in_org_unit(case_text, m.start(), m.end()):
+            saw_org_only = True
+            continue
+        saw_qualifying_stem = True
+        break
+
+    if saw_qualifying_stem:
+        return True
+    if saw_org_only:
+        return False
+    return False
+
+# Audit helpers: which risky stems fired (for FP review).
+_DISTRIBUTION_SHARING_RE = re.compile(
+    rf"""\bshar(?:e|ed|ing)\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b""",
+    re.IGNORECASE | re.VERBOSE,
+)
+_DISTRIBUTION_UPLOADED_RE = re.compile(
+    rf"""\bupload(?:ed|ing)\s+(?:\S+\s+){{0,5}}(?:{_CSAM_MEDIA_OBJECT})\b""",
     re.IGNORECASE | re.VERBOSE,
 )
 
@@ -222,7 +382,15 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
         'victim_count': extract_victim_count(raw_case),
         'case_demographics': case_demo,
         # Perpetrator context
-        'perpetrator_age': perp_demo.get('age') if isinstance(perp_demo, dict) else None,
+        'perpetrator_age': (
+            perp_demo.get('ages')
+            if isinstance(perp_demo, dict) and perp_demo.get('ages')
+            else (
+                [perp_demo['age']]
+                if isinstance(perp_demo, dict) and perp_demo.get('age') is not None
+                else None
+            )
+        ),
         'perpetrator_registered_sex_offender': perp_demo.get('is_registered') if isinstance(perp_demo, dict) else False,
         'relationship_to_victim': extract_relationship(raw_case),
         'previous_conviction': extract_previous_conviction(raw_case),
@@ -463,6 +631,236 @@ def extract_victim_count(case: Dict[str, Any]) -> Optional[int]:
     return max(counts)
 
 
+# ── Comma-separated name/age (ICAC press-release bulletins) ─────────────────
+_NAME_PART = r"[\w'\u2019\u00b4\-]"
+_CAP_NAME_BEFORE_COMMA = re.compile(
+    rf"((?:[A-Z]{_NAME_PART}*(?:\s+[A-Z]{_NAME_PART}*){{0,4}})),\s+(\d{{1,2}})\s*,",
+    re.UNICODE,
+)
+_PERP_COMMA_OF_PATTERNS: Tuple[re.Pattern, ...] = (
+    re.compile(r",\s+(\d{1,3}),\s+of\s+", re.IGNORECASE),
+    re.compile(r",\s+(\d{1,3}),?\s+headed\s+", re.IGNORECASE),
+)
+_PERP_COMMA_VERB_RE = (
+    r"arrested|indicted|charged|convicted|sentenced|pleaded|pled|found\s+guilty"
+)
+_PERP_COMMA_VERB_PATTERNS: Tuple[re.Pattern, ...] = (
+    re.compile(
+        rf",\s+(\d{{1,3}}),?\s+(?:was|were)\s+(?:{_PERP_COMMA_VERB_RE})\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r",\s+(\d{1,3}),?\s+pleaded\s+guilty\b", re.IGNORECASE),
+    re.compile(r",\s+(\d{1,3}),?\s+(?:was|were)\s+found\s+guilty\b", re.IGNORECASE),
+)
+# Backward-compatible alias for audits referencing the original trio
+_PERP_COMMA_AGE_PATTERNS: Tuple[re.Pattern, ...] = (
+    *_PERP_COMMA_OF_PATTERNS,
+    re.compile(r",\s+(\d{1,3}),?\s+was\s+arrested\b", re.IGNORECASE),
+)
+_COMMA_AGE_SENTENCING_KEYWORDS = (
+    "sentenced",
+    "sentence",
+    "sentencing",
+    "prison",
+    "imprisonment",
+    "probation",
+    "parole",
+    "supervised release",
+    "incarceration",
+    "jail",
+    "fine",
+    "fined",
+    "mandatory minimum",
+    "counts of",
+    "count of",
+    "indictment",
+    "indicted",
+    "years in",
+    "months in",
+    "term of",
+)
+_COMMA_AGE_COUNT_PREFIX_RE = re.compile(
+    r"\b(?:count|counts|charge|charges|indictment|indictments|no\.?|number)\s*$",
+    re.IGNORECASE,
+)
+_COMMA_AGE_WORD_RE = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+_ROMAN_NUMERAL_TOKEN_RE = re.compile(r"^[IVXLC]+$", re.IGNORECASE)
+_COMMA_AGE_BLOCKLIST_FIRST_TOKEN = frozenset(
+    {
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "sept",
+        "oct",
+        "nov",
+        "dec",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat",
+        "sun",
+        "count",
+        "case",
+        "county",
+        "state",
+        "district",
+        "publication",
+        "source",
+    }
+)
+
+
+def _is_comma_age_false_positive(
+    text: str, num_start: int, num_end: int, *, verb_anchored: bool = False
+) -> bool:
+    """
+    Reject comma-number candidates in sentencing, calendar, or counter context.
+
+    When ``verb_anchored`` is True the match is already ``Name, NN, was indicted``
+    (etc.) — skip sentencing-vocabulary rejection so we do not discard the anchor
+  verb; still reject duration/year/counter shapes like ``204 months``.
+    """
+    if num_start < 0 or num_end > len(text) or num_start >= num_end:
+        return False
+    left_raw = text[max(0, num_start - 240) : num_start]
+    right_raw = text[num_end : min(len(text), num_end + 40)]
+    if not verb_anchored:
+        left_words = _COMMA_AGE_WORD_RE.findall(left_raw)[-12:]
+        right_words = _COMMA_AGE_WORD_RE.findall(right_raw)[:8]
+        window = (" ".join(left_words) + " " + " ".join(right_words)).lower()
+        for kw in _COMMA_AGE_SENTENCING_KEYWORDS:
+            if kw in window:
+                return True
+    if _COMMA_AGE_COUNT_PREFIX_RE.search(left_raw):
+        return True
+    if re.search(r"\b(19|20)\d{2}\b", right_raw):
+        return True
+    if re.search(r"\b(?:months?|years?|days?|weeks?)\b", right_raw, re.I):
+        return True
+    if re.search(r"[$]\s*\d", left_raw[-30:] + right_raw[:30]):
+        return True
+    return False
+
+
+def _collect_comma_ages(
+    text: str,
+    patterns: Tuple[re.Pattern, ...],
+    *,
+    min_age: int,
+    max_age: int,
+    verb_anchored: bool = False,
+    claimed_spans: Optional[Set[Tuple[int, int]]] = None,
+) -> List[int]:
+    found: List[int] = []
+    for pattern in patterns:
+        for match in pattern.finditer(text):
+            try:
+                age = int(match.group(1))
+            except (ValueError, IndexError):
+                continue
+            if not min_age <= age <= max_age:
+                continue
+            num_start, num_end = match.start(1), match.end(1)
+            span = (num_start, num_end)
+            if claimed_spans is not None and span in claimed_spans:
+                continue
+            if _is_comma_age_false_positive(
+                text, num_start, num_end, verb_anchored=verb_anchored
+            ):
+                continue
+            found.append(age)
+            if claimed_spans is not None:
+                claimed_spans.add(span)
+    return found
+
+
+def _collect_perp_comma_ages(text: str) -> Tuple[List[int], Set[Tuple[int, int]]]:
+    """Perp comma ages; returns ages and digit spans claimed for victim de-dupe."""
+    claimed: Set[Tuple[int, int]] = set()
+    ages: List[int] = []
+    ages.extend(
+        _collect_comma_ages(
+            text,
+            _PERP_COMMA_OF_PATTERNS,
+            min_age=18,
+            max_age=99,
+            verb_anchored=False,
+            claimed_spans=claimed,
+        )
+    )
+    ages.extend(
+        _collect_comma_ages(
+            text,
+            _PERP_COMMA_VERB_PATTERNS,
+            min_age=10,
+            max_age=99,
+            verb_anchored=True,
+            claimed_spans=claimed,
+        )
+    )
+    return sorted(set(ages)), claimed
+
+
+def _collect_victim_name_comma_ages(
+    text: str, *, exclude_spans: Optional[Set[Tuple[int, int]]] = None
+) -> List[int]:
+    ages: List[int] = []
+    for match in _CAP_NAME_BEFORE_COMMA.finditer(text):
+        try:
+            age = int(match.group(2))
+        except (ValueError, IndexError):
+            continue
+        if not 1 <= age <= 17:
+            continue
+        num_start, num_end = match.start(2), match.end(2)
+        span = (num_start, num_end)
+        if exclude_spans and span in exclude_spans:
+            continue
+        if _is_comma_age_false_positive(text, num_start, num_end):
+            continue
+        name_run = (match.group(1) or "").strip()
+        name_tokens = [t.strip(".,;:\"'()[]") for t in name_run.split() if t.strip()]
+        if not name_tokens:
+            continue
+        first = name_tokens[0].lower().rstrip(".")
+        if first in _COMMA_AGE_BLOCKLIST_FIRST_TOKEN:
+            continue
+        if len(name_tokens) == 1 and len(first) <= 3:
+            continue
+        if _ROMAN_NUMERAL_TOKEN_RE.match(name_tokens[-1]):
+            continue
+        if age <= 2 and not any(len(t) >= 4 for t in name_tokens):
+            continue
+        ages.append(age)
+    return ages
+
+
 def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
     Extract case demographics: ages, age ranges, gender (all ages from case, not just victim-specific).
@@ -509,6 +907,12 @@ def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         except (ValueError, IndexError):
             pass
     
+    # Name-run comma ages (1–17); skip spans already claimed by perp comma patterns
+    _, perp_claimed = _collect_perp_comma_ages(case_text)
+    demographics['ages'].extend(
+        _collect_victim_name_comma_ages(case_text, exclude_spans=perp_claimed)
+    )
+
     # Extract gender: "female", "boy", "girl"
     if re.search(r'\b(female|girl)\b', case_text, re.IGNORECASE):
         demographics['gender'] = 'female'
@@ -528,15 +932,16 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
     - "25 year old Scottsdale man" (allows location between "old" and "man")
     - "21 year old Goodyear, AZ resident" (supports "resident" as well as man/woman/male/female)
     - "30 year old man" (simple case)
+    - ", 60, of Ardmore" / ", 35, headed" / ", 39, was arrested" (ICAC bulletin lists)
     - "registered sex offender"
     """
     case_text = case.get('case_text', '')
     if not case_text:
         return None
     
-    demographics = {
-        'age': None,
-        'is_registered': False
+    demographics: Dict[str, Any] = {
+        'ages': [],
+        'is_registered': False,
     }
     
     # Offender age: man/woman/male/resident only — not "female" (victim/decoy phrasing).
@@ -567,26 +972,29 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
         window = case_text[window_start:window_end]
         if victim_ctx_re.search(window):
             continue
-        demographics['age'] = age
-        break
-    
+        demographics['ages'].append(age)
+
+    perp_comma, _ = _collect_perp_comma_ages(case_text)
+    demographics['ages'].extend(perp_comma)
+    demographics['ages'] = sorted(set(demographics['ages']))
+
     # Check for registered sex offender
     if re.search(r'registered\s+sex\s+offender', case_text, re.IGNORECASE):
         demographics['is_registered'] = True
     
-    return demographics if demographics['age'] is not None or demographics['is_registered'] else None
+    return demographics if demographics['ages'] or demographics['is_registered'] else None
 
 
 def extract_relationship(case: Dict[str, Any]) -> Optional[str]:
     """
     Extract relationship to victim.
     Patterns: "father", "mother", "brother", "sister", "uncle", "aunt", "cousin", "stranger", "teacher"
-    Defaults to "stranger" if no relationship is found (non-family, non-teacher cases).
+    Defaults to "unknown" when no kin/teacher language is detected (not the same as stranger).
     Note: "biological father" is extracted as "father" (same as "mother").
     """
     case_text = case.get('case_text', '')
     if not case_text:
-        return 'stranger'  # Default to stranger if no text
+        return 'unknown'
     
     # Check for family relationships (father, mother, parent)
     # Note: "biological father" is extracted as "father" (removed biological prefix)
@@ -621,9 +1029,8 @@ def extract_relationship(case: Dict[str, Any]) -> Optional[str]:
     if re.search(r'\bstranger\b', case_text, re.IGNORECASE):
         return 'stranger'
     
-    # Default to stranger if no relationship found
-    # (If it's not family or teacher, it's likely a stranger)
-    return 'stranger'
+    # No kin/teacher language detected — do not assume stranger
+    return 'unknown'
 
 
 def extract_previous_conviction(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -1468,8 +1875,8 @@ def extract_severity(case: Dict[str, Any]) -> List[str]:
 def extract_topics(case: Dict[str, Any]) -> List[str]:
     """
     Extract case topics/themes using pattern-based matching.
-    Topics: production, possession, international, multi_state, hands_on, online_only, family, stranger,
-    csam, ai_csam (AI-generated / synthetic CSAM product), sextortion (regex only)
+    Topics: production, possession, distribution, trafficking, international, multi_state, hands_on,
+    online_only, family, stranger, csam, ai_csam (AI-generated / synthetic CSAM product), sextortion (regex only)
 
     Production requires phrase-level cues (e.g. "production of", "minor production", "created … videos",
     "produced child …"); bare "created"/"produced" alone do not tag production.
@@ -1487,6 +1894,10 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
         topics.append('production')
     if re.search(r'\b(trading|downloading|possessing|collecting|possessed|traded|possession|dissemination)\b', case_text, re.IGNORECASE):
         topics.append('possession')
+    if _DISTRIBUTION_TOPIC_RE.search(case_text):
+        topics.append('distribution')
+    if should_tag_trafficking(case_text):
+        topics.append('trafficking')
     
     # International cooperation
     if re.search(r'\b(Australia|Philippines|Japan|India|Thailand|international|overseas)\b', case_text, re.IGNORECASE):

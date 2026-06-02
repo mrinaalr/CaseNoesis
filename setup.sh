@@ -18,10 +18,10 @@ fi
 echo "✓ Python 3 found: $(python3 --version)"
 
 # Create virtual environment if it doesn't exist
-if [ ! -d "venv" ]; then
+if [ ! -d ".venv" ]; then
     echo ""
     echo "Creating virtual environment..."
-    python3 -m venv venv
+    python3 -m venv .venv
     echo "✓ Virtual environment created"
 else
     echo ""
@@ -31,7 +31,7 @@ fi
 # Activate virtual environment
 echo ""
 echo "Activating virtual environment..."
-source venv/bin/activate
+source .venv/bin/activate
 
 # Upgrade pip
 echo ""
@@ -54,7 +54,7 @@ echo "✓ Setup Complete!"
 echo "============================================================"
 echo ""
 echo "To activate the virtual environment, run:"
-echo "  source venv/bin/activate"
+echo "  source .venv/bin/activate"
 echo ""
 echo ""
 echo "Then you can run:"

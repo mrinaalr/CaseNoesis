@@ -12,8 +12,24 @@ Merge logic:
 - Raw NER entities stored in ml_features.ner_entities for reference/debugging
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple, Union
+import importlib.util
 import re
+from pathlib import Path
+
+_victim_gate_mod = None
+
+
+def _victim_age_gate():
+    global _victim_gate_mod
+    if _victim_gate_mod is None:
+        gate_path = Path(__file__).parent / "victim_age_gate.py"
+        spec = importlib.util.spec_from_file_location("victim_age_gate", gate_path)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader
+        spec.loader.exec_module(mod)
+        _victim_gate_mod = mod
+    return _victim_gate_mod
 
 # Promote case_topics ai_csam when semantic concept ai_and_internet_tools clears this bar.
 AI_CSAM_SEMANTIC_THRESHOLD = 0.50
@@ -224,16 +240,35 @@ class MergeProcessing:
         
         # Merge victim ages: combine filtered pattern and NER, deduplicate
         # Ensure victim ages are valid (1-17) and don't overlap with perpetrator ages
-        all_victim_ages = list(set(pattern_victim_ages_filtered + ner_victim_ages))
-        all_victim_ages = [age for age in all_victim_ages if 1 <= age <= 17 and age not in all_perp_ages]
-        all_victim_ages.sort()
-        
-        # Update case_demographics (ALWAYS update to ensure filtering is applied)
+        candidate_victim_ages = list(
+            set(pattern_victim_ages_filtered + ner_victim_ages)
+        )
+        candidate_victim_ages = [
+            age
+            for age in candidate_victim_ages
+            if 1 <= age <= 17 and age not in all_perp_ages
+        ]
+
+        case_id = merged.get("case_id") or ""
+        case_text = merged.get("case_text") or ""
+        gate_mod = _victim_age_gate()
+        all_victim_ages, gate_log = gate_mod.apply_victim_age_gate(
+            case_id, case_text, candidate_victim_ages
+        )
+
         if not isinstance(case_demo, dict):
             case_demo = {}
-        case_demo['ages'] = all_victim_ages
-        merged['case_demographics'] = case_demo
-        
+        case_demo["ages"] = all_victim_ages
+        merged["case_demographics"] = case_demo
+
+        if "ml_features" not in merged:
+            merged["ml_features"] = {}
+        merged["ml_features"]["victim_age_gate"] = {
+            "candidates": sorted(candidate_victim_ages),
+            "final": all_victim_ages,
+            **gate_log,
+        }
+
         return merged
     
     def _merge_organizations(
@@ -347,6 +382,171 @@ class MergeProcessing:
 
         cleaned.sort()
         return cleaned
+
+    # Lightweight location residue filter (Stanza post-process; not transformers-era heavy filter)
+    _LOCATION_FRAGMENT_DROP = frozenset({
+        "an",
+        "ab",
+        "pi",
+        "alas",
+        "anch",
+        "chor",
+        "ag",
+        ". s",
+        ". s.",
+        "u. s",
+        "u. s.",
+        "u. s. c",
+        "states",
+    })
+    # Possessive stems that are real places — do not drop "Boise's" etc. if ever tagged
+    _KNOWN_PLACE_POSSESSIVE_STEMS = frozenset({
+        "alaska", "alabama", "arizona", "arkansas", "california", "colorado",
+        "connecticut", "delaware", "florida", "georgia", "hawaii", "idaho",
+        "illinois", "indiana", "iowa", "kansas", "kentucky", "louisiana",
+        "maine", "maryland", "massachusetts", "michigan", "minnesota",
+        "mississippi", "missouri", "montana", "nebraska", "nevada",
+        "new hampshire", "new jersey", "new mexico", "new york",
+        "north carolina", "north dakota", "ohio", "oklahoma", "oregon",
+        "pennsylvania", "rhode island", "south carolina", "south dakota",
+        "tennessee", "texas", "utah", "vermont", "virginia", "washington",
+        "west virginia", "wisconsin", "wyoming",
+        "anchorage", "boise", "boston", "chicago", "dallas", "denver",
+        "houston", "phoenix", "seattle", "portland", "honolulu", "juneau",
+        "ely", "erie", "rome", "paris",
+    })
+    _POSSESSIVE_LOC_RE = re.compile(r"^(.+?)(?:['\u2019])s$", re.IGNORECASE)
+
+    def _expand_newline_location_entities(self, loc: str) -> List[str]:
+        """``ALASKA\\nWASHINGTON`` → two entities."""
+        if not loc or "\n" not in loc:
+            return [loc.strip()] if loc and loc.strip() else []
+        return [p.strip() for p in loc.splitlines() if p.strip()]
+
+    def _is_location_residue_fragment(self, loc: str) -> bool:
+        """Rare transformers-era shards; explicit list only (not all ≤2-char places)."""
+        low = loc.lower().strip()
+        if low in self._LOCATION_FRAGMENT_DROP:
+            return True
+        if re.match(r"^\.\s*[a-z]\.?$", low):
+            return True
+        if re.match(r"^u\.\s*s\.?$", low):
+            return True
+        return False
+
+    def _is_possessive_non_place(self, loc: str) -> bool:
+        """Drop ``Moore's``-style PERSON possessives; keep known place stems."""
+        m = self._POSSESSIVE_LOC_RE.match(loc.strip())
+        if not m:
+            return False
+        stem = m.group(1).strip().lower()
+        if stem in self._KNOWN_PLACE_POSSESSIVE_STEMS:
+            return False
+        if len(stem) >= 2 and stem in self._BARE_STATE_AGENCY_NAMES:
+            return False
+        return True
+
+    def _pick_canonical_location_label(self, variants: List[str]) -> str:
+        """Case-insensitive dedup: prefer title-case over ALL-CAPS dateline duplicates."""
+
+        def _score(label: str) -> tuple:
+            s = label.strip()
+            if not s:
+                return (0, 0, 0)
+            letters = [c for c in s if c.isalpha()]
+            all_caps = bool(letters) and all(c.isupper() for c in letters) and len(s) > 3
+            titleish = bool(re.search(r"[a-z]", s)) and bool(re.search(r"[A-Z]", s))
+            return (1 if titleish else 0, 0 if all_caps else 1, len(s))
+
+        return max(variants, key=_score)
+
+    def _drop_substring_location_fragments(self, locations: List[str]) -> List[str]:
+        """Drop ``Chorage`` / ``An`` when a longer location on the case contains it."""
+        if len(locations) < 2:
+            return locations
+        lowered = [loc.lower() for loc in locations]
+        keep: List[str] = []
+        for i, loc in enumerate(locations):
+            low = lowered[i]
+            if len(low) <= 4:
+                if any(
+                    j != i
+                    and len(lowered[j]) > len(low) + 2
+                    and low in lowered[j]
+                    and low not in ("erie", "ely", "rome", "ohio", "utah", "iowa", "id")
+                    for j in range(len(locations))
+                ):
+                    continue
+            keep.append(loc)
+        return keep
+
+    def _filter_location_residue(
+        self, locations: List[str], *, audit: bool = False
+    ) -> List[str] | Tuple[List[str], List[Tuple[str, str]]]:
+        """
+        Stanza residue safety net (not a full transformers fragment rebuild).
+
+        - Split newline-glued entities
+        - Drop explicit fragment shards + possessive non-places
+        - Case-insensitive dedup (prefer title-case)
+        - Substring fragment dedup when parent place exists
+        - Keeps jurisdiction phrases (District of Alaska, Western District of …)
+        - Does NOT blocklist alias GPEs (e.g. China) — flagged for later
+
+        With ``audit=True``, returns ``(cleaned, [(dropped_label, reason), ...])``.
+        """
+        dropped_audit: List[Tuple[str, str]] = []
+        expanded: List[str] = []
+        for raw in locations:
+            if not raw or not str(raw).strip():
+                continue
+            parts = self._expand_newline_location_entities(str(raw).strip())
+            if audit and len(parts) > 1:
+                for p in parts[1:]:
+                    dropped_audit.append((raw, "newline_split"))
+            expanded.extend(parts)
+
+        filtered: List[str] = []
+        for loc in expanded:
+            if self._is_location_residue_fragment(loc):
+                if audit:
+                    dropped_audit.append((loc, "fragment_reject_list"))
+                continue
+            if self._is_possessive_non_place(loc):
+                if audit:
+                    dropped_audit.append((loc, "possessive_non_place"))
+                continue
+            filtered.append(loc)
+
+        before_sub = list(filtered)
+        filtered = self._drop_substring_location_fragments(filtered)
+        if audit:
+            kept_low = {x.lower() for x in filtered}
+            for loc in before_sub:
+                if loc.lower() not in kept_low:
+                    dropped_audit.append((loc, "substring_parent_dedup"))
+
+        groups: Dict[str, List[str]] = {}
+        for loc in filtered:
+            key = re.sub(r"\s+", " ", loc.lower().strip())
+            groups.setdefault(key, []).append(loc)
+
+        deduped: List[str] = []
+        seen: set = set()
+        for key, variants in groups.items():
+            canonical = self._pick_canonical_location_label(variants)
+            if key not in seen:
+                seen.add(key)
+                deduped.append(canonical)
+            elif audit:
+                for v in variants:
+                    if v != canonical:
+                        dropped_audit.append((v, "case_insensitive_dedup"))
+
+        deduped.sort(key=lambda s: s.lower())
+        if audit:
+            return deduped, dropped_audit
+        return deduped
     
     def _filter_law_enforcement_agencies(self, organizations: List[str]) -> List[str]:
         """
@@ -723,10 +923,12 @@ class MergeProcessing:
             seen.add(loc_lower)
             seen.add(loc_normalized.lower())
         
-        # Store locations in merged features
+        filtered = self._filter_location_residue(normalized_locations)
+        normalized_locations = filtered if isinstance(filtered, list) else filtered[0]
+
         if normalized_locations:
-            merged['locations'] = sorted(list(set(normalized_locations)))
-        
+            merged['locations'] = normalized_locations
+
         return merged
 
 
