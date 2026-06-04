@@ -1654,6 +1654,75 @@ _MERGED_NEWS_DATELINE_WEEKDAY_RE = re.compile(
     r"\d{1,2},?\s+(?:19|20)\d{2}\s*$",
     re.I,
 )
+_MERGED_NEWS_PUBLICATION_DATE_RE = re.compile(
+    r"^\s*Publication\s+date:\s*\d{4}-\d{2}-\d{2}\s*$",
+    re.I,
+)
+# ReportLab scrape_pdf titles: "Headline fragment — Agency Name" (Title Case, not ALL-CAPS).
+_MERGED_NEWS_SCRAPE_MASTHEAD_SUFFIXES = (
+    "police department",
+    "sheriff",
+    "attorney general",
+    "department of justice",
+    "u.s. attorney",
+    "district attorney",
+    "state bureau",
+    "office of the",
+    "bureau of investigation",
+    "department of public safety",
+)
+
+
+def _merged_news_line_looks_like_scrape_masthead_title(line: str) -> bool:
+    """Wrapped headline line ending with em-dash org masthead (Anchorage PD / scrape_pdf layout)."""
+    s = line.strip()
+    if len(s) < 20 or len(s) > 160:
+        return False
+    if not re.search(r"[—–]", s):
+        return False
+    low = s.lower()
+    return any(m in low for m in _MERGED_NEWS_SCRAPE_MASTHEAD_SUFFIXES)
+
+
+def _merged_news_line_looks_like_scrape_wrapped_title_lead(line: str, next_line: str) -> bool:
+    """First line of a two-line Title Case headline when the next line carries the masthead."""
+    s = line.strip()
+    if not s or _merged_news_line_looks_like_scrape_masthead_title(line):
+        return False
+    if not _merged_news_line_looks_like_scrape_masthead_title(next_line):
+        return False
+    if len(s) < 12 or len(s) > 110:
+        return False
+    if s.endswith(".") or re.search(r"[—–]", s):
+        return False
+    if _merged_news_line_looks_like_dateline_above_source(s):
+        return False
+    if _merged_news_line_looks_like_narrative_body(s):
+        return False
+    if not re.match(r"^[A-Z0-9]", s):
+        return False
+    letters = [c for c in s if c.isalpha()]
+    if len(letters) < 10:
+        return False
+    upper_ratio = sum(1 for c in letters if c.isupper()) / len(letters)
+    # Title Case wraps can be mostly lowercase (e.g. "Anchorage man arrested in Juneau, charged with …").
+    if upper_ratio >= 0.58:
+        return False
+    return True
+
+
+def _merged_news_hi_immediately_before_source(lines: List[str], si: int, prev_barrier: int) -> int:
+    """
+    Last non-empty line before ``Source:`` — skip ``Publication date:`` emitted by scrape_pdf.
+    """
+    hi = si - 1
+    while hi > prev_barrier and not lines[hi].strip():
+        hi -= 1
+    while hi > prev_barrier and _MERGED_NEWS_PUBLICATION_DATE_RE.match(lines[hi].strip()):
+        hi -= 1
+        while hi > prev_barrier and not lines[hi].strip():
+            hi -= 1
+    return hi
 
 
 def _merged_news_line_looks_like_dateline_above_source(line: str) -> bool:
@@ -1671,6 +1740,8 @@ def _merged_news_line_looks_like_narrative_body(line: str) -> bool:
     """
     s = line.strip()
     if not s:
+        return False
+    if _merged_news_line_looks_like_scrape_masthead_title(s):
         return False
     # Wrapped continuation of a paragraph (line does not start with a digit; headline may be "19-year-old …").
     if not s[0].isdigit():
@@ -1775,9 +1846,7 @@ def _merged_news_title_starts(lines: List[str], sources: List[int]) -> List[int]
     for idx, si in enumerate(sources):
         prev_barrier = sources[idx - 1] if idx > 0 else -1
         lo = prev_barrier + 1
-        hi = si - 1
-        while hi > prev_barrier and not lines[hi].strip():
-            hi -= 1
+        hi = _merged_news_hi_immediately_before_source(lines, si, prev_barrier)
         if hi <= prev_barrier:
             title_starts.append(max(0, lo))
             continue
@@ -1786,6 +1855,16 @@ def _merged_news_title_starts(lines: List[str], sources: List[int]) -> List[int]
             title_start = hi
             t = hi - 1
             while t > prev_barrier and _merged_news_line_looks_like_headline(lines[t]):
+                title_start = t
+                t -= 1
+            while t > prev_barrier and _merged_news_line_looks_like_scrape_masthead_title(lines[t]):
+                title_start = t
+                t -= 1
+            if (
+                t > prev_barrier
+                and t + 1 <= hi
+                and _merged_news_line_looks_like_scrape_wrapped_title_lead(lines[t], lines[t + 1])
+            ):
                 title_start = t
                 t -= 1
             while t > prev_barrier and _merged_news_is_likely_preface_before_date(lines[t]):

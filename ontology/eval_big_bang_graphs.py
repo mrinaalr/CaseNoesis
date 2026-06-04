@@ -2,7 +2,7 @@
 """
 Generate + SHACL-eval + merge-metrics for ontology/big_bang_ids.txt.
 
-1. Wipe ontology/graph_output/*.jsonld + *.ttl
+1. Wipe ontology/graph_output/*.jsonld + *.ttl (staging root only — not universe/ or big_bang/)
 2. Build JSON-LD + TTL per selected ID (features_to_cac)
 3. SHACL gate (target 100%)
 4. Merged Big Bang payload + structural / bridge / connectivity metrics
@@ -29,7 +29,8 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ONTOLOGY = REPO_ROOT / "ontology"
-GRAPH_DIR = ONTOLOGY / "graph_output"
+GRAPH_ROOT = ONTOLOGY / "graph_output"
+GRAPH_DIR = GRAPH_ROOT
 CACHE_DIR = ONTOLOGY / "cache"
 IDS_FILE = ONTOLOGY / "big_bang_ids.txt"
 SEED_FILE = ONTOLOGY / "selected_200_ids.txt"
@@ -69,9 +70,10 @@ def bridge_uri(u: str) -> bool:
 
 
 def wipe_graph_output() -> int:
+    """Remove staging graphs at graph_output/ root (viz subdirs untouched)."""
     n = 0
     for pat in ("*.jsonld", "*.ttl"):
-        for p in GRAPH_DIR.glob(pat):
+        for p in GRAPH_ROOT.glob(pat):
             p.unlink()
             n += 1
     return n
@@ -278,12 +280,17 @@ def generate_graphs(ids: List[str]) -> Dict[str, Any]:
     }
 
 
-def build_and_analyze_merge(case_ids: List[str], seed_ids: Set[str]) -> Dict[str, Any]:
+def build_and_analyze_merge(
+    case_ids: List[str],
+    seed_ids: Set[str],
+    graph_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
     from merge_graph_cache import build_merged_flat, graph_manifest, save_merged_payload  # noqa: E402
 
-    flat = build_merged_flat(case_ids)
+    gdir = graph_dir or GRAPH_DIR
+    flat = build_merged_flat(case_ids, graph_dir=gdir)
     payload = save_merged_payload("all", flat, case_ids)
-    manifest = graph_manifest()
+    manifest = graph_manifest(gdir)
 
     raw_json = json.dumps({"flat_nodes": flat, "pool": "all", "manifest": manifest, "n_cases": len(case_ids)})
     raw_bytes = len(raw_json.encode("utf-8"))
@@ -297,7 +304,7 @@ def build_and_analyze_merge(case_ids: List[str], seed_ids: Set[str]) -> Dict[str
     seed_spine: List[int] = []
     other_spine: List[int] = []
     for cid in case_ids:
-        path = GRAPH_DIR / f"{cid}.jsonld"
+        path = (graph_dir or GRAPH_DIR) / f"{cid}.jsonld"
         if not path.is_file():
             continue
         ev, ro = spine_events_roles_from_doc(json.loads(path.read_text()))

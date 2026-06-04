@@ -1,0 +1,83 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-detection: <https://cacontology.projectvic.org/detection#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-06-04T04:40:07.670124" ;
+    dcterms:identifier "us_marshals_2024_002" ;
+    dcterms:modified "2026-06-04T04:40:07.670124" ;
+    dcterms:source <https://www.usmarshals.gov/news/press-release/texas-us-marshals-fugitive-task-force-apprehends-alabama-capital-murder-suspect>,
+        "US MARSHALS" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/phase/booked> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/phase/booked> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/legal-proceeding> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/austin-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/gulf-coast-regional-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/hsi>,
+        <https://caselinker.up.railway.app/resource/agency/illinois-office-texas-department-of-criminal-justice>,
+        <https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force>,
+        <https://caselinker.up.railway.app/resource/agency/san-marcos-police-department>,
+        <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety>,
+        <https://caselinker.up.railway.app/resource/agency/us-dhs>,
+        <https://caselinker.up.railway.app/resource/agency/usms> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/austin-police-department> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/gulf-coast-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Gulf Coast Regional Fugitive Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/illinois-office-texas-department-of-criminal-justice> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Illinois Office Texas Department of Criminal Justice" .
+
+<https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/san-marcos-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "San Marcos Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cacontology-multi:StateAgency .
+
+<https://caselinker.up.railway.app/resource/agency/us-dhs> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "U.S. DHS" .
+
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): Williamson County Jail" ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/person/offender/1> a uco-identity:Person ;
+    cacontology-detection:ageEstimate 32 .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/phase/booked> a cacontology:InitialPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+

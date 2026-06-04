@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """
-Build + cache merged JSON-LD flat node lists for Patterns compare / Big Bang.
+Build + cache merged JSON-LD flat node lists for Patterns compare / Big Bang / Universe.
+
+Layout (Patterns visualizer reads subdirs only — not graph_output/ root):
+  graph_output/            — new batch output (staging; not loaded by viz)
+  graph_output/universe/   — full corpus (compare chips + secret Universe mode)
+  graph_output/big_bang/   — half-sample (Big Bang button)
+  graph_output/analysis/   — bridge-dense 1000 (big_bang.py; triple-click Exit Universe)
 
 Caches to:
   ontology/cache/merged_compare.json
   ontology/cache/merged_all.json.gz
+  ontology/cache/merged_universe.json.gz
+  ontology/cache/merged_analysis.json.gz
 
 Redis keys (when available):
   caselinker:ontology:merged:compare:{manifest}
   caselinker:ontology:merged:all:{manifest}
+  caselinker:ontology:merged:universe:{manifest}
+  caselinker:ontology:merged:analysis:{manifest}
 """
 
 from __future__ import annotations
@@ -22,10 +32,21 @@ from typing import Any, Dict, List, Optional, Set
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ONTOLOGY = REPO_ROOT / "ontology"
-GRAPH_DIR = ONTOLOGY / "graph_output"
+GRAPH_ROOT = ONTOLOGY / "graph_output"
+UNIVERSE_DIR = GRAPH_ROOT / "universe"
+BIG_BANG_DIR = GRAPH_ROOT / "big_bang"
+ANALYSIS_DIR = GRAPH_ROOT / "analysis"
+BIG_BANG_IDS_FILE = ONTOLOGY / "big_bang_ids.txt"
 CACHE_DIR = ONTOLOGY / "cache"
 COMPARE_IDS_FILE = ONTOLOGY / "selected_200_ids.txt"
 NLP_GRAPH_RE = re.compile(r"/graphs/nlp$")
+
+_POOL_CACHE_FILES = {
+    "compare": CACHE_DIR / "merged_compare.json",
+    "all": CACHE_DIR / "merged_all.json.gz",
+    "universe": CACHE_DIR / "merged_universe.json.gz",
+    "analysis": CACHE_DIR / "merged_analysis.json.gz",
+}
 
 
 def _compare_pool_ids() -> List[str]:
@@ -34,12 +55,33 @@ def _compare_pool_ids() -> List[str]:
     return [ln.strip() for ln in COMPARE_IDS_FILE.read_text().splitlines() if ln.strip()]
 
 
-def graph_manifest() -> str:
-    """Fingerprint graph_output contents for cache invalidation."""
-    if not GRAPH_DIR.is_dir():
+def _analysis_pool_ids() -> List[str]:
+    if not BIG_BANG_IDS_FILE.is_file():
+        return []
+    return [ln.strip() for ln in BIG_BANG_IDS_FILE.read_text().splitlines() if ln.strip()]
+
+
+def graph_dir_for_pool(pool: str) -> Path:
+    """Return on-disk graph directory for a Patterns pool."""
+    p = pool.strip().lower()
+    if p == "compare":
+        return UNIVERSE_DIR
+    if p in ("all", "big_bang"):
+        return BIG_BANG_DIR
+    if p == "universe":
+        return UNIVERSE_DIR
+    if p == "analysis":
+        return ANALYSIS_DIR
+    raise ValueError(f"unknown pool: {pool}")
+
+
+def graph_manifest(graph_dir: Optional[Path] = None) -> str:
+    """Fingerprint graph dir contents for cache invalidation."""
+    d = graph_dir or UNIVERSE_DIR
+    if not d.is_dir():
         return "empty"
     parts: List[str] = []
-    for p in sorted(GRAPH_DIR.glob("*.jsonld")):
+    for p in sorted(d.glob("*.jsonld")):
         st = p.stat()
         parts.append(f"{p.stem}:{st.st_size}:{int(st.st_mtime)}")
     return hashlib.sha256("\n".join(parts).encode()).hexdigest()[:16]
@@ -116,10 +158,14 @@ def merge_case_into_store(store: Dict[str, Dict[str, Any]], case_id: str, json_l
                         seen.add(key)
 
 
-def build_merged_flat(case_ids: List[str]) -> List[Dict[str, Any]]:
+def build_merged_flat(
+    case_ids: List[str],
+    graph_dir: Optional[Path] = None,
+) -> List[Dict[str, Any]]:
+    d = graph_dir or UNIVERSE_DIR
     store: Dict[str, Dict[str, Any]] = {}
     for cid in case_ids:
-        path = GRAPH_DIR / f"{cid}.jsonld"
+        path = d / f"{cid}.jsonld"
         if not path.is_file():
             continue
         try:
@@ -134,16 +180,25 @@ def build_merged_flat(case_ids: List[str]) -> List[Dict[str, Any]]:
 
 
 def case_ids_for_pool(pool: str) -> List[str]:
-    graphs = sorted(p.stem for p in GRAPH_DIR.glob("*.jsonld"))
+    d = graph_dir_for_pool(pool)
+    graphs = sorted(p.stem for p in d.glob("*.jsonld")) if d.is_dir() else []
     if pool == "compare":
         order = _compare_pool_ids()
-        return [cid for cid in order if cid in set(graphs)]
+        graph_set = set(graphs)
+        return [cid for cid in order if cid in graph_set]
+    if pool == "analysis":
+        order = _analysis_pool_ids()
+        graph_set = set(graphs)
+        return [cid for cid in order if cid in graph_set]
     return graphs
 
 
 def load_merged_payload(pool: str) -> Optional[Dict[str, Any]]:
-    manifest = graph_manifest()
-    path = CACHE_DIR / ("merged_compare.json" if pool == "compare" else "merged_all.json.gz")
+    d = graph_dir_for_pool(pool)
+    manifest = graph_manifest(d)
+    path = _POOL_CACHE_FILES.get(pool)
+    if not path:
+        return None
     if not path.is_file():
         return None
     try:
@@ -161,7 +216,8 @@ def load_merged_payload(pool: str) -> Optional[Dict[str, Any]]:
 
 def save_merged_payload(pool: str, flat: List[Dict[str, Any]], case_ids: List[str]) -> Dict[str, Any]:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    manifest = graph_manifest()
+    d = graph_dir_for_pool(pool)
+    manifest = graph_manifest(d)
     payload = {
         "pool": pool,
         "manifest": manifest,
@@ -170,21 +226,25 @@ def save_merged_payload(pool: str, flat: List[Dict[str, Any]], case_ids: List[st
         "case_ids": case_ids,
         "flat_nodes": flat,
     }
-    if pool == "compare":
-        (CACHE_DIR / "merged_compare.json").write_text(json.dumps(payload))
-    else:
+    path = _POOL_CACHE_FILES.get(pool)
+    if not path:
+        raise ValueError(f"unknown pool: {pool}")
+    if path.suffix == ".gz":
         data = json.dumps(payload).encode()
-        (CACHE_DIR / "merged_all.json.gz").write_bytes(gzip.compress(data, compresslevel=6))
+        path.write_bytes(gzip.compress(data, compresslevel=6))
+    else:
+        path.write_text(json.dumps(payload))
     return payload
 
 
 def get_or_build_merged(pool: str, redis_get=None, redis_set=None) -> Dict[str, Any]:
     """Return merged payload; use Redis hooks from run/redis_cache when provided."""
     pool = pool.strip().lower()
-    if pool not in ("compare", "all"):
-        raise ValueError("pool must be compare or all")
+    if pool not in ("compare", "all", "universe", "analysis"):
+        raise ValueError("pool must be compare, all, universe, or analysis")
 
-    manifest = graph_manifest()
+    d = graph_dir_for_pool(pool)
+    manifest = graph_manifest(d)
     redis_key = f"caselinker:ontology:merged:{pool}:{manifest}"
 
     if redis_get:
@@ -201,7 +261,7 @@ def get_or_build_merged(pool: str, redis_get=None, redis_set=None) -> Dict[str, 
         return disk
 
     case_ids = case_ids_for_pool(pool)
-    flat = build_merged_flat(case_ids)
+    flat = build_merged_flat(case_ids, graph_dir=d)
     payload = save_merged_payload(pool, flat, case_ids)
     payload["cache"] = "built"
     if redis_set:
@@ -210,7 +270,7 @@ def get_or_build_merged(pool: str, redis_get=None, redis_set=None) -> Dict[str, 
 
 
 def warm_all_caches(redis_get=None, redis_set=None) -> None:
-    for pool in ("compare", "all"):
+    for pool in ("compare", "all", "universe", "analysis"):
         p = get_or_build_merged(pool, redis_get=redis_get, redis_set=redis_set)
         print(f"  merged {pool}: {p['n_cases']} cases, {p['n_nodes']} nodes ({p.get('cache')})")
 

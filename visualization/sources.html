@@ -400,9 +400,9 @@
                     ]
                 },
                 {
-                    name: "Tennessee Bureau of Investigation ICAC – Newsroom",
+                    name: "Tennessee Bureau of Investigation – Newsroom",
                     url: "https://tbinewsroom.com/?s=ICAC",
-                    description: "Press releases Tennessee Bureau of Investigation’s Internet Crimes Against Children (ICAC) Task Force.",
+                    description: "Press releases Tennessee Bureau of Investigation’s Internet Crimes Against Children (child) Task Force.",
                     type: "Official website",
                     yearLinks: [
                         {
@@ -413,7 +413,7 @@
                     ]
                 },
                 {
-                    name: "South Carolina Attorney General – ICAC News",
+                    name: "South Carolina Attorney General – News",
                     url: "https://www.scag.gov/about-the-office/news/?category=icac",
                     description: "Public news releases from the South Carolina Attorney General’s Internet Crimes Against Children (ICAC) Task Force.",
                     type: "Official website",
@@ -426,9 +426,9 @@
                     ]
                 },
                 {
-                    name: "New York State Police – Newsroom (ICAC)",
+                    name: "New York State Police – Newsroom",
                     url: "https://troopers.ny.gov/nysp-newsroom?keyword=ICAC",
-                    description: "Press releases from the New York State Police Newsroom (ICAC).",
+                    description: "Press releases from the New York State Police Newsroom.",
                     type: "Official website",
                     dateRangeDisplay: "2022–2026",
                     yearLinks: [
@@ -467,13 +467,13 @@
                     ]
                 },
                 {
-                    name: "New Jersey Office of the Attorney General – Press Releases (ICAC)",
+                    name: "New Jersey Office of the Attorney General – Press Releases",
                     url: "https://www.njoag.gov/?s=icac",
-                    description: "NJ OAG site search for ICAC-related releases.",
+                    description: "NJ OAG site search for child exploitation-related releases.",
                     type: "Official website",
                     yearLinks: [
                         {
-                            year: "ICAC search",
+                            year: "child search",
                             url: "https://www.njoag.gov/?s=icac",
                             casesUsed: 0
                         }
@@ -870,13 +870,13 @@
                     ]
                 },
                 {
-                    name: "Kentucky State Police – News Archive (ICAC)",
+                    name: "Kentucky State Police – News Archive",
                     url: "https://www.kentuckystatepolice.ky.gov/news?searchTerm=ICAC",
-                    description: "Kentucky State Police public news search filtered to ICAC-related posts.",
+                    description: "Kentucky State Police public news search filtered to child exploitation-related posts.",
                     type: "Official website",
                     yearLinks: [
                         {
-                            year: "ICAC search",
+                            year: "child search",
                             url: "https://www.kentuckystatepolice.ky.gov/news?searchTerm=ICAC",
                             casesUsed: 0
                         }
@@ -1572,7 +1572,7 @@
                         if (staticSource.yearLinks && staticSource.yearLinks.length > 0) {
                             staticSource.yearLinks[0].casesUsed = osceolaCases.length;
                         }
-                    } else if (staticSource.name.includes('Las Vegas Metropolitan')) {
+                    } else if (staticSource.name.includes('Las Vegas Police Department')) {
                         const lvmpdCases = cases.filter(c => {
                             const s = (c.source || c.raw_data?.source || '')
                                 .toUpperCase()

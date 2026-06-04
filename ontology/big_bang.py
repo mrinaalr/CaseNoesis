@@ -54,6 +54,8 @@ Does NOT modify ontology/selected_200_ids.txt (maintained by select_cases.py).
 
 Usage:
   python ontology/big_bang.py --target 1000
+  python ontology/big_bang.py --boom   # TEMP: fill to 3000 — non-NCMEC first, NCMEC last
+  python ontology/eval_big_bang_graphs.py   # then generate graph_output + SHACL eval
 """
 
 from __future__ import annotations
@@ -85,6 +87,7 @@ from select_cases import (  # noqa: E402
 )
 
 TARGET_TOTAL = 1000
+BOOM_TARGET = 3000  # TEMP local graph explore (~3000 JSON-LD graphs)
 SEED_200 = ONTOLOGY / "selected_200_ids.txt"
 
 # Bucket quotas (v2)
@@ -386,8 +389,171 @@ class BridgeTracker:
         return [{"uri": u, "degree": len(cs)} for u, cs in ranked]
 
 
-def parse_args(argv: List[str]) -> Dict[str, int]:
-    opts = {
+def _picked_meta(case: Dict[str, Any], cid: str) -> Dict[str, Any]:
+    return {
+        "case_id": cid,
+        "source": case.get("source"),
+        "buckets": [],
+        "rationales": {},
+        "density": score_density(case),
+        "richness": score_richness(case),
+        "severity": score_severity(case),
+        "spine": dict(zip(("events", "roles", "bridges"), spine_node_counts(case))),
+    }
+
+
+def _write_selection_output(
+    *,
+    picked: Dict[str, Dict[str, Any]],
+    target_n: int,
+    mode: str,
+    cases: Dict[str, Dict[str, Any]],
+    substantive: List[str],
+    ai_ids: List[str],
+    n_seed: int,
+    n_seed_missing: int,
+    extra: Optional[Dict[str, Any]] = None,
+) -> None:
+    ids = sorted(picked.keys())
+    out: Dict[str, Any] = {
+        "mode": mode,
+        "n_selected": len(ids),
+        "n_target": target_n,
+        "n_corpus": len(cases),
+        "n_substantive_pool": len(substantive),
+        "n_seed_200": n_seed,
+        "compare_pool_file": "ontology/selected_200_ids.txt",
+        "n_seed_200_missing_from_db": n_seed_missing,
+        "ai_pin": {
+            "n_union": len(ai_ids),
+            "n_ncmec": sum(1 for c in ai_ids if is_ncmec(cases[c])),
+        },
+        "bucket_counts": dict(
+            Counter(b for meta in picked.values() for b in meta["buckets"])
+        ),
+        "source_distribution": dict(Counter(picked[c]["source"] for c in ids)),
+        "selection": [picked[c] for c in ids],
+    }
+    if extra:
+        out.update(extra)
+    (ONTOLOGY / "big_bang_ids.txt").write_text("\n".join(ids) + "\n")
+    (ONTOLOGY / "big_bang_cases.json").write_text(json.dumps(out, indent=2))
+    print(f"\nWrote {len(ids)} cases → big_bang_ids.txt (target {target_n}, mode={mode})")
+    print("Bucket counts:", out["bucket_counts"])
+    print("Top sources:", Counter(picked[c]["source"] for c in ids).most_common(12))
+
+
+def run_boom_selection(
+    cases: Dict[str, Dict[str, Any]],
+    *,
+    target_n: int,
+    ai_ids: List[str],
+    nf: NoiseFilter,
+) -> None:
+    """
+    TEMP chill path: reach ``target_n`` (default 3000) with minimal logic.
+    Order: seed_200 → ai_pin → all other non-noisy non-NCMEC → NCMEC remainder.
+    No bridge buckets, quality gate, or hub trim.
+    """
+    ai_pinned = set(ai_ids)
+    picked: Dict[str, Dict[str, Any]] = {}
+
+    def add(cid: str, bucket: str, rationale: str) -> None:
+        if cid not in cases:
+            return
+        if cid not in picked:
+            picked[cid] = _picked_meta(cases[cid], cid)
+        if bucket not in picked[cid]["buckets"]:
+            picked[cid]["buckets"].append(bucket)
+        picked[cid]["rationales"][bucket] = rationale
+
+    seed_ids = load_seed_200()
+    n_seed = n_seed_missing = 0
+    for cid in seed_ids:
+        if cid not in cases:
+            n_seed_missing += 1
+            continue
+        add(cid, "seed_200", "compare pool (selected_200_ids.txt)")
+        n_seed += 1
+    print(f"Seed 200: {n_seed}/{len(seed_ids)}", flush=True)
+
+    for cid in ai_ids:
+        add(cid, "ai_pin", "mandatory AI pin")
+
+    non_ncmec: List[str] = []
+    ncmec_pool: List[str] = []
+    noisy_skip = 0
+    for cid, c in cases.items():
+        if cid in picked:
+            continue
+        noisy, _ = nf.is_noisy_case(c)
+        if noisy and cid not in ai_pinned:
+            noisy_skip += 1
+            continue
+        if is_ncmec(c):
+            ncmec_pool.append(cid)
+        else:
+            non_ncmec.append(cid)
+
+    non_ncmec.sort(key=lambda c: (-spine_richness_score(cases[c]), -score_density(cases[c]), c))
+    ncmec_pool.sort(key=lambda c: (-spine_richness_score(cases[c]), -score_density(cases[c]), c))
+
+    n_non = 0
+    for cid in non_ncmec:
+        if len(picked) >= target_n:
+            break
+        add(cid, "non_ncmec_fill", "non-NCMEC preferred fill")
+        n_non += 1
+
+    n_ncmec = 0
+    for cid in ncmec_pool:
+        if len(picked) >= target_n:
+            break
+        add(cid, "ncmec_fill", "NCMEC tail fill to target")
+        n_ncmec += 1
+
+    print(
+        f"BOOM chill fill: target={target_n} selected={len(picked)} "
+        f"(non_ncmec={n_non}, ncmec_tail={n_ncmec}, noisy_skipped={noisy_skip})",
+        flush=True,
+    )
+    if len(picked) < target_n:
+        print(
+            f"WARN: only {len(picked)} cases available (wanted {target_n})",
+            flush=True,
+        )
+
+    _write_selection_output(
+        picked=picked,
+        target_n=target_n,
+        mode="boom",
+        cases=cases,
+        substantive=non_ncmec + ncmec_pool,
+        ai_ids=ai_ids,
+        n_seed=n_seed,
+        n_seed_missing=n_seed_missing,
+        extra={
+            "boom_strategy": "seed_200 + ai_pin + non_ncmec_fill + ncmec_fill",
+            "n_non_ncmec_fill": n_non,
+            "n_ncmec_fill": n_ncmec,
+            "n_noisy_skipped": noisy_skip,
+        },
+    )
+
+
+def scale_opts_to_target(opts: Dict[str, int], target_n: int) -> Dict[str, int]:
+    """Scale bucket quotas proportionally (1000-case demo baseline)."""
+    scale = target_n / TARGET_TOTAL
+    out = dict(opts)
+    out["target"] = target_n
+    for key in ("bridge", "reinforce", "platform_max", "rich", "severe", "distinct"):
+        out[key] = max(1, round(opts[key] * scale))
+    out["max_per_source"] = max(20, round(opts["max_per_source"] * scale))
+    return out
+
+
+def parse_args(argv: List[str]) -> Tuple[Dict[str, int], bool]:
+    opts: Dict[str, int] = {
         "target": TARGET_TOTAL,
         "bridge": N_BRIDGE,
         "reinforce": N_REINFORCE,
@@ -397,9 +563,13 @@ def parse_args(argv: List[str]) -> Dict[str, int]:
         "distinct": N_DISTINCT,
         "max_per_source": MAX_PER_SOURCE_DEFAULT,
     }
+    boom = False
     i = 0
     while i < len(argv):
-        if argv[i] == "--target" and i + 1 < len(argv):
+        if argv[i] == "--boom":
+            boom = True
+            i += 1
+        elif argv[i] == "--target" and i + 1 < len(argv):
             opts["target"] = int(argv[i + 1])
             i += 2
         elif argv[i] == "--bridge" and i + 1 < len(argv):
@@ -410,11 +580,11 @@ def parse_args(argv: List[str]) -> Dict[str, int]:
             i += 2
         else:
             i += 1
-    return opts
+    return opts, boom
 
 
 def main() -> None:
-    opts = parse_args(sys.argv[1:])
+    opts, boom = parse_args(sys.argv[1:])
     nf = NoiseFilter()
     quality_gate_rejected = 0
     ncmec_excluded = 0
@@ -449,6 +619,12 @@ def main() -> None:
         substantive.append(cid)
     print(f"Substantive pool (non-noisy, NCMEC only if AI): {len(substantive)}", flush=True)
     print(f"AI pin set: {len(ai_ids)} (NCMEC in AI: {sum(1 for c in ai_ids if is_ncmec(cases[c]))})")
+
+    if boom:
+        boom_target = opts["target"] if opts["target"] != TARGET_TOTAL else BOOM_TARGET
+        print(f"BOOM mode (chill): fill to {boom_target}, non-NCMEC first then NCMEC", flush=True)
+        run_boom_selection(cases, target_n=boom_target, ai_ids=ai_ids, nf=nf)
+        return
 
     picked: Dict[str, Dict[str, Any]] = {}
     tracker = BridgeTracker(MAX_BRIDGE_SHARE)
@@ -808,41 +984,30 @@ def main() -> None:
 
     median_spine_nodes = {k: median(v) for k, v in bucket_spine.items()}
 
-    out = {
-        "n_selected": len(ids),
-        "n_target": target_n,
-        "n_seed_200": n_seed,
-        "compare_pool_file": "ontology/selected_200_ids.txt",
-        "n_seed_200_missing_from_db": n_seed_missing,
-        "ncmec_excluded": ncmec_excluded,
-        "quality_gate_rejected": quality_gate_rejected,
-        "quotas": opts,
-        "ai_pin": {
-            "n_union": len(ai_ids),
-            "n_ncmec": sum(1 for c in ai_ids if is_ncmec(cases[c])),
+    _write_selection_output(
+        picked=picked,
+        target_n=target_n,
+        mode="default",
+        cases=cases,
+        substantive=substantive,
+        ai_ids=ai_ids,
+        n_seed=n_seed,
+        n_seed_missing=n_seed_missing,
+        extra={
+            "ncmec_excluded": ncmec_excluded,
+            "quality_gate_rejected": quality_gate_rejected,
+            "quotas": opts,
+            "bridge_degree_histogram": tracker.degree_histogram(),
+            "top_bridges": tracker.top_bridges(20),
+            "median_spine_nodes": median_spine_nodes,
+            "corpus_median_spine_events_roles": corpus_median_spine,
+            "max_bridge_degree_cap": cap,
+            "platform_group_coverage_in_selection": platform_coverage,
         },
-        "bucket_counts": dict(
-            Counter(b for meta in picked.values() for b in meta["buckets"])
-        ),
-        "bridge_degree_histogram": tracker.degree_histogram(),
-        "top_bridges": tracker.top_bridges(20),
-        "median_spine_nodes": median_spine_nodes,
-        "corpus_median_spine_events_roles": corpus_median_spine,
-        "max_bridge_degree_cap": cap,
-        "platform_group_coverage_in_selection": platform_coverage,
-        "source_distribution": dict(Counter(picked[c]["source"] for c in ids)),
-        "selection": [picked[c] for c in ids],
-    }
-
-    (ONTOLOGY / "big_bang_ids.txt").write_text("\n".join(ids) + "\n")
-    (ONTOLOGY / "big_bang_cases.json").write_text(json.dumps(out, indent=2))
-
-    print(f"\nWrote {len(ids)} cases → big_bang_ids.txt (target {target_n})")
-    print("Bucket counts:", out["bucket_counts"])
-    print("Bridge degree histogram (cases_touched → n_bridges):", out["bridge_degree_histogram"])
-    print("Top bridges:", out["top_bridges"][:5])
+    )
+    print("Bridge degree histogram (cases_touched → n_bridges):", tracker.degree_histogram())
+    print("Top bridges:", tracker.top_bridges(5))
     print("Median spine (events+roles) by bucket:", median_spine_nodes)
-    print("Top sources:", Counter(picked[c]["source"] for c in ids).most_common(8))
 
 
 if __name__ == "__main__":

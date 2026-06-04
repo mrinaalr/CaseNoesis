@@ -1,0 +1,162 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix cacontology-production: <https://cacontology.projectvic.org/production#> .
+@prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
+@prefix cacontology-taskforce: <https://cacontology.projectvic.org/taskforce#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-06-04T04:38:33.791639" ;
+    dcterms:identifier "nj_ag_2026_004" ;
+    dcterms:modified "2026-06-04T04:38:33.791639" ;
+    dcterms:source <https://www.njoag.gov/ag-platkin-sues-messaging-app-discord-for-unlawful-practices-that-expose-nj-kids-to-child-predators-and-violent-sexual-content/>,
+        "NJ AG" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/phase/convicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/phase/convicted> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/production>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/legal-step/convicted>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/operation> ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/new-jersey-office-of-the-attorney-general-and-division-of-consumer-affairs>,
+        <https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/production>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/sextortion> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/csam>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/production>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/sextortion> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/new-jersey-office-of-the-attorney-general-and-division-of-consumer-affairs> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "New Jersey Office of the Attorney General and Division of Consumer Affairs" .
+
+<https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Office of the Attorney General" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/1> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:StateCharge ;
+    rdfs:label "sexual exploitation of children" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/2> a cacontology-legal-outcomes:CSAM_Possession,
+        cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child sexual abuse material" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/3> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:SextortionCharge ;
+    rdfs:label "sextortion" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/4> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/facet/csam> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/facet/production> a <https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/3>,
+        <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/4> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/legal-step/convicted> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/operation> a cac-core:Event,
+        cacontology-taskforce:TaskForceOperation .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/phase/convicted> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/csam> a cacontology:CSAMIncident,
+        cac-core:Event ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat>,
+        <https://caselinker.up.railway.app/resource/platform/discord>,
+        <https://caselinker.up.railway.app/resource/platform/facebook>,
+        <https://caselinker.up.railway.app/resource/platform/instagram>,
+        <https://caselinker.up.railway.app/resource/platform/roblox>,
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/tiktok> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/facet/csam> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/production> a cac-core:Event,
+        cacontology-production:ProductionOffense ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat>,
+        <https://caselinker.up.railway.app/resource/platform/discord>,
+        <https://caselinker.up.railway.app/resource/platform/facebook>,
+        <https://caselinker.up.railway.app/resource/platform/instagram>,
+        <https://caselinker.up.railway.app/resource/platform/roblox>,
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/tiktok> ;
+    uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/facet/production> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/event/sextortion> a cac-core:Event,
+        cacontology-sextortion:SextortionIncident ;
+    cacontology:severityLevel 3 ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat>,
+        <https://caselinker.up.railway.app/resource/platform/discord>,
+        <https://caselinker.up.railway.app/resource/platform/facebook>,
+        <https://caselinker.up.railway.app/resource/platform/instagram>,
+        <https://caselinker.up.railway.app/resource/platform/roblox>,
+        <https://caselinker.up.railway.app/resource/platform/social-media>,
+        <https://caselinker.up.railway.app/resource/platform/tiktok> .
+
+<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" .
+
+<https://caselinker.up.railway.app/resource/platform/discord> a cacontology-platforms:MessagingService ;
+    rdfs:label "Discord" .
+
+<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Facebook" .
+
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
+
+<https://caselinker.up.railway.app/resource/platform/roblox> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:GamePlatform ;
+    rdfs:label "Roblox" ;
+    cacontology-platforms:allowsAnonymousChat "true" .
+
+<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" .
+
+<https://caselinker.up.railway.app/resource/platform/tiktok> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "TikTok" .
+

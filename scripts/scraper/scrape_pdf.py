@@ -58,6 +58,8 @@ REQUEST_DELAY = 1.2
 REQUEST_TIMEOUT = 30
 JINA_READER_TIMEOUT = 90
 MIN_BODY_CHARS = 80
+# Drupal SPAs (e.g. troopers.ny.gov) often return only title+date in static HTML.
+THIN_HTML_RETRY_CHARS = 400
 
 # news.delaware.gov: breadcrumb lines vary — e.g.
 #   ``Department of Justice Press Releases | Date Posted:``
@@ -549,6 +551,38 @@ def _unwrap_jina_markdown_links(md: str) -> str:
     return re.sub(r"[ \t]{2,}", " ", out)
 
 
+# WordPress.com / Jetpack sharedaddy (TBINewsroom and similar).
+_WP_JETPACK_SHARE_BLOCK = re.compile(
+    r"(?s)(?:\d+\.\s*)?"
+    r"Share on X \(Opens in new window\)\s*X\s*"
+    r"(?:\d+\.\s*)?Share on Facebook \(Opens in new window\)\s*Facebook\s*"
+    r"(?:\d+\.\s*)?Share on\s*LinkedIn \(Opens in new window\)\s*LinkedIn\s*"
+    r"(?:\d+\.\s*)?Email a link to a friend \(Opens in new window\)\s*Email\s*",
+    re.I,
+)
+
+
+def _strip_wordpress_jetpack_share(body: str) -> str:
+    """Remove Jetpack share rows that Jina inlines after the release body."""
+    if not body:
+        return body
+    body = _WP_JETPACK_SHARE_BLOCK.sub("\n\n", body)
+    kept: list[str] = []
+    for line in body.splitlines():
+        if re.search(
+            r"Share on (?:X|Facebook|LinkedIn).+Opens in new window",
+            line,
+            re.I,
+        ):
+            remainder = _WP_JETPACK_SHARE_BLOCK.sub("", line).strip()
+            if remainder and len(remainder) > 40:
+                if not re.search(r"Opens in new window", remainder, re.I):
+                    kept.append(remainder)
+            continue
+        kept.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(kept)).strip()
+
+
 def _trim_mass_gov_jina_preface(body: str) -> str:
     """Drop site chrome / duplicate H1 when Jina returns the full page shell."""
     m = _JINA_MASS_GOV_PRESS_LEDE.search(body)
@@ -679,6 +713,206 @@ def _trim_sjpd_jina_body(body: str) -> str:
             continue
         lines.append(line)
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+_TROOPERS_MONTH = (
+    r"(?:January|February|March|April|May|June|July|August|September|October|November|December)"
+)
+_TROOPERS_LEDE_RE = re.compile(
+    r"(?m)^(?:On\s+"
+    + _TROOPERS_MONTH
+    + r"\s+\d{1,2},\s+\d{4},?\s+"
+    r"(?:the\s+|members of the\s+)?(?:New York State Police|State Police)\b"
+    r"|The New York State Police (?:announce|arrest|investigated|received|conducted)\b"
+    r"|(?:On\s+"
+    + _TROOPERS_MONTH
+    + r"\s+\d{1,2},\s+\d{4},?\s+State Police in\b))",
+    re.I,
+)
+_TROOPERS_NAV_MARKERS = (
+    "Troop Locator",
+    "School and Community Outreach",
+    "Ticket Inquiries",
+    "Crime Laboratory System",
+)
+
+
+def _troopers_body_ok(body: str) -> bool:
+    """Reject site nav masquerading as a press release."""
+    b = (body or "").strip()
+    if len(b) < THIN_HTML_RETRY_CHARS:
+        return False
+    if any(m in b for m in _TROOPERS_NAV_MARKERS):
+        return False
+    if re.match(r"(?m)^#\s+New York State Police\s*$", b):
+        return False
+    return bool(_TROOPERS_LEDE_RE.search(b) or re.search(r"(?i)\b(?:arrested|indicted|charged)\b", b))
+
+
+def _trim_troopers_jina_body(body: str) -> str:
+    """
+    troopers.ny.gov (NY Drupal) via Jina: global nav, NY.gov trust banner, translate
+    widget, and recruiting copy wrap the actual press-release lede.
+    """
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    trimmed = re.sub(
+        r"(?is)Skip to main content.*?Share sensitive information only on official, secure websites\.\s*",
+        "\n",
+        trimmed,
+    )
+    trimmed = re.sub(
+        r"(?is)An official website of New York State\.\s*Here's how you know.*?secure websites\.\s*",
+        "\n",
+        trimmed,
+    )
+    trimmed = re.sub(
+        r"(?is)We are now accepting applications for the NYS Trooper Entrance Exam!.*?(?=\n)",
+        "\n",
+        trimmed,
+        count=1,
+    )
+    lede = _TROOPERS_LEDE_RE.search(trimmed)
+    if not lede:
+        return ""
+    start = lede.start()
+    window = trimmed[max(0, start - 900) : start]
+    headlines = list(
+        re.finditer(
+            r"(?m)^#\s+(?!Accident Reports|Employment|Contact Us|New York State Police\b)[^\n|]{12,220}\s*$",
+            window,
+        )
+    )
+    if headlines:
+        start = max(0, start - 900) + headlines[-1].start()
+    trimmed = trimmed[start:].strip()
+    end_at: int | None = None
+    for marker in (
+        r"(?m)^##\s+Contact Troop\b",
+        r"(?m)^\*\*Troop [A-Z] Commander:\*\*",
+        r"(?m)^Accident Reports\s*$",
+        r"(?m)^TraCS\s*$",
+        r"(?m)^Employment\s*$",
+        r"(?m)^Become a Trooper\s*$",
+        r"(?m)^Agencies\s*$",
+        r"(?m)^Facebook\s*$",
+        r"(?m)^Translate\s*$",
+        r"(?m)^\[\]\(https?://troopers\.ny\.gov/news/",
+        r"(?m)^Toggle navigation",
+        r"(?m)^\s*Troopers\s*$",
+    ):
+        m = re.search(marker, trimmed)
+        if m and m.start() > 200 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if "Here's how you know" in s or s.startswith("Official websites use"):
+            continue
+        if re.match(
+            r"^(Accident Reports|TraCS|Employment|Agencies|Contact Us|Troopers|Traffic|Firearms)$",
+            s,
+        ):
+            break
+        if re.match(r"^(Criminal Investigation|Specialty Units|Prevention and Preparedness)$", s):
+            continue
+        lines.append(re.sub(r"\s*\|\s*New York State Police\s*$", "", line))
+    out = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    return out if _troopers_body_ok(out) else ""
+
+
+_NJOAG_NAV_MARKERS = (
+    "Recent Posts",
+    "Divisions & Offices",
+    "Meet Attorney General",
+    "File a Complaint",
+    "All Posts",
+    "Grant Opportunities",
+    "Public Records Request",
+)
+
+
+def _njoag_body_ok(body: str) -> bool:
+    b = (body or "").strip()
+    if len(b) < THIN_HTML_RETRY_CHARS:
+        return False
+    if sum(1 for m in _NJOAG_NAV_MARKERS if m in b) >= 2:
+        return False
+    return bool(
+        re.search(r"(?m)^TRENTON\s*[\u2014\u2013\-]", b)
+        or re.search(r"(?i)Attorney General .{0,80} announced", b)
+        or re.search(r"(?i)\b(?:indicted|arrested|charged|convicted|sentenced)\b", b)
+    )
+
+
+def _trim_njoag_body(body: str) -> str:
+    """njoag.gov press releases: trim masthead metadata and Jina site chrome."""
+    if not (body or "").strip():
+        return body
+    trimmed = body
+    trimmed = re.sub(
+        r"(?is)Skip to main content.*?Share sensitive information only on official, secure websites\.\s*",
+        "\n",
+        trimmed,
+    )
+    start_at: int | None = None
+    for pat in (
+        r"(?m)^TRENTON\s*[\u2014\u2013\-]\s*\*?\*?",
+        r"(?m)^FOR IMMEDIATE RELEASE\s*$",
+        r"(?m)^\*\*?FOR IMMEDIATE RELEASE\*\*?\s*$",
+    ):
+        m = re.search(pat, trimmed)
+        if m and (start_at is None or m.start() < start_at):
+            start_at = m.start()
+    if start_at is not None and start_at > 0:
+        trimmed = trimmed[start_at:].strip()
+    else:
+        m = re.search(
+            r"(?m)^#\s+(?!Home|Divisions|About|Media)[^\n|]{20,240}\s*$",
+            trimmed,
+        )
+        if m:
+            trimmed = trimmed[m.start() :].strip()
+    end_at: int | None = None
+    for marker in (
+        r"(?m)^Recent Posts\s*$",
+        r"(?m)^Categories:\s*$",
+        r"(?m)^All Posts\s*$",
+        r"(?m)^Share on Facebook\s*$",
+        r"(?m)^\*\*Related\*\*",
+        r"(?m)^Divisions\s*$",
+        r"(?m)^Initiatives\s*$",
+        r"(?m)^Media Inquiries",
+        r"(?m)^\[\]\(https?://www\.njoag\.gov/",
+    ):
+        m = re.search(marker, trimmed)
+        if m and m.start() > 250 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if s.startswith("by NJOAG Communications") or s.startswith("Media Inquiries"):
+            continue
+        if re.match(r"^(Divisions|About|Initiatives|Media|Home)\s*$", s):
+            break
+        lines.append(line)
+    out = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    return out if _njoag_body_ok(out) else ""
 
 
 def _trim_ice_gov_jina_body(body: str) -> str:
@@ -1393,6 +1627,16 @@ def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str
     if "news.delaware.gov" in (original_url or "").lower():
         body = _trim_news_delaware_duplicate_press_rail(body)
         body = _dedupe_news_delaware_paragraph_blocks(body)
+    if "tbinewsroom.com" in (original_url or "").lower():
+        body = _strip_wordpress_jetpack_share(body)
+    if "troopers.ny.gov" in (original_url or "").lower():
+        body = _trim_troopers_jina_body(body)
+        if not body:
+            return None
+    if "njoag.gov" in (original_url or "").lower():
+        body = _trim_njoag_body(body)
+        if not body:
+            return None
     if len(body) < MIN_BODY_CHARS:
         return None
     byline = pub.strftime("%B %d, %Y") if pub else ""
@@ -1604,6 +1848,14 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
             or soup.select_one(".field--name-body")
             or soup.select_one("main")
         )
+    elif netloc in ("www.njoag.gov", "njoag.gov"):
+        container = (
+            soup.select_one("article.type-post")
+            or soup.select_one("article.post")
+            or soup.select_one(".entry-content")
+            or soup.select_one("article")
+            or soup.select_one("main")
+        )
     elif netloc in ("www.myfloridalegal.com", "myfloridalegal.com"):
         container = (
             soup.select_one("article.node--type-news-release")
@@ -1689,6 +1941,18 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
 
     if netloc in ("www.usmarshals.gov", "usmarshals.gov"):
         body = _trim_usmarshals_postface(body)
+
+    if netloc in ("tbinewsroom.com", "www.tbinewsroom.com"):
+        body = _strip_wordpress_jetpack_share(body)
+
+    if netloc in ("troopers.ny.gov", "www.troopers.ny.gov"):
+        if len(body) < THIN_HTML_RETRY_CHARS:
+            return None
+
+    if netloc in ("www.njoag.gov", "njoag.gov"):
+        body = _trim_njoag_body(body)
+        if not body:
+            return None
 
     pub_date = resolve_publication_date(soup, url, body)
     byline = format_display_byline(pub_date, soup)
@@ -1858,10 +2122,17 @@ def main():
             continue
 
         use_jina_first = args.jina_fallback and (
-            "cbp.gov" in url.lower() or "usmarshals.gov" in url.lower()
+            "cbp.gov" in url.lower()
+            or "usmarshals.gov" in url.lower()
+            or "troopers.ny.gov" in url.lower()
         )
         if use_jina_first:
-            tag = "cbp" if "cbp.gov" in url.lower() else "usms"
+            if "cbp.gov" in url.lower():
+                tag = "cbp"
+            elif "usmarshals.gov" in url.lower():
+                tag = "usms"
+            else:
+                tag = "nysp"
             print(f"    [{tag}] r.jina.ai reader ...")
             html = fetch_via_jina_reader(url, verify=verify_tls)
         else:
@@ -1880,7 +2151,26 @@ def main():
             result = extract_from_jina_reader(html, url)
         else:
             result = extract(html, url)
-        if not result and args.jina_fallback:
+        body_len = len(((result[2] if result else "") or "").strip())
+        needs_jina = (
+            args.jina_fallback
+            and not is_jina
+            and (
+                not result
+                or (
+                    "troopers.ny.gov" in url.lower()
+                    and body_len < THIN_HTML_RETRY_CHARS
+                )
+                or (
+                    "njoag.gov" in url.lower()
+                    and (
+                        body_len < THIN_HTML_RETRY_CHARS
+                        or not _njoag_body_ok((result[2] if result else "") or "")
+                    )
+                )
+            )
+        )
+        if needs_jina:
             print("    [fallback] r.jina.ai reader (thin or empty extract) ...")
             html_j = fetch_via_jina_reader(url, verify=verify_tls)
             if html_j:

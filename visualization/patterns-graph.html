@@ -493,9 +493,9 @@
         <a href="/patterns#method" class="back-link">&larr; Back to Phase 2 Pipeline</a>
 
         <div class="header-card">
-            <h1>CAC Ontology Knowledge Graph</h1>
+            <h1>CaseLinker Knowledge Graph</h1>
             <p class="graph-title" id="case-title">Loading available cases…</p>
-            <p class="subtitle">Interactive view of ICAC cases as a knowledge graph. Compare 200 currated cases or press <strong>Big Bang</strong> to view the full graph.</p>
+            <p class="subtitle">Interactive view of ICAC cases as a knowledge graph. Compare 200 curated cases or press <strong>Big Bang</strong> to merge the half-sample corpus graph.</p>
             <div class="case-selector" id="case-selector" hidden>
                 <span class="case-selector-label">Case</span>
                 <div class="mode-toggle" id="mode-toggle" role="tablist" aria-label="Selection mode">
@@ -523,9 +523,9 @@
         </div>
 
         <p class="graph-footnote">
-            This graph represents ICAC cases expressed in CAC Ontology. Each node is a typed entity. Edges show relationships between entities. Shared nodes (platforms, agencies) connect cases when multiple cases are loaded.
+            This graph represents exploitation cases expressed in CAC Ontology. Each node is a typed entity. Edges show relationships between entities. Shared nodes (platforms, agencies) connect cases when multiple cases are loaded.
             <span class="footnote-actions">
-                <button type="button" id="big-bang-btn" class="big-bang-btn" title="Merge every Big Bang case that has a graph">Big Bang</button>
+                <button type="button" id="big-bang-btn" class="big-bang-btn" title="Merge the Big Bang half-sample corpus graph">Big Bang</button>
             </span>
         </p>
     </div>
@@ -541,7 +541,9 @@
      * CAC Ontology Knowledge Graph visualizer
      * ------------------------------------------------------------
      * Boot: GET /api/ontology/cases?pool=compare (curated 200 metadata only).
-     * Big Bang: ?pool=all then fetches each case's JSON-LD on demand.
+     * Big Bang: ?pool=all — half-sample at graph_output/big_bang/
+     * Universe (secret): double-click Exit Big Bang → ?pool=universe
+     * Analysis (secret): triple-click Exit Universe → ?pool=analysis (big_bang.py 1000)
      *
      * There is no embedded graph data. Run
      *     python ontology/features_to_cac.py <case_id>
@@ -551,21 +553,31 @@
     // ---------- Endpoints (only source of truth) ----------
     const API_CASES_URL = '/api/ontology/cases';
     const MAX_COMPARE_CASES = 200;
-    /** Cases merged per tick when building client-side (fallback if /api/ontology/merged miss). */
+    /** Cases merged per tick when building client-side (fallback if /api/ontology/merged unavailable). */
     const BIG_BANG_FETCH_BATCH = 80;
+    const UNIVERSE_FETCH_BATCH = 80;
+    const ANALYSIS_FETCH_BATCH = 80;
     const COMPARE_MERGE_BATCH = 40;
     /** Full D3 re-layout every N merge batches (fewer = smoother; each paint restarts the simulation). */
     const MERGE_RENDER_EVERY_N_BATCHES = 2;
+    const BANG_EXIT_DBLCLICK_MS = 320;
 
     // ---------- Runtime state ----------
     let COMPARE_POOL = [];           // Curated demo cases (pool=compare, max 200)
-    let BIG_BANG_POOL = [];          // Filled only when user presses Big Bang (pool=all)
-    let CORPUS_GRAPH_TOTAL = 0;      // Total graphs on disk (for button label)
-    let GRAPH_MANIFEST = '';         // Invalidates browser merged cache when graphs change
+    let BIG_BANG_POOL = [];          // Big Bang half-sample (pool=all)
+    let UNIVERSE_POOL = [];          // Secret full corpus (pool=universe)
+    let ANALYSIS_POOL = [];          // Bridge-dense 1000 (pool=analysis, big_bang.py)
+    let CORPUS_GRAPH_TOTAL = 0;      // Total graphs in universe (for labels)
+    let GRAPH_MANIFEST = '';         // Invalidates stored merged graph when graphs change
     let CURRENT_CASE_ID = null;
     let MODE = 'single';
     let SELECTED_CASES = new Set();
     let BIG_BANG_MODE = false;
+    let UNIVERSE_MODE = false;
+    let ANALYSIS_MODE = false;
+    let bangExitClickTimer = null;
+    let universeExitClicks = 0;
+    let universeExitTimer = null;
     const JSONLD_CACHE = Object.create(null);
 
     // ---------- Vocabulary constants ----------
@@ -830,7 +842,7 @@
                 const nid = node['@id'];
                 if (!nid) continue;
                 if (!merged[nid]) {
-                    // Clone shallowly so we don't mutate cached JSON-LD docs.
+                    // Clone shallowly so we don't mutate stored JSON-LD docs.
                     const copy = Object.assign({}, node);
                     if (Array.isArray(node['@type'])) {
                         copy['@type'] = node['@type'].slice();
@@ -921,6 +933,8 @@
     const LS_MERGED_PREFIX = 'caselinker-patterns-merged:';
     const LS_CATALOG_KEY = 'caselinker-patterns-catalog-compare';
     const LS_CATALOG_ALL_KEY = 'caselinker-patterns-catalog-all';
+    const LS_CATALOG_UNIVERSE_KEY = 'caselinker-patterns-catalog-universe';
+    const LS_CATALOG_ANALYSIS_KEY = 'caselinker-patterns-catalog-analysis';
     const LS_MODE_KEY = 'caselinker-patterns-mode';
     const LS_GRAPH_PREFIX = 'caselinker-patterns-graph:';
     let CASE_SELECTOR_WIRED = false;
@@ -945,7 +959,7 @@
     async function fetchServerMerged(pool) {
         const local = loadLocalMerged(pool, GRAPH_MANIFEST);
         if (local) {
-            return { flat_nodes: local, n_cases: null, cache: 'browser', manifest: GRAPH_MANIFEST };
+            return { flat_nodes: local, n_cases: null, manifest: GRAPH_MANIFEST };
         }
         const resp = await fetch('/api/ontology/merged?pool=' + encodeURIComponent(pool), { cache: 'default' });
         if (!resp.ok) return null;
@@ -960,23 +974,29 @@
         const titleEl = document.getElementById('case-title');
         ensureGraphSvg();
 
-        // Pre-merged server cache is only valid for the full pool (200 or Big Bang).
+        // Pre-merged payload is only valid for the full pool (200 or Big Bang).
         // Hand-picked 2–199 must merge client-side from selected JSON-LD only.
         const useServerMerge =
             pool === 'all' ||
+            pool === 'universe' ||
+            pool === 'analysis' ||
             (pool === 'compare' && caseEntries.length >= COMPARE_POOL.length);
-        const cached = useServerMerge ? await fetchServerMerged(pool) : null;
-        if (cached && cached.flat_nodes && cached.flat_nodes.length) {
-            const n = cached.n_cases || caseEntries.length;
-            titleEl.textContent = titleLabel + ' · ' + n + ' cases (' + (cached.cache || 'cached') + ')';
-            if (pool === 'compare') setTitleCompare(cached.flat_nodes, caseEntries.map(c => c.case_id));
-            renderGraphFromFlat(cached.flat_nodes);
+        const merged = useServerMerge ? await fetchServerMerged(pool) : null;
+        if (merged && merged.flat_nodes && merged.flat_nodes.length) {
+            const n = merged.n_cases || caseEntries.length;
+            titleEl.textContent = titleLabel + ' · ' + n + ' cases';
+            if (pool === 'compare') setTitleCompare(merged.flat_nodes, caseEntries.map(c => c.case_id));
+            renderGraphFromFlat(merged.flat_nodes);
             return;
         }
 
         const store = createFlatStore();
         const total = caseEntries.length;
-        const batchSize = pool === 'all' ? BIG_BANG_FETCH_BATCH : COMPARE_MERGE_BATCH;
+        const batchSize =
+            pool === 'analysis' ? ANALYSIS_FETCH_BATCH :
+            pool === 'universe' ? UNIVERSE_FETCH_BATCH :
+            pool === 'all' ? BIG_BANG_FETCH_BATCH :
+            COMPARE_MERGE_BATCH;
         let loaded = 0;
         let firstPaint = false;
         let batchIndex = 0;
@@ -1010,6 +1030,7 @@
             showCompareEmpty('No graph data loaded.');
         }
     }
+
 
     function serializeRdfTerm(v) {
         if (v && typeof v === 'object') {
@@ -1343,9 +1364,11 @@
         CORPUS_GRAPH_TOTAL = payload.corpus_total || COMPARE_POOL.length;
         GRAPH_MANIFEST = payload.graph_manifest || '';
         BIG_BANG_POOL = [];
+        UNIVERSE_POOL = [];
+        ANALYSIS_POOL = [];
         const bangBtnEl = document.getElementById('big-bang-btn');
         if (bangBtnEl) {
-            bangBtnEl.title = 'Merge all ' + CORPUS_GRAPH_TOTAL + ' graphs (loads on demand)';
+            bangBtnEl.title = 'Merge Big Bang half-sample (' + (CORPUS_GRAPH_TOTAL ? '~' + Math.round(CORPUS_GRAPH_TOTAL / 2) : '?') + ' graphs)';
         }
     }
 
@@ -1367,7 +1390,7 @@
                 return;
             }
             const chip = ev.target.closest('.case-chip');
-            if (!chip || BIG_BANG_MODE) return;
+            if (!chip || BIG_BANG_MODE || UNIVERSE_MODE || ANALYSIS_MODE) return;
             const entry = COMPARE_POOL.find(c => c.case_id === chip.dataset.caseId);
             if (entry) onChipClick(entry);
         });
@@ -1445,7 +1468,7 @@
     }
 
     function onChipClick(caseEntry) {
-        if (BIG_BANG_MODE) return;
+        if (BIG_BANG_MODE || UNIVERSE_MODE || ANALYSIS_MODE) return;
         if (MODE === 'single') {
             if (caseEntry.case_id === CURRENT_CASE_ID) return;
             loadAndRenderSingle(caseEntry);
@@ -1474,6 +1497,8 @@
         } else {
             SELECTED_CASES.clear();
             BIG_BANG_MODE = false;
+            UNIVERSE_MODE = false;
+            ANALYSIS_MODE = false;
             const bangBtn = document.getElementById('big-bang-btn');
             if (bangBtn) {
                 bangBtn.classList.remove('active');
@@ -1521,7 +1546,7 @@
     }
 
     async function refreshCompareView() {
-        if (BIG_BANG_MODE) return;
+        if (BIG_BANG_MODE || UNIVERSE_MODE || ANALYSIS_MODE) return;
         const selected = COMPARE_POOL.filter(c => SELECTED_CASES.has(c.case_id));
         const titleEl = document.getElementById('case-title');
 
@@ -1552,19 +1577,51 @@
         }
     }
 
-    async function activateBigBang() {
+    function resetToCompareUi() {
+        BIG_BANG_MODE = false;
+        UNIVERSE_MODE = false;
+        ANALYSIS_MODE = false;
+        universeExitClicks = 0;
+        if (universeExitTimer) {
+            clearTimeout(universeExitTimer);
+            universeExitTimer = null;
+        }
         const btn = document.getElementById('big-bang-btn');
-        if (BIG_BANG_MODE) {
-            BIG_BANG_MODE = false;
+        if (btn) {
             btn.classList.remove('active');
             btn.textContent = 'Big Bang';
-            SELECTED_CASES.clear();
-            syncChipState();
-            if (MODE === 'compare') refreshCompareView();
-            else if (COMPARE_POOL[0]) loadAndRenderSingle(COMPARE_POOL[0]);
-            return;
+            btn.disabled = false;
         }
+        SELECTED_CASES.clear();
+        syncChipState();
+        if (MODE === 'compare') refreshCompareView();
+        else if (COMPARE_POOL[0]) loadAndRenderSingle(COMPARE_POOL[0]);
+    }
+
+    async function loadCatalogPool(pool, storageKey) {
+        let payload = null;
+        try {
+            const raw = sessionStorage.getItem(storageKey);
+            if (raw) payload = JSON.parse(raw);
+        } catch (_) { /* ignore */ }
+        if (!payload || !Array.isArray(payload.cases) || !payload.cases.length) {
+            const resp = await fetch(API_CASES_URL + '?pool=' + encodeURIComponent(pool), { cache: 'default' });
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            payload = await resp.json();
+            try {
+                sessionStorage.setItem(storageKey, JSON.stringify(payload));
+            } catch (_) { /* quota */ }
+        }
+        if (payload.corpus_total) CORPUS_GRAPH_TOTAL = payload.corpus_total;
+        if (payload.graph_manifest) GRAPH_MANIFEST = payload.graph_manifest;
+        return payload;
+    }
+
+    async function enterBigBang() {
+        const btn = document.getElementById('big-bang-btn');
         BIG_BANG_MODE = true;
+        UNIVERSE_MODE = false;
+        ANALYSIS_MODE = false;
         MODE = 'compare';
         btn.classList.add('active');
         btn.textContent = 'Exit Big Bang';
@@ -1572,33 +1629,16 @@
         syncChipState();
         const titleEl = document.getElementById('case-title');
         titleEl.textContent = 'Big Bang · loading catalog…';
-        showCompareEmpty('Loading full corpus catalog…');
+        showCompareEmpty('Loading Big Bang half-sample…');
 
         try {
             if (!BIG_BANG_POOL.length) {
-                let payload = null;
-                try {
-                    const raw = sessionStorage.getItem(LS_CATALOG_ALL_KEY);
-                    if (raw) payload = JSON.parse(raw);
-                } catch (_) { /* ignore */ }
-                if (!payload || !Array.isArray(payload.cases) || !payload.cases.length) {
-                    const resp = await fetch(API_CASES_URL + '?pool=all', { cache: 'default' });
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                    payload = await resp.json();
-                    try {
-                        sessionStorage.setItem(LS_CATALOG_ALL_KEY, JSON.stringify(payload));
-                    } catch (_) { /* quota */ }
-                }
+                const payload = await loadCatalogPool('all', LS_CATALOG_ALL_KEY);
                 BIG_BANG_POOL = Array.isArray(payload.cases) ? payload.cases : [];
-                CORPUS_GRAPH_TOTAL = payload.corpus_total || BIG_BANG_POOL.length;
-                if (payload.graph_manifest) GRAPH_MANIFEST = payload.graph_manifest;
             }
             if (!BIG_BANG_POOL.length) {
-                showCompareEmpty('No graphs in graph_output yet. Generate JSON-LD graphs first.');
-                BIG_BANG_MODE = false;
-                btn.classList.remove('active');
-                btn.textContent = 'Big Bang';
-                btn.disabled = false;
+                showCompareEmpty('No graphs in graph_output/big_bang yet. Run graph generation first.');
+                resetToCompareUi();
                 return;
             }
             showCompareEmpty('Big Bang · building corpus graph…');
@@ -1606,13 +1646,139 @@
             restoreGraphChrome();
         } catch (err) {
             console.error('Big Bang merge failed', err);
-            BIG_BANG_MODE = false;
-            btn.classList.remove('active');
-            btn.textContent = 'Big Bang';
+            resetToCompareUi();
             showLoadError('big-bang', err);
         } finally {
             btn.disabled = false;
         }
+    }
+
+    async function activateUniverse() {
+        if (bangExitClickTimer) {
+            clearTimeout(bangExitClickTimer);
+            bangExitClickTimer = null;
+        }
+        const btn = document.getElementById('big-bang-btn');
+        BIG_BANG_MODE = false;
+        UNIVERSE_MODE = true;
+        ANALYSIS_MODE = false;
+        MODE = 'compare';
+        btn.classList.add('active');
+        btn.textContent = 'Exit Universe';
+        btn.disabled = true;
+        syncChipState();
+        const titleEl = document.getElementById('case-title');
+        titleEl.textContent = 'Universe · loading catalog…';
+        showCompareEmpty('Loading full universe…');
+
+        try {
+            if (!UNIVERSE_POOL.length) {
+                const payload = await loadCatalogPool('universe', LS_CATALOG_UNIVERSE_KEY);
+                UNIVERSE_POOL = Array.isArray(payload.cases) ? payload.cases : [];
+            }
+            if (!UNIVERSE_POOL.length) {
+                showCompareEmpty('No graphs in graph_output/universe yet.');
+                resetToCompareUi();
+                return;
+            }
+            showCompareEmpty('Universe · building full graph…');
+            await renderMergedWithProgress(UNIVERSE_POOL, 'universe', 'Universe');
+            restoreGraphChrome();
+        } catch (err) {
+            console.error('Universe merge failed', err);
+            resetToCompareUi();
+            showLoadError('universe', err);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    async function activateAnalysis() {
+        if (universeExitTimer) {
+            clearTimeout(universeExitTimer);
+            universeExitTimer = null;
+        }
+        universeExitClicks = 0;
+        const btn = document.getElementById('big-bang-btn');
+        BIG_BANG_MODE = false;
+        UNIVERSE_MODE = false;
+        ANALYSIS_MODE = true;
+        MODE = 'compare';
+        btn.classList.add('active');
+        btn.textContent = 'Exit Analysis';
+        btn.disabled = true;
+        syncChipState();
+        const titleEl = document.getElementById('case-title');
+        titleEl.textContent = 'Analysis · loading catalog…';
+        showCompareEmpty('Loading bridge-dense 1000…');
+
+        try {
+            if (!ANALYSIS_POOL.length) {
+                const payload = await loadCatalogPool('analysis', LS_CATALOG_ANALYSIS_KEY);
+                ANALYSIS_POOL = Array.isArray(payload.cases) ? payload.cases : [];
+            }
+            if (!ANALYSIS_POOL.length) {
+                showCompareEmpty(
+                    'No graphs in graph_output/analysis yet. Run big_bang.py --target 1000 then populate_analysis_graphs.py'
+                );
+                resetToCompareUi();
+                return;
+            }
+            showCompareEmpty('Analysis · building curated graph…');
+            await renderMergedWithProgress(ANALYSIS_POOL, 'analysis', 'Analysis');
+            restoreGraphChrome();
+        } catch (err) {
+            console.error('Analysis merge failed', err);
+            resetToCompareUi();
+            showLoadError('analysis', err);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function handleBangButtonClick() {
+        const btn = document.getElementById('big-bang-btn');
+
+        if (ANALYSIS_MODE) {
+            resetToCompareUi();
+            return;
+        }
+
+        if (UNIVERSE_MODE) {
+            universeExitClicks += 1;
+            if (universeExitTimer) clearTimeout(universeExitTimer);
+            if (universeExitClicks >= 3) {
+                universeExitClicks = 0;
+                activateAnalysis();
+                return;
+            }
+            universeExitTimer = setTimeout(() => {
+                universeExitTimer = null;
+                if (universeExitClicks === 1) resetToCompareUi();
+                universeExitClicks = 0;
+            }, BANG_EXIT_DBLCLICK_MS);
+            return;
+        }
+
+        if (BIG_BANG_MODE) {
+            if (bangExitClickTimer) {
+                clearTimeout(bangExitClickTimer);
+                bangExitClickTimer = null;
+                activateUniverse();
+                return;
+            }
+            bangExitClickTimer = setTimeout(() => {
+                bangExitClickTimer = null;
+                resetToCompareUi();
+            }, BANG_EXIT_DBLCLICK_MS);
+            return;
+        }
+
+        enterBigBang();
+    }
+
+    function activateBigBang() {
+        handleBangButtonClick();
     }
 
     function restoreGraphChrome() {
@@ -1627,8 +1793,6 @@
 
     // Allow renderGraph to accept either a JSON-LD doc or a pre-merged flat array.
     function renderGraphFromFlat(flatNodes) {
-        // Stash the pre-built model on a thunk so renderGraph() can reuse its
-        // existing pipeline without re-running mergeNamedGraphs.
         renderGraph({ __preMerged: flatNodes });
     }
 
@@ -1660,7 +1824,7 @@
 
     // Double-click Compare: select / clear entire stratified 200 pool.
     function toggleSelectAll() {
-        if (BIG_BANG_MODE) return;
+        if (BIG_BANG_MODE || UNIVERSE_MODE || ANALYSIS_MODE) return;
         if (MODE !== 'compare') {
             MODE = 'compare';
             try { sessionStorage.setItem(LS_MODE_KEY, MODE); } catch (_) { /* ignore */ }
@@ -1689,7 +1853,7 @@
         renderCaseSelector(COMPARE_POOL);
         document.getElementById('case-selector').hidden = false;
         syncChipState();
-        if (BIG_BANG_MODE) return;
+        if (BIG_BANG_MODE || UNIVERSE_MODE || ANALYSIS_MODE) return;
         if (MODE === 'compare') {
             if (SELECTED_CASES.size === 0 && CURRENT_CASE_ID) {
                 SELECTED_CASES.add(CURRENT_CASE_ID);
@@ -1715,7 +1879,9 @@
         buildLegend();
         wireCaseSelectorOnce();
         const bangBtn = document.getElementById('big-bang-btn');
-        if (bangBtn) bangBtn.addEventListener('click', () => activateBigBang());
+        if (bangBtn) {
+            bangBtn.addEventListener('click', () => activateBigBang());
+        }
 
         try {
             const savedMode = sessionStorage.getItem(LS_MODE_KEY);

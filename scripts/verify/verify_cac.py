@@ -12,7 +12,7 @@ Usage::
     python3 scripts/verify/verify_cac.py
     python3 scripts/verify/verify_cac.py --db /path/to/caselinker.db
     python3 scripts/verify/verify_cac.py --fail-csv /tmp/cac_failures.csv
-    python3 scripts/verify/verify_cac.py --json /tmp/cac_verify.json
+    python3 scripts/verify/verify_cac.py --pdf KYSP_ICAC_All.pdf --source "KY SP" --all-failures --default-fail-csv
 """
 
 from __future__ import annotations
@@ -290,7 +290,38 @@ def analyze_cases(cases: Sequence[Dict[str, Any]]) -> Tuple[List[CacVerdict], Di
     return verdicts, summary
 
 
-def _print_report(summary: Dict[str, Any], failures: Sequence[CacVerdict], show_failures: int) -> None:
+def _print_failures_clean(failures: Sequence[CacVerdict], *, limit: int | None) -> None:
+    """Print every failing case (or first ``limit``) in a scannable block format."""
+    if not failures:
+        return
+    shown = failures if limit is None else failures[:limit]
+    hidden = len(failures) - len(shown)
+    print()
+    print("=" * 72)
+    print(f"CAC FAILURES — {len(failures)} case(s) flagged for review / removal")
+    print("=" * 72)
+    for i, v in enumerate(shown, 1):
+        print()
+        print(f"--- [{i}/{len(failures)}] {v.case_id}  ({v.source}) ---")
+        if v.source_url:
+            print(f"URL:     {v.source_url}")
+        else:
+            print("URL:     (not found in batched text — check batching)")
+        preview = (v.preview or "").strip()
+        if len(preview) > 400:
+            preview = preview[:400] + "…"
+        print(f"Preview: {preview}")
+    if hidden > 0:
+        print(f"\n… {hidden} more failure(s) omitted; use --all-failures or --fail-csv")
+    print()
+    print("=" * 72)
+
+
+def _print_report(
+    summary: Dict[str, Any],
+    failures: Sequence[CacVerdict],
+    show_failures: int | None,
+) -> None:
     print("=" * 72)
     print("CAC CORPUS VERIFY — one broad signal required per case")
     print("=" * 72)
@@ -304,46 +335,165 @@ def _print_report(summary: Dict[str, Any], failures: Sequence[CacVerdict], show_
     print("\nTop matched signals (cases may match multiple):")
     for name, n in summary["top_signals"][:15]:
         print(f"  {name}: {n}")
-    if failures and show_failures:
-        print(f"\nFirst {show_failures} failing cases:")
-        for v in failures[:show_failures]:
-            print(f"  - {v.case_id} [{v.source}]")
-            if v.source_url:
-                print(f"    {v.source_url[:100]}")
-            print(f"    {v.preview[:180]}...")
+    if failures:
+        limit = None if show_failures is None else show_failures
+        _print_failures_clean(failures, limit=limit)
+    if summary["failed"]:
+        print(
+            "ACTION: Remove or re-scrape flagged cases before DB ingest. "
+            "Full list in --fail-csv if provided."
+        )
+
+
+_PDF_SOURCE_BY_PREFIX: List[Tuple[str, str]] = [
+    ("KYSP", "KY SP"),
+    ("SCAG", "SCAG ICAC"),
+    ("FRESNO", "FRESNO SO"),
+    ("ILLNOIS", "ILLINOIS AG"),
+    ("ILLINOIS", "ILLINOIS AG"),
+    ("NJOAG", "NJ AG"),
+    ("TBI", "TBI ICAC"),
+    ("NYSP", "NEWYORK SP"),
+    ("ANCHORAGE", "ANCHORAGE PD"),
+    ("LAPD", "LAPD"),
+    ("SJPD", "SJPD"),
+]
+
+
+def _source_from_pdf_name(name: str) -> str:
+    upper = name.upper()
+    for prefix, label in _PDF_SOURCE_BY_PREFIX:
+        if prefix in upper:
+            return label
+    stem = Path(name).stem.replace("_ICAC_All", "").replace("_All", "")
+    return stem.replace("_", " ").strip() or "Unknown"
+
+
+def _source_url_from_batch(batch: dict, case_text: str) -> str:
+    """Canonical URL from batching ``source_url``; grep ``case_text`` only as legacy fallback."""
+    url = str(batch.get("source_url") or "").strip()
+    if url:
+        return url.rstrip(".,;)")
+    m = re.search(r"Source:\s*(https?://\S+)", case_text or "", re.I)
+    return m.group(1).rstrip(".,;)") if m else ""
+
+
+def load_cases_from_pdf(
+    pdf_path: Path, *, source: str, org_name: str
+) -> List[Dict[str, Any]]:
+    """Batch a merged scrape PDF and return case dicts for CAC verification."""
+    try:
+        import pdfplumber
+    except ImportError:
+        sys.exit("pip install pdfplumber")
+
+    sys.path.insert(0, str(REPO_ROOT / "src" / "Processing Layer"))
+    from batching import case_batching  # noqa: WPS433
+
+    with pdfplumber.open(str(pdf_path)) as pdf:
+        text = "\n".join((p.extract_text() or "") for p in pdf.pages)
+
+    batches = case_batching(
+        text,
+        org_name=org_name,
+        source=source,
+        source_file=pdf_path.name,
+    )
+    out: List[Dict[str, Any]] = []
+    for b in batches:
+        ct = b.get("case_text") or ""
+        out.append(
+            {
+                "id": b.get("case_id") or "",
+                "source": source,
+                "source_url": _source_url_from_batch(b, ct),
+                "case_topics": [],
+                "tags": None,
+                "severity_indicators": None,
+                "notes": "",
+                "relationship_to_victim": "",
+                "raw_data": {"case_text": ct},
+                "case_text": ct,
+            }
+        )
+    return out
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Verify every DB case is a CAC-relevant case.")
     ap.add_argument("--db", type=Path, default=DEFAULT_DB, help="SQLite database path")
-    ap.add_argument("--fail-csv", type=Path, help="Write failing rows to CSV")
+    ap.add_argument(
+        "--pdf",
+        type=Path,
+        help="Verify batched cases from a merged scrape PDF (instead of --db)",
+    )
+    ap.add_argument(
+        "--source",
+        default="",
+        help="Source label for --pdf (e.g. 'KY SP'); inferred from filename if omitted",
+    )
+    ap.add_argument("--fail-csv", type=Path, help="Write ALL failing rows to CSV")
     ap.add_argument("--json", type=Path, help="Write full summary JSON")
-    ap.add_argument("--show-failures", type=int, default=25, help="Max failures printed to stdout")
+    ap.add_argument(
+        "--show-failures",
+        type=int,
+        default=25,
+        metavar="N",
+        help="Max failures printed to stdout (default 25). Use 0 with --all-failures.",
+    )
+    ap.add_argument(
+        "--all-failures",
+        action="store_true",
+        help="Print every failing case to stdout (expansion PDF review)",
+    )
+    ap.add_argument(
+        "--default-fail-csv",
+        action="store_true",
+        help="With --pdf, write scripts/scraper/state/<pdf_stem>_cac_failures.csv",
+    )
     ap.add_argument("--quiet", action="store_true", help="Only print summary line unless failures")
     args = ap.parse_args()
 
-    db_path = args.db.expanduser().resolve()
-    if not db_path.is_file():
-        print(f"Database not found: {db_path}", file=sys.stderr)
-        return 2
+    if args.pdf:
+        pdf_path = args.pdf.expanduser().resolve()
+        if not pdf_path.is_file():
+            print(f"PDF not found: {pdf_path}", file=sys.stderr)
+            return 2
+        source = args.source.strip() or _source_from_pdf_name(pdf_path.name)
+        org = source.lower().replace(" ", "_").replace("-", "_")
+        cases = load_cases_from_pdf(pdf_path, source=source, org_name=org)
+    else:
+        db_path = args.db.expanduser().resolve()
+        if not db_path.is_file():
+            print(f"Database not found: {db_path}", file=sys.stderr)
+            return 2
 
-    conn = sqlite3.connect(str(db_path))
-    try:
-        cases = load_cases(conn)
-    finally:
-        conn.close()
+        conn = sqlite3.connect(str(db_path))
+        try:
+            cases = load_cases(conn)
+        finally:
+            conn.close()
 
     verdicts, summary = analyze_cases(cases)
     failures = [v for v in verdicts if not v.passed]
 
+    show_n: int | None = args.show_failures
+    if args.all_failures:
+        show_n = None
+
+    fail_csv = args.fail_csv
+    if args.pdf and args.default_fail_csv and not fail_csv:
+        stem = args.pdf.expanduser().resolve().stem.lower()
+        fail_csv = REPO_ROOT / "scripts" / "scraper" / "state" / f"{stem}_cac_failures.csv"
+
     if args.quiet and not failures:
         print(f"CAC verify OK: {summary['passed']}/{summary['total']} cases")
     else:
-        _print_report(summary, failures, args.show_failures)
+        _print_report(summary, failures, show_n)
 
-    if args.fail_csv and failures:
-        args.fail_csv.parent.mkdir(parents=True, exist_ok=True)
-        with args.fail_csv.open("w", newline="", encoding="utf-8") as f:
+    if fail_csv and failures:
+        fail_csv.parent.mkdir(parents=True, exist_ok=True)
+        with fail_csv.open("w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
             w.writerow(["id", "source", "source_url", "preview"])
             for v in failures:
@@ -366,8 +516,10 @@ def main() -> int:
         args.json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         print(f"\nWrote JSON -> {args.json}")
 
-    if args.fail_csv and failures:
-        print(f"Wrote failures CSV -> {args.fail_csv}")
+    if fail_csv and failures:
+        print(f"Wrote failures CSV ({len(failures)} rows) -> {fail_csv}")
+    elif fail_csv and not failures:
+        print(f"No failures — CSV not written ({fail_csv})")
 
     return 1 if failures else 0
 

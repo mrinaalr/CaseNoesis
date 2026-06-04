@@ -6,6 +6,7 @@ Provides API endpoints for visualization frontend
 from fastapi import FastAPI, Request, Query, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from typing import List, Dict, Any, Optional, Tuple
@@ -107,6 +108,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Compress large ontology merged payloads (e.g. Big Bang merged graph).
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Structured logging
 logging.basicConfig(
@@ -3531,12 +3534,8 @@ _viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets
 if _viz_assets.is_dir():
     app.mount("/viz-assets", StaticFiles(directory=str(_viz_assets)), name="viz_assets")
 
-# Serve ontology/graph_output/ files (JSON-LD, Turtle) so the graph visualizer
-# can fetch('/ontology/graph_output/{case_id}.jsonld') for any case that has
-# been expressed as a CAC Ontology knowledge graph.
-# Always mount (mkdir if needed): if the server starts before regen creates files,
-# skipping the mount when the dir is missing leaves /ontology/graph_output/* 404
-# until restart even after JSON-LD files exist.
+# Serve ontology/graph_output/ (staging + universe/ + big_bang/ subdirs).
+# Patterns viz loads only graph_output/universe/ and graph_output/big_bang/.
 _graph_output = Path(__file__).resolve().parent.parent / "ontology" / "graph_output"
 _graph_output.mkdir(parents=True, exist_ok=True)
 app.mount(
@@ -3563,6 +3562,24 @@ if _q1_data.is_dir():
         name="q1_data",
     )
 
+# Q02 lifecycle table: q2_evidence.json, q2_lifecycle.json (manual pathway synthesis).
+_q2_data = Path(__file__).resolve().parent.parent / "ontology" / "q2"
+if _q2_data.is_dir():
+    app.mount(
+        "/ontology/q2",
+        StaticFiles(directory=str(_q2_data)),
+        name="q2_data",
+    )
+
+# Q03 intervention table: q3_evidence.json, q3_interventions.json (manual leverage synthesis).
+_q3_data = Path(__file__).resolve().parent.parent / "ontology" / "q3"
+if _q3_data.is_dir():
+    app.mount(
+        "/ontology/q3",
+        StaticFiles(directory=str(_q3_data)),
+        name="q3_data",
+    )
+
 _ontology_dir = Path(__file__).resolve().parent.parent / "ontology"
 _q_results_path = _ontology_dir / "q_results.json"
 if _q_results_path.is_file():
@@ -3579,40 +3596,69 @@ def _compare_pool_id_order() -> List[str]:
     return [ln.strip() for ln in p.read_text().splitlines() if ln.strip()]
 
 
-def _ontology_graph_case_entries() -> Dict[str, Dict[str, Any]]:
-    """case_id -> {case_id, path, ttl_path} for every .jsonld in graph_output."""
+def _graph_pool_subdir(pool: str) -> str:
+    """Filesystem subdir under graph_output/ for a Patterns pool."""
+    p = (pool or "compare").strip().lower()
+    if p == "compare":
+        return "universe"
+    if p in ("all", "big_bang"):
+        return "big_bang"
+    if p == "universe":
+        return "universe"
+    if p == "analysis":
+        return "analysis"
+    raise ValueError(f"unknown graph pool: {pool}")
+
+
+def _ontology_graph_case_entries(
+    pool: str = "all",
+) -> Dict[str, Dict[str, Any]]:
+    """case_id -> {case_id, path, ttl_path} for graphs in graph_output/{subdir}/."""
     by_id: Dict[str, Dict[str, Any]] = {}
-    if not _graph_output.is_dir():
+    subdir = _graph_pool_subdir(pool)
+    scan_dir = _graph_output / subdir
+    url_prefix = f"/ontology/graph_output/{subdir}"
+    if not scan_dir.is_dir():
         return by_id
-    for entry in _graph_output.glob("*.jsonld"):
+    for entry in scan_dir.glob("*.jsonld"):
         case_id = entry.stem
         ttl = entry.with_suffix(".ttl")
         by_id[case_id] = {
             "case_id": case_id,
-            "path": f"/ontology/graph_output/{entry.name}",
-            "ttl_path": f"/ontology/graph_output/{ttl.name}" if ttl.exists() else None,
+            "path": f"{url_prefix}/{entry.name}",
+            "ttl_path": f"{url_prefix}/{ttl.name}" if ttl.exists() else None,
         }
     return by_id
+
+
+def _universe_graph_count() -> int:
+    d = _graph_output / "universe"
+    return len(list(d.glob("*.jsonld"))) if d.is_dir() else 0
 
 
 @app.get("/api/ontology/cases")
 def api_ontology_cases(
     pool: str = Query(
         "compare",
-        description="compare = stratified 200 demo cases only; all = full corpus graphs (Big Bang)",
+        description="compare | all (Big Bang half-sample) | universe | analysis (big_bang.py 1000)",
     ),
 ):
     """
     Patterns graph case catalog (metadata only — no JSON-LD bodies).
 
-    - pool=compare (default): up to 200 curated cases that have graphs (Railway-safe boot).
-    - pool=all: every case with a graph (fetch only when user presses Big Bang).
+    - pool=compare (default): up to 200 curated cases with graphs in graph_output/universe/
+    - pool=all: Big Bang half-sample at graph_output/big_bang/
+    - pool=universe: every graph in graph_output/universe/
+    - pool=analysis: big_bang_ids.txt cases in graph_output/analysis/
     """
     from fastapi.responses import JSONResponse
 
     pool_norm = (pool or "compare").strip().lower()
-    if pool_norm not in ("compare", "all"):
-        raise HTTPException(status_code=400, detail="pool must be 'compare' or 'all'")
+    if pool_norm not in ("compare", "all", "universe", "analysis"):
+        raise HTTPException(
+            status_code=400,
+            detail="pool must be 'compare', 'all', 'universe', or 'analysis'",
+        )
 
     if pool_norm == "compare" and pool_norm in _ontology_catalog_mem:
         payload = _ontology_catalog_mem[pool_norm]
@@ -3623,10 +3669,12 @@ def api_ontology_cases(
 
     if str(_ontology_dir) not in sys.path:
         sys.path.insert(0, str(_ontology_dir))
-    from merge_graph_cache import graph_manifest  # noqa: E402
+    from merge_graph_cache import graph_dir_for_pool, graph_manifest  # noqa: E402
 
-    manifest = graph_manifest()
+    universe_total = _universe_graph_count()
+
     if pool_norm == "compare":
+        manifest = graph_manifest(graph_dir_for_pool("compare"))
         redis_key = get_cache_key("ontology_catalog", pool="compare", manifest=manifest)
         redis_hit = get_cached(redis_key)
         if isinstance(redis_hit, dict) and redis_hit.get("graph_manifest") == manifest:
@@ -3635,43 +3683,50 @@ def api_ontology_cases(
                 content=redis_hit,
                 headers={"Cache-Control": "public, max-age=3600"},
             )
-
-    graphs = _ontology_graph_case_entries()
-    corpus_total = len(graphs)
-
-    if pool_norm == "all":
-        cases = sorted(graphs.values(), key=lambda r: r["case_id"])
+        graphs = _ontology_graph_case_entries("compare")
+        compare_ids = _compare_pool_id_order()
+        cases = [graphs[cid] for cid in compare_ids if cid in graphs]
         payload = {
-            "pool": "all",
+            "pool": "compare",
             "cases": cases,
-            "corpus_total": corpus_total,
+            "corpus_total": universe_total,
+            "compare_pool_size": len(cases),
             "graph_manifest": manifest,
         }
+        _ontology_catalog_mem["compare"] = payload
+        set_cached(
+            get_cache_key("ontology_catalog", pool="compare", manifest=manifest),
+            payload,
+            ttl=86400 * 7,
+        )
+        return JSONResponse(
+            content=payload,
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+
+    if pool_norm in ("all", "universe", "analysis"):
+        scan_pool = (
+            "all" if pool_norm == "all"
+            else "analysis" if pool_norm == "analysis"
+            else "universe"
+        )
+        manifest = graph_manifest(graph_dir_for_pool(scan_pool))
+        graphs = _ontology_graph_case_entries(scan_pool)
+        cases = sorted(graphs.values(), key=lambda r: r["case_id"])
+        payload = {
+            "pool": pool_norm,
+            "cases": cases,
+            "corpus_total": universe_total if pool_norm in ("all", "analysis") else len(cases),
+            "graph_manifest": manifest,
+        }
+        if pool_norm == "analysis":
+            payload["analysis_pool_size"] = len(cases)
         return JSONResponse(
             content=payload,
             headers={"Cache-Control": "public, max-age=300"},
         )
 
-    compare_ids = _compare_pool_id_order()
-    cases = [graphs[cid] for cid in compare_ids if cid in graphs]
-
-    payload = {
-        "pool": "compare",
-        "cases": cases,
-        "corpus_total": corpus_total,
-        "compare_pool_size": len(cases),
-        "graph_manifest": manifest,
-    }
-    _ontology_catalog_mem["compare"] = payload
-    set_cached(
-        get_cache_key("ontology_catalog", pool="compare", manifest=manifest),
-        payload,
-        ttl=86400 * 7,
-    )
-    return JSONResponse(
-        content=payload,
-        headers={"Cache-Control": "public, max-age=3600"},
-    )
+    raise HTTPException(status_code=400, detail=f"unknown pool: {pool_norm}")
 
 
 _ontology_catalog_mem: Dict[str, Any] = {}
@@ -3680,16 +3735,19 @@ _ontology_merged_mem: Dict[str, Dict[str, Any]] = {}
 
 @app.get("/api/ontology/merged")
 def api_ontology_merged(
-    pool: str = Query("compare", description="compare = 200 demo merge; all = full corpus merge"),
+    pool: str = Query("compare", description="compare | all | universe | analysis"),
 ):
     """
     Pre-merged flat RDF nodes for Patterns (Redis + disk + in-process cache).
 
     After graph_output changes, manifest rotates and cache rebuilds on first request.
-  """
+    """
     pool_norm = (pool or "compare").strip().lower()
-    if pool_norm not in ("compare", "all"):
-        raise HTTPException(status_code=400, detail="pool must be 'compare' or 'all'")
+    if pool_norm not in ("compare", "all", "universe", "analysis"):
+        raise HTTPException(
+            status_code=400,
+            detail="pool must be 'compare', 'all', 'universe', or 'analysis'",
+        )
 
     mem_key = pool_norm
     if mem_key in _ontology_merged_mem:
@@ -3725,7 +3783,7 @@ def api_ontology_merged(
 
 @app.post("/api/ontology/cache/warm")
 def api_ontology_cache_warm(
-    pool: str = Query("all", description="compare, all, or both (omit pool for both)"),
+    pool: str = Query("all", description="compare, all, universe, analysis, or both (all four)"),
 ):
     """Rebuild merged graph disk/redis caches (run after batch graph generation)."""
     ontology_dir = Path(__file__).resolve().parent.parent / "ontology"
@@ -3733,11 +3791,17 @@ def api_ontology_cache_warm(
         sys.path.insert(0, str(ontology_dir))
     from merge_graph_cache import get_or_build_merged, warm_all_caches  # noqa: E402
 
+    _ontology_catalog_mem.clear()
     _ontology_merged_mem.clear()
-    pools = ["compare", "all"] if pool.strip().lower() == "both" else [pool.strip().lower()]
+    pool_arg = pool.strip().lower()
+    pools = (
+        ["compare", "all", "universe", "analysis"]
+        if pool_arg == "both"
+        else [pool_arg]
+    )
     results = []
     for p in pools:
-        if p not in ("compare", "all"):
+        if p not in ("compare", "all", "universe", "analysis"):
             continue
         payload = get_or_build_merged(
             p,

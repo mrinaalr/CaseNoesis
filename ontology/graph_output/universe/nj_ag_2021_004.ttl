@@ -1,0 +1,49 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-06-04T04:38:43.254359" ;
+    dcterms:identifier "nj_ag_2021_004" ;
+    dcterms:modified "2026-06-04T04:38:43.254359" ;
+    dcterms:source <https://www.njoag.gov/ag-grewal-44-attorneys-general-are-calling-on-facebook-to-abandon-plans-to-target-children-13-and-younger-in-new-version-of-instagram/>,
+        "NJ AG" ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/event/multi-jurisdiction> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" .
+
+<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Facebook" .
+
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Instagram" .
+
+<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/event/multi-jurisdiction> a cac-core:Event,
+        cacontology-multi:MultiJurisdictionalInvestigation ;
+    cacontology:severityLevel 3 .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1> a uco-identity:Person .
+

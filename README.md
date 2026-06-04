@@ -6,7 +6,7 @@
 
 **Try the latest version online:** [https://caselinker.up.railway.app/](https://caselinker.up.railway.app/)
 
-The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **5,401 cases** across **56** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
+The live release includes all features and a processed case corpus from publicly available ICAC / NCMEC / DOJ / State Attorneys General press materials. The corpus holds **6,323 cases** across **56** ingestion sources. Live counts and per-source coverage are on the in-app **Sources** page. These reports summarize investigations, arrests, and prosecutions, redacted for public release. No PII was processed; all data was already in the public domain. No installation required — just open the link in your browser.
 
 ## Technical Reports
 
@@ -81,6 +81,7 @@ Then open your browser to:
 - **Look Under the Hood**: http://localhost:8000/under-the-hood
 - **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
+- **Patterns (Phase 2)**: http://localhost:8000/patterns
 - **Tech Landscape**: http://localhost:8000/tech-landscape
 - **LLM (Query assistant)**: http://localhost:8000/llm
 - **Case Studies**: http://localhost:8000/case-studies
@@ -246,7 +247,13 @@ Search provides a **facet decision tree** over the stored case corpus: the serve
 
 Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
 
-**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns), or http://localhost:8000/patterns) is the research documentation surface for platform harm analysis, exploitation lifecycle structure, and intervention mapping via the CAC Ontology pipeline. Currently in active development.
+**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns), or http://localhost:8000/patterns) is the research surface for platform harm (Q1), exploitation lifecycle (Q2), kill-chain interventions (Q3), and CAC ontology mapping. The hub links question pages (`/patterns/questions/q01`–`q03`) and a merged-graph explorer at `/patterns/graph` (compare pool and Big Bang subset). Offline evidence pipelines live under `ontology/q1/` (platform→case candidates, affordance extraction → `q1_evidence.json` / `q1_affordance_table.md`), `ontology/q2/` (eight lifecycle subsets; pathway narrative in `q2_lifecycle.json`; empirical table via `q2_evidence.py` when candidates are populated), and `ontology/q3/` (seven intervention points; leverage synthesis in `q3_interventions.json`; empirical table via `q3_evidence.py` when candidates are populated). Per-case JSON-LD graphs, merge cache, and Big Bang generation are in `ontology/` (`graph_generate.py`, `big_bang.py`, `merge_graph_cache.py`).
+
+```bash
+python3 ontology/q1/build_candidates.py && python3 ontology/q1/q1_evidence.py
+python3 ontology/q2/build_candidates.py && python3 ontology/q2/q2_evidence.py
+python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
+```
 
 **Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
 
@@ -328,12 +335,22 @@ CaseLinker/
 │   ├── expand.html                   # /expand
 │   ├── triage.html                   # /triage
 │   ├── patterns.html                 # /patterns
+│   ├── patterns-graph.html           # /patterns/graph
+│   ├── questions/                    # /patterns/questions/q01–q03
 │   ├── tech-landscape.html           # /tech-landscape
 │   ├── LLM.html                      # /llm
 │   ├── sources.html                  # /sources
 │   ├── case-studies.html             # /case-studies
 │   ├── audit.html                    # /audit
 │   └── under-the-hood.html           # /under-the-hood
+├── ontology/
+│   ├── q1/                           # Q1 affordance candidates + evidence
+│   ├── q2/                           # Q2 lifecycle subsets + evidence
+│   ├── graph_output/                 # staging (new graphs; not in Patterns viz)
+│   │   ├── universe/                 # full corpus — compare + Universe mode
+│   │   └── big_bang/                 # half-sample — Big Bang button
+│   ├── big_bang.py                   # ~1k bridge-dense subset for /patterns/graph
+│   └── merge_graph_cache.py          # merged compare / all pools (API)
 ├── models/                           # triage_bundle.joblib (optional; see /triage)
 ├── data/                             # case_studies.json for /case-studies
 ├── setup.sh
@@ -383,6 +400,10 @@ Each case includes structured features extracted from case narratives:
 - `POST /api/facet-cohort-members` - Case IDs for a facet path (same prune semantics as tree; small cohorts gated)
 - `GET /triage` - Triage page (rules, model evaluation, corpus model tiers, live paste)
 - `GET /patterns` - Phase 2: Patterns research documentation page
+- `GET /patterns/graph` - Merged CAC ontology graph explorer (compare / Big Bang pools)
+- `GET /patterns/questions/{question_id}` - Q01–Q03 narrative question pages
+- `GET /api/ontology/merged` - Merged graph JSON (`pool=compare|all`)
+- `GET /api/ontology/cases` - Per-case graph manifest / metadata
 - `GET /api/triage-eval` - Stratified train/test metrics on live cases (same pipeline as `scripts/verify/test_triage.py`)
 - `GET /api/triage-model-corpus` - Saved bundle predictions over live DB; optional `facet_constraints` JSON query param (rate limited)
 - `POST /api/triage-live` - Classify pasted batch text in memory only; requires bundle; no persistence

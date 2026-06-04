@@ -1,0 +1,121 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
+@prefix cacontology-platforms: <https://cacontology.projectvic.org/platforms#> .
+@prefix cacontology-sextortion: <https://cacontology.projectvic.org/sextortion#> .
+@prefix cacontology-us-ncmec: <https://cacontology.projectvic.org/us/ncmec#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ns1: <https://caselinker.up.railway.app/resource/vocab/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-06-04T04:40:00.055177" ;
+    dcterms:identifier "tbi_icac_2025_007" ;
+    dcterms:modified "2026-06-04T04:40:00.055177" ;
+    dcterms:source <https://tbinewsroom.com/2025/05/23/roan-mountain-man-arrested-in-child-exploitation-investigation/>,
+        "TBI ICAC" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/phase/convicted> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/phase/convicted> ;
+    cacontology:hasStep <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/cybertip>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/legal-proceeding>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/legal-step/convicted>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> ;
+    cacontology:investigationStatus "unknown" ;
+    cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-office>,
+        <https://caselinker.up.railway.app/resource/agency/ncmec>,
+        <https://caselinker.up.railway.app/resource/agency/tennessee-department-of-corrections>,
+        <https://caselinker.up.railway.app/resource/agency/weakley-county-sheriffs-office> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/online-only>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/sextortion>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-office> a cacontology-multi:LocalAgency .
+
+<https://caselinker.up.railway.app/resource/agency/tennessee-department-of-corrections> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Tennessee Department of Corrections" .
+
+<https://caselinker.up.railway.app/resource/agency/weakley-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Weakley County Sheriff's Office" .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/1> a cacontology-legal-outcomes:CriminalCharge,
+        cacontology-legal-outcomes:SextortionCharge ;
+    rdfs:label "sextortion" .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/2> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "sexual exploitation" ;
+    ns1:chargeCluster "sexual_exploitation_unspecified" .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/3> a cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:label "child exploitation" ;
+    rdfs:seeAlso <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> ;
+    ns1:chargeCluster "child_exploitation" ;
+    ns1:chargeOffenseEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
+    cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/legal-proceeding> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding ;
+    rdfs:comment "Pretrial detention facility (not a sentence): Johnson County Jail" ;
+    cacontology-legal-outcomes:hasCharge <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/1>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/2>,
+        <https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/charge/3> ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/legal-step/convicted> a cac-core:Event,
+        cac-core:LegalEvent,
+        cacontology-legal-outcomes:LegalProceeding,
+        cacontology-legal-outcomes:SentencingHearing ;
+    cacontology-legal-outcomes:hasProceedingBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/phase/convicted> a cac-core:Phase,
+        cacontology-legal-outcomes:SentencingPhase ;
+    cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/online-only> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/event/sextortion> a cac-core:Event,
+        cacontology-sextortion:SextortionIncident ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> .
+
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" .
+
+<https://caselinker.up.railway.app/resource/case/tbi_icac_2025_007/offense-event/charge-3> a cacontology:ChildSexualAbuseEvent,
+        cac-core:Event,
+        uco-action:Crime ;
+    rdfs:label "Inferred offense from charge: child exploitation" ;
+    cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/snapchat> .
+

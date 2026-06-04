@@ -864,33 +864,64 @@ def extract_victim_count(case: Dict[str, Any]) -> Optional[int]:
 # ── Comma-separated name/age (ICAC press-release bulletins) ─────────────────
 _NAME_PART = r"[\w'\u2019\u00b4\-]"
 _CAP_NAME_BEFORE_COMMA = re.compile(
-    rf"((?:[A-Z]{_NAME_PART}*(?:\s+[A-Z]{_NAME_PART}*){{0,4}})),\s+(\d{{1,2}})\s*,",
+    rf"((?:[A-Z]{_NAME_PART}*(?:\s+[A-Z]{_NAME_PART}*){{0,4}})),\s*(\d{{1,2}})\s*,",
     re.UNICODE,
 )
+
+# ReportLab NYSP (and similar) often pack "Lastname,37, of" without spaces after commas.
+_COMMA_TIGHT_AGE_RE = re.compile(
+    r",(\d{1,3}),(?=\s*(?:of\b|headed\b|was\b|were\b|pleaded\b|is\b|are\b|has\b|had\b))",
+    re.IGNORECASE,
+)
+_COMMA_AGE_WORD_TIGHT_RE = re.compile(
+    r",\s*age\s*(\d{1,2})\s*,\s*(?=of\b)",
+    re.IGNORECASE,
+)
+_COMMA_DIGIT_TIGHT_BEFORE_OF_RE = re.compile(
+    r"(\d{1,3}),(\s*)(?=of\b)",
+    re.IGNORECASE,
+)
+
+
+def _normalize_comma_age_datelines(text: str) -> str:
+    """
+    Pre-normalize PDF-compressed datelines before comma-age regexes run.
+
+    Wrobel,37, of Tr -> Wrobel, 37, of Tr
+    Westcott,age 23,of -> Westcott, age 23, of
+    """
+    if not text:
+        return text
+    text = _COMMA_AGE_WORD_TIGHT_RE.sub(r", age \1, ", text)
+    text = _COMMA_TIGHT_AGE_RE.sub(r", \1,", text)
+    text = _COMMA_DIGIT_TIGHT_BEFORE_OF_RE.sub(r"\1, \2", text)
+    return text
+# NYSP / troopers PDFs often compress datelines: "Name,37, of", "Name, 28 of", ", age 23, of".
 _PERP_COMMA_OF_PATTERNS: Tuple[re.Pattern, ...] = (
-    re.compile(r",\s+(\d{1,3}),\s+of\s+", re.IGNORECASE),
-    re.compile(r",\s+(\d{1,3}),?\s+headed\s+", re.IGNORECASE),
+    re.compile(r",\s*(\d{1,3})\s*,?\s+of\s+", re.IGNORECASE),
+    re.compile(r",\s*age\s+(\d{1,2})\s*,?\s+of\s+", re.IGNORECASE),
+    re.compile(r",\s*(\d{1,3}),?\s+headed\s+", re.IGNORECASE),
 )
 _PERP_COMMA_VERB_RE = (
     r"arrested|indicted|charged|convicted|sentenced|pleaded|pled|found\s+guilty"
 )
 _PERP_COMMA_VERB_PATTERNS: Tuple[re.Pattern, ...] = (
     re.compile(
-        rf",\s+(\d{{1,3}}),?\s+(?:was|were)\s+(?:{_PERP_COMMA_VERB_RE})\b",
+        rf",\s*(\d{{1,3}}),?\s+(?:was|were)\s+(?:{_PERP_COMMA_VERB_RE})\b",
         re.IGNORECASE,
     ),
-    re.compile(r",\s+(\d{1,3}),?\s+pleaded\s+guilty\b", re.IGNORECASE),
-    re.compile(r",\s+(\d{1,3}),?\s+(?:was|were)\s+found\s+guilty\b", re.IGNORECASE),
+    re.compile(r",\s*(\d{1,3}),?\s+pleaded\s+guilty\b", re.IGNORECASE),
+    re.compile(r",\s*(\d{1,3}),?\s+(?:was|were)\s+found\s+guilty\b", re.IGNORECASE),
 )
 # Backward-compatible alias for audits referencing the original trio
 _PERP_COMMA_AGE_PATTERNS: Tuple[re.Pattern, ...] = (
     *_PERP_COMMA_OF_PATTERNS,
-    re.compile(r",\s+(\d{1,3}),?\s+was\s+arrested\b", re.IGNORECASE),
+    re.compile(r",\s*(\d{1,3}),?\s+was\s+arrested\b", re.IGNORECASE),
 )
 
 # Weak headline verbs: Name, 25, is charged — gated (see _collect_weak_comma_perp_ages).
 _PERP_COMMA_WEAK_VERB_RE = re.compile(
-    r",\s+(\d{1,2}),\s+(?:is|are|has|had)\b", re.IGNORECASE
+    r",\s*(\d{1,2}),?\s+(?:is|are|has|had)\b", re.IGNORECASE
 )
 
 _WEAK_COMMA_PERP_PERSON_TAIL_RE = re.compile(
@@ -1332,6 +1363,7 @@ def _collect_comma_ages(
 
 def _collect_perp_comma_ages(text: str) -> Tuple[List[int], Set[Tuple[int, int]]]:
     """Perp comma ages; returns ages and digit spans claimed for victim de-dupe."""
+    text = _normalize_comma_age_datelines(text)
     claimed: Set[Tuple[int, int]] = set()
     ages: List[int] = []
     ages.extend(
@@ -1399,7 +1431,7 @@ def extract_case_demographics(case: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     Role-aware victim_gender is set in merge_processing after the gate.
     Patterns: "7 years old", "ages 4 thru 10", "13 year old female", "4 year old boy"
     """
-    case_text = case.get('case_text', '')
+    case_text = _normalize_comma_age_datelines(case.get('case_text', '') or '')
     if not case_text:
         return None
     
@@ -1461,7 +1493,7 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
     - ", 60, of Ardmore" / ", 35, headed" / ", 39, was arrested" (ICAC bulletin lists)
     - "registered sex offender"
     """
-    case_text = case.get('case_text', '')
+    case_text = _normalize_comma_age_datelines(case.get('case_text', '') or '')
     if not case_text:
         return None
     
@@ -1669,6 +1701,10 @@ _PLATFORM_SPECS: List[Tuple[str, str]] = [
     ("DALL-E", r"\bDALL[\s-]?E\b"),
     # Generics (after named brands)
     ("online", r"\bonline\b"),
+    (
+        "internet",
+        r"\b(?:over|via|through|on)\s+(?:the\s+)?internet\b",
+    ),
     # Avoid tagging "Internet Relay Chat" / "...Relay Chat" as generic chat (IRC row handles IRC).
     ("chat", r"(?<![Rr]elay\s)\bchat(ting|ted|s)?\b"),
     ("social media", r"\bsocial\s+media\b"),
@@ -1680,7 +1716,7 @@ def extract_platforms(case: Dict[str, Any]) -> List[str]:
     Extract platforms and online methods used (contact / distribution surfaces).
 
     Named brands and early-era chat surfaces map to stable labels for ``platforms_used``.
-    Generic ``online`` / ``chat`` / ``social media`` are last so specific hits win visually
+    Generic ``online`` / ``internet`` / ``chat`` / ``social media`` are last so specific hits win visually
     in the same list.
     """
     case_text = case.get("case_text", "")

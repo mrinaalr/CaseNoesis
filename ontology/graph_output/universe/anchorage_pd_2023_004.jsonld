@@ -1,0 +1,130 @@
+[
+  {
+    "@graph": [
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Anchorage Police Department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004",
+        "@type": [
+          "https://cacontology.projectvic.org#CACInvestigation",
+          "https://cacontology.projectvic.org/core#EnduringEntity"
+        ],
+        "http://purl.org/dc/terms/created": [
+          {
+            "@value": "2026-06-04T04:37:14.012176"
+          }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+          {
+            "@value": "anchorage_pd_2023_004"
+          }
+        ],
+        "http://purl.org/dc/terms/modified": [
+          {
+            "@value": "2026-06-04T04:37:14.012176"
+          }
+        ],
+        "http://purl.org/dc/terms/source": [
+          {
+            "@value": "ANCHORAGE PD"
+          },
+          {
+            "@id": "https://www.anchoragepolice.com/news/shooting-investigation-at-abbott-fred-meyer-no-suspects-are-outstanding"
+          }
+        ],
+        "https://cacontology.projectvic.org#currentPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#hasPhase": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/phase/charged"
+          }
+        ],
+        "https://cacontology.projectvic.org#investigationStatus": [
+          {
+            "@value": "unknown"
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#involvesAgency": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/anchorage-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/anchorage_pd_2023_004/person/offender/1"
+          }
+        ]
+      }
+    ],
+    "@id": "https://caselinker.up.railway.app/resource/graphs/deterministic"
+  }
+]

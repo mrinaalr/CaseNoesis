@@ -16,7 +16,7 @@ Outputs:
   ontology/excluded_cases.json  (noisy-case registry via NoiseFilter)
 
 Graphs (default on run):
-  ontology/graph_output/{case_id}.jsonld + .ttl
+  ontology/graph_output/{case_id}.jsonld + .ttl  (staging — not loaded by Patterns viz)
 
 Usage:
   python ontology/select_200.py
