@@ -36,10 +36,12 @@ DEFAULT_DB = REPO_ROOT / "caselinker.db"
 _CAC_TOPIC_TAGS = frozenset(
     {
         "csam",
+        "ai_csam",
         "hands_on",
         "production",
         "possession",
         "online_only",
+        "sextortion",
     }
 )
 
@@ -70,7 +72,18 @@ _TEXT_SIGNALS: List[Tuple[str, re.Pattern[str]]] = [
     ("child_sex_crime", re.compile(r"child\s+sex\s+(crime|offen)|sex\s+offen\w*\s+.{0,40}\b(child|minor|juvenile)", re.I)),
     ("child_predator", re.compile(r"child\s+predator|predator\s+.{0,30}\b(child|minor)", re.I)),
     ("sexual_abuse_minor", re.compile(r"sexual\s+abuse\s+of\s+(a\s+)?(child|minor)|abuse\s+of\s+(a\s+)?minor", re.I)),
-    ("rape_molest_child", re.compile(r"\brape\b.{0,50}\b(child|minor|juvenile)|\b(child|minor|juvenile).{0,50}\brape\b|child\s+molest|molest\w+.{0,40}\b(child|minor)", re.I)),
+    ("rape_molest_child", re.compile(
+        r"\brape\b|\brapist\b|\braped\b|"
+        r"\b(child|minor|juvenile).{0,50}\b(?:rape|rapist|raped)\b|"
+        r"\b(?:rape|rapist|raped)\b.{0,50}\b(child|minor|juvenile|\d{1,2}[\s-]*year[\s-]*old)|"
+        r"child\s+molest|molest\w+.{0,40}\b(child|minor)",
+        re.I,
+    )),
+    ("sodomy_minor", re.compile(
+        r"\bsodomy\b.{0,40}\b(minor|child|juvenile)|\b(minor|child|juvenile).{0,40}\bsodomy\b|"
+        r"sexual\s+abuse\s+and\s+sodomy",
+        re.I,
+    )),
     ("enticement_solicitation", re.compile(r"entic\w+.{0,60}\b(child|minor|juvenile|teen)|solicit\w+.{0,60}\b(child|minor|juvenile|teen)", re.I)),
     ("grooming", re.compile(r"groom\w+.{0,50}\b(child|minor|juvenile)|\b(child|minor).{0,50}groom", re.I)),
     ("possession_distribution_csam", re.compile(
@@ -98,7 +111,33 @@ _TEXT_SIGNALS: List[Tuple[str, re.Pattern[str]]] = [
         r"\b(child|children|minor|juvenile|student|teen)\b.{0,120}sex\s+offen",
         re.I,
     )),
-    ("deepfake_minor", re.compile(r"deepfake\w*.{0,40}\b(minor|juvenile|child|student)|\b(minor|juvenile|child|student).{0,40}deepfake", re.I)),
+    ("deepfake_minor", re.compile(
+        r"deepfake\w*.{0,80}\b(minor|juvenile|child|children|student)|"
+        r"\b(minor|juvenile|child|children|student).{0,80}deepfake|"
+        r"unlawful\s+deepfake|charges?\s+against\s+children",
+        re.I,
+    )),
+    ("missing_abducted_child", re.compile(
+        r"\bamber\s+alert\b|child\s+abduction|"
+        r"amber\s+alert.{0,100}(missing|abduct|locat|child|children)|"
+        r"(missing|abducted)\s+(child|children|teen|minor)|"
+        r"\babducted\b.{0,80}\b(juvenile|minor|child|teen)|"
+        r"\bminor\s+children\b.{0,60}(taken|missing|abduct|recover|locat)|"
+        r"locates?\s+missing\s+teen|abducted\s+teen",
+        re.I,
+    )),
+    ("minor_communication_exploitation", re.compile(
+        r"inappropriate\s+(photos?|communications?).{0,50}\b(juvenile|minor|child)|"
+        r"communications?\s+with\s+a\s+minor|sent\s+.{0,30}\bto\s+a\s+juvenile|"
+        r"procure\s+minor|electronic\s+communication\s+to\s+procure\s+minor|"
+        r"first[\s-]*degree\s+sexual\s+abuse",
+        re.I,
+    )),
+    ("child_age_violence", re.compile(
+        r"\b\d{1,2}[\s-]*year[\s-]*old\b.{0,60}(sexual|sex\b|rape|molest|abuse|assault|torture|murder)|"
+        r"(sexual|sex\b|rape|molest|abuse|assault|torture|murder).{0,60}\b\d{1,2}[\s-]*year[\s-]*old\b",
+        re.I,
+    )),
     ("sexual_assault_child", re.compile(r"sexual\s+assault.{0,40}(child|minor|juvenile)|(child|minor|juvenile).{0,40}sexual\s+assault", re.I)),
     ("trafficking_child_sex", re.compile(r"(sex|human)\s+traffick\w+.{0,40}(child|minor)|(child|minor).{0,40}sex\s+traffick", re.I)),
     ("pedophile", re.compile(r"pedophil|paedophil", re.I)),

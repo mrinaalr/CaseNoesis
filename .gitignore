@@ -38,6 +38,7 @@ case_data/
 
 # IDE
 .vscode/
+.cursor/mcp.json
 .idea/
 *.swp
 *.swo
@@ -104,6 +105,9 @@ models/*
 *.key
 credentials/
 secrets/
+
+# Local config overrides (not for deploy)
+config/
 
 # Temporary files
 *.tmp

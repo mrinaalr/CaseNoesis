@@ -92,6 +92,76 @@ def generate_graphs(
     }
 
 
+def generate_graph_for_ids(case_ids: List[str]) -> Dict[str, Any]:
+    """
+    Build a merged in-memory CAC ontology graph for specific case IDs.
+
+    Uses the same DB loaders and CaseToCAC mapper as the batch pipeline but
+    does not write JSON-LD/TTL files or mutate the database.
+
+    When a case is missing locally, falls back to GET /api/cases/{id} when
+    CASELINKER_API_URL is set (aligns MCP stdio dev with the remote corpus).
+    """
+    import json
+    import os
+
+    import requests
+
+    from features_to_cac import CaseToCAC, _load_case_with_fallback  # noqa: E402
+    from graph_utils import flat_nodes_to_nodes_edges  # noqa: E402
+    from merge_graph_cache import merge_case_into_store  # noqa: E402
+
+    def _load_case(case_id: str) -> Tuple[Optional[Dict[str, Any]], str]:
+        case, src = _load_case_with_fallback(case_id)
+        if case is not None:
+            return case, src
+        api_url = os.getenv("CASELINKER_API_URL", "").strip().rstrip("/")
+        if not api_url:
+            return None, "missing"
+        headers = {"Accept": "application/json"}
+        key = os.getenv("CASELINKER_KEY", "").strip()
+        if key:
+            headers["CaseLinker-Key"] = key
+        try:
+            resp = requests.get(f"{api_url}/api/cases/{case_id}", headers=headers, timeout=30)
+            if resp.status_code == 200:
+                return resp.json(), "api"
+        except requests.RequestException:
+            pass
+        return None, "missing"
+
+    requested = [str(cid).strip() for cid in case_ids if cid and str(cid).strip()]
+    mapper = CaseToCAC()
+    store: Dict[str, Dict[str, Any]] = {}
+    mapped: List[str] = []
+    skipped: List[Dict[str, str]] = []
+
+    for cid in requested:
+        case, src = _load_case(cid)
+        if case is None:
+            skipped.append({"case_id": cid, "reason": "not in DB or API"})
+            continue
+        graph, _warnings = mapper.map_case(case)
+        jsonld_str = graph.serialize(format="json-ld")
+        doc = json.loads(jsonld_str)
+        merge_case_into_store(store, cid, doc)
+        mapped.append(cid)
+
+    flat = list(store.values())
+    for node in flat:
+        node["_isShared"] = len(node.get("_cases") or []) > 1
+
+    nodes, edges = flat_nodes_to_nodes_edges(flat)
+    metadata = {
+        "requested_count": len(requested),
+        "cases_mapped": mapped,
+        "skipped": skipped,
+        "node_count": len(nodes),
+        "edge_count": len(edges),
+    }
+    return {"nodes": nodes, "edges": edges, "metadata": metadata, "flat_nodes": flat}
+
+
 def load_all_case_ids(db_path: Optional[Path] = None) -> List[str]:
     import sqlite3
 

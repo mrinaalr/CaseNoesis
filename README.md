@@ -78,14 +78,14 @@ Then open your browser to:
 - **Search**: http://localhost:8000/search
 - **Query**: http://localhost:8000/query 
 - **Expand**: http://localhost:8000/expand 
-- **Look Under the Hood**: http://localhost:8000/under-the-hood
-- **Data Sources**: http://localhost:8000/sources
 - **Triage**: http://localhost:8000/triage
 - **Patterns (Phase 2)**: http://localhost:8000/patterns
 - **Tech Landscape**: http://localhost:8000/tech-landscape
-- **LLM (Query assistant)**: http://localhost:8000/llm
-- **Case Studies**: http://localhost:8000/case-studies
+- **LLM**: http://localhost:8000/llm
+- **Look Under the Hood**: http://localhost:8000/under-the-hood
+- **Data Sources**: http://localhost:8000/sources
 - **Data Audit**: http://localhost:8000/audit
+- **Case Studies**: http://localhost:8000/case-studies
 - **API Documentation**: http://localhost:8000/docs
 
 
@@ -108,7 +108,7 @@ You can process additional PDFs to add more cases to the database.
 **Please proceed with awareness of the sensitive nature of the material and use the project responsibly for research, academic, or authorized analytical purposes.**
 
 
-## Two Main Entry Points
+## Entry Points
 
 1. **`src/main.py`** - **CLI Tool for Processing PDFs**
    - Processes PDF files to extract and store cases in the database
@@ -122,9 +122,16 @@ You can process additional PDFs to add more cases to the database.
    - Uses pre-computes clusters on startup for fast performance
    - Provides REST API endpoints for case data, analysis, and statistics
 
+3. **`caselinker_mcp/server.py`** - **MCP Server for agent and LLM analysis**
+   - Exposes corpus, knowledge graphs, triage, and analysis as MCP tools
+   - Use from Cursor, Claude Desktop, or any MCP-compatible agent host
+   - Read-only; wraps existing REST API; no DB mutation
+   - See `caselinker_mcp/README.md` for setup
+
 **Typical use case:**
 1. First, process PDFs with `src/main.py` to populate the database
 2. Then, start the web server with `run/main.py` to view and analyze the cases
+3. Optionally, run the MCP server (`python -m caselinker_mcp.server`) for agent-based analysis from Cursor or other MCP-compatible hosts
 
 ## Process Your Own PDF Files
 
@@ -247,13 +254,6 @@ Search provides a **facet decision tree** over the stored case corpus: the serve
 
 Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
 
-**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns), or http://localhost:8000/patterns) is the research surface for platform harm (Q1), exploitation lifecycle (Q2), kill-chain interventions (Q3), and CAC ontology mapping. The hub links question pages (`/patterns/questions/q01`–`q03`) and a merged-graph explorer at `/patterns/graph` (compare pool and Big Bang subset). Offline evidence pipelines live under `ontology/q1/` (platform→case candidates, affordance extraction → `q1_evidence.json` / `q1_affordance_table.md`), `ontology/q2/` (eight lifecycle subsets; pathway narrative in `q2_lifecycle.json`; empirical table via `q2_evidence.py` when candidates are populated), and `ontology/q3/` (seven intervention points; leverage synthesis in `q3_interventions.json`; empirical table via `q3_evidence.py` when candidates are populated). Per-case JSON-LD graphs, merge cache, and Big Bang generation are in `ontology/` (`graph_generate.py`, `big_bang.py`, `merge_graph_cache.py`).
-
-```bash
-python3 ontology/q1/build_candidates.py && python3 ontology/q1/q1_evidence.py
-python3 ontology/q2/build_candidates.py && python3 ontology/q2/q2_evidence.py
-python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
-```
 
 **Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
 
@@ -263,6 +263,13 @@ python3 scripts/run/train_triage_model.py --model rf --out models/triage_bundle.
 
 Evaluate or reproduce metrics with `scripts/verify/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
 
+**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns), or http://localhost:8000/patterns) is the research surface for platform harm analysis (Q1), exploitation lifecycle (Q2), kill-chain interventions (Q3), and CAC ontology mapping. The hub links question pages (`/patterns/questions/q01`–`q03`) and a visual graph explorer at `/patterns/graph`. Evidence for pattern analysis lives under `ontology/q1/` (platform → case candidates, affordance extraction → `q1_evidence.json` / `q1_affordance_table.md`), `ontology/q2/` (eight lifecycle subsets; pathway narrative in `q2_lifecycle.json`; empirical table via `q2_evidence.py`), and `ontology/q3/` (seven intervention points; leverage synthesis in `q3_interventions.json`; empirical table via `q3_evidence.py`). Per-case JSON-LD graphs, merge cache, and graph generation are in `ontology/` (`graph_generate.py`, `big_bang.py`, `merge_graph_cache.py`).
+
+```bash
+python3 ontology/q1/build_candidates.py && python3 ontology/q1/q1_evidence.py
+python3 ontology/q2/build_candidates.py && python3 ontology/q2/q2_evidence.py
+python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
+```
 
 ## Using Advanced Case Analysis
 

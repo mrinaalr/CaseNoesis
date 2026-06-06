@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request, Query, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from typing import List, Dict, Any, Optional, Tuple
@@ -94,6 +95,9 @@ except ImportError:
         return f"caselinker:{endpoint}"
 
 app = FastAPI(title="CaseLinker API")
+
+# Trust Railway / reverse-proxy X-Forwarded-* headers for scheme and client IP.
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 # Rate limiting
 limiter = Limiter(key_func=get_remote_address)
@@ -3817,6 +3821,18 @@ def api_ontology_cache_warm(
             }
         )
     return {"warmed": results}
+
+
+# MCP SSE mount (agent entry point via /mcp/sse)
+try:
+    if str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from caselinker_mcp.server import build_mcp_sse_app
+
+    app.mount("/mcp", build_mcp_sse_app())
+    # MCP SSE endpoint: /mcp/sse — gate with MCP_ACCESS_KEY env var
+except Exception as _mcp_mount_err:
+    print(f"Warning: MCP mount failed: {_mcp_mount_err}", file=sys.stderr)
 
 
 if __name__ == "__main__":
