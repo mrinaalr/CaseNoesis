@@ -112,11 +112,8 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2008-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/kazaa> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:FileHostingService ;
-    rdfs:label "Kazaa" ;
-    cacontology-platforms:platformType "p2p" ;
-    cacontology-platforms:platformVersion "legacy" .
+<https://caselinker.up.railway.app/resource/platform/kazaa> a cacontology-platforms:FileHostingService ;
+    rdfs:label "Kazaa" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_042/event/possession> a cacontology:CSAMIncident,
         cac-core:Event ;

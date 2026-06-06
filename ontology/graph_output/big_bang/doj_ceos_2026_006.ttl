@@ -150,7 +150,8 @@
     cacontology:severityLevel 3 ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/grindr> .
 
-<https://caselinker.up.railway.app/resource/platform/grindr> a cacontology-platforms:OnlineDatingPlatform ;
+<https://caselinker.up.railway.app/resource/platform/grindr> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:OnlineDatingPlatform ;
     rdfs:label "Grindr" .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2026_006/offense-event/charge-5> a cacontology:ChildSexualAbuseEvent,

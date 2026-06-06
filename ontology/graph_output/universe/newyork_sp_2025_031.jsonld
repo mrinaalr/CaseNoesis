@@ -2,6 +2,30 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-york-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/victim/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/role/offender/1",
         "@type": [
           "https://cacontology.projectvic.org#OffenderRole",
@@ -20,20 +44,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-york-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 11
+            "@value": 85
           }
         ]
       },
@@ -50,19 +68,6 @@
           }
         ],
         "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
@@ -125,32 +130,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/phase/charged",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 85
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2025_031/person/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 11
           }
         ]
       }

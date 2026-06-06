@@ -56,9 +56,7 @@
         cacontology-multi:FederalAgency ;
     rdfs:label "Homeland Security Investigations" .
 
-<https://caselinker.up.railway.app/resource/agency/icac> a cac-core:OrganizationLikeEntity,
-        cacontology-taskforce:StateICACtaskForce ;
-    rdfs:label "ICAC" .
+<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/saline-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

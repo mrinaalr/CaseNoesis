@@ -78,23 +78,17 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Illinois Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Johnson County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/judicial-district-attorney-generals-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
     rdfs:label "Judicial District Attorney General's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/judicial-district-drug-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Judicial District Drug Task Force" .
+<https://caselinker.up.railway.app/resource/agency/judicial-district-drug-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/maury-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/mcminn-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "McMinn County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/mcminn-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/mcminnville-police-department> a cacontology-multi:LocalAgency .
 
@@ -108,9 +102,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/texas-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Texas Police Department" .
+<https://caselinker.up.railway.app/resource/agency/texas-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/texas-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

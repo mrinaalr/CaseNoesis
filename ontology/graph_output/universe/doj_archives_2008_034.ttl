@@ -43,9 +43,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/police-service> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Police Service" .
+<https://caselinker.up.railway.app/resource/agency/police-service> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/toronto-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

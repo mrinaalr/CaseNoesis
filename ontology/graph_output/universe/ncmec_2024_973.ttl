@@ -107,8 +107,7 @@
 <https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
     rdfs:label "Snapchat" .
 
-<https://caselinker.up.railway.app/resource/platform/telegram> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/telegram> a cacontology-platforms:MessagingService ;
     rdfs:label "Telegram" .
 
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;

@@ -51,7 +51,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "SP Rochester Bureau of Criminal Investigation" .
 
-<https://caselinker.up.railway.app/resource/agency/troop-e-forensic-investigation-unit> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/troop-e-forensic-investigation-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Troop E Forensic Investigation Unit" .
 
 <https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

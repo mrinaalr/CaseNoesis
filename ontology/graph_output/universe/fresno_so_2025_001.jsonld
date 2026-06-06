@@ -2,20 +2,31 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/operation",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/event/online-only",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#usesChannel": [
           {
-            "@value": "chat"
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
@@ -25,26 +36,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/legal-proceeding",
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#comment": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Pretrial detention facility: Fresno County Jail"
+            "@value": "$50,000"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/sentence/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 50
           }
         ]
       },
@@ -57,19 +68,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 13
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/phase/booked",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
           }
         ]
       },
@@ -93,56 +91,6 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/social-media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 50
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "social media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "$50,000"
           }
         ]
       },
@@ -206,10 +154,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/operation",
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/phase/booked",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "social media"
+          }
         ]
       },
       {
@@ -232,6 +197,41 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+          {
+            "@value": "Pretrial detention facility: Fresno County Jail"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#resultsSentence": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/fresno_so_2025_001/sentence/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "chat"
           }
         ]
       }

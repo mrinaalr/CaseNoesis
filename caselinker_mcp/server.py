@@ -34,7 +34,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger("caselinker_mcp")
 
-mcp = FastMCP("CaseLinker")
+# message_path without trailing slash: Mount("/messages/") 307-redirects POST /messages,
+# which breaks MCP clients that strip the slash when parsing the SSE endpoint event.
+mcp = FastMCP("CaseLinker", message_path="/messages")
 
 # Tag string -> API category for POST /api/return-tagged-cases
 _TAG_CATEGORIES: dict[str, str] = {
@@ -250,15 +252,72 @@ def configure_mcp_deployment() -> None:
         logger.info("MCP transport_security unchanged (localhost defaults)")
 
 
+def _fix_mcp_message_post_routes(starlette_app: Any) -> Any:
+    """Serve POST /messages and /messages/ directly (no 307 trailing-slash redirect).
+
+    FastMCP registers Mount("/messages/", ...) which redirects bare /messages with 307.
+    MCP HTTP clients often POST to /messages?session_id=... after parsing the SSE event,
+    so redirects break the session handshake on Railway and other proxies.
+    """
+    from starlette.requests import Request
+    from starlette.routing import Mount, Route
+
+    patched: list[Any] = []
+    for route in starlette_app.routes:
+        if isinstance(route, Mount) and route.path.rstrip("/") == "/messages":
+            asgi_app = route.app
+
+            async def post_messages(request: Request, _asgi: Any = asgi_app) -> None:
+                await _asgi(request.scope, request.receive, request._send)
+
+            patched.append(Route("/messages", endpoint=post_messages, methods=["POST"]))
+            patched.append(Route("/messages/", endpoint=post_messages, methods=["POST"]))
+        else:
+            patched.append(route)
+
+    starlette_app.router.routes = patched
+    return starlette_app
+
+
 def build_mcp_sse_app(mount_path: str | None = None) -> Any:
-    """Build the MCP SSE Starlette app with deployment + auth middleware."""
+    """Build the MCP SSE Starlette app with deployment + auth middleware.
+
+    When mounted under FastAPI at ``/mcp``, leave *mount_path* as ``None`` (default ``/``).
+    FastMCP only prepends *mount_path* to the client-facing message URL in the SSE event;
+    actual Starlette routes stay at ``/sse`` and ``/messages``. ASGI ``root_path`` from the
+    FastAPI mount (``/mcp``) completes the client URL: ``/mcp/messages?session_id=...``.
+    Do not pass ``mount_path="/mcp"`` here or the SSE event doubles the prefix.
+    """
     configure_mcp_deployment()
     sse_app = mcp.sse_app(mount_path=mount_path)
+    sse_app = _fix_mcp_message_post_routes(sse_app)
     return wrap_mcp_with_auth(sse_app)
 
 
+def _wrap_mcp_request_context(starlette_app: Any) -> Any:
+    """Bind inbound CaseLinker-Key header to per-request context for REST API calls."""
+    from starlette.middleware.base import BaseHTTPMiddleware
+    from starlette.requests import Request
+
+    from caselinker_mcp.client import bind_request_caselinker_key, reset_request_caselinker_key
+
+    class MCPRequestContextMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request: Request, call_next):
+            inbound = (request.headers.get("CaseLinker-Key") or "").strip() or None
+            token = bind_request_caselinker_key(inbound)
+            try:
+                return await call_next(request)
+            finally:
+                reset_request_caselinker_key(token)
+
+    starlette_app.add_middleware(MCPRequestContextMiddleware)
+    return starlette_app
+
+
 def wrap_mcp_with_auth(starlette_app: Any) -> Any:
-    """Gate inbound MCP HTTP requests when MCP_ACCESS_KEY is set."""
+    """Per-request CaseLinker-Key forwarding + optional MCP_ACCESS_KEY bearer gate."""
+    starlette_app = _wrap_mcp_request_context(starlette_app)
+
     access_key = os.getenv("MCP_ACCESS_KEY", "").strip()
     if not access_key:
         return starlette_app
@@ -298,7 +357,7 @@ def _store_graph_payload(payload: dict[str, Any]) -> str:
 
 @mcp.tool()
 async def get_corpus_stats() -> dict[str, Any]:
-    """Return corpus-wide statistics: total cases, victims, sources, and feature counts."""
+    """Return corpus-wide statistics: total cases, sources, and feature counts."""
     try:
         result = await api_get("/api/stats")
         return result if isinstance(result, dict) else {"data": result}
@@ -517,7 +576,7 @@ async def case2cac(case_ids: list[str]) -> dict[str, Any]:
     """Generate a CAC ontology graph on-demand for the given case IDs.
 
     Case IDs must come from prior search/filter tool calls — do not fabricate IDs.
-    Hard cap: first 100 IDs are processed silently.
+    Hard cap: first 1000 IDs are processed silently (Q1 full-cohort research).
 
     MCP-only. Not exposed as a REST endpoint.
 
@@ -527,7 +586,7 @@ async def case2cac(case_ids: list[str]) -> dict[str, Any]:
         from graph_generate import generate_graph_for_ids  # noqa: E402
         from graph_utils import build_graph_summary  # noqa: E402
 
-        ids = [cid.strip() for cid in case_ids if cid and cid.strip()][:100]
+        ids = [cid.strip() for cid in case_ids if cid and cid.strip()][:1000]
         if not ids:
             return {
                 "graph_id": None,

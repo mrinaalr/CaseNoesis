@@ -2023,19 +2023,16 @@ Case 3 : …</code>
 
                 renderTierTree(data, 'tierTreeWrap', { linkToAudit: true, allCollapsed: true });
 
-                var bundleHint = document.getElementById('modelBundleUnavailable');
-                const modelWrap = document.getElementById('modelTierTreeWrap');
+                // /api/triage-eval trains on the fly and does not include saved-bundle corpus
+                // tiers. Only refresh the model corpus block when the response actually carries
+                // them; otherwise leave the accordion-loaded tree (or hint) unchanged.
                 if (data.corpus_predictions_available && data.model_case_ids_by_tier) {
+                    var bundleHint = document.getElementById('modelBundleUnavailable');
+                    const modelWrap = document.getElementById('modelTierTreeWrap');
                     if (bundleHint) bundleHint.style.display = 'none';
                     if (modelWrap) {
                         renderModelCorpusTree(data);
                     }
-                } else {
-                    if (modelWrap) {
-                        modelWrap.innerHTML = '';
-                        modelWrap.style.display = 'none';
-                    }
-                    if (bundleHint) bundleHint.style.display = 'block';
                 }
 
                 results.style.display = 'block';

@@ -373,9 +373,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/south-central-illinois-drug-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "South-Central Illinois Drug Task Force" .
+<https://caselinker.up.railway.app/resource/agency/south-central-illinois-drug-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2025_009/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

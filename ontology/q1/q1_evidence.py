@@ -102,6 +102,16 @@ PLATFORM_TYPE: Dict[str, str] = {
 ALIASES: Dict[str, Tuple[str, ...]] = {
     "Webcam platform": ("webcam", "web cam", "myfreecams", "mfc"),
     "Twitter / X": ("twitter", " x.com", "x.com", "twitter.com"),
+    "Xbox Live": ("xbox live", "xbox"),
+    "Gen AI": (
+        "gen ai",
+        "ai-generated",
+        "artificial intelligence",
+        "generative intelligence",
+        "generated ai",
+        "ai csam",
+    ),
+    "Mega.nz": ("mega", "mega.nz"),
 }
 
 KNOWN_PLATFORM_NAMES: Tuple[str, ...] = tuple(

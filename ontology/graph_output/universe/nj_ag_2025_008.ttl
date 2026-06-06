@@ -91,7 +91,8 @@
 <https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
-<https://caselinker.up.railway.app/resource/platform/facebook-messenger> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/facebook-messenger> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Facebook Messenger" .
 
 <https://caselinker.up.railway.app/resource/platform/gen-ai> a cacontology-platforms:FileHostingService ;

@@ -439,11 +439,15 @@
 
 <https://caselinker.up.railway.app/resource/agency/delaware-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/dublin-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/dublin-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Dublin Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/franklin-county-hope-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/franklin-county-hope-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Franklin County Hope Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/franklin-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
@@ -451,13 +455,19 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Grandview Heights Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/grove-city-division-of-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/grove-city-division-of-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Grove City Division of Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/hilliard-division-of-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/hilliard-division-of-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Hilliard Division of Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/human-trafficking-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Human Trafficking Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -465,17 +475,23 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Inside the Operation Columbus Division of Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/new-albany-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/new-albany-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "New Albany Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/ohio-state-university-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/ohio-state-university-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Ohio State University Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/powell-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/reynoldsburg-division-of-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/reynoldsburg-division-of-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Reynoldsburg Division of Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/upper-arlington-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

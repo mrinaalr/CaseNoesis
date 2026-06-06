@@ -65,13 +65,17 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Bartow County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/cartersville-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/cartersville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Cartersville Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/floyd-county-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/floyd-county-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Floyd County Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation> a cacontology-multi:StateAgency .
 
@@ -89,9 +93,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/polk-county-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/roswell-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Roswell Police Department" .
+<https://caselinker.up.railway.app/resource/agency/roswell-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 

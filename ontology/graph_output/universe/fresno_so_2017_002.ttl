@@ -44,9 +44,7 @@
         <https://caselinker.up.railway.app/resource/case/fresno_so_2017_002/event/online-only> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/fresno_so_2017_002/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/federal-agents> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Federal Agents" .
+<https://caselinker.up.railway.app/resource/agency/federal-agents> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fresno-county-sheriffs-office> a cacontology-multi:LocalAgency .
 

@@ -46,11 +46,17 @@
         <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_003/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_003/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Department of Homeland Security" .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/doj> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "U.S. Department of Justice" .
 
-<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Justice Department's Criminal Division" .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_003/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -116,10 +122,8 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" ;
-    cacontology-platforms:encryptionLevel "end-to-end" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" .
 
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .

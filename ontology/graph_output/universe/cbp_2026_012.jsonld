@@ -14,27 +14,32 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/role/victim/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 35
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/person/victim/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/event/distribution",
+        "@id": "https://caselinker.up.railway.app/resource/agency/shelby-county-sheriffs-office",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": "Shelby County Sheriff's Office"
           }
         ]
       },
@@ -57,27 +62,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/event/distribution",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2026-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/person/victim/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/shelby-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/cbp_2026_012/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 35
+          }
         ]
       },
       {

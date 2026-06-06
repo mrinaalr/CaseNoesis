@@ -40,7 +40,9 @@
     cacontology:hasRoleBeginPoint "2024-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2024_002/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/austin-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/austin-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Austin Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/gulf-coast-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -52,7 +54,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Illinois Office Texas Department of Criminal Justice" .
 
-<https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Lone Star Fugitive Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/san-marcos-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

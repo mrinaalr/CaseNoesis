@@ -268,7 +268,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Gibson County Sheriff's Department" .
 
-<https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Henry County Sheriff's Department" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -278,19 +280,23 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/judicial-drug-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/judicial-drug-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Judicial Drug Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/lawrence-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Lawrence County Sheriff's Department" .
 
-<https://caselinker.up.railway.app/resource/agency/marion-county-sheriffs-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/martin-police-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/paris-police-department> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/marion-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Paris Police Department" .
+    rdfs:label "Marion County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/martin-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Martin Police Department" .
+
+<https://caselinker.up.railway.app/resource/agency/paris-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/pickett-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -304,7 +310,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Robertson County Sheriff's Department" .
 
-<https://caselinker.up.railway.app/resource/agency/sequatchie-county-sheriffs-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/sequatchie-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Sequatchie County Sheriff's Department" .
 
 <https://caselinker.up.railway.app/resource/agency/sheriffs-department> a cacontology-multi:LocalAgency .
 

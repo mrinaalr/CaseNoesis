@@ -47,9 +47,13 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2018_007/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2018_007/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/boston-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/boston-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Boston Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/brockton-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/brockton-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Brockton Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/bureau-of-alcohol-tobacco-firearms-and-explosives> a cacontology-multi:LocalAgency .
 

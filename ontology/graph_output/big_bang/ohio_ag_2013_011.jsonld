@@ -2,22 +2,44 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/offender/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2013-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/offender/1"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": 13
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -40,31 +62,6 @@
         "https://cacontology.projectvic.org/core#hasRole": [
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/phase/indicted",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2013-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
           }
         ]
       },
@@ -130,6 +127,18 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/vinton-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
@@ -142,43 +151,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit",
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/phase/indicted",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Attorney General's Crimes Against Children Unit"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2013-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/offender/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       }

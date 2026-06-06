@@ -54,7 +54,9 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Massachusetts State Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/usms> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "U.S. Marshals" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_012/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:SexTrafficking ;

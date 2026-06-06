@@ -57,9 +57,13 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/johnson-city-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/johnson-city-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Johnson City Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/newport-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/newport-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Newport Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 

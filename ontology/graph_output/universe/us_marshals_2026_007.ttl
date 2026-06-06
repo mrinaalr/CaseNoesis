@@ -42,11 +42,17 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_007/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_007/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/biddeford-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/biddeford-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Biddeford Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Maine Department of Corrections" .
 
-<https://caselinker.up.railway.app/resource/agency/maine-national-guard-counterdrug-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/maine-national-guard-counterdrug-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Maine National Guard Counterdrug Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

@@ -2,6 +2,42 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2021-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/platform/facebook",
         "@type": [
           "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
@@ -13,20 +49,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Instagram"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "chat"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -65,27 +107,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
+            "@value": "social media"
           }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -102,42 +131,13 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/social-media",
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "social media"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2021-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/nj_ag_2021_004/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/instagram",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#SocialMediaPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Instagram"
+            "@value": "chat"
           }
         ]
       }

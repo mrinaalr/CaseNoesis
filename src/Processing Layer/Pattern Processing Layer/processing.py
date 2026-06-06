@@ -824,6 +824,11 @@ def _victim_count_match_excluded(case_text: str, start: int, end: int) -> bool:
     return any(phrase in wide for phrase in _VICTIM_COUNT_INITIATIVE_PHRASES)
 
 
+# Extraction retained for per-case reference only. The aggregate sum of
+# victim_count is not a reliable victim census — 98.5% of cases have null
+# values and the non-null values contain significant false positives
+# (task-force boilerplate, operation totals, evidence counts). Do not surface
+# the aggregate sum in any public-facing stat.
 def extract_victim_count(case: Dict[str, Any]) -> Optional[int]:
     """
     Extract victim count only from explicit victim-clause phrasing.

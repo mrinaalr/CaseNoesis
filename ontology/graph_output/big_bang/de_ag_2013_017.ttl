@@ -67,7 +67,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Task Force Detectives" .
 
-<https://caselinker.up.railway.app/resource/agency/task-forces> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/task-forces> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Task Force's" .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2013_017/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

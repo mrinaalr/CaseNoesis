@@ -50,7 +50,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/delaware-department-of-justice> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/state-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "State Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/de_ag_2016_003/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

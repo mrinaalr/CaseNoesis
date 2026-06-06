@@ -53,9 +53,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Arizona Department of Child Services" .
 
-<https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Arizona WANTED Violent Offender Task Force" .
+<https://caselinker.up.railway.app/resource/agency/arizona-wanted-violent-offender-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/department-of-child-safety> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

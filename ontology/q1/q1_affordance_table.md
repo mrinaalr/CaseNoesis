@@ -8,15 +8,17 @@
 
 **Affordance / Surface / Harm:** *(blank — manual)*
 
-**Stated evidence** (176 cases):
+**Stated evidence** (178 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
 | anchorage_pd_2023_006 | contact and communication with victim | Attempted Sexual Abuse of a Minor in the Second Degr... | Peronto subsequently contacted the 16-year-old via social... |
 | doj_ceos_2026_001 | contact and communication with victim | the production of child pornography and to coercion ... | teenage boy while communicating with the minor victims ov... |
+| fresno_so_2013_004 | contact and communication with victim |  | messages from Torres via social media. |
 | fresno_so_2017_002 | grooming / soliciting minor |  | social media site to try and solicit sex from a 15 year o... |
 | fresno_so_2020_001 | grooming / soliciting minor |  | As part of their regular duties, ICAC detectives monitor ... |
 | fresno_so_2020_002 | grooming / soliciting minor |  | As part of their regular duties, ICAC detectives monitor ... |
 | fresno_so_2020_003 | grooming / soliciting minor | distributing pornography to a minor and arranging to... | As part of their regular duties, ICAC detectives monitor ... |
+| fresno_so_2020_014 | contact and communication with victim | Child Pornography Charges After Using Public | She communicated with him through the social media apps “... |
 | ky_sp_2024_020 | distribution of CSAM | 13 counts of possessing matter portraying a minor un... | suspects uploading sexually explicit videos of juveniles ... |
 | ky_sp_2024_024 | distribution of CSAM | seven counts of possessing matter portraying a minor... | uploading sexually explicit images of juveniles to an onl... |
 | ky_sp_2024_028 | distribution of CSAM | three counts of possessing matter portraying a minor... | uploading sexually explicit images of juveniles to an onl... |
@@ -160,7 +162,7 @@
 | pa_ag_2025_030 | contact and communication with victim |  | five to 15 years in prison for contacting a girl, via soc... |
 | scag_icac_2021_050 | distribution of CSAM | Child Sexual Abuse Material* | A social media site reported that a user uploaded files o... |
 | scag_icac_2022_036 | distribution of CSAM | two counts of sexual exploitation of a minor, second... | Investigators received Cybertips about the uploading of C... |
-| sdpd_2024_001 | used in offense (specific role unspecified) | Child Publication date: 2024-03-21 FOR IMMEDIATE REL... | indicated that De Freitas had sent and requested illicit ... |
+| sdpd_2024_001 | used in offense (specific role unspecified) | Child Porn Charges Detectives are Searching for Addi... | indicated that De Freitas had sent and requested illicit ... |
 | south_florida_icac_2024_002 | contact and communication with victim |  | Most of those cases started with messages on social media... |
 | south_florida_icac_2025_012 | used in offense (specific role unspecified) | child pornography charges, police say Updated on: Ju... | through the Kik social media platform. |
 | south_florida_icac_2025_036 | platform-reported CSAM (distribution inferred) |  | and Pearl sent through social media and reported them to ... |
@@ -206,7 +208,7 @@
 | nm_ag_2024_001 | used in offense (specific role unspecified) |  | “This operation conclusively demonstrates that using... | social media and offense language co-occur in the same sentence without instr... |
 | pa_ag_2026_004 | contact and communication with victim | sexual abuse and numerous other crimes against ... | using various social media platforms through 2025, i... | social media and offense language co-occur in the same sentence without instr... |
 
-**Named only** (450 cases): af_osi_2023_001, alea_2018_001, anchorage_pd_2022_001, anchorage_pd_2022_004, anchorage_pd_2022_005, anchorage_pd_2022_007, anchorage_pd_2023_002, anchorage_pd_2024_002, anchorage_pd_2024_006, anchorage_pd_2025_003, arkansas_dps_2024_002, arkansas_dps_2024_003, arkansas_dps_2024_011, arkansas_dps_2024_012, arkansas_dps_2025_003, azicac_2014_008, de_ag_2014_010, de_ag_2016_005, de_ag_2022_003, doj_ceos_2025_003, doj_ceos_2025_014, doj_ceos_2025_015, doj_ceos_2026_012, doj_ceos_2026_013, fresno_so_2013_001, fresno_so_2015_002, fresno_so_2017_001, fresno_so_2020_004, fresno_so_2020_005, fresno_so_2020_008, fresno_so_2021_001, fresno_so_2021_008, fresno_so_2022_001, fresno_so_2022_004, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_001, fresno_so_2025_002, fresno_so_2025_003, fresno_so_2025_005, gbi_2017_003, gbi_2017_004, gbi_2019_002, gbi_2020_001, gbi_2022_001, gbi_2023_003, gbi_2024_004, gbi_2025_009, gbi_2025_013, ice_2013_015, ice_2017_007, idaho_icac_2024_033, idaho_icac_2025_002, idaho_icac_2025_012, idaho_icac_2025_024, idaho_icac_2025_042, illinois_ag_2021_004, illinois_ag_2021_005, illinois_ag_2021_010, illinois_ag_2021_011, illinois_ag_2021_015, illinois_ag_2022_001, illinois_ag_2022_002, illinois_ag_2022_003, illinois_ag_2022_004, illinois_ag_2022_005, illinois_ag_2022_006, illinois_ag_2022_007, illinois_ag_2022_008, illinois_ag_2022_009, illinois_ag_2022_010, illinois_ag_2022_011, illinois_ag_2022_019, illinois_ag_2022_020, illinois_ag_2023_013, ky_sp_2018_005, ky_sp_2018_019, ky_sp_2018_035, ky_sp_2024_012, ky_sp_2024_017, ky_sp_2024_029, ky_sp_2024_031, ky_sp_2024_033, ky_sp_2024_034, ky_sp_2026_014, ky_sp_2026_017, ky_sp_2026_030, ky_sp_2026_034, la_ag_2025_004, la_ag_2026_016, la_ag_2026_017, la_ag_2026_023, la_ag_2026_026, lapd_2013_003, lapd_2022_002, lapd_2022_004, lapd_2025_003, lvmpd_2026_001, lvmpd_2026_002, michigan_icac_2026_006, nc_sbi_2020_004, nc_sbi_2025_001, nc_sbi_2025_002, nc_sbi_2026_006, ncis_2022_002, ncis_2023_001, ncmec_2022_002, ncmec_2022_042, ncmec_2022_049, ncmec_2022_062, ncmec_2022_069, ncmec_2022_089, ncmec_2022_094, ncmec_2022_125, ncmec_2022_126, ncmec_2022_143, ncmec_2022_156, ncmec_2022_183, ncmec_2022_189, ncmec_2022_191, ncmec_2022_199, ncmec_2022_202, ncmec_2022_212, ncmec_2022_228, ncmec_2022_243, ncmec_2022_246, ncmec_2022_248, ncmec_2022_270, ncmec_2022_334, ncmec_2022_343, ncmec_2022_374, ncmec_2022_407, ncmec_2022_426, ncmec_2022_430, ncmec_2022_433, ncmec_2022_457, ncmec_2022_471, ncmec_2022_481, ncmec_2022_490, ncmec_2022_495, ncmec_2022_510, ncmec_2022_519, ncmec_2022_539, ncmec_2022_547, ncmec_2022_554, ncmec_2022_574, ncmec_2022_594, ncmec_2022_596, ncmec_2022_601, ncmec_2023_016, ncmec_2023_040, ncmec_2023_041, ncmec_2023_056, ncmec_2023_067, ncmec_2023_089, ncmec_2023_105, ncmec_2023_113, ncmec_2023_120, ncmec_2023_138, ncmec_2023_179, ncmec_2023_188, ncmec_2023_190, ncmec_2023_206, ncmec_2023_214, ncmec_2023_259, ncmec_2023_261, ncmec_2023_291, ncmec_2023_305, ncmec_2023_306, ncmec_2023_321, ncmec_2023_323, ncmec_2023_326, ncmec_2023_355, ncmec_2023_369, ncmec_2023_371, ncmec_2023_372, ncmec_2023_382, ncmec_2023_388, ncmec_2023_396, ncmec_2023_415, ncmec_2023_430, ncmec_2023_432, ncmec_2023_438, ncmec_2023_463, ncmec_2023_464, ncmec_2023_498, ncmec_2023_530, ncmec_2023_557, ncmec_2023_572, ncmec_2023_582, ncmec_2023_588, ncmec_2023_594, ncmec_2023_604, ncmec_2023_607, ncmec_2023_617, ncmec_2023_623, ncmec_2023_624, ncmec_2023_635, ncmec_2023_651, ncmec_2024_003, ncmec_2024_038, ncmec_2024_045, ncmec_2024_046, ncmec_2024_071, ncmec_2024_082, ncmec_2024_085, ncmec_2024_1046, ncmec_2024_1051, ncmec_2024_1072, ncmec_2024_1078, ncmec_2024_1094, ncmec_2024_1134, ncmec_2024_1185, ncmec_2024_1197, ncmec_2024_1200, ncmec_2024_1227, ncmec_2024_1256, ncmec_2024_132, ncmec_2024_139, ncmec_2024_142, ncmec_2024_144, ncmec_2024_155, ncmec_2024_156, ncmec_2024_182, ncmec_2024_206, ncmec_2024_221, ncmec_2024_228, ncmec_2024_238, ncmec_2024_254, ncmec_2024_273, ncmec_2024_286, ncmec_2024_289, ncmec_2024_294, ncmec_2024_295, ncmec_2024_298, ncmec_2024_302, ncmec_2024_341, ncmec_2024_361, ncmec_2024_367, ncmec_2024_382, ncmec_2024_384, ncmec_2024_405, ncmec_2024_406, ncmec_2024_422, ncmec_2024_440, ncmec_2024_483, ncmec_2024_491, ncmec_2024_505, ncmec_2024_512, ncmec_2024_519, ncmec_2024_521, ncmec_2024_529, ncmec_2024_536, ncmec_2024_603, ncmec_2024_605, ncmec_2024_607, ncmec_2024_612, ncmec_2024_617, ncmec_2024_655, ncmec_2024_725, ncmec_2024_754, ncmec_2024_758, ncmec_2024_773, ncmec_2024_777, ncmec_2024_808, ncmec_2024_820, ncmec_2024_849, ncmec_2024_863, ncmec_2024_870, ncmec_2024_883, ncmec_2024_903, ncmec_2024_940, ncmec_2024_942, ncmec_2024_944, ncmec_2024_951, ncmec_2024_957, ncmec_2024_972, ncmec_2024_982, ncmec_2024_991, ne_sp_2018_002, newyork_sp_2025_003, newyork_sp_2025_010, newyork_sp_2025_016, newyork_sp_2025_035, newyork_sp_2025_066, newyork_sp_2025_084, newyork_sp_2026_010, nj_ag_2013_001, nj_ag_2015_002, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2016_009, nj_ag_2017_001, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_008, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2021_005, nj_ag_2022_001, nj_ag_2023_002, nj_ag_2024_003, nj_ag_2025_001, nj_ag_2025_003, nj_ag_2026_001, nj_ag_2026_002, nj_ag_2026_003, nj_ag_2026_004, nj_ag_2026_005, nj_ag_2026_007, nj_ag_2026_009, nj_ag_2026_030, nj_ag_2026_032, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_038, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_060, nj_ag_2026_075, nj_ag_2026_079, nj_ag_2026_081, nj_ag_2026_083, ohio_ag_2014_006, oregon_doj_2025_002, osceola_so_2025_001, osceola_so_2026_003, pa_ag_2025_016, pa_ag_2025_017, pa_ag_2026_014, pa_ag_2026_021, pa_ag_2026_022, pa_ag_2026_030, pa_ag_2026_037, scag_icac_2021_093, scag_icac_2022_063, scag_icac_2025_091, scag_icac_2025_102, sdpd_2021_001, sjpd_2022_001, sjpd_2022_002, sjpd_2023_005, sjpd_2023_006, sjpd_2025_007, sjpd_2026_007, south_florida_icac_2023_005, south_florida_icac_2024_021, south_florida_icac_2025_005, south_florida_icac_2025_008, south_florida_icac_2025_013, south_florida_icac_2025_023, south_florida_icac_2026_014, svicac_2020_004, svicac_2021_002, svicac_2021_007, svicac_2022_017, svicac_2023_001, svicac_2023_006, svicac_2026_006, svicac_2026_007, svicac_2026_010, svicac_2026_015, svicac_2026_025, tbi_icac_2015_008, tbi_icac_2018_002, tbi_icac_2018_007, tbi_icac_2019_003, tbi_icac_2021_001, tbi_icac_2023_003, tbi_icac_2025_008, texas_ag_2019_003, texas_ag_2019_004, texas_ag_2019_005, texas_ag_2019_010, texas_ag_2019_013, us_marshals_2022_015, us_marshals_2026_007, usss_2017_010, usss_2021_001, usss_2021_006, usss_2021_011, usss_2022_012, usss_2023_003, usss_2023_006, usss_2025_003, ut_ag_2026_003, ut_ag_2026_004, ut_ag_2026_017, vt_ag_2020_004, vt_ag_2020_008, vt_ag_2021_001, vt_ag_2021_003, vt_ag_2021_007, vt_ag_2021_009, vt_ag_2024_037, vt_ag_2025_003, wa_ag_2022_001, wa_ag_2022_002, wa_ag_2024_001, wy_dci_2024_002, wy_dci_2024_003, wy_dci_2025_004
+**Named only** (453 cases): af_osi_2023_001, alea_2018_001, anchorage_pd_2022_001, anchorage_pd_2022_004, anchorage_pd_2022_005, anchorage_pd_2022_007, anchorage_pd_2023_002, anchorage_pd_2024_002, anchorage_pd_2024_006, anchorage_pd_2025_003, arkansas_dps_2024_002, arkansas_dps_2024_003, arkansas_dps_2024_011, arkansas_dps_2024_012, arkansas_dps_2025_003, azicac_2014_008, de_ag_2014_010, de_ag_2016_005, de_ag_2022_003, doj_ceos_2025_003, doj_ceos_2025_014, doj_ceos_2025_015, doj_ceos_2026_012, doj_ceos_2026_013, fresno_so_2013_001, fresno_so_2015_002, fresno_so_2017_001, fresno_so_2020_004, fresno_so_2020_005, fresno_so_2020_008, fresno_so_2020_012, fresno_so_2021_001, fresno_so_2021_008, fresno_so_2022_001, fresno_so_2022_004, fresno_so_2022_008, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_001, fresno_so_2025_002, fresno_so_2025_003, fresno_so_2025_005, gbi_2017_003, gbi_2017_004, gbi_2019_002, gbi_2020_001, gbi_2022_001, gbi_2023_003, gbi_2024_004, gbi_2025_009, gbi_2025_013, ice_2013_015, ice_2017_007, idaho_icac_2024_033, idaho_icac_2025_002, idaho_icac_2025_012, idaho_icac_2025_024, idaho_icac_2025_042, illinois_ag_2021_004, illinois_ag_2021_005, illinois_ag_2021_010, illinois_ag_2021_011, illinois_ag_2021_015, illinois_ag_2022_001, illinois_ag_2022_002, illinois_ag_2022_003, illinois_ag_2022_004, illinois_ag_2022_005, illinois_ag_2022_006, illinois_ag_2022_007, illinois_ag_2022_008, illinois_ag_2022_009, illinois_ag_2022_010, illinois_ag_2022_011, illinois_ag_2022_019, illinois_ag_2022_020, illinois_ag_2023_013, ky_sp_2018_005, ky_sp_2018_019, ky_sp_2018_035, ky_sp_2024_012, ky_sp_2024_017, ky_sp_2024_029, ky_sp_2024_031, ky_sp_2024_033, ky_sp_2024_034, ky_sp_2026_014, ky_sp_2026_017, ky_sp_2026_030, ky_sp_2026_034, la_ag_2025_004, la_ag_2026_016, la_ag_2026_017, la_ag_2026_023, la_ag_2026_026, lapd_2013_003, lapd_2022_002, lapd_2022_004, lapd_2025_003, lvmpd_2026_001, lvmpd_2026_002, michigan_icac_2026_006, nc_sbi_2020_004, nc_sbi_2025_001, nc_sbi_2025_002, nc_sbi_2026_006, ncis_2022_002, ncis_2023_001, ncmec_2022_002, ncmec_2022_042, ncmec_2022_049, ncmec_2022_062, ncmec_2022_069, ncmec_2022_089, ncmec_2022_094, ncmec_2022_125, ncmec_2022_126, ncmec_2022_143, ncmec_2022_156, ncmec_2022_183, ncmec_2022_189, ncmec_2022_191, ncmec_2022_199, ncmec_2022_202, ncmec_2022_212, ncmec_2022_228, ncmec_2022_243, ncmec_2022_246, ncmec_2022_248, ncmec_2022_270, ncmec_2022_334, ncmec_2022_343, ncmec_2022_374, ncmec_2022_407, ncmec_2022_426, ncmec_2022_430, ncmec_2022_433, ncmec_2022_457, ncmec_2022_471, ncmec_2022_481, ncmec_2022_490, ncmec_2022_495, ncmec_2022_510, ncmec_2022_519, ncmec_2022_539, ncmec_2022_547, ncmec_2022_554, ncmec_2022_574, ncmec_2022_594, ncmec_2022_596, ncmec_2022_601, ncmec_2023_016, ncmec_2023_040, ncmec_2023_041, ncmec_2023_056, ncmec_2023_067, ncmec_2023_089, ncmec_2023_105, ncmec_2023_113, ncmec_2023_120, ncmec_2023_138, ncmec_2023_179, ncmec_2023_188, ncmec_2023_190, ncmec_2023_206, ncmec_2023_214, ncmec_2023_259, ncmec_2023_261, ncmec_2023_291, ncmec_2023_305, ncmec_2023_306, ncmec_2023_321, ncmec_2023_323, ncmec_2023_326, ncmec_2023_355, ncmec_2023_369, ncmec_2023_371, ncmec_2023_372, ncmec_2023_382, ncmec_2023_388, ncmec_2023_396, ncmec_2023_415, ncmec_2023_430, ncmec_2023_432, ncmec_2023_438, ncmec_2023_463, ncmec_2023_464, ncmec_2023_498, ncmec_2023_530, ncmec_2023_557, ncmec_2023_572, ncmec_2023_582, ncmec_2023_588, ncmec_2023_594, ncmec_2023_604, ncmec_2023_607, ncmec_2023_617, ncmec_2023_623, ncmec_2023_624, ncmec_2023_635, ncmec_2023_651, ncmec_2024_003, ncmec_2024_038, ncmec_2024_045, ncmec_2024_046, ncmec_2024_071, ncmec_2024_082, ncmec_2024_085, ncmec_2024_1046, ncmec_2024_1051, ncmec_2024_1072, ncmec_2024_1078, ncmec_2024_1094, ncmec_2024_1134, ncmec_2024_1185, ncmec_2024_1197, ncmec_2024_1200, ncmec_2024_1227, ncmec_2024_1256, ncmec_2024_132, ncmec_2024_139, ncmec_2024_142, ncmec_2024_144, ncmec_2024_155, ncmec_2024_156, ncmec_2024_182, ncmec_2024_206, ncmec_2024_221, ncmec_2024_228, ncmec_2024_238, ncmec_2024_254, ncmec_2024_273, ncmec_2024_286, ncmec_2024_289, ncmec_2024_294, ncmec_2024_295, ncmec_2024_298, ncmec_2024_302, ncmec_2024_341, ncmec_2024_361, ncmec_2024_367, ncmec_2024_382, ncmec_2024_384, ncmec_2024_405, ncmec_2024_406, ncmec_2024_422, ncmec_2024_440, ncmec_2024_483, ncmec_2024_491, ncmec_2024_505, ncmec_2024_512, ncmec_2024_519, ncmec_2024_521, ncmec_2024_529, ncmec_2024_536, ncmec_2024_603, ncmec_2024_605, ncmec_2024_607, ncmec_2024_612, ncmec_2024_617, ncmec_2024_655, ncmec_2024_725, ncmec_2024_754, ncmec_2024_758, ncmec_2024_773, ncmec_2024_777, ncmec_2024_808, ncmec_2024_820, ncmec_2024_849, ncmec_2024_863, ncmec_2024_870, ncmec_2024_883, ncmec_2024_903, ncmec_2024_940, ncmec_2024_942, ncmec_2024_944, ncmec_2024_951, ncmec_2024_957, ncmec_2024_972, ncmec_2024_982, ncmec_2024_991, ne_sp_2018_002, newyork_sp_2025_003, newyork_sp_2025_010, newyork_sp_2025_016, newyork_sp_2025_035, newyork_sp_2025_066, newyork_sp_2025_084, newyork_sp_2026_010, nj_ag_2013_001, nj_ag_2015_002, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2016_009, nj_ag_2017_001, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_008, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2021_005, nj_ag_2022_001, nj_ag_2023_002, nj_ag_2024_003, nj_ag_2025_001, nj_ag_2025_003, nj_ag_2026_001, nj_ag_2026_002, nj_ag_2026_003, nj_ag_2026_004, nj_ag_2026_005, nj_ag_2026_007, nj_ag_2026_009, nj_ag_2026_030, nj_ag_2026_032, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_038, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_060, nj_ag_2026_075, nj_ag_2026_079, nj_ag_2026_081, nj_ag_2026_083, ohio_ag_2014_006, oregon_doj_2025_002, osceola_so_2025_001, osceola_so_2026_003, pa_ag_2025_016, pa_ag_2025_017, pa_ag_2026_014, pa_ag_2026_021, pa_ag_2026_022, pa_ag_2026_030, pa_ag_2026_037, scag_icac_2021_093, scag_icac_2022_063, scag_icac_2025_091, scag_icac_2025_102, sdpd_2021_001, sjpd_2022_001, sjpd_2022_002, sjpd_2023_005, sjpd_2023_006, sjpd_2025_007, sjpd_2026_007, south_florida_icac_2023_005, south_florida_icac_2024_021, south_florida_icac_2025_005, south_florida_icac_2025_008, south_florida_icac_2025_013, south_florida_icac_2025_023, south_florida_icac_2026_014, svicac_2020_004, svicac_2021_002, svicac_2021_007, svicac_2022_017, svicac_2023_001, svicac_2023_006, svicac_2026_006, svicac_2026_007, svicac_2026_010, svicac_2026_015, svicac_2026_025, tbi_icac_2015_008, tbi_icac_2018_002, tbi_icac_2018_007, tbi_icac_2019_003, tbi_icac_2021_001, tbi_icac_2023_003, tbi_icac_2025_008, texas_ag_2019_003, texas_ag_2019_004, texas_ag_2019_005, texas_ag_2019_010, texas_ag_2019_013, us_marshals_2022_015, us_marshals_2026_006, usss_2017_010, usss_2021_001, usss_2021_006, usss_2021_011, usss_2022_012, usss_2023_003, usss_2023_006, usss_2025_003, ut_ag_2026_003, ut_ag_2026_004, ut_ag_2026_017, vt_ag_2020_004, vt_ag_2020_008, vt_ag_2021_001, vt_ag_2021_003, vt_ag_2021_007, vt_ag_2021_009, vt_ag_2024_037, vt_ag_2025_003, wa_ag_2022_001, wa_ag_2022_002, wa_ag_2024_001, wy_dci_2024_002, wy_dci_2024_003, wy_dci_2025_004
 
 **PSA exclusions** (3 cases):
 - `lapd_2017_004`: PSA-only — 'social media' appears only after PSA boundary. Sample: "developed an online friendship w
@@ -222,13 +224,14 @@
 
 **Affordance / Surface / Harm:** *(blank — manual)*
 
-**Stated evidence** (125 cases):
+**Stated evidence** (126 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
 | arkansas_dps_2024_012 | contact and communication with victim |  | through the online messaging applications Snapchat and Kik. |
 | cspd_2021_003 | contact and communication with victim | multiple counts of Sexual Assault on a Child by One ... | reported sexual assault on a child in which the suspect w... |
 | doj_ceos_2025_003 | contact and communication with victim |  | According to court documents, Donald Ramirez, 40, of Sali... |
 | doj_ceos_2025_026 | contact and communication with victim | the charge on Nov | the victim through Snapchat, convincing her to send him e... |
+| fresno_so_2020_014 | contact and communication with victim | Child Pornography Charges After Using Public | She communicated with him through the social media apps “... |
 | idaho_icac_2025_023 | grooming / soliciting minor | Child Enticement [BOISE] – Attorney General Raúl Lab... | name on Snapchat to “keep the creeps away.” After a two-d... |
 | ncmec_2022_018 | contact and communication with victim |  | deputy sent obscene images to him via Snapchat. |
 | ncmec_2022_044 | contact and communication with victim | child porn Published February 24 | State police said its Computer Crime Unit received a Snap... |
@@ -393,9 +396,9 @@
 | tbi_icac_2025_017 | contact and communication with victim |  | In January, special agents began investigating a tip... | Snapchat and offense language co-occur in the same sentence without instrumen... |
 | usss_2022_009 | contact and communication with victim | engaging in sexual acts with a child and taking... | The National Center for Missing and Exploited Childr... | Snapchat and offense language co-occur in the same sentence without instrumen... |
 | vt_ag_2021_001 | contact and communication with victim | a crime are legally presumed innocent until the... | source of the suspected content on the identified Sn... | Snapchat and offense language co-occur in the same sentence without instrumen... |
-| wcso_2021_005 | contact and communication with victim | possession of child pornography Publication dat... | Cannel has been under investigation since May 2020, ... | Snapchat and offense language co-occur in the same sentence without instrumen... |
+| wcso_2021_005 | contact and communication with victim |  | Cannel has been under investigation since May 2020, ... | Snapchat and offense language co-occur in the same sentence without instrumen... |
 
-**Named only** (24 cases): anchorage_pd_2025_003, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, ncmec_2022_049, ncmec_2022_212, ncmec_2022_334, ncmec_2022_596, ncmec_2024_003, ncmec_2024_071, ncmec_2024_1090, ncmec_2024_1197, ncmec_2024_1227, ncmec_2024_607, ncmec_2024_913, ncmec_2024_934, ncmec_2024_942, south_florida_icac_2026_010, svicac_2023_001
+**Named only** (26 cases): anchorage_pd_2025_003, doj_ceos_2026_007, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, ncmec_2022_049, ncmec_2022_212, ncmec_2022_334, ncmec_2022_596, ncmec_2024_003, ncmec_2024_071, ncmec_2024_1090, ncmec_2024_1197, ncmec_2024_1227, ncmec_2024_607, ncmec_2024_913, ncmec_2024_934, ncmec_2024_942, south_florida_icac_2026_010, svicac_2023_001
 
 **PSA exclusions** (2 cases):
 - `usss_2022_001`: PSA-only — 'Snapchat' appears only after PSA boundary. Sample: "Sharing Child Sexual Abuse Material 
@@ -410,7 +413,7 @@
 
 **Affordance / Surface / Harm:** *(blank — manual)*
 
-**Stated evidence** (123 cases):
+**Stated evidence** (124 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
 | anchorage_pd_2022_003 | contact and communication with victim |  | had been chatting online for a number of years including ... |
@@ -423,7 +426,8 @@
 | doj_ceos_2026_008 | grooming / soliciting minor |  | for Attempting to Coerce and Entice Minors Using WhatsApp... |
 | doj_ceos_2026_010 | contact and communication with victim |  | According to court documents and evidence presented at tr... |
 | fresno_so_2014_002 | distribution of CSAM | POSSESSION OF CHILD PORNOGRAPHY AND “SEXTORTION”-REL... | After the exchange of information back and forth via Kik,... |
-| fresno_so_2015_001 | contact and communication with victim | Multiple Sex Abuse & Child Pornography Charges Publi... | Ricardo Carrillo contacted the boy through apps called “W... |
+| fresno_so_2014_003 | distribution of CSAM | POSSESSION OF CHILD PORNOGRAPHY AND “SEXTORTION”-REL... | After the exchange of information back and forth via Kik,... |
+| fresno_so_2015_001 | contact and communication with victim |  | Ricardo Carrillo contacted the boy through apps called “W... |
 | ice_2026_006 | contact and communication with victim |  | uncovered Kik messenger chats with Miller containing imag... |
 | ncis_2022_001 | CSAM production | receiving and possessing thousands of images and vid... | obtain CSAM from a CSAM trafficker on Kik, who was later ... |
 | ncmec_2022_008 | distribution of CSAM |  | KIK Messenger App to share adult pornography with other K... |
@@ -566,7 +570,7 @@
 | tbi_icac_2025_009 | contact and communication with victim |  | In 2023, agents received a tip concerning a subject ... | Kik and offense language co-occur in the same sentence without instrumental p... |
 | vt_ag_2020_011 | used in offense (specific role unspecified) | a crime are legally presumed innocent until the... | This matter stems from an undercover operation withi... | Kik and offense language co-occur in the same sentence without instrumental p... |
 
-**Named only** (73 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, idaho_icac_2026_001, ncmec_2022_022, ncmec_2022_049, ncmec_2022_069, ncmec_2022_077, ncmec_2022_147, ncmec_2022_151, ncmec_2022_154, ncmec_2022_166, ncmec_2022_212, ncmec_2022_340, ncmec_2022_428, ncmec_2022_449, ncmec_2022_493, ncmec_2022_527, ncmec_2022_529, ncmec_2022_532, ncmec_2023_018, ncmec_2023_033, ncmec_2023_067, ncmec_2023_105, ncmec_2023_113, ncmec_2023_441, ncmec_2023_487, ncmec_2023_595, ncmec_2023_658, ncmec_2024_1030, ncmec_2024_1079, ncmec_2024_129, ncmec_2024_177, ncmec_2024_202, ncmec_2024_218, ncmec_2024_343, ncmec_2024_388, ncmec_2024_409, ncmec_2024_460, ncmec_2024_477, ncmec_2024_575, ncmec_2024_580, ncmec_2024_583, ncmec_2024_603, ncmec_2024_635, ncmec_2024_942, ncmec_2024_954, ncmec_2024_968, nj_ag_2018_005, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2023_002, nj_ag_2026_001, nj_ag_2026_037, nj_ag_2026_085, nm_ag_2026_003, pa_ag_2025_016, south_florida_icac_2023_002, south_florida_icac_2024_016, south_florida_icac_2025_031, svicac_2023_001, svicac_2026_015, usss_2017_006, usss_2018_008, vt_ag_2022_001, vt_ag_2022_007, wcso_2024_004, wy_dci_2026_004
+**Named only** (74 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, idaho_icac_2026_001, ncmec_2022_022, ncmec_2022_049, ncmec_2022_069, ncmec_2022_077, ncmec_2022_147, ncmec_2022_151, ncmec_2022_154, ncmec_2022_166, ncmec_2022_212, ncmec_2022_340, ncmec_2022_428, ncmec_2022_449, ncmec_2022_493, ncmec_2022_527, ncmec_2022_529, ncmec_2022_532, ncmec_2023_018, ncmec_2023_033, ncmec_2023_067, ncmec_2023_105, ncmec_2023_113, ncmec_2023_441, ncmec_2023_487, ncmec_2023_595, ncmec_2023_658, ncmec_2024_1030, ncmec_2024_1079, ncmec_2024_129, ncmec_2024_177, ncmec_2024_202, ncmec_2024_218, ncmec_2024_343, ncmec_2024_388, ncmec_2024_409, ncmec_2024_460, ncmec_2024_477, ncmec_2024_575, ncmec_2024_580, ncmec_2024_583, ncmec_2024_603, ncmec_2024_635, ncmec_2024_942, ncmec_2024_954, ncmec_2024_968, nj_ag_2018_005, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2023_002, nj_ag_2026_001, nj_ag_2026_037, nj_ag_2026_085, nm_ag_2026_003, pa_ag_2025_016, south_florida_icac_2023_002, south_florida_icac_2024_016, south_florida_icac_2025_031, svicac_2023_001, svicac_2026_015, usss_2017_006, usss_2018_008, vt_ag_2022_001, vt_ag_2022_007, wcso_2024_004, wy_dci_2026_004
 
 **PSA exclusions** (3 cases):
 - `nj_ag_2026_017`: PSA-only — 'Kik' appears only after PSA boundary. Sample: "In past cases, the ICAC Task Force has ar
@@ -591,13 +595,13 @@
 | azicac_2011_008 | contact and communication with victim | aggravated luring a minor for sexual exploitation an... | chat rooms, posing as a 13 year old child when |
 | azicac_2011_010 | contact and communication with victim |  | was posing online in chat rooms as a 14 year old |
 | azicac_2012_005 | contact and communication with victim |  | was working proactively online in a chat room |
-| de_ag_2012_001 | contact and communication with victim |  | The undercover Delaware Child Predator Task Force detecti... |
+| de_ag_2012_001 | contact and communication with victim | Distributing Child Pornography - State of | The undercover Delaware Child Predator Task Force detecti... |
 | de_ag_2012_015 | contact and communication with victim | four counts of sexual solicitation of a child under 18 | to meet with who he thought was a 13-year-old girl he had... |
 | de_ag_2013_018 | contact and communication with victim | dealing in child pornography and the arrest of two D... | online chat room. |
 | de_ag_2016_001 | distribution of CSAM |  | A public internet chat room reported that one of its user... |
 | doj_archives_2006_021 | contact and communication with victim |  | Internet user, developed a relationship with Thomas Evere... |
 | doj_archives_2006_022 | contact and communication with victim |  | internet chat room. |
-| doj_archives_2007_021 | contact and communication with victim |  | chat rooms. |
+| doj_archives_2007_020 | contact and communication with victim |  | chat rooms. |
 | doj_archives_2008_047 | contact and communication with victim | one count of conspiracy to produce child pornography | ring between 2005 and 2007 to use instant messaging, vide... |
 | doj_archives_2008_062 | contact and communication with victim | one count of conspiracy to produce child pornography... | 2005 and 2007 to use instant messaging, video messaging, ... |
 | fresno_so_2017_001 | contact and communication with victim |  | Teach children to be wary of the person on the other end ... |
@@ -705,7 +709,7 @@
 | nj_ag_2026_037 | contact and communication with victim |  | their children about social media and chat apps to l... | chat and offense language co-occur in the same sentence without instrumental ... |
 | south_florida_icac_2023_006 | contact and communication with victim |  | Authorities said video chat app Bam Bam tipped off t... | chat and offense language co-occur in the same sentence without instrumental ... |
 
-**Named only** (255 cases): anchorage_pd_2022_003, arkansas_dps_2024_014, azicac_2011_004, azicac_2013_007, azicac_2014_011, de_ag_2011_003, de_ag_2012_005, de_ag_2012_009, de_ag_2012_023, de_ag_2012_026, de_ag_2015_001, de_ag_2016_005, doj_archives_2003_006, doj_archives_2006_005, doj_archives_2007_022, doj_archives_2007_029, doj_archives_2008_016, doj_archives_2008_017, doj_archives_2008_028, doj_archives_2008_037, doj_archives_2008_053, doj_ceos_2025_034, doj_ceos_2025_038, doj_ceos_2026_001, fresno_so_2015_001, fresno_so_2015_002, fresno_so_2017_002, fresno_so_2020_001, fresno_so_2020_002, fresno_so_2020_003, fresno_so_2020_004, fresno_so_2020_005, fresno_so_2020_008, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_001, fresno_so_2025_002, fresno_so_2025_003, gbi_2022_001, gbi_2023_003, gbi_2023_005, gbi_2024_004, gbi_2025_002, ice_2013_011, ice_2013_013, ice_2017_009, ice_2023_002, ice_2026_006, idaho_icac_2025_002, idaho_icac_2025_004, idaho_icac_2025_011, idaho_icac_2025_013, idaho_icac_2025_038, illinois_ag_2006_002, illinois_ag_2006_003, illinois_ag_2008_004, illinois_ag_2011_007, illinois_ag_2025_008, lapd_2007_001, lapd_2010_002, lapd_2013_003, lapd_2023_001, lapd_2024_001, ncis_2022_002, ncis_2026_001, ncmec_2022_004, ncmec_2022_051, ncmec_2022_055, ncmec_2022_067, ncmec_2022_077, ncmec_2022_156, ncmec_2022_159, ncmec_2022_193, ncmec_2022_207, ncmec_2022_219, ncmec_2022_235, ncmec_2022_255, ncmec_2022_278, ncmec_2022_293, ncmec_2022_304, ncmec_2022_317, ncmec_2022_413, ncmec_2022_446, ncmec_2022_557, ncmec_2022_568, ncmec_2022_584, ncmec_2022_585, ncmec_2022_600, ncmec_2022_608, ncmec_2023_055, ncmec_2023_073, ncmec_2023_074, ncmec_2023_082, ncmec_2023_127, ncmec_2023_149, ncmec_2023_150, ncmec_2023_188, ncmec_2023_238, ncmec_2023_269, ncmec_2023_282, ncmec_2023_287, ncmec_2023_406, ncmec_2023_429, ncmec_2023_442, ncmec_2023_493, ncmec_2023_604, ncmec_2023_647, ncmec_2024_003, ncmec_2024_038, ncmec_2024_046, ncmec_2024_071, ncmec_2024_085, ncmec_2024_1009, ncmec_2024_101, ncmec_2024_1049, ncmec_2024_1086, ncmec_2024_1123, ncmec_2024_1132, ncmec_2024_1161, ncmec_2024_1163, ncmec_2024_1173, ncmec_2024_142, ncmec_2024_160, ncmec_2024_179, ncmec_2024_214, ncmec_2024_215, ncmec_2024_227, ncmec_2024_237, ncmec_2024_249, ncmec_2024_254, ncmec_2024_290, ncmec_2024_301, ncmec_2024_365, ncmec_2024_395, ncmec_2024_405, ncmec_2024_530, ncmec_2024_581, ncmec_2024_608, ncmec_2024_613, ncmec_2024_623, ncmec_2024_636, ncmec_2024_643, ncmec_2024_666, ncmec_2024_706, ncmec_2024_709, ncmec_2024_741, ncmec_2024_758, ncmec_2024_812, ncmec_2024_835, ncmec_2024_840, ncmec_2024_866, ncmec_2024_914, ncmec_2024_942, newyork_sp_2025_022, nj_ag_2015_002, nj_ag_2015_003, nj_ag_2015_006, nj_ag_2016_009, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2018_005, nj_ag_2018_007, nj_ag_2019_001, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2020_002, nj_ag_2020_006, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2021_005, nj_ag_2022_001, nj_ag_2023_002, nj_ag_2024_001, nj_ag_2024_003, nj_ag_2024_004, nj_ag_2025_001, nj_ag_2025_005, nj_ag_2026_004, nj_ag_2026_005, nj_ag_2026_013, nj_ag_2026_015, nj_ag_2026_016, nj_ag_2026_018, nj_ag_2026_019, nj_ag_2026_020, nj_ag_2026_022, nj_ag_2026_025, nj_ag_2026_026, nj_ag_2026_028, nj_ag_2026_039, nj_ag_2026_045, nj_ag_2026_048, nj_ag_2026_052, nj_ag_2026_068, nj_ag_2026_070, nm_ag_2026_002, ohio_ag_2018_004, ohio_ag_2022_001, osceola_so_2025_002, pa_ag_2026_029, scag_icac_2025_102, sjpd_2024_002, sjpd_2025_004, sjpd_2026_002, sjpd_2026_005, south_florida_icac_2023_007, south_florida_icac_2024_001, south_florida_icac_2024_003, south_florida_icac_2024_008, south_florida_icac_2024_013, south_florida_icac_2024_020, south_florida_icac_2025_008, south_florida_icac_2025_010, south_florida_icac_2025_012, south_florida_icac_2025_017, south_florida_icac_2025_019, south_florida_icac_2025_032, south_florida_icac_2026_008, spd_2023_001, spd_2025_008, svicac_2019_005, svicac_2019_006, svicac_2019_012, svicac_2022_001, svicac_2022_010, svicac_2023_001, svicac_2026_006, svicac_2026_015, svicac_2026_017, tbi_icac_2014_011, tbi_icac_2018_003, tbi_icac_2020_004, tbi_icac_2022_001, tbi_icac_2023_001, tbi_icac_2023_002, tbi_icac_2023_012, tbi_icac_2024_013, tbi_icac_2026_004, usss_2017_002, usss_2017_006, usss_2018_008, usss_2021_019, ut_ag_2023_001, ut_ag_2026_002, ut_ag_2026_007, vt_ag_2020_011, wy_dci_2024_003, wy_dci_2025_003, wy_dci_2025_004, wy_dci_2026_001, wy_dci_2026_005
+**Named only** (258 cases): anchorage_pd_2022_003, arkansas_dps_2024_014, azicac_2011_004, azicac_2013_007, azicac_2014_011, de_ag_2011_003, de_ag_2012_005, de_ag_2012_009, de_ag_2012_023, de_ag_2012_026, de_ag_2015_001, de_ag_2016_005, doj_archives_2003_006, doj_archives_2006_005, doj_archives_2007_021, doj_archives_2007_027, doj_archives_2008_016, doj_archives_2008_017, doj_archives_2008_028, doj_archives_2008_037, doj_archives_2008_053, doj_ceos_2025_034, doj_ceos_2025_038, doj_ceos_2026_001, fresno_so_2015_001, fresno_so_2015_002, fresno_so_2017_002, fresno_so_2017_003, fresno_so_2020_001, fresno_so_2020_002, fresno_so_2020_003, fresno_so_2020_004, fresno_so_2020_005, fresno_so_2020_008, fresno_so_2020_014, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_001, fresno_so_2025_002, fresno_so_2025_003, gbi_2022_001, gbi_2023_003, gbi_2023_005, gbi_2024_004, gbi_2025_002, ice_2013_011, ice_2013_013, ice_2017_009, ice_2023_002, ice_2026_006, idaho_icac_2025_002, idaho_icac_2025_004, idaho_icac_2025_011, idaho_icac_2025_013, idaho_icac_2025_038, illinois_ag_2006_002, illinois_ag_2006_003, illinois_ag_2008_004, illinois_ag_2011_007, illinois_ag_2025_008, lapd_2007_001, lapd_2010_002, lapd_2013_003, lapd_2023_001, lapd_2024_001, ncis_2022_002, ncis_2026_001, ncmec_2022_004, ncmec_2022_051, ncmec_2022_055, ncmec_2022_067, ncmec_2022_077, ncmec_2022_156, ncmec_2022_159, ncmec_2022_193, ncmec_2022_207, ncmec_2022_219, ncmec_2022_235, ncmec_2022_255, ncmec_2022_278, ncmec_2022_293, ncmec_2022_304, ncmec_2022_317, ncmec_2022_413, ncmec_2022_446, ncmec_2022_557, ncmec_2022_568, ncmec_2022_584, ncmec_2022_585, ncmec_2022_600, ncmec_2022_608, ncmec_2023_055, ncmec_2023_073, ncmec_2023_074, ncmec_2023_082, ncmec_2023_127, ncmec_2023_149, ncmec_2023_150, ncmec_2023_188, ncmec_2023_238, ncmec_2023_269, ncmec_2023_282, ncmec_2023_287, ncmec_2023_406, ncmec_2023_429, ncmec_2023_442, ncmec_2023_493, ncmec_2023_604, ncmec_2023_647, ncmec_2024_003, ncmec_2024_038, ncmec_2024_046, ncmec_2024_071, ncmec_2024_085, ncmec_2024_1009, ncmec_2024_101, ncmec_2024_1049, ncmec_2024_1086, ncmec_2024_1123, ncmec_2024_1132, ncmec_2024_1161, ncmec_2024_1163, ncmec_2024_1173, ncmec_2024_142, ncmec_2024_160, ncmec_2024_179, ncmec_2024_214, ncmec_2024_215, ncmec_2024_227, ncmec_2024_237, ncmec_2024_249, ncmec_2024_254, ncmec_2024_290, ncmec_2024_301, ncmec_2024_365, ncmec_2024_395, ncmec_2024_405, ncmec_2024_530, ncmec_2024_581, ncmec_2024_608, ncmec_2024_613, ncmec_2024_623, ncmec_2024_636, ncmec_2024_643, ncmec_2024_666, ncmec_2024_706, ncmec_2024_709, ncmec_2024_741, ncmec_2024_758, ncmec_2024_812, ncmec_2024_835, ncmec_2024_840, ncmec_2024_866, ncmec_2024_914, ncmec_2024_942, newyork_sp_2025_022, nj_ag_2015_002, nj_ag_2015_003, nj_ag_2015_006, nj_ag_2016_009, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2018_005, nj_ag_2018_007, nj_ag_2019_001, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2020_002, nj_ag_2020_006, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2021_005, nj_ag_2022_001, nj_ag_2023_002, nj_ag_2024_001, nj_ag_2024_003, nj_ag_2024_004, nj_ag_2025_001, nj_ag_2025_005, nj_ag_2026_004, nj_ag_2026_005, nj_ag_2026_013, nj_ag_2026_015, nj_ag_2026_016, nj_ag_2026_018, nj_ag_2026_019, nj_ag_2026_020, nj_ag_2026_022, nj_ag_2026_025, nj_ag_2026_026, nj_ag_2026_028, nj_ag_2026_039, nj_ag_2026_045, nj_ag_2026_048, nj_ag_2026_052, nj_ag_2026_068, nj_ag_2026_070, nm_ag_2026_002, ohio_ag_2018_004, ohio_ag_2022_001, osceola_so_2025_002, pa_ag_2026_029, scag_icac_2025_102, sjpd_2024_002, sjpd_2025_004, sjpd_2026_002, sjpd_2026_005, south_florida_icac_2023_007, south_florida_icac_2024_001, south_florida_icac_2024_003, south_florida_icac_2024_008, south_florida_icac_2024_013, south_florida_icac_2024_020, south_florida_icac_2025_008, south_florida_icac_2025_010, south_florida_icac_2025_012, south_florida_icac_2025_017, south_florida_icac_2025_019, south_florida_icac_2025_032, south_florida_icac_2026_008, spd_2023_001, spd_2025_008, svicac_2019_005, svicac_2019_006, svicac_2019_012, svicac_2022_001, svicac_2022_010, svicac_2023_001, svicac_2026_006, svicac_2026_015, svicac_2026_017, tbi_icac_2014_011, tbi_icac_2018_003, tbi_icac_2020_004, tbi_icac_2022_001, tbi_icac_2023_001, tbi_icac_2023_002, tbi_icac_2023_012, tbi_icac_2024_013, tbi_icac_2026_004, usss_2017_002, usss_2017_006, usss_2018_008, usss_2021_019, ut_ag_2023_001, ut_ag_2026_002, ut_ag_2026_007, vt_ag_2020_011, wy_dci_2024_003, wy_dci_2025_003, wy_dci_2025_004, wy_dci_2026_001, wy_dci_2026_005
 
 **PSA exclusions** (3 cases):
 - `lapd_2017_004`: PSA-only — 'chat' appears only after PSA boundary. Sample: "developed an online friendship with them
@@ -724,10 +728,10 @@
 - `de_ag_2013_012`: `chat` — "online chatrooms where he solicited unlawful images of a sex"
 - `doj_archives_2002_002`: `chat` — "private Internet Relay Chat (IRC) channel. With the man’s co"
 - `doj_archives_2005_008`: `chat` — "chat (IRC) channels a willingness to receive or distribute f"
-- `doj_archives_2005_012`: `chat` — "public to upload files to that computer. He also advertised "
-- `doj_archives_2005_015`: `chat` — "that computer, and by advertising on specified Internet Rela"
-- `doj_archives_2005_018`: `chat` — "public to upload files to that computer, and by advertising "
-- `doj_archives_2005_026`: `chat` — "and by advertising on specified Internet Relay Chat (IRC) ch"
+- `doj_archives_2005_011`: `chat` — "public to upload files to that computer. He also advertised "
+- `doj_archives_2005_014`: `chat` — "that computer, and by advertising on specified Internet Rela"
+- `doj_archives_2005_017`: `chat` — "public to upload files to that computer, and by advertising "
+- `doj_archives_2005_025`: `chat` — "and by advertising on specified Internet Relay Chat (IRC) ch"
 - `doj_archives_2006_007`: `chat` — "configured and operated. DECKER distributed the images in an"
 - `doj_archives_2006_014`: `chat` — "through a file server set up in an Internet Relay Chat chann"
 - `doj_ceos_2025_002`: `chat` — "years, beginning in 2021. He also allegedly used artificial "
@@ -781,7 +785,7 @@
 | tbi_icac_2021_003 | grooming / soliciting minor |  | solicited and exploited a minor victim on Facebook, the T... |
 | tbi_icac_2024_019 | distribution of CSAM |  | distributed multiple files of child sexual abuse material... |
 | us_marshals_2023_012 | distribution of CSAM |  | On May 31, the Shawano County Sheriff’s Office uploaded a... |
-| usss_2017_007 | platform-reported CSAM (distribution inferred) | Production of Child Pornography and Cyberstalking Pu... | enforcement agents began investigating Ridder after a min... |
+| usss_2017_007 | platform-reported CSAM (distribution inferred) | two counts of production of child pornography, in vi... | enforcement agents began investigating Ridder after a min... |
 | usss_2019_005 | distribution of CSAM |  | calls that his Facebook Messenger account was distributin... |
 | usss_2021_003 | distribution of CSAM | the offense on August 11, 2021 | McKie came to law enforcement’s attention after receiving... |
 | ut_ag_2020_001 | contact and communication with victim |  | to chatting with the victim for over a year, almost every... |
@@ -803,7 +807,7 @@
 | south_florida_icac_2025_005 | used in offense (specific role unspecified) |  | when we can; however, this is still an active invest... | Facebook and offense language co-occur in the same sentence without instrumen... |
 | vt_ag_2025_041 | contact and communication with victim | a crime are legally presumed innocent until the... | to be a minor on the Snapchat and Facebook platforms. | Facebook and offense language co-occur in the same sentence without instrumen... |
 
-**Named only** (164 cases): alea_2018_001, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, hi_ag_2014_001, ice_2013_015, ice_2016_001, ice_2017_004, ice_2026_001, ice_2026_004, ice_2026_005, illinois_ag_2021_003, ncmec_2022_002, ncmec_2022_049, ncmec_2022_060, ncmec_2022_263, ncmec_2022_371, ncmec_2022_375, ncmec_2022_467, ncmec_2022_469, ncmec_2022_490, ncmec_2022_508, ncmec_2022_556, ncmec_2022_561, ncmec_2022_579, ncmec_2022_596, ncmec_2022_603, ncmec_2023_004, ncmec_2023_023, ncmec_2023_055, ncmec_2023_136, ncmec_2023_270, ncmec_2023_277, ncmec_2023_304, ncmec_2023_320, ncmec_2023_464, ncmec_2023_467, ncmec_2023_468, ncmec_2023_479, ncmec_2023_616, ncmec_2023_663, ncmec_2024_031, ncmec_2024_089, ncmec_2024_1030, ncmec_2024_1076, ncmec_2024_108, ncmec_2024_1091, ncmec_2024_1158, ncmec_2024_1205, ncmec_2024_1215, ncmec_2024_1227, ncmec_2024_1251, ncmec_2024_182, ncmec_2024_186, ncmec_2024_191, ncmec_2024_193, ncmec_2024_272, ncmec_2024_290, ncmec_2024_345, ncmec_2024_382, ncmec_2024_471, ncmec_2024_513, ncmec_2024_514, ncmec_2024_522, ncmec_2024_524, ncmec_2024_532, ncmec_2024_541, ncmec_2024_607, ncmec_2024_646, ncmec_2024_650, ncmec_2024_653, ncmec_2024_913, ncmec_2024_987, newyork_sp_2025_008, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2023_002, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_059, nj_ag_2026_060, nj_ag_2026_075, nm_ag_2024_001, sdpd_2018_001, south_florida_icac_2026_012, svicac_2021_005, svicac_2023_001, svicac_2023_008, svicac_2026_025, tbi_icac_2014_007, us_marshals_2026_012, ut_ag_2019_002, vt_ag_2021_007, vt_ag_2021_009, vt_ag_2022_005, wy_dci_2025_001
+**Named only** (165 cases): alea_2018_001, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, hi_ag_2014_001, ice_2013_015, ice_2016_001, ice_2017_004, ice_2026_001, ice_2026_004, ice_2026_005, illinois_ag_2021_003, ncmec_2022_002, ncmec_2022_049, ncmec_2022_060, ncmec_2022_263, ncmec_2022_371, ncmec_2022_375, ncmec_2022_467, ncmec_2022_469, ncmec_2022_490, ncmec_2022_508, ncmec_2022_556, ncmec_2022_561, ncmec_2022_579, ncmec_2022_596, ncmec_2022_603, ncmec_2023_004, ncmec_2023_023, ncmec_2023_055, ncmec_2023_136, ncmec_2023_270, ncmec_2023_277, ncmec_2023_304, ncmec_2023_320, ncmec_2023_464, ncmec_2023_467, ncmec_2023_468, ncmec_2023_479, ncmec_2023_616, ncmec_2023_663, ncmec_2024_031, ncmec_2024_089, ncmec_2024_1030, ncmec_2024_1076, ncmec_2024_108, ncmec_2024_1091, ncmec_2024_1158, ncmec_2024_1205, ncmec_2024_1215, ncmec_2024_1227, ncmec_2024_1251, ncmec_2024_182, ncmec_2024_186, ncmec_2024_191, ncmec_2024_193, ncmec_2024_272, ncmec_2024_290, ncmec_2024_345, ncmec_2024_382, ncmec_2024_471, ncmec_2024_513, ncmec_2024_514, ncmec_2024_522, ncmec_2024_524, ncmec_2024_532, ncmec_2024_541, ncmec_2024_607, ncmec_2024_646, ncmec_2024_650, ncmec_2024_653, ncmec_2024_913, ncmec_2024_987, newyork_sp_2025_008, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2021_003, nj_ag_2021_004, nj_ag_2023_002, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_059, nj_ag_2026_060, nj_ag_2026_075, nm_ag_2024_001, sdpd_2018_001, south_florida_icac_2026_012, svicac_2021_005, svicac_2023_001, svicac_2023_008, svicac_2026_025, tbi_icac_2014_007, us_marshals_2026_012, ut_ag_2019_002, vt_ag_2021_007, vt_ag_2021_009, vt_ag_2022_005, wy_dci_2025_001
 
 **PSA exclusions** (2 cases):
 - `lapd_2017_004`: PSA-only — 'Facebook' appears only after PSA boundary. Sample: "under-aged boys who appear within Wa
@@ -821,7 +825,7 @@
 **Stated evidence** (29 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
-| doj_ceos_2025_007 | distribution of CSAM | Sexually Exploiting Children on the Internet Publica... | explicit conduct and shared it to other Discord servers a... |
+| doj_ceos_2025_007 | distribution of CSAM | the unspeakable act of coercing and blackmailing chi... | explicit conduct and shared it to other Discord servers a... |
 | ncmec_2022_103 | distribution of CSAM | possessing child pornography | that an image file was shared by a Discord user on its ch... |
 | ncmec_2022_530 | distribution of CSAM |  | The images were uploaded and disseminated on the messagin... |
 | ncmec_2023_059 | distribution of CSAM | distributing child porn ELLETTSVILLE, Ind | tips advised of an unknown individual distributing child ... |
@@ -861,7 +865,7 @@
 | ncmec_2024_630 | distribution of CSAM | POSSESSION OF CHILD PORNOGRAPHY LINCOLN UNIVERS... | Discord messaging app to possess and distribute chil... | Discord and offense language co-occur in the same sentence without instrument... |
 | nj_ag_2026_003 | contact and communication with victim | endangering the welfare of a child, aggravated ... | AG Platkin Sues Messaging App “Discord” for Unlawful... | Discord and offense language co-occur in the same sentence without instrument... |
 
-**Named only** (45 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, idaho_icac_2025_026, ncmec_2022_023, ncmec_2022_221, ncmec_2022_361, ncmec_2022_596, ncmec_2023_043, ncmec_2023_322, ncmec_2023_338, ncmec_2023_371, ncmec_2023_493, ncmec_2024_003, ncmec_2024_1037, ncmec_2024_1212, ncmec_2024_1221, ncmec_2024_1227, ncmec_2024_295, ncmec_2024_309, ncmec_2024_403, ncmec_2024_411, ncmec_2024_607, ncmec_2024_754, ncmec_2024_942, ncmec_2024_954, nj_ag_2018_005, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2023_002, nj_ag_2026_001, nj_ag_2026_037, nj_ag_2026_083, svicac_2022_013, svicac_2023_001, tbi_icac_2024_020, vt_ag_2021_008, vt_ag_2022_006, vt_ag_2024_021, vt_ag_2024_033
+**Named only** (46 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, idaho_icac_2025_026, ncmec_2022_023, ncmec_2022_221, ncmec_2022_361, ncmec_2022_596, ncmec_2023_043, ncmec_2023_322, ncmec_2023_338, ncmec_2023_371, ncmec_2023_493, ncmec_2024_003, ncmec_2024_1037, ncmec_2024_1212, ncmec_2024_1221, ncmec_2024_1227, ncmec_2024_295, ncmec_2024_309, ncmec_2024_403, ncmec_2024_411, ncmec_2024_607, ncmec_2024_754, ncmec_2024_942, ncmec_2024_954, nj_ag_2018_005, nj_ag_2019_002, nj_ag_2020_001, nj_ag_2023_002, nj_ag_2026_001, nj_ag_2026_037, nj_ag_2026_083, svicac_2022_013, svicac_2023_001, tbi_icac_2024_020, vt_ag_2021_008, vt_ag_2022_006, vt_ag_2024_021, vt_ag_2024_033
 
 **PSA exclusions** (1 cases):
 - `nj_ag_2026_017`: PSA-only — 'Discord' appears only after PSA boundary. Sample: "encountered on the gaming app Discord
@@ -910,7 +914,7 @@
 | tbi_icac_2024_004 | contact and communication with victim | various internet crimes against children | Instagram and Snapchat. | Instagram and offense language co-occur in the same sentence without instrume... |
 | tbi_icac_2024_017 | contact and communication with victim | Sexual Exploitation of Children and other relat... | including Snapchat and Instagram. | Instagram and offense language co-occur in the same sentence without instrume... |
 
-**Named only** (140 cases): cbp_2021_001, cbp_2021_002, cbp_2021_004, cbp_2021_005, cbp_2024_001, cbp_2025_001, cbp_2025_002, cbp_2026_002, cbp_2026_004, cbp_2026_005, cbp_2026_017, cbp_2026_021, cbp_2026_026, cbp_2026_031, cbp_2026_036, cbp_2026_038, cbp_2026_039, cbp_2026_040, cbp_2026_046, cbp_2026_049, cbp_2026_053, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, ice_2026_001, ice_2026_004, ice_2026_005, illinois_ag_2021_005, ncmec_2022_117, ncmec_2022_270, ncmec_2022_334, ncmec_2022_474, ncmec_2022_522, ncmec_2022_524, ncmec_2022_596, ncmec_2023_004, ncmec_2023_055, ncmec_2023_171, ncmec_2023_463, ncmec_2024_003, ncmec_2024_046, ncmec_2024_071, ncmec_2024_089, ncmec_2024_182, ncmec_2024_186, ncmec_2024_193, ncmec_2024_343, ncmec_2024_865, ncmec_2024_881, ncmec_2024_895, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2021_003, nj_ag_2023_002, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_059, nj_ag_2026_060, nm_ag_2024_001, pa_ag_2026_029, pa_ag_2026_030, south_florida_icac_2023_011, south_florida_icac_2025_036, south_florida_icac_2026_012, svicac_2023_001, svicac_2023_006, svicac_2026_013, tbi_icac_2022_008, usss_2017_006, usss_2018_008, ut_ag_2019_002, vt_ag_2021_001, vt_ag_2021_003, wy_dci_2023_005
+**Named only** (141 cases): cbp_2021_001, cbp_2021_002, cbp_2021_004, cbp_2021_005, cbp_2024_001, cbp_2025_001, cbp_2025_002, cbp_2026_002, cbp_2026_004, cbp_2026_005, cbp_2026_017, cbp_2026_021, cbp_2026_026, cbp_2026_031, cbp_2026_036, cbp_2026_038, cbp_2026_039, cbp_2026_040, cbp_2026_046, cbp_2026_049, cbp_2026_053, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, ice_2026_001, ice_2026_004, ice_2026_005, illinois_ag_2021_005, ncmec_2022_117, ncmec_2022_270, ncmec_2022_334, ncmec_2022_474, ncmec_2022_522, ncmec_2022_524, ncmec_2022_596, ncmec_2023_004, ncmec_2023_055, ncmec_2023_171, ncmec_2023_463, ncmec_2024_003, ncmec_2024_046, ncmec_2024_071, ncmec_2024_089, ncmec_2024_182, ncmec_2024_186, ncmec_2024_193, ncmec_2024_343, ncmec_2024_865, ncmec_2024_881, ncmec_2024_895, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2021_003, nj_ag_2023_002, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_047, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_058, nj_ag_2026_059, nj_ag_2026_060, nm_ag_2024_001, pa_ag_2026_029, pa_ag_2026_030, south_florida_icac_2023_011, south_florida_icac_2025_036, south_florida_icac_2026_012, svicac_2023_001, svicac_2023_006, svicac_2026_013, tbi_icac_2022_008, usss_2017_006, usss_2018_008, ut_ag_2019_002, vt_ag_2021_001, vt_ag_2021_003, wy_dci_2023_005
 
 **PSA exclusions** (0 cases):
 *(none)*
@@ -984,7 +988,7 @@
 | nj_ag_2026_047 | distribution of CSAM |  | offenders are finding new ways to distribute this filth, ... |
 | nj_ag_2026_059 | distribution of CSAM | second-degree distribution of child pornography and ... | three Twitter accounts that allegedly were used to upload... |
 | nj_ag_2026_060 | distribution of CSAM |  | Center for Missing and Exploited Children (NCMEC) regardi... |
-| ri_ag_2023_001 | distribution of CSAM | possession, distribution of child Publication date: ... | The report contained information about a Twitter account ... |
+| ri_ag_2023_001 | distribution of CSAM |  | The report contained information about a Twitter account ... |
 | svicac_2019_005 | contact and communication with victim | traveling to the Bay Area to sexually abuse a teen g... | Authorities determined the two met online, and communicat... |
 | ut_ag_2026_017 | distribution of CSAM |  | ICAC investigators received a tip that child pornography ... |
 | wcso_2024_001 | distribution of CSAM |  | Missing and Exploited Children (NCMEC) about uploads of C... |
@@ -1000,7 +1004,7 @@
 | ncmec_2024_973 | contact and communication with victim | 15 counts of possessing child pornography | He also admitted to using both Snapchat and Twitter ... | Twitter / X and offense language co-occur in the same sentence without instru... |
 | nj_ag_2026_058 | used in offense (specific role unspecified) |  | Millburn Lawyer Arrested on Charges That He Used Twi... | Twitter / X and offense language co-occur in the same sentence without instru... |
 
-**Named only** (145 cases): cbp_2017_001, cbp_2021_001, cbp_2021_002, cbp_2021_004, cbp_2021_005, cbp_2022_001, cbp_2022_002, cbp_2023_001, cbp_2023_002, cbp_2023_003, cbp_2026_002, cbp_2026_004, cbp_2026_017, cbp_2026_020, cbp_2026_024, cbp_2026_025, cbp_2026_026, cbp_2026_029, cbp_2026_034, cbp_2026_041, cbp_2026_042, cbp_2026_047, cbp_2026_049, cbp_2026_052, cbp_2026_065, cspd_2021_001, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, ice_2023_002, ice_2024_001, ncmec_2022_177, ncmec_2022_472, ncmec_2022_490, ncmec_2022_501, ncmec_2022_536, ncmec_2022_596, ncmec_2023_016, ncmec_2023_059, ncmec_2023_258, ncmec_2023_378, ncmec_2023_531, ncmec_2024_1005, ncmec_2024_1152, ncmec_2024_1155, ncmec_2024_1159, ncmec_2024_182, ncmec_2024_299, ncmec_2024_382, ncmec_2024_401, ncmec_2024_698, newyork_sp_2025_008, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2023_002, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_075, ohio_ag_2020_001, ohio_ag_2020_004, ohio_ag_2020_007, ohio_ag_2022_003, ohio_ag_2022_005, ohio_ag_2023_004, pa_ag_2026_014, south_florida_icac_2023_005, south_florida_icac_2024_007, south_florida_icac_2026_012, svicac_2022_001, svicac_2023_001, svicac_2023_008, svicac_2026_004, svicac_2026_013, tbi_icac_2014_007, us_marshals_2022_001, us_marshals_2023_003, us_marshals_2024_015, us_marshals_2026_012, us_marshals_2026_017, us_marshals_2026_019, us_marshals_2026_020, usss_2023_001, usss_2025_003
+**Named only** (147 cases): cbp_2017_001, cbp_2021_001, cbp_2021_002, cbp_2021_004, cbp_2021_005, cbp_2022_001, cbp_2022_002, cbp_2023_001, cbp_2023_002, cbp_2023_003, cbp_2026_002, cbp_2026_004, cbp_2026_017, cbp_2026_020, cbp_2026_024, cbp_2026_025, cbp_2026_026, cbp_2026_029, cbp_2026_034, cbp_2026_041, cbp_2026_042, cbp_2026_047, cbp_2026_049, cbp_2026_052, cbp_2026_065, cspd_2021_001, fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, ice_2023_002, ice_2024_001, ncmec_2022_177, ncmec_2022_472, ncmec_2022_490, ncmec_2022_501, ncmec_2022_536, ncmec_2022_596, ncmec_2023_016, ncmec_2023_059, ncmec_2023_258, ncmec_2023_378, ncmec_2023_531, ncmec_2024_1005, ncmec_2024_1152, ncmec_2024_1155, ncmec_2024_1159, ncmec_2024_182, ncmec_2024_299, ncmec_2024_382, ncmec_2024_401, ncmec_2024_698, newyork_sp_2025_008, nj_ag_2016_002, nj_ag_2016_003, nj_ag_2016_004, nj_ag_2016_005, nj_ag_2016_006, nj_ag_2017_001, nj_ag_2017_002, nj_ag_2017_003, nj_ag_2017_004, nj_ag_2017_005, nj_ag_2017_006, nj_ag_2017_007, nj_ag_2017_008, nj_ag_2017_009, nj_ag_2017_010, nj_ag_2017_011, nj_ag_2017_012, nj_ag_2017_013, nj_ag_2017_014, nj_ag_2017_015, nj_ag_2017_016, nj_ag_2017_017, nj_ag_2018_001, nj_ag_2018_002, nj_ag_2018_003, nj_ag_2018_004, nj_ag_2018_005, nj_ag_2018_006, nj_ag_2018_007, nj_ag_2018_008, nj_ag_2018_009, nj_ag_2018_010, nj_ag_2018_011, nj_ag_2018_012, nj_ag_2018_013, nj_ag_2018_014, nj_ag_2018_015, nj_ag_2018_016, nj_ag_2023_002, nj_ag_2026_034, nj_ag_2026_035, nj_ag_2026_036, nj_ag_2026_037, nj_ag_2026_038, nj_ag_2026_039, nj_ag_2026_040, nj_ag_2026_041, nj_ag_2026_042, nj_ag_2026_043, nj_ag_2026_044, nj_ag_2026_045, nj_ag_2026_046, nj_ag_2026_048, nj_ag_2026_049, nj_ag_2026_050, nj_ag_2026_051, nj_ag_2026_052, nj_ag_2026_053, nj_ag_2026_054, nj_ag_2026_055, nj_ag_2026_056, nj_ag_2026_057, nj_ag_2026_075, ohio_ag_2020_001, ohio_ag_2020_004, ohio_ag_2020_007, ohio_ag_2022_003, ohio_ag_2022_005, ohio_ag_2023_004, pa_ag_2026_014, south_florida_icac_2023_005, south_florida_icac_2024_007, south_florida_icac_2026_012, svicac_2022_001, svicac_2023_001, svicac_2023_008, svicac_2026_004, svicac_2026_013, tbi_icac_2014_007, us_marshals_2024_015, us_marshals_2026_001, us_marshals_2026_012, us_marshals_2026_013, us_marshals_2026_017, us_marshals_2026_019, us_marshals_2026_020, usss_2023_001, usss_2025_002, usss_2025_003
 
 **PSA exclusions** (0 cases):
 *(none)*
@@ -1120,7 +1124,7 @@
 **Stated evidence** (6 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
-| doj_archives_2007_029 | used in offense (specific role unspecified) | a single-count indictment on Dec | a collector.” He gave agents detailed information about t... |
+| doj_archives_2007_027 | used in offense (specific role unspecified) | a single-count indictment on Dec | a collector.” He gave agents detailed information about t... |
 | nj_ag_2016_013 | distribution of CSAM |  | and images of child pornography in exchange for the “moth... |
 | nj_ag_2017_001 | contact and communication with victim | two counts of manufacturing child pornography (2nd d... | into engaging in sexual conduct on a webcam by a person w... |
 | nj_ag_2017_003 | contact and communication with victim |  | into engaging in sexual conduct on a webcam by a person w... |
@@ -1155,10 +1159,10 @@
 |---|---|---|---|
 | doj_archives_2002_002 | contact and communication with victim |  | private Internet Relay Chat (IRC) channel. |
 | doj_archives_2005_008 | distribution of CSAM |  | chat (IRC) channels a willingness to receive or distribut... |
-| doj_archives_2005_012 | contact and communication with victim | a criminal complaint on March 25, 2005, in Portland,... | He also advertised on specified Internet Relay Chat (IRC)... |
-| doj_archives_2005_015 | contact and communication with victim | HIGH-TECH DISTRIBUTION OF CHILD PORNOGRAPHY WASHINGT... | that computer, and by advertising on specified Internet R... |
-| doj_archives_2005_018 | distribution of CSAM |  | public to upload files to that computer, and by advertisi... |
-| doj_archives_2005_026 | distribution of CSAM | multiple child pornography offenses and has agreed t... | and by advertising on specified Internet Relay Chat (IRC)... |
+| doj_archives_2005_011 | contact and communication with victim | a criminal complaint on March 25, 2005, in Portland,... | He also advertised on specified Internet Relay Chat (IRC)... |
+| doj_archives_2005_014 | contact and communication with victim | HIGH-TECH DISTRIBUTION OF CHILD PORNOGRAPHY WASHINGT... | that computer, and by advertising on specified Internet R... |
+| doj_archives_2005_017 | distribution of CSAM |  | public to upload files to that computer, and by advertisi... |
+| doj_archives_2005_025 | distribution of CSAM | multiple child pornography offenses and has agreed t... | and by advertising on specified Internet Relay Chat (IRC)... |
 
 **Inferred evidence** (0 cases):
 *(none)*
@@ -1251,6 +1255,38 @@
 
 ---
 
+## Gen AI (AIService)
+
+**Affordance / Surface / Harm:** *(blank — manual)*
+
+**Stated evidence** (4 cases):
+| case_id | platform_role | harm | quote |
+|---|---|---|---|
+| doj_ceos_2025_002 | contact and communication with victim |  | He also allegedly used artificial intelligence chatbots t... |
+| mt_doj_2025_001 | CSAM production | sexual abuse of children and incest | social media account and used AI to create manipulated co... |
+| ncmec_2024_430 | platform-reported CSAM (distribution inferred) | the following: • Child Exploitation, a Level 5 Felon... | of the files are reported to be Artificial Intelligence. |
+| scag_icac_2025_141 | distribution of CSAM |  | Makes it a felony to create, distribute, or possess non-c... |
+
+**Inferred evidence** (6 cases):
+| case_id | platform_role | harm | quote | reasoning |
+|---|---|---|---|---|
+| ncmec_2024_191 | used in offense (specific role unspecified) |  | PORT ORANGE MAN ARRESTED AFTER POSSIBLE AI-GENERATED... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+| pa_ag_2026_003 | grooming / soliciting minor | 33 felony counts of possession of child sexual ... | use of artificial intelligence technology to create ... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+| pa_ag_2026_006 | grooming / soliciting minor | possessing nearly 100 files, including artifici... | artificial intelligence technology to create materia... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+| scag_icac_2025_018 | used in offense (specific role unspecified) | three counts of sexual exploitation of a minor,... | Lexington County Man Arrested on Artificial Intellig... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+| scag_icac_2026_028 | used in offense (specific role unspecified) | three counts of possession of a visual depictio... | Berkeley County man arrested on Artificial Intellige... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+| tbi_icac_2024_004 | used in offense (specific role unspecified) | various internet crimes against children | This operation included an instance involving artifi... | Gen AI and offense language co-occur in the same sentence without instrumenta... |
+
+**Named only** (31 cases): arkansas_dps_2025_005, arkansas_dps_2025_006, idaho_icac_2024_026, idaho_icac_2024_028, idaho_icac_2024_032, idaho_icac_2025_012, idaho_icac_2026_001, idaho_icac_2026_012, lapd_2025_002, ncmec_2024_1064, ncmec_2024_1070, ncmec_2024_1212, ncmec_2024_1221, ncmec_2024_1251, ncmec_2024_164, ncmec_2024_238, ncmec_2024_259, ncmec_2024_411, ncmec_2024_437, ncmec_2024_636, ncmec_2024_656, nj_ag_2025_003, nj_ag_2025_008, nj_ag_2026_080, pa_ag_2026_024, scag_icac_2024_028, scag_icac_2025_019, scag_icac_2026_013, sd_ag_2026_002, south_florida_icac_2026_011, wy_dci_2026_005
+
+**PSA exclusions** (0 cases):
+*(none)*
+
+**DB gaps flagged** (0 cases):
+*(none)*
+
+---
+
 ## Craigslist (ClassifiedsMarketplace)
 
 **Affordance / Surface / Harm:** *(blank — manual)*
@@ -1258,7 +1294,7 @@
 **Stated evidence** (4 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
-| doj_archives_2007_030 | contact and communication with victim | traveling in interstate commerce with intent to enga... | been communicating with via the website “Craigslist” to a... |
+| doj_archives_2007_028 | contact and communication with victim | traveling in interstate commerce with intent to enga... | been communicating with via the website “Craigslist” to a... |
 | nj_ag_2016_004 | grooming / soliciting minor | Wednesday on charges of second-degree sexual assault... | allegedly placed by Chandler on Craigslist soliciting ora... |
 | nj_ag_2017_010 | grooming / soliciting minor |  | detectives spotted an ad allegedly placed by Chandler on ... |
 | nj_ag_2026_048 | grooming / soliciting minor |  | He had placed an ad on Craigslist soliciting |
@@ -1268,7 +1304,7 @@
 |---|---|---|---|---|
 | ice_2017_009 | used in offense (specific role unspecified) | the charges March 3, 2016 | He had placed a Craigslist ad to which an undercover... | Craigslist and offense language co-occur in the same sentence without instrum... |
 
-**Named only** (7 cases): doj_archives_2007_002, doj_archives_2007_013, ice_2013_011, ice_2013_014, ice_2017_010, nj_ag_2026_075, wa_ag_2026_001
+**Named only** (7 cases): doj_archives_2007_002, doj_archives_2007_012, ice_2013_011, ice_2013_014, ice_2017_010, nj_ag_2026_075, wa_ag_2026_001
 
 **PSA exclusions** (0 cases):
 *(none)*
@@ -1293,7 +1329,7 @@
 **Inferred evidence** (0 cases):
 *(none)*
 
-**Named only** (20 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2025_002, fresno_so_2025_003, ncmec_2022_049, ncmec_2022_117, ncmec_2024_1227, ncmec_2024_160, ncmec_2024_193, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_083, south_florida_icac_2025_004, south_florida_icac_2026_012, svicac_2022_013, svicac_2023_001
+**Named only** (21 cases): fresno_so_2022_001, fresno_so_2023_001, fresno_so_2024_002, fresno_so_2024_003, fresno_so_2024_004, fresno_so_2024_005, fresno_so_2024_008, fresno_so_2025_002, fresno_so_2025_003, ncmec_2022_049, ncmec_2022_117, ncmec_2024_1227, ncmec_2024_160, ncmec_2024_193, nj_ag_2025_001, nj_ag_2026_004, nj_ag_2026_083, south_florida_icac_2025_004, south_florida_icac_2026_012, svicac_2022_013, svicac_2023_001
 
 **PSA exclusions** (1 cases):
 - `ut_ag_2022_001`: PSA-only — 'TikTok' appears only after PSA boundary. Sample: "toward the LGBTQ community based on us
@@ -1313,12 +1349,39 @@
 | illinois_ag_2021_006 | distribution of CSAM |  | these inexcusable crimes.” Prosecutors alleged that Polja... |
 | ncmec_2023_488 | contact and communication with victim | the charge on July 7, 2020 | According to court records, the investigation began after... |
 | ncmec_2024_967 | distribution of CSAM | allegedly having child pornography on his laptop aft... | and fake Skype account that was used to upload this photo... |
-| usss_2020_002 | contact and communication with victim | Possession Of Child Publication date: 2020-12-07 SAN... | The complaint further describes cell phone messages and S... |
+| usss_2020_002 | contact and communication with victim | possession of child pornography, in violation of 18 U | The complaint further describes cell phone messages and S... |
 
 **Inferred evidence** (0 cases):
 *(none)*
 
 **Named only** (4 cases): nj_ag_2015_003, nj_ag_2015_006, nj_ag_2015_007, nj_ag_2016_013
+
+**PSA exclusions** (0 cases):
+*(none)*
+
+**DB gaps flagged** (0 cases):
+*(none)*
+
+---
+
+## Mega.nz (FileHostingService)
+
+**Affordance / Surface / Harm:** *(blank — manual)*
+
+**Stated evidence** (4 cases):
+| case_id | platform_role | harm | quote |
+|---|---|---|---|
+| ncmec_2022_207 | distribution of CSAM | Two Counts Of Possession Of Child Pornography Origin... | shared a link with him and told him to download Mega to g... |
+| ncmec_2024_637 | used in offense (specific role unspecified) |  | with the undercover officer, Bush also sent a Mega link c... |
+| south_florida_icac_2023_011 | distribution of CSAM | eight counts of possession of child pornography and ... | Dropbox and Mega accounts he used to distribute the porno... |
+| south_florida_icac_2025_010 | distribution of CSAM | November 6 and faces 12 felony counts, including mul... | involving minors and had exchanged Mega file-storage link... |
+
+**Inferred evidence** (1 cases):
+| case_id | platform_role | harm | quote | reasoning |
+|---|---|---|---|---|
+| ncmec_2022_123 | CSAM production | 10 counts of child exploitation | produced using the Kik messenger app and the cloud s... | Mega.nz and offense language co-occur in the same sentence without instrument... |
+
+**Named only** (7 cases): ncmec_2023_074, ncmec_2024_193, ncmec_2024_640, ncmec_2024_980, nj_ag_2026_052, nj_ag_2026_076, wy_dci_2026_002
 
 **PSA exclusions** (0 cases):
 *(none)*
@@ -1335,7 +1398,7 @@
 **Stated evidence** (3 cases):
 | case_id | platform_role | harm | quote |
 |---|---|---|---|
-| fresno_so_2015_001 | contact and communication with victim | Multiple Sex Abuse & Child Pornography Charges Publi... | Ricardo Carrillo contacted the boy through apps called “W... |
+| fresno_so_2015_001 | contact and communication with victim |  | Ricardo Carrillo contacted the boy through apps called “W... |
 | ncmec_2023_633 | contact and communication with victim | one count of possession of child pornography | on the Whisper app and by text message. |
 | ncmec_2024_765 | contact and communication with victim | DISTRIBUTING CHILD PORNOGRAPHY, FEDERAL OFFICIALS SA... | with an undercover law enforcement officer on the messagi... |
 
@@ -1639,6 +1702,28 @@
 
 ---
 
+## Xbox Live (GamePlatform)
+
+**Affordance / Surface / Harm:** *(blank — manual)*
+
+**Stated evidence** (1 cases):
+| case_id | platform_role | harm | quote |
+|---|---|---|---|
+| ncmec_2023_272 | platform-reported CSAM (distribution inferred) | second-degree and third-degree child pornography | Xbox registered with an email matching the one on the fla... |
+
+**Inferred evidence** (0 cases):
+*(none)*
+
+**Named only** (3 cases): ncmec_2024_1195, ncmec_2024_402, ncmec_2024_626
+
+**PSA exclusions** (0 cases):
+*(none)*
+
+**DB gaps flagged** (0 cases):
+*(none)*
+
+---
+
 ## IMVU (MessagingService)
 
 **Affordance / Surface / Harm:** *(blank — manual)*
@@ -1694,26 +1779,6 @@
 *(none)*
 
 **Named only** (2 cases): anchorage_pd_2022_009, usss_2018_007
-
-**PSA exclusions** (0 cases):
-*(none)*
-
-**DB gaps flagged** (0 cases):
-*(none)*
-
----
-
-## Gen AI (AIService)
-
-**Affordance / Surface / Harm:** *(blank — manual)*
-
-**Stated evidence** (0 cases):
-*(none)*
-
-**Inferred evidence** (0 cases):
-*(none)*
-
-**Named only** (42 cases): arkansas_dps_2025_005, arkansas_dps_2025_006, doj_ceos_2025_002, idaho_icac_2024_026, idaho_icac_2024_028, idaho_icac_2024_032, idaho_icac_2025_012, idaho_icac_2026_001, idaho_icac_2026_012, lapd_2025_002, mt_doj_2025_001, ncmec_2024_1064, ncmec_2024_1070, ncmec_2024_1212, ncmec_2024_1221, ncmec_2024_1251, ncmec_2024_164, ncmec_2024_191, ncmec_2024_238, ncmec_2024_258, ncmec_2024_259, ncmec_2024_411, ncmec_2024_430, ncmec_2024_437, ncmec_2024_636, ncmec_2024_656, nj_ag_2025_003, nj_ag_2025_008, nj_ag_2026_080, pa_ag_2026_003, pa_ag_2026_006, pa_ag_2026_024, scag_icac_2024_028, scag_icac_2025_018, scag_icac_2025_019, scag_icac_2025_141, scag_icac_2026_013, scag_icac_2026_028, sd_ag_2026_002, south_florida_icac_2026_011, tbi_icac_2024_004, wy_dci_2026_005
 
 **PSA exclusions** (0 cases):
 *(none)*
@@ -1838,7 +1903,7 @@
 **PSA exclusions** (0 cases):
 *(none)*
 
-**DB gaps flagged** (1207 cases):
+**DB gaps flagged** (1214 cases):
 - `af_osi_2023_001`: `Tor` — "Witnesses informed investigators that he had been contacting"
 - `alea_2018_001`: `Tor` — "prosecutorial agencies on the local, state and federal level"
 - `anchorage_pd_2022_001`: `Tor` — "From the District Attorney’s Office:"
@@ -1899,46 +1964,6 @@
 **PSA exclusions** (2 cases):
 - `nj_ag_2026_017`: PSA-only — 'Skout' appears only after PSA boundary. Sample: "In past cases, the ICAC Task Force has 
 - `ut_ag_2022_001`: PSA-only — 'Skout' appears only after PSA boundary. Sample: "video chat app lets users meet people i
-
-**DB gaps flagged** (0 cases):
-*(none)*
-
----
-
-## Mega.nz (FileHostingService)
-
-**Affordance / Surface / Harm:** *(blank — manual)*
-
-**Stated evidence** (0 cases):
-*(none)*
-
-**Inferred evidence** (0 cases):
-*(none)*
-
-**Named only** (12 cases): ncmec_2022_123, ncmec_2022_207, ncmec_2023_074, ncmec_2024_193, ncmec_2024_637, ncmec_2024_640, ncmec_2024_980, nj_ag_2026_052, nj_ag_2026_076, south_florida_icac_2023_011, south_florida_icac_2025_010, wy_dci_2026_002
-
-**PSA exclusions** (0 cases):
-*(none)*
-
-**DB gaps flagged** (0 cases):
-*(none)*
-
----
-
-## Xbox Live (GamePlatform)
-
-**Affordance / Surface / Harm:** *(blank — manual)*
-
-**Stated evidence** (0 cases):
-*(none)*
-
-**Inferred evidence** (0 cases):
-*(none)*
-
-**Named only** (4 cases): ncmec_2023_272, ncmec_2024_1195, ncmec_2024_402, ncmec_2024_626
-
-**PSA exclusions** (0 cases):
-*(none)*
 
 **DB gaps flagged** (0 cases):
 *(none)*

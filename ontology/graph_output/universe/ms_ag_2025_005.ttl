@@ -58,9 +58,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Lincoln County Sheriff's Department" .
 
-<https://caselinker.up.railway.app/resource/agency/mississippi-department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Mississippi Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/mississippi-department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/washington-dc-metropolitan-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

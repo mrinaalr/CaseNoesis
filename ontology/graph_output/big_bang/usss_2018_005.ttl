@@ -52,9 +52,7 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Texas Office of Attorney General" .
 
-<https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Texas Office of the Attorney General" .
+<https://caselinker.up.railway.app/resource/agency/texas-office-of-the-attorney-general> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 

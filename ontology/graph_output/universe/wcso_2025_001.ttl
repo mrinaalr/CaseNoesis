@@ -63,17 +63,13 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/sparks-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Sparks Police Department" .
+<https://caselinker.up.railway.app/resource/agency/sparks-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/task-force-detectives> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Task Force Detectives" .
 
-<https://caselinker.up.railway.app/resource/agency/united-states-marshals> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "United States Marshals" .
+<https://caselinker.up.railway.app/resource/agency/united-states-marshals> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

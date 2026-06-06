@@ -25,66 +25,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/yavapai-county-attorneys-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Yavapai County Attorney's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "chat"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/phase/booked",
-        "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2011-08-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/yavapai-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Yavapai County Sheriff's Office"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -124,14 +64,38 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/legal-proceeding",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 13
+            "@value": "Pretrial detention facility (not a sentence): Yavapai County Jail"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2011-08-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/yavapai-county-attorneys-office",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Yavapai County Attorney's Office"
           }
         ]
       },
@@ -192,6 +156,18 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
@@ -204,26 +180,50 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/legal-proceeding",
+        "@id": "https://caselinker.up.railway.app/resource/agency/yavapai-county-sheriffs-office",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#comment": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Pretrial detention facility (not a sentence): Yavapai County Jail"
+            "@value": "Yavapai County Sheriff's Office"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/charge/1"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 13
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/azicac_2011_007/phase/booked",
+        "@type": [
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2011-08-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "chat"
           }
         ]
       }

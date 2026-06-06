@@ -46,11 +46,11 @@
 
 <https://caselinker.up.railway.app/resource/agency/maine-department-of-corrections> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/maine-national-guard-counterdrug-task-force> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/maine-national-guard-counterdrug-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Maine Violent Offender Task Force" .
+    rdfs:label "Maine National Guard Counterdrug Task Force" .
+
+<https://caselinker.up.railway.app/resource/agency/maine-violent-offender-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/northern-oklahoma-violent-crimes-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

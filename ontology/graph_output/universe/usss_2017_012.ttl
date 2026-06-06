@@ -41,9 +41,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2017_012/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2017_012/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/colonie-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Colonie Police Department" .
+<https://caselinker.up.railway.app/resource/agency/colonie-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 

@@ -2,43 +2,6 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/child-predator-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/facet/csam",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004",
         "@type": [
           "https://cacontology.projectvic.org#CACInvestigation",
@@ -79,13 +42,13 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/distribution"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/online-only"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/distribution"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/legal-proceeding"
@@ -103,6 +66,93 @@
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/dover-police-department"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#TaskForceOperation",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2014-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/child-predator-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/csam",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/facet/csam"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Dealing in Child"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 10
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/dover-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/3",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "distribution of child pornography"
           }
         ]
       },
@@ -133,20 +183,20 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/facet/csam",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/dover-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Dover Police Department"
+            "@value": "child pornography"
           }
         ]
       },
@@ -176,13 +226,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/role/victim/1",
         "@type": [
           "https://cacontology.projectvic.org#VictimRole",
@@ -209,39 +252,15 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/distribution",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/3",
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "distribution of child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Dealing in Child"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 10
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
@@ -253,31 +272,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 22
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2014-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/event/csam",
-        "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2014_004/facet/csam"
           }
         ]
       }

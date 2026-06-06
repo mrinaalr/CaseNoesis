@@ -42,9 +42,7 @@
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_009/event/production> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_009/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Anchorage Police Department" .
+<https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 

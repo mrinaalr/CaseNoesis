@@ -34,9 +34,7 @@
     cacontology:hasRoleBeginPoint "2023-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2023_005/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/great-lakes-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Great Lakes Regional Fugitive Task Force" .
+<https://caselinker.up.railway.app/resource/agency/great-lakes-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/north-star-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -48,9 +46,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/wisconsin-department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Wisconsin Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/wisconsin-department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_005/event/multi-jurisdiction> a cac-core:Event,
         cacontology-multi:MultiJurisdictionalInvestigation ;

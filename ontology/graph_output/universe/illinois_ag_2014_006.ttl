@@ -46,13 +46,17 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/centralia-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/centralia-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Centralia Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/vandalia-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/vandalia-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Vandalia Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2014_006/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

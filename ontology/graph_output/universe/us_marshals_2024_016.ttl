@@ -39,7 +39,9 @@
         <https://caselinker.up.railway.app/resource/agency/new-orleans-task-force>,
         <https://caselinker.up.railway.app/resource/agency/usms> .
 
-<https://caselinker.up.railway.app/resource/agency/atf> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/atf> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "ATF" .
 
 <https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
 

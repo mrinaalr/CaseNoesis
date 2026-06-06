@@ -426,7 +426,7 @@ Each case includes structured features extracted from case narratives:
 - `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
 - `GET /api/automated-analysis` - Run automated analysis (case grouping, triage, insights)
 - `POST /api/return-tagged-cases` - Get cases matching selected tags (intersection logic)
-- `GET /api/stats` - Get case statistics (total cases, total victims, extracted features count, sources)
+- `GET /api/stats` - Get case statistics (total cases, extracted features count, sources)
 - `GET /docs` - Interactive API documentation
 
 ## Technology Stack

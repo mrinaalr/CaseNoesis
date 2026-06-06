@@ -39,7 +39,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/west-virginia-state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/west-virginia-state-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "West Virginia State Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/ky_sp_2019_029/event/distribution> a cac-core:Event,
         cacontology-legal-outcomes:CSAM_Distribution ;

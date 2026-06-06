@@ -37,13 +37,17 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_008/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_008/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-bureau-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Attorney General's Bureau of Criminal Investigation" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hardin-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/toledo-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/toledo-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Toledo Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2015_008/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,

@@ -48,9 +48,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/north-augusta-department-of-public-safety> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "North Augusta Department of Public Safety" .
+<https://caselinker.up.railway.app/resource/agency/north-augusta-department-of-public-safety> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/scag_icac_2022_084/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;

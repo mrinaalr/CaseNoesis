@@ -53,17 +53,13 @@
         <https://caselinker.up.railway.app/resource/case/ice_2023_001/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ice_2023_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Homeland Security" .
+<https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Virtual Global Taskforce" .
+<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ice_2023_001/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

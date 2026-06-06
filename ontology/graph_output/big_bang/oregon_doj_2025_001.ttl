@@ -42,7 +42,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Oregon Department of Justice" .
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2025_001/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,

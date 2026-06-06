@@ -52,9 +52,7 @@
         cacontology-multi:StateAgency ;
     rdfs:label "New Jersey Office of the Attorney General and Division of Consumer Affairs" .
 
-<https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Office of the Attorney General" .
+<https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_004/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -149,10 +147,8 @@
 <https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Instagram" .
 
-<https://caselinker.up.railway.app/resource/platform/roblox> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:GamePlatform ;
-    rdfs:label "Roblox" ;
-    cacontology-platforms:allowsAnonymousChat "true" .
+<https://caselinker.up.railway.app/resource/platform/roblox> a cacontology-platforms:GamePlatform ;
+    rdfs:label "Roblox" .
 
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .

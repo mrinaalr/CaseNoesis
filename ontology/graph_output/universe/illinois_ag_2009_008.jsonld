@@ -2,26 +2,69 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/facet/possession"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2009-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/offense-event/charge-3"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/sentence/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/facet/possession",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/cybertip",
+        "@type": [
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+        ],
+        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/naperville-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "supervised release"
+            "@value": "Naperville Police Department"
           }
         ]
       },
@@ -66,10 +109,10 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/distribution"
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
           },
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/distribution"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/legal-step/sentenced"
@@ -109,26 +152,54 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau",
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/legal-step/sentenced",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/charge/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
-            "@value": "possession of child pornography"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2009-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/phase/sentenced",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2009-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/facet/possession"
           }
         ]
       },
@@ -159,15 +230,71 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/lisle-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/charge/2",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "possession of child pornography"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2009-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/offense-event/charge-3"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/sentence/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "$1,000"
+          }
         ]
       },
       {
@@ -181,6 +308,38 @@
           {
             "@value": "Inferred offense from charge: child exploitation"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/sentence/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#SupervisedRelease",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "supervised release"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/distribution",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       },
       {
@@ -217,161 +376,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/lisle-police-department",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/naperville-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2009-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/offense-event/charge-3"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/victim/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/sentence/2",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "$1,000"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/distribution",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Distribution",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/legal-step/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingHearing",
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2009-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2009-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/offense-event/charge-3"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/phase/sentenced",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#SentencingPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2009-01-01T00:00:00Z"
+            "@value": "Lisle Police Department"
           }
         ]
       }

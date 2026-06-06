@@ -50,13 +50,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/department-of-corrections> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/washington-state-patrol-missing-and-exploited-children-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Washington State Patrol Missing and Exploited Children Task Force" .
+<https://caselinker.up.railway.app/resource/agency/washington-state-patrol-missing-and-exploited-children-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/wa_ag_2024_001/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child molestation" ;

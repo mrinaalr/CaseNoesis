@@ -47,7 +47,9 @@
         <https://caselinker.up.railway.app/resource/case/de_ag_2008_001/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2008_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Delaware Child Predator Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/delaware-department-of-justice> a cacontology-multi:StateAgency .
 
@@ -55,7 +57,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/doj> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "U.S. Department of Justice" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

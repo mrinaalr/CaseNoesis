@@ -1162,27 +1162,8 @@
                 statBox.style.cursor = 'default';
                 statBox.onclick = null;
             } else {
-                // Total victims for other visualizations
-                // Show the stat box (in case it was hidden)
                 const statBox = document.getElementById('victim-count').parentElement;
-                statBox.style.display = 'block';
-                
-                let totalVictims = 0;
-                filteredCases.forEach(c => {
-                    const count = c.victim_count;
-                    if (count && typeof count === 'number') {
-                        totalVictims += count;
-                    } else if (c.raw_data?.victim_count) {
-                        const rawCount = parseInt(c.raw_data.victim_count);
-                        if (!isNaN(rawCount)) totalVictims += rawCount;
-                    }
-                });
-                document.getElementById('victim-count').textContent = totalVictims > 0 ? totalVictims : '-';
-                victimLabel.textContent = 'Total Victims';
-                
-                // Remove click handler for non-geographic visualizations
-                statBox.style.cursor = 'default';
-                statBox.onclick = null;
+                statBox.style.display = 'none';
             }
             
             // Third stat box: agency jump (geographic) or data source count (other viz)

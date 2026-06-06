@@ -32,7 +32,9 @@
         <https://caselinker.up.railway.app/resource/agency/prosecutors-office-morris-county-prosecutors-office-ocean-county-prosecutors-office-passaic-county-sheriffs-office>,
         <https://caselinker.up.railway.app/resource/agency/springfield-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/bayonne-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/bayonne-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Bayonne Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 

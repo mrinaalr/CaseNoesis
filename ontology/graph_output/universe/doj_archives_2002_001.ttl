@@ -87,7 +87,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Reno Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Texas Department of Public Safety" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2002_001/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

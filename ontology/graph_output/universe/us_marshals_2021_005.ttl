@@ -57,11 +57,11 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Louisiana State Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "New Orleans Police Department" .
+<https://caselinker.up.railway.app/resource/agency/new-orleans-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/new-orleans-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "New Orleans Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/southern-texas-corpus-christi-gulf-coast-violent-offenders-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

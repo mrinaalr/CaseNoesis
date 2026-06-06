@@ -60,7 +60,9 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Kansas Bureau of Investigation" .
 
-<https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigations> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/kansas-bureau-of-investigations> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Kansas Bureau of Investigations" .
 
 <https://caselinker.up.railway.app/resource/agency/secret-service> a cacontology-multi:LocalAgency .
 

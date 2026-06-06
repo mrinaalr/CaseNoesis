@@ -40,9 +40,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/san-francisco-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "San Francisco Police Department" .
+<https://caselinker.up.railway.app/resource/agency/san-francisco-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 

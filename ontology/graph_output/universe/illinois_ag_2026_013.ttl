@@ -49,17 +49,11 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Illinois Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/illinois-department-of-corrections> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/naperville-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Naperville Police Department" .
+<https://caselinker.up.railway.app/resource/agency/naperville-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/wheaton-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "WHEATON Police Department" .
+<https://caselinker.up.railway.app/resource/agency/wheaton-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2026_013/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child exploitation" ;

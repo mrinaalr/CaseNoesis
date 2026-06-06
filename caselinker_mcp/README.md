@@ -104,7 +104,7 @@ Fill in `CASELINKER_KEY` locally if you need trusted-key endpoints.
 
 ## Hosted (Railway)
 
-When CaseLinker runs on Railway, the MCP server is mounted on the main FastAPI app at **`/mcp/sse`** (no separate service or Procfile entry).
+When CaseLinker runs on Railway, the MCP server is mounted on the main FastAPI app at **`/mcp/sse`** (no separate service or Procfile entry). Client messages POST to **`/mcp/messages?session_id=...`** (no trailing slash; trailing-slash redirects break some MCP clients).
 
 **SSE URL:** `https://caselinker.up.railway.app/mcp/sse`
 
@@ -116,12 +116,15 @@ When CaseLinker runs on Railway, the MCP server is mounted on the main FastAPI a
     "caselinker-hosted": {
       "url": "https://caselinker.up.railway.app/mcp/sse",
       "headers": {
-        "Authorization": "Bearer <your MCP_ACCESS_KEY>"
+        "Authorization": "Bearer <your MCP_ACCESS_KEY>",
+        "CaseLinker-Key": "<your trusted key>"
       }
     }
   }
 }
 ```
+
+Public tier only (no trusted key): omit `CaseLinker-Key` from `headers`.
 
 **Railway environment variables:**
 
@@ -129,10 +132,12 @@ When CaseLinker runs on Railway, the MCP server is mounted on the main FastAPI a
 |----------|---------|
 | `MCP_ACCESS_KEY` | Gates inbound MCP HTTP requests (`Authorization: Bearer …`) |
 
-`MCP_ACCESS_KEY` is separate from `CASELINKER_KEY`:
+`MCP_ACCESS_KEY` is separate from `CASELINKER_KEY` / `CaseLinker-Key`:
 
-- **`MCP_ACCESS_KEY`** — who may connect to the MCP server
-- **`CASELINKER_KEY`** — what the MCP server sends to the CaseLinker REST API (trusted bulk access)
+- **`MCP_ACCESS_KEY`** — who may connect to the MCP server (`Authorization: Bearer …`)
+- **`CASELINKER_KEY` env** (stdio) or **`CaseLinker-Key` header** (SSE) — what the MCP server sends to the CaseLinker REST API for trusted-tier tools
+
+Per-user trusted access over SSE: pass `CaseLinker-Key` in `mcp.json` `headers`. The server forwards it on outbound REST calls. If the header is absent, it falls back to server-side `CASELINKER_KEY` env (if set), then public tier only.
 
 Add `.cursor/mcp.json` to `.gitignore` if it contains secrets.
 

@@ -25,26 +25,62 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam",
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/charge/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/charge/1",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
           "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "child pornography"
+            "@value": "dealing in child"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 25
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2012-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/us-department-of-justice",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "U.S. Department of Justice"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 21
           }
         ]
       },
@@ -72,33 +108,9 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
-        ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2012-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "dealing in child"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#indictmentCounts": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 25
-          }
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
@@ -136,30 +148,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/us-department-of-justice",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/sentence/1",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
@@ -172,21 +160,21 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 21
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/event/csam",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam"
+          }
         ]
       },
       {
@@ -249,6 +237,24 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/us-department-of-justice"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child pornography"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_003/facet/csam",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       }
     ],

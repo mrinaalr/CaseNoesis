@@ -52,9 +52,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/task-forces> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Task Force's" .
+<https://caselinker.up.railway.app/resource/agency/task-forces> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-department-of-justice> a cacontology-multi:LocalAgency .
 

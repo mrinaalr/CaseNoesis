@@ -124,10 +124,8 @@
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2023-09-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/bittorrent> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:FileHostingService ;
-    rdfs:label "BitTorrent" ;
-    cacontology-platforms:platformType "p2p" .
+<https://caselinker.up.railway.app/resource/platform/bittorrent> a cacontology-platforms:FileHostingService ;
+    rdfs:label "BitTorrent" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_133/event/conspiracy> a cacontology:ConspiracyToCommitCSA,
         cac-core:Event ;

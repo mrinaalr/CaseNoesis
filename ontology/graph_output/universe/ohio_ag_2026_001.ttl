@@ -42,7 +42,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/southeastern-ohio-human-trafficking-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/southeastern-ohio-human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Southeastern Ohio Human Trafficking Task Force" .
 
 <https://caselinker.up.railway.app/resource/case/ohio_ag_2026_001/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

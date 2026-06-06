@@ -111,8 +111,10 @@
         cacontology-legal-outcomes:PrisonSentence ;
     rdfs:label "10 years" .
 
-<https://caselinker.up.railway.app/resource/platform/meganz> a cacontology-platforms:FileHostingService ;
-    rdfs:label "Mega.nz" .
+<https://caselinker.up.railway.app/resource/platform/meganz> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:FileHostingService ;
+    rdfs:label "Mega.nz" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2026_002/phase/convicted> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

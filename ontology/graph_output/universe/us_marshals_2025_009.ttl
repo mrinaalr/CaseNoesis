@@ -53,9 +53,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/hillsborough-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/marshals> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Marshals" .
+<https://caselinker.up.railway.app/resource/agency/marshals> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/st-petersburg-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

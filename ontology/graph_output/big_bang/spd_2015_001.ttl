@@ -34,9 +34,7 @@
         <https://caselinker.up.railway.app/resource/agency/los-angeles-police-department>,
         <https://caselinker.up.railway.app/resource/agency/seattle-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/bureau-of-justice-assistance> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Bureau of Justice Assistance" .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-justice-assistance> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/bureau-of-justice-statistics> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

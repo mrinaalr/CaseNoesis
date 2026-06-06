@@ -42,7 +42,9 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/arkansas_dps_2024_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/arkansas_dps_2024_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/arkansas-state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/arkansas-state-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Arkansas State Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/crawford-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

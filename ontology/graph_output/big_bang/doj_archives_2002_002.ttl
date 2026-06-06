@@ -118,8 +118,10 @@
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/irc> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_archives_2002_002/facet/production> .
 
-<https://caselinker.up.railway.app/resource/platform/irc> a cacontology-platforms:AnonymousChatPlatform ;
-    rdfs:label "IRC" .
+<https://caselinker.up.railway.app/resource/platform/irc> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "IRC" ;
+    cacontology-platforms:platformType "legacy" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2002_002/offense-event/charge-3> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

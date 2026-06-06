@@ -63,10 +63,12 @@
 <https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
     rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/discord> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/discord> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Discord" .
 
-<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/facebook> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
 <https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
@@ -81,7 +83,8 @@
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .
 
-<https://caselinker.up.railway.app/resource/platform/tiktok> a cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/tiktok> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "TikTok" .
 
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;

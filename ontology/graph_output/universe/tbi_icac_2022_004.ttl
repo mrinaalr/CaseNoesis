@@ -41,7 +41,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/macon-county-sheriffs-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/macon-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Macon County Sheriff's Department" .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2022_004/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;

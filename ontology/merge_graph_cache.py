@@ -6,7 +6,7 @@ Layout (Patterns visualizer reads subdirs only — not graph_output/ root):
   graph_output/            — new batch output (staging; not loaded by viz)
   graph_output/universe/   — full corpus (compare chips + secret Universe mode)
   graph_output/big_bang/   — half-sample (Big Bang button)
-  graph_output/analysis/   — bridge-dense 1000 (big_bang.py; triple-click Exit Universe)
+  graph_output/analysis/   — custom MCP/research cohorts (Analysis mode; see analysis_ids.txt)
 
 Caches to:
   ontology/cache/merged_compare.json
@@ -37,6 +37,7 @@ UNIVERSE_DIR = GRAPH_ROOT / "universe"
 BIG_BANG_DIR = GRAPH_ROOT / "big_bang"
 ANALYSIS_DIR = GRAPH_ROOT / "analysis"
 BIG_BANG_IDS_FILE = ONTOLOGY / "big_bang_ids.txt"
+ANALYSIS_IDS_FILE = ONTOLOGY / "analysis_ids.txt"
 CACHE_DIR = ONTOLOGY / "cache"
 COMPARE_IDS_FILE = ONTOLOGY / "selected_200_ids.txt"
 NLP_GRAPH_RE = re.compile(r"/graphs/nlp$")
@@ -56,9 +57,9 @@ def _compare_pool_ids() -> List[str]:
 
 
 def _analysis_pool_ids() -> List[str]:
-    if not BIG_BANG_IDS_FILE.is_file():
+    if not ANALYSIS_IDS_FILE.is_file():
         return []
-    return [ln.strip() for ln in BIG_BANG_IDS_FILE.read_text().splitlines() if ln.strip()]
+    return [ln.strip() for ln in ANALYSIS_IDS_FILE.read_text().splitlines() if ln.strip()]
 
 
 def graph_dir_for_pool(pool: str) -> Path:
@@ -188,8 +189,10 @@ def case_ids_for_pool(pool: str) -> List[str]:
         return [cid for cid in order if cid in graph_set]
     if pool == "analysis":
         order = _analysis_pool_ids()
-        graph_set = set(graphs)
-        return [cid for cid in order if cid in graph_set]
+        if order:
+            graph_set = set(graphs)
+            return [cid for cid in order if cid in graph_set]
+        return graphs
     return graphs
 
 

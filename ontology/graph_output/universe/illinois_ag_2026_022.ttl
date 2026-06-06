@@ -256,9 +256,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/macoupin-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Macoupin County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/macoupin-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/palmyra-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

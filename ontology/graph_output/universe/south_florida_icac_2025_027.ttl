@@ -48,9 +48,7 @@
         <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_027/event/production> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_027/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/coconut-creek-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Coconut Creek Police Department" .
+<https://caselinker.up.railway.app/resource/agency/coconut-creek-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cacontology-multi:LocalAgency .
 

@@ -40,7 +40,9 @@
     cacontology:hasRoleBeginPoint "2024-03-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/idaho_icac_2024_009/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/chubbuck-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/chubbuck-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Chubbuck Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/department-of-homeland-security> a cacontology-multi:LocalAgency .
 

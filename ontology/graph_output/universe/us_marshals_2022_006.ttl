@@ -30,7 +30,9 @@
     cacontology-multi:involvesAgency <https://caselinker.up.railway.app/resource/agency/marshals>,
         <https://caselinker.up.railway.app/resource/agency/usms> .
 
-<https://caselinker.up.railway.app/resource/agency/marshals> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/marshals> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Marshals" .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

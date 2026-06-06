@@ -137,11 +137,15 @@
         <https://caselinker.up.railway.app/resource/platform/social-media> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_004/facet/production> .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
+<https://caselinker.up.railway.app/resource/platform/social-media> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_004/offense-event/charge-5> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

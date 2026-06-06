@@ -44,9 +44,13 @@
         <https://caselinker.up.railway.app/resource/case/ohio_ag_2020_001/offense-event/charge-1> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2020_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/ashtabula-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/ashtabula-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Ashtabula Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/conneaut-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/conneaut-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Conneaut Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals-office> a cacontology-multi:StateAgency .
 

@@ -2,23 +2,29 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/offense-event/charge-1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/event/hands-on",
         "@type": [
           "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "Inferred offense from charge: child exploitation"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -36,14 +42,8 @@
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/victim/1"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
@@ -103,6 +103,32 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2019-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/offender/1"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
@@ -115,15 +141,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@value": 12
           }
         ]
       },
@@ -137,37 +162,6 @@
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2019-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/charge/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2019-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 12
           }
         ]
       },
@@ -198,28 +192,34 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/legal-proceeding",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2019-01-01T00:00:00Z"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/offense-event/charge-1",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/offense-event/charge-1"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/svicac_2019_011/person/victim/1"
+            "@value": "Inferred offense from charge: child exploitation"
           }
         ]
       }

@@ -84,7 +84,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Hawaini Department of Human Services" .
 
-<https://caselinker.up.railway.app/resource/agency/honolulu-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/honolulu-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Honolulu Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

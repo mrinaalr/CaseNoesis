@@ -51,9 +51,7 @@
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2023_012/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2023_012/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/effingham-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Effingham Police Department" .
+<https://caselinker.up.railway.app/resource/agency/effingham-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

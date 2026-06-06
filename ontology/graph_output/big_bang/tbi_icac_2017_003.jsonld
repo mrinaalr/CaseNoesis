@@ -2,31 +2,56 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/facet/possession",
+        "@id": "https://caselinker.up.railway.app/resource/agency/sullivan-county-sheriffs-office",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Sullivan County Sheriff's Office"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/sentence/1",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-01-01T00:00:00Z"
+            "@value": "$25,000"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession"
+            "@value": "child pornography"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession",
+        "@type": [
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/facet/possession"
           }
         ]
       },
@@ -63,58 +88,43 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/phase/booked",
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/facet/possession",
         "@type": [
-          "https://cacontology.projectvic.org#InitialPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2017-01-01T00:00:00Z"
           }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/offender/1"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/sullivan-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Sullivan County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/sentence/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#MonetaryPenalty",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalSentence"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "$25,000"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/charge/1",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "child pornography"
+            "@value": "Johnson County Sheriff's Office"
           }
         ]
       },
@@ -135,32 +145,50 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/phase/booked",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#InitialPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/facet/possession"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2017-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/victim/1"
           }
         ]
       },
@@ -232,32 +260,10 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/johnson-county-sheriffs-office",
+        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/multi-jurisdiction",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2017-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/event/possession"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/tbi_icac_2017_003/person/victim/1"
-          }
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
         ]
       }
     ],

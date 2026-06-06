@@ -62,9 +62,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/floridacaribbean-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Florida/Caribbean Regional Fugitive Task Force" .
+<https://caselinker.up.railway.app/resource/agency/floridacaribbean-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fort-myers-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -78,9 +76,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/pennsylvania-state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/philadelphia-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Philadelphia Police Department" .
+<https://caselinker.up.railway.app/resource/agency/philadelphia-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

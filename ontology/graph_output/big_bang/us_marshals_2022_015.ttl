@@ -53,17 +53,13 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Bogalusa Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/caribbean-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Caribbean Regional Fugitive Task Force" .
+<https://caselinker.up.railway.app/resource/agency/caribbean-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/hammond-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Hammond Police Department" .
+<https://caselinker.up.railway.app/resource/agency/hammond-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 

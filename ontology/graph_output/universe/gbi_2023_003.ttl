@@ -62,9 +62,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Georgia Bureau of Investigation's Child Exploitation and Computer Crimes Unit" .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes-unit> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

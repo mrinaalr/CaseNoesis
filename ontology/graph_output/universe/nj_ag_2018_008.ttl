@@ -53,9 +53,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/department-of-children-and-families> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-corruption-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Division of Criminal Justice Corruption Bureau" .
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-corruption-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

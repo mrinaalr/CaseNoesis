@@ -51,15 +51,15 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/hartford-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/hartford-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Hartford Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/orange-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Orange County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/orange-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/vermont-state-police-department> a cacontology-multi:StateAgency .
 

@@ -38,11 +38,11 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2022_010/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2022_010/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/dekalb-county-sheriffs-department> a cacontology-multi:LocalAgency .
-
-<https://caselinker.up.railway.app/resource/agency/department-of-childrens-services> a cac-core:OrganizationLikeEntity,
+<https://caselinker.up.railway.app/resource/agency/dekalb-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
-    rdfs:label "Department of Children's Services" .
+    rdfs:label "DeKalb County Sheriff's Department" .
+
+<https://caselinker.up.railway.app/resource/agency/department-of-childrens-services> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 

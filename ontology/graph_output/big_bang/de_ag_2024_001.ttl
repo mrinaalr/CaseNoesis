@@ -43,7 +43,9 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/de_ag_2024_001/event/csam> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/de_ag_2024_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/crimes-against-children-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/crimes-against-children-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Crimes Against Children Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/delaware-department-of-justice> a cacontology-multi:StateAgency .
 

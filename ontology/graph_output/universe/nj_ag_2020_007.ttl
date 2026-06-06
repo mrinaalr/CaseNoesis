@@ -35,9 +35,7 @@
         <https://caselinker.up.railway.app/resource/case/nj_ag_2020_007/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2020_007/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-cyber-crimes-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Division of Criminal Justice Financial & Cyber Crimes Bureau" .
+<https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-cyber-crimes-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 

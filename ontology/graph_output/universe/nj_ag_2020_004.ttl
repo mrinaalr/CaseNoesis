@@ -32,9 +32,13 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/nj_ag_2020_004/event/conspiracy> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2020_004/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/bureau-of-securities> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-securities> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Bureau of Securities" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-law-and-public-safety> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/department-of-law-and-public-safety> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Department of Law and Public Safety" .
 
 <https://caselinker.up.railway.app/resource/agency/enforcement-bureau> a cacontology-multi:LocalAgency .
 

@@ -37,9 +37,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ky_sp_2019_041/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ky_sp_2019_041/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-department-of-corrections> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Georgia Department of Corrections" .
+<https://caselinker.up.railway.app/resource/agency/georgia-department-of-corrections> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cacontology-multi:StateAgency .
 

@@ -1733,7 +1733,6 @@ def get_stats(request: Request):
         if not cases:
             result = {
                 "total_cases": 0,
-                "total_victims": 0,
                 "sources": [],
                 "source_count": 0,
                 "unique_features": 0,
@@ -1742,18 +1741,6 @@ def get_stats(request: Request):
             }
             set_cached(cache_key, result, ttl=3600)
             return result
-        
-        # Calculate total victims
-        total_victims = 0
-        for case in cases:
-            victim_count = case.get('victim_count')
-            if victim_count and isinstance(victim_count, (int, float)):
-                total_victims += victim_count
-            elif case.get('raw_data', {}).get('victim_count'):
-                try:
-                    total_victims += int(case['raw_data']['victim_count'])
-                except:
-                    pass
         
         # Get unique sources
         sources = set()
@@ -1837,7 +1824,6 @@ def get_stats(request: Request):
         
         result = {
             "total_cases": len(cases),
-            "total_victims": total_victims,
             "sources": list(sources),
             "source_count": len(sources),
             "unique_features": total_features,
@@ -1858,7 +1844,6 @@ def get_stats(request: Request):
             cases = storage.get_all_cases()
             return {
                 "total_cases": len(cases) if cases else 0,
-                "total_victims": 0,
                 "sources": [],
                 "source_count": 0,
                 "unique_features": 0,
@@ -1868,7 +1853,6 @@ def get_stats(request: Request):
         except:
             return {
                 "total_cases": 0,
-                "total_victims": 0,
                 "sources": [],
                 "source_count": 0,
                 "unique_features": 0,
@@ -3653,7 +3637,7 @@ def api_ontology_cases(
     - pool=compare (default): up to 200 curated cases with graphs in graph_output/universe/
     - pool=all: Big Bang half-sample at graph_output/big_bang/
     - pool=universe: every graph in graph_output/universe/
-    - pool=analysis: big_bang_ids.txt cases in graph_output/analysis/
+    - pool=analysis: analysis_ids.txt cases in graph_output/analysis/ (MCP/research cohorts)
     """
     from fastapi.responses import JSONResponse
 

@@ -49,9 +49,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "New Jersey Attorney General's Office" .
+<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 
@@ -90,28 +88,22 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/facebook> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
-<https://caselinker.up.railway.app/resource/platform/instagram> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Instagram" .
 
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .
 
-<https://caselinker.up.railway.app/resource/platform/twitter-x> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Twitter / X" .
 
-<https://caselinker.up.railway.app/resource/platform/webcam-platform> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:VideoStreamingPlatform ;
-    rdfs:label "Webcam platform" ;
-    cacontology-platforms:allowsAnonymousChat "true" .
+<https://caselinker.up.railway.app/resource/platform/webcam-platform> a cacontology-platforms:VideoStreamingPlatform ;
+    rdfs:label "Webcam platform" .
 
-<https://caselinker.up.railway.app/resource/platform/youtube> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:VideoStreamingPlatform ;
+<https://caselinker.up.railway.app/resource/platform/youtube> a cacontology-platforms:VideoStreamingPlatform ;
     rdfs:label "YouTube" .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_057/event/hands-on> a cacontology:ChildSexualAbuseEvent,

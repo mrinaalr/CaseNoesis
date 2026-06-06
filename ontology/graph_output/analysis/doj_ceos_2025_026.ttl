@@ -58,13 +58,17 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Child Exploitation Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/fairfax-county-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Fairfax County Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Metropolitan Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_026/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "sexual exploitation" ;

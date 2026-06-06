@@ -35,9 +35,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ohio_ag_2013_011/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Attorney General's Crimes Against Children Unit" .
+<https://caselinker.up.railway.app/resource/agency/attorney-generals-crimes-against-children-unit> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 

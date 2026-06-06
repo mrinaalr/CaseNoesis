@@ -2,7 +2,6 @@
 @prefix cacontology: <https://cacontology.projectvic.org#> .
 @prefix cacontology-multi: <https://cacontology.projectvic.org/multi-jurisdiction#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
 @prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -29,9 +28,7 @@
     cacontology:hasRoleBeginPoint "2020-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ky_sp_2020_028/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Kentucky State Police Department" .
+<https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/ky_sp_2020_028/person/offender/1> a uco-identity:Person .
 

@@ -41,9 +41,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_004/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_004/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/carolinas-regional-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Carolinas Regional Fugitive Task Force" .
+<https://caselinker.up.railway.app/resource/agency/carolinas-regional-fugitive-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/gulf-coast-violent-offender-fugitive-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

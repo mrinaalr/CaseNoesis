@@ -2,6 +2,12 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/ky_sp_2026_028/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/ky_sp_2026_028/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
@@ -23,6 +29,12 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/case/ky_sp_2026_028/person/victim/1"
           }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       },
       {
@@ -76,18 +88,6 @@
           {
             "@id": "https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/ky_sp_2026_028/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

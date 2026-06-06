@@ -67,9 +67,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Virtual Global Taskforce" .
+<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_011/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -144,10 +142,8 @@
 <https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
     rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/craigslist> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Craigslist" ;
-    cacontology-platforms:platformType "classifieds" .
+<https://caselinker.up.railway.app/resource/platform/craigslist> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Craigslist" .
 
 <https://caselinker.up.railway.app/resource/case/ice_2013_011/event/csam> a cacontology:CSAMIncident,
         cac-core:Event ;

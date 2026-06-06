@@ -54,9 +54,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/south-dakotas-division-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "South Dakota's Division of Criminal Investigation" .
+<https://caselinker.up.railway.app/resource/agency/south-dakotas-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/sd_ag_2026_002/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

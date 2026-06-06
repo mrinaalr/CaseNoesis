@@ -81,8 +81,7 @@
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2012-11-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/facebook> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2012_011/event/hands-on> a cacontology:ChildSexualAbuseEvent,

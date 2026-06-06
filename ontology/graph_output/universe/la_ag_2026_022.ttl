@@ -36,9 +36,7 @@
     cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/la_ag_2026_022/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/covington-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Covington Police Department" .
+<https://caselinker.up.railway.app/resource/agency/covington-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
@@ -46,9 +44,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "JDC SVU Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Louisiana Bureau of Investigation" .
+<https://caselinker.up.railway.app/resource/agency/louisiana-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/la_ag_2026_022/cybertip> a cacontology-us-ncmec:NCMECCybertipReport ;
     cacontology-us-ncmec:supportedBy <https://caselinker.up.railway.app/resource/agency/ncmec> .

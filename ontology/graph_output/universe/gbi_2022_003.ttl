@@ -50,7 +50,9 @@
         <https://caselinker.up.railway.app/resource/case/gbi_2022_003/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2022_003/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Georgia Bureau of Investigation Child Exploitation and Computer Crimes Unit" .
 
 <https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes> a cacontology-multi:StateAgency .
 

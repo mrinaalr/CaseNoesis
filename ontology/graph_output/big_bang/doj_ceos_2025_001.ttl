@@ -58,9 +58,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Justice Department's Criminal Division" .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-services-seattle-field-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:FederalAgency ;

@@ -51,7 +51,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Digital Technology Investigation Unit" .
 
 <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
 
@@ -71,7 +73,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/trenton-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/trenton-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Trenton Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2026_037/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

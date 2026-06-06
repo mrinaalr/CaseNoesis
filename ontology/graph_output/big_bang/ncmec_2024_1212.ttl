@@ -46,7 +46,9 @@
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_1212/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_1212/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigation> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/department-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Department of Criminal Investigation" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_1212/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;

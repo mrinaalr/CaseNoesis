@@ -44,9 +44,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Hialeah Gardens Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/secret-service> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Secret Service" .
+<https://caselinker.up.railway.app/resource/agency/secret-service> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
@@ -78,7 +76,8 @@
 <https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
     rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/telegram> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/telegram> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Telegram" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_215/event/hands-on> a cacontology:ChildSexualAbuseEvent,

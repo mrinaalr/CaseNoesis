@@ -2,15 +2,34 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2",
+        "@id": "https://caselinker.up.railway.app/resource/agency/new-york-state-police-department",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/charge/2",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Inferred offense from charge: child exploitation"
+            "@value": "child exploitation"
+          }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
+          {
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
           }
         ]
       },
@@ -87,41 +106,64 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/charge/1",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "child sexual abuse material"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/troop-e-forensic-investigation-unit",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Troop E Forensic Investigation Unit"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/person/victim/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/facet/possession",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/event/possession"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/person/offender/1"
-          }
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/new-york-state-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/sp-rochester-bureau-of-criminal-investigation",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "SP Rochester Bureau of Criminal Investigation"
+          }
         ]
       },
       {
@@ -151,40 +193,33 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/event/possession",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@value": "child sexual abuse material"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/facet/possession"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/charge/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/phase/charged",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@value": "child exploitation"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
         ]
       },
@@ -211,27 +246,13 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/troop-e-forensic-investigation-unit",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/tech/cybertipline",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/facet/possession",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2023-01-01T00:00:00Z"
+            "@value": "CyberTipline"
           }
         ]
       },
@@ -248,43 +269,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/event/possession",
+        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2023-01-01T00:00:00Z"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/facet/possession"
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/event/possession"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/offense-event/charge-2"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/sp-rochester-bureau-of-criminal-investigation",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
+        "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@value": "SP Rochester Bureau of Criminal Investigation"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/tech/cybertipline",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "CyberTipline"
+            "@id": "https://caselinker.up.railway.app/resource/case/newyork_sp_2023_005/person/offender/1"
           }
         ]
       }

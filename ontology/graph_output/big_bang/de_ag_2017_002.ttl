@@ -54,9 +54,13 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "First State Fugitive Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/middletown-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/middletown-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Middletown Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/new-castle-county-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/new-castle-county-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "New Castle County Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/wilmington-police-department> a cacontology-multi:LocalAgency .
 

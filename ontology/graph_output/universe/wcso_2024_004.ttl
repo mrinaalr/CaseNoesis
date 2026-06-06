@@ -69,9 +69,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/sparks-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/university-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "University Police Department" .
+<https://caselinker.up.railway.app/resource/agency/university-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

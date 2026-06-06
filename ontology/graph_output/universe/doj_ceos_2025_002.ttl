@@ -121,8 +121,10 @@
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/gen-ai> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_002/facet/possession> .
 
-<https://caselinker.up.railway.app/resource/platform/gen-ai> a cacontology-platforms:FileHostingService ;
-    rdfs:label "Gen AI" .
+<https://caselinker.up.railway.app/resource/platform/gen-ai> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:FileHostingService ;
+    rdfs:label "Gen AI" ;
+    cacontology-platforms:platformType "generative-ai" .
 
 <https://caselinker.up.railway.app/resource/case/doj_ceos_2025_002/offense-event/charge-5> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

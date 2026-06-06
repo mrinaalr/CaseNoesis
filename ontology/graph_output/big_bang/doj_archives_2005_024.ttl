@@ -44,15 +44,11 @@
 
 <https://caselinker.up.railway.app/resource/agency/doj> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/federal-district-court> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Federal District Court" .
+<https://caselinker.up.railway.app/resource/agency/federal-district-court> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/kenyan-national-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Kenyan National Police Department" .
+<https://caselinker.up.railway.app/resource/agency/kenyan-national-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2005_024/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

@@ -42,7 +42,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/wyoming-division-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Wyoming Division of Criminal Investigation" .
 
 <https://caselinker.up.railway.app/resource/case/wy_dci_2024_002/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;

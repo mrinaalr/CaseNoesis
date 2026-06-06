@@ -2,44 +2,6 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/operation",
-        "@type": [
-          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
-          "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/osceola-county-sheriffs-office",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Osceola County Sheriff's Office"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/event/multi-jurisdiction",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ],
-        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-            "@value": true
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/agency/st-cloud-police-department",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
@@ -52,16 +14,28 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/agency/florida-department-of-corrections",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Florida Department of Corrections"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -71,55 +45,25 @@
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 14
-          }
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/lake-city-police-department",
+        "@id": "https://caselinker.up.railway.app/resource/agency/osceola-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
           "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "Lake City Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/orlando-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Orlando Police Department"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/florida-department-of-corrections",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
-          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Florida Department of Corrections"
+            "@value": "Osceola County Sheriff's Office"
           }
         ]
       },
@@ -195,6 +139,50 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/operation",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
+          "https://cacontology.projectvic.org/core#Event"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 14
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/event/multi-jurisdiction",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#MultiJurisdictionalInvestigation",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ],
+        "https://cacontology.projectvic.org/multi-jurisdiction#crossesBorders": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+            "@value": true
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/phase/charged",
         "@type": [
           "https://cacontology.projectvic.org#LegalProcessPhase",
@@ -208,22 +196,22 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/orlando-police-department",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Orlando Police Department"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/hsi",
+        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -233,7 +221,19 @@
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/fl_ag_2026_001/person/victim/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/lake-city-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency",
+          "https://cacontology.projectvic.org/core#OrganizationLikeEntity"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "Lake City Police Department"
           }
         ]
       }

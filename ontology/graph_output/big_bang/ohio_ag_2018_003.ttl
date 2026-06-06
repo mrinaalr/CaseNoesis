@@ -54,7 +54,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/mahoning-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/mahoning-valley-human-trafficking-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/mahoning-valley-human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Mahoning Valley Human Trafficking Task Force" .
 
 <https://caselinker.up.railway.app/resource/agency/ohio-attorney-generals> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;

@@ -52,9 +52,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-cyber-crimes-bureau> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/financial-cyber-crimes-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Financial & Cyber Crimes Bureau" .
+<https://caselinker.up.railway.app/resource/agency/financial-cyber-crimes-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

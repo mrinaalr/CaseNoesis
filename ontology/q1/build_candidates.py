@@ -1,7 +1,17 @@
 """Stage 1: Build candidates.json — platform → case IDs with per-platform counts."""
-import sqlite3
 import json
+import sqlite3
+import sys
 from collections import defaultdict
+from pathlib import Path
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(_REPO_ROOT / "src/Processing Layer/Pattern Processing Layer"))
+from ai_extraction_patterns import (  # noqa: E402
+    AI_CSAM_IMPLIES_TOOL_RE,
+    AI_CSAM_TOPIC_RE,
+    GEN_AI_TOOL_RE,
+)
 
 DB = "caselinker.db"
 OUT = "ontology/q1/candidates.json"
@@ -80,25 +90,72 @@ GENERICS = {
     "internet",
 }
 
+_PHOTO_BELOW_MARKERS = ("booking photo is below", "photo is below")
+
+
+def _gen_ai_match_starts(text: str) -> list[int]:
+    """Start offsets of regex matches that justify a Gen AI platforms_used tag."""
+    starts: list[int] = []
+    for pat in (GEN_AI_TOOL_RE, AI_CSAM_IMPLIES_TOOL_RE, AI_CSAM_TOPIC_RE):
+        for m in pat.finditer(text):
+            starts.append(m.start())
+    return starts
+
+
+def _photo_below_cutoff(text: str) -> int | None:
+    """End offset of the latest photo-below embed marker, or None."""
+    tl = text.lower()
+    cutoff: int | None = None
+    for marker in _PHOTO_BELOW_MARKERS:
+        i = tl.find(marker)
+        if i >= 0:
+            end = i + len(marker)
+            if cutoff is None or end > cutoff:
+                cutoff = end
+    return cutoff
+
+
+def gen_ai_candidate_valid(case_id: str, case_text: str) -> bool:
+    """False when every Gen AI match sits in trailing embed text after photo-below."""
+    if case_id.startswith("nj_ag_"):
+        return True
+    if not case_text or not case_text.strip():
+        return False
+    starts = _gen_ai_match_starts(case_text)
+    if not starts:
+        return False
+    cutoff = _photo_below_cutoff(case_text)
+    if cutoff is None:
+        return True
+    return any(s < cutoff for s in starts)
+
+
 def main():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT cases.id, j.value AS platform
+        SELECT cases.id, j.value AS platform, cases.raw_data
         FROM cases, json_each(cases.platforms_used) AS j
         WHERE cases.platforms_used IS NOT NULL
     """)
 
     platform_to_cases = defaultdict(set)
     skipped_platforms = defaultdict(int)
+    skipped_gen_ai_embed: list[str] = []
 
     for row in cur.fetchall():
         p = row["platform"]
         if p.lower() in GENERICS or p.lower().startswith("unknown"):
             skipped_platforms[p] += 1
             continue
+        if p == "Gen AI":
+            raw = json.loads(row["raw_data"]) if row["raw_data"] else {}
+            text = raw.get("case_text", "") or ""
+            if not gen_ai_candidate_valid(row["id"], text):
+                skipped_gen_ai_embed.append(row["id"])
+                continue
         if p not in PLATFORM_TYPE:
             # Unknown named platform — still include, type = Unknown
             pass
@@ -157,6 +214,10 @@ def main():
     print(f"\nSkipped generics:")
     for k, v in sorted(skipped_platforms.items(), key=lambda x: -x[1]):
         print(f"  {k}: {v}")
+    if skipped_gen_ai_embed:
+        print(f"\nSkipped Gen AI (photo-below embed): {len(skipped_gen_ai_embed)}")
+        for cid in sorted(skipped_gen_ai_embed):
+            print(f"  {cid}")
 
 if __name__ == "__main__":
     main()

@@ -366,23 +366,19 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Department of Human Services" .
 
-<https://caselinker.up.railway.app/resource/agency/dhs> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/dhs> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "DHS" .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/illinois-attorney-generals-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Illinois Attorney General's Office" .
+<https://caselinker.up.railway.app/resource/agency/illinois-attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/illinois-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Illinois State Police Department" .
+<https://caselinker.up.railway.app/resource/agency/illinois-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/office-of-the-attorney-general> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/rushville-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Rushville Police Department" .
+<https://caselinker.up.railway.app/resource/agency/rushville-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/schuyler-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

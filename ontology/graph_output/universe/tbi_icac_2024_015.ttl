@@ -67,9 +67,13 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Maury County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Tennessee Bureau of Investigation" .
 
-<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation-tipline> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Tennessee Bureau of Investigation Tipline" .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 

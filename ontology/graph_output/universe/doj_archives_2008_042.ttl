@@ -45,11 +45,15 @@
         <https://caselinker.up.railway.app/resource/case/doj_archives_2008_042/offense-event/charge-2> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/doj_archives_2008_042/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/dea> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/dea> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "DEA" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/florida-department-of-law-enforcement> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Florida Department of Law Enforcement" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2008_042/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

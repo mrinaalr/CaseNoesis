@@ -45,9 +45,7 @@
         <https://caselinker.up.railway.app/resource/agency/perth-amboy-police-department>,
         <https://caselinker.up.railway.app/resource/agency/raritan-township-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/deputy-bureau> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Deputy Bureau" .
+<https://caselinker.up.railway.app/resource/agency/deputy-bureau> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
 
@@ -65,9 +63,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Perth Amboy Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/raritan-township-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Raritan Township Police Department" .
+<https://caselinker.up.railway.app/resource/agency/raritan-township-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2017_004/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

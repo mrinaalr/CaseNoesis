@@ -2,15 +2,14 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/phase/charged",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/production#victimAge": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2012-01-01T00:00:00Z"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 14
           }
         ]
       },
@@ -21,50 +20,37 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department",
+        "@type": [
+          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/webcam-platform"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/operation",
         "@type": [
           "https://cacontology.projectvic.org/taskforce#UndercoverUnit",
           "https://cacontology.projectvic.org/core#Event"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2012-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/event/online-only"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/offender/1"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/offender/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
-        "@type": [
-          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "chat"
-          }
         ]
       },
       {
@@ -102,14 +88,44 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2012-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/event/online-only"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/offender/1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
         ],
-        "https://cacontology.projectvic.org/production#victimAge": [
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 14
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2012-01-01T00:00:00Z"
           }
         ]
       },
@@ -173,30 +189,14 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-child-predator-task-force",
+        "@id": "https://caselinker.up.railway.app/resource/platform/chat",
         "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/de_ag_2012_023/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org/platforms#AnonymousChatPlatform"
         ],
-        "https://cacontology.projectvic.org#usesChannel": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/platform/webcam-platform"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/chat"
+            "@value": "chat"
           }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/delaware-state-police-department",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#StateAgency"
         ]
       }
     ],

@@ -36,7 +36,9 @@
         <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department>,
         <https://caselinker.up.railway.app/resource/agency/parker-police-department> .
 
-<https://caselinker.up.railway.app/resource/agency/cranford-township-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/cranford-township-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Cranford Township Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/division-of-criminal-justice-financial-computer-crimes-bureau> a cacontology-multi:LocalAgency .
 
@@ -46,7 +48,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/new-jersey-state-police-department> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/parker-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/parker-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Parker Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2015_006/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

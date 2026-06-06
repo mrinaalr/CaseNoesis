@@ -116,8 +116,7 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/dark-web> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:DarkWebService ;
+<https://caselinker.up.railway.app/resource/platform/dark-web> a cacontology-platforms:DarkWebService ;
     rdfs:label "dark web" .
 
 <https://caselinker.up.railway.app/resource/platform/tor> a cac-core:DigitalSystemEntity,

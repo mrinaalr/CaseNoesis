@@ -42,7 +42,9 @@
         cacontology-taskforce:StateICACtaskForce ;
     rdfs:label "AZICAC Phoenix Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/maricopa-county-attorneys-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/maricopa-county-attorneys-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Maricopa County Attorney's Office" .
 
 <https://caselinker.up.railway.app/resource/agency/phoenix-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

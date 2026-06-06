@@ -59,7 +59,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/ice> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/virtual-global-taskforce> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Virtual Global Taskforce" .
 
 <https://caselinker.up.railway.app/resource/agency/white-lake-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

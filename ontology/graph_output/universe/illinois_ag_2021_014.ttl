@@ -49,9 +49,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/marshall-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Marshall Police Department" .
+<https://caselinker.up.railway.app/resource/agency/marshall-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2021_014/charge/1> a cacontology-legal-outcomes:CSAM_Production,
         cacontology-legal-outcomes:CriminalCharge ;

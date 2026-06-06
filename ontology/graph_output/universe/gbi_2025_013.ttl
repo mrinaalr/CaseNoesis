@@ -74,7 +74,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Gordon County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/grovetown-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/grovetown-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Grovetown Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/heard-county-sheriffs-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

@@ -48,9 +48,7 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Michigan State Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/usms> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "U.S. Marshals Service" .
+<https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/michigan_icac_2026_004/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "sexual exploitation" ;

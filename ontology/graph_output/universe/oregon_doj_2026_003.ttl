@@ -49,9 +49,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Monmouth Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Oregon Department of Justice" .
+<https://caselinker.up.railway.app/resource/agency/oregon-department-of-justice> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -87,7 +85,8 @@
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/tech/cybertipline> a cacontology-us-ncmec:NCMECCybertipReport ;
     rdfs:label "CyberTipline" .
 
-<https://caselinker.up.railway.app/resource/platform/dropbox> a cacontology-platforms:FileHostingService ;
+<https://caselinker.up.railway.app/resource/platform/dropbox> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:FileHostingService ;
     rdfs:label "Dropbox" .
 
 <https://caselinker.up.railway.app/resource/case/oregon_doj_2026_003/phase/sentenced> a cac-core:Phase,

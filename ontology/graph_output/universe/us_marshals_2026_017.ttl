@@ -39,9 +39,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/us_marshals_2026_017/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/us_marshals_2026_017/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/garfield-heights-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Garfield Heights Police Department" .
+<https://caselinker.up.railway.app/resource/agency/garfield-heights-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/northeast-ohio-human-trafficking-task-force> a cacontology-multi:LocalAgency .
 

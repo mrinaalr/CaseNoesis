@@ -46,9 +46,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/usss_2023_003/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2023_003/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/council-bluffs-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Council Bluffs Police Department" .
+<https://caselinker.up.railway.app/resource/agency/council-bluffs-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

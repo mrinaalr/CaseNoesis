@@ -45,9 +45,7 @@
 <https://caselinker.up.railway.app/resource/platform/twitter-x> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Twitter / X" .
 
-<https://caselinker.up.railway.app/resource/agency/colorado-bureau-of-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Colorado Bureau of Investigation" .
+<https://caselinker.up.railway.app/resource/agency/colorado-bureau-of-investigation> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/colorado-violent-offender-task-force> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -69,9 +67,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Glenwood Springs Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Lone Star Fugitive Task Force" .
+<https://caselinker.up.railway.app/resource/agency/lone-star-fugitive-task-force> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

@@ -45,9 +45,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/los-angeles-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Los Angeles Police Department" .
+<https://caselinker.up.railway.app/resource/agency/los-angeles-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/torrance-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

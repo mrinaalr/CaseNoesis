@@ -56,9 +56,13 @@
 
 <https://caselinker.up.railway.app/resource/agency/illinois-high-tech-crimes-bureau> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/lisle-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/lisle-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Lisle Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/naperville-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/naperville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Naperville Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2009_008/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

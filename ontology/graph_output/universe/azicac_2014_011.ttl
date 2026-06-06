@@ -179,6 +179,8 @@
     rdfs:label "Inferred offense from charge: child molestation" ;
     cacontology:usesChannel <https://caselinker.up.railway.app/resource/platform/chat> .
 
-<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
-    rdfs:label "chat" .
+<https://caselinker.up.railway.app/resource/platform/chat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" ;
+    cacontology-platforms:platformSpecificity "generic" .
 

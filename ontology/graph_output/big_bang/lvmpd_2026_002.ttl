@@ -50,9 +50,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/henderson-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Henderson Police Department" .
+<https://caselinker.up.railway.app/resource/agency/henderson-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -60,13 +58,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Nevada Attorney General's" .
+<https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "North Las Vegas Police Department" .
+<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_002/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child exploitation" ;

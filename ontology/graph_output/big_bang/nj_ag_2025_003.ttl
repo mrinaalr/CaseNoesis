@@ -34,9 +34,13 @@
 
 <https://caselinker.up.railway.app/resource/agency/department-of-law-and-public-safety> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/enforcement-bureau> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/enforcement-bureau> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Enforcement Bureau" .
 
-<https://caselinker.up.railway.app/resource/agency/lawrence-township-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/lawrence-township-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Lawrence Township Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/nj_ag_2025_003/event/distribution> a cac-core:Event,
         cacontology-legal-outcomes:CSAM_Distribution ;

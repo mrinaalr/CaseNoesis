@@ -2,9 +2,69 @@
   {
     "@graph": [
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/phase/charged",
+        "@type": [
+          "https://cacontology.projectvic.org#LegalProcessPhase",
+          "https://cacontology.projectvic.org/core#Phase"
+        ],
+        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#severityLevel": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/charge/1"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/charge/2"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/ncmec",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/detection#ageEstimate": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 30
+          }
         ]
       },
       {
@@ -20,33 +80,96 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/offender/1",
         "@type": [
-          "https://cacontology.projectvic.org#CSAMIncident",
-          "https://cacontology.projectvic.org/core#Event"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
-        "https://cacontology.projectvic.org#severityLevel": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
           }
         ],
-        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/facet/csam"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/1"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/tech/cybertipline",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+          {
+            "@value": "CyberTipline"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion",
+        "@type": [
+          "https://cacontology.projectvic.org/sextortion#SextortionIncident",
           "https://cacontology.projectvic.org/core#Event"
         ],
         "https://cacontology.projectvic.org#severityLevel": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#integer",
             "@value": 3
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@type": [
+          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/victim/1",
+        "@type": [
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2024-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/victim/1"
           }
         ]
       },
@@ -91,13 +214,13 @@
         ],
         "https://cacontology.projectvic.org#hasStep": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
@@ -129,47 +252,27 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/offender/2",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org#CSAMIncident",
+          "https://cacontology.projectvic.org/core#Event"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org#severityLevel": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 3
           }
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/2"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/facet/csam"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/facet/csam",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/detection#ageEstimate": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 30
-          }
+          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
         ]
       },
       {
@@ -200,16 +303,16 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/facet/csam",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/victim/1",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/offender/2",
         "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
         ],
         "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
@@ -219,13 +322,13 @@
         ],
         "https://cacontology.projectvic.org#participatesInEvent": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
-          },
-          {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
           },
           {
             "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
@@ -233,54 +336,18 @@
         ],
         "https://cacontology.projectvic.org/core#hasRole": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/victim/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/2"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/agency/icac",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/cybertip",
         "@type": [
-          "https://cacontology.projectvic.org/taskforce#StateICACtaskForce"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/phase/charged",
-        "@type": [
-          "https://cacontology.projectvic.org#LegalProcessPhase",
-          "https://cacontology.projectvic.org/core#Phase"
+          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
         ],
-        "https://cacontology.projectvic.org#hasPhaseBeginPoint": [
+        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/victim/1",
-        "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/charge/1"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/charge/2"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
           }
         ]
       },
@@ -297,30 +364,6 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion",
-        "@type": [
-          "https://cacontology.projectvic.org/sextortion#SextortionIncident",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#severityLevel": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 3
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/tech/cybertipline",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "CyberTipline"
-          }
-        ]
-      },
-      {
         "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/charge/1",
         "@type": [
           "https://cacontology.projectvic.org/legal-outcomes#CSAM_Possession",
@@ -329,49 +372,6 @@
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
             "@value": "child pornography"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/cybertip",
-        "@type": [
-          "https://cacontology.projectvic.org/us/ncmec#NCMECCybertipReport"
-        ],
-        "https://cacontology.projectvic.org/us/ncmec#supportedBy": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/agency/ncmec"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/role/offender/1",
-        "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
-        ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2024-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/hands-on"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/csam"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/sextortion"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/event/conspiracy"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2024_005/person/offender/1"
           }
         ]
       }

@@ -49,9 +49,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Anchorage Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/fbi> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "FBI" .
+<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_002/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

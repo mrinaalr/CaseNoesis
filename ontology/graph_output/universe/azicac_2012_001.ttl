@@ -47,9 +47,7 @@
         <https://caselinker.up.railway.app/resource/case/azicac_2012_001/offense-event/charge-2> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/azicac_2012_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/azicac-task-force> a cac-core:OrganizationLikeEntity,
-        cacontology-taskforce:StateICACtaskForce ;
-    rdfs:label "AZICAC Task Force" .
+<https://caselinker.up.railway.app/resource/agency/azicac-task-force> a cacontology-taskforce:StateICACtaskForce .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 

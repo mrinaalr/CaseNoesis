@@ -76,11 +76,11 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Cresco Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/des-moines-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Des Moines Police Department" .
+<https://caselinker.up.railway.app/resource/agency/des-moines-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/dubuque-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/dubuque-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Dubuque Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/fort-dodge-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -96,9 +96,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Iowa Department of Human Services" .
 
-<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Iowa Department of Public Safety" .
+<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
@@ -126,9 +124,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/southern-iowa-fugitive-task-force> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/us-department-of-health-and-human-services> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "U.S. Department of Health and Human Services" .
+<https://caselinker.up.railway.app/resource/agency/us-department-of-health-and-human-services> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 

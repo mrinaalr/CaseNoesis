@@ -64,9 +64,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/azicac-task-force> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/chandler-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Chandler Police Department" .
+<https://caselinker.up.railway.app/resource/agency/chandler-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/azicac_2014_011/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "Sexual Exploitation" ;

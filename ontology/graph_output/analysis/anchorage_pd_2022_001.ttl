@@ -50,13 +50,21 @@
         <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_001/offense-event/charge-6> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/anchorage-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Anchorage Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/child-exploitation-and-human-trafficking-task-force> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/child-exploitation-and-human-trafficking-task-force> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Child Exploitation and Human Trafficking Task Force" .
 
-<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "District Attorney's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/fbi> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "FBI" .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_001/charge/1> a cacontology-legal-outcomes:CriminalCharge,
         cacontology-legal-outcomes:StateCharge ;
@@ -143,11 +151,15 @@
         <https://caselinker.up.railway.app/resource/platform/social-media> ;
     uco-core:hasFacet <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_001/facet/production> .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
+<https://caselinker.up.railway.app/resource/platform/social-media> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
 <https://caselinker.up.railway.app/resource/case/anchorage_pd_2022_001/offense-event/charge-6> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

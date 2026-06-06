@@ -40,9 +40,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/newyork_sp_2024_001/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/newyork_sp_2024_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Bureau of Criminal Investigation" .
+<https://caselinker.up.railway.app/resource/agency/bureau-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

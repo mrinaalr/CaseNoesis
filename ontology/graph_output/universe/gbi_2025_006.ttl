@@ -53,9 +53,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Coffee County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Georgia Bureau of Investigation Child Exploitation and Computer Crimes Unit" .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigation-child-exploitation-and-computer-crimes-unit> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

@@ -48,9 +48,7 @@
         <https://caselinker.up.railway.app/resource/case/gbi_2025_015/offense-event/charge-4> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/gbi_2025_015/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/dekalb-county-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "DeKalb County Police Department" .
+<https://caselinker.up.railway.app/resource/agency/dekalb-county-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 

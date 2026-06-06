@@ -71,7 +71,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Unita County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/utah-attorney-generals-office> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/utah-attorney-generals-office> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Utah Attorney General's Office" .
 
 <https://caselinker.up.railway.app/resource/agency/utah-state-bureau-of-investigations> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;

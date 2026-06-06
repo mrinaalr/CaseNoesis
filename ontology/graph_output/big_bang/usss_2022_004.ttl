@@ -50,9 +50,7 @@
         <https://caselinker.up.railway.app/resource/case/usss_2022_004/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/usss_2022_004/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/ceos> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "CEOS" .
+<https://caselinker.up.railway.app/resource/agency/ceos> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/shawnee-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -62,9 +60,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "State of Kansas Department of Corrections" .
 
-<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:FederalAgency ;
-    rdfs:label "U.S. Secret Service" .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_004/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -133,8 +129,7 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/google-drive> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:FileHostingService ;
+<https://caselinker.up.railway.app/resource/platform/google-drive> a cacontology-platforms:FileHostingService ;
     rdfs:label "Google Drive" .
 
 <https://caselinker.up.railway.app/resource/case/usss_2022_004/event/possession> a cacontology:CSAMIncident,

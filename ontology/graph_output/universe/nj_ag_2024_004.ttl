@@ -59,9 +59,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-advocacy-institute> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "New Jersey Attorney General's Advocacy Institute" .
+<https://caselinker.up.railway.app/resource/agency/new-jersey-attorney-generals-advocacy-institute> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/new-jersey-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

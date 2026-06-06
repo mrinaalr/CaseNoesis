@@ -1,0 +1,35 @@
+@prefix cac-core: <https://cacontology.projectvic.org/core#> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009> a cacontology:CACInvestigation,
+        cac-core:EnduringEntity ;
+    dcterms:created "2026-06-04T04:39:53.173093" ;
+    dcterms:identifier "south_florida_icac_2026_009" ;
+    dcterms:modified "2026-06-04T04:39:53.173093" ;
+    dcterms:source <https://www.mbtimes.com.au/news/court-justice/thornlie-man-25-due-to-face-court-charged-with-possessing-and-sharing-child-abuse-material-online--c-11815559>,
+        "SOUTH FLORIDA ICAC" ;
+    cacontology:currentPhase <https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/phase/charged> ;
+    cacontology:hasPhase <https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/phase/charged> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/role/offender/1> a cacontology:OffenderRole,
+        uco-role:OffenderRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/person/offender/1> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/role/victim/1> a cacontology:VictimRole,
+        uco-role:VictimRole ;
+    cacontology:hasRoleBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp ;
+    cac-core:hasRole <https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/person/victim/1> .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/person/offender/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/person/victim/1> a uco-identity:Person .
+
+<https://caselinker.up.railway.app/resource/case/south_florida_icac_2026_009/phase/charged> a cacontology:LegalProcessPhase,
+        cac-core:Phase ;
+    cacontology:hasPhaseBeginPoint "2026-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+

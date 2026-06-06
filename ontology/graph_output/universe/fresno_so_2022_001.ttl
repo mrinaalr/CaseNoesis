@@ -61,9 +61,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Atascadero Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "District Attorney's Office" .
+<https://caselinker.up.railway.app/resource/agency/district-attorneys-office> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
@@ -85,7 +83,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Task Force -Fresno County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/us-secret-service> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "U.S. Secret Service" .
 
 <https://caselinker.up.railway.app/resource/agency/us-secret-service--paso-robles-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:FederalAgency ;
@@ -132,13 +132,10 @@
         cac-core:Phase ;
     cacontology:hasPhaseBeginPoint "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/chat> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:AnonymousChatPlatform ;
-    rdfs:label "chat" ;
-    cacontology-platforms:platformSpecificity "generic" .
+<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/discord> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/discord> a cacontology-platforms:MessagingService ;
     rdfs:label "Discord" .
 
 <https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;

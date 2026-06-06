@@ -111,7 +111,8 @@
 <https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
     rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/skype> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/skype> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Skype" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_488/event/online-only> a cacontology:ChildSexualAbuseEvent,

@@ -42,9 +42,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/boise-police-department> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/garden-city-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Garden City Police Department" .
+<https://caselinker.up.railway.app/resource/agency/garden-city-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 

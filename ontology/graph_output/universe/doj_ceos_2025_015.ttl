@@ -58,7 +58,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/fresno-county-sheriffs-office> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/fresno-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/fresno-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Fresno Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
@@ -136,8 +138,10 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2025-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/bittorrent> a cacontology-platforms:FileHostingService ;
-    rdfs:label "BitTorrent" .
+<https://caselinker.up.railway.app/resource/platform/bittorrent> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:FileHostingService ;
+    rdfs:label "BitTorrent" ;
+    cacontology-platforms:platformType "p2p" .
 
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .

@@ -107,8 +107,10 @@
 <https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
-<https://caselinker.up.railway.app/resource/platform/icloud> a cacontology-platforms:FileHostingService ;
-    rdfs:label "iCloud" .
+<https://caselinker.up.railway.app/resource/platform/icloud> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:FileHostingService ;
+    rdfs:label "iCloud" ;
+    cacontology-platforms:platformType "cloud-backup" .
 
 <https://caselinker.up.railway.app/resource/platform/instagram> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Instagram" .

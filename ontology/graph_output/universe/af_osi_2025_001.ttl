@@ -38,7 +38,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Colorado Springs Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/fbi> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "FBI" .
 
 <https://caselinker.up.railway.app/resource/agency/texas-department-of-public-safety> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;

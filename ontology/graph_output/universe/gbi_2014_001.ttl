@@ -91,7 +91,9 @@
         cacontology-multi:StateAgency ;
     rdfs:label "District Attorney's Office 10" .
 
-<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes-unit> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/georgia-bureau-of-investigations-child-exploitation-and-computer-crimes-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Georgia Bureau of Investigation's Child Exploitation and Computer Crimes Unit" .
 
 <https://caselinker.up.railway.app/resource/agency/gwinnett-county-police-department> a cacontology-multi:LocalAgency .
 
@@ -119,7 +121,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Paulding County Sheriff's Office" .
 
-<https://caselinker.up.railway.app/resource/agency/polk-county-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/polk-county-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Polk County Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/sandy-springs-police-department> a cacontology-multi:LocalAgency .
 

@@ -50,15 +50,15 @@
         <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_019/offense-event/charge-5> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_019/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Henry County Sheriff's Department" .
+<https://caselinker.up.railway.app/resource/agency/henry-county-sheriffs-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/hsi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/tbis-criminal-investigation-division> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/tbis-criminal-investigation-division> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "TBI's Criminal Investigation Division" .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigation> a cacontology-multi:StateAgency .
 

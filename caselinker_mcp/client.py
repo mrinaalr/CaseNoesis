@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from contextvars import ContextVar, Token
 from typing import Any
 
 import httpx
@@ -12,27 +13,51 @@ DEFAULT_TIMEOUT = 30.0
 BULK_TIMEOUT = 180.0
 
 _TRUSTED_KEY_HINT = (
-    "Set CASELINKER_KEY to a value listed in CASELINKER_TRUSTED_KEYS on the server."
+    "Set CASELINKER_KEY env (stdio) or CaseLinker-Key header (SSE) to a value listed "
+    "in CASELINKER_TRUSTED_KEYS on the server."
+)
+
+_request_caselinker_key: ContextVar[str | None] = ContextVar(
+    "caselinker_request_key",
+    default=None,
 )
 
 
+def bind_request_caselinker_key(key: str | None) -> Token:
+    """Bind per-request CaseLinker-Key from inbound SSE headers (stdio: leave unset)."""
+    normalized = key.strip() if key else None
+    return _request_caselinker_key.set(normalized or None)
+
+
+def reset_request_caselinker_key(token: Token) -> None:
+    _request_caselinker_key.reset(token)
+
+
+def effective_caselinker_key() -> str:
+    """Inbound SSE CaseLinker-Key header, else CASELINKER_KEY env."""
+    request_key = (_request_caselinker_key.get() or "").strip()
+    if request_key:
+        return request_key
+    return os.getenv("CASELINKER_KEY", "").strip()
+
+
 def caselinker_key_configured() -> bool:
-    """True when CASELINKER_KEY is set in the MCP server environment."""
-    return bool(os.getenv("CASELINKER_KEY", "").strip())
+    """True when a trusted key is available for outbound REST calls."""
+    return bool(effective_caselinker_key())
 
 
 def require_caselinker_key() -> dict[str, str] | None:
-    """Return an error payload when CASELINKER_KEY is missing for trusted-tier tools."""
+    """Return an error payload when no trusted key is configured for this request."""
     if caselinker_key_configured():
         return None
     return {
-        "error": f"CASELINKER_KEY is not set. {_TRUSTED_KEY_HINT}",
+        "error": f"No trusted key configured. {_TRUSTED_KEY_HINT}",
     }
 
 
 def _headers() -> dict[str, str]:
     headers = {"Accept": "application/json"}
-    key = os.getenv("CASELINKER_KEY", "").strip()
+    key = effective_caselinker_key()
     if key:
         headers["CaseLinker-Key"] = key
     return headers

@@ -161,11 +161,8 @@
 <https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "social media" .
 
-<https://caselinker.up.railway.app/resource/platform/whisper> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:AnonymousChatPlatform ;
-    rdfs:label "Whisper" ;
-    cacontology-platforms:guestAccountsAllowed "true" ;
-    cacontology-platforms:identityVerificationRequired "false" .
+<https://caselinker.up.railway.app/resource/platform/whisper> a cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "Whisper" .
 
 <https://caselinker.up.railway.app/resource/case/svicac_2021_002/offense-event/charge-3> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event,

@@ -41,7 +41,9 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/ncmec_2023_258/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2023_258/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/gainesville-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/gainesville-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Gainesville Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2023_258/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

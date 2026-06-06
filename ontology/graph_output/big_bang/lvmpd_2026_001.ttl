@@ -59,17 +59,13 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Metropolitan Police Department" .
+<https://caselinker.up.railway.app/resource/agency/metropolitan-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/nevada-attorney-generals> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
     rdfs:label "Nevada Attorney General's" .
 
-<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "North Las Vegas Police Department" .
+<https://caselinker.up.railway.app/resource/agency/north-las-vegas-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/lvmpd_2026_001/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "child exploitation" ;

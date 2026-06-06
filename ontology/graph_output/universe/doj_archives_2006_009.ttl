@@ -59,9 +59,7 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "IRS Criminal Investigation Division" .
 
-<https://caselinker.up.railway.app/resource/agency/justice-departments-office-of-international-affairs> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Justice Department's Office of International Affairs" .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-office-of-international-affairs> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2006_009/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

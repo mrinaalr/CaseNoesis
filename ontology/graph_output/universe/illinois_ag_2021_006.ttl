@@ -92,7 +92,8 @@
         cacontology-legal-outcomes:SentencingPhase ;
     cacontology:hasPhaseBeginPoint "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
 
-<https://caselinker.up.railway.app/resource/platform/skype> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/skype> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Skype" .
 
 <https://caselinker.up.railway.app/resource/case/illinois_ag_2021_006/event/possession> a cacontology:CSAMIncident,

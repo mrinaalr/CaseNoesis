@@ -2,90 +2,80 @@
   {
     "@graph": [
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/victim/1",
         "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event",
-          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
+          "https://cacontology.projectvic.org#VictimRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
         ],
-        "http://www.w3.org/2000/01/rdf-schema#label": [
-          {
-            "@value": "Inferred offense from charge: child exploitation"
-          }
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only",
-        "@type": [
-          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "https://cacontology.projectvic.org#usesChannel": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/trust-violation",
-        "@type": [
-          "https://cacontology.projectvic.org/custodial#TrustViolation",
-          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
-        ],
-        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/relationship/mother"
-          }
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/legal-proceeding",
-        "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
-          "https://cacontology.projectvic.org/core#LegalEvent",
-          "https://cacontology.projectvic.org/core#Event"
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#comment": [
-          {
-            "@value": "Pretrial detention facility (not a sentence): Monroe County Jail"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/charge/1"
-          }
-        ],
-        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
           }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/victim/1"
+          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/relationship/mother",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/charge/1",
         "@type": [
-          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
-          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
+          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
         ],
-        "https://cacontology.projectvic.org/custodial#involvesChild": [
+        "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/victim/1"
+            "@value": "child exploitation"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/offender/1"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
           }
         ],
-        "https://cacontology.projectvic.org/custodial#relationshipType": [
+        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
           {
-            "@value": "mother"
+            "@value": "child_exploitation"
+          }
+        ],
+        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/offender/1",
+        "@type": [
+          "https://cacontology.projectvic.org#OffenderRole",
+          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+        ],
+        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "https://cacontology.projectvic.org#participatesInEvent": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only"
+          },
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
+          }
+        ],
+        "https://cacontology.projectvic.org/core#hasRole": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/offender/1"
           }
         ]
       },
@@ -167,6 +157,30 @@
         ]
       },
       {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/victim/1",
+        "@type": [
+          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        ],
+        "https://cacontology.projectvic.org/production#victimAge": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#integer",
+            "@value": 5
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only",
+        "@type": [
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
+          }
+        ]
+      },
+      {
         "@id": "https://caselinker.up.railway.app/resource/agency/monroe-county-sheriffs-office",
         "@type": [
           "https://cacontology.projectvic.org/multi-jurisdiction#LocalAgency"
@@ -180,54 +194,41 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/charge/1",
+        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
         "@type": [
-          "https://cacontology.projectvic.org/legal-outcomes#CriminalCharge"
+          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/platform/dark-web",
+        "@type": [
+          "https://cacontology.projectvic.org/platforms#DarkWebService"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "child exploitation"
-          }
-        ],
-        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeCluster": [
-          {
-            "@value": "child_exploitation"
-          }
-        ],
-        "https://caselinker.up.railway.app/resource/vocab/chargeOffenseEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
+            "@value": "dark web"
           }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/relationship/mother",
         "@type": [
-          "https://cacontology.projectvic.org#OffenderRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/OffenderRole"
+          "https://cacontology.projectvic.org/custodial#FamilialRelationship",
+          "https://cacontology.projectvic.org/custodial#CustodialRelationship"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/custodial#involvesChild": [
           {
-            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-            "@value": "2025-01-01T00:00:00Z"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/victim/1"
           }
         ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
+        "https://cacontology.projectvic.org/custodial#involvesCustodian": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/offender/1"
           }
         ],
-        "https://cacontology.projectvic.org/core#hasRole": [
+        "https://cacontology.projectvic.org/custodial#relationshipType": [
           {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/offender/1"
+            "@value": "mother"
           }
         ]
       },
@@ -245,40 +246,38 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/offender/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/trust-violation",
         "@type": [
-          "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/agency/usms",
-        "@type": [
-          "https://cacontology.projectvic.org/multi-jurisdiction#FederalAgency"
-        ]
-      },
-      {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/role/victim/1",
-        "@type": [
-          "https://cacontology.projectvic.org#VictimRole",
-          "https://ontology.unifiedcyberontology.org/uco/role/VictimRole"
+          "https://cacontology.projectvic.org/custodial#TrustViolation",
+          "https://cacontology.projectvic.org/custodial#CustodialAbuse"
         ],
-        "https://cacontology.projectvic.org#hasRoleBeginPoint": [
+        "https://cacontology.projectvic.org/custodial#violatesRelationship": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/relationship/mother"
+          }
+        ]
+      },
+      {
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/legal-proceeding",
+        "@type": [
+          "https://cacontology.projectvic.org/legal-outcomes#LegalProceeding",
+          "https://cacontology.projectvic.org/core#LegalEvent",
+          "https://cacontology.projectvic.org/core#Event"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+          {
+            "@value": "Pretrial detention facility (not a sentence): Monroe County Jail"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasCharge": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/charge/1"
+          }
+        ],
+        "https://cacontology.projectvic.org/legal-outcomes#hasProceedingBeginPoint": [
           {
             "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
             "@value": "2025-01-01T00:00:00Z"
-          }
-        ],
-        "https://cacontology.projectvic.org#participatesInEvent": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/event/online-only"
-          },
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1"
-          }
-        ],
-        "https://cacontology.projectvic.org/core#hasRole": [
-          {
-            "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/victim/1"
           }
         ]
       },
@@ -290,25 +289,26 @@
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/victim/1",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/person/offender/1",
         "@type": [
           "https://ontology.unifiedcyberontology.org/uco/identity/Person"
-        ],
-        "https://cacontology.projectvic.org/production#victimAge": [
-          {
-            "@type": "http://www.w3.org/2001/XMLSchema#integer",
-            "@value": 5
-          }
         ]
       },
       {
-        "@id": "https://caselinker.up.railway.app/resource/platform/dark-web",
+        "@id": "https://caselinker.up.railway.app/resource/case/south_florida_icac_2025_011/offense-event/charge-1",
         "@type": [
-          "https://cacontology.projectvic.org/platforms#DarkWebService"
+          "https://cacontology.projectvic.org#ChildSexualAbuseEvent",
+          "https://cacontology.projectvic.org/core#Event",
+          "https://ontology.unifiedcyberontology.org/uco/action/Crime"
         ],
         "http://www.w3.org/2000/01/rdf-schema#label": [
           {
-            "@value": "dark web"
+            "@value": "Inferred offense from charge: child exploitation"
+          }
+        ],
+        "https://cacontology.projectvic.org#usesChannel": [
+          {
+            "@id": "https://caselinker.up.railway.app/resource/platform/dark-web"
           }
         ]
       }

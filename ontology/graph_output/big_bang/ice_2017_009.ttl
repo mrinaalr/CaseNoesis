@@ -157,10 +157,8 @@
 <https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
     rdfs:label "chat" .
 
-<https://caselinker.up.railway.app/resource/platform/craigslist> a cac-core:DigitalSystemEntity,
-        cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "Craigslist" ;
-    cacontology-platforms:platformType "classifieds" .
+<https://caselinker.up.railway.app/resource/platform/craigslist> a cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "Craigslist" .
 
 <https://caselinker.up.railway.app/resource/case/ice_2017_009/event/online-only> a cacontology:ChildSexualAbuseEvent,
         cac-core:Event ;

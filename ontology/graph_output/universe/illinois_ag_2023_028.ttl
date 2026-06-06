@@ -54,9 +54,7 @@
         <https://caselinker.up.railway.app/resource/case/illinois_ag_2023_028/offense-event/charge-3> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/illinois_ag_2023_028/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/alton-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Alton Police Department" .
+<https://caselinker.up.railway.app/resource/agency/alton-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/edwardsville-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

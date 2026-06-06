@@ -44,21 +44,29 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Altoona Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/department-of-public-safety> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/department-of-public-safety> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Department of Public Safety" .
 
-<https://caselinker.up.railway.app/resource/agency/des-moines-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/des-moines-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Des Moines Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/division-of-criminal-investigation-cyber-crime-bureau> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
     rdfs:label "Division of Criminal Investigation-Cyber Crime Bureau" .
 
-<https://caselinker.up.railway.app/resource/agency/dps> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/dps> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "DPS" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Iowa Department of Public Safety" .
 
 <https://caselinker.up.railway.app/resource/agency/iowa-department-of-public-safety-division-of-intelligence-law-enforcement-intelligence-network> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;
@@ -66,7 +74,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/iowa-division-of-criminal-investigation> a cacontology-multi:LocalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/iowa-state-university-police-department> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/iowa-state-university-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Iowa State University Police Department" .
 
 <https://caselinker.up.railway.app/resource/agency/polk-county-attorneys-office> a cac-core:OrganizationLikeEntity,
         cacontology-multi:StateAgency ;

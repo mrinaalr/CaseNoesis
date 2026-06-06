@@ -41,9 +41,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/attorney-generals-office> a cacontology-multi:StateAgency .
 
-<https://caselinker.up.railway.app/resource/agency/greenville-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Greenville Police Department" .
+<https://caselinker.up.railway.app/resource/agency/greenville-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/us-department-of-health-and-human-services> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;

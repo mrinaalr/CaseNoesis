@@ -62,7 +62,9 @@
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/justice-departments-criminal-division> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Justice Department's Criminal Division" .
 
 <https://caselinker.up.railway.app/resource/case/doj_archives_2007_035/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;

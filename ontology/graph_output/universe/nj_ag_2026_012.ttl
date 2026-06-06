@@ -41,9 +41,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
 
-<https://caselinker.up.railway.app/resource/agency/lawrence-township-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Lawrence Township Police Department" .
+<https://caselinker.up.railway.app/resource/agency/lawrence-township-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/agency/state-police-department> a cacontology-multi:StateAgency .
 

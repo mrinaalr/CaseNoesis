@@ -37,7 +37,9 @@
         cacontology-multi:LocalAgency ;
     rdfs:label "Calloway County Sheriff's Department" .
 
-<https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cacontology-multi:StateAgency .
+<https://caselinker.up.railway.app/resource/agency/kentucky-state-police-department> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:StateAgency ;
+    rdfs:label "Kentucky State Police Department" .
 
 <https://caselinker.up.railway.app/resource/case/ky_sp_2017_001/legal-proceeding> a cac-core:Event,
         cac-core:LegalEvent,

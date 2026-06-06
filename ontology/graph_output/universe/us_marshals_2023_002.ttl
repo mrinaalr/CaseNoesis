@@ -47,9 +47,7 @@
 
 <https://caselinker.up.railway.app/resource/agency/usms> a cacontology-multi:FederalAgency .
 
-<https://caselinker.up.railway.app/resource/agency/west-virginia-state-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "West Virginia State Police Department" .
+<https://caselinker.up.railway.app/resource/agency/west-virginia-state-police-department> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/case/us_marshals_2023_002/charge/1> a cacontology-legal-outcomes:CriminalCharge ;
     rdfs:label "2nd Offense Failure to Register as a Sex Offender and a Parole Violation" ;

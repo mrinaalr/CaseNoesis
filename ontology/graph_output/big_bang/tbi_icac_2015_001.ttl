@@ -36,9 +36,7 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2015_001/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2015_001/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigations> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:StateAgency ;
-    rdfs:label "Tennessee Bureau of Investigation's" .
+<https://caselinker.up.railway.app/resource/agency/tennessee-bureau-of-investigations> a cacontology-multi:StateAgency .
 
 <https://caselinker.up.railway.app/resource/agency/tennessee-department-of-childrens-services> a cacontology-multi:LocalAgency .
 

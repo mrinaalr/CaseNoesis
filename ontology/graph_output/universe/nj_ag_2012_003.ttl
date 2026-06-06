@@ -47,7 +47,9 @@
         <https://caselinker.up.railway.app/resource/case/nj_ag_2012_003/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/nj_ag_2012_003/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit> a cacontology-multi:LocalAgency .
+<https://caselinker.up.railway.app/resource/agency/digital-technology-investigation-unit> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:LocalAgency ;
+    rdfs:label "Digital Technology Investigation Unit" .
 
 <https://caselinker.up.railway.app/resource/agency/fbi> a cacontology-multi:FederalAgency .
 

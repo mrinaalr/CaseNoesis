@@ -44,9 +44,7 @@
         <https://caselinker.up.railway.app/resource/case/ncmec_2024_440/event/possession> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/ncmec_2024_440/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/westfield-police-department> a cac-core:OrganizationLikeEntity,
-        cacontology-multi:LocalAgency ;
-    rdfs:label "Westfield Police Department" .
+<https://caselinker.up.railway.app/resource/agency/westfield-police-department> a cacontology-multi:LocalAgency .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_440/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
