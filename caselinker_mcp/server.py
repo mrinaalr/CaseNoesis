@@ -20,12 +20,26 @@ from caselinker_mcp.client import BULK_TIMEOUT, api_get, api_post, require_casel
 PORT = int(os.getenv("PORT", 8001))
 MCP_TRANSPORT = os.getenv("MCP_TRANSPORT", "stdio")
 
-_graph_store: dict[str, dict] = {}
+_GRAPH_TTL = 7200
+_GRAPH_KEY_PREFIX = "caselinker:mcp:graph:"
+_graph_store: dict[str, dict[str, Any]] = {}
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _ONTOLOGY_DIR = _REPO_ROOT / "ontology"
+_RUN_DIR = _REPO_ROOT / "run"
 if str(_ONTOLOGY_DIR) not in sys.path:
     sys.path.insert(0, str(_ONTOLOGY_DIR))
+if str(_RUN_DIR) not in sys.path:
+    sys.path.insert(0, str(_RUN_DIR))
+
+_redis_available = False
+try:
+    from redis_cache import REDIS_AVAILABLE as _redis_available
+    from redis_cache import get_cached as _redis_get_cached
+    from redis_cache import set_cached as _redis_set_cached
+except ImportError:
+    _redis_get_cached = None
+    _redis_set_cached = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -337,6 +351,30 @@ def wrap_mcp_with_auth(starlette_app: Any) -> Any:
     return starlette_app
 
 
+def _graph_key(graph_id: str) -> str:
+    return f"{_GRAPH_KEY_PREFIX}{graph_id.strip()}"
+
+
+def _graph_get(graph_id: str) -> dict[str, Any] | None:
+    gid = graph_id.strip()
+    if not gid:
+        return None
+    if _redis_available and _redis_get_cached:
+        hit = _redis_get_cached(_graph_key(gid))
+        if hit is not None:
+            return hit
+    return _graph_store.get(gid)
+
+
+def _graph_put(graph_id: str, stored: dict[str, Any]) -> None:
+    gid = graph_id.strip()
+    if _redis_available and _redis_set_cached:
+        if _redis_set_cached(_graph_key(gid), stored, ttl=_GRAPH_TTL):
+            return
+        logger.warning("Redis graph store write failed; using in-memory fallback for %s", gid)
+    _graph_store[gid] = stored
+
+
 def _store_graph_payload(payload: dict[str, Any]) -> str:
     from graph_utils import build_adjacency  # noqa: E402
 
@@ -351,7 +389,7 @@ def _store_graph_payload(payload: dict[str, Any]) -> str:
         "node_index": node_index,
         "adjacency": build_adjacency(payload.get("edges") or []),
     }
-    _graph_store[graph_id] = stored
+    _graph_put(graph_id, stored)
     return graph_id
 
 
@@ -559,6 +597,29 @@ async def get_case_studies() -> dict[str, Any]:
 
 
 @mcp.tool()
+async def q1_platform_evidence(platform: str | None = None, tier: str | None = None) -> dict[str, Any]:
+    """Query Q1 platform harm evidence as a cohort source for case2cac and get_case.
+
+    Without platform: platform index with case_count and per-tier counts (stated, inferred, named_only).
+    With platform: matching case IDs (same format as get_case / case2cac), each with tier and evidence_quote.
+    Optional tier filter: stated, inferred, or named_only.
+
+    Example: q1_platform_evidence(\"Snapchat\") then case2cac on returned case_ids.
+    """
+    try:
+        params: dict[str, str] = {}
+        if platform and platform.strip():
+            params["platform"] = platform.strip()
+        if tier and tier.strip():
+            params["tier"] = tier.strip().lower()
+        result = await api_get("/api/q1/platform-evidence", params=params or None)
+        return result if isinstance(result, dict) else {"data": result}
+    except Exception as e:
+        logger.exception("q1_platform_evidence failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
 async def list_sources() -> dict[str, Any]:
     """List ingestion sources in the CaseLinker corpus.
 
@@ -639,7 +700,7 @@ async def graph_get_neighbors(graph_id: str, node_id: str) -> dict[str, Any]:
     try:
         from graph_utils import enrich_neighbors  # noqa: E402
 
-        graph = _graph_store.get(graph_id.strip())
+        graph = _graph_get(graph_id)
         if not graph:
             return {"error": "Graph not found. Call case2cac first."}
         neighbors = enrich_neighbors(graph, node_id.strip())
@@ -655,7 +716,7 @@ async def graph_find_cases_by_concept(graph_id: str, concept: str) -> dict[str, 
     try:
         from graph_utils import find_cases_by_concept  # noqa: E402
 
-        graph = _graph_store.get(graph_id.strip())
+        graph = _graph_get(graph_id)
         if not graph:
             return {"error": "Graph not found. Call case2cac first."}
         return find_cases_by_concept(graph, concept)
@@ -670,7 +731,7 @@ async def graph_summarize(graph_id: str) -> dict[str, Any]:
     try:
         from graph_utils import summarize_graph  # noqa: E402
 
-        graph = _graph_store.get(graph_id.strip())
+        graph = _graph_get(graph_id)
         if not graph:
             return {"error": "Graph not found. Call case2cac first."}
         return summarize_graph(graph)
@@ -685,8 +746,8 @@ async def graph_compare_cohorts(graph_id_a: str, graph_id_b: str) -> dict[str, A
     try:
         from graph_utils import compare_graphs  # noqa: E402
 
-        graph_a = _graph_store.get(graph_id_a.strip())
-        graph_b = _graph_store.get(graph_id_b.strip())
+        graph_a = _graph_get(graph_id_a)
+        graph_b = _graph_get(graph_id_b)
         if not graph_a or not graph_b:
             return {"error": "One or both graphs not found. Call case2cac first for each cohort."}
         return compare_graphs(graph_a, graph_b)
@@ -699,13 +760,13 @@ async def graph_compare_cohorts(graph_id_a: str, graph_id_b: str) -> dict[str, A
 async def export_case_graph_ttl(graph_id: str) -> dict[str, Any]:
     """Export a session graph from case2cac as Turtle RDF for Protégé or triple-store import.
 
-    Reads flat_nodes from the in-memory graph store, strips merge metadata (_cases, etc.),
+    Reads flat_nodes from the session graph store, strips merge metadata (_cases, etc.),
     and serializes via rdflib. Call case2cac first to obtain graph_id.
     """
     try:
         from graph_utils import flat_nodes_to_turtle  # noqa: E402
 
-        stored = _graph_store.get(graph_id.strip())
+        stored = _graph_get(graph_id)
         if not stored:
             return {"error": "Graph not found. Call case2cac first."}
 

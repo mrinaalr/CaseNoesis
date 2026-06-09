@@ -3345,10 +3345,101 @@ async def serve_case_studies():
 # default ephemeral filesystem they reset on redeploy. Mount a volume at /data
 # (or swap to the DB) for durable storage.
 
+_Q1_EVIDENCE_PATH = Path(__file__).parent.parent / "ontology" / "q1" / "q1_evidence.json"
+_Q1_VALID_TIERS = frozenset({"stated", "inferred", "named_only"})
+
 _CASE_STUDIES_CONTENT_PATH = Path(__file__).parent.parent / "data" / "case_studies.json"
 _CASE_STUDIES_NOTES_PATH = Path(__file__).parent.parent / "data" / "case_study_notes.json"
 _CASE_STUDIES_NOTES_MAX_NAME = 80
 _CASE_STUDIES_NOTES_MAX_TEXT = 1500
+
+
+def _load_q1_evidence() -> Dict[str, Any]:
+    if not _Q1_EVIDENCE_PATH.exists():
+        raise HTTPException(status_code=404, detail="Q1 evidence data not available")
+    try:
+        data = json.loads(read_utf8_text_file(_Q1_EVIDENCE_PATH))
+    except (json.JSONDecodeError, OSError) as e:
+        logger.exception("q1 evidence load failed: %s", e)
+        raise HTTPException(status_code=500, detail="Failed to load Q1 evidence")
+    if not isinstance(data, dict) or not isinstance(data.get("records"), list):
+        raise HTTPException(status_code=500, detail="Invalid Q1 evidence format")
+    return data
+
+
+def _q1_resolve_platform_name(records: List[Dict[str, Any]], platform: str) -> Optional[str]:
+    """Case-insensitive match to canonical platform label in evidence records."""
+    needle = platform.strip().casefold()
+    if not needle:
+        return None
+    for rec in records:
+        label = rec.get("platform")
+        if isinstance(label, str) and label.casefold() == needle:
+            return label
+    return None
+
+
+def _q1_platform_evidence_index(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    by_platform: Dict[str, Dict[str, Any]] = {}
+    for rec in records:
+        plat = rec.get("platform")
+        tier = rec.get("stated_vs_inferred")
+        if not isinstance(plat, str) or not plat:
+            continue
+        if tier not in _Q1_VALID_TIERS:
+            continue
+        row = by_platform.get(plat)
+        if row is None:
+            row = {
+                "platform": plat,
+                "platform_type": rec.get("platform_type") or "",
+                "case_count": 0,
+                "tier_counts": {"stated": 0, "inferred": 0, "named_only": 0},
+            }
+            by_platform[plat] = row
+        row["case_count"] += 1
+        row["tier_counts"][tier] += 1
+
+    platforms = sorted(by_platform.values(), key=lambda r: (-r["case_count"], r["platform"].casefold()))
+    return {"platforms": platforms, "count": len(platforms)}
+
+
+def _q1_platform_evidence_cases(
+    records: List[Dict[str, Any]],
+    platform: str,
+    tier: Optional[str] = None,
+) -> Dict[str, Any]:
+    canonical = _q1_resolve_platform_name(records, platform)
+    if not canonical:
+        raise HTTPException(status_code=404, detail=f"Unknown platform: {platform}")
+
+    cases: List[Dict[str, Any]] = []
+    for rec in records:
+        if rec.get("platform") != canonical:
+            continue
+        rec_tier = rec.get("stated_vs_inferred")
+        if rec_tier not in _Q1_VALID_TIERS:
+            continue
+        if tier and rec_tier != tier:
+            continue
+        cases.append(
+            {
+                "case_id": rec.get("case_id"),
+                "tier": rec_tier,
+                "evidence_quote": (rec.get("evidence_quote") or "").strip(),
+            }
+        )
+
+    cases.sort(key=lambda c: (c.get("case_id") or ""))
+    return {
+        "platform": canonical,
+        "platform_type": next(
+            (r.get("platform_type") or "" for r in records if r.get("platform") == canonical),
+            "",
+        ),
+        "case_count": len(cases),
+        "cases": cases,
+    }
 
 
 def _load_case_studies_content() -> Dict[str, Any]:
@@ -3376,6 +3467,39 @@ def _save_case_study_notes(notes: List[Dict[str, Any]]) -> None:
     }
     with open(_CASE_STUDIES_NOTES_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+@app.get("/api/q1/platform-evidence")
+@limiter.limit("60/minute")
+def api_q1_platform_evidence(
+    request: Request,
+    platform: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
+):
+    """Q1 platform harm evidence: platform index or per-platform case cohort with tiers and quotes."""
+    if tier is not None:
+        tier_norm = tier.strip().lower()
+        if tier_norm not in _Q1_VALID_TIERS:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid tier; expected one of: {', '.join(sorted(_Q1_VALID_TIERS))}",
+            )
+        tier = tier_norm
+
+    data = _load_q1_evidence()
+    records = data.get("records") or []
+    meta = data.get("_meta") or {}
+
+    if platform is None or not platform.strip():
+        payload = _q1_platform_evidence_index(records)
+        payload["_meta"] = meta
+        return payload
+
+    payload = _q1_platform_evidence_cases(records, platform, tier)
+    payload["_meta"] = meta
+    if tier:
+        payload["tier"] = tier
+    return payload
 
 
 @app.get("/api/case-studies")

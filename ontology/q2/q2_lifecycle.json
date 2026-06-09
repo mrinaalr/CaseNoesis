@@ -1,0 +1,109 @@
+{
+  "_note": "Lifecycle and offender-pathway analysis — researcher's empirical synthesis. Keyed by subset_id. Never auto-generated.",
+  "familial_abuse": {
+    "subset_label": "Familial & custodial abuse",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Access / trust position", "description": "" },
+      { "phase": "Hands-on abuse / production", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "online_grooming": {
+    "subset_label": "Online grooming",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Initial contact", "description": "" },
+      { "phase": "Trust building / isolation", "description": "" },
+      { "phase": "Sexualization / exploitation", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "sextortion": {
+    "subset_label": "Sextortion",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Coercion / demand", "description": "" },
+      { "phase": "Payment or compliance", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "trafficking": {
+    "subset_label": "Trafficking & exploitation networks",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Recruitment / control", "description": "" },
+      { "phase": "Exploitation / material", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "production": {
+    "subset_label": "CSAM production",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Access / contact", "description": "" },
+      { "phase": "Production / recording", "description": "" },
+      { "phase": "Distribution (if reported)", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "possession_distribution": {
+    "subset_label": "Possession & distribution (online)",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Acquisition / trading", "description": "" },
+      { "phase": "Storage / sharing", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "hands_on_possessor": {
+    "subset_label": "Possessors with hands-on signal",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Hands-on contact", "description": "" },
+      { "phase": "Material possession / sharing", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  },
+  "ai_csam": {
+    "subset_label": "AI-generated / synthetic CSAM",
+    "pathway_summary": "",
+    "phases": [
+      { "phase": "Tool use / generation", "description": "" },
+      { "phase": "Possession / distribution", "description": "" },
+      { "phase": "Discovery / intake", "description": "" },
+      { "phase": "Investigation", "description": "" },
+      { "phase": "Prosecution / outcome", "description": "" }
+    ],
+    "offender_pathways": [],
+    "recurring_patterns": []
+  }
+}

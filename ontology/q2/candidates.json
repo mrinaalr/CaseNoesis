@@ -1,0 +1,20 @@
+{
+  "summary": {
+    "total_candidate_cases": 0,
+    "total_subset_case_pairs": 0,
+    "subsets_defined": 8,
+    "skipped": {},
+    "_stub": true
+  },
+  "by_subset": {
+    "familial_abuse": [],
+    "online_grooming": [],
+    "sextortion": [],
+    "trafficking": [],
+    "production": [],
+    "possession_distribution": [],
+    "hands_on_possessor": [],
+    "ai_csam": []
+  },
+  "flat": []
+}

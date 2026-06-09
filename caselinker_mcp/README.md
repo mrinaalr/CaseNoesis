@@ -1,6 +1,6 @@
 # CaseLinker MCP Server
 
-The CaseLinker MCP (Model Context Protocol) server exposes the corpus, knowledge graphs, triage scoring, and automated analysis as **33 structured tools** for agent and LLM workflows. It wraps the existing CaseLinker REST API over HTTP — read-only, no direct database access — so it works the same against local `run/main.py` and the Railway production deployment.
+The CaseLinker MCP (Model Context Protocol) server exposes the corpus, knowledge graphs, triage scoring, and automated analysis as **34 structured tools** for agent and LLM workflows. It wraps the existing CaseLinker REST API over HTTP — read-only, no direct database access — so it works the same against local `run/main.py` and the Railway production deployment.
 
 See [`tool_registry.md`](tool_registry.md) for the full tool catalog and tier breakdown.
 
@@ -48,9 +48,9 @@ Set `CASELINKER_KEY` to a value listed in `CASELINKER_TRUSTED_KEYS` on Railway o
 
 ## Tool tiers
 
-**30 public** + **3 trusted-key sensitive** = **33 tools**. See [`tool_registry.md`](tool_registry.md) for the full table.
+**31 public** + **3 trusted-key sensitive** = **34 tools**. See [`tool_registry.md`](tool_registry.md) for the full table.
 
-### Public tier (30 tools)
+### Public tier (31 tools)
 
 Trusted key does **not** change behavior. Includes all corpus search, analysis, ontology, stats, and on-demand graph tools:
 
@@ -60,6 +60,7 @@ Trusted key does **not** change behavior. Includes all corpus search, analysis, 
 - Stats / filters: `get_case_count`, `get_facet_distinct`, `get_unique_tags`, `tag_threader`, `get_case_ids_by_filter`, `get_stats_detailed`, `get_technology_revolver`, `get_cluster_groups`, `get_location_stats`, `get_triage_model_corpus`
 - Ontology (pre-merged): `get_knowledge_graph`, `get_case_graph_manifest`
 - Reference: `get_case_studies`, `get_case_study_notes`, `list_sources`
+- Q1 research: `q1_platform_evidence` (platform harm evidence cohorts)
 - On-demand graphs (MCP-only): `case2cac`, `graph_get_neighbors`, `graph_find_cases_by_concept`, `graph_summarize`, `graph_compare_cohorts`, `export_case_graph_ttl`
 
 ### Trusted-key sensitive (3 tools)
@@ -145,7 +146,7 @@ Workflow for cohort-specific CAC ontology graphs (MCP-only; not REST):
 4. Call `export_case_graph_ttl(graph_id)` to get Turtle RDF (`turtle`, `triple_count`, `node_count`) for Protégé or a triple store
 5. Optionally run `case2cac` on a second cohort and call `graph_compare_cohorts` to diff them (e.g. Discord vs Roblox for Q1/Q2/Q3 research)
 
-Graphs live in an in-memory session store only (not persisted across restarts). `export_case_graph_ttl` reconstructs RDF from session `flat_nodes` via rdflib (strips merge metadata `_cases` / `_isShared` / `_isNlp`).
+Session graphs are stored in Redis on Railway (`caselinker:mcp:graph:{id}`, 2-hour TTL) with in-memory fallback when Redis is unavailable (local dev). `export_case_graph_ttl` reconstructs RDF from session `flat_nodes` via rdflib (strips merge metadata `_cases` / `_isShared` / `_isNlp`).
 
 ## Local stdio transport
 
@@ -159,11 +160,11 @@ For a standalone SSE process (not via Railway mount), set `MCP_TRANSPORT=sse` an
 
 ## Tools
 
-**33 tools total** — see [`tool_registry.md`](tool_registry.md) for the authoritative list. Summary by tier:
+**34 tools total** — see [`tool_registry.md`](tool_registry.md) for the authoritative list. Summary by tier:
 
 | Tier | Count | Examples |
 |------|------:|----------|
-| Public (trusted key irrelevant) | 30 | `get_cases_page`, `case2cac`, `get_stats_detailed` |
+| Public (trusted key irrelevant) | 31 | `get_cases_page`, `case2cac`, `q1_platform_evidence` |
 | Trusted-key sensitive | 3 | `get_all_cases`, `get_case`, `llm_chat` |
 
 Tool docstrings in `server.py` remain the source of parameter and behavior detail.

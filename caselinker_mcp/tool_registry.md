@@ -1,20 +1,20 @@
 # CaseLinker MCP tool registry
 
-**Total: 33 tools** (as of `export_case_graph_ttl`).
+**Total: 34 tools** (as of `q1_platform_evidence`).
 
 Authoritative implementation: `@mcp.tool()` definitions in `server.py`. This file is the human-readable catalog for docs and agent hosts.
 
 ## Tier model
 
-Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. Only **three** tools behave differently when a trusted key is present (see below). The other eleven REST helpers (`get_case_count`, `get_facet_distinct`, `get_unique_tags`, etc.) are **fully public**; they were previously mislabeled as trusted-tier in older docs.
+Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. Only **three** tools behave differently when a trusted key is present (see below). The other eleven REST helpers (`get_case_count`, `get_facet_distinct`, `get_unique_tags`, etc.) are **fully public**; API key is needed for full case access and removal of rate limits. 
 
 | Category | Count | Meaning |
 |----------|------:|---------|
-| Public (trusted key irrelevant) | **30** | Same behavior with or without trusted key |
+| Public (trusted key irrelevant) | **31** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **3** | Blocked or reduced without trusted key |
-| **Total** | **33** | |
+| **Total** | **34** | |
 
-## Public tier (30 tools)
+## Public tier (31 tools)
 
 Trusted key does **not** change behavior (still subject to normal slowapi / public rate limits).
 
@@ -32,6 +32,7 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 | `get_knowledge_graph` | `GET /api/ontology/merged` | Pre-merged ontology pool |
 | `get_case_graph_manifest` | `GET /api/ontology/cases` | Graph coverage metadata |
 | `get_case_studies` | `GET /api/case-studies` | Era-based narratives |
+| `q1_platform_evidence` | `GET /api/q1/platform-evidence` | Q1 platform harm cohort index or per-platform evidence |
 | `list_sources` | (static) | Source catalog |
 | `case2cac` | MCP-only | On-demand cohort graph → `graph_id` |
 | `graph_get_neighbors` | MCP-only | Traverse session graph |
@@ -57,7 +58,7 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 2. `graph_get_neighbors` / `graph_find_cases_by_concept` / `graph_summarize`
 3. `export_case_graph_ttl(graph_id)` → `{ turtle, triple_count, node_count }`
 
-Session graphs live in process memory (`_graph_store`); lost on restart.
+Session graphs are stored in Redis when available (`caselinker:mcp:graph:{id}`, 2-hour TTL); otherwise in-process memory for local dev.
 
 ## Trusted-key sensitive (3 tools)
 
