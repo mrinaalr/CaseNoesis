@@ -123,10 +123,10 @@ You can process additional PDFs to add more cases to the database.
    - Provides REST API endpoints for case data, analysis, and statistics
 
 3. **`caselinker_mcp/server.py`** - **MCP Server for agent and LLM analysis**
-   - Exposes corpus, knowledge graphs, triage, and analysis as MCP tools
+   - Exposes **33 tools**: corpus search, triage, pre-merged ontology graphs, on-demand `case2cac` cohort graphs, Turtle export (`export_case_graph_ttl`), and graph traversal
    - Use from Cursor, Claude Desktop, or any MCP-compatible agent host
    - Read-only; wraps existing REST API; no DB mutation
-   - See `caselinker_mcp/README.md` for setup
+   - See `caselinker_mcp/README.md` and `caselinker_mcp/tool_registry.md` for setup and tool catalog
 
 **Typical use case:**
 1. First, process PDFs with `src/main.py` to populate the database

@@ -695,9 +695,42 @@ async def graph_compare_cohorts(graph_id_a: str, graph_id_b: str) -> dict[str, A
         return {"error": str(e)}
 
 
-# TRUSTED-KEY TOOLS: only functional when CASELINKER_KEY is a
-# key in CASELINKER_TRUSTED_KEYS on Railway. Public/external users with
-# non-trusted keys will get 403 from API.
+@mcp.tool()
+async def export_case_graph_ttl(graph_id: str) -> dict[str, Any]:
+    """Export a session graph from case2cac as Turtle RDF for Protégé or triple-store import.
+
+    Reads flat_nodes from the in-memory graph store, strips merge metadata (_cases, etc.),
+    and serializes via rdflib. Call case2cac first to obtain graph_id.
+    """
+    try:
+        from graph_utils import flat_nodes_to_turtle  # noqa: E402
+
+        stored = _graph_store.get(graph_id.strip())
+        if not stored:
+            return {"error": "Graph not found. Call case2cac first."}
+
+        flat_nodes = stored.get("flat_nodes") or []
+        if not flat_nodes:
+            return {"error": "Graph has no flat_nodes to export."}
+
+        turtle, triple_count, node_count = await asyncio.to_thread(flat_nodes_to_turtle, flat_nodes)
+        if triple_count == 0:
+            return {"error": "No RDF triples could be reconstructed from flat_nodes."}
+
+        return {
+            "graph_id": graph_id.strip(),
+            "turtle": turtle,
+            "triple_count": triple_count,
+            "node_count": node_count,
+        }
+    except Exception as e:
+        logger.exception("export_case_graph_ttl failed")
+        return {"error": str(e)}
+
+
+# REST helpers below are public (no trusted-key gate). Only get_all_cases
+# requires a trusted CaseLinker-Key (403 without). get_case and llm_chat
+# are public but return richer data / skip daily caps when trusted.
 
 
 @mcp.tool()

@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
 import re
 from collections import Counter, defaultdict
 from itertools import combinations
 from typing import Any, Dict, List, Set, Tuple
 
 RESERVED_KEYS = frozenset({"@id", "@type", "@context", "_isNlp", "_cases", "_isShared"})
+_FLAT_NODE_META_KEYS = frozenset({"_cases", "_isShared", "_isNlp"})
 
 SPINE_BASES = re.compile(
     r"^(EnduringEntity|Occurrent|Event|Role|Phase|Situation|"
@@ -359,6 +361,39 @@ def compare_graphs(graph_a: Dict[str, Any], graph_b: Dict[str, Any]) -> Dict[str
         "shared_case_count": shared_case_count,
         "interpretation": interpretation,
     }
+
+
+def strip_flat_node_metadata(node: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove CaseLinker merge annotations before RDF export."""
+    return {k: v for k, v in node.items() if k not in _FLAT_NODE_META_KEYS}
+
+
+def flat_nodes_to_turtle(flat_nodes: List[Dict[str, Any]]) -> Tuple[str, int, int]:
+    """
+    Reconstruct Turtle from merged flat JSON-LD nodes (expanded absolute IRIs).
+
+    Returns (turtle_string, triple_count, node_count).
+    """
+    from rdflib import Graph, URIRef
+
+    from features_to_cac import CaseToCAC  # noqa: E402
+
+    cleaned = [strip_flat_node_metadata(n) for n in flat_nodes if n.get("@id")]
+    if not cleaned:
+        return "", 0, 0
+
+    g = Graph()
+    g.parse(data=json.dumps({"@graph": cleaned}), format="json-ld")
+    CaseToCAC._bind_namespaces(g)
+
+    turtle = g.serialize(format="turtle")
+    triple_count = len(g)
+    node_ids: Set[Any] = set()
+    for s, _p, o in g:
+        node_ids.add(s)
+        if isinstance(o, URIRef):
+            node_ids.add(o)
+    return turtle, triple_count, len(node_ids)
 
 
 def build_graph_summary(
