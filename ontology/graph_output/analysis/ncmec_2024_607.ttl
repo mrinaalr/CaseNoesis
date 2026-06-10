@@ -71,22 +71,31 @@
         cacontology-legal-outcomes:MonetaryPenalty ;
     rdfs:label "$150,000," .
 
-<https://caselinker.up.railway.app/resource/platform/discord> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/discord> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Discord" .
 
-<https://caselinker.up.railway.app/resource/platform/facebook> a cacontology-platforms:SocialMediaPlatform ;
+<https://caselinker.up.railway.app/resource/platform/facebook> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
     rdfs:label "Facebook" .
 
-<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/kik> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Kik" .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
+<https://caselinker.up.railway.app/resource/platform/social-media> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "NCMEC" .
 
 <https://caselinker.up.railway.app/resource/case/ncmec_2024_607/phase/charged> a cacontology:LegalProcessPhase,
         cac-core:Phase ;

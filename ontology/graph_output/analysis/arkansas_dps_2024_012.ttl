@@ -47,7 +47,9 @@
         cacontology-multi:StateAgency ;
     rdfs:label "Arkansas State Police Department" .
 
-<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+<https://caselinker.up.railway.app/resource/agency/icac> a cac-core:OrganizationLikeEntity,
+        cacontology-taskforce:StateICACtaskForce ;
+    rdfs:label "ICAC" .
 
 <https://caselinker.up.railway.app/resource/case/arkansas_dps_2024_012/charge/1> a cacontology-legal-outcomes:CSAM_Possession,
         cacontology-legal-outcomes:CriminalCharge ;
@@ -98,16 +100,23 @@
 
 <https://caselinker.up.railway.app/resource/case/arkansas_dps_2024_012/person/victim/1> a uco-identity:Person .
 
-<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/kik> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Kik" .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
+<https://caselinker.up.railway.app/resource/platform/social-media> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
-<https://caselinker.up.railway.app/resource/agency/ncmec> a cacontology-multi:FederalAgency .
+<https://caselinker.up.railway.app/resource/agency/ncmec> a cac-core:OrganizationLikeEntity,
+        cacontology-multi:FederalAgency ;
+    rdfs:label "NCMEC" .
 
 <https://caselinker.up.railway.app/resource/case/arkansas_dps_2024_012/phase/arrested> a cacontology:InitialPhase,
         cac-core:Phase ;

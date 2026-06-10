@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import os
 import sys
@@ -267,25 +268,19 @@ def configure_mcp_deployment() -> None:
 
 
 def _fix_mcp_message_post_routes(starlette_app: Any) -> Any:
-    """Serve POST /messages and /messages/ directly (no 307 trailing-slash redirect).
+    """Serve POST /messages?session_id=... without a 307 trailing-slash redirect.
 
-    FastMCP registers Mount("/messages/", ...) which redirects bare /messages with 307.
-    MCP HTTP clients often POST to /messages?session_id=... after parsing the SSE event,
-    so redirects break the session handshake on Railway and other proxies.
+    FastMCP may register Mount("/messages/", ...) which redirects bare /messages.
+    Normalize to Mount("/messages", ...) so the ASGI handler is invoked directly.
+    Do not wrap the ASGI app in a Starlette Route endpoint — that returns None and
+    triggers ``TypeError: 'NoneType' object is not callable`` after the 202 is sent.
     """
-    from starlette.requests import Request
-    from starlette.routing import Mount, Route
+    from starlette.routing import Mount
 
     patched: list[Any] = []
     for route in starlette_app.routes:
         if isinstance(route, Mount) and route.path.rstrip("/") == "/messages":
-            asgi_app = route.app
-
-            async def post_messages(request: Request, _asgi: Any = asgi_app) -> None:
-                await _asgi(request.scope, request.receive, request._send)
-
-            patched.append(Route("/messages", endpoint=post_messages, methods=["POST"]))
-            patched.append(Route("/messages/", endpoint=post_messages, methods=["POST"]))
+            patched.append(Mount("/messages", app=route.app))
         else:
             patched.append(route)
 
@@ -308,47 +303,91 @@ def build_mcp_sse_app(mount_path: str | None = None) -> Any:
     return wrap_mcp_with_auth(sse_app)
 
 
-def _wrap_mcp_request_context(starlette_app: Any) -> Any:
+_mcp_streamable_app: Any | None = None
+
+
+def build_mcp_streamable_app() -> Any:
+    """Build the MCP Streamable HTTP Starlette app with deployment + auth middleware.
+
+    When mounted under FastAPI at ``/mcp-http``, set ``streamable_http_path`` to ``/`` so the
+    public client URL is ``/mcp-http/`` (GET + POST on one endpoint). Do not set it to
+    ``/mcp-http`` here — FastAPI's mount supplies the outer prefix, same as SSE.
+
+    The Streamable HTTP session manager lifespan is **not** started here. When mounted under
+    FastAPI, call :func:`get_mcp_streamable_session_manager` from the main app startup hook
+    (see ``run/main.py``).
+    """
+    global _mcp_streamable_app
+    if _mcp_streamable_app is not None:
+        return _mcp_streamable_app
+
+    configure_mcp_deployment()
+    mcp.settings.streamable_http_path = "/"
+    inner = mcp.streamable_http_app()
+    # Mounted sub-app lifespans are not run by FastAPI; main startup runs session_manager.run().
+    inner.router.lifespan_context = None
+    _mcp_streamable_app = wrap_mcp_with_auth(inner)
+    return _mcp_streamable_app
+
+
+def get_mcp_streamable_session_manager() -> Any:
+    """Return the shared Streamable HTTP session manager (lazy-builds the app)."""
+    build_mcp_streamable_app()
+    return mcp.session_manager
+
+
+def _header_from_scope(scope: dict[str, Any], name: str) -> str:
+    """Read a request header from an ASGI HTTP scope (case-insensitive)."""
+    target = name.lower().encode("latin-1")
+    for key, val in scope.get("headers", []):
+        if key.lower() == target:
+            return val.decode("latin-1")
+    return ""
+
+
+def _wrap_mcp_request_context(asgi_app: Any) -> Any:
     """Bind inbound CaseLinker-Key header to per-request context for REST API calls."""
-    from starlette.middleware.base import BaseHTTPMiddleware
-    from starlette.requests import Request
+    from starlette.types import Receive, Scope, Send
 
     from caselinker_mcp.client import bind_request_caselinker_key, reset_request_caselinker_key
 
-    class MCPRequestContextMiddleware(BaseHTTPMiddleware):
-        async def dispatch(self, request: Request, call_next):
-            inbound = (request.headers.get("CaseLinker-Key") or "").strip() or None
-            token = bind_request_caselinker_key(inbound)
-            try:
-                return await call_next(request)
-            finally:
-                reset_request_caselinker_key(token)
+    async def middleware(scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await asgi_app(scope, receive, send)
+            return
+        inbound = _header_from_scope(scope, "CaseLinker-Key").strip() or None
+        token = bind_request_caselinker_key(inbound)
+        try:
+            await asgi_app(scope, receive, send)
+        finally:
+            reset_request_caselinker_key(token)
 
-    starlette_app.add_middleware(MCPRequestContextMiddleware)
-    return starlette_app
+    return middleware
 
 
-def wrap_mcp_with_auth(starlette_app: Any) -> Any:
+def wrap_mcp_with_auth(asgi_app: Any) -> Any:
     """Per-request CaseLinker-Key forwarding + optional MCP_ACCESS_KEY bearer gate."""
-    starlette_app = _wrap_mcp_request_context(starlette_app)
+    wrapped = _wrap_mcp_request_context(asgi_app)
 
     access_key = os.getenv("MCP_ACCESS_KEY", "").strip()
     if not access_key:
-        return starlette_app
+        return wrapped
 
-    from starlette.middleware.base import BaseHTTPMiddleware
-    from starlette.requests import Request
     from starlette.responses import JSONResponse
+    from starlette.types import Receive, Scope, Send
 
-    class MCPAuthMiddleware(BaseHTTPMiddleware):
-        async def dispatch(self, request: Request, call_next):
-            auth = request.headers.get("Authorization", "")
-            if auth != f"Bearer {access_key}":
-                return JSONResponse({"detail": "Unauthorized"}, status_code=401)
-            return await call_next(request)
+    async def auth_middleware(scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await wrapped(scope, receive, send)
+            return
+        auth = _header_from_scope(scope, "Authorization")
+        if auth != f"Bearer {access_key}":
+            response = JSONResponse({"detail": "Unauthorized"}, status_code=401)
+            await response(scope, receive, send)
+            return
+        await wrapped(scope, receive, send)
 
-    starlette_app.add_middleware(MCPAuthMiddleware)
-    return starlette_app
+    return auth_middleware
 
 
 def _graph_key(graph_id: str) -> str:
@@ -757,14 +796,21 @@ async def graph_compare_cohorts(graph_id_a: str, graph_id_b: str) -> dict[str, A
 
 
 @mcp.tool()
-async def export_case_graph_ttl(graph_id: str) -> dict[str, Any]:
-    """Export a session graph from case2cac as Turtle RDF for Protégé or triple-store import.
+async def export_case_graph_ttl(
+    graph_id: str,
+    case_id: str | None = None,
+    pool: str | None = None,
+) -> dict[str, Any]:
+    """Export a session graph from case2cac as JSON-LD + Turtle RDF.
 
     Reads flat_nodes from the session graph store, strips merge metadata (_cases, etc.),
     and serializes via rdflib. Call case2cac first to obtain graph_id.
+
+    Optional case_id + pool (e.g. pool=\"analysis\") writes {case_id}.jsonld and
+    {case_id}.ttl under ontology/graph_output/{pool}/ for Patterns graph explorer.
     """
     try:
-        from graph_utils import flat_nodes_to_turtle  # noqa: E402
+        from graph_utils import flat_nodes_to_exports  # noqa: E402
 
         stored = _graph_get(graph_id)
         if not stored:
@@ -774,16 +820,46 @@ async def export_case_graph_ttl(graph_id: str) -> dict[str, Any]:
         if not flat_nodes:
             return {"error": "Graph has no flat_nodes to export."}
 
-        turtle, triple_count, node_count = await asyncio.to_thread(flat_nodes_to_turtle, flat_nodes)
-        if triple_count == 0:
+        jsonld, turtle, triple_count, node_count = await asyncio.to_thread(
+            flat_nodes_to_exports, flat_nodes
+        )
+        if triple_count == 0 or not jsonld:
             return {"error": "No RDF triples could be reconstructed from flat_nodes."}
 
-        return {
+        result: dict[str, Any] = {
             "graph_id": graph_id.strip(),
+            "jsonld": jsonld,
             "turtle": turtle,
             "triple_count": triple_count,
             "node_count": node_count,
         }
+
+        pool_norm = (pool or "").strip().lower()
+        cid = (case_id or "").strip()
+        if pool_norm and cid:
+            allowed = {"analysis", "universe", "big_bang"}
+            if pool_norm == "all":
+                pool_norm = "big_bang"
+            if pool_norm not in allowed:
+                return {"error": f"pool must be one of: {', '.join(sorted(allowed))}"}
+
+            out_dir = _ONTOLOGY_DIR / "graph_output" / pool_norm
+            out_dir.mkdir(parents=True, exist_ok=True)
+            jsonld_path = out_dir / f"{cid}.jsonld"
+            ttl_path = out_dir / f"{cid}.ttl"
+            jsonld_path.write_text(
+                json.dumps(jsonld, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            ttl_path.write_text(turtle, encoding="utf-8")
+            result["saved"] = {
+                "case_id": cid,
+                "pool": pool_norm,
+                "jsonld_path": str(jsonld_path.relative_to(_REPO_ROOT)),
+                "ttl_path": str(ttl_path.relative_to(_REPO_ROOT)),
+            }
+
+        return result
     except Exception as e:
         logger.exception("export_case_graph_ttl failed")
         return {"error": str(e)}

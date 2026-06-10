@@ -39,7 +39,7 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 | `graph_find_cases_by_concept` | MCP-only | Concept → case IDs |
 | `graph_summarize` | MCP-only | Structural graph summary |
 | `graph_compare_cohorts` | MCP-only | Diff two session graphs |
-| `export_case_graph_ttl` | MCP-only | Session graph → Turtle RDF |
+| `export_case_graph_ttl` | MCP-only | Session graph → JSON-LD + Turtle; optional save to graph_output pool |
 | `get_case_count` | `GET /api/case-count` | Fast COUNT |
 | `get_facet_distinct` | `GET /api/facet-distinct` | Facet prune values |
 | `get_unique_tags` | `GET /api/tags` | All tag dimensions |
@@ -56,7 +56,7 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 
 1. `case2cac(case_ids)` → `graph_id`
 2. `graph_get_neighbors` / `graph_find_cases_by_concept` / `graph_summarize`
-3. `export_case_graph_ttl(graph_id)` → `{ turtle, triple_count, node_count }`
+3. `export_case_graph_ttl(graph_id, case_id?, pool?)` → `{ jsonld, turtle, triple_count, node_count, saved? }`
 
 Session graphs are stored in Redis when available (`caselinker:mcp:graph:{id}`, 2-hour TTL); otherwise in-process memory for local dev.
 

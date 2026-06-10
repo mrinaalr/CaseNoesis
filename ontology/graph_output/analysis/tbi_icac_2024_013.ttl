@@ -40,7 +40,9 @@
     cacontology:participatesInEvent <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_013/event/hands-on> ;
     cac-core:hasRole <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_013/person/victim/1> .
 
-<https://caselinker.up.railway.app/resource/agency/icac> a cacontology-taskforce:StateICACtaskForce .
+<https://caselinker.up.railway.app/resource/agency/icac> a cac-core:OrganizationLikeEntity,
+        cacontology-taskforce:StateICACtaskForce ;
+    rdfs:label "ICAC" .
 
 <https://caselinker.up.railway.app/resource/agency/metro-nashville-police-department> a cac-core:OrganizationLikeEntity,
         cacontology-multi:LocalAgency ;
@@ -78,17 +80,24 @@
         cacontology-legal-outcomes:MonetaryPenalty ;
     rdfs:label "$310,000" .
 
-<https://caselinker.up.railway.app/resource/platform/chat> a cacontology-platforms:AnonymousChatPlatform ;
-    rdfs:label "chat" .
+<https://caselinker.up.railway.app/resource/platform/chat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:AnonymousChatPlatform ;
+    rdfs:label "chat" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
-<https://caselinker.up.railway.app/resource/platform/kik> a cacontology-platforms:MessagingService ;
+<https://caselinker.up.railway.app/resource/platform/kik> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
     rdfs:label "Kik" .
 
-<https://caselinker.up.railway.app/resource/platform/snapchat> a cacontology-platforms:MessagingService ;
-    rdfs:label "Snapchat" .
+<https://caselinker.up.railway.app/resource/platform/snapchat> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:MessagingService ;
+    rdfs:label "Snapchat" ;
+    cacontology-platforms:encryptionLevel "end-to-end" .
 
-<https://caselinker.up.railway.app/resource/platform/social-media> a cacontology-platforms:SocialMediaPlatform ;
-    rdfs:label "social media" .
+<https://caselinker.up.railway.app/resource/platform/social-media> a cac-core:DigitalSystemEntity,
+        cacontology-platforms:SocialMediaPlatform ;
+    rdfs:label "social media" ;
+    cacontology-platforms:platformSpecificity "generic" .
 
 <https://caselinker.up.railway.app/resource/case/tbi_icac_2024_013/phase/convicted> a cac-core:Phase,
         cacontology-legal-outcomes:SentencingPhase ;

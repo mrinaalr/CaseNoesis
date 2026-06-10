@@ -10,6 +10,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from contextlib import asynccontextmanager
 from typing import List, Dict, Any, Optional, Tuple
 import sys
 import json
@@ -94,7 +95,26 @@ except ImportError:
     def get_cache_key(endpoint, **kwargs):
         return f"caselinker:{endpoint}"
 
-app = FastAPI(title="CaseLinker API")
+_mcp_streamable_enabled = False
+
+
+@asynccontextmanager
+async def _app_lifespan(application: FastAPI):
+    """FastAPI lifespan — starts Streamable HTTP session manager when MCP is mounted."""
+    cm = None
+    if _mcp_streamable_enabled:
+        from caselinker_mcp.server import get_mcp_streamable_session_manager
+
+        mgr = get_mcp_streamable_session_manager()
+        cm = mgr.run()
+        await cm.__aenter__()
+        application.state.mcp_streamable_cm = cm
+    yield
+    if cm is not None:
+        await cm.__aexit__(None, None, None)
+
+
+app = FastAPI(title="CaseLinker API", lifespan=_app_lifespan)
 
 # Trust Railway / reverse-proxy X-Forwarded-* headers for scheme and client IP.
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
@@ -3931,14 +3951,17 @@ def api_ontology_cache_warm(
     return {"warmed": results}
 
 
-# MCP SSE mount (agent entry point via /mcp/sse)
+# MCP mounts: legacy SSE at /mcp/sse + Streamable HTTP at /mcp-http
 try:
     if str(_REPO_ROOT) not in sys.path:
         sys.path.insert(0, str(_REPO_ROOT))
-    from caselinker_mcp.server import build_mcp_sse_app
+    from caselinker_mcp.server import build_mcp_sse_app, build_mcp_streamable_app
 
     app.mount("/mcp", build_mcp_sse_app())
-    # MCP SSE endpoint: /mcp/sse — gate with MCP_ACCESS_KEY env var
+    # Legacy SSE: GET /mcp/sse, POST /mcp/messages?session_id=...
+    app.mount("/mcp-http", build_mcp_streamable_app())
+    # Streamable HTTP: GET+POST /mcp-http/ (single endpoint; trailing slash avoids 307)
+    globals()["_mcp_streamable_enabled"] = True
 except Exception as _mcp_mount_err:
     print(f"Warning: MCP mount failed: {_mcp_mount_err}", file=sys.stderr)
 

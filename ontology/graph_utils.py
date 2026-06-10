@@ -368,6 +368,46 @@ def strip_flat_node_metadata(node: Dict[str, Any]) -> Dict[str, Any]:
     return {k: v for k, v in node.items() if k not in _FLAT_NODE_META_KEYS}
 
 
+_GRAPH_BASE = "https://caselinker.up.railway.app/resource"
+GRAPH_DETERMINISTIC_ID = f"{_GRAPH_BASE}/graphs/deterministic"
+GRAPH_NLP_ID = f"{_GRAPH_BASE}/graphs/nlp"
+
+
+def flat_nodes_to_named_jsonld(flat_nodes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Rebuild per-case JSON-LD named graphs from merged flat nodes.
+
+    Matches graph_generate.py / Patterns viz: array of { @id, @graph } documents.
+    Splits deterministic vs NLP using the _isNlp merge flag.
+    """
+    det: List[Dict[str, Any]] = []
+    nlp: List[Dict[str, Any]] = []
+    for node in flat_nodes:
+        if not node.get("@id"):
+            continue
+        cleaned = strip_flat_node_metadata(node)
+        if node.get("_isNlp"):
+            nlp.append(cleaned)
+        else:
+            det.append(cleaned)
+
+    out: List[Dict[str, Any]] = []
+    if det:
+        out.append({"@id": GRAPH_DETERMINISTIC_ID, "@graph": det})
+    if nlp:
+        out.append({"@id": GRAPH_NLP_ID, "@graph": nlp})
+    return out
+
+
+def flat_nodes_to_exports(
+    flat_nodes: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], str, int, int]:
+    """Return (named_jsonld, turtle, triple_count, node_count)."""
+    jsonld = flat_nodes_to_named_jsonld(flat_nodes)
+    turtle, triple_count, node_count = flat_nodes_to_turtle(flat_nodes)
+    return jsonld, turtle, triple_count, node_count
+
+
 def flat_nodes_to_turtle(flat_nodes: List[Dict[str, Any]]) -> Tuple[str, int, int]:
     """
     Reconstruct Turtle from merged flat JSON-LD nodes (expanded absolute IRIs).

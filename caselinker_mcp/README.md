@@ -143,7 +143,7 @@ Workflow for cohort-specific CAC ontology graphs (MCP-only; not REST):
 1. Use `filter_cases_by_tags` or `get_cohort_members` to find case IDs
 2. Call `case2cac(case_ids)` — returns `graph_id` and a structural summary
 3. Use `graph_id` with `graph_get_neighbors`, `graph_find_cases_by_concept`, or `graph_summarize`
-4. Call `export_case_graph_ttl(graph_id)` to get Turtle RDF (`turtle`, `triple_count`, `node_count`) for Protégé or a triple store
+4. Call `export_case_graph_ttl(graph_id, case_id=..., pool="analysis")` to get JSON-LD + Turtle and optionally save `{case_id}.jsonld`/`.ttl` under `ontology/graph_output/analysis/` for Patterns
 5. Optionally run `case2cac` on a second cohort and call `graph_compare_cohorts` to diff them (e.g. Discord vs Roblox for Q1/Q2/Q3 research)
 
 Session graphs are stored in Redis on Railway (`caselinker:mcp:graph:{id}`, 2-hour TTL) with in-memory fallback when Redis is unavailable (local dev). `export_case_graph_ttl` reconstructs RDF from session `flat_nodes` via rdflib (strips merge metadata `_cases` / `_isShared` / `_isNlp`).
