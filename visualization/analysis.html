@@ -529,7 +529,7 @@
                 <div class="topic-category">
                     <div class="topic-category-title">Perpetrator Relationships</div>
                     <div class="topic-selector" id="topic-selector-relationships">
-                        <!-- Relationships: father, mother, parent, brother, sister, sibling, uncle, aunt, cousin, teacher, stranger -->
+                        <!-- Relationships: father, mother, parent, brother, sister, sibling, uncle, aunt, cousin, teacher, coach, stranger -->
                     </div>
                 </div>
                 
@@ -779,7 +779,7 @@
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Roblox', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'cybertip', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
-            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
+            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach', 'stranger'];
             const allStatus = ['registered_sex_offender'];
             
             // Render each category
@@ -844,7 +844,7 @@
             const allPlatforms = ['Facebook', 'Instagram', 'Snapchat', 'Roblox', 'Discord', 'WhatsApp', 'online', 'chat', 'social media'];
             const allInvestigation = ['proactive', 'reactive', 'online', 'undercover', 'cybertip', 'unknown'];
             const allOrganizations = ['ICAC', 'FBI', 'NCMEC', 'Police', 'Unique'];
-            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'stranger'];
+            const allRelationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach', 'stranger'];
             const allStatus = ['registered_sex_offender'];
             
             // Render each category
@@ -982,7 +982,7 @@
                                 if (topic === 'stranger') {
                                     const hasFamily = Array.isArray(topics) && topics.includes('family');
                                     const relationship = caseData.relationship_to_victim || '';
-                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher'].some(fam => relationship.toLowerCase().includes(fam));
+                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach'].some(fam => relationship.toLowerCase().includes(fam));
                                     matches = !hasFamily && !hasFamilyRel;
                                 } else {
                                     matches = Array.isArray(topics) && topics.includes(topic);
@@ -1022,7 +1022,7 @@
                                     const topics = caseData.case_topics || [];
                                     const hasFamily = Array.isArray(topics) && topics.includes('family');
                                     const relationship = caseData.relationship_to_victim || '';
-                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher'].some(fam => relationship.toLowerCase().includes(fam));
+                                    const hasFamilyRel = relationship && ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach'].some(fam => relationship.toLowerCase().includes(fam));
                                     matches = !hasFamily && !hasFamilyRel;
                                 } else {
                                     // Simple exact match (no biological prefix anymore)

@@ -321,7 +321,7 @@ class NERExtractor:
                 elif entity_text.isdigit():
                     age_num = int(entity_text)
                     if 1 <= age_num <= 100:
-                        age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect',
+                        age_indicators = ['teacher', 'coach', 'man', 'woman', 'boy', 'girl', 'person', 'suspect',
                                         'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor',
                                         'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
                         if any(indicator in context for indicator in age_indicators):
@@ -523,8 +523,8 @@ class NERExtractor:
             r'(\d+)[-\s]+years[-\s]+old\s+(?:man|woman|boy|girl|male|female)',
             # Handle "teacher, 29" or "29, teacher" format (comma-separated age)
             # Look for number followed by comma or comma followed by number, with context
-            r'(?:teacher|man|woman|boy|girl|male|female|person|suspect|defendant|perpetrator|victim|individual|adult|minor|teenager|teen|child|kid),?\s+(\d{1,2})\b',
-            r'\b(\d{1,2}),?\s+(?:year|years|yr|yrs|year-old|years-old)\s+(?:old\s+)?(?:teacher|man|woman|boy|girl|male|female|person|suspect|defendant|perpetrator|victim|individual|adult|minor|teenager|teen|child|kid)',
+            r'(?:teacher|coach|man|woman|boy|girl|male|female|person|suspect|defendant|perpetrator|victim|individual|adult|minor|teenager|teen|child|kid),?\s+(\d{1,2})\b',
+            r'\b(\d{1,2}),?\s+(?:year|years|yr|yrs|year-old|years-old)\s+(?:old\s+)?(?:teacher|coach|man|woman|boy|girl|male|female|person|suspect|defendant|perpetrator|victim|individual|adult|minor|teenager|teen|child|kid)',
             # Handle standalone age in context: ", 29," or ", 29 " with nearby age-related words
             r',\s+(\d{1,2})\s*,',  # ", 29," - but validate context
             r',\s+(\d{1,2})\s+(?:was|is|has|had|did|arrested|charged|convicted|sentenced)',
@@ -551,12 +551,12 @@ class NERExtractor:
                     context = text[context_start:context_end].lower()
 
                     # For patterns that already have context (like "teacher, 29"), trust them
-                    if any(word in pattern for word in ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim']):
+                    if any(word in pattern for word in ['teacher', 'coach', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim']):
                         ages.append(age)
                     # For comma-separated patterns, check for age-related context
                     elif ',' in pattern:
                         # Look for age-related words nearby
-                        age_indicators = ['teacher', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor', 'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
+                        age_indicators = ['teacher', 'coach', 'man', 'woman', 'boy', 'girl', 'person', 'suspect', 'defendant', 'perpetrator', 'victim', 'individual', 'adult', 'minor', 'teenager', 'teen', 'child', 'kid', 'arrested', 'charged', 'convicted']
                         if any(indicator in context for indicator in age_indicators):
                             # Make sure it's not a year (like 2022, 2014)
                             if age < 18 or (age >= 18 and age <= 100 and not any(str(year) in context for year in range(2000, 2030))):

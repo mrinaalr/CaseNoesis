@@ -90,7 +90,7 @@ def _case_matches_tag(case: Dict[str, Any], tag: str, category: str) -> bool:
         if tag == 'stranger':
             has_family = isinstance(topics, list) and 'family' in topics
             relationship = case.get('relationship_to_victim', '')
-            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach']
             has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
             return not has_family and not has_family_rel
         else:
@@ -133,7 +133,7 @@ def _case_matches_tag(case: Dict[str, Any], tag: str, category: str) -> bool:
         if tag == 'stranger':
             topics = case.get('case_topics', [])
             has_family = isinstance(topics, list) and 'family' in topics
-            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher']
+            family_relationships = ['father', 'mother', 'parent', 'brother', 'sister', 'sibling', 'uncle', 'aunt', 'cousin', 'teacher', 'coach']
             has_family_rel = relationship and any(fam in relationship.lower() for fam in family_relationships)
             return not has_family and not has_family_rel
         else:

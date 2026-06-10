@@ -595,6 +595,7 @@ function topicRates(cases) {
     if (sev.includes('infant')) all.add('infant');
     if (sev.includes('grooming') || topics.includes('grooming')) all.add('grooming');
     if (rel.includes('teacher')) all.add('teacher');
+    if (rel.includes('coach')) all.add('coach');
     all.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
   });
   return counts;
@@ -612,6 +613,7 @@ function allRates() {
     if (sev.includes('infant')) all.add('infant');
     if (sev.includes('grooming')) all.add('grooming');
     if (rel.includes('teacher')) all.add('teacher');
+    if (rel.includes('coach')) all.add('coach');
     all.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
   });
   return counts;

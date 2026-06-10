@@ -1417,7 +1417,7 @@
                 'Perpetrator Context': [
                     /\b\d+\s+year\s+old\s+(man|woman|male|female)\b/gi,
                     /\bregistered\s+sex\s+offender\b/gi,
-                    /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|stranger|teacher)\b/gi
+                    /\b(father|mother|parent|brother|sister|uncle|aunt|cousin|stranger|teacher|coach)\b/gi
                 ],
                 'Case Context': [
                     /\b\d+\s+year\s+old\s+(child|children|victim|victims|boy|girl|minor|minors)\b/gi,
@@ -1562,7 +1562,8 @@
                     'uncle': /\buncle\b/gi,
                     'aunt': /\baunt\b/gi,
                     'stranger': /\bstranger\b/gi,
-                    'teacher': /\bteacher\b/gi
+                    'teacher': /\bteacher\b/gi,
+                    'coach': /\bcoach\b/gi
                 };
                 if (relMap[searchValue]) {
                     searchPatterns.push(relMap[searchValue]);

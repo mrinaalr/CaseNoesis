@@ -18,7 +18,7 @@ The live release includes all features and a processed case corpus from publicly
 
 - **Report #4: [Framework for Retrospective Analysis and Case Studies of Internet Crimes Against Children Across U.S. Task Forces](https://mrinaalr.github.io/website/Framework.pdf)** - Fourth report establishing a replicable and extensible case study methodology: four-era framework (2010-2026), stratified sampling across eras, a five-dimension case study structure, and the legal and ethical grounding for the analysis.
 
-- **Report #5: [Painting the Landscape of Internet Crimes Against Children with Interpretive Tooling](https://mrinaalr.github.io/website/PaintingTheLandscapeOfInternetCrimesAgainstChildrenWithInterpretiveTooling.html)** - Fifth and final report: a ten-page visual briefing on sixteen years of U.S. ICAC enforcement, presenting the 10-dimension framework, 20 case studies across four eras, and aggregate findings across 5,000+ cases.
+- **Report #5: [Painting the Landscape of Internet Crimes Against Children with Interpretive Tooling](https://mrinaalr.github.io/website/PaintingTheLandscapeOfInternetCrimesAgainstChildrenWithInterpretiveTooling.html)** - Fifth and final report: a ten-page visual briefing on sixteen years of U.S. ICAC enforcement, presenting the extraction and analysis framework, 20 case studies across four eras, and aggregate findings across 5,000+ cases.
 
 ## Motivation
 
@@ -129,11 +129,11 @@ You can process additional PDFs to add more cases to the database.
 3. **`caselinker_mcp/server.py`** — **MCP server for agent and LLM analysis**
    - Exposes **34 tools**: corpus search, triage, Q1 platform evidence, on-demand `case2cac` cohort graphs, Turtle export (`export_case_graph_ttl`), and graph traversal
    - Read-only; wraps the existing REST API; no database mutation
-   - Reach out for private mcp.json keys and review `caselinker_mcp/README.md` / `caselinker_mcp/tool_registry.md` for setup, auth and the full tool catalog
+   - Reach out for private mcp.json keys and review `caselinker_mcp/README.md` & `caselinker_mcp/tool_registry.md` for setup, auth and the full tool catalog
 
 **Typical use case:**
 1. First, process PDFs with `src/main.py` to populate the database
-2. Then, start the web server with `run/main.py` to view and analyze the cases
+2. Then, start the web server with `run/main.py` to view and analyze cases
 3. Optionally, connect an MCP client (Cursor, Claude Desktop, or any MCP-compatible host) via **stdio**, **SSE**, or **Streamable HTTP**
 
 ## Process Your Own PDF Files
@@ -251,68 +251,10 @@ Access the visualizations via the [live demo](https://caselinker.up.railway.app/
 
 Access Search via the [live demo](https://caselinker.up.railway.app/search) or locally at http://localhost:8000/search
 
-Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) gate ID listing behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
-
-## Triage and Phase 2: Patterns
-
-Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory only and **does not write** to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
+Search provides a **facet decision tree** over the stored case corpus: the server builds a deterministic partition tree from structured facets (not a precomputed file on disk). The view uses **D3.js** (SVG) to render cohort nodes and edges. You can limit tree depth, **prune** which partition dimensions apply and optionally filter allowed values per facet (extracted feature), then **click any node** (branch or leaf) to list **case IDs** in that cohort for use elsewhere (e.g. single-case visualization, manual cross-case analysis). Small cohorts (fewer than three cases) have gate IDs behind a demo access key. See `src/Storage Layer/facet_tree.py` and `/api/facet-tree` for the partition order and semantics.
 
 
-**Using Random Forest Model:** Place `triage_bundle.joblib` under `models/` at the repo root, or set `CASELINKER_TRIAGE_BUNDLE` to a file path, or `CASELINKER_MODELS_DIR` so the app looks for `triage_bundle.joblib` inside that directory. Train / create locally with:
-
-```bash
-python3 scripts/run/train_triage_model.py --model rf --out models/triage_bundle.joblib
-```
-
-Evaluate or reproduce metrics with `scripts/verify/test_triage.py` or `GET /api/triage-eval` (live DB, stratified train/test, same feature pipeline as training).
-
-**Phase 2: Patterns** ([live](https://caselinker.up.railway.app/patterns) · [local](http://localhost:8000/patterns)) is the next stage of research for cross-case pattern analysis ontop of the corpus.
-
-### Section A — The Research Questions
-
-Three questions drive Phase 2; each builds on the last. Findings pages: [`/patterns/questions/q01`](https://caselinker.up.railway.app/patterns/questions/q01) (Q1), [`q02`](https://caselinker.up.railway.app/patterns/questions/q02) (Q2), [`q03`](https://caselinker.up.railway.app/patterns/questions/q03) (Q3).
-
-| Question | Focus | Why it matters |
-|----------|--------|----------------|
-| **Q1 — Platform harm** | What is the platform and what capabilities does it have? How has it been misused in practice, and what surfaces, vectors, and avenues for exploitation does it expose? What specifically about this medium makes it usable for exploitation? Can those properties be  generalized into a framework for stress-testing future platforms? | Press releases name platforms but rarely explain *what about the medium* enabled the offense. Affordance-level analysis turns scattered mentions into a transferable framework. Evidence: `ontology/q1/` ([`q1_evidence.json`](ontology/q1/q1_evidence.json)) |
-| **Q2 — Exploitation lifecycle** | What does offending and enforcement look like at scale across offense subsets (familial abuse, grooming, sextortion, production, possession, etc.)? What platforms, methods, and patterns recur within each? | Most ICAC research works in hashing, aggregate counts, or single-case narratives. The lifecycle view, stratified by subset, shows how offending and enforcement unfold across thousands of cases. Evidence: `ontology/q2/` ([`q2_lifecycle.json`](ontology/q2/q2_lifecycle.json), [`q2_evidence.py`](ontology/q2/q2_evidence.py)). |
-| **Q3 — Kill-chain interventions** | Given Q1 and Q2, where can technology, investigation, or enforcement intervene with the most leverage? | Platform mapping and lifecycle analysis exist to answer the operational question: where disruption is most plausible (detection, reporting, warrant execution, prevention). Evidence: `ontology/q3/` ([`q3_interventions.json`](ontology/q3/q3_interventions.json), [`q3_evidence.py`](ontology/q3/q3_evidence.py)). |
-
-Rebuild evidence tables locally:
-
-```bash
-python3 ontology/q1/build_candidates.py && python3 ontology/q1/q1_evidence.py
-python3 ontology/q2/build_candidates.py && python3 ontology/q2/q2_evidence.py
-python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
-```
-
-### Section B — The Method: Ontology Pipeline
-
-To answer Q1–Q3 at corpus scale, enforcement narratives cannot stay only in relational tables and regex-derived tags. They must be expressed in a **structured, graph-queryable** form so patterns can be queried, validated, and compared across cases. CaseLinker already extracts consistent features from each narrative; the **ontology pipeline** maps those features into a standard investigation vocabulary and builds a validated knowledge graph as the mechanism for cross-case analysis.
-
-**What it is :** The [CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology) (Crimes Against Children Ontology) is a formal vocabulary developed to model the entities of a child-exploitation investigation as typed, related objects: platforms, victims, offenders, investigations, and outcomes. CAC is shepherded by [Project VIC International](https://www.projectvic.org/) and is built on the Linux Foundation's [Cyber Domain Ontology](https://cyberdomainontology.org/) stack ([UCO](https://unifiedcyberontology.org/) and [CASE](https://caseontology.org/)). CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.
-
-
-**How CaseLinker uses ontologies :** A deterministic mapping layer translates each case's extracted features into CAC entities and relationships, emits per-case RDF graphs, validates them, and merges only conformant graphs into a queryable knowledge graph.
-
-**Pipeline flow** (see also [`visualization/patterns.html`](visualization/patterns.html) Section B):
-
-1. **CaseLinker case features** — already extracted (platforms, topics, investigation signals, prosecution outcomes).
-2. **Mapping layer** — deterministic translation to CAC entities and relationships (`ontology/graph_generate.py`).
-3. **RDF emission** — per-case graphs as Turtle and JSON-LD under `ontology/graph_output/`.
-4. **SHACL validation** — conformant graphs only enter the merged corpus.
-5. **SPARQL-queryable corpus** — merged validated graphs become the substrate for Q1–Q3 analyses.
-
-Agents can also build cohort graphs on demand via MCP (`case2cac` → `graph_summarize` → `export_case_graph_ttl`).
-
-**References**
-- [CAC Ontology repository](https://github.com/Project-VIC-International/CAC-Ontology)
-- [CASE/UCO SDK with CAC bindings](https://github.com/vulnmaster/CASE-UCO-SDK)
-- [CASE](https://github.com/casework/CASE)
-- [UCO](https://github.com/ucoProject/UCO)
-- [Project VIC International](https://projectvic.org/)
-
-## Using Advanced Case Analysis
+## Using Advanced Case Analysis and Triage
 
 Navigate to [live demo](https://caselinker.up.railway.app/analysis) or run server locally and navigate to http://localhost:8000/analysis.
 
@@ -338,6 +280,54 @@ Navigate to [live demo](https://caselinker.up.railway.app/analysis) or run serve
    - **Top Keywords**: View most frequent keywords extracted from case text
    - **Expandable Details**: Click any box to view raw case data with highlighted priority indicators and detailed explanations of why the analysis prioritized/grouped the case
 
+Access Triage via the [live demo](https://caselinker.up.railway.app/triage) or locally at http://localhost:8000/triage. Current implementation uses **rule-based** priority tiers, **ML Classification for triage** (random forest or decision tree trained on features from the database with labels derived from deterministic rules), optionally constrained by the same facet-dimension filtering used in Search, and supports **paste-in live triage** that scores text in memory without writing to the database. For the full triage documentation (rules, bundle paths, APIs, live paste), see **`triage.md`** in the repo root.
+
+## Phase 2: Patterns ([local](http://localhost:8000/patterns) · [live](https://caselinker.up.railway.app/patterns)) is an ongoing stage of research for cross-case pattern analysis ontop of the corpus.
+
+### Section A — The Research Questions
+
+Three questions drive Phase 2; each builds on the last. Findings pages: [`/patterns/questions/q01`](https://caselinker.up.railway.app/patterns/questions/q01) (Q1), [`q02`](https://caselinker.up.railway.app/patterns/questions/q02) (Q2), [`q03`](https://caselinker.up.railway.app/patterns/questions/q03) (Q3).
+
+| Question | Focus | Why it matters |
+|----------|--------|----------------|
+| **Q1 — Platform harm** | What is the platform and what capabilities does it have? How has it been misused in practice, and what surfaces, vectors, and avenues for exploitation does it expose? What specifically about this medium makes it usable for exploitation? Can those properties be  generalized into a framework for stress-testing future platforms? | Press releases and online harms research often name platforms but rarely explain *what about the medium* enabled the offense. Affordance-level analysis turns platform mentions and documented crimes into a transferable framework. Evidence: `ontology/q1/` ([`q1_evidence.json`](ontology/q1/q1_evidence.json)) |
+| **Q2 — Exploitation lifecycle** | What does offending and enforcement look like at scale across offense subsets (familial abuse, grooming, sextortion, production, possession, etc.)? What platforms, methods, and patterns recur within each? | Most ICAC research works in hashing, aggregate counts, or single-case narratives. The lifecycle view, stratified by subset, shows how offending and enforcement unfold across thousands of cases. Evidence: `ontology/q2/` ([`q2_lifecycle.json`](ontology/q2/q2_lifecycle.json), [`q2_evidence.py`](ontology/q2/q2_evidence.py)). |
+| **Q3 — Kill-chain interventions** | Given Q1 and Q2, where can technology, investigation, or enforcement intervene with the most leverage? | Platform mapping and lifecycle analysis exist to answer the operational question: where disruption is most plausible (detection, reporting, warrant execution, prevention). Evidence: `ontology/q3/` ([`q3_interventions.json`](ontology/q3/q3_interventions.json), [`q3_evidence.py`](ontology/q3/q3_evidence.py)). |
+
+Rebuild evidence tables locally:
+
+```bash
+python3 ontology/q1/build_candidates.py && python3 ontology/q1/q1_evidence.py
+python3 ontology/q2/build_candidates.py && python3 ontology/q2/q2_evidence.py
+python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
+```
+
+### Section B — The Method: Ontology Pipeline
+
+To answer Q1–Q3 at corpus scale, enforcement narratives cannot stay only in relational tables and regex-derived tags. They must be expressed in a **structured, graph-queryable** form so patterns can be queried, validated, and compared across cases. CaseLinker already extracts consistent features from each narrative; the **ontology pipeline** maps those features into a standard investigation vocabulary and builds a validated knowledge graph as the mechanism for cross-case analysis.
+
+**What is an ontology :** The [CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology) (Crimes Against Children Ontology) is a formal vocabulary developed to model the entities of a child-exploitation investigation as typed, related objects: platforms, victims, offenders, investigations, and outcomes. CAC is shepherded by [Project VIC International](https://www.projectvic.org/) and is built on the Linux Foundation's [Cyber Domain Ontology](https://cyberdomainontology.org/) stack ([UCO](https://unifiedcyberontology.org/) and [CASE](https://caseontology.org/)). CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.
+
+**How CaseLinker uses ontologies :** A deterministic mapping layer translates each case's extracted features into CAC entities and relationships, emits per-case RDF graphs, validates them, and merges conformant graphs into a queryable knowledge graph.
+
+**Pipeline flow** :
+
+1. **CaseLinker case features** — already extracted (platforms, topics, investigation signals, prosecution outcomes).
+2. **Mapping layer** — deterministic translation to CAC entities and relationships (`ontology/graph_generate.py`).
+3. **RDF emission** — per-case graphs as Turtle and JSON-LD under `ontology/graph_output/`.
+4. **SHACL validation** — only conformant graphs enter the merged corpus.
+5. **SPARQL-queryable corpus** — merged validated graphs become the substrate for Q1–Q3 analyses.
+
+Agents can also build cohort graphs on demand via MCP (`case2cac` → `graph_summarize` → `export_case_graph_ttl`).
+
+**References**
+- [CAC Ontology repository](https://github.com/Project-VIC-International/CAC-Ontology)
+- [CASE/UCO SDK with CAC bindings](https://github.com/vulnmaster/CASE-UCO-SDK)
+- [CASE](https://github.com/casework/CASE)
+- [UCO](https://github.com/ucoProject/UCO)
+- [Project VIC International](https://projectvic.org/)
+
+
 ### Other Features
 
 - **Sources Tab**: View data sources and access original case reports
@@ -346,7 +336,7 @@ Navigate to [live demo](https://caselinker.up.railway.app/analysis) or run serve
 - **Tech Landscape**: Technology revolver (platforms, investigation tech, anonymization, P2P) by era
 - **Query / Expand**: Custom analysis lab and build-your-own viz examples (public APIs)
 - **LLM**: Natural-language queries over case statistics (SQL-backed; rate limited on production)
-- **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`; optional `data/case_study_notes.json`)
+- **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`)
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
 
 ## Project Structure
@@ -419,25 +409,31 @@ CaseLinker/
 
 Each case includes structured features extracted from case narratives:
 
-### **Extracted Features (Regex-based)**
-- **Perpetrator Demographics**: Age, registration status (registered sex offender)
-- **Victim Demographics**: Age(s), count (when explicit), gender
-- **Relationship**: Relationship to victim (father, mother, brother, stranger, etc.)
-- **Platforms**: Social / messaging apps (e.g. Facebook Messenger, Instagram, Kik, Discord, TikTok, Twitter/X, Telegram, Skype, Omegle, MeWe), gaming surfaces (Roblox, Minecraft, Xbox Live, PSN, Fortnite), file hosting (Dropbox, Google Drive, Mega.nz, MediaFire, OneDrive), early-era chat (AIM, IRC, Yahoo Chat, MySpace, Craigslist), livestreaming (YouTube / YouTube Live, Twitch, generic webcam-platform phrasing), plus generic `online` / `chat` / `social media` when no named product matches.
-- **Technology signals**: `investigation_technology` (e.g. PhotoDNA, CSAI Match, hash-matching language, CyberTipline variants), `anonymization_network` (Tor, I2P, dark web phrasing, cryptocurrency), and `p2p_clients` (LimeWire, BitTorrent, Kazaa, Gigatribe).
-- **Charges**: Detailed prosecution charges with counts
-- **Evidence Volume**: Images, videos, storage size (TB/GB), messages
-- **Investigation Type**: Proactive, reactive, online, undercover, and/or CyberTipline-origin
-- **Agencies**: Law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.)
+### **Regex extraction**
 
-### **Semantic Features (Pattern-based)**
-- **Case Topics**: Themes such as production vs. possession, international cooperation, multi-state cases, hands-on vs. online-only, family vs. stranger, CSAM (`csam`)
-- **Severity Indicators**: Age-based severity (infant, rape, very_young, under_10) and production indicators
-- **Severity Phrases**: Non-traditional indicators extracted from case text (dangerous, stated, told, continue, attacked, out_of_control, attracted) - used for priority scoring
+- **Perpetrator**: Age(s), registered sex offender status, gender when stated; flags for multi-defendant operations
+- **Victim**: Age(s), age ranges, count when explicitly stated in victim-clause phrasing, gender after validation
+- **Relationship**: Kin and role labels (father, mother, parent, sibling, teacher, coach, stranger, etc.); unknown when not stated
+- **Platforms**: Named apps and surfaces — social, messaging, gaming, file hosting, livestreaming, early-era chat, Gen AI tools when cited — plus generic online, chat, or social media when no product matches
+- **Technology signals** (stored separately from the platform list): investigation tooling (PhotoDNA, hash matching, CyberTipline language), anonymization (Tor, dark web, cryptocurrency), P2P clients
+- **Prosecution**: Charge phrases with counts, booking stage (arrest through sentenced), jail mentions, sentence durations
+- **Evidence volume**: Image, video, storage, and message counts when quantified in text
+- **Investigation**: Non-exclusive types — proactive, reactive, online, undercover, CyberTipline-origin, or unknown; agencies from pattern matching plus NER supplements
+- **Prior record**: Registered status and age at prior arrest when stated
 
-### **Preserved Data**
-- **Raw Case Text**: Original case narrative preserved for reference
-- **Metadata**: Source, date range, creation timestamps
+### **Pattern-based classification**
+
+- **Case topics**: production, possession, distribution, trafficking, csam, ai_csam, sextortion, hands_on vs online_only, family vs stranger, international, multi_state
+- **Severity indicators**: infant, very_young, under_12, sexual_abuse; multiple_perpetrators when several offender ages are extracted
+- **Severity phrases**: dangerous, stated, told, continue, attacked, out_of_control, attracted — used in priority scoring
+
+### **ML enrichment**
+When the ML stack is enabled, NER adds organizations, locations, dates, and ages, merged with regex output. A victim-age gate drops decoy and headline ages. Semantic sentence scoring stores concept scores on each case; grooming may add a severity tag, and strong possession or AI-generation language may reinforce case topics. Most concept scores are kept for analysis; only selected ones are merged in with main fields.
+
+### **Clustering & storage**
+- **Comparison values**: Normalized vectors (platforms, demographics, investigation, evidence, topics, severity, date) for similarity and pre-computed clusters
+- **Agency pathways**: Federal vs state/local splits where inferable from narrative context
+- **Preserved data**: Raw narrative, source organization, source URL when present, source publication date from formatted PDFs, timestamps
 
 ## API Endpoints
 
@@ -487,6 +483,7 @@ Each case includes structured features extracted from case narratives:
 - **Visualization**: D3.js, HTML/CSS/JavaScript
 - **ML/NER**: 
   - Stanza primary NER model; optional Transformers/spaCy paths in code
+  - Semantic concept scoring (grooming, possession, AI-generated CSAM language, and related themes) merged into case topics and severity where thresholds are met
   - **Supervised triage (experimental)**: scikit-learn random forest or decision tree; labels from rule-based priority scores; `joblib` bundle loaded at inference time
 - **Architecture**: Modular 5-layer design
 

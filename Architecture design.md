@@ -108,7 +108,7 @@ Case:
   # Perpetrator Context (anonymized)
   - perpetrator_age: int (extracted from "X year old man/woman")
   - perpetrator_registered_sex_offender: bool
-  - relationship_to_victim: str (father, mother, brother, sister, uncle, aunt, cousin, stranger, teacher, unknown)
+  - relationship_to_victim: str (father, mother, brother, sister, uncle, aunt, cousin, stranger, teacher, coach, unknown)
   - previous_conviction: {is_registered: bool, age_at_first_offense: int}
   
   # Technology & Platforms

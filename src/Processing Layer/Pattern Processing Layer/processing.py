@@ -1553,8 +1553,8 @@ def extract_perpetrator_demographics(case: Dict[str, Any]) -> Optional[Dict[str,
 def extract_relationship(case: Dict[str, Any]) -> Optional[str]:
     """
     Extract relationship to victim.
-    Patterns: "father", "mother", "brother", "sister", "uncle", "aunt", "cousin", "stranger", "teacher"
-    Defaults to "unknown" when no kin/teacher language is detected (not the same as stranger).
+    Patterns: "father", "mother", "brother", "sister", "uncle", "aunt", "cousin", "stranger", "teacher", "coach"
+    Defaults to "unknown" when no kin/teacher/coach language is detected (not the same as stranger).
     Note: "biological father" is extracted as "father" (same as "mother").
     """
     case_text = case.get('case_text', '')
@@ -1589,6 +1589,10 @@ def extract_relationship(case: Dict[str, Any]) -> Optional[str]:
     # Check for teacher
     if re.search(r'\bteacher\b', case_text, re.IGNORECASE):
         return 'teacher'
+
+    # Check for coach
+    if re.search(r'\bcoach\b', case_text, re.IGNORECASE):
+        return 'coach'
     
     # Check for stranger (explicit mention)
     if re.search(r'\bstranger\b', case_text, re.IGNORECASE):
