@@ -272,20 +272,88 @@ def _fix_mcp_message_post_routes(starlette_app: Any) -> Any:
 
     FastMCP may register Mount("/messages/", ...) which redirects bare /messages.
     Normalize to Mount("/messages", ...) so the ASGI handler is invoked directly.
-    Do not wrap the ASGI app in a Starlette Route endpoint — that returns None and
-    triggers ``TypeError: 'NoneType' object is not callable`` after the 202 is sent.
-    """
-    from starlette.routing import Mount
 
+    With ``redirect_slashes=False`` on the inner router, Starlette no longer 307s
+    bare ``/messages`` to ``/messages/``, but the Mount regex still only fully
+    matches ``/messages/...``. Prepend an exact ``Route("/messages", …)`` so the
+    URL advertised in the SSE ``endpoint`` event is handled without a redirect.
+
+    The Route wrapper must not return a Starlette Response — ``handle_post_message``
+    is an ASGI app that sends the response itself (same pattern as FastMCP's Mount).
+    """
+    from starlette.routing import Mount, Route
+
+    messages_handler: Any | None = None
     patched: list[Any] = []
     for route in starlette_app.routes:
         if isinstance(route, Mount) and route.path.rstrip("/") == "/messages":
+            messages_handler = route.app
             patched.append(Mount("/messages", app=route.app))
         else:
             patched.append(route)
 
+    if messages_handler is not None:
+
+        async def _messages_exact(request: Any) -> None:
+            await messages_handler(request.scope, request.receive, request._send)
+
+        patched.insert(0, Route("/messages", endpoint=_messages_exact, methods=["POST"]))
+
     starlette_app.router.routes = patched
     return starlette_app
+
+
+_SSE_STREAM_PATH = "/sse"
+_NON_SSE_STREAM_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
+
+
+def _sse_misroute_response_body(scope: dict[str, Any]) -> dict[str, Any]:
+    """Build JSON body for POST (etc.) mistakenly sent to the SSE stream URL."""
+    root_path = scope.get("root_path", "").rstrip("/")
+    messages_example = f"{root_path}/messages?session_id=<from SSE endpoint event>"
+    base = _public_base_url()
+    streamable_url = f"{base.rstrip('/')}/mcp-http/" if base else f"{root_path.replace('/mcp', '/mcp-http')}/"
+    return {
+        "detail": "POST is not accepted on the SSE stream endpoint.",
+        "hint": (
+            "SSE uses two URLs: open GET …/sse, read the endpoint event, then POST JSON-RPC to "
+            "…/messages?session_id=…. Or use Streamable HTTP (single URL for GET+POST)."
+        ),
+        "sse_messages_url": messages_example,
+        "streamable_http_url": streamable_url,
+    }
+
+
+def _is_sse_stream_path(path: str) -> bool:
+    """True when the request targets the SSE stream URL (not /messages).
+
+    FastAPI ``app.mount("/mcp", …)`` forwards the full path ``/mcp/sse`` when the
+    mounted target is a bare ASGI callable; Starlette TestClient uses ``/sse`` only.
+    """
+    normalized = path.rstrip("/") or "/"
+    return normalized == _SSE_STREAM_PATH or normalized.endswith(_SSE_STREAM_PATH)
+
+
+def _wrap_sse_misroute_hint(asgi_app: Any) -> Any:
+    """Return 405 with transport hints when clients POST to /sse instead of /messages."""
+    from starlette.responses import JSONResponse
+    from starlette.types import Receive, Scope, Send
+
+    async def middleware(scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http":
+            path = scope.get("path", "").rstrip("/") or "/"
+            method = scope.get("method", "GET").upper()
+            if method in _NON_SSE_STREAM_METHODS and _is_sse_stream_path(path):
+                response = JSONResponse(
+                    _sse_misroute_response_body(scope),
+                    status_code=405,
+                    headers={"Allow": "GET, HEAD"},
+                )
+                await response(scope, receive, send)
+                return
+        await asgi_app(scope, receive, send)
+
+    return middleware
 
 
 def build_mcp_sse_app(mount_path: str | None = None) -> Any:
@@ -299,8 +367,11 @@ def build_mcp_sse_app(mount_path: str | None = None) -> Any:
     """
     configure_mcp_deployment()
     sse_app = mcp.sse_app(mount_path=mount_path)
+    # Starlette Router default redirect_slashes=True 307s POST /messages → /messages/
+    # before the Mount handler runs; the SSE endpoint event advertises bare /messages.
+    sse_app.router.redirect_slashes = False
     sse_app = _fix_mcp_message_post_routes(sse_app)
-    return wrap_mcp_with_auth(sse_app)
+    return _wrap_sse_misroute_hint(wrap_mcp_with_auth(sse_app))
 
 
 _mcp_streamable_app: Any | None = None

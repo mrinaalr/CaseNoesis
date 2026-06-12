@@ -99,11 +99,30 @@ Fill in `CASELINKER_KEY` locally only if you need bulk export, full case narrati
 
 ## Hosted (Railway)
 
-When CaseLinker runs on Railway, the MCP server is mounted on the main FastAPI app at **`/mcp/sse`** (no separate service or Procfile entry). Client messages POST to **`/mcp/messages?session_id=...`** (no trailing slash; trailing-slash redirects break some MCP clients).
+CaseLinker exposes **two HTTP transports** on Railway (pick one in your MCP client config):
 
-**SSE URL:** `https://caselinker.up.railway.app/mcp/sse`
+| Transport | Client URL | How messages flow |
+|-----------|------------|-------------------|
+| **SSE** (legacy dual-endpoint) | `https://caselinker.up.railway.app/mcp/sse` | `GET /mcp/sse` opens the stream; the server sends an `endpoint` event; **POST JSON-RPC to `/mcp/messages?session_id=…`** (not to `/sse`) |
+| **Streamable HTTP** (recommended) | `https://caselinker.up.railway.app/mcp-http/` | **Same URL** for `GET` and `POST` (trailing slash avoids 307 redirects) |
 
-**Cursor config (URL transport):**
+**Cursor config — Streamable HTTP (recommended):**
+
+```json
+{
+  "mcpServers": {
+    "caselinker-hosted": {
+      "url": "https://caselinker.up.railway.app/mcp-http/",
+      "headers": {
+        "Authorization": "Bearer <your MCP_ACCESS_KEY>",
+        "CaseLinker-Key": "<your trusted key>"
+      }
+    }
+  }
+}
+```
+
+**Cursor config — SSE:**
 
 ```json
 {
