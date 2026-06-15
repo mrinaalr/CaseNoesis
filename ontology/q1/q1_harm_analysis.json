@@ -1,5 +1,5 @@
 {
-  "_note": "Harm and misuse vector analysis — researcher's own affordance reasoning. Keyed by platform name. Never auto-generated.",
+  "_note": "Harm and misuse vector analysis: researcher's own affordance reasoning. Keyed by platform name. Never auto-generated.",
   "chat": {
     "affordances": [
       " "
@@ -14,31 +14,150 @@
   },
   "Snapchat": {
     "affordances": [
-      " ",
-      " "
+      "Ephemeral messaging (timer-based auto-deletion)",
+      "Disappearing media (view-once photo/video)",
+      "Quick-add / username & QR contact discovery",
+      "Real-time photo/video capture-and-send (camera-first)",
+      "Persistent contact via Snap Map / location",
+      "Low-friction account creation"
     ],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "misuse_surface": [
+      "Evidence destruction by design: content gone before it can be preserved",
+      "Solicitation and CSAM transmission with reduced forensic trail",
+      "Stranger-to-minor contact via username sharing / quick-add",
+      "Real-time coercion of imagery capture using camera-first send",
+      "Migration target: offenders move victims to Snapchat for the ephemerality"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through ephemeral messaging",
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
   },
   "Kik": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Username-only registration (no phone number required)",
+      "Anonymity by design (no real identity tied to account)",
+      "Pseudonymous handles, easily created and discarded",
+      "Public group/chat discovery by interest or keyword",
+      "Bot and third-party integration within chats",
+      "Image and video sharing in direct and group messages",
+      "Perceived private or encrypted messaging"
+    ],
+    "misuse_surface": [
+      "Anonymous contact with minors without traceable identity",
+      "Account churn; discard and recreate handles to evade blocks and detection",
+      "Interest-based group discovery used to locate victims or trade material",
+      "CSAM trading in direct messages and closed groups with low visibility",
+      "Offenders cite encryption/privacy as operational cover (anchorage_pd_2024_002 calls it \"an encrypted chat platform\")",
+      "Migration target; offenders move victims onto Kik for the anonymity layer"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child)",
+      "A child is contacted and exploited through anonymous messaging",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
   },
   "Facebook": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Real-name-oriented profiles with rich personal detail",
+      "Friend network and mutual-connection discovery",
+      "Profile creation with minimal verification (fake accounts trivial)",
+      "Public and private messaging (Messenger)",
+      "Groups, pages, and event surfaces",
+      "Photo/video sharing and tagging",
+      "Search by name, school, location, interests",
+      "Friend suggestions / \"People You May Know\" graph traversal"
+    ],
+    "misuse_surface": [
+      "Fake/impersonation accounts to approach minors under false identity",
+      "Mining public profile detail (school, age, location) to target and tailor approach",
+      "Friend-network traversal to locate a victim's peers and siblings",
+      "Messenger as private channel to move contact out of public view",
+      "Building false rapport using profile-derived personal information",
+      "Migration target; initiate on Facebook, move to private/ephemeral platform"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is contacted and exploited through profiles and Messenger",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
   },
   "Discord": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Persistent server/community structure (topic-based, invite-linked)",
+      "Public and private channels within servers",
+      "Real-time text, voice, and video",
+      "Direct messaging alongside group spaces",
+      "Screen-sharing and livestreaming (Go Live)",
+      "File and image sharing in channels and DMs",
+      "Pseudonymous accounts, low-friction creation",
+      "Bot and webhook integration",
+      "Invite-link distribution (servers spread by shareable link)"
+    ],
+    "misuse_surface": [
+      "Closed/private servers as low-visibility spaces to share material",
+      "Server invite-links used to gather offenders or victims into a controlled space",
+      "Real-time livestream/screen-share to direct abuse or production as it happens",
+      "Community structure used to organize and coordinate among multiple offenders",
+      "DM-to-server migration; pull a contact from public channel into private space",
+      "Pseudonymity layered with server gating to limit outside visibility"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child)",
+      "A child is contacted and exploited through server channels and direct messaging",
+      "A child is sextorted (coerced under threat after imagery is obtained)",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
   },
   "Instagram": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Visual-first profiles (photo/video centric)",
+      "Public-by-default accounts and discoverability",
+      "DM and disappearing-message options",
+      "Follower/following graph and suggested accounts",
+      "Hashtag and explore-page content discovery",
+      "Story format (ephemeral, view-tracked)",
+      "Low-friction account creation, multiple accounts per user",
+      "Identity/handle takeover potential (account compromise)"
+    ],
+    "misuse_surface": [
+      "Public visual profiles used to identify and select minor targets",
+      "DM as direct private contact channel to a minor",
+      "Disappearing messages to reduce forensic trail during solicitation",
+      "Explore/hashtag discovery to find minors by interest or age signal",
+      "Account compromise/identity takeover to contact a victim's network under a trusted handle (ncmec_2023_430)",
+      "Migration target; move contact to ephemeral or encrypted platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through DMs and visual profiles",
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is sextorted (coerced under threat after imagery is obtained)"
+    ]
+  },
+  "TikTok": {
+    "affordances": [
+      "Algorithmic For You feed (content surfaced by engagement, not follows)",
+      "Short-form video creation and discovery",
+      "Public-by-default accounts, broad discoverability",
+      "Direct messaging",
+      "Duet / stitch / comment interaction with strangers",
+      "Live streaming with real-time gifting",
+      "Low-friction account creation, large minor user base",
+      "Profile and content visible without mutual connection"
+    ],
+    "misuse_surface": [
+      "Algorithmic discovery used to surface and reach minors at scale",
+      "Public videos used to identify and select targets by age signal",
+      "DM as private channel to move contact off the public feed",
+      "Comment/duet interaction to initiate contact under low suspicion",
+      "Migration target; initiate on TikTok, move to private/ephemeral platform (pa_ag_2026_004: \"met on TikTok... continued to communicate\")"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through TikTok messaging (pa_ag_2026_004; south_florida_icac_2025_005; tbi_icac_2023_003; south_florida_icac_2024_002)",
+      "A child is groomed or enticed toward sexual contact or meeting (pa_ag_2026_004)",
+      "A child is solicited for explicit imagery through TikTok messages (south_florida_icac_2025_005; tbi_icac_2023_003)"
+    ]
   },
   "Grindr": {
     "affordances": [],
@@ -196,8 +315,30 @@
     "harm_vector": ""
   },
   "Gen AI": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Text-to-image / image-to-image generation",
+      "Image-to-image manipulation of existing photos (face-swap, de-aging, nudification)",
+      "Conversational chatbots (persona simulation, sustained interaction)",
+      "Voice synthesis and cloning",
+      "Low/no skill barrier to produce realistic synthetic media",
+      "Rapid generation at scale (many outputs, fast)",
+      "Open-source / locally-runnable models (no platform oversight)",
+      "Fine-tuning on a target's images (likeness capture)"
+    ],
+    "misuse_surface": [
+      "Generating synthetic CSAM from text prompts (no real victim in the image) (ncmec_2024_1251: prompt-to-image program)",
+      "Manipulating a real child's benign photo into abuse imagery (nudification of an actual minor) (mt_doj_2025_001)",
+      "Chatbots used to generate CSAM from photos of children the offender knows (doj_ceos_2025_002)",
+      "Fine-tuning or prompt engineering to produce targeted synthetic abuse at scale (idaho_icac_2024_026: thousands of AI-generated images)",
+      "Chatbots used to simulate a minor, or to automate grooming conversations at scale",
+      "Voice cloning for impersonation in contact/extortion",
+      "Local model use to evade platform-side detection entirely"
+    ],
+    "harm_vector": [
+      "A real child's likeness or benign photo is manipulated or synthesized into abuse imagery without requiring contact during creation (mt_doj_2025_001; lapd_2025_002; ncmec_2024_164)",
+      "Synthetic CSAM is created via text prompts or chatbots without a separate traditional platform contact phase (doj_ceos_2025_002; ncmec_2024_1251; ncmec_2024_1070)",
+      "AI-generated or AI-labeled CSAM is possessed or distributed at scale under new statutory charge types (idaho_icac_2026_001; arkansas_dps_2025_005; scag_icac_2025_019)",
+      "Stated evidence N=14 (inferred N=9) in Q1 corpus — harm is production/possession-first, not contact-first (contrast TikTok/Instagram)"
+    ]
   }
 }

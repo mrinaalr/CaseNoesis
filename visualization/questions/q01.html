@@ -577,17 +577,22 @@
       );
     }
 
+    function harmLines(value) {
+      if (Array.isArray(value)) {
+        return value.map((s) => String(s).trim()).filter(Boolean);
+      }
+      return textToLines(typeof value === "string" ? value : "");
+    }
+
     function harmEntry(harmAnalysis, platform) {
       const raw = harmAnalysis && harmAnalysis[platform];
       if (!raw || typeof raw !== "object") {
-        return { harm_vector: "", affordances: [], misuse_surface: "" };
+        return { harm_vector: [], affordances: [], misuse_surface: [] };
       }
       return {
-        harm_vector: (raw.harm_vector || "").trim(),
-        misuse_surface: (raw.misuse_surface || "").trim(),
-        affordances: Array.isArray(raw.affordances)
-          ? raw.affordances.map((a) => String(a).trim()).filter(Boolean)
-          : [],
+        harm_vector: harmLines(raw.harm_vector),
+        misuse_surface: harmLines(raw.misuse_surface),
+        affordances: harmLines(raw.affordances),
       };
     }
 
@@ -617,8 +622,8 @@
       );
       const wrap = el("div", { class: "harm-cell" });
       renderHarmField(wrap, "Affordances", affordances);
-      renderHarmField(wrap, "Misuse surface", textToLines(misuse_surface));
-      renderHarmField(wrap, "Harm vector", textToLines(harm_vector));
+      renderHarmField(wrap, "Misuse surface", misuse_surface);
+      renderHarmField(wrap, "Harm vector", harm_vector);
       td.appendChild(wrap);
     }
 

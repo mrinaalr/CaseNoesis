@@ -228,6 +228,54 @@ TIER_RANK = {"stated": 3, "inferred": 2, "named_only": 1}
 
 _INSTRUMENTAL_RE_CACHE: Dict[str, List[re.Pattern]] = {}
 
+# Gen AI only: CSAM noun phrases and creation/possession verbs are offense evidence, not
+# contact/distribution stems. Kept separate so other platforms are unchanged.
+_GEN_AI_CSAM_OFFENSE_PATTERNS: Tuple[re.Pattern, ...] = tuple(
+    re.compile(p, re.IGNORECASE)
+    for p in (
+        r"\bchild porn(?:ography)?\b",
+        r"\bchild sexual abuse\b",
+        r"\bchild sex abuse\b",
+        r"\bsexual abuse material\b",
+        r"\bsex abuse material\b",
+        r"\bcsam\b",
+        r"\bsexual exploitation\b",
+        r"\bchild exploitation\b",
+        r"\bexploitation material\b",
+        r"\bexploitative material\b",
+        r"\bobscene image",
+        r"\bsexual performance\b",
+        r"\bgenerated ai csam\b",
+        r"\bai[- ]generated\b[\w\s,\-\"'()]{0,35}\b(?:child|csam|porn|exploit|abuse|obscene|lewd|depict)",
+        r"\b(?:child|csam|porn|exploit|sexual abuse|sex abuse)\b[\w\s,\-\"'()]{0,35}\bai[- ]generated\b",
+    )
+)
+
+_GEN_AI_INSTRUMENTAL_PATTERNS: Tuple[re.Pattern, ...] = tuple(
+    re.compile(p, re.IGNORECASE)
+    for p in (
+        r"\b(?:used|using|create[ds]?|generat(?:e|ed|ing)|produc(?:e|ed|ing)|possess(?:ed|ing)?)\b"
+        r"[\w\s,\-\"'()]{0,55}\b(?:artificial intelligence|generative artificial intelligence|"
+        r"ai[- ]generated|generated ai)\b",
+        r"\b(?:artificial intelligence|generative artificial intelligence|ai[- ]generated|generated ai)\b"
+        r"[\w\s,\-\"'()]{0,55}\b(?:child|csam|porn|exploit|sexual abuse|sex abuse|obscene|lewd|exploitative)\b",
+        r"\bai[- ]generated\b[\w\s,\-\"'()]{0,40}\b(?:child|csam|porn|exploit|sexual abuse|sex abuse|"
+        r"images?|material|content|files?|depic|exploitative)\b",
+        r"\b(?:computer[- ]generated|ai[- ]generated)\s+child porn",
+        r"\bpossess(?:ed|ion|ing)?\s+(?:files?\s+)?of\s+(?:artificial intelligence|ai)[- ]generated\b",
+        r"\b(?:artificial intelligence|generative artificial intelligence)\b"
+        r"[\w\s,\-\"'()]{0,20}\b(?:child exploitation|exploitation material)\b",
+        r"\bpossessing\s+generated\s+child\s+porn",
+        r"\bappeared\s+to\s+be\s+ai(?:/computer)?[- ]generated\b",
+    )
+)
+
+_GEN_AI_CONDUCT_RE = re.compile(
+    r"\b(?:arrested|charged|sentenced|possess(?:ed|ing)?|created|admitted|indicted|"
+    r"found|seized|uncovered|faces?|investigators state|used)\b",
+    re.IGNORECASE,
+)
+
 
 def psa_boundary(text: str) -> int:
     tl = text.lower()
@@ -336,11 +384,97 @@ def has_offense_keyword(sentence: str) -> bool:
     return any(k in sl for k in OFFENSE_KEYWORDS)
 
 
+def has_gen_ai_offense_keyword(sentence: str) -> bool:
+    return any(p.search(sentence) for p in _GEN_AI_CSAM_OFFENSE_PATTERNS)
+
+
+def has_offense_keyword_for_platform(sentence: str, platform: str) -> bool:
+    if platform == "Gen AI" and has_gen_ai_offense_keyword(sentence):
+        return True
+    return has_offense_keyword(sentence)
+
+
+def _gen_ai_offense_keyword_spans(sentence: str) -> List[Tuple[int, int]]:
+    spans: List[Tuple[int, int]] = []
+    for pat in _GEN_AI_CSAM_OFFENSE_PATTERNS:
+        for m in pat.finditer(sentence):
+            spans.append((m.start(), m.end()))
+    return spans
+
+
+def has_gen_ai_instrumental_construction(sentence: str) -> bool:
+    if not line_mentions_platform(sentence, "Gen AI"):
+        return False
+    return any(p.search(sentence) for p in _GEN_AI_INSTRUMENTAL_PATTERNS)
+
+
+def has_instrumental_for_platform(sentence: str, platform: str) -> bool:
+    if platform == "Gen AI" and has_gen_ai_instrumental_construction(sentence):
+        return True
+    return has_instrumental_construction(sentence, platform)
+
+
+def is_gen_ai_scrape_noise(sentence: str) -> bool:
+    """Syndicated footer / unrelated legislation — not case conduct."""
+    sl = sentence.lower()
+    if re.search(r"notice under the americans with disabilities|applauds passage of s\.", sl):
+        return True
+    if "crack down on" in sl and not _GEN_AI_CONDUCT_RE.search(sentence):
+        return True
+    return False
+
+
+def is_gen_ai_weak_stated(sentence: str) -> bool:
+    """Downgrade stated when AI mention is incidental, speculative, or non-CSAM."""
+    sl = sentence.lower()
+    if re.search(r"reported to be artificial intelligence", sl) and not has_gen_ai_offense_keyword(sentence):
+        return True
+    if re.search(r"\bartificial intelligence of some kind\b", sl):
+        return True
+    if re.search(r"\bPOSSIBLE\b", sentence) and len(sentence.strip()) < 140:
+        return True
+    if re.search(r"\b(?:new law that targets|a new law targeting|first case prosecuted under)\b", sl):
+        if not _GEN_AI_CONDUCT_RE.search(sentence):
+            return True
+    if re.search(r"\b(?:advanced through new threats|people who create and share)\b", sl):
+        if not _GEN_AI_CONDUCT_RE.search(sentence):
+            return True
+    return False
+
+
+def _merge_fragment_lines(lines: List[str]) -> List[str]:
+    """Join broken news lines ('among other things,' / trailing commas) before sentence split."""
+    out: List[str] = []
+    buf = ""
+    for raw in lines:
+        ln = raw.strip()
+        if not ln:
+            continue
+        buf = f"{buf} {ln}".strip() if buf else ln
+        tail = buf.rstrip()
+        if tail.endswith(",") or tail.lower().endswith("among other things"):
+            continue
+        out.append(buf)
+        buf = ""
+    if buf:
+        out.append(buf)
+    return out
+
+
+def _gen_ai_sentence_rank(sentence: str, tier: str) -> Tuple[int, int, int, int, int]:
+    conduct = 1 if _GEN_AI_CONDUCT_RE.search(sentence) else 0
+    noise = 1 if is_gen_ai_scrape_noise(sentence) else 0
+    weak = 1 if is_gen_ai_weak_stated(sentence) else 0
+    return (TIER_RANK[tier], conduct, -noise, -weak, len(sentence))
+
+
 def offense_keyword_near_platform(sentence: str, platform: str, window: int) -> bool:
     p_spans = _platform_positions(sentence, platform)
     if not p_spans:
         return False
     o_spans = _offense_keyword_spans(sentence)
+    if platform == "Gen AI":
+        o_spans = o_spans + _gen_ai_offense_keyword_spans(sentence)
     if not o_spans:
         return False
     return any(
@@ -460,32 +594,44 @@ def classify_sentence(sentence: str, platform: str) -> str:
     if is_enumeration_only(sentence, platform):
         return "named_only"
 
-    if not has_offense_keyword(sentence):
+    if not has_offense_keyword_for_platform(sentence, platform):
         sl = sentence.lower()
         if any(k in sl for k in INVESTIGATIVE_KEYWORDS):
             return "inferred"
         return "named_only"
 
-    if has_instrumental_construction(sentence, platform):
-        return "stated"
-    if offense_keyword_near_platform(sentence, platform, INSTRUMENTAL_WINDOW):
-        return "stated"
+    if has_instrumental_for_platform(sentence, platform):
+        tier = "stated"
+    elif offense_keyword_near_platform(sentence, platform, INSTRUMENTAL_WINDOW):
+        tier = "stated"
+    else:
+        tier = "inferred"
 
-    # Same sentence: platform + offense keyword, but not instrumentally linked.
-    return "inferred"
+    if platform == "Gen AI":
+        if is_gen_ai_scrape_noise(sentence):
+            return "named_only"
+        if tier == "stated" and is_gen_ai_weak_stated(sentence):
+            return "inferred"
+    return tier
 
 
 def best_sentence(lines: List[str], platform: str) -> Tuple[str, str]:
     """Return (tier, best_sentence) from offense lines."""
-    candidates = sentences_with_platform(lines, platform)
+    work_lines = _merge_fragment_lines(lines) if platform == "Gen AI" else lines
+    candidates = sentences_with_platform(work_lines, platform)
     if not candidates:
         return "named_only", ""
 
     best_tier = "named_only"
     best_sent = candidates[0]
+    best_rank = _gen_ai_sentence_rank(best_sent, best_tier) if platform == "Gen AI" else (TIER_RANK[best_tier], 0, 0, 0, 0)
     for sent in candidates:
         tier = classify_sentence(sent, platform)
-        if TIER_RANK[tier] > TIER_RANK[best_tier]:
+        if platform == "Gen AI":
+            rank = _gen_ai_sentence_rank(sent, tier)
+            if rank > best_rank:
+                best_tier, best_sent, best_rank = tier, sent, rank
+        elif TIER_RANK[tier] > TIER_RANK[best_tier]:
             best_tier, best_sent = tier, sent
         elif TIER_RANK[tier] == TIER_RANK[best_tier] and len(sent) > len(best_sent):
             best_sent = sent
@@ -508,7 +654,7 @@ def extract_harm(text: str) -> str:
     return ""
 
 
-def simple_role(line: str) -> str:
+def simple_role(line: str, platform: str = "") -> str:
     ll = line.lower()
     if any(k in ll for k in ("upload", "shar", "distribut", "trad", "exchang")):
         return "distribution of CSAM"
@@ -516,6 +662,11 @@ def simple_role(line: str) -> str:
         return "grooming / soliciting minor"
     if any(k in ll for k in ("contact", "communicat", "messag", "chat")):
         return "contact and communication with victim"
+    if platform == "Gen AI" and (
+        has_gen_ai_offense_keyword(line)
+        or any(k in ll for k in ("produc", "stream", "creat", "generat"))
+    ):
+        return "CSAM production"
     if any(k in ll for k in ("produc", "stream", "creat")):
         return "CSAM production"
     if "cybertip" in ll or "reported" in ll or "flagged" in ll:
@@ -586,6 +737,21 @@ def process_case(case_id: str, platforms: List[str], case_text: str) -> Dict[str
         off_hits = lines_with_platform(offense, platform)
         psa_hits = lines_with_platform(psa, platform)
 
+        if platform == "Gen AI":
+            clean_hits = [ln for ln in off_hits if not is_gen_ai_scrape_noise(ln)]
+            if off_hits and not clean_hits:
+                exclusions.append({
+                    "case_id": case_id,
+                    "platform": platform,
+                    "exclusion_reason": (
+                        "Scrape noise only — Gen AI mention appears only in site footer / "
+                        "unrelated legislation rail, not case conduct. "
+                        f"Sample: \"{extract_quote(off_hits[0], 80)}\""
+                    ),
+                })
+                continue
+            off_hits = clean_hits
+
         if not off_hits:
             if psa_hits:
                 exclusions.append({
@@ -618,7 +784,7 @@ def process_case(case_id: str, platforms: List[str], case_text: str) -> Dict[str
             "case_id": case_id,
             "platform": platform,
             "platform_type": PLATFORM_TYPE.get(platform, "Unknown"),
-            "platform_role_in_offense": simple_role(picked),
+            "platform_role_in_offense": simple_role(picked, platform),
             "harm": harm,
             "evidence_quote": extract_quote(picked),
             "stated_vs_inferred": tier,

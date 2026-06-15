@@ -115,8 +115,23 @@ def _photo_below_cutoff(text: str) -> int | None:
     return cutoff
 
 
+def _gen_ai_footer_start(text: str) -> int | None:
+    """Start offset of syndicated site chrome / unrelated AG legislation rails."""
+    tl = text.lower()
+    idx: int | None = None
+    for marker in (
+        "notice under the americans with disabilities",
+        "applauds passage of s.",
+        "accessibility 2. privacy policy",
+    ):
+        i = tl.rfind(marker)
+        if i >= 0 and (idx is None or i < idx):
+            idx = i
+    return idx
+
+
 def gen_ai_candidate_valid(case_id: str, case_text: str) -> bool:
-    """False when every Gen AI match sits in trailing embed text after photo-below."""
+    """False when every Gen AI match sits in trailing embed text after photo-below or site footer."""
     if case_id.startswith("nj_ag_"):
         return True
     if not case_text or not case_text.strip():
@@ -125,9 +140,12 @@ def gen_ai_candidate_valid(case_id: str, case_text: str) -> bool:
     if not starts:
         return False
     cutoff = _photo_below_cutoff(case_text)
-    if cutoff is None:
-        return True
-    return any(s < cutoff for s in starts)
+    if cutoff is not None and not any(s < cutoff for s in starts):
+        return False
+    footer = _gen_ai_footer_start(case_text)
+    if footer is not None and all(s >= footer for s in starts):
+        return False
+    return True
 
 
 def main():

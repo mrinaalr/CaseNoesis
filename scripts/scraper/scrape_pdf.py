@@ -853,6 +853,219 @@ def _njoag_body_ok(body: str) -> bool:
     )
 
 
+_SINCLAIR_BROADCAST_HOSTS = (
+    "cbs12.com",
+    "wpbf.com",
+    "wptv.com",
+    "cbsnews.com",
+)
+
+
+def _is_sinclair_broadcast_url(url: str) -> bool:
+    host = urlparse(url or "").netloc.lower().removeprefix("www.")
+    return any(host == h or host.endswith("." + h) for h in _SINCLAIR_BROADCAST_HOSTS)
+
+
+_SOUTH_FLORIDA_NEWS_HOSTS = (
+    "cbs12.com",
+    "local10.com",
+    "nbcmiami.com",
+    "wsvn.com",
+    "wpbf.com",
+    "wptv.com",
+    "cbsnews.com",
+    "alachuachronicle.com",
+    "gulfcoastnewsnow.com",
+    "palmbeachpost.com",
+    "fdle.state.fl.us",
+    "dhs.gov",
+    "coconutcreektalk.com",
+    "coralspringstalk.com",
+    "margatetalk.com",
+    "tamaractalk.com",
+    "kvia.com",
+    "mbtimes.com.au",
+)
+
+
+def _is_south_florida_news_url(url: str) -> bool:
+    host = urlparse(url or "").netloc.lower().removeprefix("www.")
+    return any(host == h or host.endswith("." + h) for h in _SOUTH_FLORIDA_NEWS_HOSTS)
+
+
+def _trim_south_florida_regional_news_body(body: str, url: str = "") -> str:
+    """
+    Regional ICAC news syndication (CBS12/Sinclair, Local10, NBC6, WSVN, etc.):
+    drop site-wide breaking-news tickers, nav rails, footer CTAs, and duplicate bodies.
+    """
+    if not (body or "").strip():
+        return body
+    host = urlparse(url or "").netloc.lower().removeprefix("www.")
+    trimmed = body.strip()
+    if re.search(r"(?i)page not found|our apologies, the content you requested cannot be found", trimmed):
+        return ""
+
+    # Sinclair/CBS12 site-wide alert strip (e.g. F-15 airman rescue) before the dateline
+    trimmed = re.sub(
+        r"(?s)^(?:U\.S\. forces safely rescued.*?Friday\.\s*)+",
+        "",
+        trimmed,
+        count=1,
+    )
+    trimmed = re.sub(
+        r"(?m)^(?:U\.S\. forces safely rescued[^\n]{0,200}\n)+",
+        "",
+        trimmed,
+    )
+
+    # NBC6 streaming-channel chrome (full paragraph before the dateline, or inline in Jina rails)
+    trimmed = re.sub(
+        r"(?is)^You['\u2019]re watching the NBC6 South Florida News streaming channel.*?(?=\n\n[A-Z])",
+        "",
+        trimmed,
+        count=1,
+    )
+    trimmed = re.sub(
+        r"(?is)You['\u2019]re watching the NBC6 South Florida News streaming channel[^.\n]{0,800}\.",
+        "",
+        trimmed,
+    )
+
+    # CBS syndicated header line (keep article after it)
+    trimmed = re.sub(
+        r"(?m)^Updated on: [^\n]+ / CBS (?:Miami|Detroit|12)\s*\n?",
+        "",
+        trimmed,
+        count=1,
+    )
+
+    # ICE.gov archive boilerplate when linked from SF ICAC index
+    trimmed = re.sub(
+        r"(?is)^In an effort to keep ICE\.gov current, the archive contains content from a previous.*?\.gov\s*\n+",
+        "",
+        trimmed,
+        count=1,
+    )
+
+    start_at: int | None = None
+    if host == "wsvn.com":
+        m = re.search(r"(?m)^[A-Z][A-Z\s,\./\(\)]+\(WSVN\)\s", trimmed)
+        if m:
+            start_at = m.start()
+    elif host.endswith("talk.com"):
+        for pat in (
+            r"(?m)^_By [A-Z][a-z]+ [A-Z][a-z]+_\s*$",
+            r"(?m)^A Google cyber tip led to",
+            r"(?m)^On (?:July|August|October|November|December|January|February|March|April|May|June)\s+\d",
+        ):
+            m = re.search(pat, trimmed)
+            if m and (start_at is None or m.start() < start_at):
+                start_at = m.start()
+    elif host == "local10.com":
+        m = re.search(r"(?m)^[A-Z][A-Za-z .'\-/]+, Fla\. — ", trimmed)
+        if m:
+            start_at = m.start()
+    else:
+        for pat in (
+            r"(?m)^(?:Published: )?[A-Z][A-Za-z .'\-/]+, (?:Fla\.|Florida|FLA\.)\s",
+            r"(?m)^[A-Z][A-Za-z .'\-/]+, (?:Fla\.|Florida|FLA\.)\s*(?:\([A-Z0-9]+\)|—|-)",
+            r"(?m)^(?:Staff report\s+)?[A-Z][A-Za-z .'\-/]+, Fla\. – ",
+            r"(?m)^Tags: [^\n]+(?:Fla\.|Florida)",
+            r"(?m)^[A-Z][A-Z\s,\./\(\)]+(?:\(CBS12\)|\(WFOR\)|\(WSVN\)|\(WPLG\)|\(WPBF\)|\(WPTV\))\s*[—–-]",
+            r"(?m)^(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\s*$",
+            r"(?m)^By [A-Z][a-z]+ [A-Z][a-z]+\s",
+            r"(?m)^[A-Z][A-Za-z .'\-/]+ — ",
+        ):
+            m = re.search(pat, trimmed)
+            if m and (start_at is None or m.start() < start_at):
+                start_at = m.start()
+    if start_at is not None and start_at > 0:
+        trimmed = trimmed[start_at:].strip()
+
+    end_at: int | None = None
+    for marker in (
+        r"(?i)Find more ways to stay up to date with your latest local news",
+        r"(?i)Sign up for our newsletter",
+        r"(?i)Subscribe to our YouTube channel",
+        r"(?i)Hidden predators in school",
+        r"(?m)^## Related\b",
+        r"(?m)^## Trending\b",
+        r"(?m)^Today['\u2019]s Top Stories\b",
+        r"(?m)^Page not found\b",
+        r"(?i)Articles about arrests are based on reports from law enforcement agencies",
+        r"(?m)^GAINESVILLE, Fla\. – .+\n\nGAINESVILLE, Fla\. – ",
+        r"(?m)^Copyright 20\d{2} by WPLG",
+        r"(?m)^_Copyright 20\d{2}",
+        r"(?m)^### Around the Web\b",
+        r"(?m)^Join our Newsletter\b",
+        r"(?m)^#### Author Profile\b",
+        r"(?i)Got News in (?:Margate|Coconut Creek|Coral Springs|Parkland|Tamarac)",
+        r"(?m)^###### About The Author\b",
+        r"(?m)^#### Marketplace\b",
+        r"(?m)^Powered by\s*$",
+        r"(?m)^BACK TO TOP\b",
+        r"(?m)^Sunbeam Television Corporation\b",
+    ):
+        m = re.search(marker, trimmed)
+        if m and m.start() > 200 and (end_at is None or m.start() < end_at):
+            end_at = m.start()
+    if end_at is not None:
+        trimmed = trimmed[:end_at].strip()
+
+    _junk_line = re.compile(
+        r"(?i)^("
+        r"share|"
+        r"\d+ shares|"
+        r"video \d+|"
+        r"video player is loading|"
+        r"play video|"
+        r"play|"
+        r"mute|"
+        r"current time \d|"
+        r"duration \d|"
+        r"stream type live|"
+        r"playback rate|"
+        r"fullscreen cast to chromecast|"
+        r"close modal dialog|"
+        r"this is a modal window|"
+        r"beginning of dialog window|"
+        r"chapters|"
+        r"descriptions|"
+        r"captions|"
+        r"quality levels|"
+        r"native, selected|"
+        r"cc1 captions|"
+        r"audio track|"
+        r"seek to live|"
+        r"remaining time|"
+        r"loaded: \d|"
+        r"^\[\]\(https?://"
+        r")$",
+    )
+    lines: list[str] = []
+    for line in trimmed.splitlines():
+        s = line.strip()
+        if not s:
+            lines.append("")
+            continue
+        if _junk_line.match(s):
+            continue
+        if re.match(r"(?i)^see also:", s):
+            continue
+        if re.search(r"(?m)(?:^|\s)\d+\.\s+\w", s) and len(re.findall(r"\d+\.\s+\w", s)) >= 3:
+            continue
+        if re.match(r"^\[\]\(https?://", s):
+            continue
+        if re.search(r"(?i)sellwild\.com|search by queryly|Advanced Search", s):
+            break
+        lines.append(line)
+    trimmed = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+    trimmed = _dedupe_news_delaware_paragraph_blocks(trimmed)
+    trimmed = re.sub(r"\n{3,}", "\n\n", trimmed).strip()
+    return trimmed
+
+
 def _trim_njoag_body(body: str) -> str:
     """njoag.gov press releases: trim masthead metadata and Jina site chrome."""
     if not (body or "").strip():
@@ -1637,6 +1850,10 @@ def extract_from_jina_reader(markdown_blob: str, original_url: str) -> tuple[str
         body = _trim_njoag_body(body)
         if not body:
             return None
+    if _is_south_florida_news_url(original_url or ""):
+        body = _trim_south_florida_regional_news_body(body, original_url or "")
+        if not body or len(body) < MIN_BODY_CHARS:
+            return None
     if len(body) < MIN_BODY_CHARS:
         return None
     byline = pub.strftime("%B %d, %Y") if pub else ""
@@ -1915,6 +2132,13 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
             or soup.select_one("article")
             or soup.select_one("main")
         )
+    elif _is_sinclair_broadcast_url(url):
+        # Sinclair Next.js pages: generic ``*content*`` regex hits empty Expandable_content first.
+        container = (
+            soup.select_one('[class*="mainContent"]')
+            or soup.select_one('[class*="contentColumnContainer"]')
+            or soup.select_one('[class*="StoryPage"]')
+        )
 
     if container is None:
         container = (
@@ -1952,6 +2176,11 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
     if netloc in ("www.njoag.gov", "njoag.gov"):
         body = _trim_njoag_body(body)
         if not body:
+            return None
+
+    if _is_south_florida_news_url(url):
+        body = _trim_south_florida_regional_news_body(body, url)
+        if not body or len(body) < MIN_BODY_CHARS:
             return None
 
     pub_date = resolve_publication_date(soup, url, body)

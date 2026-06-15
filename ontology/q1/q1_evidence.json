@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "generated": "2026-06-06",
-    "cases_processed": 1497,
-    "offense_records": 2598,
+    "generated": "2026-06-14",
+    "cases_processed": 1487,
+    "offense_records": 2595,
     "psa_exclusions": 28,
-    "db_gaps": 3577,
-    "text_cap_hits": 104,
+    "db_gaps": 3557,
+    "text_cap_hits": 99,
     "text_cap": 6000
   },
   "records": [
@@ -365,21 +365,21 @@
       "case_id": "arkansas_dps_2025_005",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "SEXUAL ABUSE MATERIAL, AI-GENERATED EXPLOITATIVE",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"SEXUAL ABUSE MATERIAL, AI-GENERATED EXPLOITATIVE\""
     },
     {
       "case_id": "arkansas_dps_2025_006",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "illegal CSAM but also disturbing evidence of AI-generated images depicting CSAM and other explicit material.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"illegal CSAM but also disturbing evidence of AI-generated images de...\""
     },
     {
       "case_id": "arkansas_dps_2025_009",
@@ -1876,6 +1876,37 @@
       "evidence_quote": "According to court documents, Hounsell used an online social media platform to pay an individual in the",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "fl_ag_2025_002",
+      "platform": "social media",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "",
+      "harm": "",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
+      "case_id": "fl_ag_2025_002",
+      "platform": "Facebook",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "media platforms, including Facebook and Snapchat, to communicate with the victim and coerced her into",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Facebook instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"media platforms, including Facebook and Snapchat, to communicate wi...\""
+    },
+    {
+      "case_id": "fl_ag_2025_002",
+      "platform": "Snapchat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "media platforms, including Facebook and Snapchat, to communicate with the victim and coerced her into",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"media platforms, including Facebook and Snapchat, to communicate wi...\""
     },
     {
       "case_id": "fresno_so_2013_001",
@@ -3588,31 +3619,31 @@
       "case_id": "idaho_icac_2024_026",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "Obscene Visual Representation of the Sexual Abuse of Children\n[BOISE] \u2013 Attorney",
       "evidence_quote": "\u201cThis case involves thousands of AI-generated images of child sexual abuse,\u201d said Attorney General Labrador.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"\u201cThis case involves thousands of AI-generated images of child sexua...\""
     },
     {
       "case_id": "idaho_icac_2024_028",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "7 counts of sexual exploitation of a child by possession of sexually exploitativ",
       "evidence_quote": "under Idaho\u2019s new law that targets AI-generated, animated and other obscene images of child sexual abuse.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "inferred",
+      "your_reasoning": "Gen AI and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"under Idaho\u2019s new law that targets AI-generated, animated and other...\""
     },
     {
       "case_id": "idaho_icac_2024_032",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "exploitation material and 2 counts of possession of generated artificial intelligence child sexual exploitation mater...",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"exploitation material and 2 counts of possession of generated artif...\""
     },
     {
       "case_id": "idaho_icac_2024_033",
@@ -3689,11 +3720,11 @@
       "case_id": "idaho_icac_2025_012",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "Abuse of Children\u2014a new law targeting images of child sex abuse generated using artificial intelligence.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "inferred",
+      "your_reasoning": "Gen AI and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"Abuse of Children\u2014a new law targeting images of child sex abuse gen...\""
     },
     {
       "case_id": "idaho_icac_2025_013",
@@ -3799,11 +3830,11 @@
       "case_id": "idaho_icac_2026_001",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "two (2) counts of Sexual Exploitation of a Child by Possession of Sexually Explo",
       "evidence_quote": "Material (Child Pornography) and one (1) count of Possession of Generated AI CSAM.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Material (Child Pornography) and one (1) count of Possession of Gen...\""
     },
     {
       "case_id": "idaho_icac_2026_004",
@@ -3819,11 +3850,11 @@
       "case_id": "idaho_icac_2026_012",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "6 counts of possession of child sexual exploitation\nmaterial",
       "evidence_quote": "generative artificial intelligence child exploitation material.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"generative artificial intelligence child exploitation material.\""
     },
     {
       "case_id": "illinois_ag_2006_002",
@@ -4614,8 +4645,8 @@
       "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "Perez created artificial intelligence-generated Child Sexual Abuse Material (CSAM) involving at least two",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Perez created artificial intelligence-generated Child Sexual Abuse...\""
     },
     {
       "case_id": "lapd_2025_003",
@@ -10586,8 +10617,8 @@
       "platform_role_in_offense": "CSAM production",
       "harm": "six counts of Possessing Child\nPornography where each count carries a maximum se",
       "evidence_quote": "computer-generated child pornography, including those images and videos created using artificial intelligence, a",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"computer-generated child pornography, including those images and vi...\""
     },
     {
       "case_id": "ncmec_2024_1072",
@@ -11345,11 +11376,11 @@
       "case_id": "ncmec_2024_1251",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "CHILD PORNOGRAPHY POSSESSION\nStevens Point Journal\nhttps://www",
       "evidence_quote": "They also found hundreds of AI-generated images that depicted, among other things,",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"They also found hundreds of AI-generated images that depicted, amon...\""
     },
     {
       "case_id": "ncmec_2024_1256",
@@ -11569,8 +11600,8 @@
       "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "Law enforcement in Florida says a man used artificial intelligence to create child pornography.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Law enforcement in Florida says a man used artificial intelligence...\""
     },
     {
       "case_id": "ncmec_2024_172",
@@ -11768,7 +11799,7 @@
       "case_id": "ncmec_2024_191",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "PORT ORANGE MAN ARRESTED AFTER POSSIBLE AI-GENERATED CHILD PORNOGRAPHY FOUND",
       "stated_vs_inferred": "inferred",
@@ -12128,7 +12159,7 @@
       "case_id": "ncmec_2024_238",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "The images in question involved sexually explicit cartoons and images generated through artificial intelligence",
       "stated_vs_inferred": "named_only",
@@ -12911,7 +12942,7 @@
       "case_id": "ncmec_2024_411",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "CHILD SEX\nhttps://www",
       "evidence_quote": "Police said they found explicit materials involving young children, some allegedly AI-generated.",
       "stated_vs_inferred": "named_only",
@@ -13045,8 +13076,8 @@
       "platform_role_in_offense": "platform-reported CSAM (distribution inferred)",
       "harm": "the following:\n\u2022 Child Exploitation, a Level 5 Felony\n\u2022 Possession of Child Porn",
       "evidence_quote": "of the files are reported to be Artificial Intelligence.",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"of the files are reported to be Artificial Intelligence.\""
+      "stated_vs_inferred": "inferred",
+      "your_reasoning": "Gen AI and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"of the files are reported to be Artificial Intelligence.\""
     },
     {
       "case_id": "ncmec_2024_432",
@@ -14038,7 +14069,7 @@
       "case_id": "ncmec_2024_656",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "",
       "evidence_quote": "Eight-eight of those images appeared to be AI-generated, officials said.",
       "stated_vs_inferred": "named_only",
@@ -22024,20 +22055,10 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "scag_icac_2024_028",
-      "platform": "Gen AI",
-      "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "five counts of sexual exploitation of a minor, third\ndegree (\u00a716-15-410), a felo",
-      "evidence_quote": "crack down on AI-generated Child Sexual Abuse Material, morphed",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
-    },
-    {
       "case_id": "scag_icac_2025_018",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "three counts of sexual exploitation of a minor,\nthird degree (\u00a716-15-410), a fel",
       "evidence_quote": "Lexington County Man Arrested on Artificial Intelligence-Generated",
       "stated_vs_inferred": "inferred",
@@ -22047,11 +22068,11 @@
       "case_id": "scag_icac_2025_019",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "two counts of possession of a visual depiction or\nrepresentation of a minor enga",
       "evidence_quote": "I nvestigators state Kelton possessed files of artificial intelligence-generated child sexual abuse material",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"I nvestigators state Kelton possessed files of artificial intellige...\""
     },
     {
       "case_id": "scag_icac_2025_091",
@@ -22104,30 +22125,20 @@
       "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"investigation revealed that the minor had met a man named Alberto M...\""
     },
     {
-      "case_id": "scag_icac_2025_141",
-      "platform": "Gen AI",
-      "platform_type": "AIService",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "",
-      "evidence_quote": "Makes it a felony to create, distribute, or possess non-consensual AI-generated sexual content 2.",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Makes it a felony to create, distribute, or possess non-consensual...\""
-    },
-    {
       "case_id": "scag_icac_2026_013",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "five counts of sexual exploitation of a minor,\nthird degree (\u00a716-15-410), a felo",
       "evidence_quote": "possessed files of artificial intelligence-generated child sexual abuse",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Gen AI instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"possessed files of artificial intelligence-generated child sexual a...\""
     },
     {
       "case_id": "scag_icac_2026_028",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "three counts of possession of a visual depiction or\nrepresentation of a minor en",
       "evidence_quote": "Berkeley County man arrested on Artificial Intelligence-generated Child",
       "stated_vs_inferred": "inferred",
@@ -22285,24 +22296,13 @@
     },
     {
       "case_id": "south_florida_icac_2023_002",
-      "platform": "Kik",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "",
-      "harm": "11 felony charges of\npossessing child pornography",
-      "evidence_quote": "",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
-      "_text_not_found": true
-    },
-    {
-      "case_id": "south_florida_icac_2023_002",
-      "platform": "Google Drive",
-      "platform_type": "FileHostingService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "11 felony charges of\npossessing child pornography",
-      "evidence_quote": "contents of Elias\u2019s Google Drive, and eventually, during the investigation, additional personal information,",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Google Drive' named without instrumental offense role in matching sentence."
+      "platform": "Instagram",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "DeMay was a popular teenager who received a message on Instagram and thought it was a girl named Dani",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Instagram instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"DeMay was a popular teenager who received a message on Instagram an...\""
     },
     {
       "case_id": "south_florida_icac_2023_003",
@@ -22316,16 +22316,6 @@
     },
     {
       "case_id": "south_florida_icac_2023_004",
-      "platform": "Instagram",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "",
-      "evidence_quote": "DeMay was a popular teenager who received a message on Instagram and thought it was a girl named Dani",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Instagram instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"DeMay was a popular teenager who received a message on Instagram an...\""
-    },
-    {
-      "case_id": "south_florida_icac_2023_005",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22335,7 +22325,7 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2023_005",
+      "case_id": "south_florida_icac_2023_004",
       "platform": "Twitter / X",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22345,7 +22335,7 @@
       "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2023_006",
+      "case_id": "south_florida_icac_2023_005",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22355,7 +22345,7 @@
       "your_reasoning": "chat and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"Authorities said video chat app Bam Bam tipped off the South Florid...\""
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22365,7 +22355,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22375,7 +22365,7 @@
       "your_reasoning": "Kik and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"originating from the websites Reddit and Quora as well as messaging...\""
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "Reddit",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22385,7 +22375,7 @@
       "your_reasoning": "Reddit and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"originating from the websites Reddit and Quora as well as messaging...\""
     },
     {
-      "case_id": "south_florida_icac_2023_009",
+      "case_id": "south_florida_icac_2023_008",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22395,7 +22385,7 @@
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Keys man accused of sharing child sexual abuse videos on Kik messaging\""
     },
     {
-      "case_id": "south_florida_icac_2023_010",
+      "case_id": "south_florida_icac_2023_009",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22405,7 +22395,17 @@
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Deputies said Morris would use his \u201cbinhorny22\u2020 Kik account to shar...\""
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_009",
+      "platform": "Snapchat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "",
+      "evidence_quote": "Snapchat Tips Lead Florida Police to Arrest Man on Child Porn Charges",
+      "stated_vs_inferred": "inferred",
+      "your_reasoning": "Snapchat and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"Snapchat Tips Lead Florida Police to Arrest Man on Child Porn Charges\""
+    },
+    {
+      "case_id": "south_florida_icac_2023_010",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22415,7 +22415,7 @@
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"A 20-year-old was arrested for allegedly distributing child pornogr...\""
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "Instagram",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22425,7 +22425,7 @@
       "your_reasoning": "'Instagram' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "Dropbox",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22435,7 +22435,7 @@
       "your_reasoning": "Sentence ties Dropbox instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Dropbox and Mega accounts he used to distribute the pornography, as...\""
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "Mega.nz",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22445,7 +22445,7 @@
       "your_reasoning": "Sentence ties Mega.nz instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Dropbox and Mega accounts he used to distribute the pornography, as...\""
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "Cash App",
       "platform_type": "FinancialTransferService",
       "platform_role_in_offense": "",
@@ -22457,26 +22457,6 @@
     },
     {
       "case_id": "south_florida_icac_2024_001",
-      "platform": "chat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "",
-      "evidence_quote": "said he no longer had Snapchat because it was a \u201chuge distraction\u201d but admitted owning the suspect account and",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2024_001",
-      "platform": "Snapchat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "",
-      "evidence_quote": "added further evidence that the email account associated with the Snapchat account belonged to Lewis and was",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"added further evidence that the email account associated with the S...\""
-    },
-    {
-      "case_id": "south_florida_icac_2024_002",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22486,7 +22466,7 @@
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Most of those cases started with messages on social media platforms...\""
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22496,7 +22476,7 @@
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Most of those cases started with messages on social media platforms...\""
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "Instagram",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22506,7 +22486,7 @@
       "your_reasoning": "Sentence ties Instagram instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Most of those cases started with messages on social media platforms...\""
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "TikTok",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22516,7 +22496,7 @@
       "your_reasoning": "Sentence ties TikTok instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Most of those cases started with messages on social media platforms...\""
     },
     {
-      "case_id": "south_florida_icac_2024_003",
+      "case_id": "south_florida_icac_2024_002",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22526,37 +22506,51 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_004",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "case_id": "south_florida_icac_2024_006",
+      "platform": "social media",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "",
       "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
+      "evidence_quote": "",
       "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
     },
     {
       "case_id": "south_florida_icac_2024_006",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform": "Kik",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "",
       "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
+      "evidence_quote": "",
       "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
+      "case_id": "south_florida_icac_2024_006",
+      "platform": "Facebook",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "",
+      "harm": "",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
+      "case_id": "south_florida_icac_2024_006",
+      "platform": "Twitter / X",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "",
+      "harm": "",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
     },
     {
       "case_id": "south_florida_icac_2024_007",
-      "platform": "Twitter / X",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "known as Twitter, at @HSI_Miami .",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2024_008",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22566,7 +22560,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_008",
+      "case_id": "south_florida_icac_2024_007",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22576,7 +22570,7 @@
       "your_reasoning": "Kik and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"According to an arrest warrant, the investigation into the 30-year-...\""
     },
     {
-      "case_id": "south_florida_icac_2024_008",
+      "case_id": "south_florida_icac_2024_007",
       "platform": "Telegram",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22586,7 +22580,7 @@
       "your_reasoning": "Sentence ties Telegram instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Authorities would later find two videos on Rembiszewski\u2019s iPhone 11...\""
     },
     {
-      "case_id": "south_florida_icac_2024_011",
+      "case_id": "south_florida_icac_2024_010",
       "platform": "Dropbox",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22596,7 +22590,7 @@
       "your_reasoning": "'Dropbox' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_013",
+      "case_id": "south_florida_icac_2024_012",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22606,7 +22600,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_016",
+      "case_id": "south_florida_icac_2024_015",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22616,7 +22610,7 @@
       "your_reasoning": "'Kik' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_017",
+      "case_id": "south_florida_icac_2024_016",
       "platform": "Google Drive",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22626,7 +22620,7 @@
       "your_reasoning": "Sentence ties Google Drive instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Google reported that Jean uploaded a lewd photo collage of a 10-yea...\""
     },
     {
-      "case_id": "south_florida_icac_2024_017",
+      "case_id": "south_florida_icac_2024_016",
       "platform": "WhatsApp",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22636,7 +22630,7 @@
       "your_reasoning": "'WhatsApp' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_018",
+      "case_id": "south_florida_icac_2024_017",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22646,7 +22640,7 @@
       "your_reasoning": "Sentence ties chat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Authorities said he used the chat app Kik to share the files and ut...\""
     },
     {
-      "case_id": "south_florida_icac_2024_018",
+      "case_id": "south_florida_icac_2024_017",
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -22656,7 +22650,7 @@
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Authorities said he used the chat app Kik to share the files and ut...\""
     },
     {
-      "case_id": "south_florida_icac_2024_020",
+      "case_id": "south_florida_icac_2024_019",
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22666,7 +22660,7 @@
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_021",
+      "case_id": "south_florida_icac_2024_020",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22676,7 +22670,67 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2024_024",
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "Facebook",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Facebook' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "Twitter / X",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "Instagram",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Instagram' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "YouTube",
+      "platform_type": "VideoStreamingPlatform",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "Gen AI",
+      "platform_type": "AIService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "The Martin County Sheriff's office made its first arrest in a case involving artificial intelligence.",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "TikTok",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'TikTok' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2025_001",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22686,47 +22740,7 @@
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"According to an arrest report, Taylor and the girl were involved in...\""
     },
     {
-      "case_id": "south_florida_icac_2025_001",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_002",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_003",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "possession of child pornography \u2014 a term one Jacksonville\nlawmaker wants to chan",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
+      "case_id": "south_florida_icac_2025_005",
       "platform": "TikTok",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22736,7 +22750,7 @@
       "your_reasoning": "'TikTok' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2025_005",
+      "case_id": "south_florida_icac_2025_006",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22746,7 +22760,7 @@
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2025_005",
+      "case_id": "south_florida_icac_2025_006",
       "platform": "Facebook",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -22756,17 +22770,7 @@
       "your_reasoning": "Facebook and offense language co-occur in the same sentence without instrumental proximity; role inferred: \"when we can; however, this is still an active investigation{ < }\" s...\""
     },
     {
-      "case_id": "south_florida_icac_2025_005",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_005",
+      "case_id": "south_florida_icac_2025_006",
       "platform": "TikTok",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "contact and communication with victim",
@@ -22776,101 +22780,51 @@
       "your_reasoning": "Sentence ties TikTok instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"messages with a 10-year-old girl in Texas through TikTok.\""
     },
     {
-      "case_id": "south_florida_icac_2025_006",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "conspiring to distribute and\ndistributing CSAM involving children under the age",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_007",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "Child Porn Charges",
-      "evidence_quote": "Subscribe to our YouTube channel for the biggest stories and can't miss",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "November 21 after\nCoral Springs Police and members of the South Florida Internet",
+      "harm": "November 21 after Coral Springs Police and members\nof the South Florida Internet",
       "evidence_quote": "A Coral Springs man is facing a series of felony charges after investigators say he used multiple social media",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "chat",
       "platform_type": "MessagingService",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "November 21 after\nCoral Springs Police and members of the South Florida Internet",
-      "evidence_quote": "Police say the chats also showed Ewald communicating with multiple juveniles and attempting to obtain",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "November 21 after Coral Springs Police and members\nof the South Florida Internet",
+      "evidence_quote": "chat logs in which Ewald allegedly solicited and traded what he called CP with other users and bragged about",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "November 21 after\nCoral Springs Police and members of the South Florida Internet",
-      "evidence_quote": "The tips were submitted by Snapchat and Discord, which reported that a user had uploaded child",
+      "harm": "November 21 after Coral Springs Police and members\nof the South Florida Internet",
+      "evidence_quote": "The tips were submitted by Snapchat and Discord, which reported that a user had uploaded child pornography",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The tips were submitted by Snapchat and Discord, which reported tha...\""
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "Discord",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "November 21 after\nCoral Springs Police and members of the South Florida Internet",
-      "evidence_quote": "The tips were submitted by Snapchat and Discord, which reported that a user had uploaded child",
+      "harm": "November 21 after Coral Springs Police and members\nof the South Florida Internet",
+      "evidence_quote": "The tips were submitted by Snapchat and Discord, which reported that a user had uploaded child pornography",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The tips were submitted by Snapchat and Discord, which reported tha...\""
-    },
-    {
-      "case_id": "south_florida_icac_2025_010",
-      "platform": "chat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "November 6 and faces 12\nfelony counts, including multiple charges of possession",
-      "evidence_quote": "the child pornography files originally reported and found additional chat logs in which the user requested",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2025_010",
-      "platform": "Kik",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "platform-reported CSAM (distribution inferred)",
-      "harm": "November 6 and faces 12\nfelony counts, including multiple charges of possession",
-      "evidence_quote": "received a CyberTip from MediaLab/Kik reporting that a user with identifiers linked to the username \u201ckylelick\u201d",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"received a CyberTip from MediaLab/Kik reporting that a user with id...\""
-    },
-    {
-      "case_id": "south_florida_icac_2025_010",
-      "platform": "Mega.nz",
-      "platform_type": "FileHostingService",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "November 6 and faces 12\nfelony counts, including multiple charges of possession",
-      "evidence_quote": "involving minors and had exchanged Mega file-storage links commonly used to distribute large quantities of",
-      "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Mega.nz instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"involving minors and had exchanged Mega file-storage links commonly...\""
     },
     {
       "case_id": "south_florida_icac_2025_012",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "",
       "evidence_quote": "through the Kik social media platform.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"through the Kik social media platform.\""
@@ -22880,7 +22834,7 @@
       "platform": "chat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "contact and communication with victim",
-      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "",
       "evidence_quote": "Investigators said messages from various chat groups, provided by Kik, showed Rogers referring to himself as a",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
@@ -22890,7 +22844,7 @@
       "platform": "Kik",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "child pornography charges, police say\nUpdated on: July 2, 2025 / 6:18 PM EDT / C",
+      "harm": "",
       "evidence_quote": "The tip indicated that an individual using a Kik/Media Lab account was distributing child sexual abuse material",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Kik instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"The tip indicated that an individual using a Kik/Media Lab account...\""
@@ -23030,7 +22984,7 @@
       "platform": "Google Drive",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "",
+      "harm": "child porn charges, again: Miami",
       "evidence_quote": "subscribers uploaded eight files depicting child pornography to a Google drive.",
       "stated_vs_inferred": "stated",
       "your_reasoning": "Sentence ties Google Drive instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"subscribers uploaded eight files depicting child pornography to a G...\""
@@ -23040,7 +22994,7 @@
       "platform": "Telegram",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
+      "harm": "child porn charges, again: Miami",
       "evidence_quote": "Detectives said the files appeared to have been taken from Telegram.",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "'Telegram' named without instrumental offense role in matching sentence."
@@ -23096,37 +23050,138 @@
       "your_reasoning": "'Instagram' named without instrumental offense role in matching sentence."
     },
     {
-      "case_id": "south_florida_icac_2026_003",
+      "case_id": "south_florida_icac_2025_039",
       "platform": "social media",
       "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Felony Murder After Stolen Car Pursuit Injures Coconut Creek Police Officer, Dep",
-      "evidence_quote": "2024, after the social media platforms Snapchat, Discord, and X reported the uploading of child porn by a poster",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "According to a social media post by SLCSO, the search was part of an active investigation by its Criminal",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2026_001",
+      "platform": "Google Drive",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "11 felony charges of possessing child\nOn July 20, Google reported to the Nationa",
+      "evidence_quote": "Elias\u2019s Google Drive, and eventually, during the investigation, additional personal information, including",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Google Drive' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2026_002",
+      "platform": "chat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "child pornography charges\nGAINESVILLE, Fla",
+      "evidence_quote": "He reportedly said at first that he only chatted with 15- and 16-year-olds, but when told that there were chats",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2026_002",
+      "platform": "Snapchat",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "contact and communication with victim",
+      "harm": "child pornography charges\nGAINESVILLE, Fla",
+      "evidence_quote": "Post Miranda, Lewis reportedly said he no longer had Snapchat because it was a \u201chuge distraction\u201d but admitted",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties social media instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"2024, after the social media platforms Snapchat, Discord, and X rep...\""
+      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Post Miranda, Lewis reportedly said he no longer had Snapchat becau...\""
     },
     {
       "case_id": "south_florida_icac_2026_003",
+      "platform": "Kik",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "Police say he admitted to operating the Kik account, sending child pornography, and",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Kik' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2026_003",
+      "platform": "Mega.nz",
+      "platform_type": "FileHostingService",
+      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "harm": "",
+      "evidence_quote": "saving Mega links containing illegal material on his phone.",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "'Mega.nz' named without instrumental offense role in matching sentence."
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "social media",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "",
+      "stated_vs_inferred": "named_only",
+      "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
+      "_text_not_found": true
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "Facebook",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Facebook instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares\""
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Felony Murder After Stolen Car Pursuit Injures Coconut Creek Police Officer, Dep",
-      "evidence_quote": "2024, after the social media platforms Snapchat, Discord, and X reported the uploading of child porn by a poster",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "media platforms Snapchat, Discord, and X reported the uploading of child porn by a poster later identified as",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"2024, after the social media platforms Snapchat, Discord, and X rep...\""
+      "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"media platforms Snapchat, Discord, and X reported the uploading of...\""
     },
     {
-      "case_id": "south_florida_icac_2026_003",
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "Twitter / X",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Twitter / X instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares\""
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
       "platform": "Discord",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
-      "harm": "Felony Murder After Stolen Car Pursuit Injures Coconut Creek Police Officer, Dep",
-      "evidence_quote": "2024, after the social media platforms Snapchat, Discord, and X reported the uploading of child porn by a poster",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "media platforms Snapchat, Discord, and X reported the uploading of child porn by a poster later identified as",
       "stated_vs_inferred": "stated",
-      "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"2024, after the social media platforms Snapchat, Discord, and X rep...\""
+      "your_reasoning": "Sentence ties Discord instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"media platforms Snapchat, Discord, and X reported the uploading of...\""
     },
     {
-      "case_id": "south_florida_icac_2026_004",
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "WhatsApp",
+      "platform_type": "MessagingService",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties WhatsApp instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares\""
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "Reddit",
+      "platform_type": "SocialMediaPlatform",
+      "platform_role_in_offense": "distribution of CSAM",
+      "harm": "eleven felonies, including numerous counts of possessing\nmaterials depicting chi",
+      "evidence_quote": "Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares",
+      "stated_vs_inferred": "stated",
+      "your_reasoning": "Sentence ties Reddit instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares\""
+    },
+    {
+      "case_id": "south_florida_icac_2026_007",
       "platform": "Snapchat",
       "platform_type": "MessagingService",
       "platform_role_in_offense": "distribution of CSAM",
@@ -23136,7 +23191,7 @@
       "your_reasoning": "Sentence ties Snapchat instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Further subpoenas revealed that Ryan\u2019s Snapchat account showed he h...\""
     },
     {
-      "case_id": "south_florida_icac_2026_007",
+      "case_id": "south_florida_icac_2026_010",
       "platform": "OneDrive",
       "platform_type": "FileHostingService",
       "platform_role_in_offense": "used in offense (specific role unspecified)",
@@ -23146,95 +23201,15 @@
       "your_reasoning": "Sentence ties OneDrive instrumentally to offense conduct (through/via/using or offense verb within 60 chars): \"Through the investigation, the OneDrive account was found to belong...\""
     },
     {
-      "case_id": "south_florida_icac_2026_008",
-      "platform": "chat",
-      "platform_type": "MessagingService",
-      "platform_role_in_offense": "contact and communication with victim",
-      "harm": "",
-      "evidence_quote": "\u2018alarming\u2019 chats on app",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'chat' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_010",
-      "platform": "Snapchat",
-      "platform_type": "MessagingService",
+      "case_id": "south_florida_icac_2026_013",
+      "platform": "Gen AI",
+      "platform_type": "AIService",
       "platform_role_in_offense": "",
-      "harm": "Child Porn Charges After Tips From",
+      "harm": "",
       "evidence_quote": "",
       "stated_vs_inferred": "named_only",
       "your_reasoning": "Platform tagged in DB platforms_used but not found in capped case text.",
       "_text_not_found": true
-    },
-    {
-      "case_id": "south_florida_icac_2026_011",
-      "platform": "Gen AI",
-      "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "The Martin County Sheriff's office made its first arrest in a case involving artificial intelligence.",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Gen AI' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "Facebook",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Facebook' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "Twitter / X",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Twitter / X' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "Instagram",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'Instagram' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "YouTube",
-      "platform_type": "VideoStreamingPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'YouTube' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "TikTok",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'TikTok' named without instrumental offense role in matching sentence."
-    },
-    {
-      "case_id": "south_florida_icac_2026_014",
-      "platform": "social media",
-      "platform_type": "SocialMediaPlatform",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
-      "harm": "",
-      "evidence_quote": "According to a social media post by SLCSO, the search was part of an active investigation by its Criminal",
-      "stated_vs_inferred": "named_only",
-      "your_reasoning": "'social media' named without instrumental offense role in matching sentence."
     },
     {
       "case_id": "spd_2012_001",
@@ -26219,7 +26194,7 @@
       "case_id": "wy_dci_2026_005",
       "platform": "Gen AI",
       "platform_type": "AIService",
-      "platform_role_in_offense": "used in offense (specific role unspecified)",
+      "platform_role_in_offense": "CSAM production",
       "harm": "sexual abuse of a minor in 1989",
       "evidence_quote": "of toddler abuse were found, and one was believed to be have been generated by artificial intelligence.",
       "stated_vs_inferred": "named_only",
@@ -28108,6 +28083,16 @@
       "case_id": "doj_ceos_2026_013",
       "platform": "other",
       "found_in": "video and other evidence of Hounsell\u2019s criminal conduct from his phone during..."
+    },
+    {
+      "case_id": "fl_ag_2025_002",
+      "platform": "Tor",
+      "found_in": "TALLAHASSEE, Fla.\u2014Attorney General James Uthmeier announced that Sky Skidmore..."
+    },
+    {
+      "case_id": "fl_ag_2025_002",
+      "platform": "chat",
+      "found_in": "media platforms, including Facebook and Snapchat, to communicate with the vic..."
     },
     {
       "case_id": "fresno_so_2013_001",
@@ -40760,21 +40745,6 @@
       "found_in": "For media inquiries please contact Robert Kittle, [email protected] or 803-73..."
     },
     {
-      "case_id": "scag_icac_2024_028",
-      "platform": "Tor",
-      "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
-    },
-    {
-      "case_id": "scag_icac_2024_028",
-      "platform": "email",
-      "found_in": "For media inquiries please contact Robert Kittle, [email protected] or 803-73..."
-    },
-    {
-      "case_id": "scag_icac_2024_028",
-      "platform": "internet",
-      "found_in": "Mayes, 54, of Aiken, S.C. on seven charges connected to the sexual exploitati..."
-    },
-    {
       "case_id": "scag_icac_2025_018",
       "platform": "Tor",
       "found_in": "(COLUMBIA, S.C.) - South Carolina Attorney General Alan Wilson announced the..."
@@ -40856,16 +40826,6 @@
     },
     {
       "case_id": "scag_icac_2025_130",
-      "platform": "email",
-      "found_in": "For media inquiries please contact Robert Kittle, [email protected] or 803-73..."
-    },
-    {
-      "case_id": "scag_icac_2025_141",
-      "platform": "Tor",
-      "found_in": "(COLUMBIA, S.C.) \u2013 Attorney General Alan Wilson today issued the following st..."
-    },
-    {
-      "case_id": "scag_icac_2025_141",
       "platform": "email",
       "found_in": "For media inquiries please contact Robert Kittle, [email protected] or 803-73..."
     },
@@ -41121,8 +41081,18 @@
     },
     {
       "case_id": "south_florida_icac_2023_002",
+      "platform": "Tor",
+      "found_in": "combating sextortion."
+    },
+    {
+      "case_id": "south_florida_icac_2023_002",
       "platform": "internet",
-      "found_in": "South Florida Internet Crimes Against Children (ICAC) Task Force , which bega..."
+      "found_in": "extort me,\u201d said BSO Sgt. Thomas McInerney, a commander in the South Florida..."
+    },
+    {
+      "case_id": "south_florida_icac_2023_002",
+      "platform": "other",
+      "found_in": "\u201cThe typical pattern that takes place when we\u2019re looking at sextortion is we..."
     },
     {
       "case_id": "south_florida_icac_2023_003",
@@ -41141,383 +41111,288 @@
     },
     {
       "case_id": "south_florida_icac_2023_004",
-      "platform": "Tor",
-      "found_in": "combating sextortion."
-    },
-    {
-      "case_id": "south_florida_icac_2023_004",
-      "platform": "internet",
-      "found_in": "extort me,\u201d said BSO Sgt. Thomas McInerney, a commander in the South Florida..."
-    },
-    {
-      "case_id": "south_florida_icac_2023_004",
-      "platform": "other",
-      "found_in": "\u201cThe typical pattern that takes place when we\u2019re looking at sextortion is we..."
-    },
-    {
-      "case_id": "south_florida_icac_2023_005",
       "platform": "Tor",
       "found_in": "According to an arrest report authored on Feb. 13, investigators zeroed in on..."
     },
     {
-      "case_id": "south_florida_icac_2023_005",
+      "case_id": "south_florida_icac_2023_004",
       "platform": "Twitter",
       "found_in": "other social media applications, including Twitter, the report states."
     },
     {
-      "case_id": "south_florida_icac_2023_005",
+      "case_id": "south_florida_icac_2023_004",
       "platform": "other",
       "found_in": "meetups between him and other men that could be viewed for $5 per month."
     },
     {
-      "case_id": "south_florida_icac_2023_006",
+      "case_id": "south_florida_icac_2023_005",
       "platform": "Tor",
       "found_in": "Force to the livestream on Oct. 17, leading investigators to Ketrick Freeman."
     },
     {
-      "case_id": "south_florida_icac_2023_006",
+      "case_id": "south_florida_icac_2023_005",
       "platform": "internet",
       "found_in": "Authorities said video chat app Bam Bam tipped off the South Florida Internet..."
     },
     {
-      "case_id": "south_florida_icac_2023_006",
+      "case_id": "south_florida_icac_2023_005",
       "platform": "other",
       "found_in": "some of whom were as young as 5, being raped or otherwise sexually abused."
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "Tor",
       "found_in": "The 33-year-old made an appearance in Broward County court Monday after prose..."
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "internet",
       "found_in": "A Plantation Police Department detective working for the Internet Crimes Agai..."
     },
     {
-      "case_id": "south_florida_icac_2023_007",
+      "case_id": "south_florida_icac_2023_006",
       "platform": "other",
       "found_in": "Police said they also found another disturbing discovery on Angela Marcella R..."
     },
     {
-      "case_id": "south_florida_icac_2023_010",
+      "case_id": "south_florida_icac_2023_009",
+      "platform": "chat",
+      "found_in": "Snapchat Tips Lead Florida Police to Arrest Man on Child Porn Charges"
+    },
+    {
+      "case_id": "south_florida_icac_2023_009",
       "platform": "internet",
       "found_in": "According to an arrest report from the Monroe County Sheriff\u2019s Office, the So..."
     },
     {
-      "case_id": "south_florida_icac_2023_010",
+      "case_id": "south_florida_icac_2023_009",
       "platform": "other",
       "found_in": "masturbating to a sexualized photo of a girl under the age of 12 and to a vid..."
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "chat",
       "found_in": "Instagram. A 20-year-old was arrested for allegedly distributing child pornog..."
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "internet",
       "found_in": "According to an arrest affidavit filed last week, the South Florida Internet..."
     },
     {
-      "case_id": "south_florida_icac_2023_011",
+      "case_id": "south_florida_icac_2023_010",
       "platform": "other",
       "found_in": "Two alarming arrests. An 18-year-old was arrested after police say he threate..."
     },
     {
       "case_id": "south_florida_icac_2024_001",
-      "platform": "email",
-      "found_in": "the email address associated with the Snapchat account. A subpoena to Google..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_001",
-      "platform": "other",
-      "found_in": "included 66 \u201cselfies\u201d of the same person, sent from the Snapchat account to o..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_002",
       "platform": "Tor",
       "found_in": "And it seems like every week , we\u2019re reporting another story about a district..."
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "chat",
       "found_in": "Most of those cases started with messages on social media platforms like Inst..."
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "internet",
       "found_in": "enforcement action,\" said South Florida Internet Crimes Against Children (ICA..."
     },
     {
-      "case_id": "south_florida_icac_2024_002",
+      "case_id": "south_florida_icac_2024_001",
       "platform": "other",
       "found_in": "And it seems like every week , we\u2019re reporting another story about a district..."
     },
     {
-      "case_id": "south_florida_icac_2024_003",
-      "platform": "Signal",
-      "found_in": "See also: Massive drug bust in Indian River County may signal large scale ope..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_003",
+      "case_id": "south_florida_icac_2024_002",
       "platform": "Tor",
-      "found_in": "PBC investigators help secure 20-year sentence for Michigan man in"
+      "found_in": "South Florida task force fights rise in online child predators"
     },
     {
-      "case_id": "south_florida_icac_2024_003",
+      "case_id": "south_florida_icac_2024_002",
       "platform": "internet",
       "found_in": "instead met with members of BSO's Internet Crimes Against Children (ICAC) Tas..."
     },
     {
-      "case_id": "south_florida_icac_2024_004",
+      "case_id": "south_florida_icac_2024_006",
       "platform": "Tor",
-      "found_in": "spend increasing amounts of time online, CBS12 News is looking at the risks o..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_004",
-      "platform": "internet",
-      "found_in": "The Internet Crimes Against Children Task Force (ICAC) works to tackle this i..."
+      "found_in": "Student and Exchange Visitor Program (SEVP)"
     },
     {
       "case_id": "south_florida_icac_2024_006",
-      "platform": "Tor",
-      "found_in": "unit recovered over 150 devices. Investigators stated that multiple digital d..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_006",
-      "platform": "internet",
-      "found_in": "Sheriff Keith Pearson said following a search of the home detectives with the..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_006",
-      "platform": "other",
-      "found_in": "41-year-old after several failed commands to get the people inside to exit th..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_007",
-      "platform": "Tor",
-      "found_in": "U.S. Attorney Markenzy Lapointe for the Southern District of Florida and HSI..."
-    },
-    {
-      "case_id": "south_florida_icac_2024_007",
-      "platform": "Twitter",
-      "found_in": "known as Twitter, at @HSI_Miami ."
-    },
-    {
-      "case_id": "south_florida_icac_2024_007",
       "platform": "internet",
       "found_in": "HSI Miami and the South Florida Internet Crimes Against Children Task Force i..."
     },
     {
-      "case_id": "south_florida_icac_2024_007",
+      "case_id": "south_florida_icac_2024_006",
       "platform": "other",
       "found_in": "In an effort to keep ICE.gov current, the archive contains content from a pre..."
     },
     {
-      "case_id": "south_florida_icac_2024_008",
+      "case_id": "south_florida_icac_2024_007",
       "platform": "internet",
       "found_in": "the Internet Crimes Against Children Task Force of a user uploading child sex..."
     },
     {
-      "case_id": "south_florida_icac_2024_008",
+      "case_id": "south_florida_icac_2024_007",
       "platform": "other",
       "found_in": "otherwise sexually abused."
     },
     {
-      "case_id": "south_florida_icac_2024_011",
+      "case_id": "south_florida_icac_2024_010",
       "platform": "other",
       "found_in": "Generally, the files depicted girls \u201cunder the age of 7\u2020 being raped or other..."
     },
     {
-      "case_id": "south_florida_icac_2024_013",
+      "case_id": "south_florida_icac_2024_012",
       "platform": "Tor",
       "found_in": "charges after prosecutors allege that agents netted him in an ongoing investi..."
     },
     {
-      "case_id": "south_florida_icac_2024_013",
+      "case_id": "south_florida_icac_2024_012",
       "platform": "internet",
       "found_in": "The court documents state that HSI agents and members of the South Florida In..."
     },
     {
-      "case_id": "south_florida_icac_2024_016",
+      "case_id": "south_florida_icac_2024_015",
       "platform": "IRC",
       "found_in": "with Broward County Circuit Judge Timothy L. Bailey."
     },
     {
-      "case_id": "south_florida_icac_2024_016",
+      "case_id": "south_florida_icac_2024_015",
       "platform": "Tor",
       "found_in": "Prosecutors filed the case against Zalenzky on Aug. 30 and his arraignment wa..."
     },
     {
-      "case_id": "south_florida_icac_2024_016",
+      "case_id": "south_florida_icac_2024_015",
       "platform": "internet",
       "found_in": "The nonprofit then notified The South Florida Internet Crimes Against Childre..."
     },
     {
-      "case_id": "south_florida_icac_2024_016",
+      "case_id": "south_florida_icac_2024_015",
       "platform": "other",
       "found_in": "\u201cHe received child pornography from other Kik users. He said that he deleted..."
     },
     {
-      "case_id": "south_florida_icac_2024_017",
+      "case_id": "south_florida_icac_2024_016",
       "platform": "internet",
       "found_in": "According to a BSO arrest report, the investigation into Jean began in April..."
     },
     {
-      "case_id": "south_florida_icac_2024_018",
+      "case_id": "south_florida_icac_2024_017",
       "platform": "Tor",
       "found_in": "POMPANO BEACH, Fla. \u2014 Broward County prosecutors upgraded charges Monday agai..."
     },
     {
-      "case_id": "south_florida_icac_2024_018",
+      "case_id": "south_florida_icac_2024_017",
       "platform": "other",
       "found_in": "He was arrested again on Oct. 17 at a home on Northwest Sixth Avenue that he..."
     },
     {
-      "case_id": "south_florida_icac_2024_020",
+      "case_id": "south_florida_icac_2024_019",
       "platform": "Tor",
       "found_in": "and not possess devices with internet access. Attorney information wasn't ava..."
     },
     {
-      "case_id": "south_florida_icac_2024_020",
+      "case_id": "south_florida_icac_2024_019",
       "platform": "internet",
       "found_in": "The investigation began Feb. 23 when BSO's Internet Crimes Against Children T..."
     },
     {
-      "case_id": "south_florida_icac_2024_021",
+      "case_id": "south_florida_icac_2024_020",
       "platform": "Tor",
       "found_in": "State Attorney\u2019s Office Cybercrimes Unit in solving this case.\u201d"
     },
     {
-      "case_id": "south_florida_icac_2024_021",
+      "case_id": "south_florida_icac_2024_020",
       "platform": "internet",
       "found_in": "\u201cOur Special Victims Internet Crimes Against Children (ICAC) Unit conducted a..."
     },
     {
-      "case_id": "south_florida_icac_2024_024",
+      "case_id": "south_florida_icac_2024_023",
       "platform": "Tor",
-      "found_in": "\"Upon receiving the case details and digital evidence, St. Lucie County inves..."
+      "found_in": "predators arrested in Martin County"
     },
     {
-      "case_id": "south_florida_icac_2024_024",
-      "platform": "chat",
-      "found_in": "communications began, had been contacted by a man via Snapchat."
+      "case_id": "south_florida_icac_2024_023",
+      "platform": "Twitter",
+      "found_in": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube"
     },
     {
-      "case_id": "south_florida_icac_2024_024",
+      "case_id": "south_florida_icac_2024_023",
       "platform": "internet",
-      "found_in": "locations in Fort Pierce as part of an ongoing investigation into internet cr..."
+      "found_in": "Daniel Warren, 51, was arrested in January after detectives received an inter..."
     },
     {
-      "case_id": "south_florida_icac_2024_024",
+      "case_id": "south_florida_icac_2024_023",
       "platform": "other",
-      "found_in": "report from the mother of a 13-year-old girl. The mother said her daughter, w..."
+      "found_in": "\"The reason why we waited this long to put it out is because our detectives h..."
     },
     {
       "case_id": "south_florida_icac_2025_001",
       "platform": "Tor",
-      "found_in": "headlines delivered right to your inbox. Subscribe to our YouTube channel for..."
+      "found_in": "\"Upon receiving the case details and digital evidence, St. Lucie County inves..."
     },
     {
-      "case_id": "south_florida_icac_2025_002",
-      "platform": "Tor",
-      "found_in": "headlines delivered right to your inbox. Subscribe to our YouTube channel for..."
+      "case_id": "south_florida_icac_2025_001",
+      "platform": "chat",
+      "found_in": "communications began, had been contacted by a man via Snapchat."
     },
     {
-      "case_id": "south_florida_icac_2025_002",
+      "case_id": "south_florida_icac_2025_001",
       "platform": "internet",
-      "found_in": "The cyber tip was assigned to the Miami-Dade Sheriff's Office's (MDSO) Intern..."
+      "found_in": "locations in Fort Pierce as part of an ongoing investigation into internet cr..."
     },
     {
-      "case_id": "south_florida_icac_2025_003",
-      "platform": "MeetMe",
-      "found_in": "on the messaging app 'MeetMe' was contacted by a suspect, identified as 48-ye..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_003",
-      "platform": "Tor",
-      "found_in": "The undercover said they arranged a time to meet with the accused predator at..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
-      "platform": "Tor",
-      "found_in": "When investigators confronted him, they say Smith confessed to uploading the..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
-      "platform": "email",
-      "found_in": "Detectives with the sheriff\u2019s Internet Crimes Against Children Task Force tra..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
-      "platform": "internet",
-      "found_in": "Detectives with the sheriff\u2019s Internet Crimes Against Children Task Force tra..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_004",
+      "case_id": "south_florida_icac_2025_001",
       "platform": "other",
-      "found_in": "Baker, a former prosecutor, says the word pornography is misleading. In other..."
+      "found_in": "report from the mother of a 13-year-old girl. The mother said her daughter, w..."
     },
     {
       "case_id": "south_florida_icac_2025_005",
       "platform": "Tor",
+      "found_in": "When investigators confronted him, they say Smith confessed to uploading the..."
+    },
+    {
+      "case_id": "south_florida_icac_2025_005",
+      "platform": "email",
+      "found_in": "Detectives with the sheriff\u2019s Internet Crimes Against Children Task Force tra..."
+    },
+    {
+      "case_id": "south_florida_icac_2025_005",
+      "platform": "internet",
+      "found_in": "Detectives with the sheriff\u2019s Internet Crimes Against Children Task Force tra..."
+    },
+    {
+      "case_id": "south_florida_icac_2025_005",
+      "platform": "other",
+      "found_in": "Baker, a former prosecutor, says the word pornography is misleading. In other..."
+    },
+    {
+      "case_id": "south_florida_icac_2025_006",
+      "platform": "Tor",
       "found_in": "her TikTok account. Investigators later tracked down Ford through social medi..."
     },
     {
-      "case_id": "south_florida_icac_2025_006",
-      "platform": "Tor",
-      "found_in": "The case was prosecuted by Assistant U.S. Attorney Alexandra Chase as part of..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_006",
-      "platform": "chat",
-      "found_in": "According to court records, Faraz participated in a private chatroom in late..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_006",
-      "platform": "internet",
-      "found_in": "County Sheriff\u2019s Office, both of which are active members of the South Florid..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_007",
-      "platform": "Tor",
-      "found_in": "investigators posed online as a 14-year-old girl. Police say that during the..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_007",
-      "platform": "internet",
-      "found_in": "SPD said on Tuesday, the department launched an Internet Crimes Against Child..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "Tor",
       "found_in": "A Coral Springs man is facing a series of felony charges after investigators..."
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "email",
-      "found_in": "were tied to Ewald through subscriber information, recovery emails, phone num..."
+      "found_in": "information, recovery emails, phone numbers, and internet records."
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "internet",
-      "found_in": "Coral Springs Police and members of the South Florida Internet Crimes Against..."
+      "found_in": "of the South Florida Internet Crimes Against Children Task Force concluded a..."
     },
     {
-      "case_id": "south_florida_icac_2025_008",
+      "case_id": "south_florida_icac_2025_009",
       "platform": "other",
-      "found_in": "Ewald allegedly solicited and traded what he called CP with other users and b..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_010",
-      "platform": "Tor",
-      "found_in": "containing child pornography. Three of the files involved bestiality, and one..."
-    },
-    {
-      "case_id": "south_florida_icac_2025_010",
-      "platform": "internet",
-      "found_in": "wrote. The CyberTip was forwarded to the South Florida Internet Crimes Agains..."
+      "found_in": "chat logs in which Ewald allegedly solicited and traded what he called CP wit..."
     },
     {
       "case_id": "south_florida_icac_2025_012",
@@ -41640,99 +41515,99 @@
       "found_in": "Otherwise, he counts various social media models and influencers among his cl..."
     },
     {
-      "case_id": "south_florida_icac_2026_003",
-      "platform": "Tor",
-      "found_in": "Against Children Task Force, which is made up of local, state, and federal la..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_003",
-      "platform": "chat",
-      "found_in": "2024, after the social media platforms Snapchat, Discord, and X reported the..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_003",
-      "platform": "internet",
-      "found_in": "tactics, to track down and arrest Miranda. The case involved the work of the..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_003",
-      "platform": "other",
-      "found_in": "other illegal pornography in the digital possession of Marlon Miranda, 18, of..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_004",
-      "platform": "chat",
-      "found_in": "two CyberTips from Snapchat on February 19 and February 26. According to reco..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_004",
-      "platform": "internet",
-      "found_in": "A collaborative investigation by the South Florida Internet Crimes Against Ch..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_007",
-      "platform": "internet",
-      "found_in": "The South Florida Internet Crimes Against Children (ICAC) received a tip abou..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_008",
-      "platform": "internet",
-      "found_in": "Fort Myers police said on Feb. 27, 2025, the South Florida Internet Crimes Ag..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_010",
-      "platform": "internet",
-      "found_in": "According to an arrest report, on Jan. 19, Internet Crimes Against Children d..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_010",
-      "platform": "other",
-      "found_in": "In one message, he asked for a photo of her in the shower, and in another she..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_011",
-      "platform": "internet",
-      "found_in": "Daniel Warren, 51, was arrested in January after detectives received an inter..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_011",
-      "platform": "other",
-      "found_in": "\"The reason why we waited this long to put it out is because our detectives h..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "IRC",
-      "found_in": "Tom Bakkedahl, state attorney for the 19th Judicial Circuit, said the six in..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "Tor",
-      "found_in": "predators arrested in Martin County"
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "Twitter",
-      "found_in": "Follow us on social: Facebook | Twitter | Instagram | TikTok | YouTube"
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "internet",
-      "found_in": "operation called \"All Tricks, No Treats\" targeting internet-facilitated crime..."
-    },
-    {
-      "case_id": "south_florida_icac_2026_012",
-      "platform": "other",
-      "found_in": "Officials are seeking warrants for 12 others."
-    },
-    {
-      "case_id": "south_florida_icac_2026_014",
+      "case_id": "south_florida_icac_2025_039",
       "platform": "Tor",
       "found_in": "Sheriff Richard Del Toro said. \u201cThe exploitation of our most vulnerable will..."
     },
     {
-      "case_id": "south_florida_icac_2026_014",
+      "case_id": "south_florida_icac_2025_039",
       "platform": "internet",
       "found_in": "Investigations Division concerning internet crimes against children."
+    },
+    {
+      "case_id": "south_florida_icac_2026_001",
+      "platform": "Tor",
+      "found_in": "BCPS and BSO launch campaign warning teenagers of sextortion crimes"
+    },
+    {
+      "case_id": "south_florida_icac_2026_001",
+      "platform": "internet",
+      "found_in": "According to records, NCMEC referred the case to the South Florida Internet C..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_002",
+      "platform": "Tor",
+      "found_in": "Hidden predators in schools: How to battle rising crimes against kids"
+    },
+    {
+      "case_id": "south_florida_icac_2026_002",
+      "platform": "email",
+      "found_in": "CyberTip involving the email address associated with the Snapchat account."
+    },
+    {
+      "case_id": "south_florida_icac_2026_002",
+      "platform": "other",
+      "found_in": "sent from the Snapchat account to other accounts."
+    },
+    {
+      "case_id": "south_florida_icac_2026_003",
+      "platform": "Tor",
+      "found_in": "Man Arrested After Investigators Say He Uploaded Dozens of Child"
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "Tor",
+      "found_in": "is made up of local, state, and federal law enforcement investigators."
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "Twitter",
+      "found_in": "Facebook Twitter LinkedIn Reddit WhatsApp 91 Shares"
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "chat",
+      "found_in": "media platforms Snapchat, Discord, and X reported the uploading of child porn..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "internet",
+      "found_in": "Miranda. The case involved the work of the South Florida Internet Crimes Agai..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_006",
+      "platform": "other",
+      "found_in": "Police said they also found bestiality images and other illegal pornography i..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_007",
+      "platform": "chat",
+      "found_in": "Snapchat Cybertip Leads to Arrest of Coconut Creek Man on Multiple"
+    },
+    {
+      "case_id": "south_florida_icac_2026_007",
+      "platform": "internet",
+      "found_in": "On March 19, the ICAC Task Force sent subpoenas to internet and telecommunica..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_010",
+      "platform": "Tor",
+      "found_in": "commissions on editorially chosen products purchased through our links to ret..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_010",
+      "platform": "internet",
+      "found_in": "The South Florida Internet Crimes Against Children (ICAC) received a tip abou..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_013",
+      "platform": "internet",
+      "found_in": "According to an arrest report, on Jan. 19, Internet Crimes Against Children d..."
+    },
+    {
+      "case_id": "south_florida_icac_2026_013",
+      "platform": "other",
+      "found_in": "In one message, he asked for a photo of her in the shower, and in another she..."
     },
     {
       "case_id": "spd_2012_001",
