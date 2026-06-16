@@ -31,6 +31,12 @@ CHARGE_LABELS: dict[str, str] = {
     "travel_intent_illicit_sexual_conduct": "Travel with intent to engage in illicit sexual conduct",
     "sexual_exploitation_of_child": "Sexual exploitation of a child",
     "attempted_receipt_csam": "Attempted receipt of CSAM",
+    "transportation_csam": "Transportation of CSAM",
+    "possession_csam": "Possession of CSAM",
+    "receipt_csam": "Receipt of CSAM",
+    "attempted_sexual_exploitation_minor": "Attempted sexual exploitation of a minor",
+    "access_with_intent_to_view_csam": "Access with intent to view CSAM",
+    "conspiracy_interstate_threats": "Conspiracy to transmit interstate threats",
 }
 
 COERCION_LABELS: dict[str, str] = {
@@ -56,6 +62,13 @@ PLATFORM_ROLE_LABELS: dict[str, str] = {
     "coercion_primary": "primary coercion",
     "storage_and_distribution": "storage and distribution",
     "coercion_and_contact": "coercion and contact",
+    "enterprise_infrastructure": "enterprise infrastructure",
+    "live_production": "live production",
+    "coercion_and_harassment": "coercion and harassment",
+}
+
+PRODUCTION_MECHANISM_LABELS: dict[str, str] = {
+    "device_seizure_forfeiture_alleged": "device seizure and forfeiture alleged",
 }
 
 CURATED_ONTOLOGY_FILES = [
@@ -73,6 +86,7 @@ CURATED_ONTOLOGY_FILES = [
     "ontology/ontology/cacontology-victim-impact.ttl",
     "ontology/ontology/cacontology-grooming.ttl",
     "ontology/ontology/cacontology-us-ncmec.ttl",
+    "ontology/ontology/cacontology-production.ttl",
 ]
 
 CONTEXT = {
@@ -98,6 +112,7 @@ CONTEXT = {
     "cacontology-victim-impact": "https://cacontology.projectvic.org/victim-impact#",
     "cacontology-grooming": "https://cacontology.projectvic.org/grooming#",
     "cacontology-us-ncmec": "https://cacontology.projectvic.org/us/ncmec#",
+    "cacontology-production": "https://cacontology.projectvic.org/production#",
     "cacontology-gufo": "https://cacontology.projectvic.org/gufo#",
     "gufo": "http://purl.org/nemo/gufo#",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
@@ -197,6 +212,8 @@ def make_ids(slug: str, case_number: str) -> dict[str, str]:
         "sextortion": f"{prefix}-sextortion",
         "enticement": f"{prefix}-enticement",
         "grooming": f"{prefix}-grooming-solicitation",
+        "csam_incident": f"{prefix}-csam-incident",
+        "content_facet": f"{prefix}-content-facet",
         "conspiracy": f"{prefix}-conspiracy",
         "impersonation": f"{prefix}-impersonation",
         "recruitment": f"{prefix}-recruitment",
@@ -218,6 +235,18 @@ def platform_id(slug: str, case_number: str, name: str) -> str:
 
 def coconspirator_id(slug: str, case_number: str, index: int) -> str:
     return f"kb:{slug}-{case_token(case_number)}-co-conspirator-{index}"
+
+
+def device_id(slug: str, case_number: str, index: int) -> str:
+    return f"kb:{slug}-{case_token(case_number)}-device-{index}"
+
+
+def parallel_court_id(slug: str, case_number: str, index: int) -> str:
+    return f"kb:{slug}-{case_token(case_number)}-parallel-court-{index}"
+
+
+def evidentiary_label(evidentiary: str) -> str:
+    return "proven" if evidentiary.lower() == "proven" else "alleged"
 
 
 def build_platform_node(
@@ -313,21 +342,37 @@ def build_provenance_nodes(
     ]
 
 
+def is_facet_node(node: dict[str, Any]) -> bool:
+    node_type = node.get("@type", [])
+    if isinstance(node_type, str):
+        node_type = [node_type]
+    return any("Facet" in str(t) for t in node_type)
+
+
 def finalize_graph(nodes: list[dict[str, Any]], bundle_id: str) -> list[dict[str, Any]]:
-    object_refs = [node["@id"] for node in nodes if node["@id"] != bundle_id]
+    object_refs = [
+        node["@id"]
+        for node in nodes
+        if node["@id"] != bundle_id and not is_facet_node(node)
+    ]
     nodes[0]["uco-core:object"] = [{"@id": ref} for ref in object_refs]
     return nodes
 
 
 def build_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
     if "enterprise" in facts:
+        if slug == "sextortion":
+            return build_sextortion_enterprise_graph(facts, slug)
         return build_enterprise_graph(facts, slug)
     if "offense" in facts:
+        offense_type = str(facts["offense"].get("type", ""))
+        if offense_type.startswith("csam_"):
+            return build_production_graph(facts, slug)
         return build_enticement_graph(facts, slug)
     raise ValueError("Facts file must contain either 'enterprise' or 'offense' section")
 
 
-def build_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
+def build_sextortion_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
     case = facts["case"]
     offender = facts.get("offender", {})
     enterprise = facts.get("enterprise", {})
@@ -684,6 +729,625 @@ def build_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
     return finalize_graph(nodes, g["bundle"])
 
 
+def build_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
+    """Enterprise-style CSEA group prosecution (e.g. Greggy's Cult) — not sextortion-shaped."""
+    case = facts["case"]
+    offender = facts.get("offender", {})
+    enterprise = facts.get("enterprise", {})
+    platforms = facts.get("platforms", [])
+    coercion = facts.get("coercion_mechanisms", [])
+    harm = facts.get("victim_harm_indicators", [])
+    charges = facts.get("charges", [])
+    stacking = facts.get("charge_stacking_note", {})
+    forfeiture = facts.get("forfeiture", {})
+    timeline = facts.get("procedural_timeline", [])
+    provenance = facts.get("provenance", {})
+
+    case_number = str(case["case_number"])
+    court = str(case.get("court", "Unknown court"))
+    date_filed = str(case.get("date_filed", "unknown"))
+    evidentiary = str(case.get("evidentiary_basis", "alleged"))
+    status = str(case.get("status", "unknown"))
+    offender_label = str(offender.get("label", "Defendant-1"))
+    basis_word = evidentiary.capitalize()
+    basis_label = evidentiary_label(evidentiary)
+
+    g = make_ids(slug, case_number)
+    offense_begin = timeline_date(timeline, "indictment", "sealed") or f"{date_filed}T00:00:00Z"
+    indictment_date = offense_begin
+
+    victim_count = int(enterprise.get("victim_count_approx", 1))
+    co_conspirator_min = int(enterprise.get("co_conspirator_count_min", 2))
+    co_conspirators = max(0, co_conspirator_min - 1)
+    enterprise_name = str(enterprise.get("name_alleged", "Alleged child exploitation enterprise"))
+
+    platform_iris: dict[str, str] = {}
+    platform_nodes: list[dict[str, Any]] = []
+    for platform in platforms:
+        iri = platform_id(slug, case_number, str(platform["name"]))
+        platform_iris[str(platform["name"]).lower()] = iri
+        platform_nodes.append(
+            build_platform_node(
+                platform=platform,
+                platform_iri=iri,
+                ban_evasion={},
+                basis_word=basis_word,
+            )
+        )
+
+    charge_nodes = build_charge_nodes(
+        charges=charges,
+        slug=slug,
+        case_number=case_number,
+        evidentiary=evidentiary,
+        doc_ref=str(provenance.get("document", "source document")),
+    )
+
+    coercion_text = ", ".join(COERCION_LABELS.get(str(c), str(c).replace("_", " ")) for c in coercion)
+    harm_text = "; ".join(HARM_LABELS.get(str(h), str(h).replace("_", " ")) for h in harm)
+
+    stacking_text = ""
+    if stacking.get("observed"):
+        stacking_text = (
+            f" Charge stacking observed: {str(stacking.get('description', '')).replace('_', ' ')}."
+        )
+
+    operational_window = str(enterprise.get("operational_window", "unknown"))
+    offense_window = str(enterprise.get("offense_window_charged", operational_window))
+    doc_ref = str(provenance.get("document", "source document"))
+    defendant_count = offender.get("defendant_count_total", offender.get("defendant_count_named", "?"))
+
+    investigation_status = "closed" if status == "sentenced" else "open"
+    prosecution_status = "resolved" if status == "sentenced" else "active"
+
+    nodes: list[dict[str, Any]] = [
+        {
+            "@id": g["bundle"],
+            "@type": "uco-core:Bundle",
+            "uco-core:name": f"{court} {case_number} (CAC Enhanced)",
+            "uco-core:description": desc(
+                f"CAC knowledge graph for {case_number} derived from {doc_ref}. "
+                f"Evidentiary basis: {evidentiary.upper()}. Coded extraction only — no victim-identifying detail."
+            ),
+        },
+        {
+            "@id": g["investigation"],
+            "@type": ["case-investigation:Investigation", "cacontology:CACInvestigation"],
+            "uco-core:name": f"U.S. v. {offender_label} et al. — {case_number}",
+            "uco-core:description": desc(
+                f"Federal child exploitation enterprise prosecution in {court}. "
+                f"Approximately {victim_count} alleged victims; {defendant_count} defendants. "
+                f"Operational window {operational_window}; charged conduct {offense_window}."
+                f"{stacking_text}"
+            ),
+            "case-investigation:focus": [
+                "Child Sexual Exploitation Enterprise",
+                "Live CSAM Production",
+                "Group Coercion and Harassment",
+                "Interstate Threats",
+            ],
+            "case-investigation:investigationForm": "case",
+            "case-investigation:investigationStatus": investigation_status,
+            "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
+        },
+        {
+            "@id": g["prosecution"],
+            "@type": "cacontology-usa-federal-law:FederalProsecution",
+            "uco-core:name": f"Federal prosecution — {case_number}",
+            "rdfs:label": f"Federal prosecution — {case_number}",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:hasProsecutionBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:prosecutedBy": {"@id": g["prosecutor"]},
+            "cacontology-usa-federal-law:hasLegalPhase": {"@id": g["pretrial_phase"]},
+            "cacontology-usa-federal-law:prosecutionComplexity": "highly-complex",
+            "cacontology-usa-federal-law:prosecutionSeverity": "aggravated-felony",
+            "cacontology-usa-federal-law:prosecutionStatus": prosecution_status,
+        },
+        {
+            "@id": g["prosecutor"],
+            "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+            "uco-core:name": court,
+            "rdfs:label": court,
+            "cacontology-usa-federal-law:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:roleSpecialization": "child-exploitation",
+        },
+        {
+            "@id": g["pretrial_phase"],
+            "@type": ["cac-core:Phase", "cacontology-usa-federal-law:PreTrialPhase"],
+            "uco-core:name": "Pre-trial phase",
+            "rdfs:label": "Pre-trial phase",
+            "cacontology:hasPhaseBeginPoint": xs(indictment_date, "xsd:dateTimeStamp"),
+        },
+        {
+            "@id": g["indictment"],
+            "@type": "cacontology:MultiDefendantIndictment",
+            "uco-core:name": doc_ref,
+            "rdfs:label": doc_ref,
+            "uco-core:description": desc(
+                f"Indictment filed {date_filed}. {len(charges)} counts; {defendant_count} defendants alleged."
+            ),
+        },
+        {
+            "@id": g["enterprise"],
+            "@type": ["uco-identity:Organization", "cacontology-extremist-enterprises:ChildExploitationEnterprise"],
+            "uco-core:name": enterprise_name,
+            "rdfs:label": enterprise_name,
+            "uco-core:description": desc(
+                f"{basis_word} enterprise under {enterprise.get('statute', '18 U.S.C. 2252A(g)')} "
+                f"with minimum {co_conspirator_min} co-conspirators and approximately {victim_count} victims."
+            ),
+            "cacontology-extremist-enterprises:leadershipCount": xs("1", "xsd:nonNegativeInteger"),
+            "cacontology-extremist-enterprises:membershipRequirements": (
+                "Alleged members coordinated systematic online child exploitation using "
+                "multiple platforms including live video and group harassment."
+            ),
+            "cacontology-extremist-enterprises:hasHierarchy": {"@id": g["hierarchy"]},
+            "cacontology-extremist-enterprises:hasLeadershipRelation": {"@id": g["leadership_relator"]},
+            "cacontology-extremist-enterprises:hasExploitationRelation": {"@id": g["exploitation_relator"]},
+            "cacontology-extremist-enterprises:hasMember": [{"@id": g["defendant"]}]
+            + [{"@id": coconspirator_id(slug, case_number, i)} for i in range(2, 2 + co_conspirators)],
+            "cacontology-extremist-enterprises:hasOperationalBeginDate": xs(offense_begin, "xsd:dateTimeStamp"),
+        },
+        {
+            "@id": g["hierarchy"],
+            "@type": "cacontology-extremist-enterprises:EnterpriseHierarchy",
+            "uco-core:name": f"{basis_word} enterprise hierarchy",
+            "rdfs:label": f"{basis_word} enterprise hierarchy",
+            "cacontology-extremist-enterprises:hierarchyComplexity": str(enterprise.get("scale", "moderate")),
+        },
+        {"@id": g["leadership_relator"], "@type": "gufo:Relator", "rdfs:label": f"{basis_word} enterprise leadership relation"},
+        {"@id": g["exploitation_relator"], "@type": "gufo:Relator", "rdfs:label": f"{basis_word} perpetrator-victim exploitation relation"},
+        {
+            "@id": g["defendant"],
+            "@type": "uco-identity:Person",
+            "uco-core:name": offender_label,
+            "uco-core:description": desc(
+                f"Principal alleged offender; {str(offender.get('location_at_offense', 'unknown')).replace('_', ' ')}."
+            ),
+        },
+        {
+            "@id": g["subject"],
+            "@type": ["case-investigation:Subject", "cacontology:OffenderRole"],
+            "uco-core:name": f"{offender_label} — principal subject",
+            "rdfs:label": f"{offender_label} — principal subject",
+            "cacontology:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology:participatesInEvent": [{"@id": g["csam_incident"]}, {"@id": g["conspiracy"]}],
+        },
+        {
+            "@id": g["victim_role"],
+            "@type": ["uco-victim:Victim", "cacontology:VictimRole"],
+            "uco-core:name": "Alleged victim population (aggregate)",
+            "rdfs:label": "Alleged victim population (aggregate)",
+            "cacontology:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology:participatesInEvent": [{"@id": g["csam_incident"]}, {"@id": g["conspiracy"]}],
+            "uco-core:description": desc(
+                f"Aggregate victim role for approximately {victim_count} alleged victims; no identifying detail."
+            ),
+        },
+        {
+            "@id": g["content_facet"],
+            "@type": "uco-observable:ContentDataFacet",
+        },
+        {
+            "@id": g["csam_incident"],
+            "@type": "cacontology:CSAMIncident",
+            "uco-core:name": f"{basis_word} CSAM production and distribution ({basis_label})",
+            "rdfs:label": f"{basis_word} CSAM production and distribution ({basis_label})",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+            "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
+            "uco-core:hasFacet": [{"@id": g["content_facet"]}],
+            "cacontology:participatesInEvent": [
+                {"@id": g["subject"]},
+                {"@id": g["victim_role"]},
+            ],
+            "uco-core:description": desc(
+                f"{basis_word} enterprise CSAM conduct {offense_window}. Coercion via {coercion_text}."
+            ),
+        },
+        {
+            "@id": g["conspiracy"],
+            "@type": "cacontology:ConspiracyToCommitCSA",
+            "uco-core:name": f"{basis_word} conspiracy to commit CSA",
+            "rdfs:label": f"{basis_word} conspiracy to commit CSA",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+        },
+        {
+            "@id": g["location_court"],
+            "@type": "uco-location:Location",
+            "uco-core:name": court,
+        },
+        {
+            "@id": g["forfeiture_asset"],
+            "@type": "uco-observable:ObservableObject",
+            "uco-core:name": f"{basis_word} criminal proceeds and digital devices (forfeiture target)",
+        },
+        {
+            "@id": g["forfeiture"],
+            "@type": "cacontology-asset-forfeiture:AssetForfeitureAction",
+            "uco-core:name": f"{basis_word} asset forfeiture under {forfeiture.get('statute', '18 U.S.C. 2253')}",
+            "rdfs:label": f"{basis_word} asset forfeiture under {forfeiture.get('statute', '18 U.S.C. 2253')}",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(indictment_date, "xsd:dateTimeStamp"),
+            "cacontology-gufo:forfeitureBeginTime": xs(indictment_date, "xsd:dateTime"),
+            "cacontology-asset-forfeiture:targetedAsset": {"@id": g["forfeiture_asset"]},
+            "uco-core:description": desc(f"Forfeiture status: {forfeiture.get('status', 'unknown')}."),
+        },
+        {
+            "@id": g["impact"],
+            "@type": "cacontology-victim-impact:ComprehensiveImpactAssessment",
+            "uco-core:name": f"{basis_word} victim harm indicators",
+            "rdfs:label": f"{basis_word} victim harm indicators",
+            "cacontology-victim-impact:assessmentDate": xs(indictment_date, "xsd:dateTime"),
+            "cacontology-victim-impact:assessmentType": "documented_harm_indicators",
+            "cacontology-victim-impact:assessorCredentials": "indictment_extraction_agent",
+            "cac-core:assesses": {"@id": g["csam_incident"]},
+            "uco-core:description": desc(f"Coded harm indicators only: {harm_text}."),
+        },
+    ]
+
+    nodes.extend(build_provenance_nodes(g, provenance=provenance, doc_ref=doc_ref))
+
+    for i in range(2, 2 + co_conspirators):
+        nodes.append(
+            {
+                "@id": coconspirator_id(slug, case_number, i),
+                "@type": "uco-identity:Person",
+                "uco-core:name": f"Alleged co-conspirator {i - 1}",
+                "uco-core:description": desc(
+                    f"Unnamed alleged co-conspirator in enterprise (minimum {co_conspirator_min} total)."
+                ),
+            }
+        )
+
+    nodes.extend(platform_nodes)
+    nodes.extend(charge_nodes)
+
+    relationships: list[dict[str, Any]] = [
+        {
+            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
+            "@type": "uco-core:Relationship",
+            "uco-core:name": f"{offender_label} subject role",
+            "uco-core:source": {"@id": g["defendant"]},
+            "uco-core:target": {"@id": g["subject"]},
+            "uco-core:kindOfRelationship": "has_role",
+            "uco-core:isDirectional": xs("true", "xsd:boolean"),
+        },
+        {
+            "@id": f"kb:{slug}-{case_token(case_number)}-rel-enterprise-csam",
+            "@type": "uco-core:Relationship",
+            "uco-core:name": "Enterprise conducted CSAM offenses",
+            "uco-core:source": {"@id": g["enterprise"]},
+            "uco-core:target": {"@id": g["csam_incident"]},
+            "uco-core:kindOfRelationship": "conducted",
+            "uco-core:isDirectional": xs("true", "xsd:boolean"),
+        },
+        {
+            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
+            "@type": "uco-core:Relationship",
+            "uco-core:name": "Investigation jurisdiction",
+            "uco-core:source": {"@id": g["investigation"]},
+            "uco-core:target": {"@id": g["location_court"]},
+            "uco-core:kindOfRelationship": "located_at",
+            "uco-core:isDirectional": xs("true", "xsd:boolean"),
+        },
+    ]
+
+    for platform in platforms:
+        name = str(platform["name"])
+        iri = platform_iris[name.lower()]
+        role = str(platform.get("role", ""))
+        target = g["csam_incident"] if role in {"live_production", "coercion_and_harassment"} else g["enterprise"]
+        relationships.append(
+            {
+                "@id": f"kb:{slug}-{case_token(case_number)}-rel-{role}-{name.lower()}",
+                "@type": "uco-core:Relationship",
+                "uco-core:name": f"Enterprise conduct used {name}",
+                "uco-core:source": {"@id": target},
+                "uco-core:target": {"@id": iri},
+                "uco-core:kindOfRelationship": "used_platform",
+                "uco-core:isDirectional": xs("true", "xsd:boolean"),
+            }
+        )
+
+    nodes.extend(relationships)
+    return finalize_graph(nodes, g["bundle"])
+
+
+def build_production_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
+    """CSAM production/possession/transport prosecution — multi-district when present."""
+    case = facts["case"]
+    offender = facts.get("offender", {})
+    offense = facts.get("offense", {})
+    charges = facts.get("charges", [])
+    forfeiture = facts.get("forfeiture", {})
+    timeline = facts.get("procedural_timeline", [])
+    provenance = facts.get("provenance", {})
+    parallel_districts = facts.get("parallel_districts", [])
+    parallel_prosecution = facts.get("parallel_prosecution", {})
+    production_mechanisms = facts.get("production_mechanisms", [])
+    devices = facts.get("devices_forfeiture_alleged", [])
+
+    case_number = str(case["case_number"])
+    court = str(case.get("court", "Unknown court"))
+    date_filed = str(case.get("date_filed", "unknown"))
+    evidentiary = str(case.get("evidentiary_basis", "alleged"))
+    status = str(case.get("status", "unknown"))
+    offender_label = str(offender.get("label", "Defendant-1"))
+    basis_word = evidentiary.capitalize()
+    basis_label = evidentiary_label(evidentiary)
+
+    g = make_ids(slug, case_number)
+    offense_begin = str(offense.get("conduct_window_start", "")) or timeline_date(timeline, "indictment", "arrest")
+    if offense_begin and "T" not in offense_begin:
+        offense_begin = f"{offense_begin}T00:00:00Z"
+    if not offense_begin:
+        offense_begin = f"{date_filed}T00:00:00Z"
+
+    offense_end = str(offense.get("conduct_window_end", ""))
+    if offense_end and "T" not in offense_end:
+        offense_end = f"{offense_end}T00:00:00Z"
+
+    doc_ref = str(provenance.get("document", "source document"))
+    charge_nodes = build_charge_nodes(
+        charges=charges,
+        slug=slug,
+        case_number=case_number,
+        evidentiary=evidentiary,
+        doc_ref=doc_ref,
+    )
+
+    mechanism_text = ", ".join(
+        PRODUCTION_MECHANISM_LABELS.get(str(m), str(m).replace("_", " ")) for m in production_mechanisms
+    )
+    conduct_flags = []
+    for flag, label in (
+        ("production_alleged", "production"),
+        ("receipt_alleged", "receipt"),
+        ("possession_alleged", "possession"),
+        ("transport_alleged", "transport"),
+    ):
+        if offense.get(flag):
+            conduct_flags.append(label)
+    conduct_text = ", ".join(conduct_flags) if conduct_flags else "unspecified conduct"
+
+    multi_district_text = ""
+    if parallel_prosecution.get("multi_district_federal"):
+        districts = parallel_prosecution.get("districts", [])
+        if districts:
+            multi_district_text = f" Parallel federal prosecutions in {', '.join(str(d) for d in districts)}."
+
+    military_text = ""
+    if offender.get("military_context_alleged"):
+        military_text = " Military context alleged (docket signal only)."
+
+    investigation_status = "closed" if status == "sentenced" else "open"
+    prosecution_status = "resolved" if status == "sentenced" else "active"
+
+    victim_count_known = int(offense.get("known_victim_count_in_indictment", 0))
+
+    csam_node: dict[str, Any] = {
+        "@id": g["csam_incident"],
+        "@type": "cacontology:CSAMIncident",
+        "uco-core:name": f"{basis_word} CSAM {conduct_text} ({basis_label})",
+        "rdfs:label": f"{basis_word} CSAM {conduct_text} ({basis_label})",
+        "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+        "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
+        "uco-core:hasFacet": [{"@id": g["content_facet"]}],
+        "cacontology:participatesInEvent": [{"@id": g["subject"]}],
+        "uco-core:description": desc(
+            f"{basis_word} {str(offense.get('type', 'csam offense')).replace('_', ' ')} "
+            f"under {offense.get('primary_statute_alleged', 'federal CSAM statutes')}. "
+            f"Conduct window {offense.get('conduct_window_start', '?')} to "
+            f"{offense.get('conduct_window_end', '?')}. "
+            f"Interstate commerce element: {offense.get('interstate_commerce_element', False)}. "
+            f"Mechanisms: {mechanism_text or 'not specified in indictment'}."
+            f"{military_text}"
+        ),
+    }
+    if offense_end:
+        csam_node["gufo:hasEndPointInXSDDateTimeStamp"] = xs(offense_end, "xsd:dateTimeStamp")
+
+    nodes: list[dict[str, Any]] = [
+        {
+            "@id": g["bundle"],
+            "@type": "uco-core:Bundle",
+            "uco-core:name": f"{court} {case_number} (CAC Enhanced)",
+            "uco-core:description": desc(
+                f"CAC knowledge graph for {case_number} derived from {doc_ref}. "
+                f"Evidentiary basis: {evidentiary.upper()}. Coded extraction only — no victim-identifying detail."
+            ),
+        },
+        {
+            "@id": g["investigation"],
+            "@type": ["case-investigation:Investigation", "cacontology:CACInvestigation"],
+            "uco-core:name": f"U.S. v. {offender_label} — {case_number}",
+            "uco-core:description": desc(
+                f"Federal CSAM production/possession/transport prosecution in {court}."
+                f"{multi_district_text}{military_text} "
+                f"Victim count in indictment: {victim_count_known if victim_count_known else 'not specified'}."
+            ),
+            "case-investigation:focus": [
+                "CSAM Production",
+                "CSAM Possession",
+                "CSAM Transport and Receipt",
+                "Multi-District Prosecution",
+            ],
+            "case-investigation:investigationForm": "case",
+            "case-investigation:investigationStatus": investigation_status,
+            "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
+        },
+        {
+            "@id": g["prosecution"],
+            "@type": "cacontology-usa-federal-law:FederalProsecution",
+            "uco-core:name": f"Federal prosecution — {case_number}",
+            "rdfs:label": f"Federal prosecution — {case_number}",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:hasProsecutionBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:prosecutedBy": {"@id": g["prosecutor"]},
+            "cacontology-usa-federal-law:hasLegalPhase": {"@id": g["pretrial_phase"]},
+            "cacontology-usa-federal-law:prosecutionComplexity": "moderate",
+            "cacontology-usa-federal-law:prosecutionSeverity": "aggravated-felony",
+            "cacontology-usa-federal-law:prosecutionStatus": prosecution_status,
+        },
+        {
+            "@id": g["prosecutor"],
+            "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+            "uco-core:name": court,
+            "rdfs:label": court,
+            "cacontology-usa-federal-law:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:roleSpecialization": "child-exploitation",
+        },
+        {
+            "@id": g["pretrial_phase"],
+            "@type": ["cac-core:Phase", "cacontology-usa-federal-law:PreTrialPhase"],
+            "uco-core:name": "Pre-trial phase",
+            "rdfs:label": "Pre-trial phase",
+            "cacontology:hasPhaseBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+        },
+        {
+            "@id": g["indictment"],
+            "@type": "cacontology:MultiDefendantIndictment",
+            "uco-core:name": doc_ref,
+            "rdfs:label": doc_ref,
+            "uco-core:description": desc(
+                f"Primary indictment filed {date_filed}. {len(charges)} federal counts alleged."
+            ),
+        },
+        {
+            "@id": g["defendant"],
+            "@type": "uco-identity:Person",
+            "uco-core:name": offender_label,
+            "uco-core:description": desc(
+                f"Principal alleged offender; {str(offender.get('location_at_offense', 'unknown')).replace('_', ' ')}."
+                f"{military_text}"
+            ),
+        },
+        {
+            "@id": g["subject"],
+            "@type": ["case-investigation:Subject", "cacontology:OffenderRole"],
+            "uco-core:name": f"{offender_label} — principal subject",
+            "rdfs:label": f"{offender_label} — principal subject",
+            "cacontology:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology:participatesInEvent": [{"@id": g["csam_incident"]}],
+        },
+        {
+            "@id": g["content_facet"],
+            "@type": "uco-observable:ContentDataFacet",
+        },
+        csam_node,
+        {
+            "@id": g["location_court"],
+            "@type": "uco-location:Location",
+            "uco-core:name": court,
+        },
+        {
+            "@id": g["forfeiture_asset"],
+            "@type": "uco-observable:ObservableObject",
+            "uco-core:name": f"{basis_word} devices and criminal proceeds (forfeiture target)",
+        },
+        {
+            "@id": g["forfeiture"],
+            "@type": "cacontology-asset-forfeiture:AssetForfeitureAction",
+            "uco-core:name": f"{basis_word} asset forfeiture under {forfeiture.get('statute', '18 U.S.C. 2253')}",
+            "rdfs:label": f"{basis_word} asset forfeiture under {forfeiture.get('statute', '18 U.S.C. 2253')}",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-gufo:forfeitureBeginTime": xs(offense_begin, "xsd:dateTime"),
+            "cacontology-asset-forfeiture:targetedAsset": {"@id": g["forfeiture_asset"]},
+            "uco-core:description": desc(
+                f"Forfeiture status: {forfeiture.get('status', 'unknown')}. "
+                f"Devices enumerated: {forfeiture.get('devices_enumerated', False)}."
+            ),
+        },
+    ]
+
+    device_nodes: list[dict[str, Any]] = []
+    for index, device in enumerate(devices, start=1):
+        make = str(device.get("make", "unknown"))
+        model = str(device.get("model", "unknown"))
+        device_nodes.append(
+            {
+                "@id": device_id(slug, case_number, index),
+                "@type": [
+                    "uco-observable:ObservableObject",
+                    "cacontology-production:MobileRecordingDevice",
+                ],
+                "uco-core:name": f"{make} {model}",
+                "uco-core:description": desc(f"{basis_word} mobile device listed for forfeiture."),
+                "cacontology-production:equipmentType": "smartphone",
+                "cacontology-production:deviceBrand": make,
+                "cacontology-production:deviceModel": model,
+            }
+        )
+
+    parallel_nodes: list[dict[str, Any]] = []
+    for index, district in enumerate(parallel_districts):
+        parallel_nodes.append(
+            {
+                "@id": parallel_court_id(slug, case_number, index),
+                "@type": "uco-location:Location",
+                "uco-core:name": str(district.get("court", "Parallel district court")),
+                "uco-core:description": desc(
+                    f"Parallel case {district.get('case_number', '?')} filed {district.get('date_filed', '?')}. "
+                    f"Role: {str(district.get('role', 'parallel prosecution')).replace('_', ' ')}."
+                ),
+            }
+        )
+
+    nodes.extend(build_provenance_nodes(g, provenance=provenance, doc_ref=doc_ref))
+    nodes.extend(device_nodes)
+    nodes.extend(parallel_nodes)
+    nodes.extend(charge_nodes)
+
+    relationships: list[dict[str, Any]] = [
+        {
+            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
+            "@type": "uco-core:Relationship",
+            "uco-core:name": f"{offender_label} subject role",
+            "uco-core:source": {"@id": g["defendant"]},
+            "uco-core:target": {"@id": g["subject"]},
+            "uco-core:kindOfRelationship": "has_role",
+            "uco-core:isDirectional": xs("true", "xsd:boolean"),
+        },
+        {
+            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
+            "@type": "uco-core:Relationship",
+            "uco-core:name": "Investigation jurisdiction",
+            "uco-core:source": {"@id": g["investigation"]},
+            "uco-core:target": {"@id": g["location_court"]},
+            "uco-core:kindOfRelationship": "located_at",
+            "uco-core:isDirectional": xs("true", "xsd:boolean"),
+        },
+    ]
+
+    for index, _district in enumerate(parallel_districts):
+        relationships.append(
+            {
+                "@id": f"kb:{slug}-{case_token(case_number)}-rel-parallel-{index}",
+                "@type": "uco-core:Relationship",
+                "uco-core:name": "Parallel federal prosecution district",
+                "uco-core:source": {"@id": g["investigation"]},
+                "uco-core:target": {"@id": parallel_court_id(slug, case_number, index)},
+                "uco-core:kindOfRelationship": "parallel_jurisdiction",
+                "uco-core:isDirectional": xs("true", "xsd:boolean"),
+            }
+        )
+
+    for index, _device in enumerate(devices, start=1):
+        relationships.append(
+            {
+                "@id": f"kb:{slug}-{case_token(case_number)}-rel-device-{index}",
+                "@type": "uco-core:Relationship",
+                "uco-core:name": "CSAM incident involved device",
+                "uco-core:source": {"@id": g["csam_incident"]},
+                "uco-core:target": {"@id": device_id(slug, case_number, index)},
+                "uco-core:kindOfRelationship": "used_equipment",
+                "uco-core:isDirectional": xs("true", "xsd:boolean"),
+            }
+        )
+
+    nodes.extend(relationships)
+    return finalize_graph(nodes, g["bundle"])
+
+
 def build_enticement_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
     case = facts["case"]
     offender = facts.get("offender", {})
@@ -707,6 +1371,7 @@ def build_enticement_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
     status = str(case.get("status", "unknown"))
     offender_label = str(offender.get("label", "Defendant-1"))
     basis_word = evidentiary.capitalize()
+    basis_label = evidentiary_label(evidentiary)
 
     g = make_ids(slug, case_number)
     offense_begin = timeline_date(timeline, "indictment", "arrest") or f"{date_filed}T00:00:00Z"
@@ -872,8 +1537,8 @@ def build_enticement_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
                 "cacontology:GroomingSolicitation",
                 "cacontology-us-ncmec:OnlineEnticementIncident",
             ],
-            "uco-core:name": "Online enticement to contact (proven)",
-            "rdfs:label": "Online enticement to contact (proven)",
+            "uco-core:name": f"Online enticement to contact ({basis_label})",
+            "rdfs:label": f"Online enticement to contact ({basis_label})",
             "cacontology-us-ncmec:incidentCode": "OE",
             "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
             "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
