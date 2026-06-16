@@ -109,3 +109,7 @@ provenance:
   human_reviewed: false
   corpus_link: "doj_ceos_2025_002"
   corpus_link_note: "Press-release AI mechanism not merged — PACER-only discipline"
+
+# Placeholder keys for relationship wiring (enrich from indictment as needed)
+count_venues: {}
+forfeiture_devices: []

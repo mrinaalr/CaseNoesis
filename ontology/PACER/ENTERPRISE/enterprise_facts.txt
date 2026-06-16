@@ -144,3 +144,129 @@ provenance:
   retrieval_method: manual
   extraction_method: agent_assisted
   human_reviewed: false
+
+# Extracted from Doc 8 redacted indictment (1:25-cr-00361-PKC); Yatco not in this instrument
+defendant_counts:
+  Defendant-1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]   # Bermudez
+  Defendant-2: [1, 2, 3]                          # Brilhante
+  Defendant-3: [1, 2, 3, 5, 6, 7, 8, 9, 10]       # Dosch
+  Defendant-4: [1, 2, 3, 4, 6, 7, 8, 9, 10]      # Rodriguez
+  Defendant-5: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]    # Valdez
+
+overt_act_violations:
+  - id: violation_one
+    label: "Violation One (Sexual Exploitation - Minor Victim 1)"
+    venue: "District of New Mexico"
+    date_window: "2020-01-01"
+    defendants: [Defendant-2, Defendant-3]
+    victim_reference: "Minor Victim 1"
+  - id: violation_two
+    label: "Violation Two (Distribution of Child Pornography - Minor Victim 1)"
+    venue: "District of New Mexico"
+    date_window: "2020-01-01"
+    defendants: [Defendant-3]
+    victim_reference: "Minor Victim 1"
+  - id: violation_three
+    label: "Violation Three (Access With Intent to View Child Pornography - Minor Victim 1)"
+    venue: "Southern District of California"
+    date_window: "2020-01-01"
+    defendants: [Defendant-2]
+    victim_reference: "Minor Victim 1"
+  - id: violation_four
+    label: "Violation Four (Sexual Exploitation - Minor Victim 2)"
+    venue: "Eastern District of New York"
+    date_window: "2020-01-28 to 2020-01-30"
+    defendants: [Defendant-2, Defendant-3]
+    victim_reference: "Minor Victim 2"
+  - id: violation_five
+    label: "Violation Five (Distribution of Child Pornography - Minor Victim 2)"
+    venue: "Eastern District of New York"
+    date_window: "2020-01-28 to 2021-01-02"
+    defendants: [Defendant-3]
+    victim_reference: "Minor Victim 2"
+  - id: violation_six
+    label: "Violation Six (Access With Intent to View Child Pornography - Minor Victim 2)"
+    venue: "Eastern District of New York"
+    date_window: "2020-01-28 to 2021-01-02"
+    defendants: [Defendant-1, Defendant-4, Defendant-5]
+    victim_reference: "Minor Victim 2"
+  - id: violation_seven
+    label: "Violation Seven (Sexual Exploitation - Minor Victim 3)"
+    venue: "Eastern District of New York"
+    date_window: "2020-09-06"
+    defendants: [Defendant-1, Defendant-3, Defendant-5]
+    victim_reference: "Minor Victim 3"
+  - id: violation_eight
+    label: "Violation Eight (Access With Intent to View Child Pornography - Minor Victim 3)"
+    venue: "Eastern District of New York"
+    date_window: "2020-09-06"
+    defendants: [Defendant-1, Defendant-3, Defendant-5]
+    victim_reference: "Minor Victim 3"
+  - id: violation_nine
+    label: "Violation Nine (Sexual Exploitation - Minor Victim 4)"
+    venue: "Eastern District of New York"
+    date_window: "2020-10-23 to 2020-12-02"
+    defendants: [Defendant-1, Defendant-3, Defendant-4, Defendant-5]
+    victim_reference: "Minor Victim 4"
+  - id: violation_ten
+    label: "Violation Ten (Distribution of Child Pornography - Minor Victim 4)"
+    venue: "District of New Mexico"
+    date_window: "2020-10-23 to 2020-12-02"
+    defendants: [Defendant-3, Defendant-5]
+    victim_reference: "Minor Victim 4"
+  - id: violation_eleven
+    label: "Violation Eleven (Access with Intent to View Child Pornography - Minor Victim 4)"
+    venue: "Eastern District of New York"
+    date_window: "2020-10-23 to 2020-12-02"
+    defendants: [Defendant-1, Defendant-3, Defendant-4, Defendant-5]
+    victim_reference: "Minor Victim 4"
+  - id: violation_twelve
+    label: "Violation Twelve (Sexual Exploitation - Minor Victim 5)"
+    venue: "Eastern District of New York"
+    date_window: "2020-11-01"
+    defendants: [Defendant-3, Defendant-5]
+    victim_reference: "Minor Victim 5"
+  - id: violation_thirteen
+    label: "Violation Thirteen (Distribution of Child Pornography - Minor Victim 5)"
+    venue: "District of New Mexico"
+    date_window: "2020-11-01"
+    defendants: [Defendant-3]
+    victim_reference: "Minor Victim 5"
+  - id: violation_fourteen
+    label: "Violation Fourteen (Receipt of Child Pornography - Minor Victim 5)"
+    venue: "District of Colorado"
+    date_window: "2020-11-01"
+    defendants: [Defendant-4]
+    victim_reference: "Minor Victim 5"
+  - id: violation_fifteen
+    label: "Violation Fifteen (Distribution of Child Pornography - Minor Victim 5)"
+    venue: "Eastern District of New York"
+    date_window: "2020-11-04"
+    defendants: [Defendant-1, Defendant-3, Defendant-4, Defendant-5]
+    victim_reference: "Minor Victim 5"
+  - id: violation_sixteen
+    label: "Violation Sixteen (Sexual Exploitation - Minor Victim 6)"
+    venue: "Southern District of California"
+    date_window: "2020-11-16"
+    defendants: [Defendant-5]
+    victim_reference: "Minor Victim 6"
+  - id: violation_seventeen
+    label: "Violation Seventeen (Access with Intent to View Child Pornography - Minor Victim 6)"
+    venue: "Southern District of California"
+    date_window: "2020-11-16"
+    defendants: [Defendant-5]
+    victim_reference: "Minor Victim 6"
+
+count_venues:
+  1: "Eastern District of New York"
+  2: "Eastern District of New York"
+  3: "Eastern District of New York"
+  4: "Eastern District of New York"
+  5: "Eastern District of New York"
+  6: "Eastern District of New York"
+  7: "Eastern District of New York"
+  8: "Eastern District of New York"
+  9: "Eastern District of New York"
+  10: "Eastern District of New York"
+
+forfeiture_devices: []

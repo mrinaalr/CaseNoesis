@@ -1,5 +1,5 @@
 # PACER facts manifest — one facts file per line (paths relative to this directory)
 SEXTORTION/sextortion_facts.txt
-ENTICEMENT/enticement_facts.txt
-PRODUCTION/production_facts.txt
+# ENTICEMENT/enticement_facts.txt
+# PRODUCTION/production_facts.txt
 ENTERPRISE/enterprise_facts.txt

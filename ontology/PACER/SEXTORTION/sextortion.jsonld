@@ -150,6 +150,12 @@
           "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
         },
         {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-ban-evasion-lifecycle"
+        },
+        {
           "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-subject"
         },
         {
@@ -157,6 +163,111 @@
         },
         {
           "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-investigation-jurisdiction"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-impersonation-sextortion"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-inv-indictment"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-prosecution-indictment"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-conspiracy-indictment"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-enterprise-indictment"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-1"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-2"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-3"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-4"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-5"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-6"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-7-8"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-9-13"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-1"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-2"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-3"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-4"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-5"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-6"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-7-8"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-9-13"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-1"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-2"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-3"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-4"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-5"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-6"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-7-8"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-9-13"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-sextortion-ban-evasion"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-enterprise-ban-evasion"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-defendant-extradition"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-extradition-prosecution"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-extradition-investigation"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-defendant-abroad"
         },
         {
           "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-sextortion-instagram"
@@ -302,12 +413,28 @@
     {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-leadership-relator",
       "@type": "gufo:Relator",
-      "rdfs:label": "Alleged enterprise leadership relation"
+      "rdfs:label": "Alleged enterprise leadership relation",
+      "gufo:hasParticipant": [
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-person-defendant"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-co-conspirator-2"
+        }
+      ]
     },
     {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-exploitation-relator",
       "@type": "gufo:Relator",
-      "rdfs:label": "Alleged perpetrator-victim exploitation relation"
+      "rdfs:label": "Alleged perpetrator-victim exploitation relation",
+      "gufo:hasParticipant": [
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-person-defendant"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-victim-role"
+        }
+      ]
     },
     {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-person-defendant",
@@ -316,7 +443,33 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Principal alleged offender; foreign national abroad."
-      }
+      },
+      "cacontology-legal-outcomes:chargedWith": [
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-1"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-2"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-3"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-4"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-5"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-6"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-7_8"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
+        }
+      ]
     },
     {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-subject",
@@ -465,7 +618,33 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Forfeiture status: alleged_not_adjudicated."
-      }
+      },
+      "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-1"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-2"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-3"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-4"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-5"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-6"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-7_8"
+        },
+        {
+          "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
+        }
+      ]
     },
     {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-impact",
@@ -650,6 +829,25 @@
       }
     },
     {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska",
+      "@type": "uco-location:Location",
+      "uco-core:name": "U.S. District Court, District of Alaska"
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-ban-evasion-lifecycle",
+      "@type": "cacontology-platforms:PlatformOperation",
+      "uco-core:name": "Alleged platform ban-evasion lifecycle",
+      "rdfs:label": "Alleged platform ban-evasion lifecycle",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2022-05-03T00:00:00Z"
+      },
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Alleged ban-evasion pattern: platform disabled account then recreated. Minimum 80 Snapchat and 40 Instagram accounts recreated after enforcement."
+      }
+    },
+    {
       "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-subject",
       "@type": "uco-core:Relationship",
       "uco-core:name": "Defendant-1 subject role",
@@ -692,6 +890,566 @@
         "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-location-court"
       },
       "uco-core:kindOfRelationship": "located_at",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-impersonation-sextortion",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Impersonation supported sextortion scheme",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-impersonation"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-inv-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation charging instrument",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Prosecution charging instrument",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-prosecution"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-conspiracy-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Conspiracy resulted in indictment",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-conspiracy"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-enterprise-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise charging instrument",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 1",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 2",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 3",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-3"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 4",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-4"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 5",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-5"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 6",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-6"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-7-8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 7-8",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-7_8"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-indictment-charge-9-13",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 9-13",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 3 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-3"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 4 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-4"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 5 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-5"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 6 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-6"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-7-8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 7-8 impersonation conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-7_8"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-impersonation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-scheme-9-13",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 9-13 sextortion conduct",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 3 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-3"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 4 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-4"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 5 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-5"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 6 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-6"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-7-8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 7-8 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-7_8"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-charge-venue-9-13",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 9-13 venue",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-charge-9_13"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-sextortion-ban-evasion",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Sextortion scheme used ban-evasion lifecycle",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-sextortion"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-ban-evasion-lifecycle"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-enterprise-ban-evasion",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise used ban-evasion lifecycle",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-ban-evasion-lifecycle"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-defendant-extradition",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Defendant extradition proceedings",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-person-defendant"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-extradition"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-extradition-prosecution",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extradition for federal prosecution",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-extradition"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-prosecution"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-extradition-investigation",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extradition supports investigation",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-extradition"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-investigation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-rel-defendant-abroad",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Defendant alleged abroad at offense",
+      "uco-core:source": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-person-defendant"
+      },
+      "uco-core:target": {
+        "@id": "kb:sextortion-3-22-cr-00055-slg-kfr-location-abroad"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {
         "@type": "xsd:boolean",
         "@value": "true"

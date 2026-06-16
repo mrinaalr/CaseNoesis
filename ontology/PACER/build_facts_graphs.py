@@ -225,6 +225,7 @@ def make_ids(slug: str, case_number: str) -> dict[str, str]:
         "impact": f"{prefix}-impact",
         "provenance": f"{prefix}-provenance",
         "provenance_action": f"{prefix}-provenance-action",
+        "ban_evasion_lifecycle": f"{prefix}-ban-evasion-lifecycle",
     }
 
 
@@ -247,6 +248,607 @@ def parallel_court_id(slug: str, case_number: str, index: int) -> str:
 
 def evidentiary_label(evidentiary: str) -> str:
     return "proven" if evidentiary.lower() == "proven" else "alleged"
+
+
+def charge_iri(slug: str, case_number: str, charge: dict[str, Any]) -> str:
+    count_label = charge_count_label(charge)
+    return f"kb:{slug}-{case_token(case_number)}-charge-{count_label.replace('-', '_')}"
+
+
+def violation_id(slug: str, case_number: str, violation_key: str) -> str:
+    safe = re.sub(r"[^a-zA-Z0-9]+", "-", violation_key.lower()).strip("-")
+    return f"kb:{slug}-{case_token(case_number)}-overt-act-{safe}"
+
+
+def venue_id(slug: str, case_number: str, venue_key: str) -> str:
+    safe = re.sub(r"[^a-zA-Z0-9]+", "-", venue_key.lower()).strip("-")
+    return f"kb:{slug}-{case_token(case_number)}-venue-{safe}"
+
+
+def make_rel(
+    *,
+    slug: str,
+    case_number: str,
+    rel_id: str,
+    source: str,
+    target: str,
+    kind: str,
+    name: str,
+) -> dict[str, Any]:
+    safe_rel_id = re.sub(r"[^a-zA-Z0-9]+", "-", rel_id.lower()).strip("-")
+    return {
+        "@id": f"kb:{slug}-{case_token(case_number)}-rel-{safe_rel_id}",
+        "@type": "uco-core:Relationship",
+        "uco-core:name": name,
+        "uco-core:source": {"@id": source},
+        "uco-core:target": {"@id": target},
+        "uco-core:kindOfRelationship": kind,
+        "uco-core:isDirectional": xs("true", "xsd:boolean"),
+    }
+
+
+def _normalize_count_lookup_key(key: str | int) -> str:
+    return str(key).replace("_", "-")
+
+
+def defendant_charge_refs(
+    facts: dict[str, Any],
+    charges: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+    default_label: str = "Defendant-1",
+) -> dict[str, list[dict[str, str]]]:
+    """Map defendant label → chargedWith object refs."""
+    count_index: dict[str, dict[str, Any]] = {}
+    for charge in charges:
+        label = charge_count_label(charge)
+        count_index[_normalize_count_lookup_key(label)] = charge
+        count_index[str(label)] = charge
+
+    raw = facts.get("defendant_counts") or {}
+    if not isinstance(raw, dict) or not raw:
+        return {
+            default_label: [{"@id": charge_iri(slug, case_number, c)} for c in charges],
+        }
+
+    out: dict[str, list[dict[str, str]]] = {}
+    for defendant, count_keys in raw.items():
+        if not isinstance(count_keys, list):
+            continue
+        refs: list[dict[str, str]] = []
+        for key in count_keys:
+            charge = count_index.get(_normalize_count_lookup_key(key))
+            if charge:
+                refs.append({"@id": charge_iri(slug, case_number, charge)})
+        out[str(defendant)] = refs
+    return out
+
+
+def defendant_person_id(slug: str, case_number: str, label: str) -> str:
+    if label == "Defendant-1":
+        return f"kb:{slug}-{case_token(case_number)}-person-defendant"
+    safe = re.sub(r"[^a-zA-Z0-9]+", "-", label.lower()).strip("-")
+    return f"kb:{slug}-{case_token(case_number)}-person-{safe}"
+
+
+def all_charge_refs(
+    charges: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+) -> list[dict[str, str]]:
+    return [{"@id": charge_iri(slug, case_number, charge)} for charge in charges]
+
+
+def apply_charged_with(
+    nodes: list[dict[str, Any]],
+    charge_refs: dict[str, list[dict[str, str]]],
+    *,
+    slug: str,
+    case_number: str,
+    principal_label: str,
+    principal_id: str,
+) -> list[dict[str, Any]]:
+    """Patch principal Person chargedWith; return additional defendant Person nodes."""
+    extra: list[dict[str, Any]] = []
+    for label, refs in charge_refs.items():
+        if not refs:
+            continue
+        if label == principal_label or label == "Defendant-1":
+            for node in nodes:
+                if node.get("@id") == principal_id:
+                    node["cacontology-legal-outcomes:chargedWith"] = refs
+                    break
+            continue
+        extra.append(
+            {
+                "@id": defendant_person_id(slug, case_number, label),
+                "@type": "uco-identity:Person",
+                "uco-core:name": label,
+                "uco-core:description": desc(f"Alleged co-defendant; counts assigned per indictment."),
+                "cacontology-legal-outcomes:chargedWith": refs,
+            }
+        )
+    return extra
+
+
+def apply_forfeiture_charge_links(
+    nodes: list[dict[str, Any]],
+    forfeiture_id: str,
+    charges: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+) -> None:
+    refs = all_charge_refs(charges, slug=slug, case_number=case_number)
+    if not refs:
+        return
+    for node in nodes:
+        if node.get("@id") == forfeiture_id:
+            node["cacontology-asset-forfeiture:relatedCriminalCharges"] = refs
+            break
+
+
+def build_forfeiture_device_links(
+    forfeiture_devices: list[Any],
+    *,
+    slug: str,
+    case_number: str,
+    forfeiture_id: str,
+    basis_word: str,
+    device_index_offset: int = 0,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    device_nodes: list[dict[str, Any]] = []
+    rels: list[dict[str, Any]] = []
+    if not isinstance(forfeiture_devices, list) or not forfeiture_devices:
+        return device_nodes, rels
+
+    targeted: list[dict[str, str]] = []
+    for index, device in enumerate(forfeiture_devices, start=1):
+        if not isinstance(device, dict):
+            continue
+        device_index = device_index_offset + index
+        did = device_id(slug, case_number, device_index)
+        make = str(device.get("make", "unknown"))
+        model = str(device.get("model", "unknown"))
+        device_nodes.append(
+            {
+                "@id": did,
+                "@type": [
+                    "uco-observable:ObservableObject",
+                    "cacontology-production:MobileRecordingDevice",
+                ],
+                "uco-core:name": f"{make} {model}",
+                "uco-core:description": desc(f"{basis_word} device listed for asset forfeiture."),
+                "cacontology-production:equipmentType": str(device.get("equipment_type", "smartphone")),
+                "cacontology-production:deviceBrand": make,
+                "cacontology-production:deviceModel": model,
+            }
+        )
+        targeted.append({"@id": did})
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"forfeiture-device-{device_index}",
+                source=forfeiture_id,
+                target=did,
+                kind="targetedAsset",
+                name=f"Forfeiture targets {make} {model}",
+            )
+        )
+    return device_nodes, rels
+
+
+def build_extradition_relationships(
+    transnational: dict[str, Any],
+    *,
+    slug: str,
+    case_number: str,
+    g: dict[str, str],
+    defendant_id: str,
+) -> list[dict[str, Any]]:
+    if not isinstance(transnational, dict) or not transnational:
+        return []
+    if not g.get("extradition"):
+        return []
+    if not (
+        transnational.get("extradition_observed")
+        or transnational.get("defendant_abroad")
+        or transnational.get("extradition_country")
+        or transnational.get("foreign_residence")
+    ):
+        return []
+
+    rels: list[dict[str, Any]] = [
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="defendant-extradition",
+            source=defendant_id,
+            target=g["extradition"],
+            kind="Relates_To",
+            name="Defendant extradition proceedings",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="extradition-prosecution",
+            source=g["extradition"],
+            target=g["prosecution"],
+            kind="Relates_To",
+            name="Extradition for federal prosecution",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="extradition-investigation",
+            source=g["extradition"],
+            target=g["investigation"],
+            kind="Relates_To",
+            name="Extradition supports investigation",
+        ),
+    ]
+    if g.get("location_abroad"):
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id="defendant-abroad",
+                source=defendant_id,
+                target=g["location_abroad"],
+                kind="Relates_To",
+                name="Defendant alleged abroad at offense",
+            )
+        )
+    return rels
+
+
+def build_ban_evasion_lifecycle(
+    ban_evasion: dict[str, Any],
+    *,
+    slug: str,
+    case_number: str,
+    g: dict[str, str],
+    offense_begin: str,
+    basis_word: str,
+) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    if not isinstance(ban_evasion, dict) or not ban_evasion.get("observed"):
+        return None, []
+
+    snap_min = ban_evasion.get("snapchat_accounts_min", "?")
+    insta_min = ban_evasion.get("instagram_accounts_min", "?")
+    pattern = str(ban_evasion.get("pattern", "account_recreation_after_enforcement")).replace("_", " ")
+    node: dict[str, Any] = {
+        "@id": g["ban_evasion_lifecycle"],
+        "@type": "cacontology-platforms:PlatformOperation",
+        "uco-core:name": f"{basis_word} platform ban-evasion lifecycle",
+        "rdfs:label": f"{basis_word} platform ban-evasion lifecycle",
+        "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+        "uco-core:description": desc(
+            f"Alleged ban-evasion pattern: {pattern}. "
+            f"Minimum {snap_min} Snapchat and {insta_min} Instagram accounts recreated after enforcement."
+        ),
+    }
+    rels = [
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="sextortion-ban-evasion",
+            source=g["sextortion"],
+            target=g["ban_evasion_lifecycle"],
+            kind="Relates_To",
+            name="Sextortion scheme used ban-evasion lifecycle",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="enterprise-ban-evasion",
+            source=g["enterprise"],
+            target=g["ban_evasion_lifecycle"],
+            kind="Relates_To",
+            name="Enterprise used ban-evasion lifecycle",
+        ),
+    ]
+    return node, rels
+
+
+def build_federal_prosecution_relationships(
+    *,
+    slug: str,
+    case_number: str,
+    g: dict[str, str],
+    charges: list[dict[str, Any]],
+    conduct_id: str,
+    link_enterprise: bool = False,
+    link_conspiracy: bool = True,
+    link_charges_to_conduct: bool = True,
+) -> list[dict[str, Any]]:
+    rels: list[dict[str, Any]] = [
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="inv-indictment",
+            source=g["investigation"],
+            target=g["indictment"],
+            kind="Relates_To",
+            name="Investigation charging instrument",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="prosecution-indictment",
+            source=g["prosecution"],
+            target=g["indictment"],
+            kind="Relates_To",
+            name="Prosecution charging instrument",
+        ),
+    ]
+    if link_conspiracy and g.get("conspiracy"):
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id="conspiracy-indictment",
+                source=g["conspiracy"],
+                target=g["indictment"],
+                kind="Relates_To",
+                name="Conspiracy resulted in indictment",
+            )
+        )
+    if link_enterprise and g.get("enterprise"):
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id="enterprise-indictment",
+                source=g["enterprise"],
+                target=g["indictment"],
+                kind="Relates_To",
+                name="Enterprise charging instrument",
+            )
+        )
+    for charge in charges:
+        count_label = charge_count_label(charge)
+        iri = charge_iri(slug, case_number, charge)
+        safe_count = count_label.replace("-", "_")
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"indictment-charge-{safe_count}",
+                source=g["indictment"],
+                target=iri,
+                kind="Relates_To",
+                name=f"Indictment count {count_label}",
+            )
+        )
+        if link_charges_to_conduct:
+            rels.append(
+                make_rel(
+                    slug=slug,
+                    case_number=case_number,
+                    rel_id=f"charge-conduct-{safe_count}",
+                    source=iri,
+                    target=conduct_id,
+                    kind="Relates_To",
+                    name=f"Count {count_label} conduct",
+                )
+            )
+    return rels
+
+
+def _parallel_district_venue_map(parallel_districts: list[dict[str, Any]]) -> dict[str, str]:
+    by_prefix: dict[str, str] = {}
+    for entry in parallel_districts:
+        if not isinstance(entry, dict):
+            continue
+        court = str(entry.get("court", ""))
+        case_num = str(entry.get("case_number", ""))
+        if "Alaska" in court or "SLG" in case_num.upper():
+            by_prefix["AK"] = court
+        elif "Texas" in court or "El Paso" in court:
+            by_prefix["TX"] = court
+    return by_prefix
+
+
+def build_count_venue_nodes(
+    facts: dict[str, Any],
+    charges: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+    primary_court: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    count_venues = facts.get("count_venues") or {}
+    if not isinstance(count_venues, dict):
+        count_venues = {}
+    parallel_districts = facts.get("parallel_districts") or []
+    if not isinstance(parallel_districts, list):
+        parallel_districts = []
+    district_by_prefix = _parallel_district_venue_map(parallel_districts)
+
+    venue_iris: dict[str, str] = {}
+    nodes: list[dict[str, Any]] = []
+    rels: list[dict[str, Any]] = []
+
+    def ensure_venue(name: str) -> str:
+        if name not in venue_iris:
+            iri = venue_id(slug, case_number, name)
+            venue_iris[name] = iri
+            nodes.append(
+                {
+                    "@id": iri,
+                    "@type": "uco-location:Location",
+                    "uco-core:name": name,
+                }
+            )
+        return venue_iris[name]
+
+    for charge in charges:
+        count_label = charge_count_label(charge)
+        venue_name = charge.get("venue")
+        if not venue_name:
+            venue_name = count_venues.get(count_label) or count_venues.get(str(count_label))
+        if not venue_name and "-" in str(count_label):
+            prefix = str(count_label).split("-", 1)[0]
+            venue_name = district_by_prefix.get(prefix)
+        if not venue_name:
+            venue_name = primary_court
+        venue_iri = ensure_venue(str(venue_name))
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"charge-venue-{count_label.replace('-', '_')}",
+                source=charge_iri(slug, case_number, charge),
+                target=venue_iri,
+                kind="Relates_To",
+                name=f"Count {count_label} venue",
+            )
+        )
+    return nodes, rels
+
+
+def build_enterprise_relators(
+    g: dict[str, str],
+    *,
+    defendant_id: str,
+    victim_role_id: str,
+    co_conspirator_ids: list[str],
+    basis_word: str = "Alleged",
+) -> list[dict[str, Any]]:
+    leadership_participants: list[dict[str, str]] = [{"@id": defendant_id}]
+    if co_conspirator_ids:
+        leadership_participants.append({"@id": co_conspirator_ids[0]})
+    return [
+        {
+            "@id": g["leadership_relator"],
+            "@type": "gufo:Relator",
+            "rdfs:label": f"{basis_word} enterprise leadership relation",
+            "gufo:hasParticipant": leadership_participants,
+        },
+        {
+            "@id": g["exploitation_relator"],
+            "@type": "gufo:Relator",
+            "rdfs:label": f"{basis_word} perpetrator-victim exploitation relation",
+            "gufo:hasParticipant": [{"@id": defendant_id}, {"@id": victim_role_id}],
+        },
+    ]
+
+
+def build_overt_act_violation_nodes(
+    violations: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+    count_one_iri: str,
+    basis_word: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    nodes: list[dict[str, Any]] = []
+    rels: list[dict[str, Any]] = []
+    if not violations:
+        return nodes, rels
+
+    venue_iris: dict[str, str] = {}
+
+    def ensure_venue(name: str) -> str:
+        if name not in venue_iris:
+            iri = venue_id(slug, case_number, name)
+            venue_iris[name] = iri
+            nodes.append(
+                {
+                    "@id": iri,
+                    "@type": "uco-location:Location",
+                    "uco-core:name": name,
+                }
+            )
+        return venue_iris[name]
+
+    for index, violation in enumerate(violations):
+        if not isinstance(violation, dict):
+            continue
+        violation_key = str(violation.get("id", f"violation-{index + 1}"))
+        vid = violation_id(slug, case_number, violation_key)
+        venue_name = str(violation.get("venue", "Unknown venue"))
+        lid = ensure_venue(venue_name)
+        label = str(violation.get("label", violation_key))
+        display = f"{basis_word} {label}"
+        violation_node: dict[str, Any] = {
+            "@id": vid,
+            "@type": "gufo:Event",
+            "uco-core:name": display,
+            "rdfs:label": display,
+            "uco-core:description": desc(
+                f"Embedded Count 1 violation. Window: {violation.get('date_window', 'unknown')}. "
+                f"Victim ref: {violation.get('victim_reference', 'aggregate')}."
+            ),
+        }
+        nodes.append(violation_node)
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"count1-overt-act-{violation_key}",
+                source=count_one_iri,
+                target=vid,
+                kind="Relates_To",
+                name=f"Count 1 {violation.get('label', violation_key)}",
+            )
+        )
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"overt-act-venue-{violation_key}",
+                source=vid,
+                target=lid,
+                kind="Relates_To",
+                name=f"{violation.get('label', violation_key)} venue",
+            )
+        )
+    return nodes, rels
+
+
+SEXTORTION_STACKED_CHARGE_LABELS = frozenset(
+    {"cyberstalking", "aggravated_identity_theft", "wire_fraud"}
+)
+
+
+def build_sextortion_charge_conduct_links(
+    charges: list[dict[str, Any]],
+    *,
+    slug: str,
+    case_number: str,
+    g: dict[str, str],
+) -> list[dict[str, Any]]:
+    rels: list[dict[str, Any]] = []
+    for charge in charges:
+        label = str(charge.get("label", ""))
+        count_label = charge_count_label(charge)
+        iri = charge_iri(slug, case_number, charge)
+        if label == "aggravated_identity_theft":
+            target = g["impersonation"]
+            rel_name = f"Count {count_label} impersonation conduct"
+        elif label in SEXTORTION_STACKED_CHARGE_LABELS or label in CHARGE_LABELS:
+            target = g["sextortion"]
+            rel_name = f"Count {count_label} sextortion conduct"
+        else:
+            target = g["sextortion"]
+            rel_name = f"Count {count_label} conduct"
+        rels.append(
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"charge-scheme-{count_label.replace('-', '_')}",
+                source=iri,
+                target=target,
+                kind="Relates_To",
+                name=rel_name,
+            )
+        )
+    return rels
 
 
 def build_platform_node(
@@ -665,35 +1267,128 @@ def build_sextortion_enterprise_graph(facts: dict[str, Any], slug: str) -> list[
     nodes.extend(platform_nodes)
     nodes.extend(charge_nodes)
 
+    co_conspirator_ids = [coconspirator_id(slug, case_number, i) for i in range(2, 2 + co_conspirators)]
+    for index, node in enumerate(nodes):
+        if node.get("@id") == g["leadership_relator"]:
+            nodes[index] = build_enterprise_relators(
+                g,
+                defendant_id=g["defendant"],
+                victim_role_id=g["victim_role"],
+                co_conspirator_ids=co_conspirator_ids,
+                basis_word=evidentiary.capitalize(),
+            )[0]
+        elif node.get("@id") == g["exploitation_relator"]:
+            nodes[index] = build_enterprise_relators(
+                g,
+                defendant_id=g["defendant"],
+                victim_role_id=g["victim_role"],
+                co_conspirator_ids=co_conspirator_ids,
+                basis_word=evidentiary.capitalize(),
+            )[1]
+
+    charge_refs = defendant_charge_refs(
+        facts,
+        charges,
+        slug=slug,
+        case_number=case_number,
+        default_label=offender_label,
+    )
+    nodes.extend(
+        apply_charged_with(
+            nodes,
+            charge_refs,
+            slug=slug,
+            case_number=case_number,
+            principal_label=offender_label,
+            principal_id=g["defendant"],
+        )
+    )
+    apply_forfeiture_charge_links(nodes, g["forfeiture"], charges, slug=slug, case_number=case_number)
+
+    venue_nodes, venue_rels = build_count_venue_nodes(
+        facts, charges, slug=slug, case_number=case_number, primary_court=court
+    )
+    nodes.extend(venue_nodes)
+
+    ban_evasion_node, ban_evasion_rels = build_ban_evasion_lifecycle(
+        ban_evasion,
+        slug=slug,
+        case_number=case_number,
+        g=g,
+        offense_begin=offense_begin,
+        basis_word=evidentiary.capitalize(),
+    )
+    if ban_evasion_node:
+        nodes.append(ban_evasion_node)
+
+    transnational = facts.get("transnational") or {}
+
     relationships: list[dict[str, Any]] = [
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": f"{offender_label} subject role",
-            "uco-core:source": {"@id": g["defendant"]},
-            "uco-core:target": {"@id": g["subject"]},
-            "uco-core:kindOfRelationship": "has_role",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-enterprise-sextortion",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Enterprise conducted sextortion",
-            "uco-core:source": {"@id": g["enterprise"]},
-            "uco-core:target": {"@id": g["sextortion"]},
-            "uco-core:kindOfRelationship": "conducted",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Investigation jurisdiction",
-            "uco-core:source": {"@id": g["investigation"]},
-            "uco-core:target": {"@id": g["location_court"]},
-            "uco-core:kindOfRelationship": "located_at",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="subject",
+            source=g["defendant"],
+            target=g["subject"],
+            kind="has_role",
+            name=f"{offender_label} subject role",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="enterprise-sextortion",
+            source=g["enterprise"],
+            target=g["sextortion"],
+            kind="conducted",
+            name="Enterprise conducted sextortion",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="investigation-jurisdiction",
+            source=g["investigation"],
+            target=g["location_court"],
+            kind="located_at",
+            name="Investigation jurisdiction",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="impersonation-sextortion",
+            source=g["impersonation"],
+            target=g["sextortion"],
+            kind="Relates_To",
+            name="Impersonation supported sextortion scheme",
+        ),
     ]
+    relationships.extend(
+        build_federal_prosecution_relationships(
+            slug=slug,
+            case_number=case_number,
+            g=g,
+            charges=charges,
+            conduct_id=g["sextortion"],
+            link_enterprise=True,
+            link_conspiracy=True,
+            link_charges_to_conduct=False,
+        )
+    )
+    relationships.extend(
+        build_sextortion_charge_conduct_links(
+            charges, slug=slug, case_number=case_number, g=g
+        )
+    )
+    relationships.extend(venue_rels)
+    relationships.extend(ban_evasion_rels)
+    relationships.extend(
+        build_extradition_relationships(
+            transnational,
+            slug=slug,
+            case_number=case_number,
+            g=g,
+            defendant_id=g["defendant"],
+        )
+    )
 
     for platform in platforms:
         name = str(platform["name"])
@@ -1001,35 +1696,97 @@ def build_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
     nodes.extend(platform_nodes)
     nodes.extend(charge_nodes)
 
+    co_conspirator_ids = [coconspirator_id(slug, case_number, i) for i in range(2, 2 + co_conspirators)]
+    relator_nodes = build_enterprise_relators(
+        g,
+        defendant_id=g["defendant"],
+        victim_role_id=g["victim_role"],
+        co_conspirator_ids=co_conspirator_ids,
+        basis_word=basis_word,
+    )
+    for index, node in enumerate(nodes):
+        if node.get("@id") == g["leadership_relator"]:
+            nodes[index] = relator_nodes[0]
+        elif node.get("@id") == g["exploitation_relator"]:
+            nodes[index] = relator_nodes[1]
+
+    charge_refs = defendant_charge_refs(
+        facts,
+        charges,
+        slug=slug,
+        case_number=case_number,
+        default_label=offender_label,
+    )
+    nodes.extend(
+        apply_charged_with(
+            nodes,
+            charge_refs,
+            slug=slug,
+            case_number=case_number,
+            principal_label=offender_label,
+            principal_id=g["defendant"],
+        )
+    )
+    apply_forfeiture_charge_links(nodes, g["forfeiture"], charges, slug=slug, case_number=case_number)
+
+    venue_nodes, venue_rels = build_count_venue_nodes(
+        facts, charges, slug=slug, case_number=case_number, primary_court=court
+    )
+    nodes.extend(venue_nodes)
+
+    count_one_iri = charge_iri(slug, case_number, charges[0]) if charges else ""
+    overt_act_violations = facts.get("overt_act_violations") or []
+    overt_nodes, overt_rels = build_overt_act_violation_nodes(
+        overt_act_violations if isinstance(overt_act_violations, list) else [],
+        slug=slug,
+        case_number=case_number,
+        count_one_iri=count_one_iri,
+        basis_word=basis_word,
+    )
+    nodes.extend(overt_nodes)
+
     relationships: list[dict[str, Any]] = [
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": f"{offender_label} subject role",
-            "uco-core:source": {"@id": g["defendant"]},
-            "uco-core:target": {"@id": g["subject"]},
-            "uco-core:kindOfRelationship": "has_role",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-enterprise-csam",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Enterprise conducted CSAM offenses",
-            "uco-core:source": {"@id": g["enterprise"]},
-            "uco-core:target": {"@id": g["csam_incident"]},
-            "uco-core:kindOfRelationship": "conducted",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Investigation jurisdiction",
-            "uco-core:source": {"@id": g["investigation"]},
-            "uco-core:target": {"@id": g["location_court"]},
-            "uco-core:kindOfRelationship": "located_at",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="subject",
+            source=g["defendant"],
+            target=g["subject"],
+            kind="has_role",
+            name=f"{offender_label} subject role",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="enterprise-csam",
+            source=g["enterprise"],
+            target=g["csam_incident"],
+            kind="conducted",
+            name="Enterprise conducted CSAM offenses",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="investigation-jurisdiction",
+            source=g["investigation"],
+            target=g["location_court"],
+            kind="located_at",
+            name="Investigation jurisdiction",
+        ),
     ]
+    relationships.extend(
+        build_federal_prosecution_relationships(
+            slug=slug,
+            case_number=case_number,
+            g=g,
+            charges=charges,
+            conduct_id=g["csam_incident"],
+            link_enterprise=True,
+            link_conspiracy=True,
+        )
+    )
+    relationships.extend(venue_rels)
+    relationships.extend(overt_rels)
 
     for platform in platforms:
         name = str(platform["name"])
@@ -1297,51 +2054,99 @@ def build_production_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
     nodes.extend(parallel_nodes)
     nodes.extend(charge_nodes)
 
+    charge_refs = defendant_charge_refs(
+        facts,
+        charges,
+        slug=slug,
+        case_number=case_number,
+        default_label=offender_label,
+    )
+    nodes.extend(
+        apply_charged_with(
+            nodes,
+            charge_refs,
+            slug=slug,
+            case_number=case_number,
+            principal_label=offender_label,
+            principal_id=g["defendant"],
+        )
+    )
+    apply_forfeiture_charge_links(nodes, g["forfeiture"], charges, slug=slug, case_number=case_number)
+
+    venue_nodes, venue_rels = build_count_venue_nodes(
+        facts, charges, slug=slug, case_number=case_number, primary_court=court
+    )
+    nodes.extend(venue_nodes)
+
+    forfeiture_devices = facts.get("forfeiture_devices") or []
+    ff_device_nodes, ff_device_rels = build_forfeiture_device_links(
+        forfeiture_devices if isinstance(forfeiture_devices, list) else [],
+        slug=slug,
+        case_number=case_number,
+        forfeiture_id=g["forfeiture"],
+        basis_word=basis_word,
+        device_index_offset=len(devices),
+    )
+    nodes.extend(ff_device_nodes)
+
     relationships: list[dict[str, Any]] = [
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": f"{offender_label} subject role",
-            "uco-core:source": {"@id": g["defendant"]},
-            "uco-core:target": {"@id": g["subject"]},
-            "uco-core:kindOfRelationship": "has_role",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Investigation jurisdiction",
-            "uco-core:source": {"@id": g["investigation"]},
-            "uco-core:target": {"@id": g["location_court"]},
-            "uco-core:kindOfRelationship": "located_at",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="subject",
+            source=g["defendant"],
+            target=g["subject"],
+            kind="has_role",
+            name=f"{offender_label} subject role",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="investigation-jurisdiction",
+            source=g["investigation"],
+            target=g["location_court"],
+            kind="located_at",
+            name="Investigation jurisdiction",
+        ),
     ]
+    relationships.extend(
+        build_federal_prosecution_relationships(
+            slug=slug,
+            case_number=case_number,
+            g=g,
+            charges=charges,
+            conduct_id=g["csam_incident"],
+            link_enterprise=False,
+            link_conspiracy=False,
+        )
+    )
+    relationships.extend(venue_rels)
+    relationships.extend(ff_device_rels)
 
     for index, _district in enumerate(parallel_districts):
         relationships.append(
-            {
-                "@id": f"kb:{slug}-{case_token(case_number)}-rel-parallel-{index}",
-                "@type": "uco-core:Relationship",
-                "uco-core:name": "Parallel federal prosecution district",
-                "uco-core:source": {"@id": g["investigation"]},
-                "uco-core:target": {"@id": parallel_court_id(slug, case_number, index)},
-                "uco-core:kindOfRelationship": "parallel_jurisdiction",
-                "uco-core:isDirectional": xs("true", "xsd:boolean"),
-            }
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"parallel-{index}",
+                source=g["investigation"],
+                target=parallel_court_id(slug, case_number, index),
+                kind="parallel_jurisdiction",
+                name="Parallel federal prosecution district",
+            )
         )
 
     for index, _device in enumerate(devices, start=1):
         relationships.append(
-            {
-                "@id": f"kb:{slug}-{case_token(case_number)}-rel-device-{index}",
-                "@type": "uco-core:Relationship",
-                "uco-core:name": "CSAM incident involved device",
-                "uco-core:source": {"@id": g["csam_incident"]},
-                "uco-core:target": {"@id": device_id(slug, case_number, index)},
-                "uco-core:kindOfRelationship": "used_equipment",
-                "uco-core:isDirectional": xs("true", "xsd:boolean"),
-            }
+            make_rel(
+                slug=slug,
+                case_number=case_number,
+                rel_id=f"device-{index}",
+                source=g["csam_incident"],
+                target=device_id(slug, case_number, index),
+                kind="used_equipment",
+                name="CSAM incident involved device",
+            )
         )
 
     nodes.extend(relationships)
@@ -1591,26 +2396,57 @@ def build_enticement_graph(facts: dict[str, Any], slug: str) -> list[dict[str, A
     nodes.extend(platform_nodes)
     nodes.extend(charge_nodes)
 
+    charge_refs = defendant_charge_refs(
+        facts,
+        charges,
+        slug=slug,
+        case_number=case_number,
+        default_label=offender_label,
+    )
+    nodes.extend(
+        apply_charged_with(
+            nodes,
+            charge_refs,
+            slug=slug,
+            case_number=case_number,
+            principal_label=offender_label,
+            principal_id=g["defendant"],
+        )
+    )
+    if forfeiture.get("alleged"):
+        apply_forfeiture_charge_links(nodes, g["forfeiture"], charges, slug=slug, case_number=case_number)
+
     relationships: list[dict[str, Any]] = [
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-subject",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": f"{offender_label} subject role",
-            "uco-core:source": {"@id": g["defendant"]},
-            "uco-core:target": {"@id": g["subject"]},
-            "uco-core:kindOfRelationship": "has_role",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
-        {
-            "@id": f"kb:{slug}-{case_token(case_number)}-rel-investigation-jurisdiction",
-            "@type": "uco-core:Relationship",
-            "uco-core:name": "Investigation jurisdiction",
-            "uco-core:source": {"@id": g["investigation"]},
-            "uco-core:target": {"@id": g["location_court"]},
-            "uco-core:kindOfRelationship": "located_at",
-            "uco-core:isDirectional": xs("true", "xsd:boolean"),
-        },
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="subject",
+            source=g["defendant"],
+            target=g["subject"],
+            kind="has_role",
+            name=f"{offender_label} subject role",
+        ),
+        make_rel(
+            slug=slug,
+            case_number=case_number,
+            rel_id="investigation-jurisdiction",
+            source=g["investigation"],
+            target=g["location_court"],
+            kind="located_at",
+            name="Investigation jurisdiction",
+        ),
     ]
+    relationships.extend(
+        build_federal_prosecution_relationships(
+            slug=slug,
+            case_number=case_number,
+            g=g,
+            charges=charges,
+            conduct_id=g["grooming"],
+            link_enterprise=False,
+            link_conspiracy=False,
+        )
+    )
 
     for platform in platforms:
         name = str(platform["name"])

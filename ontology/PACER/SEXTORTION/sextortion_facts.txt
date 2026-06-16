@@ -2,7 +2,7 @@
 # Source: PACER, D. Alaska 3:22-cr-00055-SLG-KFR, Doc 15 (Redacted Indictment)
 # Evidentiary status: ALLEGED (pre-trial; defendant pled not guilty 3/5/2026)
 # Extraction discipline: coded signals only — no raw explicit text, no victim-identifying detail
-# Methodology : Hand extracted facts, agent formalization of facts, CASE-UCO-SDK ontology expression of facts.
+# This file models the output of the constrained extraction agent.
 
 case:
   case_number: "3:22-cr-00055-SLG-KFR"
@@ -117,3 +117,10 @@ provenance:
   retrieval_method: manual
   extraction_method: agent_assisted
   human_reviewed: true
+
+# Placeholder keys for relationship wiring (enrich from indictment as needed)
+defendant_counts: {}
+count_venues: {}
+transnational:
+  defendant_abroad: true
+  extradition_observed: true

@@ -2,7 +2,7 @@
 # Source: PACER, D.D.C. 1:23-cr-00064-CJN, Doc 42 (Statement of Offense)
 # Evidentiary status: PROVEN (guilty plea 11/21/2024; stipulated factual basis)
 # Extraction discipline: coded signals only — no raw explicit text, no victim-identifying detail
-# Methodology : Hand extracted facts, agent formalization of facts, CASE-UCO-SDK ontology expression of facts.
+# Models output of the constrained extraction agent.
 
 case:
   case_number: "1:23-cr-00064-CJN"
@@ -116,3 +116,6 @@ provenance:
   retrieval_method: manual
   extraction_method: agent_assisted
   human_reviewed: true
+
+# Placeholder keys for relationship wiring (enrich from indictment as needed)
+count_venues: {}
