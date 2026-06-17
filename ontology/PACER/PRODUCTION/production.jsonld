@@ -105,10 +105,67 @@
           "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
         },
         {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-district-of-alaska"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-western-district-of-texas-el-paso"
+        },
+        {
           "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-subject"
         },
         {
           "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-investigation-jurisdiction"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-inv-indictment"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-prosecution-indictment"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-3"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-3"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-tx-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-tx-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-tx-2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-tx-2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-3"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-tx-1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-tx-2"
         },
         {
           "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-parallel-0"
@@ -212,7 +269,24 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Principal alleged offender; domestic. Military context alleged (docket signal only)."
-      }
+      },
+      "cacontology-legal-outcomes:chargedWith": [
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_3"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
+        }
+      ]
     },
     {
       "@id": "kb:production-3-24-cr-00091-slg-kfr-subject",
@@ -297,7 +371,24 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Forfeiture status: alleged_not_adjudicated. Devices enumerated: True."
-      }
+      },
+      "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_2"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_3"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_1"
+        },
+        {
+          "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
+        }
+      ]
     },
     {
       "@id": "kb:production-3-24-cr-00091-slg-kfr-provenance-action",
@@ -431,6 +522,16 @@
       }
     },
     {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-district-of-alaska",
+      "@type": "uco-location:Location",
+      "uco-core:name": "U.S. District Court, District of Alaska"
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-western-district-of-texas-el-paso",
+      "@type": "uco-location:Location",
+      "uco-core:name": "U.S. District Court, Western District of Texas (El Paso)"
+    },
+    {
       "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-subject",
       "@type": "uco-core:Relationship",
       "uco-core:name": "Defendant-1 subject role",
@@ -457,6 +558,278 @@
         "@id": "kb:production-3-24-cr-00091-slg-kfr-location-court"
       },
       "uco-core:kindOfRelationship": "located_at",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-inv-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation charging instrument",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Prosecution charging instrument",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-prosecution"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count AK-1",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-1 conduct",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_1"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count AK-2",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-2 conduct",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_2"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-ak-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count AK-3",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_3"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-ak-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-3 conduct",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_3"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-tx-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count TX-1",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-tx-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count TX-1 conduct",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_1"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-indictment-charge-tx-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count TX-2",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-conduct-tx-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count TX-2 conduct",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-1 venue",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_1"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-2 venue",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_2"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-ak-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count AK-3 venue",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-AK_3"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-district-of-alaska"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-tx-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count TX-1 venue",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_1"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-western-district-of-texas-el-paso"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:production-3-24-cr-00091-slg-kfr-rel-charge-venue-tx-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count TX-2 venue",
+      "uco-core:source": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-charge-TX_2"
+      },
+      "uco-core:target": {
+        "@id": "kb:production-3-24-cr-00091-slg-kfr-venue-u-s-district-court-western-district-of-texas-el-paso"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {
         "@type": "xsd:boolean",
         "@value": "true"

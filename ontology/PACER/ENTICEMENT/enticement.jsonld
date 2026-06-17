@@ -105,6 +105,36 @@
           "@id": "kb:enticement-1-23-cr-00064-cjn-rel-investigation-jurisdiction"
         },
         {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-inv-indictment"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-prosecution-indictment"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-1"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-1"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-2"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-2"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-3"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-3"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-4"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-4"
+        },
+        {
           "@id": "kb:enticement-1-23-cr-00064-cjn-rel-grooming-snapchat"
         }
       ]
@@ -204,7 +234,21 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Principal offender; domestic. Age misrepresentation to victim."
-      }
+      },
+      "cacontology-legal-outcomes:chargedWith": [
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-1"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-2"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-3"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-4"
+        }
+      ]
     },
     {
       "@id": "kb:enticement-1-23-cr-00064-cjn-subject",
@@ -305,7 +349,21 @@
       "uco-core:description": {
         "@type": "xsd:string",
         "@value": "Forfeiture status: ordered."
-      }
+      },
+      "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-1"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-2"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-3"
+        },
+        {
+          "@id": "kb:enticement-1-23-cr-00064-cjn-charge-4"
+        }
+      ]
     },
     {
       "@id": "kb:enticement-1-23-cr-00064-cjn-impact",
@@ -433,6 +491,166 @@
         "@id": "kb:enticement-1-23-cr-00064-cjn-location-court"
       },
       "uco-core:kindOfRelationship": "located_at",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-inv-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation charging instrument",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Prosecution charging instrument",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-prosecution"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 1",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 conduct",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-grooming-solicitation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 2",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 conduct",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-grooming-solicitation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 3",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-3"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 3 conduct",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-3"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-grooming-solicitation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-indictment-charge-4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 4",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-4"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:enticement-1-23-cr-00064-cjn-rel-charge-conduct-4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 4 conduct",
+      "uco-core:source": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-charge-4"
+      },
+      "uco-core:target": {
+        "@id": "kb:enticement-1-23-cr-00064-cjn-grooming-solicitation"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {
         "@type": "xsd:boolean",
         "@value": "true"
