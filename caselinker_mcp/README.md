@@ -48,7 +48,7 @@ Set `CASELINKER_KEY` to a value listed in `CASELINKER_TRUSTED_KEYS` on Railway o
 
 ## Tool tiers
 
-**31 public** + **3 trusted-key sensitive** = **34 tools**. See [`tool_registry.md`](tool_registry.md) for the full table.
+**31 public** + **5 trusted-key sensitive** = **36 tools**. See [`tool_registry.md`](tool_registry.md) for the full table.
 
 ### Public tier (31 tools)
 
@@ -179,7 +179,7 @@ For a standalone SSE process (not via Railway mount), set `MCP_TRANSPORT=sse` an
 
 ## Tools
 
-**34 tools total** — see [`tool_registry.md`](tool_registry.md) for the authoritative list. Summary by tier:
+**36 tools total** — see [`tool_registry.md`](tool_registry.md) for the authoritative list. Summary by tier:
 
 | Tier | Count | Examples |
 |------|------:|----------|

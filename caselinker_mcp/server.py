@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 
-from caselinker_mcp.client import BULK_TIMEOUT, api_get, api_post, require_caselinker_key
+from caselinker_mcp.client import BULK_TIMEOUT, DEFAULT_TIMEOUT, api_get, api_post, require_caselinker_key
 
 PORT = int(os.getenv("PORT", 8001))
 MCP_TRANSPORT = os.getenv("MCP_TRANSPORT", "stdio")
@@ -936,9 +936,9 @@ async def export_case_graph_ttl(
         return {"error": str(e)}
 
 
-# REST helpers below are public (no trusted-key gate). Only get_all_cases
-# requires a trusted CaseLinker-Key (403 without). get_case and llm_chat
-# are public but return richer data / skip daily caps when trusted.
+# REST helpers below are public (no trusted-key gate). get_all_cases and
+# get_lifecycle_* require a trusted CaseLinker-Key (403 without). get_case and
+# llm_chat are public but return richer data / skip daily caps when trusted.
 
 
 @mcp.tool()
@@ -962,6 +962,43 @@ async def get_all_cases(include_raw_data: bool = False) -> dict[str, Any]:
         return result if isinstance(result, dict) else {"cases": result}
     except Exception as e:
         logger.exception("get_all_cases failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def get_lifecycle_cases() -> dict[str, Any]:
+    """PACER exploitation lifecycle swimlanes payload (trusted key required).
+
+    Wraps GET /api/lifecycle/cases — five offense types as CAC state machines with
+    fundamental stages, cross-case coverage, affordance annotations, and per-case
+    phase trajectories. The public /lifecycle page embeds this data; API access
+    requires CASELINKER_KEY in CASELINKER_TRUSTED_KEYS.
+    """
+    try:
+        if err := require_caselinker_key():
+            return err
+        result = await api_get("/api/lifecycle/cases", timeout=DEFAULT_TIMEOUT)
+        return result if isinstance(result, dict) else {"data": result}
+    except Exception as e:
+        logger.exception("get_lifecycle_cases failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def get_lifecycle_lstar() -> dict[str, Any]:
+    """Full L* computation output for all PACER cases (trusted key required).
+
+    Wraps GET /api/lifecycle/lstar — raw state_machines/data/lstar_all_cases.json including
+    transition_matrix, global_lstar, cross_case_comparison, and per-case
+    phase_details. Use get_lifecycle_cases for the visualization-oriented payload.
+    """
+    try:
+        if err := require_caselinker_key():
+            return err
+        result = await api_get("/api/lifecycle/lstar", timeout=DEFAULT_TIMEOUT)
+        return result if isinstance(result, dict) else {"data": result}
+    except Exception as e:
+        logger.exception("get_lifecycle_lstar failed")
         return {"error": str(e)}
 
 

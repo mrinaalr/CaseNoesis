@@ -81,7 +81,7 @@ Then open your browser to:
 - **Stats**: http://localhost:8000/stats
 - **Search**: http://localhost:8000/search
 - **Query**: http://localhost:8000/query 
-- **Expand**: http://localhost:8000/expand 
+- **Lifecycle**: http://localhost:8000/lifecycle
 - **Triage**: http://localhost:8000/triage
 - **Patterns (Phase 2)**: http://localhost:8000/patterns
 - **Tech Landscape**: http://localhost:8000/tech-landscape
@@ -334,7 +334,8 @@ Agents can also build cohort graphs on demand via MCP (`case2cac` → `graph_sum
 - **Clusters Tab**: View pre-computed clusters and analyze case reports
 - **Stats Tab**: Coverage over the dataset and case distributions
 - **Tech Landscape**: Technology revolver (platforms, investigation tech, anonymization, P2P) by era
-- **Query / Expand**: Custom analysis lab and build-your-own viz examples (public APIs)
+- **Lifecycle**: PACER exploitation lifecycles — five offense types as CAC ontology state machines (public page; API export requires trusted `CaseLinker-Key`)
+- **Query**: Custom analysis lab (public APIs)
 - **LLM**: Natural-language queries over case statistics (SQL-backed; rate limited on production)
 - **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`)
 - **Audit Tab**: Review extracted features case-by-case with interactive highlighting to verify extraction accuracy
@@ -364,13 +365,13 @@ CaseLinker/
 ├── visualization/                    # Static HTML (served by run/main.py)
 │   ├── assets/                       # caselinker-api.js, cover.png
 │   ├── home.html                     # /
-│   ├── index.html                    # /visualization
+│   ├── visualization.html            # /visualization
 │   ├── search.html                   # /search (facet tree)
 │   ├── analysis.html                 # /analysis
 │   ├── clusters.html                 # /clusters
 │   ├── stats.html                    # /stats
 │   ├── query.html                    # /query
-│   ├── expand.html                   # /expand
+│   ├── lifecycle.html                # /lifecycle
 │   ├── triage.html                   # /triage
 │   ├── patterns.html                 # /patterns
 │   ├── patterns-graph.html           # /patterns/graph
@@ -389,7 +390,7 @@ CaseLinker/
 │   │   └── big_bang/                 # half-sample — Big Bang button
 │   ├── big_bang.py                   # ~1k bridge-dense subset for /patterns/graph
 │   └── merge_graph_cache.py          # merged compare / all pools (API)
-├── caselinker_mcp/                   # MCP server (34 tools; SSE + Streamable HTTP on Railway)
+├── caselinker_mcp/                   # MCP server (36 tools; SSE + Streamable HTTP on Railway)
 │   ├── server.py                     # FastMCP entry point
 │   ├── README.md                     # Hosted auth, Cursor config, graph workflow
 │   └── tool_registry.md              # Full tool catalog
@@ -438,10 +439,16 @@ When the ML stack is enabled, NER adds organizations, locations, dates, and ages
 ## API Endpoints
 
 - `GET /` - Home page
+- `GET /api/cases` - Full bulk case export (localhost or `CaseLinker-Key` in `CASELINKER_TRUSTED_KEYS`)
+- `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
+- `POST /api/cases-summaries-by-ids` - Public batched summaries (max 500 ids per request) for cluster membership and similar flows
+- `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
 - `GET /visualization` - Interactive visualization page with multiple chart types (Timeline, Severity Indicators, Prosecution Outcomes, Previous Perpetrator, Environment, Organizations Involved)
 - `GET /search` - Facet decision tree over stored cases (D3); prune filters; cohort case IDs via API
 - `GET /query` - Custom analysis lab (browser-only JavaScript calling public APIs; see page for examples)
-- `GET /expand` - Build-your-own viz examples (stats bars, facet tree text view, D3 histogram via public APIs)
+- `GET /lifecycle` - Exploitation lifecycle visualization (public HTML; payload embedded server-side)
+- `GET /api/lifecycle/cases` - Lifecycle JSON (trusted `CaseLinker-Key` or localhost; same gate as `GET /api/cases`)
+- `GET /api/lifecycle/lstar` - Full L* output (`state_machines/data/lstar_all_cases.json`; trusted key or localhost)
 - `GET /analysis` - Advanced case analysis page with tag-based filtering and automated analysis
 - `GET /api/facet-tree` - Build facet tree JSON (`max_depth`, optional prune query params)
 - `GET /api/facet-distinct` - Distinct primary-bucket values per facet (for Search prune UI)
@@ -463,10 +470,6 @@ When the ML stack is enabled, NER adds organizations, locations, dates, and ages
 - `GET /api/case-studies/notes/{case_id}` - Community notes for a study id
 - `POST /api/case-studies/notes/{case_id}` - Append a community note (rate limited)
 - `GET /audit` - Data audit page for reviewing extracted features case-by-case
-- `GET /api/cases` - Full bulk case export (localhost or `CaseLinker-Key` in `CASELINKER_TRUSTED_KEYS`)
-- `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
-- `POST /api/cases-summaries-by-ids` - Public batched summaries (max 500 ids per request) for cluster membership and similar flows
-- `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
 - `GET /api/automated-analysis` - Run automated analysis (case grouping, triage, insights)
 - `POST /api/return-tagged-cases` - Get cases matching selected tags (intersection logic)
 - `GET /api/stats` - Get case statistics (total cases, extracted features count, sources)

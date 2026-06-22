@@ -1,0 +1,930 @@
+{
+  "n_cases": 5,
+  "transition_matrix": {
+    "cacontology-grooming:ExploitationPhase \u2192 cacontology-grooming:ExploitationPhase": 0.2,
+    "cacontology-grooming:ExploitationPhase \u2192 cacontology-grooming:MaintenancePhase": 0.8,
+    "cacontology-grooming:ExploitationPhase \u2192 cacontology-sextortion:ThreatMechanism": 0.2,
+    "cacontology-grooming:InitialContactPhase \u2192 cacontology-grooming:InitialContactPhase": 0.2,
+    "cacontology-grooming:InitialContactPhase \u2192 cacontology-grooming:TrustBuildingPhase": 1.0,
+    "cacontology-grooming:MaintenancePhase \u2192 cacontology-grooming:ExploitationPhase": 0.8,
+    "cacontology-grooming:MaintenancePhase \u2192 cacontology-sextortion:ThreatMechanism": 0.2,
+    "cacontology-grooming:SexualizationPhase \u2192 cacontology-grooming:ExploitationPhase": 0.2,
+    "cacontology-grooming:TrustBuildingPhase \u2192 cacontology-grooming:ExploitationPhase": 0.4,
+    "cacontology-grooming:TrustBuildingPhase \u2192 cacontology-grooming:SexualizationPhase": 0.2,
+    "cacontology-grooming:TrustBuildingPhase \u2192 cacontology-platforms:ChannelMigrationEvent": 0.4,
+    "cacontology-platforms:ChannelMigrationEvent \u2192 cacontology-grooming:ExploitationPhase": 0.4,
+    "cacontology-sextortion:CoercionCycle \u2192 cacontology-grooming:MaintenancePhase": 0.2,
+    "cacontology-sextortion:ThreatMechanism \u2192 cacontology-grooming:ExploitationPhase": 0.2,
+    "cacontology-sextortion:ThreatMechanism \u2192 cacontology-sextortion:CoercionCycle": 0.2
+  },
+  "raw_transitions": [
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:TrustBuildingPhase",
+      "case_count": 5,
+      "weight": 1.0
+    },
+    {
+      "from": "cacontology-grooming:MaintenancePhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 4,
+      "weight": 0.8
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-grooming:MaintenancePhase",
+      "case_count": 4,
+      "weight": 0.8
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 2,
+      "weight": 0.4
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-platforms:ChannelMigrationEvent",
+      "case_count": 2,
+      "weight": 0.4
+    },
+    {
+      "from": "cacontology-platforms:ChannelMigrationEvent",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 2,
+      "weight": 0.4
+    },
+    {
+      "from": "cacontology-sextortion:CoercionCycle",
+      "to": "cacontology-grooming:MaintenancePhase",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-sextortion:ThreatMechanism",
+      "to": "cacontology-sextortion:CoercionCycle",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-sextortion:ThreatMechanism",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-grooming:SexualizationPhase",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:SexualizationPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:MaintenancePhase",
+      "to": "cacontology-sextortion:ThreatMechanism",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:InitialContactPhase",
+      "case_count": 1,
+      "weight": 0.2
+    },
+    {
+      "from": "cacontology-sextortion:ThreatMechanism",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "case_count": 1,
+      "weight": 0.2
+    }
+  ],
+  "affordance_annotations": [
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:TrustBuildingPhase",
+      "affordance": "Anonymity",
+      "case_count": 3
+    },
+    {
+      "from": "cacontology-grooming:MaintenancePhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "DistributionInfrastructure",
+      "case_count": 3
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-grooming:MaintenancePhase",
+      "affordance": "DistributionInfrastructure",
+      "case_count": 3
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-sextortion:ThreatMechanism",
+      "affordance": "DistributionInfrastructure",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-sextortion:CoercionCycle",
+      "to": "cacontology-grooming:MaintenancePhase",
+      "affordance": "DistributionInfrastructure",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-sextortion:ThreatMechanism",
+      "to": "cacontology-sextortion:CoercionCycle",
+      "affordance": "CoercionLeverage",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "Ephemerality",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-grooming:MaintenancePhase",
+      "affordance": "Coordination",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:ExploitationPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:TrustBuildingPhase",
+      "affordance": "ContactDiscovery",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-platforms:ChannelMigrationEvent",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-platforms:ChannelMigrationEvent",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:MaintenancePhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:SexualizationPhase",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-grooming:SexualizationPhase",
+      "affordance": "UnmonitoredCommunication",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:InitialContactPhase",
+      "affordance": "Anonymity",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:TrustBuildingPhase",
+      "to": "cacontology-platforms:ChannelMigrationEvent",
+      "affordance": "Coordination",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-platforms:ChannelMigrationEvent",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "Coordination",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:InitialContactPhase",
+      "to": "cacontology-grooming:TrustBuildingPhase",
+      "affordance": "Coordination",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-grooming:MaintenancePhase",
+      "to": "cacontology-sextortion:ThreatMechanism",
+      "affordance": "Coordination",
+      "case_count": 1
+    },
+    {
+      "from": "cacontology-sextortion:ThreatMechanism",
+      "to": "cacontology-grooming:ExploitationPhase",
+      "affordance": "DistributionInfrastructure",
+      "case_count": 1
+    }
+  ],
+  "phases_sparql": [],
+  "global_lstar": {
+    "trajectory": [
+      "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+      "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+      "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+    ],
+    "weights": {
+      "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+      "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+    },
+    "path_weight": 0.4,
+    "N": 5,
+    "fundamental": [
+      "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+    ],
+    "variant": [
+      [
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        0.4
+      ]
+    ],
+    "trajectory_display": [
+      "cacontology-grooming:InitialContactPhase",
+      "cacontology-grooming:TrustBuildingPhase",
+      "cacontology-grooming:ExploitationPhase"
+    ]
+  },
+  "cases": {
+    "enticement": {
+      "title": "ENTICEMENT",
+      "citation": "United States v. Rehman (D.D.C. 1:23-cr-00064)",
+      "phase_sequence": [
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        "https://cacontology.projectvic.org/grooming#SexualizationPhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+      ],
+      "phase_details": [
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-initial-contact",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Platform Contact",
+          "comment": "Single platform, pseudonymous approach. Gate: Victim declines or blocks",
+          "affordance_on_arrival": null,
+          "index": 1,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-trust-building",
+          "type": "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "label": "Normalization & Trust",
+          "comment": "Flattery to disclosed vulnerability, reciprocal disclosure, normalization of sexual content. Gate: Victim reports to trusted adult",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Anonymity",
+          "index": 2,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-sexualization",
+          "type": "https://cacontology.projectvic.org/grooming#SexualizationPhase",
+          "label": "First Compliance",
+          "comment": "First explicit request fulfilled; prior normalization made refusal psychologically costly",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 3,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-exploitation",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Escalating Solicitation",
+          "comment": "Directed production, CSAM produced as escalation instrument not coercion endpoint. Gate: Peer or parent detects contact",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 4,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-maintenance",
+          "type": "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "label": "Material Retained",
+          "comment": "CSAM held as record of escalation. Gate: Victim does not appear at meeting",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 5,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#rehman-phase-terminal",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Meeting \u2192 Physical Contact",
+          "comment": "Terminal state \u2014 offense progresses to physical terminus; does not cycle",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 6,
+          "is_terminal": true
+        }
+      ],
+      "lstar": {
+        "trajectory": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+        },
+        "path_weight": 0.4,
+        "N": 5,
+        "fundamental": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+        ],
+        "variant": [
+          [
+            "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+            0.4
+          ]
+        ],
+        "case_sequence": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#SexualizationPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "case_path_weight": 0.025600000000000008,
+        "case_step_weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#SexualizationPhase": 0.2,
+          "https://cacontology.projectvic.org/grooming#SexualizationPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.2,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/grooming#MaintenancePhase": 0.8,
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.8
+        }
+      },
+      "path_weight": 0.025600000000000008
+    },
+    "production": {
+      "title": "PRODUCTION",
+      "citation": "United States v. Pathmanathan (D.D.C. 1:22-cr-00150)",
+      "phase_sequence": [
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+      ],
+      "phase_details": [
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-initial-contact",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Visual Profile Targeting",
+          "comment": "Instagram visual profiles + algorithmic surfacing",
+          "affordance_on_arrival": null,
+          "index": 1,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-trust-building",
+          "type": "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "label": "DM Coercion",
+          "comment": "Instagram DM with disappearing messages option",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#ContactDiscovery",
+          "index": 2,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-migration",
+          "type": "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+          "label": "Migration to Production Channel",
+          "comment": "Instagram \u2192 Messenger; severs evidence trail; accesses live video capability",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 3,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-directed-production",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Live Directed Production",
+          "comment": "Offender commands; victim performs; session recorded including without victim's knowledge",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 4,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-media-capture",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Media Capture",
+          "comment": "Abuse converted to persistent artifact",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 5,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-maintenance",
+          "type": "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "label": "Archive as Ongoing Leverage",
+          "comment": "Each session adds to archive; harm persists as leverage for future sessions",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 6,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#pathmanathan-phase-terminal",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Persistent CSAM Archive",
+          "comment": "Harm does not end when contact does",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 7,
+          "is_terminal": true
+        }
+      ],
+      "lstar": {
+        "trajectory": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+        },
+        "path_weight": 0.4,
+        "N": 5,
+        "fundamental": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+        ],
+        "variant": [
+          [
+            "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+            0.4
+          ]
+        ],
+        "case_sequence": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "case_path_weight": 0.02048000000000001,
+        "case_step_weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/platforms#ChannelMigrationEvent": 0.4,
+          "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.2,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/grooming#MaintenancePhase": 0.8,
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.8
+        }
+      },
+      "path_weight": 0.02048000000000001
+    },
+    "sextortion": {
+      "title": "SEXTORTION",
+      "citation": "United States v. Amin (D. Alaska 3:22-cr-00055)",
+      "phase_sequence": [
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+        "https://cacontology.projectvic.org/sextortion#CoercionCycle",
+        "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+      ],
+      "phase_details": [
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-initial-contact",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Impersonation Contact at Scale",
+          "comment": "80+ Snapchat, 40+ Instagram accounts",
+          "affordance_on_arrival": null,
+          "index": 1,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-trust-building",
+          "type": "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "label": "Deception & Identity Fabrication",
+          "comment": "False peer identity",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Anonymity",
+          "index": 2,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-exploitation-first",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "First Image \u2014 Asymmetry Created",
+          "comment": "CSAM obtained; victim cannot undo",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Ephemerality",
+          "index": 3,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-threat",
+          "type": "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+          "label": "Threat Delivered",
+          "comment": "Threat to expose to social network",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 4,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-coercion-cycle",
+          "type": "https://cacontology.projectvic.org/sextortion#CoercionCycle",
+          "label": "Self-Sustaining Coercion Loop",
+          "comment": "Daily quotas; each compliance produces new material extending leverage; account churn after bans",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#CoercionLeverage",
+          "index": 5,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-maintenance",
+          "type": "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "label": "Network Distribution & Recruitment",
+          "comment": "Material to co-conspirators gated behind harassment; victims recruit other victims",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 6,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#amin-phase-terminal",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Perpetual Re-Contact",
+          "comment": "No closure; cycle ends only at apprehension or material removal",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 7,
+          "is_terminal": true
+        }
+      ],
+      "lstar": {
+        "trajectory": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+        },
+        "path_weight": 0.4,
+        "N": 5,
+        "fundamental": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+        ],
+        "variant": [
+          [
+            "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+            0.4
+          ]
+        ],
+        "case_sequence": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+          "https://cacontology.projectvic.org/sextortion#CoercionCycle",
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "case_path_weight": 0.002560000000000001,
+        "case_step_weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/sextortion#ThreatMechanism": 0.2,
+          "https://cacontology.projectvic.org/sextortion#ThreatMechanism|https://cacontology.projectvic.org/sextortion#CoercionCycle": 0.2,
+          "https://cacontology.projectvic.org/sextortion#CoercionCycle|https://cacontology.projectvic.org/grooming#MaintenancePhase": 0.2,
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.8
+        }
+      },
+      "path_weight": 0.002560000000000001
+    },
+    "enterprise": {
+      "title": "ENTERPRISE",
+      "citation": "United States v. Bermudez et al. (E.D.N.Y. 1:25-cr-00361)",
+      "phase_sequence": [
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+        "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+      ],
+      "phase_details": [
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-gaming-funnel",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Gaming Platform Funnel",
+          "comment": "CS:GO, Roblox; in-game chat; pseudonymous gaming identities. Enterprise role: Recruiters",
+          "affordance_on_arrival": null,
+          "index": 1,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-enterprise-recruitment",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Enterprise Recruitment",
+          "comment": "Discord invite; role assignment; victims recruited by coerced existing victims. Enterprise role: Coordinators",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Anonymity",
+          "index": 2,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-parallel-grooming",
+          "type": "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "label": "Parallel Grooming",
+          "comment": "Role-specialized coordinators; multiple victims simultaneously. Enterprise role: Coordinators",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Coordination",
+          "index": 3,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-migration",
+          "type": "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+          "label": "Migration to Operational HQ",
+          "comment": "Gaming \u2192 Discord locked channels. Enterprise role: Coordinators",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Coordination",
+          "index": 4,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-parallel-production",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Parallel Directed Production",
+          "comment": "Coordinators direct producers; producers direct victims; simultaneous across multiple victims. Enterprise role: Producers",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Coordination",
+          "index": 5,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-gated-distribution",
+          "type": "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "label": "Gated Distribution",
+          "comment": "Discord servers + DMs; harassment access gates; distributed storage across members. Enterprise role: Distributors",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 6,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-threats",
+          "type": "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+          "label": "Threats, Swatting & Doxing",
+          "comment": "Role-specialized threat actors; physical safety threatened; self-harm induced. Enterprise role: Threat actors",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Coordination",
+          "index": 7,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#bermudez-phase-terminal",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Permanent Distributed Record",
+          "comment": "No single seizure recovers all copies",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 8,
+          "is_terminal": true
+        }
+      ],
+      "lstar": {
+        "trajectory": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+        },
+        "path_weight": 0.4,
+        "N": 5,
+        "fundamental": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+        ],
+        "variant": [
+          [
+            "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+            0.4
+          ]
+        ],
+        "case_sequence": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "case_path_weight": 0.0010240000000000004,
+        "case_step_weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#InitialContactPhase": 0.2,
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/platforms#ChannelMigrationEvent": 0.4,
+          "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/grooming#MaintenancePhase": 0.8,
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase|https://cacontology.projectvic.org/sextortion#ThreatMechanism": 0.2,
+          "https://cacontology.projectvic.org/sextortion#ThreatMechanism|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.2
+        }
+      },
+      "path_weight": 0.0010240000000000004
+    },
+    "trafficking": {
+      "title": "TRAFFICKING",
+      "citation": "United States v. Riley (D. Haw. 1:23-cr-00071)",
+      "phase_sequence": [
+        "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+        "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+        "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+        "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+      ],
+      "phase_details": [
+        {
+          "uri": "https://caselinker.projectvic.app/cases#riley-phase-initial-contact",
+          "type": "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "label": "Grindr Contact",
+          "comment": "Victim identification via dating/hookup platform (Grindr); pseudonymous adult-minor contact",
+          "affordance_on_arrival": null,
+          "index": 1,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#riley-phase-trust-building",
+          "type": "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "label": "Vulnerability Grooming",
+          "comment": "Financial and electronics inducement, secrecy demands, exploitation of financial vulnerability; persistent solicitation via SMS",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Anonymity",
+          "index": 2,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#riley-phase-exploitation",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Commercial Sexual Exploitation",
+          "comment": "Sex trafficking of minors (5 charged victims); financial inducement, transportation, drug provision alleged",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#UnmonitoredCommunication",
+          "index": 3,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#riley-phase-maintenance",
+          "type": "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "label": "Multi-Victim Sustained Operation",
+          "comment": "Movement and re-contact across victims and jurisdictions; Snapchat/Instagram for ongoing coercion (2019-07 through 2022-12-14)",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#Coordination",
+          "index": 4,
+          "is_terminal": false
+        },
+        {
+          "uri": "https://caselinker.projectvic.app/cases#riley-phase-terminal",
+          "type": "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "label": "Sustained Commercial Exploitation",
+          "comment": "Interstate trafficking continuum across five minor victims until arrest",
+          "affordance_on_arrival": "https://cacontology.projectvic.org/platforms#DistributionInfrastructure",
+          "index": 5,
+          "is_terminal": true
+        }
+      ],
+      "lstar": {
+        "trajectory": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4
+        },
+        "path_weight": 0.4,
+        "N": 5,
+        "fundamental": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase"
+        ],
+        "variant": [
+          [
+            "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+            0.4
+          ]
+        ],
+        "case_sequence": [
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase"
+        ],
+        "case_path_weight": 0.25600000000000006,
+        "case_step_weights": {
+          "https://cacontology.projectvic.org/grooming#InitialContactPhase|https://cacontology.projectvic.org/grooming#TrustBuildingPhase": 1.0,
+          "https://cacontology.projectvic.org/grooming#TrustBuildingPhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.4,
+          "https://cacontology.projectvic.org/grooming#ExploitationPhase|https://cacontology.projectvic.org/grooming#MaintenancePhase": 0.8,
+          "https://cacontology.projectvic.org/grooming#MaintenancePhase|https://cacontology.projectvic.org/grooming#ExploitationPhase": 0.8
+        }
+      },
+      "path_weight": 0.25600000000000006
+    }
+  },
+  "cross_case_comparison": {
+    "fundamental": [
+      "https://cacontology.projectvic.org/grooming#ExploitationPhase",
+      "https://cacontology.projectvic.org/grooming#InitialContactPhase",
+      "https://cacontology.projectvic.org/grooming#MaintenancePhase",
+      "https://cacontology.projectvic.org/grooming#TrustBuildingPhase"
+    ],
+    "variant": [
+      [
+        "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent",
+        2
+      ],
+      [
+        "https://cacontology.projectvic.org/sextortion#ThreatMechanism",
+        2
+      ]
+    ],
+    "unique": [
+      "https://cacontology.projectvic.org/grooming#SexualizationPhase",
+      "https://cacontology.projectvic.org/sextortion#CoercionCycle"
+    ],
+    "type_cases": {
+      "https://cacontology.projectvic.org/grooming#InitialContactPhase": [
+        "enterprise",
+        "enticement",
+        "production",
+        "sextortion",
+        "trafficking"
+      ],
+      "https://cacontology.projectvic.org/grooming#SexualizationPhase": [
+        "enticement"
+      ],
+      "https://cacontology.projectvic.org/grooming#MaintenancePhase": [
+        "enterprise",
+        "enticement",
+        "production",
+        "sextortion",
+        "trafficking"
+      ],
+      "https://cacontology.projectvic.org/grooming#ExploitationPhase": [
+        "enterprise",
+        "enticement",
+        "production",
+        "sextortion",
+        "trafficking"
+      ],
+      "https://cacontology.projectvic.org/grooming#TrustBuildingPhase": [
+        "enterprise",
+        "enticement",
+        "production",
+        "sextortion",
+        "trafficking"
+      ],
+      "https://cacontology.projectvic.org/platforms#ChannelMigrationEvent": [
+        "enterprise",
+        "production"
+      ],
+      "https://cacontology.projectvic.org/sextortion#CoercionCycle": [
+        "sextortion"
+      ],
+      "https://cacontology.projectvic.org/sextortion#ThreatMechanism": [
+        "enterprise",
+        "sextortion"
+      ]
+    },
+    "n_cases": 5,
+    "fundamental_display": [
+      "cacontology-grooming:ExploitationPhase",
+      "cacontology-grooming:InitialContactPhase",
+      "cacontology-grooming:MaintenancePhase",
+      "cacontology-grooming:TrustBuildingPhase"
+    ],
+    "variant_display": [
+      [
+        "cacontology-platforms:ChannelMigrationEvent",
+        2
+      ],
+      [
+        "cacontology-sextortion:ThreatMechanism",
+        2
+      ]
+    ]
+  }
+}

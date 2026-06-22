@@ -326,8 +326,8 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/lifecycle">Lifecycle</a>
         <a href="/query">Query</a>
-        <a href="/expand">Expand</a>
         <a href="/triage">Triage</a>
         <a href="/case-studies">Case Studies</a>
         <a href="/tech-landscape" class="tech-landscape-link"><span class="tls-gate--left">Tech</span><span class="tls-gate--mid"> </span><span class="tls-gate--right">Landscape</span></a>
@@ -1246,7 +1246,7 @@
                 const caseItem = document.createElement('div');
                 caseItem.className = 'case-item';
                 
-                // Get case text (same logic as index.html)
+                // Get case text (same logic as visualization.html)
                 const caseText = caseData.raw_data?.case_text || caseData.case_text || 'No case text available';
                 const caseId = caseData.id || 'Unknown ID';
                 const date = caseData.date_range?.start || caseData.raw_data?.month_year || 'Unknown date';

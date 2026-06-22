@@ -911,8 +911,8 @@
         <a href="/clusters">Clusters</a>
         <a href="/stats">Stats</a>
         <a href="/search">Search</a>
+        <a href="/lifecycle">Lifecycle</a>
         <a href="/query">Query</a>
-        <a href="/expand">Expand</a>
         <a href="/triage">Triage</a>
         <a href="/case-studies" aria-current="page">Case Studies</a>
         <a href="/tech-landscape" class="tech-landscape-link"><span class="tls-gate--left">Tech</span><span class="tls-gate--mid"> </span><span class="tls-gate--right">Landscape</span></a>
@@ -1167,7 +1167,7 @@
             return colors[category] || 'highlight-default';
         }
 
-        // Mirrors visualization/index.html highlightCaseText so the panel
+        // Mirrors visualization/visualization.html highlightCaseText so the panel
         // renders with the same colored term spans as the Case Visualization tab.
         function highlightCaseText(text, caseData) {
             if (!text) return '';

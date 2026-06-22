@@ -1,18 +1,18 @@
 # CaseLinker MCP tool registry
 
-**Total: 34 tools** (as of `q1_platform_evidence`).
+**Total: 36 tools** (as of `get_lifecycle_lstar`).
 
 Authoritative implementation: `@mcp.tool()` definitions in `server.py`. This file is the human-readable catalog for docs and agent hosts.
 
 ## Tier model
 
-Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. Only **three** tools behave differently when a trusted key is present (see below). The other eleven REST helpers (`get_case_count`, `get_facet_distinct`, `get_unique_tags`, etc.) are **fully public**; API key is needed for full case access and removal of rate limits. 
+Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. **Five** tools require trusted access for full export behavior (see below). The other eleven REST helpers (`get_case_count`, `get_facet_distinct`, `get_unique_tags`, etc.) are **fully public**; API key is needed for full case access, lifecycle export, and removal of rate limits. 
 
 | Category | Count | Meaning |
 |----------|------:|---------|
 | Public (trusted key irrelevant) | **31** | Same behavior with or without trusted key |
-| Trusted-key sensitive | **3** | Blocked or reduced without trusted key |
-| **Total** | **34** | |
+| Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
+| **Total** | **36** | |
 
 ## Public tier (31 tools)
 
@@ -60,14 +60,16 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 
 Session graphs are stored in Redis when available (`caselinker:mcp:graph:{id}`, 2-hour TTL); otherwise in-process memory for local dev.
 
-## Trusted-key sensitive (3 tools)
+## Trusted-key sensitive (5 tools)
 
 Requires `CASELINKER_KEY` / `CaseLinker-Key` listed in server `CASELINKER_TRUSTED_KEYS` for full behavior.
 
 | Tool | Without trusted key | With trusted key |
 |------|---------------------|------------------|
 | `get_all_cases` | **403** from API (or MCP local error if no key configured) | Full bulk export; optional `include_raw_data` |
+| `get_lifecycle_cases` | **403** from API (or MCP local error if no key configured) | Lifecycle swimlane / visualization payload |
+| `get_lifecycle_lstar` | **403** from API (or MCP local error if no key configured) | Full `lstar_all_cases.json` (transition matrix, global L*, per-case details) |
 | `get_case` | Works; **sanitized** (no `raw_data` / narrative blobs) | Works; **full** case payload including `raw_data` |
 | `llm_chat` | Works; **50 requests/IP/day** (+ slowapi 15/min) | Works; **daily cap exempt** (+ slowapi 15/min still applies) |
 
-Only `get_all_cases` is blocked without trusted access. The other two are public tools with richer responses or limits when a trusted key is forwarded on REST calls.
+`get_all_cases` and both lifecycle tools are blocked without trusted access. `get_case` and `llm_chat` are public tools with richer responses or limits when a trusted key is forwarded on REST calls. The public `/lifecycle` page embeds visualization data server-side and does not require a browser API key.

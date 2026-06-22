@@ -28,6 +28,8 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Storage Layer"))
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Clustering & Analysis Layer"))
 sys.path.insert(0, str(_REPO_ROOT / "src" / "Visualization Layer"))
@@ -174,6 +176,13 @@ def _is_local_request(request: Request) -> bool:
 _BULK_CASES_FORBIDDEN_DETAIL = (
     "Bulk corpus export is restricted to local usage and access holders. "
     "To request full access to the corpus, please email mramachandra@umass.edu for the API key."
+)
+
+_LIFECYCLE_API_FORBIDDEN_DETAIL = (
+    "Lifecycle data export is restricted to local usage and trusted API key holders. "
+    "The /lifecycle visualization is public; programmatic access to GET /api/lifecycle/* "
+    "requires a CaseLinker-Key listed in CASELINKER_TRUSTED_KEYS. "
+    "Email mramachandra@umass.edu to request a key."
 )
 
 
@@ -355,7 +364,7 @@ def _case_summary_slim(case: Dict[str, Any]) -> Dict[str, Any]:
         "investigation_types": investigation_types_for_case(case),
         "agencies_involved": case.get("agencies_involved"),
         "organizations": case.get("organizations"),
-        # Needed by visualization/index.html Previous Perpetrator chart and stats (slim API otherwise omits it).
+        # Needed by visualization/visualization.html Previous Perpetrator chart and stats (slim API otherwise omits it).
         "perpetrator_registered_sex_offender": case.get("perpetrator_registered_sex_offender"),
     }
     return out
@@ -1157,13 +1166,13 @@ _cases_cache_case_count = 0
 
 # Log database status on startup and pre-compute clusters
 try:
-    test_cases = storage.get_all_cases()
+    case_count = get_case_count()
     if db_path:
         print(f"Database active with path: {db_path}")
     else:
         print(f"Database active: PostgreSQL (via DATABASE_URL)")
-    print(f"Cases in database: {len(test_cases)}")
-    if len(test_cases) == 0:
+    print(f"Cases in database: {case_count}")
+    if case_count == 0:
         if db_path:
             print(f"⚠️  Warning: Database exists but contains 0 cases. Check if database file is in the correct location.")
         else:
@@ -1176,6 +1185,23 @@ try:
             global _cluster_groups_cache, _cluster_groups_cache_case_count, _tags_cache, _tags_cache_case_count
             try:
                 print("Pre-computing clusters in background...")
+                case_count = get_case_count()
+                cache_key = get_cache_key('cluster-groups', version=case_count)
+                cached_result = get_cached(cache_key)
+                if cached_result is not None:
+                    _cluster_groups_cache = cached_result
+                    _cluster_groups_cache_case_count = case_count
+                    print(f"✅ Cluster cache warmed from Redis ({case_count} cases)")
+                    return
+                precomputed = storage.get_precomputed_clusters(case_count)
+                if precomputed and precomputed.get('case_groups'):
+                    slim_groups = _slim_for_cluster_groups(precomputed.get('case_groups', []))
+                    result = {"success": True, "case_groups": slim_groups, "cached": True, "source": "startup"}
+                    set_cached(cache_key, result, ttl=86400)
+                    _cluster_groups_cache = result
+                    _cluster_groups_cache_case_count = case_count
+                    print(f"✅ Cluster cache warmed from DB ({case_count} cases)")
+                    return
                 cases = storage.get_all_cases(include_raw_data=False)
                 if cases:
                     # Warm tags cache (tags rarely change)
@@ -2983,7 +3009,7 @@ def api_root():
 @app.get("/visualization", response_class=HTMLResponse)
 async def serve_visualization():
     """Serve the HTML visualization page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "index.html"
+    html_path = Path(__file__).parent.parent / "visualization" / "visualization.html"
     if html_path.exists():
         return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
@@ -3145,13 +3171,67 @@ def api_llm_chat(request: Request, body: LlmChatBody):
         raise HTTPException(status_code=502, detail=str(e)) from e
 
 
-@app.get("/expand", response_class=HTMLResponse)
-async def serve_expand():
-    """Build-your-own visualization: examples using public CaseLinker APIs."""
-    html_path = Path(__file__).parent.parent / "visualization" / "expand.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>Expand page not found</h1>", status_code=404)
+def _lifecycle_payload_html_snippet() -> str:
+    """Embed L* payload in /lifecycle HTML so the public page needs no API key."""
+    try:
+        from state_machines.lifecycle_api import build_lifecycle_payload
+
+        raw = json.dumps(build_lifecycle_payload(), ensure_ascii=False)
+        safe = raw.replace("</", "<\\/")
+        return (
+            f'  <script id="lifecycle-payload" type="application/json">{safe}</script>\n'
+        )
+    except Exception as exc:
+        logging.getLogger(__name__).warning("lifecycle payload embed failed: %s", exc)
+        return ""
+
+
+@app.get("/lifecycle", response_class=HTMLResponse)
+async def serve_lifecycle():
+    """Lifecycle analysis page (public; data embedded server-side)."""
+    html_path = Path(__file__).parent.parent / "visualization" / "lifecycle.html"
+    if not html_path.exists():
+        return HTMLResponse(content="<h1>Lifecycle page not found</h1>", status_code=404)
+    html = read_utf8_text_file(html_path)
+    snippet = _lifecycle_payload_html_snippet()
+    if snippet and "</body>" in html:
+        html = html.replace("</body>", snippet + "</body>", 1)
+    return HTMLResponse(content=html)
+
+
+@app.get("/api/lifecycle/cases")
+@limiter.limit("100/minute")
+def get_lifecycle_cases(request: Request):
+    """
+    L* visualization payload for all 5 PACER state-machine cases.
+    Trusted key or localhost only (same gate as GET /api/cases).
+    Public /lifecycle page embeds this payload server-side.
+    """
+    if not _has_bulk_corpus_access(request):
+        raise HTTPException(status_code=403, detail=_LIFECYCLE_API_FORBIDDEN_DETAIL)
+    from state_machines.lifecycle_api import build_lifecycle_payload
+
+    try:
+        return build_lifecycle_payload()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Lifecycle data unavailable: {e}") from e
+
+
+@app.get("/api/lifecycle/lstar")
+@limiter.limit("60/minute")
+def get_lifecycle_lstar(request: Request):
+    """
+    Full L* computation output (state_machines/data/lstar_all_cases.json).
+    Trusted key or localhost only.
+    """
+    if not _has_bulk_corpus_access(request):
+        raise HTTPException(status_code=403, detail=_LIFECYCLE_API_FORBIDDEN_DETAIL)
+    from state_machines.lifecycle_api import load_lstar_raw
+
+    try:
+        return load_lstar_raw()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Lifecycle L* output unavailable: {e}") from e
 
 
 @app.get("/triage", response_class=HTMLResponse)
