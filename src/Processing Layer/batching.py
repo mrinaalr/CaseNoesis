@@ -704,7 +704,7 @@ def _batch_ncmec_cases(text: str, org_name: str, source_file: str = None) -> Lis
         if year_match:
             report_year = year_match.group(1)
     
-    if report_year == '2024':
+    if report_year in ('2024', '2025'):
         return _batch_ncmec_2024_cases(text, org_name, source_file)
     elif report_year in ['2022', '2023']:
         # 2022 or 2023 - use media format (numbered articles)
@@ -714,19 +714,90 @@ def _batch_ncmec_cases(text: str, org_name: str, source_file: str = None) -> Lis
         lines = text.split('\n')[:10]
         first_lines_text = ' '.join(lines)
         
-        # Look for year pattern (2022, 2023, 2024)
-        year_pattern = r'\b(202[234])\b'
+        # Look for year pattern (2022–2025 NCMEC anthology years)
+        year_pattern = r'\b(202[2-5])\b'
         year_match = re.search(year_pattern, first_lines_text)
         
         if year_match:
             year = year_match.group(1)
-            if year == '2024':
+            if year in ('2024', '2025'):
                 return _batch_ncmec_2024_cases(text, org_name, source_file)
             else:
                 return _batch_ncmec_media_cases(text, org_name, source_file)
         else:
             # No year found - default to media format
             return _batch_ncmec_media_cases(text, org_name, source_file)
+
+
+def _ncmec_report_year(source_file: Optional[str]) -> Optional[str]:
+    if not source_file:
+        return None
+    year_match = re.search(r'(\d{4})', source_file)
+    return year_match.group(1) if year_match else None
+
+
+def _ncmec_media_url_pattern(report_year: Optional[str]) -> str:
+    """
+    Regex for one press clip's https block through body text.
+
+    Continues across wrapped URL lines and article body until a boundary line:
+    - 2022–2024 PDFs: bare page number (``\\n45\\n``)
+    - 2025+ PDFs: also ``Page | 38`` footers
+    """
+    if report_year and report_year.isdigit() and int(report_year) >= 2025:
+        boundary = r'(?:\d+\s*|Page\s*\|\s*\d+\s*)'
+    else:
+        boundary = r'\d+\s*'
+    return rf'https?://[^\n]+(?:\n(?!\s*{boundary}\n)[^\n]+)*'
+
+
+_NCMEC_ARTICLE_BOUNDARY_RE = re.compile(r'\n\s*(?:Page\s*\|\s*)?(\d+)\s*\n')
+
+
+def _ncmec_start_after_article_boundary(text: str, prev_url_end: int) -> int:
+    """Index where the next article begins after the previous clip's page marker."""
+    window = text[prev_url_end:prev_url_end + 8000]
+    boundary_match = _NCMEC_ARTICLE_BOUNDARY_RE.search(window)
+    if boundary_match:
+        return prev_url_end + boundary_match.end()
+    if prev_url_end < len(text) and text[prev_url_end] == '\n':
+        return prev_url_end + 1
+    return prev_url_end
+
+
+def _normalize_ncmec_source_url(url_blob: str) -> str:
+    """First https URL from a matched clip blob (may include wrapped slug lines)."""
+    if not url_blob:
+        return ""
+    lines = url_blob.splitlines()
+    for i, line in enumerate(lines):
+        m = re.search(r'https?://\S*', line)
+        if not m:
+            continue
+        url = m.group(0).strip()
+        spaced_slug_segments = 0
+        extra, add = consume_same_line_slug_after_url(url, line[m.end():])
+        url = extra
+        spaced_slug_segments += add
+        j = i + 1
+        while j < len(lines):
+            nxt = lines[j].strip()
+            if not nxt:
+                break
+            if _NCMEC_ARTICLE_BOUNDARY_RE.match('\n' + lines[j] + '\n'):
+                break
+            if re.match(r'^[A-Z0-9][A-Z0-9\s\-\'\./,&]{12,}$', nxt) and not nxt.lower().startswith('http'):
+                break
+            tup = try_append_source_url_continuation(url, nxt, spaced_slug_segments)
+            if tup is None:
+                break
+            frag, is_spaced = tup
+            url += frag
+            if is_spaced:
+                spaced_slug_segments += 1
+            j += 1
+        return url.rstrip('.,;)')
+    return ""
 
 
 def _split_ncmec_2024_double_story_blocks(segment: str) -> List[str]:
@@ -889,6 +960,7 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
                             'year': sub.get('year') or yr,
                             'case_id': '',
                             'state': state,
+                            **({'source_url': sub['source_url']} if sub.get('source_url') else {}),
                         })
                 if sub_cases:
                     cases.extend(sub_cases)
@@ -897,14 +969,18 @@ def _batch_ncmec_2024_cases(text: str, org_name: str, source_file: str = None) -
             case_text = clean_artifacts_from_text(piece)
             month_year, month, case_date_year = _metadata_from_text(case_text)
             id_year = report_year if report_year else case_date_year
-            cases.append({
+            single_case = {
                 'case_text': case_text,
                 'month_year': month_year,
                 'month': month,
                 'year': case_date_year,
                 'case_id': f'{org_name}_{id_year}_000',
                 'state': state,
-            })
+            }
+            source_url = _normalize_ncmec_source_url(piece)
+            if source_url:
+                single_case['source_url'] = source_url
+            cases.append(single_case)
 
     id_yr = report_year
     if not id_yr and cases:
@@ -1049,28 +1125,20 @@ def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) 
         List of case dictionaries with 'case_text', 'month_year', 'month', 'year', 'case_id'
     """
     # Extract report year from filename if available
-    report_year = None
-    if source_file:
-        year_match = re.search(r'(\d{4})', source_file)
-        if year_match:
-            report_year = year_match.group(1)
+    report_year = _ncmec_report_year(source_file)
     
     cases = []
     
     # Find all URLs (these mark the end of each case)
-    # URLs can span multiple lines (if ending with dash, continue on next line)
-    # URLs end when we hit: newline → number → newline (the case marker)
-    # Pattern: http://... until we hit \n\d+\n (newline, number, newline)
-    url_pattern = r'https?://[^\n]+(?:\n(?!\s*\d+\s*\n)[^\n]+)*'
+    # URLs can span multiple lines; each clip ends at a page marker line.
+    url_pattern = _ncmec_media_url_pattern(report_year)
     url_matches = []
     for match in re.finditer(url_pattern, text):
         url_text = match.group(0)
         url_end_pos = match.end()
         
-        # The URL ends, then we have newline → number → newline → next case
-        # So the case ends at the URL's end position
         url_matches.append({
-            'pos': url_end_pos,  # End position of URL (start of next case)
+            'pos': url_end_pos,
             'url': url_text
         })
     
@@ -1096,20 +1164,8 @@ def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) 
         if i == 0:
             start_pos = 0
         else:
-            # Skip the number marker between URLs
-            # Pattern: newline → number → newline → next case title
             prev_url_end = url_matches[i - 1]['pos']
-            # Find the number marker and skip past it
-            # Look for: newline, optional whitespace, number, optional whitespace, newline
-            number_pattern = r'\n\s*(\d+)\s*\n'
-            number_match = re.search(number_pattern, text[prev_url_end:prev_url_end+20])  # Only check first 20 chars
-            if number_match:
-                # Start after the number marker (which includes the trailing newline)
-                start_pos = prev_url_end + number_match.end()
-            else:
-                # No number marker found - might be at end of file or malformed
-                # Start right after previous URL (skip the newline)
-                start_pos = prev_url_end + 1 if prev_url_end < len(text) and text[prev_url_end] == '\n' else prev_url_end
+            start_pos = _ncmec_start_after_article_boundary(text, prev_url_end)
         
         # End of case: end of current URL
         end_pos = url_info['pos']
@@ -1170,13 +1226,18 @@ def _batch_ncmec_media_cases(text: str, org_name: str, source_file: str = None) 
         # Use case_date_year for case metadata (not ID)
         year = case_date_year
         
-        cases.append({
+        source_url = _normalize_ncmec_source_url(url_info['url'])
+        
+        case_entry = {
             'case_text': case_text,
             'month_year': month_year,
             'month': month,
             'year': year,
             'case_id': case_id
-        })
+        }
+        if source_url:
+            case_entry['source_url'] = source_url
+        cases.append(case_entry)
     
     # Handle last case: text after the last URL (if any)
     if url_matches:

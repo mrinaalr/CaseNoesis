@@ -40,6 +40,13 @@ case_batching = batching.case_batching
 clean_artifacts_from_text = batching.clean_artifacts_from_text
 clean_urls_from_text = batching.clean_artifacts_from_text  # Backward compatibility alias
 
+_perp_adm_path = Path(__file__).parent / "perpetrator_admissions.py"
+_perp_adm_spec = importlib.util.spec_from_file_location("perpetrator_admissions", _perp_adm_path)
+_perp_adm_mod = importlib.util.module_from_spec(_perp_adm_spec)
+_perp_adm_spec.loader.exec_module(_perp_adm_mod)
+extract_perpetrator_admissions = _perp_adm_mod.extract_perpetrator_admissions
+perpetrator_admission_themes = _perp_adm_mod.perpetrator_admission_themes
+
 
 def _extract_source_url(case_text: str) -> str:
     """Extract URL only from `Source: <url>` lines."""
@@ -590,8 +597,12 @@ def extract_features(raw_case: Dict[str, Any]) -> Dict[str, Any]:
     # P2P / Tor / detection tech — persisted in extracted_features (not duplicated on cases row)
     features.update(extract_technology_signals(raw_case))
 
-    # If offense product is tagged, infer Gen AI tool when press release names AI as instrument.
     topics = list(features.get("case_topics") or [])
+    _admissions = extract_perpetrator_admissions(raw_case, case_topics=topics)
+    features["perpetrator_admissions"] = _admissions
+    features["perpetrator_admission_themes"] = perpetrator_admission_themes(_admissions)
+
+    # If offense product is tagged, infer Gen AI tool when press release names AI as instrument.
     platforms = list(features.get("platforms_used") or [])
     case_text = raw_case.get("case_text") or ""
     if "ai_csam" in topics and "Gen AI" not in platforms:

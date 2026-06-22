@@ -83,10 +83,17 @@ CAC_NCMEC = Namespace("https://cacontology.projectvic.org/us/ncmec#")
 CAC_MULTI = Namespace("https://cacontology.projectvic.org/multi-jurisdiction#")
 CAC_AI = Namespace("https://cacontology.projectvic.org/ai-csam#")
 CAC_USA_FEDERAL = Namespace("https://cacontology.projectvic.org/usa-federal-law#")
+CAC_UNDERCOVER = Namespace("https://cacontology.projectvic.org/undercover#")
 
 # CaseLinker annotations (not in CAC ontology TTL)
 CASELINKER_CHARGE_CLUSTER = BASE["vocab/chargeCluster"]
 CASELINKER_CHARGE_OFFENSE_EVENT = BASE["vocab/chargeOffenseEvent"]
+CASELINKER_ADMISSION_FRAME = BASE["vocab/admissionFrame"]
+CASELINKER_QUOTE_TYPE = BASE["vocab/quoteType"]
+CASELINKER_ADMISSION_THEME = BASE["vocab/admissionTheme"]
+CASELINKER_ADMISSION_CONTEXT = BASE["vocab/admissionContext"]
+CASELINKER_ATTRIBUTED_TO_ROLE = BASE["vocab/attributedToOffenderRole"]
+CASELINKER_EVIDENCE_TIER = BASE["vocab/evidenceTier"]
 
 UCO_CORE = Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
 UCO_ACTION = Namespace("https://ontology.unifiedcyberontology.org/uco/action/")
@@ -129,6 +136,22 @@ def _case_bool_flag(case: Dict[str, Any], key: str) -> bool:
     if isinstance(val, str) and val.strip().lower() in ("true", "1", "yes"):
         return True
     return False
+
+
+def _case_feature(case: Dict[str, Any], key: str, default: Any = None) -> Any:
+    """Read a feature from a hoisted case dict (or extracted_features fallback)."""
+    val = case.get(key)
+    if val is not None:
+        return val
+    ef = case.get("extracted_features")
+    if isinstance(ef, str):
+        try:
+            ef = json.loads(ef)
+        except (json.JSONDecodeError, TypeError):
+            ef = None
+    if isinstance(ef, dict) and key in ef:
+        return ef.get(key, default)
+    return default
 
 
 def _to_xsd_datetime_stamp(value: Any) -> Optional[str]:
@@ -769,6 +792,22 @@ NLP_CONCEPT_MAP: Dict[str, Tuple[float, URIRef]] = {
     "ai_and_internet_tools": (0.50, CAC.DigitallyGeneratedCSAMIncident),
 }
 
+# Regex-extracted perpetrator admission confidence → numeric score for AssessmentResult.
+PERPETRATOR_ADMISSION_CONFIDENCE: Dict[str, float] = {
+    "high": 0.9,
+    "medium": 0.65,
+    "low": 0.4,
+}
+
+# Themes that warrant linking an admission artifact to CSA offense events.
+_PERP_ADMISSION_CONDUCT_THEMES = frozenset({
+    "harm_conduct",
+    "sexual_interest",
+    "recidivism_escalation",
+    "tech_use",
+    "minimization",
+})
+
 
 # ===========================================================================
 # Graph builder
@@ -837,6 +876,9 @@ class CaseToCAC:
         platform_uris = self.map_platforms(det_g, case, event_uris, warnings)
         victim_uris, offender_uris = self.map_roles(
             det_g, case, inv_uri, event_uris, warnings
+        )
+        self.map_perpetrator_admissions(
+            det_g, case, inv_uri, offender_uris, event_uris, warnings
         )
         self.map_severity(det_g, case, event_uris, offender_uris, warnings)
         self.map_prosecution(det_g, case, inv_uri, event_uris, warnings)
@@ -1940,6 +1982,101 @@ class CaseToCAC:
             g.add((inv_uri, CAC.hasStep, node_uri))
 
     # ------------------------------------------------------------------
+    # Step 10: Perpetrator admissions (regex extraction → CAC artifact)
+    # ------------------------------------------------------------------
+
+    def map_perpetrator_admissions(
+        self,
+        g: Graph,
+        case: Dict[str, Any],
+        inv_uri: URIRef,
+        offender_uris: List[URIRef],
+        event_uris: Dict[str, URIRef],
+        warnings: List[str],
+    ) -> None:
+        """
+        Map ``perpetrator_admissions`` feature records to
+        ``cacontology-undercover:IncriminatingStatement`` nodes.
+
+        CaseLinker extracts these from ICAC press-release narrative via
+        regex attribution frames in ``perpetrator_admissions.py``. There is
+        no dedicated ``PerpetratorAdmission`` class in CAC v3.0.0; the
+        undercover module's ``IncriminatingStatement`` (subClassOf
+        ``uco-observable:Message``, ``cac-core:Artifact``) is the closest
+        fit for suspect speech that evidences criminal intent or conduct.
+        """
+        case_id = case.get("id", "unknown")
+        raw = _case_feature(case, "perpetrator_admissions")
+        if isinstance(raw, str):
+            try:
+                raw = json.loads(raw)
+            except (json.JSONDecodeError, TypeError):
+                raw = None
+        if not isinstance(raw, list) or not raw:
+            return
+
+        source_url = case.get("source_url")
+        source_label = case.get("source")
+        evidence_tier = "press_release_stated"
+
+        for index, record in enumerate(raw, start=1):
+            if not isinstance(record, dict):
+                continue
+            quote = str(record.get("quote") or "").strip()
+            if not quote:
+                continue
+
+            frame = str(record.get("frame") or "unknown")
+            quote_type = str(record.get("quote_type") or "unknown")
+            context = str(record.get("context") or "").strip()
+            themes = record.get("themes") or []
+            if not isinstance(themes, list):
+                themes = []
+            themes = [str(t) for t in themes if t]
+
+            confidence_label = str(record.get("confidence") or "medium").lower()
+            confidence_score = PERPETRATOR_ADMISSION_CONFIDENCE.get(
+                confidence_label, 0.65
+            )
+
+            adm_uri = BASE[f"case/{case_id}/admission/{index}"]
+            label = quote if len(quote) <= 120 else f"{quote[:117]}..."
+
+            g.add((adm_uri, RDF.type, CAC_UNDERCOVER.IncriminatingStatement))
+            g.add((adm_uri, RDFS.label, Literal(label)))
+            g.add((adm_uri, UCO_CORE.description, Literal(quote)))
+            g.add((adm_uri, CASELINKER_ADMISSION_FRAME, Literal(frame)))
+            g.add((adm_uri, CASELINKER_QUOTE_TYPE, Literal(quote_type)))
+            g.add((adm_uri, CASELINKER_EVIDENCE_TIER, Literal(evidence_tier)))
+
+            for theme in themes:
+                g.add((adm_uri, CASELINKER_ADMISSION_THEME, Literal(theme)))
+
+            if context:
+                g.add((adm_uri, CASELINKER_ADMISSION_CONTEXT, Literal(context)))
+
+            if source_url:
+                g.add((adm_uri, DCTERMS.source, URIRef(str(source_url))))
+            elif source_label:
+                g.add((adm_uri, DCTERMS.source, Literal(str(source_label))))
+
+            g.add((inv_uri, CAC.hasStep, adm_uri))
+
+            if offender_uris:
+                g.add((adm_uri, CASELINKER_ATTRIBUTED_TO_ROLE, offender_uris[0]))
+
+            result_uri = BASE[f"case/{case_id}/admission/{index}/extraction-confidence"]
+            g.add((result_uri, RDF.type, CAC_CORE.AssessmentResult))
+            g.add((result_uri, CAC_CORE.hasConfidence,
+                   Literal(round(confidence_score, 4), datatype=XSD.decimal)))
+            g.add((result_uri, CAC_CORE.assesses, adm_uri))
+            g.add((result_uri, CAC_CORE.generatedBy, inv_uri))
+
+            if themes and any(t in _PERP_ADMISSION_CONDUCT_THEMES for t in themes):
+                for evt_uri in self._core_csa_event_uris(g, event_uris):
+                    g.add((evt_uri, CAC.producesArtifact, adm_uri))
+
+    # ------------------------------------------------------------------
     # Helpers
     # ------------------------------------------------------------------
 
@@ -2113,6 +2250,7 @@ class CaseToCAC:
         g.bind("cacontology-us-ncmec", CAC_NCMEC)
         g.bind("cacontology-multi", CAC_MULTI)
         g.bind("cacontology-usa-federal", CAC_USA_FEDERAL)
+        g.bind("cacontology-undercover", CAC_UNDERCOVER)
         g.bind("uco-action", UCO_ACTION)
         g.bind("uco-core", UCO_CORE)
         g.bind("uco-identity", UCO_IDENTITY)
@@ -2266,6 +2404,17 @@ AZICAC_2011_006_FIXTURE: Dict[str, Any] = {
     "severity_indicators": ["under_12", "sexual_abuse", "multiple_perpetrators"],
     "case_topics": ["production", "hands_on", "family", "csam"],
     "severity_phrases": ["dangerous"],
+    "perpetrator_admissions": [
+        {
+            "quote": "I have a problem and I need help",
+            "quote_type": "direct",
+            "frame": "admitted_quote",
+            "themes": ["recidivism_escalation"],
+            "confidence": "high",
+            "context": "Defendant-1 admitted \"I have a problem and I need help\"",
+        }
+    ],
+    "perpetrator_admission_themes": ["recidivism_escalation"],
     "investigation_technology": [],
     "tags": [],
     "notes": None,
@@ -2382,6 +2531,7 @@ def run_test(case_dict: Dict[str, Any], output_dir: Path) -> None:
         "EnduringEntity", "Event", "Phase", "Role", "AssessmentResult",
         "CriminalCharge", "CriminalSentence", "TrustViolation",
         "OrganizationLikeEntity", "DigitalSystemEntity", "CustodialRelationship",
+        "IncriminatingStatement",
     }
 
     print("MAPPING_PLAN.md §6.2 node type comparison:")

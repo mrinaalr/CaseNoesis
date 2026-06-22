@@ -212,8 +212,13 @@ provenance:
     - "D. Haw. 1:23-cr-00071-JMS, Doc 70 (Superseding Indictment)"
     - "D. Haw. 1:23-cr-00071-JMS, Doc 188 (Government Trial Brief)"
     - "D. Haw. 1:23-cr-00071-JMS docket report"
-  retrieval_method: manual
-  extraction_method: agent_assisted
+  retrieval_method: local_pdf
+  extraction_method: mcp_process_document_file_plus_agent_structuring
+  processed_outputs:
+    - "processed/indictment.processed.jsonld"
+    - "processed/superseding_indictment.processed.jsonld"
+    - "processed/trial_brief.processed.jsonld"
+    - "processed/docket.processed.jsonld"
   human_reviewed: false
 
 # Compatibility placeholders (safe defaults for facts-driven wiring)

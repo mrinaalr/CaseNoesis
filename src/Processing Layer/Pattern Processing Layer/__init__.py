@@ -32,6 +32,10 @@ from .processing import (
     clean_urls_from_text,  # Backward compatibility (aliased to clean_artifacts_from_text)
     clean_artifacts_from_text,
 )
+from .perpetrator_admissions import (
+    extract_perpetrator_admissions,
+    perpetrator_admission_themes,
+)
 
 __all__ = [
     'case_batching',
@@ -51,6 +55,8 @@ __all__ = [
     'extract_severity',
     'extract_topics',
     'extract_severity_phrases',
+    'extract_perpetrator_admissions',
+    'perpetrator_admission_themes',
     'clean_urls_from_text',  # Backward compatibility
     'clean_artifacts_from_text',
 ]

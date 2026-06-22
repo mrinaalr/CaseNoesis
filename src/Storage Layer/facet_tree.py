@@ -56,6 +56,7 @@ DEFAULT_FACET_ORDER: Sequence[FacetStep] = (
     ("prosecution_outcome", "Prosecution Outcome"),
     ("locations", "Location"),
     ("severity_phrases", "Severity Phrase"),
+    ("perpetrator_admission_themes", "Perp admission"),
     ("era_period", "Date range"),
 )
 

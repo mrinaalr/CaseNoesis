@@ -35,6 +35,8 @@ if _pattern_layer_path.exists():
     extract_severity = pattern_module.extract_severity
     extract_topics = pattern_module.extract_topics
     extract_severity_phrases = pattern_module.extract_severity_phrases
+    extract_perpetrator_admissions = pattern_module.extract_perpetrator_admissions
+    perpetrator_admission_themes = pattern_module.perpetrator_admission_themes
     
     # Import MergeProcessing (intersection class)
     _merge_path = Path(__file__).parent / "merge_processing.py"
@@ -66,6 +68,8 @@ __all__ = [
     'extract_severity',
     'extract_topics',
     'extract_severity_phrases',
+    'extract_perpetrator_admissions',
+    'perpetrator_admission_themes',
     'MergeProcessing',
     'merge_processing',
 ]

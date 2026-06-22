@@ -205,9 +205,24 @@
     "harm_vector": ""
   },
   "BitTorrent": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Peer-to-peer network linking users' computers for file sharing",
+      "User's computer acts as mini-server making files available to other users",
+      "Download / receive files from the network",
+      "Exchange or trade files with other users on the network",
+      "Search the network by keyword or filename",
+      "Make files available for download from a user's IP address"
+    ],
+    "misuse_surface": [
+      "Download and save CSAM collections from a peer-to-peer file-sharing network",
+      "Exchange or trade CSAM video and image files with other users on the network",
+      "Make CSAM files available for other users to download from the offender's computer",
+      "Search the network for CSAM using known search terms",
+      "Participate in peer-to-peer networks under law-enforcement investigation of CSAM sharing activity"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2024_891; idaho_icac_2024_022; doj_ceos_2026_002)"
+    ]
   },
   "LimeWire": {
     "affordances": [],
@@ -230,19 +245,72 @@
     "harm_vector": ""
   },
   "Dropbox": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Cloud storage and file hosting without Google account dependency",
+      "Shared folder links with public or restricted access controls",
+      "No content-type restriction on upload (images, video, archives)",
+      "Persistent file availability without sender action",
+      "Desktop sync client — automatic local-to-cloud mirroring without manual upload",
+      "Third-party app integration",
+      "Link-based sharing without recipient account requirement"
+    ],
+    "misuse_surface": [
+      "Shared links used to distribute CSAM collections without direct file transfer",
+      "Desktop sync client used to automatically mirror local CSAM library to cloud",
+      "Folder-level sharing to hand off bulk material in a single link",
+      "No-account-required link access lowers barrier to receiving material",
+      "Used as handoff layer — link shared via separate contact channel (forum, messaging app)",
+      "Persistent hosting until platform detection or account termination"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is possessed or stored in an offender's cloud storage account",
+      "A child's abuse imagery is uploaded to cloud file hosting for distribution or collection",
+      "A child's abuse imagery is distributed or re-shared via cloud storage links (re-victimizing the depicted child)"
+    ]
   },
   "Telegram": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "End-to-end encryption",
+      "Large-file transfer",
+      "Channel broadcasting",
+      "Self-destruct timers"
+    ],
+    "misuse_surface": [
+      "Encrypted channels distribute CSAM collections outside platform detection range",
+      "Large-file transfer delivers bulk material directly to named recipients",
+      "Broadcast channels reach subscriber audiences of thousands without individual offender-to-recipient contact",
+      "Self-destruct timers reduce the forensic trail from direct exchanges",
+      "Minimal phone-number-only registration enables pseudonymous operation and rapid account replacement after action"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2022_546; ncmec_2022_292; ncmec_2023_338; ncmec_2024_214; ncmec_2024_991; ncmec_2025_333; ncmec_2025_437; ncmec_2025_598; ncmec_2025_607; ncmec_2025_672; doj_ceos_2025_014; ncmec_2025_208; wy_dci_2026_001)",
+      "A child is contacted and exploited through Telegram messaging (svicac_2022_001)",
+      "A child is groomed or enticed toward sexual contact or meeting (svicac_2022_001)"
+    ]
   },
   "Google Drive": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Cloud storage and file hosting at scale (any file type, any size within quota)",
+      "Shareable links with configurable access controls (anyone-with-link or specific accounts)",
+      "No content-type restriction on upload (documents, images, video, archives)",
+      "Persistent availability — files remain accessible indefinitely without sender action",
+      "Folder-level organization and bulk sharing (entire directory via single link)",
+      "Google account integration with low-friction creation",
+      "Download enablement (recipients can pull local copies of shared content)"
+    ],
+    "misuse_surface": [
+      "Shared links used to distribute CSAM to one or many recipients without direct file transfer",
+      "Folder-level sharing used to hand off an entire collection in a single link",
+      "Persistent hosting — material stays accessible indefinitely unless platform detects and removes it",
+      "Anyone-with-link access removes need for recipient account — lowers barrier to receiving material",
+      "Used as handoff layer: offender hosts on Drive, shares link via separate contact channel",
+      "Lower detection surface than direct file transfer through messaging"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is possessed or stored in an offender's cloud storage account",
+      "A child's abuse imagery is uploaded to cloud file hosting for distribution or collection",
+      "A child's abuse imagery is distributed or re-shared via cloud storage (re-victimizing the depicted child)"
+    ]
   },
   "Twitter / X": {
     "affordances": [],
@@ -265,14 +333,51 @@
     "harm_vector": ""
   },
   "Omegle": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Random stranger pairing (no mutual connection, no account required)",
+      "Anonymous text and video chat (no persistent identity)",
+      "No account creation required — zero onboarding friction",
+      "Interest tag matching (common tags used to filter pairings)",
+      "Unmonitored by design — no moderation infrastructure at scale",
+      "No logging or message persistence by default"
+    ],
+    "misuse_surface": [
+      "Random pairing used to reach minors at scale without targeting effort",
+      "Zero-identity architecture — no traceability after session ends",
+      "Interest tags used to filter for younger users or shared interests with minors",
+      "Unmonitored video channel used to solicit or produce real-time imagery",
+      "Session ephemerality — no record of contact, no forensic trail",
+      "Migration target — initiate on Omegle, move victim to persistent messaging platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through anonymous random video or text chat",
+      "A child is groomed or enticed toward sexual contact or meeting",
+      "A child is solicited for explicit imagery or subjected to real-time sexual exhibition in video chat"
+    ]
   },
   "Whisper": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
+    "affordances": [
+      "Anonymous posting by default (no account required to browse)",
+      "Location-based content discovery (posts surfaced by geographic proximity)",
+      "Image-based posts with text overlay (visual-first, low-identity format)",
+      "Direct messaging between users with no prior connection required",
+      "Interest/topic-based discovery (posts tagged and surfaced by category)",
+      "No verified identity or phone number required",
+      "Ephemeral community feel — posts decay in visibility over time"
+    ],
+    "misuse_surface": [
+      "Anonymous contact with minors without traceable identity",
+      "Location-based discovery used to identify and approach nearby minors",
+      "DM used to move contact off the anonymous public feed into private channel",
+      "Interest tags used to identify and surface vulnerable or younger users",
+      "Low-identity architecture makes account accountability near-zero",
+      "Migration target — initiate on Whisper, move victim to messaging platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through anonymous messaging",
+      "A child is groomed or enticed toward sexual contact or meeting",
+      "A child is solicited for explicit imagery through anonymous posts or direct messages"
+    ]
   },
   "Mega.nz": {
     "affordances": [],

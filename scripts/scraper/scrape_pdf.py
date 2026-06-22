@@ -853,6 +853,180 @@ def _njoag_body_ok(body: str) -> bool:
     )
 
 
+_NJOAG_EXCLUDE_SLUG_RE = re.compile(
+    r"(?:"
+    r"sues-|"
+    r"civil-rights|division-on-civil-rights|announce-final-decision|"
+    r"state-board-of-medical-examiners-revokes|"
+    r"board-of-nursing-permanently-revokes|"
+    r"nj-board-of-nursing-temporarily-suspends-certification|"
+    r"revocation-of-professional-licenses|"
+    r"urges-congress|demands-immediate-action|demands-state-board|"
+    r"deepfake|tells-tech-industry|"
+    r"attorneys-general-are-calling|"
+    r"leadership-transition|assumes-control-of-the|to-lead-the-office-of|"
+    r"updates-how-forensic|"
+    r"orders-sweeping-reforms|"
+    r"establishes-task-force-to-investigate-alleg"
+    r")",
+    re.I,
+)
+
+_NJOAG_CONTAMINATION_TAIL_PATTERNS = (
+    r"[\x0c\f]\s*\n[^\n]{15,220}\s*-\s*New Jersey Office of Attorney General",
+    r"[\x0c\f]\s*\n(?:AG|Attorney General|Acting AG)[^\n]{15,220}\n[A-Z][a-z]+ \d{1,2}, \d{4}",
+    r"[\x0c\f]\s*\n[A-Z][^\n]{20,200}\n[A-Z][a-z]+ \d{1,2}, \d{4}\s*$",
+    r"[\x0c\f]\s*\n[A-Z][^\n]{20,200}\n[A-Z][a-z]+ \d{1,2}, \d{4}\s*\n",
+    r"^Publication date: \d{4}-\d{2}-\d{2}\s*$",
+    r"[\x0c\f]\s*[\u201c\"]Discord claims that safety is at the core",
+    r"[\x0c\f]?\s*\nNew Jersey and Multistate Coalition ",
+    r"[\x0c\f]\s*New Jersey and Multistate Coalition ",
+    r"\n - New Jersey Office of Attorney\s*\nGeneral\s*$",
+    r"[\x0c\f]?\s*\nAG Platkin Sues ",
+    r"[\x0c\f]\s*AG Platkin Sues ",
+    r"^AG Platkin Sues ",
+    r"^[\u201c\"]Discord claims that safety is at the core",
+    r"^[\u201c\"]By filing this lawsuit",
+    r"^The lawsuit seeks a number of remedies",
+    r"^As a result of the lawsuit, DOJ has now agreed",
+    r"[\x0c\f]\s*As a result of the lawsuit, DOJ has now agreed",
+    r"^The lawsuit, filed by the coalition on Tuesday",
+    r"[\x0c\f]\s*The lawsuit, filed by the coalition on Tuesday",
+    r"\n[A-Z][^\n]{20,180}\n[A-Z][a-z]+ \d{1,2}, \d{4}\s*$",
+    r"[\x0c\f]?\s*\nAG Platkin Tells Tech ",
+    r"^AG Platkin Tells Tech ",
+    r"\nhttps://www\.njoag\.gov/",
+    r"\nSource:\s*https://www\.njoag\.gov/",
+    r"^Source:\s*https://www\.njoag\.gov/",
+)
+
+
+def is_njoag_icac_url(url: str) -> bool:
+    """Drop lawsuits, license revocations, policy letters, and civil-rights releases."""
+    path = urlparse(url or "").path.strip("/")
+    if not path or path == "child-protection":
+        return False
+    slug = path.split("/")[-1]
+    return not _NJOAG_EXCLUDE_SLUG_RE.search(slug)
+
+
+def filter_njoag_icac_urls(urls: list[str]) -> list[str]:
+    return [u for u in urls if is_njoag_icac_url(u)]
+
+
+def extract_njoag_urls_from_merged_text(text: str) -> list[str]:
+    """Rebuild full njoag.gov URLs from merged PDF text (handles wrapped Source: lines)."""
+    urls: list[str] = []
+    lines = text.split("\n")
+    i = 0
+    while i < len(lines):
+        m = re.match(r"^Source:\s*(https://www\.njoag\.gov/\S*)", lines[i])
+        if m:
+            url = m.group(1).strip()
+            j = i + 1
+            while j < len(lines):
+                nxt = lines[j].strip()
+                if not nxt:
+                    j += 1
+                    continue
+                if (
+                    nxt.startswith("Source:")
+                    or nxt.startswith("Office of")
+                    or nxt.startswith("TRENTON")
+                    or nxt.startswith("Media Inquiries")
+                ):
+                    break
+                if re.match(r"^[-a-z0-9%]+/?$", nxt) or (
+                    nxt.startswith("-") and " " not in nxt
+                ):
+                    url += nxt.lstrip("-") if nxt.startswith("-") else nxt
+                    j += 1
+                    continue
+                break
+            urls.append(url.rstrip("/").split()[0])
+            i = j
+            continue
+        i += 1
+    return sorted(set(urls))
+
+
+def _cut_njoag_contamination(body: str, *, min_chars: int = 200) -> str:
+    """Remove next-article bleed, site footers, and mid-merge press-release blocks."""
+    if not body or len(body) < min_chars:
+        return body
+    text = body
+    cut_at = len(text)
+
+    m_tail = None
+    for pat in _NJOAG_CONTAMINATION_TAIL_PATTERNS:
+        m = re.search(pat, text[min_chars:], re.MULTILINE)
+        if m and (m_tail is None or m.start() < m_tail.start()):
+            m_tail = m
+    if m_tail:
+        cut_at = min(cut_at, min_chars + m_tail.start())
+
+    trenton = list(re.finditer(r"(?m)^TRENTON\s*[\u2014\u2013\-]", text))
+    if len(trenton) >= 2 and trenton[1].start() > min_chars:
+        cut_at = min(cut_at, trenton[1].start())
+
+    mastheads = list(
+        re.finditer(r"(?m)^Office of (?:The )?Attorney General\s*[\u2013\-]", text)
+    )
+    if len(mastheads) >= 2 and mastheads[1].start() > min_chars:
+        cut_at = min(cut_at, mastheads[1].start())
+
+    if cut_at < len(text):
+        text = text[:cut_at].rstrip()
+    return text
+
+
+def _strip_njoag_trailing_headline_bleed(text: str) -> str:
+    """Drop orphan next-article title lines left after date/footer cuts."""
+    bleed_prefixes = (
+        "AG ",
+        "Attorney General ",
+        "Acting AG ",
+        "Sussex County ",
+        "Middlesex County ",
+        "Passaic County ",
+        "Two Officers ",
+        "College Student ",
+    )
+    while text.strip():
+        lines = text.rstrip().split("\n")
+        last = lines[-1].strip()
+        if not last or last.startswith("http"):
+            break
+        if re.match(r"^[A-Z][a-z]+ \d{1,2}, \d{4}$", last):
+            text = "\n".join(lines[:-1]).rstrip()
+            continue
+        if (
+            len(last) > 25
+            and last[-1] not in ".!?;:"
+            and "counsel" not in last.lower()
+            and "Esq." not in last
+            and any(last.startswith(p) for p in bleed_prefixes)
+        ):
+            text = "\n".join(lines[:-1]).rstrip()
+            continue
+        break
+    return text
+
+
+def _clean_njoag_scraped_body(body: str) -> str:
+    """Final pass before PDF write: strip contamination Jina/HTML trim can miss."""
+    if not (body or "").strip():
+        return body
+    text = re.sub(r"\r\n?", "\n", body).strip()
+    text = re.sub(r"(?m)^Publication date: \d{4}-\d{2}-\d{2}\s*\n?", "", text)
+    text = _cut_njoag_contamination(text)
+    text = re.sub(r"[\x0c\f]+", "\n", text)
+    text = re.sub(r"\n[A-Z][a-z]+ \d{1,2}, \d{4}\s*$", "", text)
+    text = _strip_njoag_trailing_headline_bleed(text)
+    text = re.sub(r"\n{3,}", "\n\n", text).strip()
+    return text
+
+
 _SINCLAIR_BROADCAST_HOSTS = (
     "cbs12.com",
     "wpbf.com",
@@ -1105,12 +1279,15 @@ def _trim_njoag_body(body: str) -> str:
         r"(?m)^Initiatives\s*$",
         r"(?m)^Media Inquiries",
         r"(?m)^\[\]\(https?://www\.njoag\.gov/",
+        r"[\x0c\f]\s*\n[^\n]{15,220}\s*-\s*New Jersey Office of Attorney General",
+        r"(?m)^Publication date: \d{4}-\d{2}-\d{2}\s*$",
     ):
         m = re.search(marker, trimmed)
         if m and m.start() > 250 and (end_at is None or m.start() < end_at):
             end_at = m.start()
     if end_at is not None:
         trimmed = trimmed[:end_at].strip()
+    trimmed = _cut_njoag_contamination(trimmed)
     lines: list[str] = []
     for line in trimmed.splitlines():
         s = line.strip()
@@ -1125,6 +1302,7 @@ def _trim_njoag_body(body: str) -> str:
             break
         lines.append(line)
     out = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    out = _clean_njoag_scraped_body(out)
     return out if _njoag_body_ok(out) else ""
 
 
@@ -2284,6 +2462,11 @@ def main():
         action="store_true",
         help="If direct HTML fetch fails (e.g. 403), retry via https://r.jina.ai/ reader markdown.",
     )
+    ap.add_argument(
+        "--filter-njoag",
+        action="store_true",
+        help="Drop njoag.gov URLs that are lawsuits, license actions, policy letters, or civil-rights releases.",
+    )
     args = ap.parse_args()
 
     verify_tls = not args.insecure
@@ -2299,6 +2482,10 @@ def main():
         sys.exit(f"URL file not found: {args.url_file}")
 
     all_urls = load_urls(args.url_file)
+    if args.filter_njoag:
+        before = len(all_urls)
+        all_urls = filter_njoag_icac_urls(all_urls)
+        print(f"  NJ filter  : {before} -> {len(all_urls)} URLs")
     urls = all_urls[: args.limit] if args.limit else all_urls
 
     print(f"\n{'='*55}")
@@ -2340,6 +2527,13 @@ def main():
                 time.sleep(args.delay)
                 continue
             title, byline, body, pub_date = result
+            if "njoag.gov" in url.lower():
+                body = _clean_njoag_scraped_body(body)
+                if not body or len(body) < MIN_BODY_CHARS:
+                    print("    [FAILED] njoag: body too thin after clean")
+                    failures.append(url)
+                    time.sleep(args.delay)
+                    continue
             ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
             if ok:
                 kb = out_pdf.stat().st_size // 1024
@@ -2433,6 +2627,13 @@ def main():
             continue
 
         title, byline, body, pub_date = result
+        if "njoag.gov" in url.lower():
+            body = _clean_njoag_scraped_body(body)
+            if not body or len(body) < MIN_BODY_CHARS:
+                print("    [FAILED] njoag: body too thin after clean")
+                failures.append(url)
+                time.sleep(args.delay)
+                continue
         ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
 
         if ok:

@@ -529,7 +529,7 @@
       "rdfs:label": "PACER extraction",
       "uco-core:description": {
         "@type": "xsd:string",
-        "@value": "Extraction from source document; retrieval=manual, extraction=agent_assisted, human_reviewed=False."
+        "@value": "Extraction from source document; retrieval=local_pdf, extraction=mcp_process_document_file_plus_agent_structuring, human_reviewed=False."
       }
     },
     {

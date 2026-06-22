@@ -469,7 +469,8 @@ class CaseStorage:
                            'press_digest_pollution', 'multi_defendant_operation',
                            'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                            'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
-                           'severity_phrases', 'case_text', 'comparison_values',
+                           'severity_phrases', 'perpetrator_admissions', 'perpetrator_admission_themes',
+                           'case_text', 'comparison_values',
                            'investigation_technology', 'anonymization_network', 'p2p_clients', 'offense_technology']:
                     if key in extracted_features:
                         case_dict[key] = extracted_features[key]
@@ -613,7 +614,8 @@ class CaseStorage:
                                'press_digest_pollution', 'multi_defendant_operation',
                                'agencies_involved', 'organizations', 'locations', 'investigation_type', 'investigation_types', 'evidence_volume',
                                'prosecution_outcome', 'case_demographics', 'victim_demographics', 'relationship_to_victim',
-                               'severity_phrases', 'case_text', 'comparison_values',
+                               'severity_phrases', 'perpetrator_admissions', 'perpetrator_admission_themes',
+                           'case_text', 'comparison_values',
                                'investigation_technology', 'anonymization_network', 'p2p_clients', 'offense_technology']:
                         if key in extracted_features:
                             case_dict[key] = extracted_features[key]
@@ -758,6 +760,8 @@ class CaseStorage:
                         "victim_demographics",
                         "relationship_to_victim",
                         "severity_phrases",
+                        "perpetrator_admissions",
+                        "perpetrator_admission_themes",
                         "case_text",
                         "comparison_values",
                         "investigation_technology",
@@ -884,6 +888,8 @@ class CaseStorage:
                         "victim_demographics",
                         "relationship_to_victim",
                         "severity_phrases",
+                        "perpetrator_admissions",
+                        "perpetrator_admission_themes",
                         "case_text",
                         "comparison_values",
                         "investigation_technology",

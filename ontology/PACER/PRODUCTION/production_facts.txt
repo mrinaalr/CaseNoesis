@@ -1,115 +1,114 @@
 # CASE FACTS — structured extraction for CAC graph construction
-# Source: PACER, D. Alaska 3:24-cr-00091-SLG-KFR (Doc 2) + W.D. Texas 3:25-cr-01046-KC (Doc 1)
-# Evidentiary status: ALLEGED (pre-trial; not-guilty pleas; plea negotiations pending June 2026)
+# Source: PACER, E.D. Va. 1:23-cr-156 (pending: SOF / plea agreement / superseding indictment)
+# Evidentiary status: PROVEN (guilty plea 2024-05-01; sentenced 2024-07-24) — facts file PRE-ENRICHMENT
 # Extraction discipline: coded signals only — no raw explicit text, no victim-identifying detail
-# Methodology : Hand extracted facts, agent formalization of facts, CASE-UCO-SDK ontology expression of facts.
-# NOTE: Both indictments are count-only (no factual narrative). Conduct mechanism coding is limited to
-#       charge elements, forfeiture devices, and docket procedural signals until SOO/affidavit retrieved.
+# Methodology: Corpus seed (ncis_2022_002) + PACER docket signals; enrich from Statement of Facts (Doc 63 area)
+# NOTE: Production conduct is proven in press/SOF pathway but conviction counts are §2422(b) + §2252, not §2251.
 
 case:
-  case_number: "3:24-cr-00091-SLG-KFR"
-  court: "U.S. District Court, District of Alaska"
+  case_number: "1:23-cr-156"
+  court: "U.S. District Court, Eastern District of Virginia"
   jurisdiction: federal
-  date_filed: "2024-08-22"
-  status: pre_trial
-  evidentiary_basis: alleged
-
-parallel_districts:
-  - case_number: "3:25-cr-01046-KC"
-    court: "U.S. District Court, Western District of Texas (El Paso)"
-    date_filed: "2025-05-14"
-    role: production_and_receipt_charges
-    relationship: parallel_prosecution_same_defendant
+  date_filed: "2023-10-05"
+  status: sentenced
+  evidentiary_basis: proven
 
 offender:
   label: "Defendant-1"
   role: principal
+  age_misrepresentation: true        # claimed age 22 to 12-year-old victim
   location_at_offense: domestic
-  military_context_alleged: true          # Army soldier per parallel-proceedings notices (docket only)
+  occupational_context: research_scientist  # ONR Global / NRL — from corpus; verify in SOF
 
 offense:
-  type: csam_production_possession_transport
-  primary_statute_alleged: "18 U.S.C. 2251(a),(e)"   # attempted exploitation — W.D. Texas count 1
-  conduct_window_start: "2021-03-07"                 # receipt window start — Texas count 2
-  conduct_window_end: "2024-05-14"                    # possession end — Alaska count 3
-  production_alleged: true                            # attempted §2251 — Texas
-  receipt_alleged: true
-  possession_alleged: true
-  transport_alleged: true                             # Alaska count 1 only
-  interstate_commerce_element: true                   # all counts allege computer/interstate means
-  known_victim_count_in_indictment: 0                 # indictments do not identify victim count
-  extraction_gap: indictment_count_only_no_narrative
+  type: directed_remote_production_via_messaging
+  statute_of_conviction_primary: "18 U.S.C. 2422(b)"   # count 1 — plea
+  production_conduct_proven: true                      # victim-created explicit video at request (Minor 2)
+  production_statute_charged: false                    # no §2251 count in superseding indictment plea
+  single_victim_primary_narrative: false               # two minors in stipulated narrative (Minor 1, Minor 2)
+  victim_ages_at_offense: [12, 14]
+  conduct_window_start: "2019-01-01"    # approximate — Minor 2 contact; refine from SOF
+  conduct_window_end: "2022-05-18"    # search warrant execution day; last contact with Minor 2
+  interstate_commerce_element: true
+  physical_contact_occurred: false    # online-only production path for graph primary lane
+  extraction_gap: awaiting_sof_pdf_for_stage_timeline_and_platform_names
 
-production_mechanisms:                # coded only where PACER sources support; no press-release facts
-  - device_seizure_forfeiture_alleged   # three Samsung devices listed for forfeiture (both districts)
-  # AI chatbot / secret filming mechanisms NOT coded — not present in PACER PDFs in folder
+platforms:
+  - name: social media
+    role: victim_identification_and_grooming
+    affordances_abused:
+      - direct_messaging
+      - image_solicitation
+    platform_specificity: low         # corpus says "social media app" / "dating app" — name in SOF
+  - name: chat
+    role: coercion_and_production
+    affordances_abused:
+      - direct_messaging
+      - video_chat
+      - image_solicitation
 
-devices_forfeiture_alleged:
-  - device_type: mobile_phone
-    make: Samsung
-    model: Galaxy S21 Ultra
-  - device_type: mobile_phone
-    make: Samsung
-    model: Galaxy S23 Ultra
-  - device_type: mobile_phone
-    make: Samsung
-    model: Galaxy S8+
+production_mechanisms:
+  - directed_production              # instructed Minor 2 to create sexually explicit video (Feb 2022)
+  - persistent_solicitation          # daily photo requests even when victim at school
+  - flattery_as_inducement           # graphic sexual enticement of Minor 1
+  - age_misrepresentation
+
+coercion_mechanisms:
+  - directed_production
+  - persistent_solicitation
+  - flattery_as_inducement
+
+multi_victim_context:
+  additional_victims_documented: true
+  victim_count_named_in_corpus: 2
 
 charges:
-  - count: "AK-1"
-    statute: "18 U.S.C. 2252A(a)(1),(b)(1)"
-    label: transportation_csam
-  - count: "AK-2"
-    statute: "18 U.S.C. 2252A(a)(2),(b)(1)"
-    label: receipt_csam
-  - count: "AK-3"
-    statute: "18 U.S.C. 2252A(a)(5)(B),(b)(2)"
-    label: possession_csam
-  - count: "TX-1"
-    statute: "18 U.S.C. 2251(a),(e)"
-    label: attempted_sexual_exploitation_minor
-  - count: "TX-2"
+  - count: 1
+    statute: "18 U.S.C. 2422(b)"
+    label: coercion_enticement_minor
+    disposition: convicted_by_plea
+  - count: 2
+    statute: "18 U.S.C. 2252(a)(2),(b)(1)"
+    label: distribution_csam
+    disposition: convicted_by_plea
+  - count: 3
     statute: "18 U.S.C. 2252(a)(2),(b)(1)"
     label: receipt_csam
-
-parallel_prosecution:
-  state_case_present: false
-  multi_district_federal: true
-  districts:
-    - "District of Alaska"
-    - "Western District of Texas (El Paso)"
-  relationship: parallel_same_defendant
+    disposition: convicted_by_plea
+  - count: 4
+    statute: "18 U.S.C. 2252(a)(4)(B),(b)(2)"
+    label: possession_csam
+    disposition: convicted_by_plea
 
 charge_stacking_note:
   observed: false
-  description: distinct_districts_charge_different_conduct_windows_not_same_count_stack
+
+disposition:
+  plea_date: "2024-05-01"
+  plea: guilty_counts_1_through_4
+  sentence_months: 300                # 25 years per corpus sentencing PR; verify judgment
+  sentencing_date: "2024-07-24"
 
 forfeiture:
   alleged: true
-  statute: "18 U.S.C. 2253"
-  status: alleged_not_adjudicated
-  devices_enumerated: true
+  status: ordered
+  devices_enumerated: true            # MacBook Pro + MacBook Air per indictment excerpt
 
 procedural_timeline:
-  - "2024-08-22: Alaska indictment (3 counts transport/receipt/possession)"
-  - "2024-08-23: Alaska arrest, not-guilty plea, detained, forfeiture denied"
-  - "2025-05-14: W.D. Texas indictment (attempted §2251 + receipt)"
-  - "2025-05-16: Texas parallel proceedings notice filed (Alaska)"
-  - "2026-01-20: Alaska motion to suppress denied"
-  - "2026-01-27: Alaska trial set 2026-05-11"
-  - "2026-03-30: Alaska trial continued to 2026-08-17"
-  - "2026-06-09: Alaska notice of intent to change plea"
-  - "2026-06-12: Rule 20 consent to transfer for plea and sentence (both districts)"
+  - "2023-10-05: indictment filed"
+  - "2023-12-07: superseding indictment (4 counts)"
+  - "2024-05-01: guilty plea counts 1-4 (plea agreement + statement of facts expected)"
+  - "2024-07-24: sentencing"
 
 provenance:
   source: PACER
-  document: "D. Alaska 3:24-cr-00091 Doc 2; W.D. Texas 3:25-cr-01046 Doc 1; dockets both districts"
+  document: "E.D. Va. 1:23-cr-156 — pending SOF/plea PDF pull"
   retrieval_method: manual
   extraction_method: agent_assisted
   human_reviewed: false
-  corpus_link: "doj_ceos_2025_002"
-  corpus_link_note: "Press-release AI mechanism not merged — PACER-only discipline"
+  corpus_link: "ncis_2022_002"
+  corpus_link_note: "NCIS press republish; explicit Case No. in source text"
 
-# Placeholder keys for relationship wiring (enrich from indictment as needed)
+# Placeholder keys for relationship wiring (enrich from SOF as needed)
 count_venues: {}
 forfeiture_devices: []
