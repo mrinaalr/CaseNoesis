@@ -1,6 +1,6 @@
 # CaseLinker MCP tool registry
 
-**Total: 36 tools** (as of `get_lifecycle_lstar`).
+**Total: 37 tools** (as of `tree_traversal`).
 
 Authoritative implementation: `@mcp.tool()` definitions in `server.py`. This file is the human-readable catalog for docs and agent hosts.
 
@@ -10,11 +10,11 @@ Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`.
 
 | Category | Count | Meaning |
 |----------|------:|---------|
-| Public (trusted key irrelevant) | **31** | Same behavior with or without trusted key |
+| Public (trusted key irrelevant) | **32** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
-| **Total** | **36** | |
+| **Total** | **37** | |
 
-## Public tier (31 tools)
+## Public tier (32 tools)
 
 Trusted key does **not** change behavior (still subject to normal slowapi / public rate limits).
 
@@ -24,8 +24,9 @@ Trusted key does **not** change behavior (still subject to normal slowapi / publ
 | `get_cases_page` | `GET /api/cases-summaries-chunk` | Paginated summaries |
 | `get_cases_by_ids` | `POST /api/cases-summaries-by-ids` | Batch summaries |
 | `filter_cases_by_tags` | `POST /api/return-tagged-cases` | Tag intersection |
-| `get_facet_tree` | `GET /api/facet-tree` | Facet decision tree |
-| `get_cohort_members` | `POST /api/facet-cohort-members` | Cohort case IDs |
+| `get_facet_tree` | `GET /api/facet-tree` or MCP-local | Facet tree; optional `case_ids` for subset |
+| `get_cohort_members` | `POST /api/facet-cohort-members` or MCP-local | Cohort case IDs; optional `case_ids` |
+| `tree_traversal` | MCP-only | Random + targeted facet samples over a case subset |
 | `run_automated_analysis` | `GET /api/automated-analysis` | Similarity + triage insights |
 | `triage_text` | `POST /api/triage-live` | In-memory narrative triage |
 | `get_triage_eval_metrics` | `GET /api/triage-eval` | Classifier eval metrics |

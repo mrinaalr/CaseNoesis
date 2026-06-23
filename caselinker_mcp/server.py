@@ -584,38 +584,174 @@ async def filter_cases_by_tags(tags: list[str]) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def get_facet_tree(max_depth: int = 4) -> dict[str, Any]:
-    """Return the facet decision tree showing how the corpus partitions across structured dimensions.
+async def get_facet_tree(
+    max_depth: int = 4,
+    facet_constraints_json: str = "",
+    include_facets: str = "",
+    case_ids: list[str] | None = None,
+) -> dict[str, Any]:
+    """Return the facet decision tree showing how cases partition across structured dimensions.
 
-    Dimensions include platform, severity, topic, investigation type, and related facets.
-    max_depth range 1-6; deeper values yield finer cohorts.
+    Full corpus (default): calls GET /api/facet-tree with optional prune filters.
+    Sub-corpus: pass case_ids to build the tree locally from caselinker.db (MCP-only, no API).
+
+    facet_constraints_json: JSON object mapping facet field keys to allowed value lists, e.g.
+      {"source": ["DOJ CEOS", "ICE"], "case_topics": ["online_only"]}
+    include_facets: comma-separated field keys to split on (subset of DEFAULT_FACET_ORDER).
+    max_depth: 1-11 for local builds; API path caps at 6 unless case_ids is set.
     """
     try:
+        if case_ids:
+            from facet_local import (  # noqa: E402
+                _parse_constraints,
+                _parse_include_facets,
+                build_facet_tree_payload,
+                load_cases_by_ids,
+            )
+
+            ids = [c.strip() for c in case_ids if c and c.strip()]
+            if not ids:
+                return {"error": "case_ids is empty"}
+            cases = await asyncio.to_thread(load_cases_by_ids, ids)
+            if not cases:
+                return {"error": "No matching cases in database", "requested": len(ids)}
+            depth = max_depth if max_depth > 0 else None
+            payload = await asyncio.to_thread(
+                build_facet_tree_payload,
+                cases,
+                max_depth=depth,
+                facet_constraints=_parse_constraints(facet_constraints_json),
+                include_facets=_parse_include_facets(include_facets),
+            )
+            payload.pop("_root_node", None)
+            payload.pop("_cases", None)
+            payload["mode"] = "local_subset"
+            payload["input_case_ids"] = len(ids)
+            return payload
+
         depth = min(max(max_depth, 1), 6)
-        result = await api_get("/api/facet-tree", params={"max_depth": depth})
-        return result if isinstance(result, dict) else {"data": result}
+        params: dict[str, str] = {"max_depth": str(depth)}
+        if facet_constraints_json.strip():
+            params["facet_constraints"] = facet_constraints_json.strip()
+        if include_facets and include_facets.strip():
+            params["include_facets"] = include_facets.strip()
+        result = await api_get("/api/facet-tree", params=params)
+        out = result if isinstance(result, dict) else {"data": result}
+        out["mode"] = "api_corpus"
+        return out
     except Exception as e:
         logger.exception("get_facet_tree failed")
         return {"error": str(e)}
 
 
 @mcp.tool()
-async def get_cohort_members(path: list[dict[str, str]]) -> dict[str, Any]:
+async def get_cohort_members(
+    path: list[dict[str, str]],
+    facet_constraints_json: str = "",
+    case_ids: list[str] | None = None,
+) -> dict[str, Any]:
     """Return case IDs for a facet-tree cohort path.
 
     Each step: {"facet": "<dimension>", "value": "<value>"} (or use "field" instead of "facet").
 
     Example path:
-      [{"facet": "platform", "value": "discord"},
-       {"facet": "severity", "value": "infant"}]
+      [{"facet": "platforms_used", "value": "discord"},
+       {"facet": "severity_indicators", "value": "infant"}]
 
-    Small cohorts (<3 cases) may omit case_ids unless a demo access key is configured on the server.
+  Pass case_ids to resolve cohort membership locally (MCP-only). Otherwise uses the API.
+  facet_constraints_json: same prune JSON as get_facet_tree (applied before path matching).
+
+    Small cohorts (<3 cases) on the API path may omit case_ids unless a demo access key is set.
     """
     try:
-        result = await api_post("/api/facet-cohort-members", {"facet_path": path})
-        return result if isinstance(result, dict) else {"data": result}
+        if case_ids:
+            from facet_local import (  # noqa: E402
+                _parse_constraints,
+                cohort_members_payload,
+                load_cases_by_ids,
+            )
+
+            ids = [c.strip() for c in case_ids if c and c.strip()]
+            cases = await asyncio.to_thread(load_cases_by_ids, ids)
+            if not cases:
+                return {"error": "No matching cases in database", "requested": len(ids)}
+            out = await asyncio.to_thread(
+                cohort_members_payload,
+                cases,
+                path,
+                _parse_constraints(facet_constraints_json),
+            )
+            out["mode"] = "local_subset"
+            return out
+
+        body: dict[str, Any] = {"facet_path": path}
+        constraints = facet_constraints_json.strip()
+        if constraints:
+            try:
+                parsed = json.loads(constraints)
+                if isinstance(parsed, dict):
+                    body["facet_constraints"] = parsed
+            except json.JSONDecodeError:
+                return {"error": "facet_constraints_json must be valid JSON"}
+        result = await api_post("/api/facet-cohort-members", body)
+        out = result if isinstance(result, dict) else {"data": result}
+        out["mode"] = "api_corpus"
+        return out
     except Exception as e:
         logger.exception("get_cohort_members failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def tree_traversal(
+    case_ids: list[str] | None = None,
+    use_pacer_pool: bool = False,
+    pacer_min_confidence: str = "low",
+    random_count: int = 25,
+    targeted_count: int = 25,
+    max_depth: int = 0,
+    facet_constraints_json: str = "",
+    include_facets: str = "",
+    targeted_path: list[dict[str, str]] | None = None,
+    seed: int | None = None,
+) -> dict[str, Any]:
+    """MCP-only facet tree traversal over a case subset (not the full corpus).
+
+    Builds a 10-level facet tree (search UI order) directly from caselinker.db — no REST API.
+    Returns random_count cases from random tree walks plus targeted_count from diverse
+    leaf cohorts (or an explicit targeted_path).
+
+    Typical workflow for the 50-case PACER lookup:
+      1. python ontology/PACER/corpus2pacer.py  →  pacer_cases.json
+      2. tree_traversal(use_pacer_pool=true, random_count=25, targeted_count=25)
+
+    use_pacer_pool: load IDs from ontology/PACER/pacer_cases.json instead of case_ids.
+    pacer_min_confidence: low | medium | high when use_pacer_pool is true.
+    max_depth: 0 = full facet depth for the included dimensions; else cap levels.
+    targeted_path: optional explicit facet path for the targeted half; else auto-diverse leaves.
+    seed: optional RNG seed for reproducible samples.
+    """
+    try:
+        from facet_local import tree_traversal_payload  # noqa: E402
+
+        depth = None if max_depth <= 0 else max_depth
+        return await asyncio.to_thread(
+            tree_traversal_payload,
+            case_ids=case_ids,
+            use_pacer_pool=use_pacer_pool,
+            pacer_min_confidence=pacer_min_confidence,
+            random_count=max(random_count, 0),
+            targeted_count=max(targeted_count, 0),
+            max_depth=depth,
+            facet_constraints_json=facet_constraints_json,
+            include_facets=include_facets,
+            targeted_path=targeted_path,
+            seed=seed,
+        )
+    except FileNotFoundError as e:
+        return {"error": str(e)}
+    except Exception as e:
+        logger.exception("tree_traversal failed")
         return {"error": str(e)}
 
 

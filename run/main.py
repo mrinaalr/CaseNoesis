@@ -3182,17 +3182,26 @@ def _lifecycle_payload_html_snippet() -> str:
             f'  <script id="lifecycle-payload" type="application/json">{safe}</script>\n'
         )
     except Exception as exc:
-        logging.getLogger(__name__).warning("lifecycle payload embed failed: %s", exc)
+        logging.getLogger(__name__).error("lifecycle payload embed failed: %s", exc, exc_info=True)
         return ""
 
 
 @app.get("/lifecycle", response_class=HTMLResponse)
 async def serve_lifecycle():
     """Lifecycle analysis page (public; data embedded server-side)."""
-    html_path = Path(__file__).parent.parent / "visualization" / "lifecycle.html"
+    viz_dir = Path(__file__).parent.parent / "visualization"
+    html_path = viz_dir / "lifecycle.html"
     if not html_path.exists():
         return HTMLResponse(content="<h1>Lifecycle page not found</h1>", status_code=404)
     html = read_utf8_text_file(html_path)
+    js_path = viz_dir / "assets" / "lifecycle.js"
+    if js_path.is_file():
+        v = int(js_path.stat().st_mtime)
+        html = html.replace(
+            "/viz-assets/lifecycle.js",
+            f"/viz-assets/lifecycle.js?v={v}",
+            1,
+        )
     snippet = _lifecycle_payload_html_snippet()
     if snippet and "</body>" in html:
         html = html.replace("</body>", snippet + "</body>", 1)

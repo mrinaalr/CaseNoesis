@@ -1,5 +1,8 @@
 """CAC ontology IRIs for PACER state machines (read from ontology, not hardcoded from memory)."""
 
+from __future__ import annotations
+
+import re
 from pathlib import Path
 
 PKG_DIR = Path(__file__).resolve().parent
@@ -48,36 +51,110 @@ DISTRIBUTION_INFRASTRUCTURE = f"{PLATFORMS_NS}DistributionInfrastructure"
 COORDINATION = f"{PLATFORMS_NS}Coordination"
 COERCION_LEVERAGE = f"{PLATFORMS_NS}CoercionLeverage"
 
-CASE_FILES = (
-    "enticement.jsonld",
-    "production.jsonld",
-    "sextortion.jsonld",
-    "enterprise.jsonld",
-    "trafficking.jsonld",
+CANONICAL_CASE_IDS = (
+    "enticement",
+    "production",
+    "sextortion",
+    "enterprise",
+    "trafficking",
 )
+
+CASE_FILES = (
+    *(f"{case_id}.jsonld" for case_id in CANONICAL_CASE_IDS),
+    "hounsell.jsonld",
+    "gastelo.jsonld",
+    "saucedo.jsonld",
+)
+
+MODALITY_LABELS = {
+    "enticement": "ENTICEMENT",
+    "production": "PRODUCTION",
+    "sextortion": "SEXTORTION",
+    "enterprise": "ENTERPRISE",
+    "trafficking": "TRAFFICKING",
+}
 
 CASE_META = {
     "enticement": {
         "title": "ENTICEMENT",
         "citation": "United States v. Rehman (D.D.C. 1:23-cr-00064)",
+        "modality": "enticement",
     },
     "sextortion": {
         "title": "SEXTORTION",
         "citation": "United States v. Amin (D. Alaska 3:22-cr-00055)",
+        "modality": "sextortion",
     },
     "production": {
         "title": "PRODUCTION",
         "citation": "United States v. Pathmanathan (D.D.C. 1:22-cr-00150)",
+        "modality": "production",
     },
     "enterprise": {
         "title": "ENTERPRISE",
         "citation": "United States v. Bermudez et al. (E.D.N.Y. 1:25-cr-00361)",
+        "modality": "enterprise",
     },
     "trafficking": {
         "title": "TRAFFICKING",
         "citation": "United States v. Riley (D. Haw. 1:23-cr-00071)",
+        "modality": "trafficking",
+    },
+    "hounsell": {
+        "title": "Hounsell",
+        "citation": "United States v. Hounsell (E.D. Wis. 1:25-cr-00069)",
+        "statute": "18 U.S.C. § 2422(b)",
+        "modality": "enticement",
+        "corpus_id": "doj_ceos_2026_012",
+        "defendant": "Bradley D. Hounsell",
+    },
+    "gastelo": {
+        "title": "Gastelo",
+        "citation": "United States v. Gastelo (E.D. Cal. 1:20-cr-00252)",
+        "statute": "18 U.S.C. §§ 2251, 2252",
+        "modality": "production",
+        "corpus_id": "doj_ceos_2025_014",
+        "defendant": "Monico Erich Gastelo",
+    },
+    "saucedo": {
+        "title": "Saucedo",
+        "citation": "United States v. Saucedo (S.D. Cal. 3:17-cr-00095)",
+        "statute": "18 U.S.C. §§ 2251, 2252",
+        "modality": "production",
+        "corpus_id": "usss_2017_006",
+        "defendant": "Joseph Daniel Saucedo",
     },
 }
+
+_STATUTE_MODALITY = (
+    (re.compile(r"\b2422\b"), "enticement"),
+    (re.compile(r"\b2251\b|\b2252\b"), "production"),
+    (re.compile(r"\b1591\b|\b2423\b"), "trafficking"),
+    (re.compile(r"\bsextortion\b", re.I), "sextortion"),
+    (re.compile(r"\benterprise\b", re.I), "enterprise"),
+)
+
+
+def infer_modality(case_id: str, meta: dict | None = None) -> str:
+    """Map a case to exploitation modality (most severe charge family)."""
+    meta = meta or CASE_META.get(case_id, {})
+    explicit = meta.get("modality")
+    if explicit:
+        return str(explicit)
+    if case_id in CANONICAL_CASE_IDS:
+        return case_id
+    blob = " ".join(
+        str(meta.get(key, ""))
+        for key in ("citation", "statute", "title", "defendant")
+    ).lower()
+    for pattern, modality in _STATUTE_MODALITY:
+        if pattern.search(blob):
+            return modality
+    return "unknown"
+
+
+def modality_label(modality: str) -> str:
+    return MODALITY_LABELS.get(modality, modality.upper())
 
 
 def local_name(iri: str) -> str:

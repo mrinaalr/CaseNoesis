@@ -8,15 +8,17 @@ import sys
 from typing import Any
 
 from state_machines.iris import (
+    CANONICAL_CASE_IDS,
     CASE_META,
     LSTAR_JSON,
     REPO_ROOT,
     STATE_MACHINES_WORKSPACE,
     display_type,
+    infer_modality,
     local_name,
+    modality_label,
 )
-
-CASE_ORDER = ("enticement", "production", "sextortion", "enterprise", "trafficking")
+from state_machines.trajectory import cross_case_comparison
 
 
 def _ensure_lstar_json() -> dict[str, Any]:
@@ -65,12 +67,123 @@ def _transitions_for_case(
     return transitions
 
 
+def _canonical_fundamental(data: dict[str, Any]) -> list[str]:
+    sequences = {
+        case_id: data["cases"][case_id]["phase_sequence"]
+        for case_id in CANONICAL_CASE_IDS
+        if case_id in data.get("cases", {})
+    }
+    return cross_case_comparison(sequences)["fundamental"]
+
+
+def _canonical_type_cases(data: dict[str, Any]) -> dict[str, list[str]]:
+    sequences = {
+        case_id: data["cases"][case_id]["phase_sequence"]
+        for case_id in CANONICAL_CASE_IDS
+        if case_id in data.get("cases", {})
+    }
+    return cross_case_comparison(sequences)["type_cases"]
+
+
+def _build_case_record(
+    case_id: str,
+    block: dict[str, Any],
+    meta: dict[str, Any],
+    *,
+    tier: str,
+    type_cases: dict[str, list[str]],
+    fundamental: list[str],
+    affordance_rows: list[dict[str, Any]],
+    n_canonical: int,
+) -> dict[str, Any]:
+    modality = infer_modality(case_id, meta)
+    phase_details = block.get("phase_details", [])
+    phases = []
+    for phase in phase_details:
+        ptype = phase.get("type", "")
+        coverage = len(type_cases.get(ptype, []))
+        phases.append(
+            {
+                **phase,
+                "type_display": display_type(ptype),
+                "short_type": local_name(ptype),
+                "coverage": coverage,
+                "is_fundamental": ptype in fundamental,
+            }
+        )
+
+    title = meta.get("title", case_id.upper())
+    if tier == "expansion":
+        offense_type = modality_label(modality)
+        case_name = meta.get("corpus_id") or case_id
+    else:
+        offense_type = title
+        case_name = title
+
+    return {
+        "id": case_id,
+        "tier": tier,
+        "case_name": case_name,
+        "citation": block.get("citation") or meta.get("citation", ""),
+        "offense_type": offense_type,
+        "modality": modality,
+        "modality_label": modality_label(modality),
+        "corpus_id": meta.get("corpus_id"),
+        "defendant": meta.get("defendant"),
+        "trajectory": block.get("phase_sequence", []),
+        "trajectory_display": [
+            display_type(t) for t in block.get("phase_sequence", [])
+        ],
+        "phases": phases,
+        "transitions": _transitions_for_case(phase_details, affordance_rows),
+        "path_weight": block.get("path_weight"),
+        "n_canonical": n_canonical,
+    }
+
+
 def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]:
     data = raw if raw is not None else _ensure_lstar_json()
-    comparison = data.get("cross_case_comparison", {})
-    type_cases = comparison.get("type_cases", {})
-    fundamental = comparison.get("fundamental") or comparison.get("backbone", [])
-    n_cases = data.get("n_cases", 5)
+    fundamental = _canonical_fundamental(data)
+    type_cases = _canonical_type_cases(data)
+    n_canonical = len(CANONICAL_CASE_IDS)
+    affordance_rows = data.get("affordance_annotations", [])
+    all_cases = data.get("cases", {})
+
+    canonical_cases: list[dict[str, Any]] = []
+    for case_id in CANONICAL_CASE_IDS:
+        block = all_cases.get(case_id, {})
+        meta = CASE_META.get(case_id, {})
+        canonical_cases.append(
+            _build_case_record(
+                case_id,
+                block,
+                meta,
+                tier="canonical",
+                type_cases=type_cases,
+                fundamental=fundamental,
+                affordance_rows=affordance_rows,
+                n_canonical=n_canonical,
+            )
+        )
+
+    expansion_cases: list[dict[str, Any]] = []
+    for case_id in sorted(all_cases):
+        if case_id in CANONICAL_CASE_IDS:
+            continue
+        block = all_cases[case_id]
+        meta = CASE_META.get(case_id, {})
+        expansion_cases.append(
+            _build_case_record(
+                case_id,
+                block,
+                meta,
+                tier="expansion",
+                type_cases=type_cases,
+                fundamental=fundamental,
+                affordance_rows=affordance_rows,
+                n_canonical=n_canonical,
+            )
+        )
 
     cross_case: dict[str, dict[str, Any]] = {}
     for iri, cases in type_cases.items():
@@ -81,55 +194,23 @@ def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]
             "short_name": local_name(iri),
         }
 
-    cases_out: list[dict[str, Any]] = []
-    for case_id in CASE_ORDER:
-        block = data.get("cases", {}).get(case_id, {})
-        meta = CASE_META.get(case_id, {})
-        phase_details = block.get("phase_details", [])
-        phases = []
-        for p in phase_details:
-            ptype = p.get("type", "")
-            coverage = len(type_cases.get(ptype, []))
-            phases.append(
-                {
-                    **p,
-                    "type_display": display_type(ptype),
-                    "short_type": local_name(ptype),
-                    "coverage": coverage,
-                    "is_fundamental": ptype in fundamental,
-                }
-            )
-        cases_out.append(
-            {
-                "id": case_id,
-                "case_name": meta.get("title", case_id.upper()),
-                "citation": block.get("citation") or meta.get("citation", ""),
-                "offense_type": meta.get("title", case_id.upper()),
-                "trajectory": block.get("phase_sequence", []),
-                "trajectory_display": [
-                    display_type(t) for t in block.get("phase_sequence", [])
-                ],
-                "phases": phases,
-                "transitions": _transitions_for_case(
-                    phase_details, data.get("affordance_annotations", [])
-                ),
-                "path_weight": block.get("path_weight"),
-            }
-        )
-
     shared_transitions = len(data.get("raw_transitions", []))
     canonical_types = set()
-    for case in cases_out:
-        for p in case["phases"]:
-            canonical_types.add(p.get("type"))
+    for case in canonical_cases:
+        for phase in case["phases"]:
+            canonical_types.add(phase.get("type"))
 
     return {
-        "n_cases": n_cases,
+        "n_cases": data.get("n_cases", n_canonical),
+        "n_canonical": n_canonical,
+        "n_expansion": len(expansion_cases),
         "canonical_stage_count": len(canonical_types),
         "shared_transition_count": shared_transitions,
         "fundamental": fundamental,
         "fundamental_display": [display_type(t) for t in fundamental],
         "cross_case": cross_case,
-        "affordance_annotations": data.get("affordance_annotations", []),
-        "cases": cases_out,
+        "affordance_annotations": affordance_rows,
+        "canonical_cases": canonical_cases,
+        "expansion_cases": expansion_cases,
+        "cases": canonical_cases,
     }

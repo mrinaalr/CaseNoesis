@@ -35,8 +35,8 @@
       <p class="lifecycle-eyebrow">PHASE 2 · LIFECYCLE</p>
       <h1 class="lifecycle-title">Exploitation Lifecycles</h1>
       <p class="lifecycle-subtitle">
-        Five PACER federal cases modeled as CAC ontology state machines.
-        Fundamental stages (5/5) represent the invariant exploitation structure.
+        Five canonical PACER federal cases modeled as CAC ontology state machines, plus expansion cases
+        from full federal dockets. Fundamental stages (5/5) represent the invariant exploitation structure.
       </p>
       <div class="stat-pills">
         <span class="stat-pill"><strong id="stat-cases">5</strong> CASES</span>
@@ -51,6 +51,19 @@
     </div>
 
     <section id="fundamental-section" class="fundamental-section" aria-label="Fundamental stages"></section>
+
+    <section id="expansion-section" class="expansion-section" hidden aria-label="Expansion cases from federal dockets">
+      <header class="expansion-header">
+        <p class="expansion-eyebrow">EXPANSION · PACER DOCKETS</p>
+        <h2 class="expansion-title">Modeled from full federal court records</h2>
+        <p class="expansion-subtitle" id="expansion-subtitle">
+          Additional cases inferred by most-severe charge and plotted on the same CAC phase grid.
+        </p>
+      </header>
+      <div class="canvas-scroll">
+        <div id="lifecycle-canvas-expansion" role="img" aria-label="Expansion case lifecycle swimlanes"></div>
+      </div>
+    </section>
   </div>
 
   <div id="detail-backdrop" class="detail-backdrop" aria-hidden="true"></div>

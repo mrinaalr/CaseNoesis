@@ -8,13 +8,22 @@
   const SEXTORTION = "https://cacontology.projectvic.org/sextortion#";
   const PLATFORMS = "https://cacontology.projectvic.org/platforms#";
 
-  const ROWS = [
+  const CANONICAL_ROWS = [
     { id: "enticement", color: "#6ee7b7", bg: "#0d1f16" },
     { id: "production", color: "#f97316", bg: "#1a1008" },
     { id: "sextortion", color: "#fbbf24", bg: "#1a1608" },
     { id: "enterprise", color: "#f87171", bg: "#1a0d0d" },
     { id: "trafficking", color: "#c084fc", bg: "#140d1a" },
   ];
+
+  const MODALITY_STYLE = {
+    enticement: { color: "#6ee7b7", bg: "#0d1f16" },
+    production: { color: "#f97316", bg: "#1a1008" },
+    sextortion: { color: "#fbbf24", bg: "#1a1608" },
+    enterprise: { color: "#f87171", bg: "#1a0d0d" },
+    trafficking: { color: "#c084fc", bg: "#140d1a" },
+    unknown: { color: "#9ca3af", bg: "#141414" },
+  };
 
   const COLUMNS = [
     { key: "initial", type: GROOMING + "InitialContactPhase", label: "InitialContact" },
@@ -148,20 +157,20 @@
       </div>
       <div class="panel-section">
         <h4>Coverage</h4>
-        <p>${phase.coverage || cross.count}/5 cases: ${(cross.cases || []).join(", ") || "—"}</p>
-        ${phase.is_fundamental ? "<p><strong>Appears in all 5 offense types</strong> (fundamental)</p>" : ""}
+        <p>${phase.coverage || cross.count}/${payload.n_canonical || 5} cases: ${(cross.cases || []).join(", ") || "—"}</p>
+        ${phase.is_fundamental ? "<p><strong>Appears in all 5 canonical offense types</strong> (fundamental)</p>" : ""}
       </div>
       <div class="panel-section">
         <h4>Transitions in</h4>
-        <ul>${ins.length ? ins.map((t) => `<li>${escapeHtml(t.affordance)} (${t.case_count}/5)</li>`).join("") : "<li>—</li>"}</ul>
+        <ul>${ins.length ? ins.map((t) => `<li>${escapeHtml(t.affordance)} (${t.case_count}/${payload.n_canonical || 5})</li>`).join("") : "<li>—</li>"}</ul>
       </div>
       <div class="panel-section">
         <h4>Transitions out</h4>
-        <ul>${outs.length ? outs.map((t) => `<li>→ ${escapeHtml(t.affordance)} (${t.case_count}/5)</li>`).join("") : "<li>—</li>"}</ul>
+        <ul>${outs.length ? outs.map((t) => `<li>→ ${escapeHtml(t.affordance)} (${t.case_count}/${payload.n_canonical || 5})</li>`).join("") : "<li>—</li>"}</ul>
       </div>
       <div class="panel-section">
         <h4>Case</h4>
-        <p>${escapeHtml(caseData.citation)}</p>
+        <p>${escapeHtml(caseData.corpus_id || caseData.id)}</p>
       </div>
     `;
     panelEl.classList.add("open");
@@ -183,6 +192,7 @@
 
   function renderFundamentalSection() {
     const el = document.getElementById("fundamental-section");
+    if (!el) return;
     const names = (payload.fundamental_display || []).map(shortType);
     const ordered = ["InitialContactPhase", "TrustBuildingPhase", "ExploitationPhase", "MaintenancePhase"].filter(
       (n) => names.includes(n) || (payload.fundamental || []).some((iri) => iri.endsWith(n))
@@ -215,18 +225,35 @@
     `;
   }
 
-  function renderStats() {
-    document.getElementById("stat-cases").textContent = payload.n_cases || 5;
-    document.getElementById("stat-stages").textContent = payload.canonical_stage_count || "—";
-    document.getElementById("stat-transitions").textContent = payload.shared_transition_count || "—";
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
   }
 
-  function renderSwimlanes() {
-    const caseMap = {};
-    (payload.cases || []).forEach((c) => {
-      caseMap[c.id] = c;
-    });
+  function renderStats() {
+    const nTotal = payload.n_cases
+      || (payload.canonical_cases || payload.cases || []).length
+      + (payload.expansion_cases || []).length
+      || 5;
+    setText("stat-cases", nTotal);
+    setText("stat-canonical", nTotal);
+    setText("stat-stages", payload.canonical_stage_count || "—");
+    setText("stat-transitions", payload.shared_transition_count || "—");
+  }
 
+  function expansionRows(cases) {
+    return cases.map((caseData) => {
+      const style = MODALITY_STYLE[caseData.modality] || MODALITY_STYLE.unknown;
+      return {
+        id: caseData.id,
+        color: style.color,
+        bg: style.bg,
+        expansion: true,
+      };
+    });
+  }
+
+  function fundamentalColumns() {
     const fundamentalCols = new Set();
     (payload.fundamental || []).forEach((iri) => {
       COLUMNS.forEach((col, i) => {
@@ -244,11 +271,25 @@
         }
       });
     });
+    return fundamentalCols;
+  }
 
+  function renderSwimlaneCanvas(hostId, rows, caseList, options) {
+    const opts = options || {};
+    const markerId = opts.markerId || "arrow";
+    const showDecorations = opts.showDecorations !== false;
+    const nCanonical = payload.n_canonical || 5;
+
+    const caseMap = {};
+    caseList.forEach((c) => {
+      caseMap[c.id] = c;
+    });
+
+    const fundamentalCols = fundamentalColumns();
     const width = LEFT_PAD + COLUMNS.length * COL_W + 80;
-    const height = TOP_PAD + ROWS.length * ROW_H + 40;
-
-    const host = document.getElementById("lifecycle-canvas");
+    const height = TOP_PAD + rows.length * ROW_H + 40;
+    const host = document.getElementById(hostId);
+    if (!host) return;
     host.innerHTML = "";
 
     const svg = d3
@@ -262,7 +303,7 @@
     svg
       .append("defs")
       .append("marker")
-      .attr("id", "arrow")
+      .attr("id", markerId)
       .attr("viewBox", "0 -5 10 10")
       .attr("refX", 8)
       .attr("refY", 0)
@@ -275,7 +316,7 @@
 
     const fundamentalG = svg.append("g").attr("class", "fundamental-columns");
     fundamentalCols.forEach((col) => {
-      ROWS.forEach((_, ri) => {
+      rows.forEach((_, ri) => {
         fundamentalG
           .append("rect")
           .attr("class", "fundamental-col")
@@ -296,9 +337,7 @@
         .text(col.label);
     });
 
-    const nodePositions = {};
-
-    ROWS.forEach((row, ri) => {
+    rows.forEach((row, ri) => {
       const caseData = caseMap[row.id];
       if (!caseData) return;
 
@@ -315,20 +354,35 @@
         .attr("fill", row.color)
         .attr("rx", 2);
 
-      gRow
-        .append("text")
-        .attr("class", "row-label")
-        .attr("x", 20)
-        .attr("y", cy - 8)
-        .attr("fill", row.color)
-        .text(caseData.offense_type || row.id.toUpperCase());
-
-      gRow
-        .append("text")
-        .attr("class", "row-citation")
-        .attr("x", 20)
-        .attr("y", cy + 10)
-        .text(caseData.citation || "");
+      if (row.expansion) {
+        gRow
+          .append("text")
+          .attr("class", "row-label")
+          .attr("x", 20)
+          .attr("y", cy - 8)
+          .attr("fill", row.color)
+          .text(caseData.modality_label || caseData.offense_type || row.id.toUpperCase());
+        gRow
+          .append("text")
+          .attr("class", "row-sublabel")
+          .attr("x", 20)
+          .attr("y", cy + 10)
+          .text(caseData.corpus_id || caseData.id || row.id);
+      } else {
+        gRow
+          .append("text")
+          .attr("class", "row-label")
+          .attr("x", 20)
+          .attr("y", cy - 8)
+          .attr("fill", row.color)
+          .text(caseData.offense_type || row.id.toUpperCase());
+        gRow
+          .append("text")
+          .attr("class", "row-citation")
+          .attr("x", 20)
+          .attr("y", cy + 10)
+          .text(caseData.citation || "");
+      }
 
       const laid = layoutRow(caseData.phases || []);
       const edgesG = gRow.append("g").attr("class", "edges");
@@ -351,7 +405,7 @@
           .attr("fill", "none")
           .attr("stroke", color)
           .attr("stroke-width", 2)
-          .attr("marker-end", "url(#arrow)");
+          .attr("marker-end", `url(#${markerId})`);
 
         const lx = (x1 + x2) / 2;
         const ly = cy - 10;
@@ -366,7 +420,7 @@
         addFlowDots(edgesG, pathD, color);
       }
 
-      if (row.id === "sextortion") {
+      if (showDecorations && row.id === "sextortion") {
         const threat = laid.find((l) => l.phase.type === SEXTORTION + "ThreatMechanism");
         const cycle = laid.find((l) => l.phase.type === SEXTORTION + "CoercionCycle");
         if (threat && cycle) {
@@ -375,10 +429,7 @@
           const cx = cycle.x + NODE_W / 2;
           const cy2 = cy + NODE_H / 2 + 8;
           const arcD = `M${cx},${cy2 + 4} Q${(tx + cx) / 2},${cy + NODE_H + 52} ${tx},${ty + 4}`;
-          gRow
-            .append("path")
-            .attr("class", "coercion-arc")
-            .attr("d", arcD);
+          gRow.append("path").attr("class", "coercion-arc").attr("d", arcD);
           gRow
             .append("text")
             .attr("class", "coercion-arc-label")
@@ -395,8 +446,6 @@
         const { phase, x } = item;
         const nx = x;
         const ny = cy - NODE_H / 2;
-        const nodeKey = `${row.id}:${phase.uri}`;
-        nodePositions[nodeKey] = { x: nx + NODE_W / 2, y: cy, phase, caseData, row };
 
         const ng = nodesG
           .append("g")
@@ -424,14 +473,14 @@
           .attr("fill", row.color)
           .text(phase.short_type || shortType(phase.type));
 
-        if (phase.is_fundamental || phase.coverage === 5) {
+        if (phase.is_fundamental || phase.coverage === nCanonical) {
           ng
             .append("text")
             .attr("class", "coverage-badge")
             .attr("x", NODE_W - 10)
             .attr("y", 20)
             .attr("text-anchor", "end")
-            .text("5/5");
+            .text(`${nCanonical}/${nCanonical}`);
         } else if (phase.coverage) {
           ng
             .append("text")
@@ -439,7 +488,7 @@
             .attr("x", NODE_W - 10)
             .attr("y", 20)
             .attr("text-anchor", "end")
-            .text(`${phase.coverage}/5`);
+            .text(`${phase.coverage}/${nCanonical}`);
         }
 
         const label = phase.label || "";
@@ -467,7 +516,7 @@
             .text(line2);
         }
 
-        if (row.id === "enterprise" && ENTERPRISE_ROLES[pi]) {
+        if (showDecorations && row.id === "enterprise" && ENTERPRISE_ROLES[pi]) {
           ng
             .append("rect")
             .attr("class", "role-pill-bg")
@@ -489,7 +538,7 @@
         }
       });
 
-      if (row.id === "enticement") {
+      if (showDecorations && row.id === "enticement") {
         const gatesG = gRow.append("g").attr("class", "gates");
         ENTICEMENT_GATES.forEach((gate) => {
           const item = laid.find((l) => {
@@ -522,8 +571,35 @@
     });
   }
 
+  function renderSwimlanes() {
+    const canonicalCases = payload.canonical_cases || payload.cases || [];
+    renderSwimlaneCanvas("lifecycle-canvas", CANONICAL_ROWS, canonicalCases, {
+      markerId: "arrow-canonical",
+      showDecorations: true,
+    });
+  }
+
+  function renderExpansionSection() {
+    const expansionCases = payload.expansion_cases || [];
+    const section = document.getElementById("expansion-section");
+    if (!section || expansionCases.length === 0) {
+      if (section) section.hidden = true;
+      return;
+    }
+
+    section.hidden = false;
+
+    renderSwimlaneCanvas(
+      "lifecycle-canvas-expansion",
+      expansionRows(expansionCases),
+      expansionCases,
+      { markerId: "arrow-expansion", showDecorations: false }
+    );
+  }
+
   function renderLegend() {
     const el = document.getElementById("affordance-legend");
+    if (!el) return;
     const items = Object.keys(AFFORDANCE_COLORS)
       .map(
         (k) =>
@@ -533,7 +609,7 @@
     el.innerHTML = `<span class="legend-title">Affordance classes →</span>${items}`;
   }
 
-  async function init() {
+  function init() {
     panelEl = document.getElementById("detail-panel");
     backdropEl = document.getElementById("detail-backdrop");
     backdropEl.addEventListener("click", closePanel);
@@ -543,16 +619,14 @@
 
     try {
       const embedded = document.getElementById("lifecycle-payload");
-      if (embedded && embedded.textContent.trim()) {
-        payload = JSON.parse(embedded.textContent);
-      } else {
-        const res = await fetch("/api/lifecycle/cases", { cache: "no-store" });
-        if (!res.ok) throw new Error(await res.text());
-        payload = await res.json();
+      if (!embedded || !embedded.textContent.trim()) {
+        throw new Error("Lifecycle payload missing — open /lifecycle via the CaseLinker server.");
       }
+      payload = JSON.parse(embedded.textContent);
       renderStats();
       renderSwimlanes();
       renderFundamentalSection();
+      renderExpansionSection();
       renderLegend();
     } catch (err) {
       document.getElementById("lifecycle-canvas").innerHTML = `<div class="lifecycle-error">Failed to load lifecycle data: ${escapeHtml(err.message)}</div>`;

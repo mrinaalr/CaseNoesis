@@ -1,0 +1,1837 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f21efdc7-aa4e-54f0-b375-cb8c041bcf94",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "208856"
+          }
+        },
+        {
+          "@id": "urn:uuid:eed9789a-8429-5f0f-9d24-3c80330ef29a",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "208856"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:4e55996e-58c8-5a77-91c1-3669bfb0567d",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "16756493F255E5A6AB44ABFA152D731D2DE107854073954763105024DC4DACF8"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:ae720afb-f980-52c8-b459-416b9608de14",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:37f6f9d6-50e8-5eb8-b942-d121fe95f04e",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "UNITED STATES DISTRICT COURT\nEASTERN DISTRICT OF WISCONSIN\n\nUNITED STATES OF AMERICA,\n\nPlaintiff,\n\nv. Case No. 25-CR-69\n\nBRADLEY D. HOUNSELL,\n\nDefendant.\n\nPLEA AGREEMENT\n\n1. The United States of America, by its attorneys, Brad D. Schimel, United States\n\nAttorney for the Eastern District of Wisconsin, Daniel R. Humble, Assistant United States\n\nAttorney, William G. Clayman, Trial Attorney for the United States Department of Justice, and\n\nthe defendant, Bradley D. Hounsell, individually and by attorney Steven G. Richards, pursuant to\n\nRule 11 of the Federal Rules of Criminal Procedure, enter into the following plea agreement:\n\nCHARGES\n\n2. The defendant has been charged in an information, which alleges a violation of\n\nTitle 18, United States Code, Section 2422(b).\n\n3. The defendant has read and fully understands the charge contained in the\n\ninformation. He fully understands the nature and elements of the crime with which he has been\n\ncharged, and the charge and the terms and conditions of the plea agreement have been fully\n\nexplained to him by his attorney.\n\n4. The defendant voluntarily agrees to waive prosecution by indictment in open\n\ncourt.\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 1 of 14 Document 25\n5. The defendant voluntarily agrees to plead guilty to the information set forth in full\n\nas follows:\n\nTHE UNITED STATES ATTORNEY CHARGES THAT:\n\nBetween approximately November 4, 2023, and November 8, 2023, in the State and\n\nEastern District of Wisconsin and elsewhere,\n\nBRADLEY D. HOUNSELL\n\ndid knowingly use a facility and means of interstate and foreign commerce to persuade, induce,\n\nand entice an individual who had not attained the age of 18 years, Minor 1, to engage in sexual\n\nactivity for which a person can be criminally charged with a criminal offense, namely, Sexual\n\nExploitation of a Child, which is a criminal offense under Wisconsin Statutes Section 948.05.\n\nIn violation of Title 18, United States Code, Section 2422(b).\n\n6. The defendant acknowledges, understands, and agrees that he is, in fact, guilty of\n\nthe offense described in paragraph 5. The parties acknowledge and understand that if this case\n\nwere to proceed to trial, the government would be able to prove the following facts beyond a\n\nreasonable doubt. The defendant admits that these facts are true and correct and establish his\n\nguilt beyond a reasonable doubt:\n\nThe defendant, Bradley D. Hounsell, knowingly used an online social media application\n\nfrom within the Eastern District of Wisconsin to communicate with an individual in the Republic\n\nof the Philippines for the purpose of producing and receiving material depicting the sexual abuse\n\nof minor children. Specifically, between November 4, 2023, and November 8, 2023, the\n\ndefendant requested that his contact in the Philippines produce and send him a video of the\n\nindividual touching and digitally penetrating the vagina of an approximately 13-year-old child\n\n(hereinafter, \u201cMinor 1\u201d). In order to persuade, induce, and entice Minor 1 to agree to engage in\n\nthis conduct, the defendant asked the individual questions about Minor 1\u2019s sexual experience and\n2\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 2 of 14 Document 25\npreferences, asked the individual to have Minor 1 pose in sexually explicit positions, and offered\n\nto send money to the individual and Minor 1. The defendant then sent money to this individual\n\nusing an online money transfer service in exchange for the requested video. After receiving the\n\nmoney, the individual advised that she was making the video and then sent the defendant a video\n\nthat depicts his contact in the Philippines touching and digitally penetrating the vagina of Minor\n\n1. That video was recovered both from the individual\u2019s social media account and on the\n\ndefendant\u2019s phone in the Eastern District of Wisconsin.\n\nAdditional conversations between the defendant and his contact in the Philippines\n\ncontained requests for sexualized images and videos of minors with the offer of payment by the\n\ndefendant.\n\nThe videos requested and received by the defendant constitute unlawful sexual activity\n\nand would constitute a violation of Wisconsin Statute Section 948.05, Sexual Exploitation of a\n\nChild.\n\nThis information is provided for the purpose of setting forth a factual basis for the plea of\n\nguilty. It is not a full recitation of the defendant\u2019s knowledge of, or participation in, this offense.\n\nPENALTIES\n\n7. The parties understand and agree that the offense to which the defendant will\n\nenter a plea of guilty carries the following maximum term of imprisonment and fine: a lifetime of\n\nimprisonment and $250,000. The count also carries a mandatory minimum of 10 years of\n\nimprisonment. The count also carries a mandatory special assessment of $100, at least 5 years of\n\nsupervised release, and a maximum of a lifetime on supervised release. The parties further\n\nrecognize that a restitution order may be entered by the court.\n\n8. The defendant acknowledges, understands, and agrees that he has discussed the\n\nrelevant statutes as well as the applicable sentencing guidelines with his attorney.\n3\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 3 of 14 Document 25\nDISMISSAL OF INDICTMENT\n\n9. The government agrees to dismiss the original indictment at the time of\n\nsentencing.\n\nELEMENTS\n\n10. The parties understand and agree that in order to sustain the charge of enticement\n\nand coercion of a minor as set forth in the information, the government must prove each of the\n\nfollowing propositions beyond a reasonable doubt:\n\nFirst, the defendant used a facility or means of interstate commerce to knowingly\n\npersuade, induce, entice and coerce Minor 1 to engage in unlawful sexual activity; and\n\nSecond, Minor 1 was less than 18 years of age; and\n\nThird, the defendant believed Minor 1 was less than 18 years of age; and\n\nFourth, the unlawful sexual activity constituted Sexual Exploitation of a Child in\n\nviolation of Wisconsin Statutes Section 948.05.\n\nSENTENCING PROVISIONS\n\n11. The parties agree to waive the time limits in Fed. R. Crim. P. 32 relating to the\n\npresentence report, including that the presentence report be disclosed not less than 35 days\n\nbefore the sentencing hearing, in favor of a schedule for disclosure, and the filing of any\n\nobjections, to be established by the court at the change of plea hearing.\n\n12. The parties acknowledge, understand, and agree that any sentence imposed by the\n\ncourt will be pursuant to the Sentencing Reform Act, and that the court will give due regard to\n\nthe Sentencing Guidelines when sentencing the defendant.\n\n13. The defendant acknowledges and agrees that his attorney has discussed the\n\napplicable sentencing guidelines provisions with him to the defendant\u2019s satisfaction.\n\n4\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 4 of 14 Document 25\n14. The parties acknowledge and understand that prior to sentencing the United States\n\nProbation Office will conduct its own investigation of the defendant\u2019s criminal history. The\n\nparties further acknowledge and understand that, at the time the defendant enters a guilty plea,\n\nthe parties may not have full and complete information regarding the defendant\u2019s criminal\n\nhistory. The parties acknowledge, understand, and agree that the defendant may not move to\n\nwithdraw the guilty plea solely as a result of the sentencing court\u2019s determination of the\n\ndefendant\u2019s criminal history.\n\nSentencing Guidelines Calculations\n\n15. The defendant acknowledges and understands that the sentencing guidelines\n\nrecommendations contained in this agreement do not create any right to be sentenced within any\n\nparticular sentence range, and that the court may impose a reasonable sentence above or below\n\nthe guideline range. The parties further understand and agree that if the defendant has provided\n\nfalse, incomplete, or inaccurate information that affects the calculations, the government is not\n\nbound to make the recommendations contained in this agreement.\n\nRelevant Conduct\n\n16. The parties acknowledge, understand, and agree that pursuant to Sentencing\n\nGuidelines Manual \u00a7 1B1.3, the sentencing judge may consider relevant conduct in calculating\n\nthe sentencing guidelines range, even if the relevant conduct is not the subject of the offense to\n\nwhich the defendant is pleading guilty.\n\nBase Offense Level\n\n17. The parties acknowledge and understand that the government will recommend to\n\nthe sentencing court that the cross-reference to Sentencing Guidelines Manual \u00a7 2G2.1, which is\n\nlocated at Sentencing Guidelines Manual \u00a7 2G1.3(c)(1), applies because the offense involved\n\ncausing transporting, permitting, or offering or seeking by notice or advertisement, a minor to\n5\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 5 of 14 Document 25\nengage in sexually explicit conduct for the purpose of producing a visual depiction of such\n\nconduct, and that the applicable base offense level for the offense charged is therefore 32 under\n\nSentencing Guidelines Manual \u00a7 2G2.1(a)\n\nSpecific Offense Characteristics\n\n18. The parties acknowledge and understand that the government will recommend to\n\nthe sentencing court that a 2-level increase for an offense involving a minor who has attained the\n\nage of twelve years but not attained the age of sixteen years under Sentencing Guidelines Manual\n\n\u00a7 2G2.1(b)(1) is applicable to the offense level for the offense charged.\n\n19. The parties acknowledge and understand that the government will recommend to\n\nthe sentencing court that a 2-level increase for an offense involving the commission of a sexual\n\nact or sexual contact under Sentencing Guidelines Manual \u00a7 2G2.1(b)(2)(A) is applicable to the\n\noffense level for the offense charged.\n\n20. The parties acknowledge and understand that the government will recommend to\n\nthe sentencing court that a 4-level increase for material that portrays sadistic or masochistic\n\nconduct or other depictions of violence under Sentencing Guidelines Manual \u00a7 2G2.1(b)(4)(A) is\n\napplicable to the offense level for the offense charged.\n\n21. The parties acknowledge and understand that the government will recommend to\n\nthe sentencing court that a 2-level increase for use of a computer under Sentencing Guidelines\n\nManual \u00a7 2G2.1(b)(6) is applicable to the offense level for the offense charged.\n\nAcceptance of Responsibility\n\n22. The government agrees to recommend a two-level decrease for acceptance of\n\nresponsibility as authorized by Sentencing Guidelines Manual \u00a7 3E1.1(a), and to make a motion\n\nrecommending an additional one-level decrease as authorized by Sentencing Guidelines Manual\n\n\u00a7 3E1.1(b), but only if the defendant exhibits conduct consistent with those provisions.\n6\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 6 of 14 Document 25\nSentencing Recommendations\n\n23. Both parties reserve the right to provide the district court and the probation office\n\nwith any and all information which might be pertinent to the sentencing process, including but\n\nnot limited to any and all conduct related to the offense as well as any and all matters which\n\nmight constitute aggravating or mitigating sentencing factors.\n\n24. Both parties reserve the right to make any recommendation regarding any other\n\nmatters not specifically addressed by this agreement.\n\n25. The parties are free to argue for any sentence, subject to the applicable mandatory\n\nminimum.\n\nCourt\u2019s Determinations at Sentencing\n\n26. The parties acknowledge, understand, and agree that neither the sentencing court\n\nnor the United States Probation Office is a party to or bound by this agreement. The United\n\nStates Probation Office will make its own recommendations to the sentencing court. The\n\nsentencing court will make its own determinations regarding any and all issues relating to the\n\nimposition of sentence and may impose any sentence authorized by law up to the maximum\n\npenalties set forth in paragraph 7 above. The parties further understand that the sentencing court\n\nwill be guided by the sentencing guidelines but will not be bound by the sentencing guidelines\n\nand may impose a reasonable sentence above or below the calculated guideline range.\n\n27. The parties acknowledge, understand, and agree that the defendant may not move\n\nto withdraw the guilty plea solely as a result of the sentence imposed by the court.\n\nFINANCIAL MATTERS\n\n28. The defendant acknowledges and understands that any and all financial\n\nobligations imposed by the sentencing court are due and payable in full upon entry of the\n\njudgment of conviction. The defendant further understands that any payment schedule imposed\n7\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 7 of 14 Document 25\nby the sentencing court shall be the minimum the defendant is expected to pay and that the\n\ngovernment\u2019s collection of any and all court imposed financial obligations is not limited to the\n\npayment schedule. The defendant agrees not to request any delay or stay in payment of any and\n\nall financial obligations. If the defendant is incarcerated, the defendant agrees to participate in\n\nthe Bureau of Prisons\u2019 Inmate Financial Responsibility Program, regardless of whether the court\n\nspecifically directs participation or imposes a schedule of payments.\n\n29. The defendant agrees to provide to the Financial Litigation Program (FLP) of the\n\nUnited States Attorney\u2019s Office, upon request of the FLP during any period of probation or\n\nsupervised release imposed by the court, a complete and sworn financial statement on a form\n\nprovided by FLP and any documentation required by the form.\n\nSpecial Assessments\n\n30. The defendant agrees to pay the special assessment in the amount of $100 prior to\n\nor at the time of sentencing.\n\nRestitution\n\n31. The defendant agrees to pay restitution as ordered by the court. The defendant\n\nunderstands that because restitution for the offense is mandatory, the amount of restitution shall\n\nbe imposed by the court regardless of the defendant\u2019s financial resources. The defendant agrees\n\nto cooperate in efforts to collect the restitution obligation. The defendant understands that\n\nimposition or payment of restitution will not restrict or preclude the filing of any civil suit or\n\nadministrative action.\n\nForfeiture\n\n32. The defendant agrees that all properties listed in the information and/or bill of\n\nparticulars were used to facilitate such offense. The defendant agrees to the forfeiture of these\n\nproperties and to the immediate entry of a preliminary order of forfeiture. The defendant agrees\n8\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 8 of 14 Document 25\nthat he has an interest in each of the listed properties. The parties acknowledge and understand\n\nthat the government reserves the right to proceed against assets not identified in this agreement.\n\nDEFENDANT\u2019S WAIVER OF RIGHTS\n\n33. In entering this agreement, the defendant acknowledges and understands that he\n\nsurrenders any claims he may have raised in any pretrial motion, as well as certain rights which\n\ninclude the following:\n\na. If the defendant persisted in a plea of not guilty to the charges against him, he\nwould be entitled to a speedy and public trial by a court or jury. The defendant\nhas a right to a jury trial. However, in order that the trial be conducted by the\njudge sitting without a jury, the defendant, the government and the judge all\nmust agree that the trial be conducted by the judge without a jury.\n\nb. If the trial is a jury trial, the jury would be composed of twelve citizens\nselected at random. The defendant and his attorney would have a say in who\nthe jurors would be by removing prospective jurors for cause where actual\nbias or other disqualification is shown, or without cause by exercising\nperemptory challenges. The jury would have to agree unanimously before it\ncould return a verdict of guilty. The court would instruct the jury that the\ndefendant is presumed innocent until such time, if ever, as the government\nestablishes guilt by competent evidence to the satisfaction of the jury beyond a\nreasonable doubt.\n\nc. If the trial is held by the judge without a jury, the judge would find the facts\nand determine, after hearing all of the evidence, whether or not he was\npersuaded of defendant\u2019s guilt beyond a reasonable doubt.\n\nd. At such trial, whether by a judge or a jury, the government would be required\nto present witnesses and other evidence against the defendant. The defendant\nwould be able to confront witnesses upon whose testimony the government is\nrelying to obtain a conviction and he would have the right to cross-examine\nthose witnesses. In turn the defendant could, but is not obligated to, present\nwitnesses and other evidence on his own behalf. The defendant would be\nentitled to compulsory process to call witnesses.\n\ne. At such trial, defendant would have a privilege against self-incrimination so\nthat he could decline to testify and no inference of guilt could be drawn from\nhis refusal to testify. If defendant desired to do so, he could testify on his own\nbehalf.\n\n9\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 9 of 14 Document 25\n34. The defendant acknowledges and understands that by pleading guilty he is\n\nwaiving all the rights set forth above. The defendant further acknowledges the fact that his\n\nattorney has explained these rights to him and the consequences of his waiver of these rights.\n\nThe defendant further acknowledges that as a part of the guilty plea hearing, the court may\n\nquestion the defendant under oath, on the record, and in the presence of counsel about the\n\noffense to which the defendant intends to plead guilty. The defendant further understands that the\n\ndefendant\u2019s answers may later be used against the defendant in a prosecution for perjury or false\n\nstatement.\n\n35. The defendant acknowledges and understands that he will be adjudicated guilty of\n\nthe offense to which he will plead guilty and thereby may be deprived of certain rights, including\n\nbut not limited to the right to vote, to hold public office, to serve on a jury, to possess firearms,\n\nand to be employed by a federally insured financial institution.\n\n36. The defendant knowingly and voluntarily waives all claims he may have based\n\nupon the statute of limitations, the Speedy Trial Act, and the speedy trial provisions of the Sixth\n\nAmendment. The defendant agrees that any delay between the filing of this agreement and the\n\nentry of the defendant\u2019s guilty plea pursuant to this agreement constitutes excludable time under\n\nthe Speedy Trial Act.\n\n37. Based on the government\u2019s concessions in this agreement, the defendant\n\nknowingly and voluntarily waives his right to appeal his conviction or sentence in this case and\n\nfurther waives his right to challenge his conviction or sentence in any post-conviction\n\nproceeding, including but not limited to a motion pursuant to 28 U.S.C. \u00a7 2255. As used in this\n\nparagraph, the term \u201csentence\u201d means any term of imprisonment, term of supervised release,\n\nterm of probation, supervised release condition, fine, forfeiture order, and restitution order. The\n\ndefendant\u2019s waiver of appeal and post-conviction challenges includes the waiver of any claim\n10\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 10 of 14 Document 25\nthat (1) the statute or Sentencing Guidelines under which the defendant is convicted or sentenced\n\nare unconstitutional, and (2) the conduct to which the defendant has admitted does not fall within\n\nthe scope of the statute or Sentencing Guidelines. This waiver does not extend to an appeal or\n\npost-conviction motion based on (1) any punishment in excess of the statutory maximum, (2) the\n\nsentencing court\u2019s reliance on any constitutionally impermissible factor, such as race, religion, or\n\nsex, (3) ineffective assistance of counsel in connection with the negotiation of the plea agreement\n\nor sentencing, or (4) a claim that the plea agreement was entered involuntarily.\n\nMISCELLANEOUS MATTERS\n\n38. Pursuant to 18 U.S.C. \u00a7 3583(d), the defendant has been advised and understands\n\nthe court shall order as a mandatory condition of supervised release, that the defendant comply\n\nwith state sex offender registration requirements. The defendant also has been advised and\n\nunderstands that under the Sex Offender Registration and Notification Act, a federal law, he\n\nmust register and keep the registration current in each of the following jurisdictions: the location\n\nof his residence; the location of his employment; and, if he is a student, the location of his\n\nschool. Registration will require that the defendant provide information that includes, name,\n\nresidence address, and the names and addresses of any places at which he will be an employee or\n\na student. The defendant understands that he must update his registration not later than three\n\nbusiness days after any change of name, residence, employment, or student status. The defendant\n\nunderstands that failure to comply with these obligations may subject him to prosecution for\n\nfailure to register under federal law, 18 U.S.C. \u00a7 2250, which is punishable by a fine and/or\n\nimprisonment.\n\n11\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 11 of 14 Document 25\nGENERAL MATTERS\n\n39. The parties acknowledge, understand, and agree that this agreement does not\n\nrequire the government to take, or not to take, any particular position in any post-conviction\n\nmotion or appeal.\n\n40. The parties acknowledge, understand, and agree that the United States Attorney\u2019s\n\noffice is free to notify any local, state, or federal agency of the defendant\u2019s conviction.\n\n41. The defendant understands that pursuant to the Victim and Witness Protection\n\nAct, the Justice for All Act, and regulations promulgated thereto by the Attorney General of the\n\nUnited States, the victim of a crime may make a statement describing the impact of the offense\n\non the victim and further may make a recommendation regarding the sentence to be imposed.\n\nThe defendant acknowledges and understands that comments and recommendations by a victim\n\nmay be different from those of the parties to this agreement.\n\nEFFECT OF DEFENDANT\u2019S BREACH OF PLEA AGREEMENT\n\n42. The defendant acknowledges and understands if he violates any term of this\n\nagreement at any time, engages in any further criminal activity prior to sentencing, or fails to\n\nappear for sentencing, this agreement shall become null and void at the discretion of the\n\ngovernment. Alternatively, the government may, in its discretion, ask the Court to be released\n\nfrom specific obligations under this plea agreement to reflect the defendant\u2019s conduct if the\n\ndefendant commits a federal, state, or local offense punishable by a term of imprisonment\n\nexceeding one year or violates a material term of the plea agreement. The defendant further\n\nacknowledges and understands that the government\u2019s agreement to dismiss any charge is\n\nconditional upon final resolution of this matter. If this plea agreement is revoked or if the\n\ndefendant\u2019s conviction ultimately is overturned, then the government retains the right to reinstate\n\nany and all dismissed charges and to file any and all charges which were not filed because of this\n12\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 12 of 14 Document 25\nagreement. The defendant hereby knowingly and voluntarily waives any defense based on the\n\napplicable statute of limitations for any charges filed against the defendant as a result of his\n\nbreach of this agreement. The defendant understands, however, that the government may elect to\n\nproceed with the guilty plea and sentencing. If the defendant and his attorney have signed a\n\nproffer letter in connection with this case, then the defendant further acknowledges and\n\nunderstands that he continues to be subject to the terms of the proffer letter.\n\nVOLUNTARINESS OF DEFENDANT\u2019S PLEA\n\n43. The defendant acknowledges, understands, and agrees that he will plead guilty\n\nfreely and voluntarily because he is in fact guilty. The defendant further acknowledges and\n\nagrees that no threats, promises, representations, or other inducements have been made, nor\n\nagreements reached, other than those set forth in this agreement, to induce the defendant to plead\n\nguilty.\n\n13\n\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 13 of 14 Document 25\nCase 1:25-cr-00069-WCG Filed 01/27/26 Page 14 of 14 Document 25"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b11bb2a1-2a23-5256-a911-e2d3473cdf88",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.5.0"
+    },
+    {
+      "@id": "urn:uuid:5a9b12ae-846d-5ee4-89c9-73c66a8a3d03",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-06-23T11:06:59.122601+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-06-23T11:06:59.122601+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:b11bb2a1-2a23-5256-a911-e2d3473cdf88"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d7f3ee80-9121-5061-b3de-979a76a64347"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:c0b4152a-1779-551a-8fd7-502e679ee7e0"
+        },
+        {
+          "@id": "urn:uuid:f737dc87-8128-56a6-9457-36a5f18077ef"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:0119695b-315f-5d2e-ad29-b38407e63ded"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:36b81ec7-dc99-5b4f-acc7-138c4062736f"
+        },
+        {
+          "@id": "urn:uuid:443606ab-1a6d-566e-a13b-ac71fea4a809"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        },
+        {
+          "@id": "urn:uuid:8488e908-d80a-50a3-a9f9-4e2141804b89"
+        },
+        {
+          "@id": "urn:uuid:be25837d-e57c-57cf-9357-a2eda2dcbecf"
+        },
+        {
+          "@id": "urn:uuid:ce577adb-c999-56e7-90d2-f709df7d3951"
+        },
+        {
+          "@id": "urn:uuid:a9b293f7-839b-5cf4-bcf3-80d420b7f48b"
+        },
+        {
+          "@id": "urn:uuid:22da0dd7-19e2-540c-9ad9-37c7690cc958"
+        },
+        {
+          "@id": "urn:uuid:20eaef67-df72-587b-a02a-60a6c3c367f7"
+        },
+        {
+          "@id": "urn:uuid:98f8e046-8f8f-51c3-b5c6-91c5d4e4856e"
+        },
+        {
+          "@id": "urn:uuid:98fe6ae2-d652-51ee-9e3d-c35bb5a416a9"
+        },
+        {
+          "@id": "urn:uuid:5a983c3b-c3c4-535d-a2d9-58b70eb31229"
+        },
+        {
+          "@id": "urn:uuid:734e484d-9afa-58b0-ba84-f5c9e4bc629c"
+        },
+        {
+          "@id": "urn:uuid:8933d0e2-fa42-5077-9344-b40961008edd"
+        },
+        {
+          "@id": "urn:uuid:fc40bae6-9578-55d6-a78b-124619445025"
+        },
+        {
+          "@id": "urn:uuid:dd16a920-21dd-5437-8f29-a2620dd18c90"
+        },
+        {
+          "@id": "urn:uuid:9ec8a8d1-ae7a-5706-a99f-8048bcb237ab"
+        },
+        {
+          "@id": "urn:uuid:e7ae5216-c187-5fb5-a3f0-d72be18979e7"
+        },
+        {
+          "@id": "urn:uuid:13466b20-8996-53a9-9cfc-d41fcee80bf3"
+        },
+        {
+          "@id": "urn:uuid:fb4bd814-fef2-547a-a48c-49e2881ca2dc"
+        },
+        {
+          "@id": "urn:uuid:c1dd421c-6e64-51a3-8b22-00f300b967fe"
+        },
+        {
+          "@id": "urn:uuid:f8124a8c-c5ba-5c45-8d2c-8e6055b6bfd1"
+        },
+        {
+          "@id": "urn:uuid:e3c2a160-6d2f-55bc-b8fd-aba74d011b3e"
+        },
+        {
+          "@id": "urn:uuid:9d209729-c509-5d17-bfdc-9a1f01e4971d"
+        },
+        {
+          "@id": "urn:uuid:8d0f9344-13a9-5b63-9804-d8ef5b5154e0"
+        },
+        {
+          "@id": "urn:uuid:5f5a117d-4c01-5173-b6f7-c5df40b3aac3"
+        },
+        {
+          "@id": "urn:uuid:dd9879d7-c8e6-5fa5-a305-e853ca62acc9"
+        },
+        {
+          "@id": "urn:uuid:60f8be0e-7615-5b20-a293-02a2cce37690"
+        },
+        {
+          "@id": "urn:uuid:c0c48a08-6e4e-56ab-bbb6-096500f3f0f9"
+        },
+        {
+          "@id": "urn:uuid:511c8ce4-4a1a-58eb-9a54-4a3e5a3042f9"
+        },
+        {
+          "@id": "urn:uuid:93c30f14-5a0c-58a5-abf7-770825b1afd1"
+        },
+        {
+          "@id": "urn:uuid:8d0ecde8-f5d2-5c82-a584-fcca414a3ad7"
+        },
+        {
+          "@id": "urn:uuid:6d36ac2a-6a2b-59f1-bf2d-f859666e9ae0"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location an information",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0acacaa8-699b-5820-9a7f-16d7678532b4",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "an information"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the\n\ninformation",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:7ab22db5-2ad2-5f71-955e-1480e43512f6",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the\n\ninformation"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location open\n\ncourt",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a996db90-b261-5a70-9c21-9376fe9b10e5",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "open\n\ncourt"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d7f3ee80-9121-5061-b3de-979a76a64347",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location full\n\nas",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:cfb85144-3af2-54c8-8d6e-ca879abdbcb3",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "full\n\nas"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c0b4152a-1779-551a-8fd7-502e679ee7e0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date November 4, 2023",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: November 4, 2023",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f737dc87-8128-56a6-9457-36a5f18077ef",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date November 8, 2023",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: November 8, 2023",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the State",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:38eaf476-3d85-572b-ae9f-1eea3b8a8680",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the State"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0119695b-315f-5d2e-ad29-b38407e63ded",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Law-enforcement charge or arrest narrative",
+      "uco-core:eventType": [
+        "criminal charge",
+        "law-enforcement narrative"
+      ],
+      "uco-core:description": "rs, Minor 1, to engage in sexual\n\nactivity for which a person can be criminally charged with a criminal offense, namely, Sexual\n\nExploitation of a Child, which is a criminal offense under Wisconsin Statutes Secti",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location sexual\n\nactivity",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2a21cc73-e402-5b95-9129-4fddfcc6d04b",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "sexual\n\nactivity"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location violation of",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:101df115-6e49-5ad3-97ad-6d6b3b045c37",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "violation of"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location fact",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:dae440d0-f4c7-5d1a-bf18-253591561a13",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "fact"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location paragraph",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:efbfd5b6-3479-506e-b3f7-acafea5ffdf1",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "paragraph"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location within the",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:fae8ffa1-a287-57fc-b57a-dfaa96d1c84e",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "within the"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the Republic",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:32eb2e3f-e08a-55b9-93c1-6815c10d60e2",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the Republic"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:36b81ec7-dc99-5b4f-acc7-138c4062736f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date November 4, 2023",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: November 4, 2023",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:443606ab-1a6d-566e-a13b-ac71fea4a809",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date November 8, 2023",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: November 8, 2023",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the Philippines",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d7b65253-5d45-591a-8834-609c7d2d52ee",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the Philippines"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8488e908-d80a-50a3-a9f9-4e2141804b89",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location order to",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c7ca7e93-31f1-570c-98ad-f5142b74eaf3",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "order to"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:be25837d-e57c-57cf-9357-a2eda2dcbecf",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location this conduct",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b8becf56-26fd-5843-a4c4-41f1e8efeb04",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "this conduct"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ce577adb-c999-56e7-90d2-f709df7d3951",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a9b293f7-839b-5cf4-bcf3-80d420b7f48b",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location sexually explicit",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b899499d-71aa-5791-8cc1-1c4b4e4cc15c",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "sexually explicit"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:22da0dd7-19e2-540c-9ad9-37c7690cc958",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location exchange for",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e8ed9258-8eb9-54bb-b390-facde70bde71",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "exchange for"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:20eaef67-df72-587b-a02a-60a6c3c367f7",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the Philippines",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f77d4097-36fa-575e-8e62-15fbe6d5e4e1",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the Philippines"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:98f8e046-8f8f-51c3-b5c6-91c5d4e4856e",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the individual",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b0b0a708-aeb6-5e32-a705-d708f31b8a55",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the individual"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:98fe6ae2-d652-51ee-9e3d-c35bb5a416a9",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the Eastern",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:80790b55-9503-52c2-83bf-35704272d951",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the Eastern"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5a983c3b-c3c4-535d-a2d9-58b70eb31229",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the Philippines",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d8a3f55e-c226-5322-b2f3-91b6b0c50611",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the Philippines"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:734e484d-9afa-58b0-ba84-f5c9e4bc629c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $250,000",
+      "uco-core:description": "$250,000",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:28b26f8b-997e-54d4-8fdd-027a634a0729",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:ef455e17-5b4c-54a0-9c96-254145742c23",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$250,000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8933d0e2-fa42-5077-9344-b40961008edd",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $100",
+      "uco-core:description": "$100",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9d66955d-a140-5085-8732-41e262eeb3ca",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:0f95a1f0-cb73-5f8e-9a25-97445ec4b528",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$100"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fc40bae6-9578-55d6-a78b-124619445025",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location least",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:fdcc21c1-366f-5c89-90e6-90ad69090119",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "least"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:dd16a920-21dd-5437-8f29-a2620dd18c90",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9ec8a8d1-ae7a-5706-a99f-8048bcb237ab",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the time",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f8749f70-5303-5232-8186-8372d86ec886",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the time"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e7ae5216-c187-5fb5-a3f0-d72be18979e7",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location order to",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:cb8820d0-a312-5c7f-bc9e-7ec1091fc7e4",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "order to"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:13466b20-8996-53a9-9cfc-d41fcee80bf3",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the information",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:05f4693e-c4e6-556e-a1bf-9e07bcc9dd08",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the information"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fb4bd814-fef2-547a-a48c-49e2881ca2dc",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location unlawful sexual",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:aa241a31-950a-57b9-8dfb-75328e09d48f",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "unlawful sexual"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c1dd421c-6e64-51a3-8b22-00f300b967fe",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location violation of",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9b3286c4-6066-5de0-b35f-9bf4e2c5a043",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "violation of"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f8124a8c-c5ba-5c45-8d2c-8e6055b6bfd1",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location Fed",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b09253c2-e271-5f7c-b25c-083589372183",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "Fed"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e3c2a160-6d2f-55bc-b8fd-aba74d011b3e",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location favor of",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e7fc3bbf-20aa-58b9-8175-88ac93d7b2e5",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "favor of"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9d209729-c509-5d17-bfdc-9a1f01e4971d",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the change",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:fc27fb80-643a-5589-ae56-690cfde7e6bc",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the change"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8d0f9344-13a9-5b63-9804-d8ef5b5154e0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5f5a117d-4c01-5173-b6f7-c5df40b3aac3",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the time",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0c555587-3e4b-524e-ada4-2fef991f97b0",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the time"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:dd9879d7-c8e6-5fa5-a305-e853ca62acc9",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location this agreement",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:235d1850-d000-50b2-8ed8-f0a350ad7b37",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "this agreement"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:60f8be0e-7615-5b20-a293-02a2cce37690",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location this agreement",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a43486f8-deff-5bf0-958a-f6553b014c91",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "this agreement"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c0c48a08-6e4e-56ab-bbb6-096500f3f0f9",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location calculating\n\nthe",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6f7570e1-8d2f-5c3e-bd3d-fab5c80b8f28",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "calculating\n\nthe"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:511c8ce4-4a1a-58eb-9a54-4a3e5a3042f9",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location Sentencing Guidelines",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a79759f3-67f1-55c4-af8f-3767cb34a094",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "Sentencing Guidelines"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:93c30f14-5a0c-58a5-abf7-770825b1afd1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8d0ecde8-f5d2-5c82-a584-fcca414a3ad7",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location sexually explicit",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b2ba7c65-e27e-5670-b321-1f06ac0eeb6b",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "sexually explicit"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6d36ac2a-6a2b-59f1-bf2d-f859666e9ae0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/27/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/27/26",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+        },
+        {
+          "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+        },
+        {
+          "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+        },
+        {
+          "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+        },
+        {
+          "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+        },
+        {
+          "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+        },
+        {
+          "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+        },
+        {
+          "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+        },
+        {
+          "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+        },
+        {
+          "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+        },
+        {
+          "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+        },
+        {
+          "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8996ea1b-e2db-55e4-858a-f1f379a7030f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6712e209-9397-5a23-8476-6e22514bc455"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d86ee47c-14aa-52c2-a513-e7dd40b79541",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:95a3eff5-9b4c-5575-af60-e0335bcb6260"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d897c235-9148-5b04-ac2c-f6bf65242566",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f624c822-18ab-54ab-90f4-ac970a124ad1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:800f7231-99c7-5acf-9ab1-be8f94bebf22",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d7f3ee80-9121-5061-b3de-979a76a64347"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b7dd9e61-190f-5d93-95e0-894e4ea53597",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d902c989-bcb5-5c11-99c8-950bd0dfc233"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f3343c44-635f-5afd-8562-5b5733f729b1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c0b4152a-1779-551a-8fd7-502e679ee7e0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3735697d-34c7-5256-822a-88930010beea",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f737dc87-8128-56a6-9457-36a5f18077ef"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f0135495-7571-54aa-b205-f6f681302fbf",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e15051b4-dba3-5df1-8488-2e353cd9ac4e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7f32029a-6af4-505e-b8a6-b6ee9fece0da",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0119695b-315f-5d2e-ad29-b38407e63ded"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:802666b3-cee1-5dbe-8c72-7be2b36384ec",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:820ecaac-8691-55ce-b5e6-e3ddd75158b7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b162dfcd-a690-53c0-83f6-91e9b9c664b1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0d6b97b5-3927-56ee-ac55-d43a3b1040f1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b95fb9f0-6fbf-5441-8600-79480f69d2be",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ee4925df-915a-5156-acd0-028172da4304"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a55cb725-38db-5bc4-b85b-8d19475d6606",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6cad415f-3264-5c84-b28f-0eb78a85f92b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6797cd12-a97d-5a45-965f-f4259380e33c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:364e1e35-0d0a-5a85-978c-7f452ed07675"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bca64ce6-342d-5ece-bcb1-a263cd2a039c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:efee66f0-a0f9-5442-b92c-2c48308be7bb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:263ddfd2-48a1-58fd-91f6-22e6aee55037",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:36b81ec7-dc99-5b4f-acc7-138c4062736f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6663f360-94c4-5a0a-b46c-d453ee04f721",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:443606ab-1a6d-566e-a13b-ac71fea4a809"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ab227ab0-8304-54bb-9645-75be72db73b8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b84420dd-2566-5f37-82be-d7789e507e2b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:134d2014-a16f-5ae2-8112-ff43ca8cc11e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8488e908-d80a-50a3-a9f9-4e2141804b89"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cfdf188d-c634-59e3-9297-21779f575518",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:be25837d-e57c-57cf-9357-a2eda2dcbecf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9b8c14db-7b3a-5221-9520-77c4c1000cda",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ce577adb-c999-56e7-90d2-f709df7d3951"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1bd012a1-dff8-561c-9836-bcc1800b0ace",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a9b293f7-839b-5cf4-bcf3-80d420b7f48b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:64511af4-a5d6-5e34-9e1e-f7ecb0cb1923",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:22da0dd7-19e2-540c-9ad9-37c7690cc958"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d157ba67-6b79-51b4-83a4-ba37a8115bcc",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:20eaef67-df72-587b-a02a-60a6c3c367f7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a9a6565f-916e-5159-9d0d-59701f2c510c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:98f8e046-8f8f-51c3-b5c6-91c5d4e4856e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c8e13463-6e60-5881-b7d0-3bb755cf6afd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:98fe6ae2-d652-51ee-9e3d-c35bb5a416a9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2e3e0358-bbe5-5652-9099-6a773451fb9c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5a983c3b-c3c4-535d-a2d9-58b70eb31229"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ce5d8b20-b257-5fef-83a6-b7c9711f40cd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:734e484d-9afa-58b0-ba84-f5c9e4bc629c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:62146208-6cf2-58c7-94de-e662a7b0dfa1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8933d0e2-fa42-5077-9344-b40961008edd"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b7c8dc3f-e236-56eb-9099-6e35586517b6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fc40bae6-9578-55d6-a78b-124619445025"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3037241a-86a1-5aa3-9f9b-f551501882ce",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:dd16a920-21dd-5437-8f29-a2620dd18c90"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:22e58cf9-b9da-5e5f-bd3c-6428f5ad06a5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9ec8a8d1-ae7a-5706-a99f-8048bcb237ab"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ac22b9de-eafc-5ee4-accf-c1c28a1a42d9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e7ae5216-c187-5fb5-a3f0-d72be18979e7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1f21ff2f-95a1-544a-b0b5-268663508388",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:13466b20-8996-53a9-9cfc-d41fcee80bf3"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9d19acee-5afc-565c-8d51-af7bfe48727b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fb4bd814-fef2-547a-a48c-49e2881ca2dc"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:31d82c70-bcf5-57bf-b5c2-8682ab77142f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c1dd421c-6e64-51a3-8b22-00f300b967fe"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e6c00237-fc29-5476-97ba-99c9ef77af60",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f8124a8c-c5ba-5c45-8d2c-8e6055b6bfd1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8c4ef79a-71a2-5aec-892c-7af688a8f68f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e3c2a160-6d2f-55bc-b8fd-aba74d011b3e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b79f371b-27ff-5c6a-a6eb-bde659ee926a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9d209729-c509-5d17-bfdc-9a1f01e4971d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3c4f9c6d-d232-5c59-921f-1333058b6775",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8d0f9344-13a9-5b63-9804-d8ef5b5154e0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5eb3dfa3-8275-5da4-9e0c-6889d06cef36",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5f5a117d-4c01-5173-b6f7-c5df40b3aac3"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:45a1d0b7-f2d5-5168-b586-0cc4a2b4b249",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:dd9879d7-c8e6-5fa5-a305-e853ca62acc9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:518992a1-f9aa-5864-9560-b08e899b74bc",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 43 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:60f8be0e-7615-5b20-a293-02a2cce37690"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2ff7d70a-9aa3-5bba-8ecc-a617d5935443",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 44 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c0c48a08-6e4e-56ab-bbb6-096500f3f0f9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:09abefcd-c5eb-55f2-90b2-12c897794ccf",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 45 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:511c8ce4-4a1a-58eb-9a54-4a3e5a3042f9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dc1fe872-7784-5450-bd61-4f022aaeae20",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 46 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:93c30f14-5a0c-58a5-abf7-770825b1afd1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9195550c-80ed-5d0e-9298-42eec88e5636",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 47 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8d0ecde8-f5d2-5c82-a584-fcca414a3ad7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f017587f-a640-573d-92f0-e1738e041be9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 48 derived from pacer -- doj_ceos_2026_012 -- plea agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6d36ac2a-6a2b-59f1-bf2d-f859666e9ae0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f5925c3e-1954-5b82-a174-50ee70754326"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}
