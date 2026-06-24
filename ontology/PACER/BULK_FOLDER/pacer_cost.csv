@@ -1,3 +1,5 @@
+case id, docket number, PACER action, cost
+ICAC, , ,
 doj_ceos_2026_012, 1:25-cr-00069-WCG, search (1/2), 0.10
 doj_ceos_2026_012, 1:25-cr-00069-WCG, search (2/2), 0.10
 doj_ceos_2026_012, 1:25-cr-00069-WCG, docket, 0.60
@@ -15,3 +17,10 @@ usss_2017_006, 3:16-mj-03834-BGS, search (2/2), 0.10
 usss_2017_006, 3:16-mj-03834-BGS, criminal complaint, 1.40
 
 , , TOTAL, 10.20
+
+
+
+Outside , , ,
+[press release link], [docket], search, 0.00
+, , TOTAL, 0
+

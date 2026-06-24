@@ -10,12 +10,22 @@ WORKSPACE = Path(__file__).resolve().parent
 REPO_ROOT = WORKSPACE.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from state_machines.bellman import (  # noqa: E402
+    BACKBONE_FOR_INTERVENTION,
+    bellman_for_goal,
+    bellman_lstar,
+    goal_reward_profile,
+    intervention_delta,
+    matrix_from_sequences,
+)
 from state_machines.iris import (  # noqa: E402
     CASE_META,
     EXPLOITATION_PHASE,
     INITIAL_CONTACT_PHASE,
     LSTAR_JSON,
+    MAINTENANCE_PHASE,
     display_type,
+    infer_modality,
     local_name,
 )
 from state_machines.sparql_queries import (  # noqa: E402
@@ -31,12 +41,14 @@ from state_machines.sparql_queries import (  # noqa: E402
     weighted_transition_matrix,
 )
 from state_machines.trajectory import (  # noqa: E402
-    compute_lstar,
     cross_case_comparison,
+    max_weight_empirical_path,
     path_weight_for_sequence,
 )
 
 OUTPUT_PATH = LSTAR_JSON
+
+BELLMAN_GOALS = ("enticement", "sextortion", "production", "enterprise", "trafficking")
 
 
 def _case_id_from_graph(graph_uri: str) -> str:
@@ -63,6 +75,17 @@ def _format_phase_line(
     return lines
 
 
+def _serialize_bellman(result: dict) -> dict:
+    return {
+        "goal": result.get("goal"),
+        "n_cases": result.get("n_cases"),
+        "case_ids": result.get("case_ids", []),
+        "trajectory": result["trajectory"],
+        "trajectory_display": [display_type(t) for t in result["trajectory"]],
+        "v_star_start": result["v_star_start"],
+    }
+
+
 def main() -> None:
     cg = load_state_machine_graphs()
     matrix, n_cases = weighted_transition_matrix(cg)
@@ -73,7 +96,12 @@ def main() -> None:
     sequences: dict[str, list[str]] = {}
     case_results: dict[str, dict] = {}
 
-    global_lstar = compute_lstar(matrix, INITIAL_CONTACT_PHASE, EXPLOITATION_PHASE, n_cases)
+    global_lstar = max_weight_empirical_path(
+        matrix, INITIAL_CONTACT_PHASE, EXPLOITATION_PHASE, n_cases
+    )
+    global_lstar_maintenance = max_weight_empirical_path(
+        matrix, INITIAL_CONTACT_PHASE, MAINTENANCE_PHASE, n_cases
+    )
 
     for graph in case_graphs(cg):
         case_id = _case_id_from_graph(str(graph))
@@ -95,7 +123,9 @@ def main() -> None:
                 }
             )
 
-        case_lstar = compute_lstar(matrix, INITIAL_CONTACT_PHASE, EXPLOITATION_PHASE, n_cases)
+        case_lstar = max_weight_empirical_path(
+            matrix, INITIAL_CONTACT_PHASE, EXPLOITATION_PHASE, n_cases
+        )
         case_lstar["case_sequence"] = type_seq
         case_lstar["case_path_weight"] = path_weight
         case_lstar["case_step_weights"] = {
@@ -105,13 +135,26 @@ def main() -> None:
             f"{a}|{b}": w for (a, b), w in case_lstar["weights"].items()
         }
 
+        modality = infer_modality(case_id, CASE_META.get(case_id))
+        case_matrix = matrix_from_sequences({case_id: type_seq})
+        case_bellman = bellman_lstar(
+            case_matrix,
+            INITIAL_CONTACT_PHASE,
+            goal_reward_profile(modality),
+            row_normalize_matrix=False,
+        )
+
         meta = CASE_META.get(case_id, {"title": case_id.upper(), "citation": case_id})
         case_results[case_id] = {
             "title": meta["title"],
             "citation": meta["citation"],
+            "modality": modality,
             "phase_sequence": type_seq,
             "phase_details": phase_details,
-            "lstar": case_lstar,
+            "empirical_lstar": case_lstar,
+            "bellman_lstar": _serialize_bellman(
+                {**case_bellman, "goal": modality, "n_cases": 1, "case_ids": [case_id]}
+            ),
             "path_weight": path_weight,
         }
 
@@ -141,6 +184,32 @@ def main() -> None:
 
     comparison = cross_case_comparison(sequences)
 
+    bellman_by_goal = {
+        goal: _serialize_bellman(bellman_for_goal(sequences, goal, infer_modality))
+        for goal in BELLMAN_GOALS
+    }
+
+    canonical_sequences = {
+        cid: seq for cid, seq in sequences.items() if cid in BELLMAN_GOALS
+    }
+    canonical_matrix = matrix_from_sequences(canonical_sequences)
+    intervention_at_backbone: list[dict] = []
+    for phase in BACKBONE_FOR_INTERVENTION:
+        row: dict = {"phase": display_type(phase), "by_goal": {}}
+        for goal in BELLMAN_GOALS:
+            delta = intervention_delta(
+                canonical_matrix,
+                INITIAL_CONTACT_PHASE,
+                goal_reward_profile(goal),
+                phase,
+            )
+            row["by_goal"][goal] = {
+                "delta": delta["delta"],
+                "v_star_before": delta["v_star_before"],
+                "v_star_after": delta["v_star_after"],
+            }
+        intervention_at_backbone.append(row)
+
     print("═" * 55)
     print(f"CROSS-CASE COMPARISON (all {n_cases} offense types)")
     print("═" * 55)
@@ -159,6 +228,14 @@ def main() -> None:
         for t in comparison["unique"]:
             cases = comparison["type_cases"][t]
             print(f"  {local_name(t):24} ({cases[0]})")
+
+    print("═" * 55)
+    print("BELLMAN L*_{g,A} (goal-conditioned, modality-filtered)")
+    print("═" * 55)
+    for goal, result in bellman_by_goal.items():
+        traj = " → ".join(result["trajectory_display"])
+        print(f"  {goal:12} (n={result['n_cases']}): {traj}")
+        print(f"               V*(s0)={result['v_star_start']:.4f}")
 
     payload = {
         "n_cases": n_cases,
@@ -203,7 +280,25 @@ def main() -> None:
                 },
             },
             "trajectory_display": [display_type(t) for t in global_lstar["trajectory"]],
+            "method": "max_weight_empirical_path",
         },
+        "global_lstar_maintenance": {
+            **{
+                k: v
+                for k, v in global_lstar_maintenance.items()
+                if k != "weights"
+            },
+            "weights": {
+                f"{a}|{b}": w
+                for (a, b), w in global_lstar_maintenance["weights"].items()
+            },
+            "trajectory_display": [
+                display_type(t) for t in global_lstar_maintenance["trajectory"]
+            ],
+            "method": "max_weight_empirical_path",
+        },
+        "bellman_by_goal": bellman_by_goal,
+        "intervention_at_backbone": intervention_at_backbone,
         "cases": case_results,
         "cross_case_comparison": {
             **comparison,

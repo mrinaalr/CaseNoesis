@@ -5,14 +5,15 @@ from __future__ import annotations
 from collections import defaultdict
 
 
-def compute_lstar(
+def max_weight_empirical_path(
     transition_matrix: dict[tuple[str, str], float],
     start_type: str,
     terminal_type: str,
     n_cases: int = 1,
 ) -> dict:
     """
-    Max-weight path through the transition matrix (max-product / Viterbi-style).
+    Max-weight path through corpus edge frequencies (max-product / Viterbi-style).
+    Not Bellman-optimal; use state_machines.bellman.bellman_lstar for R_g-based paths.
     Cycles (CoercionCycle) are single nodes — not unrolled.
     """
     nodes: set[str] = {start_type, terminal_type}
