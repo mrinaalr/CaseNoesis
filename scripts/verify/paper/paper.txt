@@ -1,0 +1,2223 @@
+Affordances for Harm
+How Offenders Misuse Platform Capabilities
+to Exploit Children, and Where to Intervene
+Mrinaal Ramachandran
+GraduateStudent,DepartmentofComputerScience
+UniversityofMassachusettsAmherst
+mramachandra@umass.edu · IndependentResearch
+Corpus 7,426cases·80,000+features·56sources
+Coverage 61taskforces·3,500+lawenforcementagencies
+PACER 8federalprosecutionrecords·3federalindictments·2StatementsofOffense
+Timespan 2002–2026
+Platforms 30+analyzed
+Abstract
+For years, the history of the internet has been championed through the lens of
+platforms,growth,andinnovation. Farlessoftendowesystematicallyexamine
+theharmsthathavescaledalongsidethatsameinfrastructure.
+Fromlarge-scalecontentdistributionandglobalconnectivitytoencryptedmessag-
+ingandAI-generatedimagery,thecapabilitiesthatmaketechnologyworthusing
+havealsomadeitexploitable. Thesameinfrastructurethatconnectedbillionsof
+peoplequietlyrewiredtheeconomicsofchildexploitation—notbecausethesetech-
+nologiesweredesignedtocauseharm,butbecauseoffendersareadaptive: some
+pursuechildrendeliberately,othersarecapitalizingonaccessandopportunitythe
+internethasmadepossibleforthefirsttime.
+Thispaperdrawson7,426curatedInternetCrimesAgainstChildrencaserecords
+spanning2002to2026andasks: whichplatformcapabilitiesoffendersexploitmost
+consistently, how technology is weaponized within specific offense subtypes—
+grooming,sextortion,productionofCSAM,coordinatedcriminalnetworks—and
+where disruption is most realistic. Across 30+ platforms and 61 task forces, the
+samecapabilitytypessurfaceagainandagain—anonymity,disappearingcontent,
+filedistribution,contactdiscovery,trust-buildingatspeed—regardlessofwhich
+platformisintheheadlines. Thetechnologychanges. Theexploitationmechanics
+donot.
+
+Contents
+1 ExploitationIsaHumanChoice . . . . . . . . . . . . . . . . . . . . . . . . . 1
+2 TheInfrastructureofHarm . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+2.1 PriorWork: CSEA,Platforms,andtheEnforcementEcosystem . . 2
+2.2 WhatTechnologyMakesPossible . . . . . . . . . . . . . . . . . . . . . 6
+3 EvidenceatScale: Analysisof7,426ExploitationCases . . . . . . . . . . 7
+3.1 Collection,Processing,andValidation . . . . . . . . . . . . . . . . . . 7
+3.2 OntologiesforModelingRadioactiveData . . . . . . . . . . . . . . . 10
+3.3 ResearchQuestionsandAnalyticalApproach . . . . . . . . . . . . . 13
+4 PlatformAffordancesandMisuseSurfaces . . . . . . . . . . . . . . . . . 14
+4.1 ContactandApproachAffordances . . . . . . . . . . . . . . . . . . . 18
+4.2 ProductionAffordances: TheGenerativeEvolution . . . . . . . . . . 19
+4.3 PossessionandTradeAffordances . . . . . . . . . . . . . . . . . . . . 20
+4.4 CoordinationAffordances . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+5 HarmSignatures: HowTechnologyShapesExploitation . . . . . . . . . 22
+5.1 GroomingandEnticement . . . . . . . . . . . . . . . . . . . . . . . . . 23
+5.2 TheProductionofAbuseMaterial . . . . . . . . . . . . . . . . . . . . 25
+5.3 Sextortion: CoercionAfterContact . . . . . . . . . . . . . . . . . . . . 26
+5.4 CoordinatedCriminalEnterprises . . . . . . . . . . . . . . . . . . . . 27
+6 DisruptingOffenseMechanisms . . . . . . . . . . . . . . . . . . . . . . . . 29
+6.1 WhereInterventionHasTraction . . . . . . . . . . . . . . . . . . . . . 29
+6.2 TheContactChain: InterventionAcrossOffenseTypes . . . . . . . . 31
+6.3 PolicyandInvestigativeLevers . . . . . . . . . . . . . . . . . . . . . . 33
+6.4 Detection,Triage,andCross-CaseIntelligence . . . . . . . . . . . . . 33
+7 DesigningAgainstPredation . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+7.1 TheAdaptiveAdversary . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+7.2 RationalExploitationandAffordanceTrajectories . . . . . . . . . . . 34
+7.3 EmpiricalLawsoftheObservableICACUniverse . . . . . . . . . . 39
+7.4 TheForeseeableHarmStandard . . . . . . . . . . . . . . . . . . . . . . . 41
+7.5 LimitationsandScope . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42
+8 ExploitationIsNotInevitable . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+9 Data,Code,andPublicResearchArtifacts . . . . . . . . . . . . . . . . . . 44
+i
+
+1. Exploitation Is a Human Choice
+The capabilities that make the internet valuable to hundreds of millions of le-
+gitimate users are the same capabilities offenders have learned to turn against
+children. Everycase inthiscorpus beginswiththe samedecision: a personchose
+toexploitachild.
+Across the twenty-four years and 7,426 enforcement records this corpus spans,
+whattechnologychangedwasnotthatdecisionbutitsoperationalscope.
+Childsexual exploitationis notaproblemtheinternet invented. It isamongthe
+oldest documented harms to children, and the children it targets have always
+been vulnerablefor the same reasons: age, developmentalstage, and dependency
+on adults. What the internet changed is the capability available to the person
+who decides to act on that vulnerability. The offender in 1990 operated inside
+constraintsthatnolongerexistinthesameform. Physicalproximitywasrequired
+to make contact. Geography bounded victim access. Material was difficult to
+produce, store, and distribute. Detection risk was comparatively high at every
+step. In2026,noneofthoseconstraintshold. Adeviceinapocketprovidesglobal
+reach. Anonymityisdefaultonthemost-usedplatformsintheworld. Contentcan
+beproduced,encrypted,distributed,anderasedinseconds. Thebarriersdidnot
+fallbecausetechnologymadepeopleworse. Theyfellbecausetechnologyraised
+thecapabilityceilingforeveryone—includingthosewhouseittoharm.
+Thisistheamplificationproblem,anditisdistinctfromcausation. Noplatform
+builtafeaturetoenablechildexploitation. Thefeaturesexistforhundredsofmil-
+lionsoflegitimateusers,andbadactorshavelearnedtousethesamecapabilities
+that make the technology valuable. That is not a design failure unique to any
+company;itistherealityofthemoderndigitalsociety. Itisalsowhythequestion
+which platform did this? is less useful than the question this paper asks: which
+capabilitiesareconsistentlyreachedfor,andwhydotheyappearacrosseveryplatformin
+theenforcementrecord?
+Offenders in this corpus range from individuals who systematically identified
+and groomed multiple victims across years to those who acted on an available
+opportunitytechnologyplacedinfrontofthem. Bothtypesareintheenforcement
+record. Both made a choice. Understanding how malicious users transform
+platformaffordancesintomisusesurfacesistheprerequisitefordesigningagainst
+them.
+The landscape of exploitation continues to evolve alongside technology. The
+dominant image—a predator posing as a peer, deceiving a child into a meeting
+1
+
+that ends in assault—is one offense type in the enforcement record. It is not the
+onlyone. Sextortion,inwhichoffenderscoercevictimsthroughthreatstoexpose
+images,emergedasadistinctandrapidlygrowingtypologyonlyinthelastdecade,
+made possible by the same digital infrastructure that connects everyone online.
+Coordinatednetworksofoffendersoperatingacrossgamingplatformsrepresent
+another. Eachcapabilityintroducedhas,inturn,producedoffensepatternsthat
+did not previouslyexist at scale. Offendingprofiles and capabilities are notstatic.
+Theyexpandwithtechnology.
+The harm in these cases is not abstract. Livingstone and Smith [12] document
+the inseparability of digital and physical risk for children: what happens on a
+platform shapes what happens offline, and the boundary between them is not
+meaningful to the child living inside it. Contact made in a chat room migrates.
+Material produced in one context circulates in others longafter the offense ends.
+Theplatformdidnotmanufacturepredatoryintent. Itprovidedtheinfrastructure
+throughwhichthatintentfoundachild.
+Thispaper asksthreesequential questionsabout thatinfrastructure. Whichcapa-
+bilities do offenders consistently reach for, across offense types, platforms, and
+years? How do those affordances map to harm vectors across the technological
+eras this corpus spans? Where in that infrastructure does intervention become
+realistic? The affordance framework developed in §2 provides the analytical
+language: a way to ask not which platform was involved but which capability
+was used, and what that capability made possible. The answer turns out to be
+stable across three decades of platform evolution. Anonymity. Ephemerality.
+Distribution infrastructure. Contactdiscovery. Trustarchitecture at speed. These
+capabilities appearin the enforcementrecord becausethey are structurallyuseful:
+theytranslateplatformpropertiesintooffensemechanics.
+Exploitationisahumanchoice. Thetechnologydoesnotmakethatchoice. Butit
+shapes,inwaysthispapermeasuresatscaleforthefirsttime,theharmsignatures
+ofmodernoffenders.
+2. The Infrastructure of Harm
+2.1 PriorWork: CSEA,Platforms,andtheEnforcementEcosystem
+Online child exploitation is one of the most extensively documented crime cat-
+egories in the federal enforcement ecosystem. It is also one of the least studied
+atthecaselevel. Understandingwhyrequiresunderstandingwhattheexisting
+2
+
+infrastructuredoes,andchallengesthesystemfaces.
+HowICACEnforcementWorks.TheprimarylawenforcementresponseintheUnited
+StatesisorganizedthroughtheInternetCrimesAgainstChildrenTaskForcePro-
+gram: 61federallycoordinatedtaskforcesrepresentingover5,400federal,state,
+andlocalagencies,establishedin1998alongsidetheNCMECCyberTiplineand
+expanded continuously since. In fiscal year 2024, ICAC task forces conducted
+approximately 203,467investigations and arrested more than 12,600 suspected of-
+fenders. Investigationsareclassifiedasproactive—investigatorsinitiatingcontact
+in undercover capacity—or reactive, triggered by a tip or complaint. The FBI’s
+Violent CrimesAgainst Childrenprogramand HomelandSecurity Investigations
+operateinparallelformulti-jurisdictionalcases.
+The statutory framework has three main layers. The PROTECT Our Children
+Act of 2008 codified the ICAC program and established mandatory reporting
+requirements. 18 U.S.C. § 2258A requires electronic service providers to report
+apparent CSAM to the CyberTipline. The REPORT Act of 2024 extended those
+obligationstoonlineenticementandchildsextraffickingforthefirsttime. In2024,
+NCMECreceivedapproximately20.5millionCyberTipline reports —equivalent
+to29.2millionseparateincidents—fromplatformsoperatingglobally. Against
+thatvolume,12,600arrestsrepresentssuccessfulcaseresolutionforafractionof
+whatisreported. Thisisnotafailureoflawenforcement. Itisascaleproblem: the
+volumeofsuspectedexploitationarrivingthroughtheCyberTiplinevastlyexceeds
+thenumberofinvestigatorsavailabletoactonit,andtriagequalitydetermines
+whichoffendersarecaughtandwhichvictimsgetreached.
+The Response Infrastructure.The technology ecosystem for child protection operates
+onthreeplanes.
+Thefirstiscontentdetection. PhotoDNA,developedbyMicrosoftin2009,gener-
+atesperceptualhashesofimagesandcomparesthemagainstadatabaseofknown
+CSAM, detecting matches even after modification. It is deployed by Google,
+Meta, Twitter, Reddit, Discord, and dozens of other platforms. Google’s CSAI
+Matchperformstheequivalentfunctionforvideo. Meta’sopen-sourcedPDQand
+TMK+PDQFalgorithmsextendperceptualhashingtosmallerplatformsthatcan-
+notbuilddetectioninfrastructureindependently. Thorn’sSaferplatformtakesa
+complementaryapproach: perceptualhashingagainstadatabaseofover76million
+verified CSAMhashes combinedwith anAI-based classifierdesigned toidentify
+novelmaterialthathasneverbeenhashed,withcross-platformhash-sharingthat
+propagates newlyidentified CSAM acrossthe detection ecosystem withoutdelay.
+AccordingtotheTechCoalition’s2023annualsurvey,89%ofmembercompanies
+3
+
+deployatleastoneimagehash-matcher;59%usevideohash-matching.
+ThisinfrastructureisthebackboneofCSAMdetectionatscale,anditseffectiveness
+forknownmaterialiswell-established[20]. Italsohasfourstructurallimitsthat
+becomemoresignificantasthethreatlandscapeevolves. Hash-matchingrequires
+a prior identification — new material, including AI-augmented content, has no
+hash to match. Detection only occurs on cooperating platforms — encrypted
+messaging services, smaller platforms, and dark web networks are outside the
+detection envelope. Hash-matchingis also increasinglyvulnerable toadversarial
+attack: recentresearchhasdemonstratedthatgradient-basedimagemodifications
+candefeatPhotoDNAdetectionwhileleavingcontentvisuallyintact. Andhash-
+matchinganswers exactlyone question: isthis imageknownillegal material? It
+cannotansweranyoftheinvestigativelyimportantquestions—whichplatform
+capability made this offense possible, who created this material, how does this
+caserelatetothehundredsinvestigatedlastyearacrossthesameplatform.
+The Behavioral Research Base.The second major body of work is empirical. The
+CrimesAgainstChildrenResearchCenterattheUniversityofNewHampshire
+produced the most systematic research on online CSEA offending. Wolak et al.
+[24] documented the dynamics ofinternet-initiated sex crimes through anational
+law enforcement survey: who offends, how online relationships develop, how
+offenses progress from digital contact to physical harm. Wolak et al. [25] estab-
+lishedthatmostinternet-initiatedsexoffensesdonotfitthepredator-deception
+modelthat dominatespreventionmessaging— mostoffendersdid notdisguise
+their age or intentions but cultivated relationships over time, exploiting adoles-
+centdevelopmentalvulnerabilityratherthandeceivingvictimsaboutwhothey
+were. Wolak and Finkelhor [23] and Wolak et al. [26] characterized sextortion
+asanemerginganddistinctoffensetypologywithitsowndynamicsandvictim
+population. Kloessetal.[10]providedacomprehensiveframeworkfortheprocess
+ofonlinesexualgroomingacrossinternetcommunicationplatforms: prevalence,
+offense stages, offender characteristics, and legal responses across jurisdictions.
+Kloessetal.[11]mappedoffenseprocessesspecificallythroughinternetcommuni-
+cationplatforms,tracinghowoffendersmovevictimsfrominitialcontactthrough
+escalation. LivingstoneandSmith[12]documentedtheintertwiningofdigitaland
+physical risk for children at national scale. Mitchell et al. [13] characterized the
+lawenforcementresponsetointernet-facilitatedcommercialsexualexploitation
+usinganationallyrepresentativesampleofagencies.
+ThisbodyofworkestablishedthebehaviorallandscapeofonlineCSEA.Itdidnot
+—because thedataand toolsdid notyetexist —analyzethe relationship between
+specific platform capabilities and the offense patterns those capabilities make
+4
+
+possible across thousands of cases. The affordance lens has itself been applied
+toCSEAconceptually—bypsychologistsmodelingtechnology-mediatedabuse
+[18],andbycriminologiststheorizingthemechanicsthroughwhichtechnological
+design “invites” technology-facilitated violence [27]. What no prior work has
+doneisconnectbehavioralpatternstoplatformcapabilitiesviaanaffordance-level
+abstraction,operationalizedagainstenforcementcaserecordsatscale.
+OperationalForensics.Thethirdbodyofworkisforensics. Afteradeviceisseized,
+investigatorsuseenterpriseforensicsplatformstoexamineit: Nuixforlarge-scale
+e-discovery and timeline reconstruction, Magnet Axiom for mobile and cloud
+forensics, Cellebrite UFED for physical and logical extraction. The workflow is
+precise—physicalimagesofstoragemedia,filecarvingtorecoverdeletedcontent
+andfragments,parsingofapplicationdatabasesandencryptedchatlogs,artifact
+recovery from unallocated space, timeline reconstruction from access metadata
+and system logs. These platforms are powerful, expensive, and infrastructure-
+heavy. They ask what is on this phone. Not what this case shares with five
+hundredcasesinvestigatedlastyearacrossthesameplatform.
+All three layers of this infrastructure carry an acute human cost. Investigators
+inchildexploitationunitsroutinelyencountermaterialthathasnoequivalentin
+otherareasoflawenforcement. Digitalforensicsanalystsdonotmerelyviewthis
+material—theyanalyzeit,buildtimelines,andconstructtheevidentiaryrecord
+thatprosecutionrequires,withconsequencesincludingemotionalnumbing,hy-
+pervigilance,intrusiveideation,andacceleratedburnout. Thevolumeofevidence
+hasgrownasthethreatlandscapehasexpanded—asingledeviceseizurenow
+routinelycontainshundredsofthousandsofimagesandterabytesofcloud-synced
+material. The cognitive and psychological load scales accordingly. Triage tools
+that reduce manual exposure are not only an efficiency argument. They are a
+wellbeingargument.
+The harm for victims in these cases does not end with the offense. Material
+producedcirculateslongafterinvestigationsclose. Survivorsnavigatecriminal
+proceedings,civilsystems,andtheongoingrealitythatdigitalcontentdoesnot
+disappear. Investigatorscarrythecasestheyhaveworked. Familiescarrywhat
+those cases revealed about someone they trusted. These are not incidental facts
+aboutadifficultfield. Theyarepartofwhytheharmsthispaperaddressesmatter.
+Every unworked CyberTip is a case that may go uninvestigated. Every missed
+cross-casepatternandunreportedplatformcapabilityisanoffensetrajectorythat
+couldhavebeenidentifiedearlier. Theinfrastructuredescribedhere—detection,
+enforcement,behavioralresearch,operationalforensics—isstaffedbycapable,
+motivatedprofessionalsworkingunderimmenseconstraintsofscale,anevolving
+5
+
+threatlandscape,andthesustainedweightofradioactivematerial. Thefollowing
+section introduces the ontological and affordance-based framework that makes
+cross-case, platform-levelanalysispossibleatcorpus scale—withoutthedirect
+exposurethatmakesengagementinthisfieldsodifficulttosustain.
+2.2 WhatTechnologyMakesPossible
+“Platform”isthewrongunitofanalysisforthisproblem.
+Platformsemerge,scale,anddisappear. Myspaceisgone. Omeglewasshutdown.
+Discorddid notexistfifteen yearsago. Ifthe analyticalunit istheplatform, every
+newplatformgenerationrequiresresearchfromscratch. Theoffensemechanicsdo
+notrestartwitheachplatformgeneration. Thecapabilitiesthatappearconsistently
+intheenforcementrecord—anonymity,ephemerality,unmonitoredcommunica-
+tion, contact discovery, distribution infrastructure — appear on every platform,
+implementeddifferentlybutfunctioninginsimilarmanners. Theunitthatholds
+acrossplatformgenerationsisaffordance.
+Theconceptofaffordanceoriginatesinecologicalpsychology. Gibson[5]proposed
+thatorganismsdonotperceivetheirenvironmentasacollectionofobjectswith
+fixedproperties. Theyperceiveaction-possibilities: whattheenvironmentaffords
+the organism. A door handle affords gripping. A cliff edge affords a scenic
+viewpoint for a hiker, a jumping point for a daredevil, and a fatal fall for the
+unwary. The affordance is relational: it exists between what the environment
+makes available and what the organism can do with it. Norman [16] translated
+this to design: artifacts communicate possibilities for action independent of the
+designer’sintent. Childrencanpressabuttonbeforeanyoneexplainswhatitdoes
+—thedesignaffordstheaction. Hutchby[9]extendedthistotechnology: artifacts
+have material properties that shape what users can do with them. However,
+affordancesemergefromtheinteractionbetweenwhattheartifactmakesavailable
+and what the actor brings to it, not from the designer’s intent alone. Bucher
+and Helmond [2] applied the framework to social media platforms specifically,
+distinguishing high-level affordances — what the platform as a whole makes
+possible—fromlow-levelaffordancesembeddedinspecificinterfacefeatures.
+The translation to this domain is direct. End-to-end encryption, designed to
+protectprivatecommunicationforbillionsoflegitimateusers,affordsunmonitored
+contact: communicationthatnoplatformcanscanandnoinvestigatorcanaccess
+withoutacourtorder. ThataffordanceexistsonWhatsApp,Signal,Telegram,and
+in the private message systems of every major platform. Timer-based content
+deletion,designedtomakecasualsharingfeellower-stakes,affordsephemerality:
+communicationwithoutapersistentrecord. OnSnapchat,onInstagramStories,
+6
+
+on WhatsApp — material sent disappears. In the enforcement record, this is
+evidencedestructionbydesign. Accountcreationflowsthatrequirenoverified
+identity, built to reduce onboarding friction, afford anonymity: action without
+accountability. Filehostinganddistributioninfrastructure,builtforsharingphotos
+and documents, affords mass distribution of any content to anyone with a link.
+Location-based discovery features, built to surface nearby users for social or
+dating purposes, afford proximity contact with strangers. Generative AI tools,
+builttoexpandcomputingpossibilitiesandrevolutionizecontentcreation,afford
+the production of synthetic exploitative material, the fabrication of convincing
+personas at scale, and the automation of contact and grooming that previously
+requiredsustainedhumanattention—capabilitiesthatdidnotexistatthislevel
+ofaccessibilityfiveyearsago.
+Different platforms. Expanding capabilities. Same function in the enforcement
+record.
+Platforms are not designed to be exploitation-resistant. They are designed for
+engagement, retention, and scale [7]. The product decisions that produce each
+of these affordances are not made especially for offenders, or for any specific
+subset of the hundreds of millions of users. The capability exists for everyone.
+Misuseisnotadesignfailureintheconventionalsense;rather,itisanemergent
+consequenceofbuildingforeveryonewhenthepopulationincludespeoplewho
+havealreadydecidedtoharm.
+Theaffordancenameswhattheplatformoffersandtheenforcementrecordpro-
+videsevidenceforhowoffendersmisappropriatedthem. Section3presentsboth
+atscale.
+3. Evidence at Scale: Analysis of 7,426 Exploitation Cases
+3.1 Collection,Processing,andValidation
+Thecorpusunderlyingthisanalysisconsistsof7,426publiclyavailableInternet
+CrimesAgainstChildrencaserecordscollectedfrom56lawenforcementsources
+spanning2002to2026. Sourcesincludetaskforcepressreleases,agencyannual
+reports,DOJCEOSannouncements,NCMECpublicoutputs,andfederalcourtfil-
+ings. Allrecordsarepubliclyavailable. Noprivatecasedata,investigativefiles,or
+victim-identifyinginformationisincludedinanyform. Thecollectionandanalysis
+protocoloperatesinaccordancewithUniversityofMassachusettsAmherstHRPO
+NHSR Determination #7668; this research does not contain private or personally
+7
+
+identifiableinformationunderfederalregulations[45CFR46.102(f)(1),(2)].
+SourceselectiontargetedthefullrangeoftheU.S.ICACenforcementecosystem: 61
+taskforces,federalpipelinesincludingArmyCID,CustomsandBorderProtection,
+ICE/HSI, the U.S. Secret Service, and the U.S. Marshals Service, and produced
+3,500 unique law enforcement agencies. Sources includes Arizona ICAC Task
+Force,TexasOfficeoftheAttorneyGeneral,NewYorkStatePolice,andMichigan
+StatePolice,amongdozensofothersrepresenting24yearsofenforcementactivity.
+7,426casereports • 56sources • 2002–2026
+Layer1 Ingestion
+pdfplumber•sourcedetection•deduplication
+Layer2 Processing
+batching•regex/patterns/NER•schema
+Layer3 Storage
+Postgres/SQLite•facetindexing•clustercache
+Layer4 Clustering&Analysis
+tags•facettree•triage•ontologymapping
+Layer5 Visualization
+FastAPI+D3•Railway•RESTAPI
+Outputs
+CACgraphs
+∼80,000 Triage
+Clusters Facettree RDF/JSON-LD
+structuredfeatures scores
+SHACL/SPARQL
+CaseLinkerprocessingpipeline—fromrawenforcementrecordstoqueryableintelligence
+Processing operates through a hybrid deterministic and interpretive machine-
+learningpipelineacrossthreestages.
+The first stage is regex-based extraction. Deterministic rules extract structured
+fieldsfromcasenarrativesacrosssevencategories:
+8
+
+• Perpetrator signals: age, registered sex offender status, gender, and multi-
+defendantflags
+• Victim signals: age, age ranges, stated victim count, andgender after valida-
+tion
+• Relationships: kin,role,orstrangerwhennotstated
+• Prosecution: chargephraseswithcountsandbookingstagefromarrestthrough
+sentencing;sentencedurations
+• Evidencevolume: image,video,storage,andmessagecountswhenquantified
+intext
+• Platform identification: named applications and surfaces — social media,
+messaging, gaming, file hosting, livestreaming, early-era chat clients, and
+generative AI tools when cited — alongside generic labels (online, chat, social
+media)whennoproductmatchisfound
+• Technology signals (stored separately from the platform list): investigation
+tooling(PhotoDNA,hash-matching,CyberTiplinelanguage),anonymization
+infrastructure(Tor,darkweb,cryptocurrency),andP2Pclients
+The second stage is pattern-based classification. Each case receives topic labels
+(production, possession, distribution, trafficking, CSAM, AI-generated CSAM,
+sextortion, hands-on versus online-only, family versus stranger, international,
+multi-state) andseverity indicators(infant, very young, under 12, sexualabuse,
+multiple perpetrators). Severity phrases used in triage priority scoring are ex-
+tracted separately: language indicating active, ongoing, or escalating abuse is
+weightedintheprioritymodel.
+ThethirdstageisMLenrichment. WhentheMLstackisenabled,NERviaStan-
+ford NLP (Stanza) adds organizations, locations, dates, and ages, merged with
+regex output under a precedence model that preserves deterministic extractions
+when conflicts arise. A victim-age gate drops decoy and headline ages intro-
+duced by undercover investigation language. Semantic sentence scoring attaches
+concept weights to each case; grooming severity tags and strong possession or
+AI-generationlanguagereinforcecorrespondingcasetopics. Conceptscoresare
+retainedfordownstreamanalysis;acuratedsubsetaremergedintomainfields.
+Extractionis context-awarethroughout,distinguishing investigationtypes, victim
+from perpetrator gender, and perpetrator admissions where explicitly present.
+Agencynormalizationresolvesover3,796uniqueagencystringvariantstocanoni-
+cal identifiersusing a combination ofpattern matching and NER,enabling cross-
+source aggregation across jurisdictions that name the same agency differently
+acrossreleases.
+9
+
+The primary evidence base for platform harm analysis (Q1) is a candidate pool
+selected by automated filter, not manual case selection. A case enters the pool
+ifitsstructuredmetadatacontainsatleastonenon-genericplatformlabel—ex-
+cluding generic placeholders (“online,” “internet,” or generic tags). This yields
+1,875 candidate cases (25.1% of the corpus) spanning 54 named platforms; the
+remaining74.9%lacka named platformandfalloutsideaffordance-levelanalysis
+due to insufficient signals for supporting claims at the level of a specific plat-
+form capability. Thisis partly aproperty of thesource material itself: public case
+documents systematically under-report platform and offense detail to avoid in-
+fluencingoffendingbehavior,compromisingongoinginvestigations,orrevealing
+prosecutorial strategy (discussed in Section 7.5). Restricting Q1 to cases with a
+named platform trades corpus breadth for evidentiary precision as affordance-
+level analysis requires knowing which platform, and which of its features, was
+actuallypresent.
+EachcandidateisprocessedbyanevidenceextractorthatstripsPSAandawareness-
+campaign boilerplate, extracts a supporting quote, assigns an offense role, and
+classifiesevidence strength attheplatform–case level. Thecandidate-to-evidence
+pipelineyieldsafinalQ1evidencebaseof1,875casesacross3,128platform–case
+records.
+Evidencestrengthistiered. Statedrecordslinkaplatforminstrumentallytooffense
+conduct in the same sentence — through an explicit construction (through, via,
+usingaplatform)oranoffensekeywordincloseproximity,excludingawareness
+framing and enumerated app lists. Inferred records show platform and offense
+language co-occurring without instrumental linkage. Named-only records carry
+a metadata platform tag without qualifying textual support. At the case level,
+856cases(45.8%)containatleastonestatedrecord,134(7.2%)carryinferred-only
+evidence, and 881 (47.1%) are named-only. The affordance labels applied in Q1
+areamanualanalyticallayeroverthisautomatedextraction: thepipelinesupplies
+quotes,roles,andtiers;affordancesemanticsareassignedbyhand.
+The fullpipeline —extraction rules, classifier weights, normalizationdictionaries,
+andreproducibilitydocumentation—isreleasedas open-sourcesoftwareunder
+theMITLicenseatgithub.com/mrinaalr/CaseLinker.
+3.2 OntologiesforModelingRadioactiveData
+CaseLinker extracts over 80,000 structured features across 10 dimensions and
+storesthousandsofcasesinaPostgreSQLdatabaseforanalysis. However,tabular
+representations are insufficient for the questions this paper asks. A case record
+is not a row. It is a set of relationships: an offender reached a victim through
+10
+
+a platform, used a capability to produce material, and distributed it through
+infrastructure. A relational table can store the tags, actions, and data. It cannot
+nativelyrepresentthestructureandrelationshipsbetweenfields. Thequestions
+Q1’saffordance-basedplatformharmanalysisasks —whichcapabilitiescluster
+with which offense types, which platform features co-occur across cases, how
+offensemechanicsdistributeacrossa24-yearenforcementrecord—arerelational
+questions. Theyrequireadatamodelthattreatsrelationshipsasfirst-classobjects.
+Knowledgegraphsprovidethatmodel. Eachcaseinthiscorpusisrepresentedas
+a directed, typed graph: nodes forentities (offenders, victims, platforms, charges,
+agencies),edgesforrelationships(contacted_via,charged_under,investigated_by),
+andtypedpropertiesforattributes. Thisrepresentationenablesthepatternqueries
+Q1requires: offenseevents,platforms,agencies,andactorsaspiecesofaninter-
+connectedsystem,notisolatedrecords.
+Thevocabulary thatmodels these casesis theCrimes AgainstChildren(CAC) On-
+tology, shepherdedbyProjectVICInternationalas aninteroperablestandardfor
+representing crimes-against-childreninvestigations. Thestackis layered: gUFO
+providesfoundationalontologyprimitives. UCO(UnifiedCyberOntology)mod-
+elscyber investigationobjectsandrelationships. CASE(Cyber-investigationAnal-
+ysisStandard Expression)defineshow investigation narrativesareexpressed as
+knowledgegraphs. CACextendsthatstackforcrimesagainstchildrenspecifically
+— platforms, victims, offenders, investigations, and outcomes as typed entities
+ratherthanfreetext.
+CaseLinkermapseachextractedcasefeaturetoaCACclass. Platformmentions
+become typed cac:Platformnodes withsemantic relationships to offense events.
+Statutorychargesmaptoidentifierslinkedtooffensetypetaxonomies. Perpetrator
+behaviorsmaptogroomingstageclasses. Themappingisexplicitandauditable:
+every ontological assertion traces to a source extraction and a source text span.
+Therearenoblack-boxinferences. StructuralvalidationisperformedusingSHACL
+(Shapes ConstraintLanguage) againsta curated subsetof the CACmodule stack;
+each case graph is validated prior to inclusion in the Q1 evidence base, and
+non-conforminggraphsareflaggedandexcludedratherthansilentlyretained.
+11
+
+16agencies
+OffenderRole CACInvestigation involvesAgency FBI·HSI·ICAC
+anchorage_pd_2022_007 RoyalMalaysiaPD···
+VictimRole
+aggregate hasStep
+hasStep
+participatesInEvent
+Sextortion Production CSAMIncident Legal
+Incident Offense possession Proceeding
+usesChannel
+hasCharge
+CSAM_Production
+Snapchat socialmedia
+MessagingService generic
+CSAM_Possession
+SextortionCharge
+Figure1: CAContologyrepresentationofasinglecaseasemittedbythecase2cac
+pipeline(caseanchorage_pd_2022_007).
+The result is a corpus of 1,500+ SHACL-validated case graphs forming the ev-
+idence base for Q1 analysis. Graph construction at corpus scale is handled by
+the CaseLinker MCP (Model Context Protocol) server: 34 case2cac tools for au-
+tomatedgraphconstruction,validation,traversal,andexportfrompress-release
+andcase-recordsources.
+Primary-source court record representations — dockets, statements of offense,
+and federal indictments retrieved from primary court filings — are handled by
+the CASE-UCO SDK directly. The CASE-UCO SDK is a typed, multi-language
+library (Python, C#, Java, Rust) implementing 428+ ontology classes across the
+CASE/UCOstandard,designedforconstructingandvalidatingJSON-LDknowl-
+edgegraphsfordigitalforensicsandcyber-investigationworkflows. Wherethe
+case2cactoolsoperateoverstructuredfieldsatscale,theCASE-UCOSDKisused
+forprecisionrepresentation: extractedfactsfromprimaryfederalcourtdocuments
+aremappedtotypedontologyclasses,producingground-truthgraphsthatanchor
+corpus-levelpatternanalysis.
+12
+
+3.3 ResearchQuestionsandAnalyticalApproach
+Threeempiricalandonetheoreticalquestionorganizetheanalysis. Eachdrawson
+adistinctevidencelayer: the7,426-casecorpusforbreadth,the1,500+validated
+knowledge graphs for structured pattern analysis, and five federal indictments
+andStatementsofOffenserecordsforground-truthharm-signatureanchoring.
+Q1 — Platform Affordances. Which platform capabilities do offenders exploit
+mostconsistently,acrosscaserecords,offensetypes,andthefullperiodthiscorpus
+covers? Q1 operates at the platform level, drawing on every case with at least
+oneidentifiedplatformintheenforcementrecord. The30+platformaffordance
+table maps each platform to its documented misuse surfaces and harm vectors
+across stated, inferred, and named-only evidence tiers. The knowledge graph
+representationenablesthisanalysiswithoutreducingtofrequencycounts: aquery
+acrossthegraphcanaskwhichcapabilitytypesco-occurwithwhichoffensetypes,
+which platforms share affordance profiles, and how those profiles shift across
+offendertypologiesandagenciesthecorpusrepresents.
+Q2 — Exploitation Life Cycle. How is technology implicated across the four
+offensesubtypes —groomingand enticement,sextortion, CSAMproduction, and
+coordinated criminal networks — from first contact through prosecution? Q2
+operates at the harm-signature level. The primary evidence base is four federal
+district court cases, retrieved from Public Access to Court Electronic Records
+(PACER)andmodeledviatheCACOntologies:
+• UnitedStatesv.Rehman(D.D.C.1:23-cr-00064)—§2422(b)enticement;platform-
+mediatedgroomingandrelationshipformation
+• UnitedStatesv.Amin(D.Alaska3:22-cr-00055)—13-count§2252A(g)enterprise;
+sextortionatscaleacrossmorethan80Snapchatand40Instagramaccounts
+• United States v. Pathmanathan (D.D.C. 1:22-cr-00150-JEB) — §2251(a),(e) pro-
+duction; Instagram-to-Messenger platform migration and live stream directed
+self-production
+• UnitedStatesv.Bermudezetal. (E.D.N.Y.1:25-cr-00361)—six-defendant§2252A(g)
+coordinatednetwork;Discordandgamingplatforminfrastructure
+An additional four [update : targetting 50 total] federal prosecution records —
+indictments,trialbriefs,anddefendant-stipulatedStatementsofOffense—were
+capturedthrough ablendof targetedand randomtraversalof CaseLinker’sfacet
+tree. EachcasewasmappedtotheCAContologyindependentlyoftheautomated
+pipeline,anchoringcorpus-levelpatternsagainstprimaryfederalcourtrecords.
+13
+
+Q3 — Disruption. Where in the platform stack and enforcement pipeline do
+realistic opportunities to disrupt exploitation exist? Q3 synthesizes Q1 and Q2:
+given whichcapabilities offendersconsistently reach for, and howthose capabil-
+ities combine into recognizable offense mechanics, which affordances are most
+amenable todesign-level, policy-level, orenforcement-level intervention? Q3 is
+theoperationaloutputoftheanalysis—thetranslationfromdocumentedpattern
+toactionabletarget.
+Q4 — Formal Framework. Can the relationship between platform affordances,
+offendergoals,andvictim-facingharmbeexpressedinageneralizedmathematical
+model for exploitation? Q4 operates at the level of abstraction, formalizing the
+patternsthecorpusdocuments. ThemathematicalframeworkinSection 7maps
+offendergoalstoaffordancetrajectories(φ),exploitationtypestoharmsets(η),and
+affordanceclassestoco-occurringharms(ψ)—producingamarginalexploitation
+utilitymeasure u(a ,g) thatisestimablebeforeafeatureenterstheenforcement
+new
+record.
+Q1 characterizes the affordance landscape. Q2 anchors it in the court-verified
+mechanicsoffourdistinctoffensetypes. Q3askswhatcanbedone. Q4buildsthe
+vocabularytoreasonaboutexploitationbeforeitoccurs.
+PractitionersandpolicyreadersmayproceeddirectlytoSection4fortheplatform
+analysis and Section 6 for intervention recommendations; the formal framework
+inSection7isself-containedandcanbereadindependently.
+4. Platform Affordances and Misuse Surfaces
+Theenforcementrecordnames54distinctplatformlabelsacrosstheQ1evidence
+base. Analyzed individually, they appear chaotic: products from different eras,
+builtbydifferentcompanies,servingdifferentpurposes. Analyzedbyaffordance,
+theyresolveintoasmallnumberofrecurringsignatures. Aplatform’saffordance
+profile predicts its harm profile. The same chat affordance, implemented on a
+platform from 2008 or one from 2025, produces the same offense pattern in the
+record.
+Table 1presentsthe platform manifest: every analyzed platform withsufficient
+case representation, its affordance signature, the misuse surface that offenders
+utilize, and the victim-facing harm vectors documented in the corpus. Three
+definitionsdisciplinethetable. Anaffordanceisaneutralcapabilitytheplatform’s
+designmakespossible. Amisusesurfaceishowanoffenderturnsthataffordance
+14
+
+towardan offense; it is offender-facing. Aharm vector describeswhat happens to
+a child; it is victim-facing, drawn from a fixed set established across the corpus,
+andrankedbydocumentedprevalence. 1 Everyplatformwithdocumentedharm
+to more than two children receives analysis: each represents real victims and a
+realaffordancepattern.
+Platform Affordance Signature / Misuse Sur- DocumentedHarmVector
+face
+MessagingServices
+Kik Anonymity,groupdiscovery. Pseudony- Child’s abuse imagery dis-
+208 stated · 352 mous contact without traceable iden- tributed/traded(re-victimization)
+total tity; closed-group trading; account Childcontactedthroughanonymous
+churntoevadedetection. messaging
+Childgroomedtowardcontact
+Snapchat Ephemerality, camera-first capture. Evi- Child contacted and exploited
+169 stated · 257 dencedestructionbydesign;real-time throughephemeralmessaging
+total coercionofimagery;ephemeralsolici- Child’sabuseimagerydistributed/re-
+tationwithreducedforensictrail. shared(re-victimization)
+Childgroomedtowardcontact
+Discord Server/community structure, persistent Child’s abuse imagery dis-
+43stated·99to- contact. Closedserversaslow-visibility tributed/traded(re-victimization)
+tal spaces;coordinationamongoffenders; Childcontactedthroughserversand
+sustainedcontactenablingcoercion. DMs
+Childsextortedunderthreat
+Childgroomedtowardcontact
+SocialMediaPlatforms
+Facebook Digital profiles; friend, network, and Child’sabuseimagerysolicited/pro-
+55stated·274to- mutual-connection discovery; search by duced/distributed
+tal name, school, location, interests. Profile- Childcontactedthroughprofilesand
+mining to target; fake/impersonation Messenger
+accounts to approach minors under Childgroomedtowardcontact
+falseidentity;migrationtarget—con-
+tact initiated on Facebook, moved to
+private/ephemeralplatform.
+continuedonnextpage
+1Themanifestmeasuresdocumentedoffenderuseofplatformcapabilities,notground-truthharm
+frequency. Possession and distribution of CSAM dominate the record partly because they are
+themostdetectableevidenceofharmandplayasignificantchargingroleafterbeingsurfaced
+through the CyberTip pipeline; contact and grooming are systematically under-detected and
+under-documentedinpublicrecords. Affordancesandmisusesurfacesarederivedfromanalysis
+ofeachplatform’scapabilities; harmvectorsaredrawnonlyfromoffensesthecorpusactually
+documents. Platformcountsarealowerboundoninvolvement,notacompletepicture.
+15
+
+Table1(continued)
+Platform Affordance Signature / Misuse Sur- DocumentedHarmVector
+face
+Instagram Visual-first profiles, DM, discoverability. ChildcontactedthroughDMsandvi-
+27stated·174to- Visualprofilestoselecttargets;DMco- sualprofiles
+tal ercion;disappearingmessagesreduce Child’sabuseimagerydistributed/re-
+forensictrail. shared
+Childsextortedunderthreat
+Reddit Image and video upload to platform ac- Child’s abuse imagery dis-
+10stated·22to- counts,account-linkedidentity,publicpost- tributed, traded, or re-shared
+tal ingsurface. PersonalaccountCSAMup- (re-victimization)
+load and post for distribution and re-
+sharing;forumpostingsurfaceusedto
+initiatecontactwithminors.
+TikTok Algorithmic discovery, DM, public-by- Child contacted and exploited
+4stated·25total default. For You feed surfaces minors throughmessaging
+withoutactivesearch;publicvideosto Child groomed toward contact or
+selecttargets;DMtomovecontactoff meeting
+thepublicfeed. Childsolicitedforexplicitimagery
+FileHostingServices
+Dropbox Cloudstorage,publiclinksharing,desktop Child’sabuseimagerypossessedor
+33stated·86to- sync. SharedlinksdistributeCSAMcol- storedinoffender’scloudaccount
+tal lections without direct transfer; desk- Child’sabuseimageryuploadedfor
+topsyncclientmirrorslocallibraryto distributionorcollection
+cloud automatically; handoff layer — Child’s abuse imagery distributed
+link shared via separate contact chan- or re-shared via shared links (re-
+nel. victimization)
+Mega.nz Cloudstorage,shareablelinkstohostedcol- Child’sabuseimagerydistributedor
+3stated·15total lections,cross-platformapplicationaccess. re-sharedviacloudstoragelinks(re-
+Distributed CSAM collections; hand- victimization)
+offlayerinmulti-platformdistribution Child’sabuseimagerypossessedor
+stacks—linksharedonSnapchat,Kik, storedinoffender’scloudaccount
+orfetishsites,recipientdownloadsthe Child’s abuse imagery uploaded to
+Megaapptoretrievematerial; cloudfilehostingfordistributionor
+collection
+AnonymousChatPlatforms
+Whisper Anonymity, location-based discovery. Child contacted and exploited
+3stated·11total Anonymous contact with minors throughanonymousmessaging
+without traceable identity; location Child groomed or enticed toward
+proximity used to surface nearby sexualcontactormeeting
+targets; DM moves contact off public Child solicited for explicit imagery
+feedintoprivatechannel. through anonymous posts or direct
+messages
+continuedonnextpage
+16
+
+Table1(continued)
+Platform Affordance Signature / Misuse Sur- DocumentedHarmVector
+face
+Omegle Anonymousstrangerpairing,unmonitored Child contacted and exploited
+2stated·7total video. Randompairingreachesminors through anonymous random video
+without targeting effort; zero-identity ortextchat
+architectureleavesnoforensictrail;un- Child groomed or enticed toward
+monitoredvideochannelusedforreal- sexualcontactormeeting
+timesolicitationandexhibition;migra- Child solicited for explicit imagery
+tiontargettopersistentplatforms. or subjected to real-time sexual
+exhibitioninvideochat
+AIServices
+GenAI Generative synthesis, likeness manipula- Real child’s likeness manipu-
+21stated·54to- tion. Synthetic CSAM from prompts; lated/synthesized into abuse
+tal nudificationofrealphotos;modelfine- imagerywithoutcontact
+tuningonatarget’simages. Child’s abuse imagery (incl. AI-
+generated)distributed/possessed
+AdditionalSurfaces
+P2P (BitTor- Peer-to-peerfilesharing,mini-serverdistri- Child’s abuse imagery dis-
+rent) butionfromcentraldevice,networksearch tributed, traded, or re-shared
+3stated·8total by keyword. CSAM collections down- (re-victimization)
+loaded and saved from the network;
+files exchanged or traded with other
+users;offender’scomputermadeavail-
+ableasadistributionnode,seedingma-
+terialtoanypeerwhorequestsit;
+Video Real-time bidirectional video in private Child solicited for explicit imagery
+Stream- chat or 1:1 session, live remote viewing or subjected to real-time sexual
+ing ofanotherparty’scamerafeed, streaming exhibitioninvideochat
+6stated·28total media capture. Coercion into produc- Child sextorted under threat after
+tion and performance of explicit acts sessionimageryobtained
+during a live private session; session Child contacted and exploited
+recorded — including without victim throughplatformmessaging
+knowledge — to manufacture CSAM;
+captured recording used as coercion
+leveragetodemandmoreexplicitcon-
+ductunderthreatofexposure.
+continuedonnextpage
+17
+
+Table1(continued)
+Platform Affordance Signature / Misuse Sur- DocumentedHarmVector
+face
+GamingPlat- Interactiveusercommunity,built-inchat, Child contacted and exploited
+forms low-frictioncontact. In-gamechatused throughin-gamechatormessaging
+4stated·29total to initiate contact with minors under Child groomed or enticed toward
+cover of shared gameplay; pseudony- sexualcontactormeeting
+mousaccountswithnoidentityverifi- Child’s exploitation migrates off-
+cation;migrationtarget—contactini- platform to anonymous messaging
+tiated in-game, exploitation moves to afterinitialin-gamecontact
+Kik, Whisper, or anonymous messag-
+ingplatforms.
+Eachentryreportsananalyzedplatform’saffordancesignature(neutralcapabilitythedesignmakespossible),misuse
+surface(howanoffenderweaponizesthatcapability;offender-facing),anddocumentedharmvectors(whathappenstoa
+child;victim-facing),rankedbydocumentedprevalence.Fullanalysisandsupportingevidenceforall54documented
+platformsavailableontheplatformharmdashboard.
+4.1 ContactandApproachAffordances
+Table1organizestheenforcementrecordbyplatform. Thissectionandthethree
+thatfollowreorganizethesamerecordbyaffordanceclass, atthelevelofwhich
+patternsholdacrossplatformgenerations.
+Contactandapproachisthefoundationalclass. Everyvictim-facingoffensetype
+thiscorpusdocumentsbeginshere. Anoffendercannotgroomachildhehas not
+reached. Theimageryacquisitionthatmakessextortionpossiblerequiresachannel
+tothevictimbeforethefirstimagechangeshands. Directedproductionrequires
+sustainedcontactoveramediumcapableofvideo. Coordinatedenterprisesrecruit
+throughcontactbeforetheyproduce,distribute,orcoerce. Thecontactstageisnot
+one phase among several. It is the condition on which every subsequent phase
+depends.
+Across 1,720 cases in the Q1 evidence base, contact and approach affordances
+materialize in six recognizable forms. Two reduce targeting effort. Four extend
+reachwithoutmandatedaccountability.
+18
+
+Affordance MisuseSurface Examples
+hcaorppAdnatcatnoC
+Kik(124)·Snapchat
+Untraceablecontact;
+(126)
+Pseudonymousidentity accountreplacedwhen
+Whisper(3)·Omegle
+bannedorblocked
+(2)
+TikTok(4)·Instagram
+Minorssurfacetooffenders
+Algorithmicsurfacing (21)
+withoutactivesearch
+Facebook(45)
+Publicprofile Profile-miningtoselectand Facebook(45)·
+discoverability approachvictimsbeforecontact Instagram(21)
+Location-based Geographictargeting;collapses Whisper(3)·Dating
+proximity distancetoin-personcontact platforms(2)
+Contactundercoverof
+Discord(29)·Gaming
+Communityaccess sharedactivity;community
+platforms(7)
+contextlowersvictimguard
+Zero-frictionreachtoaminor;
+Stranger-pairing Omegle(2)
+randomizedcontactatscale
+Figure 2: Contact and approach affordance implementations. Flow traces from
+implementationtypethroughplatformmechanismtothemisusesurfacecreated
+intheenforcementrecord.
+4.2 ProductionAffordances: TheGenerativeEvolution
+Production is the class of affordances that enable abuse material to be created.
+The material does not preexist the offense. The offender engineers its existence:
+directedremotecapture,coercedperformanceoncamera,orgenerativesynthesis
+fromatextpromptormanipulatedphotograph.
+Generative AI introduced the first production pathway in this corpus that does
+notrequirethecontactclass. Everyprecedingproductionoffenserequiredavictim
+present during creation: a live video channel to direct, a messaging interface
+to receive self-generated imagery, or physical proximity to film. The child’s
+participationwasthenecessarycondition. GenerativeAIremovedthatcondition
+forthefirsttimeintheenforcementrecord. Atextpromptnowproducesmaterial
+withoutpresenceor compliance. Arealchild’sphotograph, runthroughalocally-
+deployedmodel,becomesabuseimagerywithoutanycontactevent. Theharmof
+production—a child’slikeness, captured andcirculated—no longerrequires the
+childtobepresentwhenthematerialismade.
+19
+
+Across 177 cases in the Q1 evidence base, production affordances materialize in
+fiverecognizableforms. Thefirstthreerequireavictim. Thelasttwodonot.
+Affordance MisuseSurface Examples
+noitcudorP
+PlatformcameraUI
+makesfrictionlesscoerced
+Camera-firstcapture Snapchat(126)
+imagerycapturethedefault
+actionduringcontact
+Offenderdirectsvictim
+Skype(4)·Discord
+oncamerainreal
+Livevideochannel (29)
+time;sessionrecorded
+Webcamplatforms(9)
+outsidevictim’scontrol
+Victimsendsself-generated
+Instagram(21)·
+materialthroughcontact
+Image/videoreceive Snapchat(126)
+channel;platformiscoercion
+Kik(124)
+andreceiptmedium
+contact-free↓
+CSAMproducedfrom
+textpromptorchatbot;
+Generativesynthesis GenAI(14)
+novictimpresent;no
+contactphaserequired
+Realchild’sphotoconverted
+toCSAM;victimappears
+Likenessmanipulation GenAI(14)
+inmaterialwithout
+contactduringproduction
+Figure3: Productionaffordanceimplementations. Thedashedlinemarksthegen-
+erativethreshold: affordancesaboveitrequireavictimpresentduringproduction;
+affordancesbelowdonot.
+4.3 PossessionandTradeAffordances
+Possession and trade is the class of affordances that enable the storage and ex-
+changeofabusematerial. Contactreachesthevictim. Possessionandtradeextend
+theharmpasttheoffenseevent. Materialcapturedinproductiondoesnotdisap-
+pearwhenthesessionends. Itaccumulates,organizes,andmoves. Asharedlink
+distributes a collection to parties the offender never contacted. A closed trading
+groupmultipliesre-victimizationacrossanetworkwithoutrequiringadditional
+access to the original victim. The offense does not end when contact does. It
+persistswhereverthemateriallands.
+Across 1,708 cases in the Q1 evidence base, possession and trade affordances
+materializeinfiverecognizableforms. Fouraddressmovement. Twoaddresses
+20
+
+storage.
+Affordance MisuseSurface Examples
+edarTdnanoissessoP
+Collectionpersistsremotely; Dropbox(20)·Google
+Cloudstorage
+survivesseizure;auto-syncs Drive(12)·Mega.nz
+persistence
+newmaterialtooffenderarchive (4)
+Filessentpeer-to-peer
+Telegram(8)·
+withinplatform;nocloud
+Directfiletransfer WhatsApp(6)·Skype
+host;individualdelivery
+(4)
+totargetedrecipients
+E2Eencryptionshields
+Encrypted Telegram(8)·
+exchangefromplatform
+channeltransfer WhatsApp(6)
+detectionandscanning
+Organizedcollection
+Discord(29)·Kik
+Closed-grouptrading exchangeamongoffenders;
+(124)·IRC(6)
+re-victimizationatnetworkscale
+Distributedseedingtomultiple
+Decentralized
+partiessimultaneously;no P2P/BitTorrent(3)
+distribution
+centralnodetodisable
+Figure 4: Possession and trade affordance implementations. Flow traces from
+affordancethroughthemisusesurfaceitcreatesintheenforcementrecord.
+4.4 CoordinationAffordances
+Coordinationistheclassofaffordancesthatenableexploitationatenterprisescale.
+Contact,production,andpossessioncaneachbeexecutedbyasingleoffenderpur-
+suingtheirownexploitativegoal. Coordinationiswhatallowsmultipleoffenders
+to pursue those goals simultaneously, across specialized roles, against multiple
+victims at once. The affordances in this class do not change what exploitation
+requires. Theychangehowmanypeoplecansharetheworkofdoingit.
+Across 198cases in theQ1 evidence base, coordination affordances materializein
+fiverecognizableforms. ThreeconcentrateinDiscord’sserverinfrastructure. Two
+extendtogamingplatforms.
+21
+
+Affordance MisuseSurface Examples
+noitanidrooC
+Operational
+compartmentalization;
+Permission-gated
+membershiptiersseparated Discord(29)
+channels
+fromproductionand
+distributionchannels
+Vettedenterprisemembership;
+Invite-link
+accesstooperationalchannels Discord(29)
+membershipcontrol
+controlledbyexistingmembers
+Liveenterpriseoperation
+Real-time
+acrossroles;simultaneous
+multi-member Discord(29)
+directionofproduction
+coordination
+anddistributionevents
+Differentplatformsassigned
+Cross-platform distinctenterprisefunctions; Gamingplatforms(7)
+enterprisearchitecture networkresilientto ·Discord(29)
+single-platformdisruption
+Rolespecializationunder
+Pseudonymous pseudonymousidentities: Discord(29)·Gaming
+roleassignment recruiter,coordinator,producer, platforms(7)
+distributor,threatactor
+Figure5: Coordinationaffordanceimplementations. Flowtracesfromaffordance
+through the misuse surface it creates in the enforcement record. Case counts at
+rightarelowerboundsonplatforminvolvement;seeSection3.1.
+Thefouraffordanceclassesthissectiondocuments establishwhattheplatforms
+in this enforcement record make possible and the misuse surfaces they expose.
+Section5exploreshowoffendersweaponizethoseaffordances.
+5. Harm Signatures: How Technology Shapes Exploitation
+TheplatformmanifestinSection4mapscapabilitiestomisusesurfaces. Itanswers
+astaticquestion: whatdoeseachplatformmakepossible? Thissectionasksthe
+harderone. Acrossfouroffensesubtypes—groomingandenticement, sextortion,
+theproductionofabusematerial,andcoordinatedcriminalenterprises—howdo
+thoseaffordancesactually combineduringthe mechanicsofan offense,fromfirst
+contactthroughvictim-facingharm? Each subsectiondevelopsaharmsignature
+for its offense type: a generalized exploitation lifecycle mapping the steps an
+22
+
+offendertakesateachstagetothevictim-facingharmsthoseactionsleavebehind.
+Theevidence baseis four federaldistrict courtcasesretrievedfrom PACER and
+readin full,eachmappedto theCAContologyindependentlyof theautomated
+pipeline. Theyareground-truthanchorswithinthesameanalyticalframework:
+primary-source court records that document, in precise legal language, exactly
+which capabilities were used, in which sequence, to reach which victims. The
+corpussuppliesbreadth. Thesefourcasessupplythemechanism.
+5.1 GroomingandEnticement
+Grooming is applied contact. The affordances Section 4.1 documents initiate
+every harm signature in this section. Grooming is not one offense type among
+four. It is the substrate on which every offense type in this section is built. The
+sustainedcontactthatmakesproductionpossibleisgrooming. Thedeceptionand
+contactthatmakesextortion’sfirstimagepossibledrawonthesamemechanics
+asgrooming. Therecruitmentmechanicsthatallowacoordinatedenterpriseto
+scaleacross victimsaregrooming. Whatchanges across offensetypes iswhatthe
+offenderdoesaftertherelationshipisestablished. Therelationshipitselfisalways
+thesamestructure: achildbrought,throughsustaineddeceptionorthreats,toa
+stateofcompliancetheywouldnothavereachedotherwise.
+The enticement-to-contact trajectory is also the most probabilistic of the four.
+A sextortion offender who holds retained imagery has a structural advantage
+thatdoesnotdependonthevictim’scontinuedwillingness. Anenterprisewho
+hasalreadydirectedexplicitconducthascreatedevidencethatbindsthevictim
+throughfear. Agroomingoffenderhasnoneofthatleverageintheearlystages.
+Everyrequestisagate. Everygateisacompliancedecisionthevictimcanrefuse.
+What the offender is managing, across every contact and every escalation, is a
+probability distribution over victim responses — and the grooming mechanics
+exist precisely to shift that distribution. Flattery raises the probability of the
+next compliance. Reciprocal disclosure lowers the victim’s sense of asymmetry.
+Persistence reduces the exit window. Exploitation of disclosed vulnerability —
+depression, isolation, prior trauma — narrows the space between compliance and
+refusal.2
+The chain documented in this case runs from first contact through flattery and
+low-stakes requests, through escalating solicitation and directed production, to
+meetingarrangementandhands-oncontact—allwithinapproximatelyfiveweeks
+2UnitedStatesv.Rehman,D.D.C.1:23-cr-00064-CJN,StatementofOffense(filedNov.21,2024).
+StructuralobservationsinthissubsectionderivefromtheStatementofOffensereadinfull. No
+victim-identifyinginformationappearshere.
+23
+
+Groomingandenticementlifecycle:UnitedStatesv.Rehman(D.D.C.1:23-cr-00064)
+Escalating Childisolated,
+Childcontacted Normalizationof CSAMproduced RepeatedCSAM
+Harm psychological meeting
+byunknownadult sexualcontent (firstimage) production
+pressure compliance
+First Escalating Explicit Meeting
+Stage Contact Normalization
+compliance solicitation production arranged
+vulnerabilityexploited:flatterytargetsdiscloseddistress Terminal: physical
+contact+retained
+Victimdeclines Victimreports Peerorparent Victimdoesnot CSAM
+Exit orblocks totrustedadult detectscontact appearatmeeting
+gate1 gate2 gate3 gate4
+eachgateisastochasticcompliancedecision:offendernavigatesthroughsustainedrelationshipinvestment
+Figure6: Groomingandenticementlifecycle: UnitedStatesv.Rehman(D.D.C.1:23-
+cr-00064) mapped onto the generalized exploitation lifecycle. Gate nodes (purple)
+markstochasticcompliancethresholdswherethetrajectorycouldhavecollapsed.
+Exit branches below the spine show documented disruption opportunities at each
+gate. Thevulnerabilityarcdenotesoffenderadaptationtodisclosedvictimdistress
+acrosstheescalationphase.
+onasingleplatform. Atnopointinthischaindidtheoffenderusethreats,quotas,
+or distributionleverage. Compliance wasobtained entirely throughrelationship
+investment: sustainedpresence,flatterycalibratedto disclosedvulnerability,and
+the normalization of escalating requests through reciprocal disclosure. Each
+compliance gate passed lowered the probability of exit at the next one. The
+trajectorydidnotrequirecoercioninthetechnicalsensebecausetherelationship
+cultivationhadalreadydonethecoerciveworkbeforeanyexplicitdemandwas
+made.
+The terminal harm state here is physical contact, not perpetual online coercion.
+Thisdistinguishestheenticement-to-contacttrajectoryfromsextortion,wherethe
+terminal state is retained material held under constant threat of release. In this
+case, the CSAM produced during the online phase is a precursor to the contact
+goal — a stage in escalation, not the instrument of continued exploitation. The
+offensedoesnotcycle. Itprogressestoaterminus,andthatterminusisphysical.
+Four documented exit points existed in the chain. The offender navigated all
+four through the same mechanism: sustained relationship investment targeted
+at a child whose vulnerability had been disclosed and whose trust had been
+deliberatelycultivated.
+24
+
+5.2 TheProductionofAbuseMaterial
+Production is the offense of directed creation of CSAM. The material does not
+preexist it. The offender engineers its existence by coercing a victim to perform
+explicit conduct on camera, or by filming in-person abuse directly. The act of
+exploitationbecomesapermanentartifactthemomentcaptureoccurs. Thepro-
+ductioneventisnotthecontact,theescalation,orthecoercionprecedingit—itis
+theconversion ofan abuseevent intopersistentmaterial. Thelifecycle proceeds
+intwophases.
+Remote, online-directed capture is the dominant production modality in this
+corpus. The first phase is access. The offender establishes contact on a public
+surface and escalates through the grooming and social engineering pathways
+documented in Section 5.1. Communication then shifts to a channel capable of
+image or video production. The contact surface is for access. The production
+channelisforcapture.
+The second phase isdirected production. The offender issues commands during
+thelivesession. Thevictimperformsthemoncamera. Theoffenderrecordsthe
+session.3 Whenthevictimresists,theoffenderthreatenstodistributepreviously
+captured material or escalates threats and compliance resumes. When a victim
+blocks contact entirely, the offender creates a new account and returns to the
+contactstage. Thelifecycledoesnotbreak. Itresets.
+Productionlifecycle:UnitedStatesv.Pathmanathan(D.D.C.1:22-cr-00150-JEB)
+Accountreplacement Resistance→Re-coercion
+Channel Directed Media
+Stage Contact Escalation Archival
+Migration Production Capture
+Childcoercedinto Childmovedto Childdirectedin Materialarchived,
+Childcontacted Abusecaptured
+Harm initial isolatedproduction explicitconduct persistent,
+onpublicsurface indigitalmedia
+self-disclosure channel oncamera heldasleverage
+Figure 7: Production lifecycle: United States v. Pathmanathan (D.D.C.1:22-cr-00150-
+JEB) mapped onto the generalized exploitation lifecycle. Dashed arc denotes
+the resistance and re-coercion loop within an active session; dotted arc denotes
+accountreplacementwhenavictimblockscontactentirely.
+Generative AI has introduced a distinct pathway that Figure 7 does not map.
+3UnitedStatesv.Pathmanathan, D.D.C.1:22-cr-00150-JEB,StatementofOffense(filedJan.30,
+2026). StructuralobservationsinthissubsectionderivefromtheStatementofOffensereadinfull.
+Novictim-identifyinginformationappearshere.
+25
+
+Section 4.2 documents how generative synthesis removes the contact phase as
+a precondition. Synthesized material, regardless of its statutory classification,
+yieldsmediathatcanbeusedtoreinforceestablishedexploitativeharmsignatures
+through normalization in grooming sequences, coercive leverage in sextortion
+chains,andcomplianceprimingpriortodirectedproduction.
+Theproductionharmsignatureterminatesinanarchive. Materialcapturedacross
+sessions is organized and held outside any channel the victim can access. Each
+sessionaddstoit. Theharmdoesnotclosewhentheproductionsessionends. It
+persistsasleverageforeverycontactthatfollows.
+5.3 Sextortion: CoercionAfterContact
+Sextortionisstructurallydistinctfromeveryotheroffensetypeinthiscorpus. The
+harmdoesnotbeginwiththeproductionofmaterial—itbeginsbefore,intheact
+ofdeception andcoercionthatmakesproduction possible. Andunlikegrooming,
+whichmovestowardaphysicalmeeting,orproduction, which terminateswhen
+material exists, sextortion is self-sustaining: the material produced in the first
+exchangebecomestheinstrumentofthenext. Thechainfeedsitself. Everyimage
+avictimsendsunderthreatbecomesleveragefordemandinganother.
+The mechanism is coercion under retained threat. A first image is obtained —
+through impersonation, false promises, or social engineering. Once that image
+exists,theoffender’spositionisasymmetric: thevictimcannotundothetransfer,
+and the offender controls whether it spreads. That asymmetry is the engine of
+theoffense. Threatstoexposetheimagetothevictim’ssocialnetwork—friends,
+family, schoolmates— convertasingle actof exploitationintoa sustainedcompli-
+ancemechanism. The victimisnotcoercedonce. Theyarecoercedcontinuously,
+eachdemandbackedbythesameretainedmaterialandtheconstantthreatofits
+release.4
+Whatsustains theloop isnotnew leverage— itisthe sameleverage, redeployed.
+Daily quotas of images and videos, directed conduct on live calls, demands for
+increasinglyexplicitmaterial: eachroundofcomplianceproducesnewmaterial,
+whichextendstheleverage,whichenablesthenextround. Theoffensedoesnot
+escalatebecausetheoffenderacquiresmorepower. Itescalatesbecausethevictim
+haslessexit. Platformbansdonotbreakthechain. Whenaccountsaredisabled,
+newonesarecreatedandvictimsaretoldtoreconnect. Thecoercionlooppersists
+across platform interventions because the leverage — the retained imagery —
+4UnitedStatesv.Amin,D.Alaska3:22-cr-00055-SLG-KFR(indictmentfiledOct.5,2022). Struc-
+turalobservationsinthissubsectionderivefromthefederalindictmentreadinfull. Novictim-
+identifyinginformationappearshere.
+26
+
+existsoutsideanysingleaccount.
+The lifecycle documented in this case extends beyond the coercion loop into
+collection, distribution, and exposure. Material is organized and stored; links
+are sharedwith co-conspiratorswho mustharass victims beforereceiving access.
+Victims’ images are sent to their friends and schoolmates when they attempt to
+stop. And the chain propagates: victims under active coercion are directed to
+recruit other minors, supply follower lists, and warn peers that they too will be
+exposed. The sextortionlifecycle does notterminate whenthe offenderstops. It
+terminates,ifitterminatesatall,whentheretainedmaterialisnolongerreachable
+ortheoffenderisapprehended.
+Sextortionlifecycle:UnitedStatesv.Amin(D.Alaska3:22-cr-00055)
+Fear, Repeated
+Childdeceived CSAMcreated Escalating
+Harm trapped production,
+intodisclosure (firstimage) demands
+compliance ongoingabuse
+Imagery Threat Platform Coercion
+Stage Contact
+acquisition delivery shift loop
+quotademandscycle:newimageryrequired
+coercionloopsustainsitself:
+retainedimageryisperpetualleverage
+newcontactinitiated
+Terminal:
+Account
+Stage retainedmaterial Exposure Distribution Collection
+churn
++re-contactcycle
+Psychological
+harm, Materialper-
+Publicshame, Re-victimization, Cannotescape
+Harm self-harm, manently
+peerharm third-partyaccess byblocking
+perpetual retained
+re-contact
+Figure 8: Sextortion lifecycle: United States v. Amin (D. Alaska 3:22-cr-00055)
+mapped onto the generalized exploitation lifecycle. The coercion loop — from
+threatdeliverybacktoimageryacquisition—isthedefiningmechanic: retained
+material is perpetual leverage. Accent arcs denote self-sustaining cycles; the
+recruitmentarcdenotespropagationbacktothecontactstage.
+5.4 CoordinatedCriminalEnterprises
+Theprecedingthreesubsectionseachdescribeasingleoffenderpursuingagoal
+throughasequenceofactions. Groomingandenticementrequiresustainedcon-
+tactandtrustarchitecture. Sextortionrequiresimageryacquisitionandcoercion
+leverage. Production requires a victim, a camera, and a channel. In each case,
+27
+
+onepersontracesatrajectoryusing A towardagoalin G. Coordinatedcriminal
+enterprisesarestructurallydifferentinonerespect: thetrajectoryisparallelized
+across actors. The affordance set is the same. What changes is that no single
+offender executes the full sequence. Recruitment, production, distribution, and
+coercion become roles, each filled by a different member of the enterprise, each
+operatingonadifferentphaseofthesametrajectorysimultaneously. Theplatform
+does not change what exploitation requires. It changes how many people can
+sharetheworkofdoingit.
+The coordination affordance makes this possible. Discord’s server and channel
+architecture — designed to let communities organize around shared interests,
+withgranularpermissioncontrolsoverwhocanaccesswhichspaces—functions
+in the enterprise context as an organizational infrastructure.5 Locked channels
+become internal operational security: the same permission system that lets a
+gaming community separate beginner and advanced discussion lets an enterprise
+separate its membership from its operations. Multiple-platform architecture —
+gamingplatformsasrecruitmentfunnel,communicationchannelsasoperational
+headquarters—isakeysignatureofexploitationthathasscaledpastwhatany
+singleoffendercanexecute.
+Whatthe enterprisestructure enablesthatsolo offendingcannotis scaleand role
+specialization. Asolooffenderwhoproduces,distributes,andcoercesisexecuting
+each phase sequentially, bounded by individual bandwidth. An enterprise dis-
+tributesthosephasesacrossmembers,executingtheminparallelacrossmultiple
+pathssimultaneously.
+5UnitedStatesv.Bermudezetal.,E.D.N.Y.1:25-cr-00361(indictmentfiledNov.18,2025). Struc-
+turalobservationsinthissubsectionderivefromthefederalindictmentreadinfull. Novictim-
+identifyinginformationappearshere.
+28
+
+CoordinatedEnterpriselifecycle:UnitedStatesv.Bermudezetal.(E.D.N.Y.25-CR-361)
+materialpersistsbeyondoffense
+Recruit& Re-coerce
+Stage Contact Production Distribution Terminal
+Coerce +Threaten
+Gamingplatforms Discord Discord+external Discordservers Socialmedia Distributed
+Platform
+(CS:GO,Roblox) lockedchannels videoconferencing +DMs messaging storage
+Recruiters Coordinators Producers Distributors Threatactors Enterprise
+Role(s)
+(enterprise-wide) (enterprise-wide) (primary+supporting) +accessviewers (enterprise-wide) (allmembers)
+Re-victimization
+Childcoerced CSAM Threats,swatting,
+Harm +perma-
+intoproduction distributed doxing,self-harm
+nentrecord
+Figure9: Coordinatedenterpriselifecycle: UnitedStatesv.Bermudezetal. mapped
+onto the generalized exploitation lifecycle. The enterprise distributes a single
+offense trajectoryacross role-specializedactors operatingin parallel. Dashed arc
+denotes parallel execution across role-specialized members; dotted arc denotes
+materialpersistencebeyondtheproductionevent.
+Acrossthefourharmsignaturesdocumentedinthissection,apatternholds. The
+offense mechanics applied differ — grooming operates through sustained contact,
+sextortionthroughcoercionleverage,productionthroughdirectedimagery,coor-
+dinatedenterprises throughparallelized roles— butthe affordancesthat enable
+themaredrawnfromthesamefiniteset. Anonymity,ephemerality,unmonitored
+communication,distributioninfrastructure,coordinationarchitecture. Thesame
+capabilitiesappearatdifferentstagesofdifferenttrajectories,repurposedbydif-
+ferentoffendertypestowardexploitativegoals. Section6exploreswhereinthose
+sequencesdisruptionbecomespossible.
+6. Disrupting Offense Mechanisms
+6.1 WhereInterventionHasTraction
+The enforcement infrastructure described in Section 2.1 was built for a specific
+function: detect known illegal material, report it, and prosecute the offender
+in possession of it. It performs that function at scale. 35.9 million incidents
+of suspected CSAM were reported to NCMEC in 2023, alongside 104 million+
+relatedfilesreportedbyregisteredElectronicServiceProviders[21]. PhotoDNA,
+deployedacrossdozensofmajorplatforms,hasbeendescribedashighlyeffective
+atdetectingknownCSAMcontent,withlowfalsepositiveandfalsenegativerates.
+29
+
+Thedetectionlayerworks.
+Theinvestigationlayerstrainsunderwhatdetectionproduces.
+Thelimitationisstructural,notoperational. Hash-matchinganswersexactlyone
+question: is this image known illegal material? It cannot answer the questions
+thatdetermine whetheracase isworkable: which platformcapabilitymade this
+offense possible, whether the offender is in contact with an active victim, how
+thiscaseconnectstoothersinvestigatedlastyearacrossthesameplatform. The
+corechallengeis notvolumeor capacityalone: documented evidenceshowsthat
+lawenforcementofficersstruggletoaccuratelytriageand prioritizeCyberTipline
+reports,aslowreportqualitymakesitdifficulttodistinguishcasesthatwilllead
+nowhere from those that could uncover ongoing abuse [8, 15]. That is not a
+failure of the agencies receiving them. It is a consequence of building detection
+infrastructurefasterthaninvestigationinfrastructure,inathreatlandscapethat
+hasexpandedfasterthaneither.
+Systematic analysis of the corpus and its affordance patterns reframes where
+intervention pressure is most productively applied. Three intervention points
+emerge from the record, each operating under distinct legal and operational
+constraints.
+The first is the detection gap. Intervention at this point is legally well-defined:
+content that matches a known-illegal hash triggers mandatory reporting under
+18 U.S.C.§ 2258A andhas led tothe identificationof hands-on offenders,traffick-
+ing networks, and ongoing abuse that would otherwise have gone undetected.
+The infrastructure is mature. Detection-threshold intervention is necessary but
+insufficient. It catches the distribution of known material. It cannot reach the
+contact,grooming,orproductionphasesthatprecedeit.
+The second is the policy and investigative layer. Proactive investigation, multi-
+agency sting operations targeting offenders who travel to meet minors, and peer-
+to-peernetworkmonitoringhashistoricallyproducedsomeofthemostsignificant
+prosecutions in the enforcement record. The statutory framework hasexpanded
+to match the threat landscape: the REPORT Act of 2024 extended mandatory
+reporting obligations to online enticement and child sex trafficking for the first
+time, closing a gap that the earlier framework did not address. Policy interven-
+tionatthislayerisconstrainedbythesamearchitecturethatprotectslegitimate
+users—lawenforcementcannotmonitorcommunicationswithoutlegalprocess,
+platforms cannotact on suspicionwithout evidenceof an act. Those constraints
+existforreasonsthatextendwellbeyondthisdomain. Workingwithinthemre-
+quiresintelligenceaboutmodernoffensepatterns,sothatenforcementpolicyand
+investigative resources concentrate where therecord shows the greatest potential
+30
+
+toreachactiveharm.
+The third intervention point is pre-deployment design review. This is the point
+atwhichnolegalconstraintpreventsaction,noinvestigativethresholdmustbe
+crossed, and no harm has yet occurred. Before a feature ships, a platform can
+ask: does this capability appear in the enforcement record? What exploitation
+patterndoesitproduce? Whatharmscouldsurfacefromthenewcapability? The
+mathematical framework developed in Section 7.2 provides the formal structure
+for that question. The corpus provides the evidence base. The answers are
+notspeculative—thirtyplatformsandtwenty-fouryearsofenforcementrecords
+documentwhatthoseanswerslooklikeacrosseveryaffordanceclassintherecord.
+Pre-deploymentistheinterventionwindowwherethecostofmitigationislowest
+andtherangeofoptionsiswidest. Ageverificationataccountcreationcostsless
+to implement before a platform scales than after. Ephemerality with preserved
+access for legal process is a design choice that becomes increasingly difficult to
+reverseonceauserbasehas formedaround the privacyexpectation. Thewindow
+for design-level intervention is pre-deployment. After that window closes, the
+remaininginterventionpointsarereactivebynecessity.
+Theenforcementrecorddoesnotshowthatanysingleinterventionpointissuf-
+ficient. Detection without investigation produces unworkable volume. Inves-
+tigation without detection misses the scale of the distribution problem. Policy
+without design-level mitigation addresses harm after the platform has been in
+the environment long enough to generate cases. What the record shows is a se-
+quencing problem: intervention has historically arrived after the affordance, after
+the platform, after the harm. The framework developed in this paper provides
+thevocabularytoreversethatsequence—toasktheexploitationquestionbefore
+deployment rather than after prosecution. That reversal does not require new
+law. Itdoes not requirenew investigativeauthority. It requires thatthe question
+becomestandardpracticeintheengineeringofnewtechnologies.
+Thefollowingsubsectionsaddresseachinterventionpointindepth.
+6.2 TheContactChain: InterventionAcrossOffenseTypes
+ThefourharmsignaturesdocumentedinSection5tracedistincttrajectories. Their
+stagesarenotdistinct. Contactprecedeseveryoffensetypeinthiscorpus. Escala-
+tionfollows contactin everytype. Channelmigration, acquisition, distribution,
+and terminal harm appear across grooming, sextortion, production, and coordi-
+natedenterprisesindifferentordersandwithdifferentmechanics—butdrawn
+fromthesamestageset.
+31
+
+That regularity is the basis for Figure 10. An intervention applied at a stage
+that appears across all four types terminates or degrades multiple trajectories
+simultaneously. An intervention applied at a stage unique to one type reaches
+only that type. The diagram shows this directly: two intervention nodes at the
+contactstage,oneterminatingthechainandonedegradingitatscale,andathird
+node at channel migration where cross-platform signal detection degrades the
+trajectoryafterescalationhasalreadyoccurred.
+Generalizedexploitationlifecyclewithinterventionnodes
+chaindegraded
+chainterminated
+Channel Acquisition/
+Stage Contact Escalation ...
+migration production
+Child Trust Evidence Abuse
+Harm
+contacted manipulated trailsevered captured
+Honeypotaccounts Reachconstraints Migrationdetection
+Intervention staticdecoys,digitally- age-gating+identity cross-platform
+mediated;norealminor verificationatonboarding signalsharing
+Figure 10: Generalized exploitation lifecycle with intervention nodes. Dashed
+nodes(crimson)markdocumentedinterventionpoints. AsolidXdenoteschain
+termination;afadedXdenoteschaindegradation.
+Contact is the only stage present in all four offense types and the only stage at
+whichadesign-levelinterventiondegradeseverytrajectorysimultaneously. Two
+proposed mechanisms operate here, in parallel, addressing distinct structural
+conditionsthatthecontactstagedependson.
+Thefirstisthehoneypotaccount. Ahoneypotisanintentionallyexposeddecoy
+system,network,orresourcedesignedtoattractmaliciousactivitybysimulating
+a legitimate target [17]. Inthe lawenforcementcontext, ahoneypot accountis a
+static decoy with no real minor behind it — the digital equivalent of an under-
+cover operator, but fully digitally-mediated and requiring no sustained human
+engagement. The legal basis is established: undercover operations targeting in-
+dividualswhoinitiatecontactwithapparentminorsarewell-documentedinthe
+enforcement record and have produced significant prosecutions across all four
+offense typesin thiscorpus. A generativeAI implementationextends thatmodel.
+The account does not advertise, does not solicit, and does not initiate contact.
+It exists. An offender who reaches out — soliciting sexual material, initiating
+groomingcontact,orissuingcoerciondemands—triggerseitheranautomated
+referraltolawenforcementoragenerativeresponsechainthatmimicsundercover
+operatorbehavior,extendingtheengagementwhilethereferralisprocessed. The
+keylegalconstraintisthatthehoneypotneverinitiates. Contactmustoriginate
+32
+
+with the offender. That constraint is satisfied by design: a static account that
+receives contact, does not send it, is indistinguishable in architecture from any
+passive account on the platform. The offense the offender commits in reaching
+out is the same offense they would commit reaching a real child. The detection
+surfaceisidentical.
+The second mechanism is the reach constraint. An unverified account in one
+geography reaching an unverified minor account in another, with no shared
+connectionandnoidentityanchoroneitherside,isthecontactarchitecturethat
+appearsintheenforcementrecordacrossgrooming,sextortion,production,and
+enterprise cases. It is not incidental. It is the condition that makes anonymous,
+frictionless,globalreachpossible—andthatmakesthecontactstagecheapenough
+toattemptatscale. Thereachconstraintargumentdoesnotrequireeliminatingthat
+reach orsurveillingit. It requiresthat unlimited,unverified, cross-demographic
+reach carry some friction. Age verification at onboarding is the clearest form:
+verificationaddsastep,arecord,andanaccountabilityanchorthatanonymous
+account creation does not. An offender who lies about age to reach a child has
+donesomethingdocumentablethatthecurrentarchitecturedoesnotrequirethem
+to do. Connection-graph gating is a complementary mechanism: an unverified
+adult account with no shared connections reaching a minor account does not
+currentlygenerateasignalacrossplatforms. Reachconstraintscreatethatsignalat
+thedesignlevel,beforeanyoffensehasoccurred,withoutmonitoringthecontent
+ofanycommunication.
+Both mechanisms target the same stage. Neither requires new investigative au-
+thority. Neither operates on content. Thehoneypot converts the contact attempt
+intoadetectionevent. Thereachconstraintraisesthecostoftheattemptbefore
+itismade. Togethertheyaddressthetwostructuralconditionsthecontactstage
+depends on: anonymity, which the honeypot absorbsinto a detection surface, and
+frictionlessglobalreach,whichtheconstraintdegradeswithouteliminating.
+The sections that follow address the policy and detection mechanisms at each
+remainingstage.
+6.3 PolicyandInvestigativeLevers
+6.4 Detection,Triage,andCross-CaseIntelligence
+7. Designing Against Predation
+33
+
+7.1 TheAdaptiveAdversary
+Most offenders in this corpus are rational adversaries. Not in the moral sense,
+nothing about this conduct is reasonable, but in the operational one. A rational
+adversary has goals, holds a working model of the environment those goals
+operatein,andchoosesactionsthatadvancethegoalsgiventhatmodel[19]. The
+offender wants to reach a child, obtain or distribute material, and avoid being
+caught. Heknowsplatformsdetectknownmaterial. Heknowsinvestigatorsare
+searching. Heactsaccordingly.
+This is visible throughout the enforcement record, and it is the part designing
+againstpredationhastodeliberate. Offendersdonotuseplatformsnaively. They
+use them the way one who knows he is being hunted and is actively hunting
+usingthem. OnInstagramandSnapchat,accountsarediscardedandrecreatedto
+evadeblocksandoutrunidentification. Contactinitiatedonapublic,monitored
+surface migrates to an encrypted or ephemeral one before the offense escalates,
+reducingtheevidencetrailanddetectionsurfaceforlawenforcement. Exploitative
+communities share tradecraft: which platforms are monitored, which detection
+methods are inuse, grooming scripts that work, andhow to avoidbeing caught.
+Noneoftheseareincidentalchoices. Offendersmodeldetectionandconsistently
+aimtomovearounddefensesandtowardstheirgoal.
+That is the structure the affordance framework exposes. An offender failing to
+reachtheirgoalsononeplatformdoesnotstop. Herelocatestoaplatformwhose
+affordances better serve evasion, trading reach for anonymity, persistence for
+ephemerality,anopenchannelforanencryptedone.
+Thiselevateswhatitmeanstodesignagainstpredation,andtoshipnewtechnol-
+ogywithnovelcapabilities.
+Adefensebuiltforastaticoffender—onewhopicksaplatformandstaysthere,
+whodoesnotanticipatedetection,whodoesnotadapt—fails,becausetherecord
+doesnotconsistentlymodelthatoffender. Itcontainsonewhomigrateschannels,
+embraces new technologies, and reaches for the tool that defeats the detection
+methodinuse. Designingagainstpredationmeansdesigningagainstadaptation.
+7.2 RationalExploitationandAffordanceTrajectories
+Section 7.1 established that offenders are rational adversaries who model their
+environmentandoptimizeagainstit. Platformaffordancesserveasinstrumentsfor
+that optimization. What followsis a mathematicalframework mapping offender
+goals,affordances,andharmvectors.
+34
+
+Let A = {a ,a ,...,a } denotethesetofcapabilitiesaplatformmakesavailable:
+1 2 n
+anonymity,ephemerality,contactdiscovery,unmonitoredcommunication,distri-
+bution infrastructure, generative synthesis. An offender with exploitation goal g
+selectsatrajectoryover A:
+L ∗ = arg max E(cid:2) U (L) (cid:3) (1)
+g,A g
+L∈Seq(A)
+where L ∗ ∈ Seq(A) isthe perceivedoptimal pathanoffender pursuinggoal g
+g,A
+traces through the affordance environment, U is the utility function for goal g,
+g
+Seq(A)denotesthesetofallfiniteorderedsequencesoverA,and E[·]istakenover
+stochasticoutcomes(victimcompliance,detectionrisk,platformintervention)that
+renderU (L) arandomvariable[19]. SeeAppendixXforthefullstatemachine
+g
+constructionandempiricalinstantiation.
+Different goals produce different optimal trajectories. An enticement offender
+maximizes over sustained-contact affordances — anonymity, trust architecture,
+unmonitored channels. A sextortion offender maximizes over affordances that
+make coercion possible — imagery acquisition, distribution infrastructure, en-
+cryptedpaymentchannels. Atraffickingoffenderexploresachainofsequential
+events,fromcontacttoexploitation. L ∗ isgoal-dependent. A isshared.
+g,A
+Goal-dependentdivergence:onegoal,distinctaffordancetrajectories,distincttypes
+GOALg AFFORDANCEBUNDLE⊆A EXPLOITATIONTYPE∈E
+Coercionaffordances Sextortion
+g
+Sustained-contact/groomingaffordances Enticement
+Exploitation
+Traffickingaffordances Trafficking
+Figure 11: Goal-dependent divergence. A single exploitation goal g resolves
+throughdistinctaffordancetrajectoriestodistinctexploitationtypesin E
+Define H = {h ,h ,...,h } as the finite set of victim-facing harm types docu-
+1 2 k
+mented inthis corpus: achild groomed toward in-personabuse; a child coerced
+35
+
+into producing self-generated imagery; a child’s material distributed and recircu-
+latedacrossnetworks;achildsextortedunderthreatofexposure;achildtrafficked
+for commercial exploitation; a child’s likeness synthesized into abuse imagery
+without contact. This paper does not measure harm severity or rank outcomes
+within H. Theanalyticalobjectiveisnarrower: mapwhichtrajectoriesthrough A
+producewhichelementsof H.
+Let E = {enticement,sextortion,trafficking,CSAMproduction,...} denote the
+set of exploitation types. This set forms a partition over the space of possible
+exploitationgoals: eachgoal g belongstoexactlyonetype e ∈ E,andeachtypein
+E correspondstooneormoregoals.
+Let φ: L → E denotethemappingfromoffensetrajectoriestoexploitationtype,
+where L is the space of possible trajectories over A. A complete trajectory ter-
+minates to a single type. Enticement and sextortion are distinct elements of E,
+reachedalongdistincttrajectories:
+φ (cid:0) L ∗ (cid:1) ̸= φ (cid:0) L ∗ (cid:1) ingeneral (2)
+enticement,A sextortion,A
+Thetrajectoriesdivergebecausethegoalsdiverge,andthereforetheaffordances
+selecteddiverge.
+Each exploitation type is constituted by a set of victim-facing harms. Define
+η: E → 2 H mappingeachexploitationtypetothe harmsitcomprises,where H is
+theharmsetdefinedabove. Sextortioncomprisescoercedimageryproductionand
+exploitation under threat of exposure; enticement comprises grooming toward
+in-person abuse. Trafficking comprises a sequence of stages spanning contact,
+targeting,grooming, brokering,and commercialsexual exploitation, each withits
+setofvictim-facingharms.
+The harm content of a trajectory is the composition η(φ(L)) ⊆ H: a path re-
+solvestoanexploitationtype,andanexploitationtyperesolvestotheharmsthat
+constituteit.
+Beneaththetrajectory,eachaffordancecarriesitsownharmassociations. Define
+ψ: A → 2 H mapping each affordance class a ∈ A to the set of harms across
+n
+alltrajectoriesinwhich a appears,recoverablefromtheenforcementrecordby
+n
+observingwhichharmtypesco-occur with a acrossthecorpus. Where φ resolves
+i
+atrajectorytoitsexploitationtypeand η unpacksthattypeintoharms, ψ records
+theharmseachindividualaffordanceparticipatesin. Table2reports ψ.
+36
+
+Sextortionpathway
+co I l m le a c g ti e on Threats Payment l S o c o a p le in / g c im hi a ld ge s r e y xt r o e r c t ir e c d u u la n t d e e d rthreat;
+Contact& Coercion Encrypted-payment Distribution
+production affordances affordances affordances
+affordances
+Enticementpathway
+Meet-up
+Contact Su co st n a t i a n c e t d bu T i r l u d s in t g Escalation ProductionofCSAM Im a a ff g o e r - d ca a p nc tu e re
+Findingmorevictims
+Contact&approach Encrypted/ Messaging/contact
+affordances anonymous affordances
+affordances
+Traffickingpathway
+Recruitment Grooming/ Advertising Commercial Movement/ childtraffickedfor
+/contact control exchange re-sale commercialsexualexploitation
+Contact-discovery Anonymity& Reach/ Encrypted-payment Coordination
+affordances coercion distribution affordances affordances
+affordances affordances
+Figure 12: Affordance trajectories for three exploitation types. Each pathway
+tracesasequenceofoffensestageswiththeaffordanceclassenablingeachstage
+feedingupward.
+Newplatformsexpand A. Forafixedgoal g,theoptimaltrajectoryshiftsandthe
+setofaffordancesavailabletooptimizeoverexpands. Theefficiencyofexploitation
+changes. Theexploitationtypedoesnot. Everypathstillresolvestoanexploitation
+typein E,andeverytypetoasubsetof H. H isclosed. 6
+The design implication is equally direct. Forany proposedaffordance a ∈/ A,
+new
+define its exploitation utility as the marginal change in an offender’s optimal
+expectedpayoffundergoal g when a enterstheaffordanceenvironment:
+new
+(cid:104) (cid:16) (cid:17)(cid:105) (cid:104) (cid:16) (cid:17)(cid:105)
+u(a , g) = E U L ∗ − E U L ∗ (3)
+new g g,A∪{anew } g g,A
+∗
+where L is the perceived optimal path for goal g over the current affordance
+g,A
+∗
+set and L the perceived optimal path when a enters the affordance
+g,A∪{anew } new
+6ProvedasTheorem1;see§7.3.
+37
+
+environment.
+Table2: Affordance-to-harmmapping. Foreachaffordanceclass a ∈ A, ψ(a ) ⊆
+i i
+H isthesetofvictim-facingharmsacrossalltrajectoriesinwhich a appearsinthe
+i
+CaseLinkercorpus.
+Affordanceclass a Harmsψ(a ) ⊆ H
+i i
+Anonymity h groomed toward in-person abuse; h coerced into
+1 2
+self-generated imagery; h sextorted under threat of
+4
+exposure
+Ephemerality h coerced into self-generated imagery; h sextorted
+2 4
+underthreatofexposure
+Contactdiscovery h groomedtowardin-personabuse
+1
+Unmonitored h groomed toward in-person abuse; h coerced into
+1 2
+communication self-generated imagery; h sextorted under threat of
+4
+exposure
+Distribution h materialdistributedandrecirculatedacrossnetworks
+3
+infrastructure
+Generativesynthesis h likenesssynthesizedintoabuseimagerywithoutcon-
+6
+tact
+An affordance with high u(a ,g) for any exploitation goal g is a structural
+new
+risk before it is a documented harm. Ephemerality carries high u for sextortion.
+Unverifiedaccountcreationcarrieshighuacrossnearlyall g. Generativesynthesis
+carrieshighuforCSAMproductionandpersonafabricationatscale. Thesevalues
+areestimablebeforeafeatureships. Theenforcementrecordprovidesasystemic
+recordtomodelharm.
+Platforms that do not model u(a ,g) prior to deployment leave that quantity
+new
+unmeasured and therefore unmitigated. The underlying corpus assembled in
+this paper provides an instrument for that measurement. It documents which
+affordances rational agents with exploitation goals consistently reach for, and
+whathappenstochildrenwhentheydo.
+Thenextplatformwillintroduceaffordancesthatdonotyetexist. Somewillcarry
+high u. Twenty-fouryearsofenforcementrecordsdocumentwhat φ(L ∗ ) looks
+g,A
+likewhen u(a , g) goessystemicallyunmeasuredbeforedeployment.
+new
+38
+
+7.3 EmpiricalLawsoftheObservableICACUniverse
+TheframeworkinSection7.2isamachineforexpressingwhatthecorpusalready
+contains. Thissectionextractswhatthatcorpus,treatedasthecompleteobservable
+ICACuniverse,establisheswithoutexception. Thesearenotmodeloutputs. They
+areempiricallyderivedinvariants,inducedfrom7,426enforcementrecordsacross
+24yearsand30+platforms,statedformallysotheycanbetestedandbroken.
+Axioms.
+Axiom1(GoalClosure). Thegoalset G isfinite,historicallystable,andpriorto
+technology. Anoffender acts ona goal: reach achild, obtain orproduce material,
+coerce,distribute,sell. Technologychangeswhichtrajectoryrealizesagoalandat
+whatcost. Itdoesnotaddanelementto G.
+Theorem.
+Theorem1(Closureof H). Thevictim-facingharmset H isfiniteandclosed.
+Proof. By Axiom 1, G is closed. The exploitation type set E is the image of G
+under the offender’s trajectory choice: every e ∈ E is the realization of some
+g ∈ G;closureispreservedundersurjectiveimage. Theharmset H istheimage
+of E under η: E → 2 H , and inherits closure from E in turn. Technology acts on
+trajectoriesthrough A—neveronthesets G, E,or H themselves.
+Two cases that appear to challenge the theorem establish it instead. Sextortion
+emerged as a named typology only in the last decade. The goal—coerce a child
+through the threat of exposure—is not new; the affordances collapsed its cost.
+Sextortion became prevalent. It did not become novel. Generative synthesis
+produces abuse imagery without physical contact, a mechanism without prior
+analogue. Theharmitactivates—achild’slikenessinabuseimagery—predates
+themechanismbydecades. Theaffordanceisnew. Theelementof H itactivates
+isnot. In bothcases: newaffordance,new trajectory, samegoal,same harm. The
+corpusistheproof: 24years,30+ platforms,nocaseproducing h ∈/ H.
+Empirical Laws. The followingareinduced from the complete observable uni-
+verse. Eachisstatedasafalsifiableuniversal. AppendixY:EstablishingTheorems,
+Abstracting Exploitation, and Disproving Claims establishes theconditions under
+whicheachcanbebroken. Nonehasbeenfalsified.
+39
+
+Law1(ContactPrimacy). In N = 7,426enforcementrecordsspanning2002–2026,
+nocasedocumentsexploitationthatproceededwithoutaninitialcontactevent.
+Basis. Every case in the Q1 evidence base with sufficient resolution to map ex-
+ploitationstagesbeginsatInitialContactPhase. ThefourPACER-anchoredharm
+signatures(Section5)confirmthisacrossallfiveoffensetypes.
+Falsification. Asingledocumentedcaseinwhichexploitation,grooming,produc-
+tion,sextortion,orcoordinatedenterprise,proceedswithoutanycontactphase.
+Law2(BackboneInvariance). Thebackbone B = {InitialContactPhase,
+TrustBuildingPhase, ExploitationPhase, MaintenancePhase} is present in ev-
+eryobservedexploitationtrajectoryacrossallfiveoffensetypes.
+Basis. Computed from five PACER case graphs spanning enticement, sextor-
+tion,directedproduction,coordinatedenterprise,andtrafficking(AppendixX).
+Each element of B achieves 5/5 coverage. Variant stages, CoercionCycle (1/5),
+ChannelMigrationEvent(2/5),divergeonlyafterthebackboneisfullytraversed;
+theyarewhere φ doesitswork.
+Falsification. Adocumentedtrajectoryinwhichanyelementof B isabsent.
+Law3(TypeInvariance). Theintroductionofanewaffordance a changesthe
+new
+costofatrajectorythrough ϕ butdoesnotchangetheexploitationtypeitresolves
+to:
+(cid:16) (cid:17) (cid:16) (cid:17)
+φ L ∗ = φ L ∗ forall g ∈ G.
+g,A∪{anew } g,A
+Basis. Every platform generation in the corpus introduces new affordances and
+produces the sameexploitation types. Sextortionon Snapchat and sextortion on
+early IRC resolve to the same element of E. The mechanism changes. The type
+doesnot.
+Falsification. Adocumentedcaseinwhichanewaffordanceproducesanexploita-
+tiontype e ∈/ E asdefinedinSection7.2.
+Law 4 (Affordance Displacement). When a platform or affordance is removed
+fromA, L ∗ shiftstothenearestavailableaffordancebundlewithoutmodification
+g,A
+to g.
+Basis. Observableacrossmultipleplatformretirementsandenforcementdisrup-
+tions in the corpus. Omegle’s shutdown, Kik’s decline, and successive P2P net-
+worktakedownseachproduceddocumentedmigrationtofunctionallyequivalent
+affordancebundlesonsuccessorplatforms,notgoalabandonment.
+40
+
+Falsification. Adocumentedcaseinwhichplatformremovalproducedgoalmodifi-
+cationratherthantrajectorysubstitution.
+Together,theseaxioms, theorem,and lawsestablishthat theenforcement recordis
+notacollectionofisolatedcases. Itisa24-yearobservationofasystemwhosefun-
+damentalmechanics,thegoalsthatdriveit,theharmtypesitproduces,thestages
+every trajectory passes through, are invariant across every platform generation
+thecorpusspans. Thetechnologychangeswhatthosetrajectoriescost. Itdoesnot
+changewheretheyresolve.
+7.4 TheForeseeableHarmStandard
+Theenforcementrecordisnotasurprise. Itisaretroactivedocumentcomprised
+offoreseeableharm.
+Everyaffordanceclassthatappearsconsistentlyacrossthiscorpus—anonymity,
+ephemerality, unmonitored communication, contact discovery, distribution infras-
+tructure — hada documented exploitationpattern before most ofthe platforms
+currently using it existed. Anonymous contact without verified identity on Kik
+and Telegram in the current enforcement record were documented misuse sur-
+faceson IRCbeforeeither platformexisted. The distributioninfrastructure that
+definesDropboxandGoogleDriveinthiscorpusappearedfirstinTorandearly
+peer-to-peernetworks.Theexploitationmechanicstheyproducearenotnew. The
+cases are new. The children in them are new. The platforms are new. The harm
+signatureisnot.
+This matters because of what foreseeability means. In law, a harm is foreseeable
+if a reasonable person could have anticipated it in advance. The standard does
+notrequirecertainty. Itdoesnotrequireaspecificvictim,aspecificoffender,ora
+specificplatform. Itrequiresthattheriskwasknowable—thatsomeonepaying
+attention could have seen it coming. Thirty platforms and twenty-four years of
+enforcement records establish, at scale, that the risk was always knowable. The
+affordance classesin this corpus carrieddocumented exploitation historiesbefore
+the product decisions that introduced them to new platforms were made. The
+harmwasforeseeablebecausethepatternalreadyexisted.
+The industry has operated on a different assumption. The implicit posture —
+expressed in policy statements, legal filings, and public communications — has
+beenthatmisuseisunpredictable: thatnoreasonableplatformteamcouldhave
+anticipatedthattheirfeatureswouldbeturnedagainstchildren. Thiscorpusdoes
+notsupportthatassumption. Itdocumentsthesamefivecapabilitytypesappear-
+ing in the enforcement record across every platform generation, implemented
+41
+
+differently eachtime andproducing the sameoffense mechanicseach time. That
+isnotanunpredictablepattern. Itisastableone. Stablepatternsareforeseeable.
+Foreseeableharmsthatgounmitigatedarechoices,notaccidents.
+This paper does notargue platform liability. That is a legal question with itsown
+framework,itsownevidentiarystandards,anditsownvenue. Whatthispaper
+arguesisnarrowerandfundamental: ifharmisestimablebeforeafeatureships
+— and Section 7.2 establishes that it is, using twenty-four years of enforcement
+records as the evidence base — then a platform that ships a high affordance-
+misuse-harm pathway without mitigation has made a measurable choice. The
+framework makes that choice visible. It does not assign guilt. It removes the
+defenseofignorance.
+Whatforeseeable harmreviewlookslike inpracticeisnotcomplicated. Beforea
+feature ships, ask: does this affordance class appear in the enforcement record?
+What exploitation pattern does it produce? What is misuse risk for the most
+plausibleexploitationgoals? Ifriskishigh, whatmitigationexistsatthedesign
+level — not in the terms of service, not in the content moderation queue, but
+in the feature itself? These are engineering questions. They are not currently
+standardizedorrequired. Theycouldbe.7
+Every case in this corpus was foreseeable. Not the specific child or offender.
+The harm type, the affordance class, the exploitation mechanic — those were
+foreseeable,becausethepatternwasintherecordbeforetheplatformwasinthe
+market. The next feature will introduce capabilities that do not yet exist in the
+enforcementrecord. Somewillcarryhighrisk. Thecorpusprovidestheinstrument
+tofindthemanddesignagainstexploitation,beforeanoffenderdoes.
+7.5 LimitationsandScope
+Thecorpusunderlyingthisanalysisconsistsentirelyofpublicenforcementrecords:
+press releases, attorney general announcements, indictments, and open-court
+documents aggregated across 56 sources spanning 2002–2026. These records
+inherentlyrepresentonlythevisiblefraction ofICACenforcementactivity. Cases
+resolvedwithoutpublicdisclosure,closedwithoutprosecution,orhandledunder
+sealed proceedings are absent by design. The 7,426 cases analyzed here therefore
+constituteasubstantialbutincompletesampleofthebroaderenforcementrecord.
+Platform attribution carries a related structural constraint. Named-platform refer-
+encesappearinonlyabout25%ofcases(1,875candidatesselectedforQ1analysis).
+The remaining 75% use generic descriptors such as “online,” “chat,” or “social
+7SeeAppendixZforawalkthroughexampleonanoveltechnology
+42
+
+media” without identifying a specific application. This is not a flaw in the data
+collectionbuta feature ofhowlawenforcementcommunicates: agencies drafting
+pressreleasesforageneralpublicaudiencehavenoobligationtonameplatforms,
+and in some operational contexts naming a platform before the investigation
+closesisinadvisable. Ofthe5,864CSAM-relatedcasesinthecorpus(79.0%),1,875
+(31.97%)wereincludedintheQ1platformaffordanceanalysis.
+Neitherlimitationunderminestheprimarycontributionsofthiswork. Theformal
+apparatus (φ, η, ψ) maps affordances to harm types independently of whether
+everycasenamesaspecificplatform. TheharmsignaturelifecyclesinSection5
+describe misuse patterns thatrecur consistently across bothnamed and unnamed
+cases. ThefourPACER-anchoreddeepdivessupplythemechanisticdepththat
+aggregatepublicrecordscannotprovideontheirown.
+Whatthiscorpusrepresentsisthelargeststructured,publicly-deriveddatasetof
+U.S.ICACenforcementrecordsassembledtodate. Itsconstraintsaretheinherent
+constraints of working with public data in this domain—constraints shared by
+everyempiricalstudyrelyingonlawenforcementpressreleasesandcourtfilings.
+Theselimitationsdefinetheobservableuniverseofthefindings,nottheirvalidity.
+8. Exploitation Is Not Inevitable
+Victimization begins with a decision to exploit a child. That decision is not a
+variableplatformdesigncontrols. Ithasexistedacrosshistory,oneveryplatform,
+witheveryaffordanceconfiguration. Theoffender’sgoalisstable.
+What changeswith each platformgeneration is theaffordancesand capabilities
+availabletoeachpersonwhohasalreadymadethatdecision. Platformschoose
+whichaffordancestoship. Anonymityisadesignchoice. Ephemeralityisadesign
+choice. Distribution infrastructure is a design choice. Each carries exploitation
+utility —a measurable contributionto an offender’s ability toreach their goal —
+whetherornotitismeasured.
+For twenty-four years, the enforcement model has been retrospective measure-
+ment and reactive attribution. A feature ships. Offenders reach for it. Cases
+accumulate. Thepatternbecomesvisibleinenforcementrecords reviewedyears
+laterbyresearchers,notbytheteamsorplatformswhobuiltthefeature.
+Thisdoesnothavetobethesequence.
+The framework developed in this paper provides the vocabulary to run that
+measurementbeforeafeatureshipsratherthanafterachildisharmed. Foreach
+43
+
+proposed affordance, ask what a rational agent with an exploitation goal does
+withit. Theanswerisnotspeculative. Thirtyplatforms,twenty-fouryears,and
+7,426casesdocumentwhatthatanswerlookslikeacrosseveryaffordanceclass.
+Platforms can be innovative. They can scale. They can ship features that hun-
+dredsofmillionsoflegitimateusersdependonwithoutshippingfeatureswhose
+exploitation utility is unknown. The mechanism is not esoteric: model the ad-
+versarialagentbeforedeployment. Treathigh-riskaffordancesasstructuralrisks
+requiringmitigation,notedgecasesrequiringlegalreviewafterthefact.
+Childexploitationisaproblemneitherproducednorintendedbytheplatforms
+through which it spreads. It is a problem that has followed every technological
+generationbecausethequestionofwhatoffendersdowithanewfeaturehasnot
+yetbecomeastandardpartofengineering.
+Thenextplatformcanshipitsmostambitiousfeaturewithoutgeneratinganother
+caseinthiscorpus.
+9. Data, Code, and Public Research Artifacts
+Alldata,code,andresearchartifactsunderlyingthisanalysisarepubliclyavailable.
+The corpus, extraction pipeline, and knowledge graph infrastructure are released
+undertheMITLicense.
+CodeandPipeline
+ThefullCaseLinkerpipeline—extractionrules,analysistools,andreproducibility
+documentation—isavailableathttps://github.com/mrinaalr/CaseLinker.
+LivePlatform
+TheCaseLinkerinterface,includingthe platform harmdashboardand casesearch
+tools,isaccessibleathttps://caselinker.up.railway.app.
+RelatedWork
+ThispaperispartoftheCaseLinkerTechnicalReportSeries. Priorreports(#1–5)
+areavailableonGitHubandtheinitialpreprintisavailableathttps://arxiv.org/
+abs/2603.18020. Additional research andprojectdocumentation ismaintained at
+44
+
+https://end-child-exploitation.com.
+APIandMCPAccess
+REST API and MCP access is available for bulk data export and programmatic
+corpusanalysis. Accessisrate-limitedbydefaultforfinancialanddatasteward-
+ship reasons. Researchers, practitioners, and institutional collaborators seeking
+full access may contact the author directly — a free key will be provided upon
+request.
+HumanResearchDetermination
+ThisresearchoperatesinaccordancewithUniversityofMassachusettsAmherst
+HRPO NHSRDetermination#7668. The corpus contains noprivate oridentifiable
+information, investigative files, or victim-identifying data under federal regula-
+tions[45CFR46.102(f)(1),(2)]. Allcaserecordsarepubliclyavailable enforcement
+documents.
+Contact
+MrinaalRamachandran
+mramachandra@umass.edu
+UniversityofMassachusettsAmherst
+Appendix X: The Exploitation State Machine, Formal Construction
+and Empirical Instantiation of
+L∗
+g,A
+Section7.2 defines L ∗ overSeq(A), thespaceof finiteaffordancesequences, and
+g,A
+assertsitisthetrajectoryarationaladversarypursuinggoal gwouldtracethrough
+the affordance environment A. This appendix definesthe machine that generates
+∗
+thatspace, derives L asthe solutionto itsoptimalityequations, and presents
+g,A
+theempiricalinstantiationacrossfivefederalcases.
+TheMachine
+AnExploitationStateMachineisatuple
+M = (S, A, T, R , s , F).
+G 0
+45
+
+States. S is a finite set of typed offense-phase classes drawn from the CAC
+ontology:
+(cid:8) (cid:9)
+S ⊇ InitialContactPhase, TrustBuildingPhase, ExploitationPhase, ... .
+Eachelementof S carriesaformalCAContologydefinition,SHACLvalidation,
+anddirectprovenanceinfederalcourtrecords. Thefullstatesetisinstantiatedin
+thefivePACERcasegraphsreleasedwiththispaper(Section9).
+Affordances. A is the affordance set from Section 4: Contact and Approach,
+Production,PossessionandTrade,andCoordinationaffordances.
+Transition function. T : S× A → ∆(S) assigns to each state–affordance pair a
+distribution over successor states. T(s | s ,a) is the probability of moving to s
+j i j
+from s whenaffordance a isavailable. Estimatedempiricallyfromacorpusof N
+i
+casegraphs:
+(cid:12) a (cid:12)
+(cid:12){c ∈ C : s −→ s incase c}(cid:12)
+Tˆ(s j | s i ,a) = (cid:12) i j (cid:12) .
+(cid:12){c ∈ C : s ∈ c}(cid:12)
+i
+With N = 1 per offense type, Tˆ is deterministic. With N ≫ 1, it is a proper
+probabilitydistributionandthestatisticsbecomemeaningful.
+Reward. R : S×G → R isafamilyofgoal-conditionedrewardfunctions. R (s)
+G g
+measureshowmuchreachingstate s advancesgoal g.
+Initial state. s = InitialContactPhase. Every trajectory in the enforcement
+0
+recordbeginshere.
+Terminal states. F ⊆ S — terminal ExploitationPhase instances. A trajectory
+endswhen s ∈ F.
+t
+TrajectoriesasPaths
+Atrajectory L = (a ,a ,...,a ) ∈ Seq(A) inducesastatesequencethrough M:
+0 1 T−1
+σ(L) = (s , s , ..., s ), s ∼ T(· | s , a ).
+0 1 T t+1 t t
+Themachinedoesnotredefine L. Itgives L thestructurethat determines which
+sequencesarereachableandatwhatprobability. Seq(A) isthepathspaceof M.
+46
+
+∗
+L astheBellmanSolution
+Theoptimaltrajectoryforgoal g maximizesexpectedcumulativereward. Thisis
+thesolutiontotheBellmanequation:
+(cid:110) (cid:111)
+V ∗(s) = max R (s) + ∑ T(s ′ | s,a)·V ∗(s ′) .
+g g g
+a∈A
+s′∈S
+Theoptimalpolicy π ∗(s) = argmax {···} selectstheaffordancethatmaximises
+g a
+∗ ∗
+valueateachstate. L isthetrajectoryfrom s to F inducedby π .
+g,A 0 g
+WhatSection7.2definesastheargmaxoverSeq(A) istheBellman-optimalpath
+∗
+through M. Themachineistheimplementation; L istheoutput.
+g,A
+Goal-DependentDivergence
+Differentgoalsproducedifferentrewardfunctions,whichproducedifferentop-
+timalpaths. R (s) peaksatCoercionCycle: theself-sustainingloopisthe
+sextortion
+goal,notasteptowardaterminus. R (s)peaksatterminalExploitationPhase:
+enticement
+physicalcontactendsthetrajectory. R (s) peaksatMaintenancePhase: sus-
+enterprise
+tainednetworkdistributionistheobjective.
+Because R differs across g ∈ G, so does π ∗ , and therefore so does L ∗ . This is
+g g g,A
+theoperationalcontentofEq.(2): samemachine,sameaffordanceenvironment,
+differentrewardstructures,differentpaths.
+Thefoundation
+Definition. Thefoundation B istheintersectionofoptimalpathsacrossallexploita-
+tiongoals:
+B = (cid:8) s ∈ S : s ∈ σ(L ∗ ) forevery g ∈ G (cid:9) .
+g,A
+B isthesetofstateseveryrationaladversarypassesthrough
+Empirical result. Across five PACER federal cases — enticement (United States
+v.Rehman),sextortion(UnitedStatesv.Amin),directedproduction(UnitedStates
+v. Pathmanathan), coordinated enterprise (United States v. Bermudez et al.), and
+trafficking (United States v. Riley) — modeled as CAC ontology state machines
+withtransitionsexpressedviacac-core:precedesandaffordancesannotatedvia
+AffordanceMisuseinstances,theempiricallycomputedbackboneis:
+(cid:8) (cid:9)
+B = InitialContactPhase, TrustBuildingPhase, ExploitationPhase, MaintenancePhase .
+47
+
+Phasetype Coverage Status
+InitialContactPhase 5/5 Backbone
+TrustBuildingPhase 5/5 Backbone
+ExploitationPhase 5/5 Backbone
+MaintenancePhase 5/5 Backbone
+ChannelMigrationEvent 2/5 Variant
+ThreatMechanism 2/5 Variant
+CoercionCycle 1/5 Unique(sextortion)
+SexualizationPhase 1/5 Unique(enticement)
+Fiveoffensetypes,fivedefendants,fivejurisdictions,variedplatforms. Fourphase
+typesineverytrajectory. Variantstages—CoercionCycle(1/5),ChannelMigrationEvent
+(2/5), ThreatMechanism (2/5) — are where ϕ does its work: the states at which
+goal g determineswhichpathistaken.
+TheInterventionCorollary
+An intervention degrades L ∗ if it reduces V ∗(s ). Removing a state s from the
+g,A g 0
+reachablesetforcestheadversaryontoasuboptimalpath.
+Interventionat s ∈ B reducesV ∗(s ) forevery g ∈ G simultaneously. Intervention
+g 0
+at s ∈/ B reduces V ∗(s ) onlyforthosegoals g forwhich s ∈ σ(L ∗ ).
+g 0 g,A
+This is the formal statement of the contact-chain regularity in Section 6.2. B is
+where every trajectory is reachable and no goal is exempt. Design-level inter-
+ventionatInitialContactPhase—reachconstraints,ageverification,honeypot
+accounts — degrades all five trajectories simultaneously, across every offense
+type in the enforcement record. Interventionat CoercionCycle reaches sextortion
+alone.
+The foundationalstages ofexploitation derived are not atheoretical artifact. They
+arethefundamentalcomponentsofexploitation,derivedfromthemachine,con-
+firmedintheobservableuniverse.
+Appendix Y: Establishing Theorems, Abstracting Exploitation, and
+Disproving Claims
+TheframeworkinSection7.2isofferedasaninstrument,notauniversallaw. Its
+claims are formal and therefore falsifiable, and the author explicitly invites re-
+searchers,particularlybehavioralcriminologistsandoffender-behaviorspecialists,
+48
+
+tousetheapparatustotest,extend,orbreaktheclaimsitmakes.
+Theauthorwouldalsoliketonotethatthemodelingislimitedbytwobounds:
+These are theorems over the observable universe, not laws over the full one.
+Thecorpus isdrawnfromsuccessfulenforcement: exploitation thatwasdetected,
+charged, and made public. Trajectories that evade detection entirely are absent
+by construction, and some affordances may be valuable to offenders precisely
+becausetheyleavenoenforcementtrace. Theclosureclaimsthereforeholdover
+the space of detected exploitation. Whether they hold over the full space is an
+open empiricalquestion the publicrecord cannot settle, becausethe unobserved
+portionis,bydefinition,unobserved. Anexploitationtypethatexiststodayonly
+in undetected offenses may not resolve to an element in H. This is the sharpest
+limitation of the work and the most direct route to extending it: a method that
+surfacesundetectedtrajectorieswouldtestclosurewherethiscorpuscannot.
+Abstraction discards detail that matters. Reducing an offense to a trajectory
+through an affordance set abstracts essential details that matter. It does not
+modelthechild’sexperience,thespecificdynamicsofagivencase,theoffender’s
+psychology beyond thethin rationality of goal-directed action, or thesocial and
+developmental context in which an offense occurs. The framework is deliberately
+narrow: itmapscapabilitytomisusetoharm,andnothingelse. Itisanengineering
+instrumentforpre-deploymentreasoning,notatheoryofwhyoffendersoffendor
+ofwhatvictimsendure. Usedasthelatter,itoverreaches. Theauthornotesthis
+boundarysotheabstractionisnotmistakenfortheterritory.
+Howto disprovethiswork. Theclaimsare statedformallyinSection 7.2,and
+eachis structuredto bebrokenby evidenceratherthan byargument. Theauthor
+encourages their direct test. A single documented case is sufficient to falsify
+anyoftheclosureclaims: anoffensewhosegoaldoesnotreducetothegoalset,
+a harm not representable in H, or an affordance whose introduction produces
+a genuinely new exploitation type rather than a cheaper path to an existing
+one. Thetype-invarianceandutilityclaimsaretestableagainstthecorpusitself,
+which is public (Section 9): a trajectory that resolves to a type outside E, or a
+demonstrationthatobservedmisuseisuncorrelatedwiththeaffordanceproperties
+the framework scores, breaks them. None of this requires agreement with the
+author’sframing. Itrequiresacase,oracorrelation,thatthemodelcannothold. A
+criminologistwhoproducesoneusingthismachineryadvancesthefieldasmuch
+asaconfirmationwould,andtheauthorregardsthatoutcomeastheframework
+49
+
+workingasintended.
+Appendix Z: A Worked Pre-Deployment Review
+TheframeworkinSection7.2ismeanttoberunbeforeafeatureships,notafterit
+generatescases. Thisappendixdemonstratesthatonahypotheticalbutrealistic
+product. Nothing here is a real platform or feature. The point is to show what
+foreseeable-harmreviewlookslikewhenthemathisappliedtoacapabilitythat
+doesnotyetexistintheenforcementrecord.
+Z.1TheProduct(astheteamwouldwriteit)
+Team Pensieve is building a consumer VR capture tool, internally Project Memory.
+Thepitch,asitwouldappearinaproductbrief:
+Memoryletsuserscapturemomentsasvolumetric,navigablescenes
+rather than flat photos. Point the device at a birthday, a first step, a
+reunion, and Memory reconstructs the moment in three dimensions.
+Users can step back into the captured scene in VR, and share it with
+friends and family who can experience the moment as if they were
+there. Memories persist in the user’s library and can be revisited
+indefinitely.
+Theengineeringdecompositiontheteamwoulddrawup:
+• Volumetriccapture. Multi-sensor reconstruction ofa physicalscene, includ-
+inganypeopleinit,intoanavigable3Dasset.
+• Real-likenessrepresentation. Thecapturedassetisaphotorealreconstruc-
+tionofrealpeople,viewablefromanglestheoriginalcapturedidnotdirectly
+frame.
+• Spatial/experientialsharing. Scenesareshareableasimmersiveexperiences
+anotheruserenters,notasfilestheyreceive.
+• Artifact persistence. Captured scenes are stored indefinitely in the user
+libraryandre-enterableatanytime.
+Read as a product, this is benign and obviously valuable. That is precisely the
+conditionunderwhichtheframeworkearnsitsplace: thecapabilitydoesnotlook
+likeaweapon. Thereviewbelowaskswhata rationalagentwithanexploitation
+goaldoeswithitanyway.
+50
+
+Z.2Mappingtheaffordancestotheexistingsets
+Eachcapabilityaboveisanaffordance a ∈ A. Thefirstquestioniswhetheranyis
+genuinelyneworwhetheritreinforcesanaffordancealreadyintherecord.
+• Volumetric capture is a new form of an existing affordance, image-capture
+/production,extendedfrom2Dto3D.Itdoesnotcreateanewaffordance
+category;itdeepensanexistingone.
+• Real-likeness representation overlaps the generative-synthesis affordance
+already in A. A photoreal 3D reconstruction viewable from un-captured
+angles is, functionally, likeness synthesis: the asset depicts the subject in
+configurationsthecameradidnotrecord.
+• Spatial sharing is a new form of distribution infrastructure: it moves an
+experientialassetratherthanafile,butitsfunctionintherecord,sharingof
+capturedmaterialtootherparties,istheexistingdistributionaffordance.
+• Artifactpersistencemapstodurablestoragealreadyintherecord: indefinite,
+re-enterableretentionofcapturedmaterialisfunctionallythecloud-storage
+andpossessionaffordancethecorpusdocumentsonfile-hostingplatforms;
+theassetisheld,distributable,andre-accessibleratherthantransient.
+This is the closure claim doing work in advance. A genuinely novel technology
+decomposesintoaffordancesthatresolvetotheexisting A,andthereforetothe
+existingharmset H. ProjectMemoryintroducesnoharmtypenotalreadyin H. It
+introducesnewtrajectoriestoharmstherecordalreadycontains.
+Z.3Comparativeexploitationutility
+Foreachaffordanceandeachplausiblegoalg ∈ {enticement,sextortion,production},
+the review estimates u(a,g), the marginal contribution of the affordance to an
+offender’soptimaltrajectoryunderthatgoal(Eq.3). Thevaluesarecomparative,
+not fitted: the frameworkranks affordances bythe leverage theyadd, it does not
+assignacardinalpayoff. Whatfollowsisthestructure u recovers.
+Affordance Enticement Sextortion Production
+Volumetriccapture low moderate high
+Real-likenessrepresentation low high high
+Spatial/experientialsharing low moderate high
+Artifactpersistence low high moderate
+Thestructure,readoffthetable:
+51
+
+Productioncarrieshigh u acrossthreeoffouraffordances. Volumetriccapture,
+likenessrepresentation, andspatialsharing eachmateriallyextend anoffender’s
+ability to produce and circulate abuse material. The combination is the con-
+cern: a tool that captures a real child volumetrically, renders that likeness from
+un-capturedangles,anddistributestheresultasanimmersiveassetis,inthepro-
+ductiontrajectory,amoreefficientpathtoharms h (distribution)and h (likeness
+3 6
+synthesized into abuse imagery without contact) than any affordance currently
+inthe record. u ishigh herebecause theaffordancescompose: eachis moderate
+aloneandhightogether.
+Enticement is uniformly low. None of these affordances materially improves
+contact,trust-building,orsustained-channelaccess,whichiswhattheenticement
+trajectoryoptimizesover. Thetoolisnotacontactsurface. Thisisasimportanta
+findingasthehighvalues: ittellstheteamwherenottospendmitigationeffort.
+Real-likeness representation carries high u for sextortion. A detailed, manipula-
+blelikenessismorecoercivematerialthanaflatimage,itraisesthecredibilityand
+threat-valueofwhattheoffendercanholdoverthevictim.
+Artifact persistence carries high u for sextortion. Sextortion is sustained coercion:
+thethreatisonlyasdurableasthematerialbehindit. Apersistent,re-enterable
+asset keeps the leverage live indefinitely, the offender can re-threaten, escalate,
+and re-extort against the same captured scene over time, rather than holding a
+one-timethreatthatdegrades. Persistenceiswhatconvertsa singlecaptureinto
+renewablecoerciveleverage.
+Z.4Mitigationsduringreview
+The mitigations are not brainstormed against the product in general. Each ad-
+dressesaspecifichigh-u affordance,atthedesignlevel,inthefeatureitself,before
+code.
+• Againstlikenessrepresentation(high u,sextortionandproduction). Con-
+strainreconstructiontocapturedviewpoints. Iftheassetcannotberotated
+toanglesthecameradidnotframe,theaffordancestopsfunctioningaslike-
+nesssynthesisandrevertstoordinarycapture. Thisisacapture-geometry
+constraint, decided at the reconstruction-engine level, and it removes the
+singlehighest-u affordancefromthesynthesistrajectory.
+• Against the capture-render-share composition (high u, production). Be-
+cause u is high only when the three affordances compose, break the com-
+position. Gate volumetric capture of identifiable minors, or require on-
+device-only processing for scenes containing them, so the captured asset
+52
+
+neverbecomesashareableserver-sideobject. Themitigationtargetsthelink
+betweencaptureanddistribution,whichiswherethecomposedutilitylives.
+• Donotover-investagainstenticement. uisuniformlylowacrossthecontact
+trajectory. The tool does not need a contact-layer mitigation it was never
+goingtorequire. Mitigationeffortconcentratesonproductionandsynthesis,
+wheretherecordsaystheleverageis.
+Z.5Whatthereviewproduced
+Before aline of capturecode was written, thereview identified thatProject Mem-
+ory’s exploitation risk concentrates in the production/synthesis trajectory, not
+thecontactone;thattheriskiscompositional,livinginthecapture-render-share
+chain rather than any single affordance; that the highest-leverage mitigation is a
+capture-geometryconstraintatthereconstructionengine;andthatthemitigation
+considerationscanbedocumentedandimplemented. Noneoftheseconclusions
+requiredashippedproduct,areportedcase,oralegalthreshold. Theyrequired
+theaffordancedecomposition,theexistingharmset,andacomparativeestimate
+of u. That is the sequence the paper argues for, run once, on one feature, before
+deployment.
+Acknowledgements
+I’dliketothankseveralpeopleforhelpingmakethisworkpossible.
+Kasper Lau — for helping debate, formalize, and sharpen the mathematical
+frameworkinSection7,andforgettingmetotouchgrassatleastoccasionallythis
+summer.
+MyyoungerbrotherPrakrit—forpushingmetoformalizethisworkandsharpen
+itspracticalgrounding.
+Practitioners, researchers, and child safety organizations — for providing do-
+mainexpertise,insights,andthekindofreal-worldgroundingthatshapedhow
+this work thinks. A specific thanks to [xx] at [yy] org — (pending confirmation
+priortorelease).
+Mymomanddad—forbeingmyfirstfundingsourceandrolemodels.
+Andaspecialthankstomygrandparents—forkeepingmefedandthoroughly
+caffeinatedwhiledevelopingthisworkthissummer.
+53
+
+Thisworkwouldnotexistwithoutthem.
+54
+
+References
+[1] DanahBoyd. It’sComplicated: TheSocialLivesofNetworkedTeens. YaleUniver-
+sityPress,NewHaven,CT,2014.
+[2] Taina Bucher and Anne Helmond. The affordances of social media plat-
+forms. InJeanBurgess,AliceMarwick,andThomasPoell,editors,TheSAGE
+Handbook of Social Media, pages 233–253. SAGE Publications, London, 2018.
+doi:10.4135/9781473984066.n14.
+[3] Elie Bursztein, Einat Clarke, Michelle DeLaune, David M. Elifff, Nick Hsu,
+LindseyOlson, JohnShehan,MarinaThiry, KurtThomas,andTravis Bright.
+Rethinking the detection of child sexual abuse imagery on the Internet. In
+Proceedingsof theWorld WideWeb Conference(WWW2019), pages2601–2607,
+NewYork,NY,2019.ACM. doi:10.1145/3308558.3313482.
+[4] DanielleKeatsCitronandMaryAnneFranks. Criminalizingrevengeporn.
+WakeForestLawReview,49:345–391,2014.
+[5] JamesJ.Gibson. TheEcologicalApproachtoVisualPerception. HoughtonMifflin,
+Boston,MA,1979.
+[6] Tarleton Gillespie. The politics of “platforms”. New Media & Society, 12(3):
+347–364,2010. doi:10.1177/1461444809342738.
+[7] Tarleton Gillespie. Custodians of the Internet: Platforms, Content Moderation,
+andtheHiddenDecisionsThatShapeSocialMedia. YaleUniversityPress,New
+Haven,CT,2018. doi:10.12987/9780300235029.
+[8] ShelbyGrossman,RianaPfefferkorn,DavidThiel,SaraShah,RenéeDiResta,
+JohnPerrino,ElenaCryst,AlexStamos,andJeffHancock. Thestrengthsand
+weaknessesof theonline child safetyecosystem. Technicalreport, Stanford
+InternetObservatory,StanfordDigitalRepository,2024. URLhttps://purl.
+stanford.edu/pr592kc5483.
+[9] Ian Hutchby. Technologies, texts and affordances. Sociology, 35(2):441–456,
+2001. doi:10.1177/S0038038501000219.
+[10] Juliane A. Kloess, Anthony R. Beech, and Leigh Harkins. Online child sex-
+ual exploitation: Prevalence, process, and offender characteristics. Trauma,
+Violence,&Abuse,15(2):126–139,2014. doi:10.1177/1524838013511543.
+55
+
+[11] JulianeA. Kloess,Catherine E.Hamilton-Giachritsis, andAnthonyR. Beech.
+Offense processes of online sexual grooming and abuse of children via In-
+ternet communication platforms. Sexual Abuse: A Journal of Research and
+Treatment,31(1):73–96,2019. doi:10.1177/1079063217720927.
+[12] Sonia Livingstone and Peter K. Smith. Annual research review: Harms
+experienced by child users of online and mobile technologies—the na-
+ture, prevalence and management of sexual and aggressive risks in the
+digital age. Journal of Child Psychology and Psychiatry, 55(6):635–654, 2014.
+doi:10.1111/jcpp.12197.
+[13] Kimberly J. Mitchell, Lisa M. Jones, David Finkelhor, and Janis Wolak.
+Internet-facilitatedcommercialsexualexploitationofchildren: Findingsfrom
+anationallyrepresentativesampleoflawenforcementagenciesintheUnited
+States. Sexual Abuse: A Journal of Research and Treatment, 23(1):43–71, 2011.
+doi:10.1177/1079063210374347.
+[14] National Center for Missing & Exploited Children. CyberTipline 2023 re-
+port. Technical report, National Center for Missing & Exploited Children,
+Alexandria, VA, 2023. URL https://www.missingkids.org/gethelpnow/
+cybertipline.
+[15] NationalCenter forMissingand Exploited Children. Testimonybefore the
+houseenergyandcommercecommittee,subcommitteeoninnovation,data,
+andcommerce,March2025. URLhttps://www.congress.gov/119/meeting/
+house/118066/witnesses/HHRG-119-IF17-Wstate-SourasY-20250326.pdf.
+Hearingonchildonlinesafetylegislation.
+[16] DonaldA.Norman. TheDesignofEverydayThings. BasicBooks, NewYork,
+NY,revisedandexpandededition,2013.
+[17] Niels Provos and Thorsten Holz. Virtual Honeypots: From Botnet Tracking to
+IntrusionDetection. Addison-Wesley,2007.
+[18] EthelQuayle. Affordances,socialmediaandthecriminogenicnatureofthe
+internet: Technology-mediatedchildsexualabuse. InErnestoCaffo,editor,
+Online Child Sexual Exploitation, pages 33–48. Springer, Cham, 2021. ISBN
+978-3-030-66654-5. doi:10.1007/978-3-030-66654-5_4.
+[19] Stuart Russell and Peter Norvig. Artificial Intelligence: A Modern Approach.
+Pearson,Hoboken,NJ,4thedition,2021.
+[20] MartinSteinebach. AnanalysisofPhotoDNA. InProceedingsofthe18thInter-
+nationalConferenceonAvailability,ReliabilityandSecurity(ARES2023),page8
+56
+
+pages, Benevento, Italy, August 2023. ACM. doi:10.1145/3600160.3605048.
+URLhttps://dl.acm.org/doi/fullHtml/10.1145/3600160.3605048.
+[21] Thorn. Childsexualabusematerial(CSAM),2024. URLhttps://www.thorn.
+org/research/child-sexual-abuse-material-csam/. Statistics sourced
+fromNCMEC2023CyberTiplinedata.
+[22] Bryce G. Westlake, Martin Bouchard, and Richard Frank. Finding the key
+players in online child exploitation networks. Policy & Internet, 9(1):104–125,
+2012. doi:10.2202/1944-2866.1126.
+[23] Janis Wolak and David Finkelhor. Sextortion: Findings from a sur-
+vey of 1,631 victims. Technical report, Crimes Against Children
+Research Center, University of New Hampshire, Durham, NH, 2016.
+URL https://www.unh.edu/ccrc/sites/default/files/media/2022-02/
+key-findings-from-a-survey-of-sextortion-victims-revised-8-9-2016.
+pdf.
+[24] Janis Wolak, David Finkelhor, and Kimberly J. Mitchell. Internet-initiated
+sex crimes against minors: Implications for prevention based on findings
+fromanationalstudy. JournalofAdolescentHealth,35(5):424.e11–424.e20,2004.
+doi:10.1016/j.jadohealth.2004.05.006.
+[25] JanisWolak,DavidFinkelhor,andKimberlyJ.Mitchell. Online“predators”
+and their victims: Myths, realities, and implications for prevention and
+treatment. American Psychologist, 63(2):111–128, 2008. doi:10.1037/0003-
+066X.63.2.111.
+[26] JanisWolak,DavidFinkelhor,WendyWalsh,andLeahTreitman. Sextortion
+ofminors: Characteristicsanddynamics. JournalofAdolescentHealth,62(1):
+72–79,2018. doi:10.1016/j.jadohealth.2017.08.014.
+[27] Mark A. Wood, Matthew Mitchell, Flynn Pervan, Briony Anderson, Tully
+O’Neill, Jackson Wood, and Will Arpke-Wales. Inviting, affording and trans-
+latingharm: Understandingtheroleoftechnologicalmediationintechnology-
+facilitatedviolence. TheBritishJournalofCriminology,63(6):1384–1404,2023.
+doi:10.1093/bjc/azac095.
+57
