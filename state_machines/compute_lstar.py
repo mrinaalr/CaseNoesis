@@ -19,7 +19,7 @@ from state_machines.bellman import (  # noqa: E402
     matrix_from_sequences,
 )
 from state_machines.iris import (  # noqa: E402
-    CASE_META,
+    get_case_meta,
     EXPLOITATION_PHASE,
     INITIAL_CONTACT_PHASE,
     LSTAR_JSON,
@@ -135,7 +135,8 @@ def main() -> None:
             f"{a}|{b}": w for (a, b), w in case_lstar["weights"].items()
         }
 
-        modality = infer_modality(case_id, CASE_META.get(case_id))
+        meta = get_case_meta(case_id)
+        modality = infer_modality(case_id, meta)
         case_matrix = matrix_from_sequences({case_id: type_seq})
         case_bellman = bellman_lstar(
             case_matrix,
@@ -144,10 +145,9 @@ def main() -> None:
             row_normalize_matrix=False,
         )
 
-        meta = CASE_META.get(case_id, {"title": case_id.upper(), "citation": case_id})
         case_results[case_id] = {
-            "title": meta["title"],
-            "citation": meta["citation"],
+            "title": meta.get("title", case_id.upper()),
+            "citation": meta.get("citation", case_id),
             "modality": modality,
             "phase_sequence": type_seq,
             "phase_details": phase_details,
@@ -159,7 +159,7 @@ def main() -> None:
         }
 
         print("═" * 55)
-        print(f"{meta['title']} — {meta['citation']}")
+        print(f"{meta.get('title', case_id)} — {meta.get('citation', case_id)}")
         print("═" * 55)
         print("Phases (CAC-native):")
         for i, uri in enumerate(phase_uris, start=1):

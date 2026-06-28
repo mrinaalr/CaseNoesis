@@ -26,14 +26,14 @@
       "@id": "caselinker:rehman-phase-initial-contact",
       "@type": "cac-grooming:InitialContactPhase",
       "rdfs:label": "Platform Contact",
-      "rdfs:comment": "Single platform, pseudonymous approach. Gate: Victim declines or blocks",
+      "rdfs:comment": "Single platform, pseudonymous approach",
       "cac-core:precedes": {"@id": "caselinker:rehman-phase-trust-building"}
     },
     {
       "@id": "caselinker:rehman-phase-trust-building",
       "@type": "cac-grooming:TrustBuildingPhase",
       "rdfs:label": "Normalization & Trust",
-      "rdfs:comment": "Flattery to disclosed vulnerability, reciprocal disclosure, normalization of sexual content. Gate: Victim reports to trusted adult",
+      "rdfs:comment": "Flattery to disclosed vulnerability, reciprocal disclosure, normalization of sexual content",
       "cac-core:precedes": {"@id": "caselinker:rehman-phase-sexualization"}
     },
     {
@@ -47,14 +47,14 @@
       "@id": "caselinker:rehman-phase-exploitation",
       "@type": "cac-grooming:ExploitationPhase",
       "rdfs:label": "Escalating Solicitation",
-      "rdfs:comment": "Directed production, CSAM produced as escalation instrument not coercion endpoint. Gate: Peer or parent detects contact",
+      "rdfs:comment": "Directed production, CSAM produced as escalation instrument not coercion endpoint",
       "cac-core:precedes": {"@id": "caselinker:rehman-phase-maintenance"}
     },
     {
       "@id": "caselinker:rehman-phase-maintenance",
       "@type": "cac-grooming:MaintenancePhase",
       "rdfs:label": "Material Retained",
-      "rdfs:comment": "CSAM held as record of escalation. Gate: Victim does not appear at meeting",
+      "rdfs:comment": "CSAM held as record of escalation",
       "cac-core:precedes": {"@id": "caselinker:rehman-phase-terminal"}
     },
     {

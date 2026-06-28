@@ -1161,14 +1161,12 @@
     function renderStats() {
       const meta = (state.evidence && state.evidence._meta) || {};
       const analyzed = state.platforms.filter((p) => p.analyzed).length;
-      const statedTotal = state.platforms.reduce((s, p) => s + p.tier_counts.stated, 0);
       const strip = document.getElementById("stats");
       strip.innerHTML = "";
       [
         { val: meta.cases_processed || "—", lbl: "Evidence Cases" },
         { val: state.platforms.length, lbl: "Platforms named" },
         { val: analyzed, lbl: "Harm analyzed" },
-        { val: statedTotal, lbl: "Stated evidence" },
       ].forEach(({ val, lbl }) => {
         strip.appendChild(
           el("div", { className: "stat-pill" }, [

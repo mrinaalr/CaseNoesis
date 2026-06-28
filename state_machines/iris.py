@@ -17,6 +17,8 @@ CAC_NS = "https://cacontology.projectvic.org#"
 GROOMING_NS = "https://cacontology.projectvic.org/grooming#"
 SEXTORTION_NS = "https://cacontology.projectvic.org/sextortion#"
 PLATFORMS_NS = "https://cacontology.projectvic.org/platforms#"
+UNDERCOVER_NS = "https://cacontology.projectvic.org/undercover#"
+CASELINKER_NS = "https://caselinker.projectvic.app/cases#"
 RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"
 RDFS_COMMENT = "http://www.w3.org/2000/01/rdf-schema#comment"
@@ -36,6 +38,10 @@ MAINTENANCE_PHASE = f"{GROOMING_NS}MaintenancePhase"
 THREAT_MECHANISM = f"{SEXTORTION_NS}ThreatMechanism"
 COERCION_CYCLE = f"{SEXTORTION_NS}CoercionCycle"
 CHANNEL_MIGRATION_EVENT = f"{PLATFORMS_NS}ChannelMigrationEvent"
+STING_OPERATION = f"{UNDERCOVER_NS}StingOperation"
+CONCLUSION_PHASE = f"{CAC_NS}ConclusionPhase"
+DISRUPTS_CHAIN = f"{CASELINKER_NS}disruptsChain"
+DISRUPTED_TARGET = f"{CASELINKER_NS}disruptedTarget"
 
 AFFORDANCE_MISUSE = f"{PLATFORMS_NS}AffordanceMisuse"
 ENABLES_TRANSITION_FROM = f"{PLATFORMS_NS}enablesTransitionFrom"
@@ -59,11 +65,18 @@ CANONICAL_CASE_IDS = (
     "trafficking",
 )
 
+EXPANSION_CASE_IDS = (
+    "doj_ceos_2025_014",  # Gastelo — production
+    "usss_2021_019",      # Lyons — trafficking
+    "doj_ceos_2026_012",  # Hounsell — enticement
+    "ncis_2023_001",      # Leggett — enticement
+    "usss_2017_006",      # Saucedo — production
+    "doj_ceos_2025_031",  # McIntosh — enterprise (Grayskull)
+)
+
 CASE_FILES = (
     *(f"{case_id}.jsonld" for case_id in CANONICAL_CASE_IDS),
-    "hounsell.jsonld",
-    "gastelo.jsonld",
-    "saucedo.jsonld",
+    *(f"{case_id}.jsonld" for case_id in EXPANSION_CASE_IDS),
 )
 
 MODALITY_LABELS = {
@@ -100,7 +113,7 @@ CASE_META = {
         "citation": "United States v. Riley (D. Haw. 1:23-cr-00071)",
         "modality": "trafficking",
     },
-    "hounsell": {
+    "doj_ceos_2026_012": {
         "title": "Hounsell",
         "citation": "United States v. Hounsell (E.D. Wis. 1:25-cr-00069)",
         "statute": "18 U.S.C. § 2422(b)",
@@ -108,7 +121,7 @@ CASE_META = {
         "corpus_id": "doj_ceos_2026_012",
         "defendant": "Bradley D. Hounsell",
     },
-    "gastelo": {
+    "doj_ceos_2025_014": {
         "title": "Gastelo",
         "citation": "United States v. Gastelo (E.D. Cal. 1:20-cr-00252)",
         "statute": "18 U.S.C. §§ 2251, 2252",
@@ -116,7 +129,15 @@ CASE_META = {
         "corpus_id": "doj_ceos_2025_014",
         "defendant": "Monico Erich Gastelo",
     },
-    "saucedo": {
+    "doj_ceos_2025_031": {
+        "title": "Grayskull",
+        "citation": "United States v. McIntosh (S.D. Fla. 9:24-cr-80053)",
+        "statute": "18 U.S.C. §§ 2251(d),(e); 2252A(a)(2)",
+        "modality": "enterprise",
+        "corpus_id": "doj_ceos_2025_031",
+        "defendant": "Keith Duane McIntosh & Thomas Peter Katsampes",
+    },
+    "usss_2017_006": {
         "title": "Saucedo",
         "citation": "United States v. Saucedo (S.D. Cal. 3:17-cr-00095)",
         "statute": "18 U.S.C. §§ 2251, 2252",
@@ -124,7 +145,32 @@ CASE_META = {
         "corpus_id": "usss_2017_006",
         "defendant": "Joseph Daniel Saucedo",
     },
+    "ncis_2023_001": {
+        "title": "Leggett",
+        "citation": "United States v. Leggett (M.D. Fla. 3:23-cr-00102)",
+        "statute": "18 U.S.C. § 2422(b)",
+        "modality": "enticement",
+        "corpus_id": "ncis_2023_001",
+        "defendant": "Jeremy Wayne Leggett",
+        "sting_operation": True,
+    },
+    "usss_2021_019": {
+        "title": "Lyons",
+        "citation": "United States v. Lyons (W.D. Ky. 3:20-cr-00049)",
+        "statute": "18 U.S.C. §§ 1591, 2251, 2252A, 2422(b)",
+        "modality": "trafficking",
+        "corpus_id": "usss_2021_019",
+        "defendant": "Matthew Alexander Lyons",
+    },
 }
+
+def get_case_meta(case_id: str) -> dict:
+    """Return CASE_META entry with sensible defaults for unknown expansion cases."""
+    return CASE_META.get(
+        case_id,
+        {"title": case_id.upper(), "citation": case_id, "corpus_id": case_id},
+    )
+
 
 _STATUTE_MODALITY = (
     (re.compile(r"\b2422\b"), "enticement"),
@@ -171,6 +217,10 @@ def display_type(iri: str) -> str:
         return f"cacontology-sextortion:{name}"
     if iri.startswith(PLATFORMS_NS):
         return f"cacontology-platforms:{name}"
+    if iri.startswith(UNDERCOVER_NS):
+        return f"cacontology-undercover:{name}"
+    if iri.startswith(CAC_NS):
+        return f"cacontology:{name}"
     if iri.startswith(CORE_NS):
         return f"cac-core:{name}"
     return name

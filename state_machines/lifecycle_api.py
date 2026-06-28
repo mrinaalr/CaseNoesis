@@ -10,6 +10,7 @@ from typing import Any
 from state_machines.iris import (
     CANONICAL_CASE_IDS,
     CASE_META,
+    EXPANSION_CASE_IDS,
     LSTAR_JSON,
     REPO_ROOT,
     STATE_MACHINES_WORKSPACE,
@@ -62,6 +63,8 @@ def _transitions_for_case(
                 "to_label": dst.get("label"),
                 "affordance": aff_iri,
                 "affordance_name": aff_name,
+                "disrupts_chain": bool(dst.get("disrupts_chain")),
+                "disrupted_target": dst.get("disrupted_target"),
             }
         )
     return transitions
@@ -85,6 +88,55 @@ def _canonical_type_cases(data: dict[str, Any]) -> dict[str, list[str]]:
     return cross_case_comparison(sequences)["type_cases"]
 
 
+def _expansion_ids_in_file_order(all_cases: dict[str, Any]) -> list[str]:
+    """Expansion swimlane order follows EXPANSION_CASE_IDS in iris.py."""
+    ordered = [cid for cid in EXPANSION_CASE_IDS if cid in all_cases]
+    for case_id in sorted(all_cases):
+        if case_id not in CANONICAL_CASE_IDS and case_id not in ordered:
+            ordered.append(case_id)
+    return ordered
+
+
+def _lifecycle_case_ids(data: dict[str, Any]) -> list[str]:
+    all_cases = data.get("cases", {})
+    canonical = [cid for cid in CANONICAL_CASE_IDS if cid in all_cases]
+    expansion = _expansion_ids_in_file_order(all_cases)
+    return canonical + expansion
+
+
+def _all_cases_type_cases(data: dict[str, Any]) -> dict[str, list[str]]:
+    """Phase-type → case ids (one per case) across canonical + expansion rows."""
+    case_ids = _lifecycle_case_ids(data)
+    sequences = {
+        case_id: data["cases"][case_id]["phase_sequence"]
+        for case_id in case_ids
+    }
+    return cross_case_comparison(sequences)["type_cases"]
+
+
+def _offense_type_for_case(case_id: str, data: dict[str, Any]) -> str:
+    """Map a lifecycle case id to its exploitation modality / offense type label."""
+    if case_id in CANONICAL_CASE_IDS:
+        return case_id
+    meta = CASE_META.get(case_id, {})
+    block = data.get("cases", {}).get(case_id, {})
+    return str(block.get("modality") or infer_modality(case_id, meta))
+
+
+def _unique_offense_types(case_ids: list[str], data: dict[str, Any]) -> list[str]:
+    """Deduplicated offense types for cases that contain a phase, canonical order first."""
+    lifecycle_order = {
+        cid: idx for idx, cid in enumerate(_lifecycle_case_ids(data))
+    }
+    seen: set[str] = set()
+    for case_id in sorted(case_ids, key=lambda cid: lifecycle_order.get(cid, 999)):
+        offense_type = _offense_type_for_case(case_id, data)
+        seen.add(offense_type)
+    canonical_part = [ot for ot in CANONICAL_CASE_IDS if ot in seen]
+    other_part = sorted(ot for ot in seen if ot not in CANONICAL_CASE_IDS)
+    return canonical_part + other_part
+
+
 def _build_case_record(
     case_id: str,
     block: dict[str, Any],
@@ -96,7 +148,9 @@ def _build_case_record(
     affordance_rows: list[dict[str, Any]],
     n_canonical: int,
 ) -> dict[str, Any]:
-    modality = infer_modality(case_id, meta)
+    # Prefer modality baked into lstar output (compute_lstar) so expansion rows
+    # stay labeled even when CASE_META is stale in a long-running server process.
+    modality = block.get("modality") or infer_modality(case_id, meta)
     phase_details = block.get("phase_details", [])
     phases = []
     for phase in phase_details:
@@ -113,9 +167,10 @@ def _build_case_record(
         )
 
     title = meta.get("title", case_id.upper())
+    citation = block.get("citation") or meta.get("citation", "")
     if tier == "expansion":
         offense_type = modality_label(modality)
-        case_name = meta.get("corpus_id") or case_id
+        case_name = citation or title
     else:
         offense_type = title
         case_name = title
@@ -124,12 +179,16 @@ def _build_case_record(
         "id": case_id,
         "tier": tier,
         "case_name": case_name,
-        "citation": block.get("citation") or meta.get("citation", ""),
+        "citation": citation,
         "offense_type": offense_type,
         "modality": modality,
         "modality_label": modality_label(modality),
         "corpus_id": meta.get("corpus_id"),
         "defendant": meta.get("defendant"),
+        "sting_operation": meta.get("sting_operation") or any(
+            p.get("disrupts_chain") for p in phases
+        ),
+        "chain_disrupted": any(p.get("disrupts_chain") for p in phases),
         "trajectory": block.get("phase_sequence", []),
         "trajectory_display": [
             display_type(t) for t in block.get("phase_sequence", [])
@@ -145,6 +204,9 @@ def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]
     data = raw if raw is not None else _ensure_lstar_json()
     fundamental = _canonical_fundamental(data)
     type_cases = _canonical_type_cases(data)
+    all_type_cases = _all_cases_type_cases(data)
+    lifecycle_case_ids = _lifecycle_case_ids(data)
+    n_lifecycle = len(lifecycle_case_ids)
     n_canonical = len(CANONICAL_CASE_IDS)
     affordance_rows = data.get("affordance_annotations", [])
     all_cases = data.get("cases", {})
@@ -167,9 +229,7 @@ def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]
         )
 
     expansion_cases: list[dict[str, Any]] = []
-    for case_id in sorted(all_cases):
-        if case_id in CANONICAL_CASE_IDS:
-            continue
+    for case_id in _expansion_ids_in_file_order(all_cases):
         block = all_cases[case_id]
         meta = CASE_META.get(case_id, {})
         expansion_cases.append(
@@ -194,6 +254,16 @@ def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]
             "short_name": local_name(iri),
         }
 
+    cross_case_all: dict[str, dict[str, Any]] = {}
+    for iri, cases in all_type_cases.items():
+        cross_case_all[iri] = {
+            "count": len(cases),
+            "cases": cases,
+            "offense_types": _unique_offense_types(cases, data),
+            "display": display_type(iri),
+            "short_name": local_name(iri),
+        }
+
     shared_transitions = len(data.get("raw_transitions", []))
     canonical_types = set()
     for case in canonical_cases:
@@ -209,6 +279,8 @@ def build_lifecycle_payload(raw: dict[str, Any] | None = None) -> dict[str, Any]
         "fundamental": fundamental,
         "fundamental_display": [display_type(t) for t in fundamental],
         "cross_case": cross_case,
+        "cross_case_all": cross_case_all,
+        "n_lifecycle": n_lifecycle,
         "affordance_annotations": affordance_rows,
         "canonical_cases": canonical_cases,
         "expansion_cases": expansion_cases,

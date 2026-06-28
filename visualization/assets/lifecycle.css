@@ -12,6 +12,7 @@
   --fundamental-stripe: rgba(110, 231, 183, 0.06);
   --panel-bg: #111a12;
   --panel-border: rgba(134, 168, 140, 0.2);
+  --fundamental-width: 1400px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -25,14 +26,14 @@ body {
 }
 
 body.lifecycle-page {
-  padding-bottom: 52px;
+  padding-bottom: 96px;
 }
 
 .lifecycle-wrap {
   position: relative;
   z-index: 1;
   max-width: 100%;
-  padding: 0 20px 24px;
+  padding: 0 20px 48px;
 }
 
 .lifecycle-header {
@@ -89,16 +90,41 @@ body.lifecycle-page {
 }
 
 .canvas-scroll {
-  overflow-x: auto;
-  overflow-y: visible;
   margin: 0 -20px;
   padding: 0 20px 8px;
+  overflow: visible;
+}
+
+#lifecycle-canvas,
+#lifecycle-canvas-expansion {
+  overflow-x: auto;
+  overflow-y: visible;
+  max-width: 100%;
   -webkit-overflow-scrolling: touch;
+}
+
+.lifecycle-svg .section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.lifecycle-svg .section-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  fill: var(--text-dim);
 }
 
 .lifecycle-svg {
   display: block;
-  min-width: 100%;
+  /* Keep intrinsic width/height from SVG attributes — no viewport stretch */
+  width: auto;
+  height: auto;
+  max-width: none;
+  flex-shrink: 0;
+  vertical-align: top;
 }
 
 .lifecycle-svg .fundamental-col {
@@ -158,6 +184,90 @@ body.lifecycle-page {
   pointer-events: none;
 }
 
+.lifecycle-svg .edge-disrupted {
+  stroke: #f87171;
+  opacity: 0.95;
+}
+
+.lifecycle-svg .edge-backward,
+.lifecycle-svg .edge-intra {
+  opacity: 0.9;
+}
+
+.lifecycle-svg .edge-blocked-ghost {
+  fill: none;
+  stroke: #6b7280;
+  stroke-width: 1.5;
+  stroke-dasharray: 4,6;
+  opacity: 0.55;
+}
+
+.lifecycle-svg .disruption-x-bg {
+  fill: #1a0d0d;
+  stroke: #f87171;
+  stroke-width: 2;
+}
+
+.lifecycle-svg .disruption-x-bg.ghost {
+  fill: #141414;
+  stroke: #6b7280;
+  stroke-width: 1.5;
+}
+
+.lifecycle-svg .disruption-x-stroke {
+  stroke: #f87171;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.lifecycle-svg .ghost-x .disruption-x-stroke {
+  stroke: #9ca3af;
+  stroke-width: 2;
+}
+
+.lifecycle-svg .disruption-edge-label {
+  fill: #fca5a5;
+  font-style: italic;
+}
+
+.lifecycle-svg .disruption-badge {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  /* fill set per-row in JS (modality color); fallback subtle enticement green */
+  fill: #6ee7b7;
+  opacity: 0.72;
+}
+
+.legend-disruption {
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(134, 168, 140, 0.2);
+}
+
+.legend-item .disruption-dot {
+  background: transparent !important;
+  border: 2px dashed #f87171;
+  position: relative;
+}
+
+.legend-item .disruption-dot::after {
+  content: "×";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #f87171;
+  line-height: 1;
+}
+
+.panel-disruption h4 {
+  color: #f87171;
+}
+
 .lifecycle-svg .gate-diamond {
   fill: #374151;
   stroke: #6b7280;
@@ -200,12 +310,15 @@ body.lifecycle-page {
 }
 
 .fundamental-section {
-  max-width: 1400px;
-  margin: 28px auto 0;
+  margin: 28px 0 0;
   padding: 20px 22px;
   background: #111a12;
   border: 1px solid rgba(134, 168, 140, 0.14);
   border-radius: 12px;
+  width: var(--fundamental-width);
+  max-width: var(--fundamental-width);
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .fundamental-section h2 {
@@ -301,8 +414,9 @@ body.lifecycle-page {
 }
 
 .expansion-section {
-  max-width: 1400px;
-  margin: 32px auto 0;
+  margin: 32px 0 0;
+  padding-bottom: 24px;
+  scroll-margin-bottom: 96px;
 }
 
 .expansion-header {

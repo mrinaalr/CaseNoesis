@@ -7,6 +7,8 @@
   const GROOMING = "https://cacontology.projectvic.org/grooming#";
   const SEXTORTION = "https://cacontology.projectvic.org/sextortion#";
   const PLATFORMS = "https://cacontology.projectvic.org/platforms#";
+  const UNDERCOVER = "https://cacontology.projectvic.org/undercover#";
+  const CAC = "https://cacontology.projectvic.org#";
 
   const CANONICAL_ROWS = [
     { id: "enticement", color: "#6ee7b7", bg: "#0d1f16" },
@@ -34,6 +36,7 @@
     { key: "threat", type: SEXTORTION + "ThreatMechanism", label: "ThreatMechanism" },
     { key: "coercion", type: SEXTORTION + "CoercionCycle", label: "CoercionCycle" },
     { key: "maintenance", type: GROOMING + "MaintenancePhase", label: "Maintenance" },
+    { key: "intervention", type: UNDERCOVER + "StingOperation", label: "Intervention" },
     { key: "terminal", type: GROOMING + "ExploitationPhase", terminal: true, label: "Terminal" },
   ];
 
@@ -57,12 +60,7 @@
     CoercionLeverage: "Coercion leverage",
   };
 
-  const ENTICEMENT_GATES = [
-    { afterType: GROOMING + "InitialContactPhase", label: "Victim declines or blocks" },
-    { afterType: GROOMING + "TrustBuildingPhase", label: "Victim reports to trusted adult" },
-    { afterType: GROOMING + "ExploitationPhase", label: "Peer or parent detects contact", nonTerminal: true },
-    { afterType: GROOMING + "MaintenancePhase", label: "Victim does not appear at meeting" },
-  ];
+  // Enticement victim-exit gate diamonds removed intentionally — do not restore ENTICEMENT_GATES.
 
   const ENTERPRISE_ROLES = [
     "Recruiters",
@@ -137,10 +135,68 @@
     });
   }
 
+  function maintenanceColumnX() {
+    const col = COLUMNS.findIndex((c) => c.key === "maintenance");
+    return LEFT_PAD + col * COL_W + NODE_W / 2;
+  }
+
+  function renderDisruptionEdge(edgesG, x1, y1, x2, y2, markerId, label) {
+    const pathD = arrowPath(x1, y1, x2, y2);
+    edgesG
+      .append("path")
+      .attr("d", pathD)
+      .attr("class", "edge-disrupted")
+      .attr("fill", "none")
+      .attr("stroke", "#f87171")
+      .attr("stroke-width", 2.5)
+      .attr("stroke-dasharray", "8,5")
+      .attr("marker-end", `url(#${markerId})`);
+
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const xg = edgesG.append("g").attr("class", "disruption-x").attr("transform", `translate(${mx},${my})`);
+    xg.append("circle").attr("r", 14).attr("class", "disruption-x-bg");
+    xg.append("line").attr("x1", -7).attr("y1", -7).attr("x2", 7).attr("y2", 7).attr("class", "disruption-x-stroke");
+    xg.append("line").attr("x1", 7).attr("y1", -7).attr("x2", -7).attr("y2", 7).attr("class", "disruption-x-stroke");
+
+    if (label) {
+      edgesG
+        .append("text")
+        .attr("class", "edge-label disruption-edge-label")
+        .attr("x", mx)
+        .attr("y", my - 22)
+        .attr("text-anchor", "middle")
+        .text(label);
+    }
+
+    const ghostX = maintenanceColumnX();
+    const ghostY = y2;
+    const ghostStart = x2 + NODE_W * 0.35;
+    if (ghostX > ghostStart + 24) {
+      const ghostD = `M${ghostStart},${ghostY} L${ghostX},${ghostY}`;
+      edgesG.append("path").attr("d", ghostD).attr("class", "edge-blocked-ghost");
+      const gx = edgesG
+        .append("g")
+        .attr("class", "disruption-x ghost-x")
+        .attr("transform", `translate(${ghostX},${ghostY})`);
+      gx.append("circle").attr("r", 10).attr("class", "disruption-x-bg ghost");
+      gx.append("line").attr("x1", -5).attr("y1", -5).attr("x2", 5).attr("y2", 5).attr("class", "disruption-x-stroke");
+      gx.append("line").attr("x1", 5).attr("y1", -5).attr("x2", -5).attr("y2", 5).attr("class", "disruption-x-stroke");
+    }
+  }
+
   let panelEl, backdropEl, payload;
 
   function openPanel(phase, caseData) {
-    const cross = payload.cross_case[phase.type] || { count: 0, cases: [] };
+    const crossAll = (payload.cross_case_all || {})[phase.type] || { count: 0, cases: [] };
+    const nLifecycle =
+      payload.n_lifecycle
+      || payload.n_cases
+      || (payload.canonical_cases || payload.cases || []).length
+        + (payload.expansion_cases || []).length
+      || 0;
+    const coverageCount = crossAll.count ?? 0;
+    const offenseTypes = crossAll.offense_types || [];
     const ins = (payload.affordance_annotations || []).filter(
       (a) => a.to && a.to.includes(shortType(phase.type))
     );
@@ -155,9 +211,19 @@
         <h4>Description</h4>
         <p>${escapeHtml(phase.comment || "—")}</p>
       </div>
+      ${
+        phase.disrupts_chain
+          ? `<div class="panel-section panel-disruption">
+        <h4>Chain disruption</h4>
+        <p>Law enforcement intervention terminates the offender trajectory before ${
+          escapeHtml(phase.disrupted_target || "downstream hands-on exploitation")
+        }.</p>
+      </div>`
+          : ""
+      }
       <div class="panel-section">
         <h4>Coverage</h4>
-        <p>${phase.coverage || cross.count}/${payload.n_canonical || 5} cases: ${(cross.cases || []).join(", ") || "—"}</p>
+        <p>${coverageCount}/${nLifecycle} cases: ${offenseTypes.join(", ") || "—"}</p>
         ${phase.is_fundamental ? "<p><strong>Appears in all 5 canonical offense types</strong> (fundamental)</p>" : ""}
       </div>
       <div class="panel-section">
@@ -170,7 +236,7 @@
       </div>
       <div class="panel-section">
         <h4>Case</h4>
-        <p>${escapeHtml(caseData.corpus_id || caseData.id)}</p>
+        <p>${escapeHtml(caseCaption(caseData))}</p>
       </div>
     `;
     panelEl.classList.add("open");
@@ -188,6 +254,11 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  /** Federal caption for row labels and panel — never corpus_id. */
+  function caseCaption(caseData) {
+    return caseData.citation || caseData.case_name || caseData.id || "";
   }
 
   function renderFundamentalSection() {
@@ -364,10 +435,10 @@
           .text(caseData.modality_label || caseData.offense_type || row.id.toUpperCase());
         gRow
           .append("text")
-          .attr("class", "row-sublabel")
+          .attr("class", "row-citation")
           .attr("x", 20)
           .attr("y", cy + 10)
-          .text(caseData.corpus_id || caseData.id || row.id);
+          .text(caseCaption(caseData));
       } else {
         gRow
           .append("text")
@@ -397,27 +468,41 @@
         const trans = (caseData.transitions || [])[i] || {};
         const aff = trans.affordance_name || "Anonymity";
         const color = affordanceColor(aff);
-        const pathD = arrowPath(x1, y1, x2, y2);
+        const disrupted = trans.disrupts_chain || b.phase.disrupts_chain;
 
-        edgesG
-          .append("path")
-          .attr("d", pathD)
-          .attr("fill", "none")
-          .attr("stroke", color)
-          .attr("stroke-width", 2)
-          .attr("marker-end", `url(#${markerId})`);
+        if (disrupted) {
+          renderDisruptionEdge(
+            edgesG,
+            x1,
+            y1,
+            x2,
+            y2,
+            markerId,
+            "chain disrupted"
+          );
+        } else {
+          const pathD = arrowPath(x1, y1, x2, y2);
 
-        const lx = (x1 + x2) / 2;
-        const ly = cy - 10;
-        edgesG
-          .append("text")
-          .attr("class", "edge-label")
-          .attr("x", lx)
-          .attr("y", ly)
-          .attr("text-anchor", "middle")
-          .text(AFFORDANCE_LABELS[aff] || aff);
+          edgesG
+            .append("path")
+            .attr("d", pathD)
+            .attr("fill", "none")
+            .attr("stroke", color)
+            .attr("stroke-width", 2)
+            .attr("marker-end", `url(#${markerId})`);
 
-        addFlowDots(edgesG, pathD, color);
+          const lx = (x1 + x2) / 2;
+          const ly = cy - 10;
+          edgesG
+            .append("text")
+            .attr("class", "edge-label")
+            .attr("x", lx)
+            .attr("y", ly)
+            .attr("text-anchor", "middle")
+            .text(AFFORDANCE_LABELS[aff] || aff);
+
+          addFlowDots(edgesG, pathD, color);
+        }
       }
 
       if (showDecorations && row.id === "sextortion") {
@@ -462,8 +547,9 @@
           .attr("height", NODE_H)
           .attr("rx", 10)
           .attr("fill", row.bg)
-          .attr("stroke", row.color)
-          .attr("stroke-width", 1.5);
+          .attr("stroke", phase.disrupts_chain ? "#f87171" : row.color)
+          .attr("stroke-width", phase.disrupts_chain ? 2 : 1.5)
+          .attr("stroke-dasharray", phase.disrupts_chain ? "6,3" : null);
 
         ng
           .append("text")
@@ -516,6 +602,16 @@
             .text(line2);
         }
 
+        if (phase.disrupts_chain) {
+          ng
+            .append("text")
+            .attr("class", "disruption-badge")
+            .attr("x", NODE_W - 10)
+            .attr("y", NODE_H - 10)
+            .attr("text-anchor", "end")
+            .text("DISRUPTED");
+        }
+
         if (showDecorations && row.id === "enterprise" && ENTERPRISE_ROLES[pi]) {
           ng
             .append("rect")
@@ -537,37 +633,6 @@
             .text(`[${ENTERPRISE_ROLES[pi]}]`);
         }
       });
-
-      if (showDecorations && row.id === "enticement") {
-        const gatesG = gRow.append("g").attr("class", "gates");
-        ENTICEMENT_GATES.forEach((gate) => {
-          const item = laid.find((l) => {
-            if (l.phase.type !== gate.afterType) return false;
-            if (gate.nonTerminal && l.phase.is_terminal) return false;
-            return true;
-          });
-          if (!item) return;
-          const gx = item.x + NODE_W / 2;
-          const gy = cy + NODE_H / 2 + 18;
-          const points = `${gx},${gy + 14} ${gx - 14},${gy + 32} ${gx + 14},${gy + 32}`;
-          gatesG.append("polygon").attr("class", "gate-diamond").attr("points", points);
-          gatesG
-            .append("line")
-            .attr("x1", gx)
-            .attr("y1", cy + NODE_H / 2)
-            .attr("x2", gx)
-            .attr("y2", gy + 12)
-            .attr("stroke", "#6b7280")
-            .attr("stroke-dasharray", "4,3");
-          gatesG
-            .append("text")
-            .attr("class", "gate-label")
-            .attr("x", gx)
-            .attr("y", gy + 48)
-            .attr("text-anchor", "middle")
-            .text(gate.label);
-        });
-      }
     });
   }
 
@@ -593,7 +658,10 @@
       "lifecycle-canvas-expansion",
       expansionRows(expansionCases),
       expansionCases,
-      { markerId: "arrow-expansion", showDecorations: false }
+      {
+        markerId: "arrow-expansion",
+        showDecorations: expansionCases.some((c) => c.chain_disrupted),
+      }
     );
   }
 
@@ -606,7 +674,8 @@
           `<span class="legend-item"><span class="dot" style="background:${AFFORDANCE_COLORS[k]}"></span>${AFFORDANCE_LABELS[k] || k}</span>`
       )
       .join("");
-    el.innerHTML = `<span class="legend-title">Affordance classes →</span>${items}`;
+    el.innerHTML = `<span class="legend-title">Affordance classes →</span>${items}
+      <span class="legend-item legend-disruption"><span class="dot disruption-dot"></span>Chain disruption (LE sting)</span>`;
   }
 
   function init() {

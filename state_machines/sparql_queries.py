@@ -14,6 +14,8 @@ from state_machines.iris import (
     AFFORDANCE_MISUSE,
     CAC_INVESTIGATION,
     CASE_FILES,
+    DISRUPTED_TARGET,
+    DISRUPTS_CHAIN,
     ENABLES_TRANSITION_FROM,
     ENABLES_TRANSITION_TO,
     HAS_STEP,
@@ -237,11 +239,16 @@ def phase_metadata(
     label = ctx.value(node, RDFS.label)
     comment = ctx.value(node, RDFS.comment)
     ptype = phase_type_for_instance(cg, case_graph, phase_uri)
+    disrupts = ctx.value(node, URIRef(DISRUPTS_CHAIN))
+    disrupted = ctx.value(node, URIRef(DISRUPTED_TARGET))
+    disrupts_chain = disrupts is not None and str(disrupts).lower() in ("true", "1")
     return {
         "uri": phase_uri,
         "type": ptype,
         "label": str(label) if label else None,
         "comment": str(comment) if comment else None,
+        "disrupts_chain": disrupts_chain,
+        "disrupted_target": str(disrupted) if disrupted else None,
     }
 
 

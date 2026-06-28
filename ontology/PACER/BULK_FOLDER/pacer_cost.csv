@@ -12,28 +12,71 @@ doj_ceos_2025_014, 1:20-cr-00252-JLT-BAM, docket, 1.80
 doj_ceos_2025_014, 1:20-cr-00252-JLT-BAM, plea agreement, 0.50
 doj_ceos_2025_014, 1:20-cr-00252-JLT-BAM, trial brief, 1.90
 
-usss_2017_006, 3:16-mj-03834-BGS, search (1/2), 0.10
-usss_2017_006, 3:16-mj-03834-BGS, search (2/2), 0.10
-usss_2017_006, 3:16-mj-03834-BGS, criminal complaint, 1.40
+usss_2017_006, 3:17-cr-00095-JLS-1, search (1/2), 0.10
+usss_2017_006, 3:17-cr-00095-JLS-1, search (2/2), 0.10
+usss_2017_006, 3:17-cr-00095-JLS-1, criminal complaint, 1.40
 
-doj_ceos_2025_031, 9:24-mj-08274, courtlistener search, 0.00
-doj_ceos_2025_031, 9:24-cr-80053, courtlistener search, 0.00
-doj_ceos_2025_003, 3:24-cr-00564, courtlistener search, 0.00
-, , TOTAL, 10.20
+ncis_2023_001, 3:23-cr-00102-MMH-SJH, search, 0.10
+ncis_2023_001, 3:23-cr-00102-MMH-SJH, docket, 0.40
+ncis_2023_001, 3:23-cr-00102-MMH-SJH, Notice of maximum penalty + factual basis, 0.90
+ncis_2023_001, 3:23-cr-00102-MMH-SJH, judgment, 0.80
+
+usss_2021_019, 3:20-cr-00049-DJH, search, 0.10
+usss_2021_019, 3:20-cr-00049-DJH, docket, 0.70
+usss_2021_019, 3:20-cr-00049-DJH, indictment, 0.80
+usss_2021_019, 3:20-cr-00049-DJH, plea agreement, 1.20
+usss_2021_019, 3:20-cr-00049-DJH, sentencing memorandum, 0.90
+
+doj_ceos_2025_031, 9:24-cr-80053, docket, 1.60
+doj_ceos_2025_031, 9:24-cr-80053, superseding indictment, 0.70
+doj_ceos_2025_031, 9:24-cr-80053, McIntosh Factual Proffer, 0.50
+doj_ceos_2025_031, 9:24-cr-80053, Katsampes Factual Proffer, 0.60
+doj_ceos_2025_031, 9:24-cr-80053, sentencing memorandum, 1.70
+
+
+
+
+
+
+
+, , TOTAL, 16.10
 
 
 
 Outside , , ,
-Cryptocurrency, [docket], search, 0.00
-Espionage / NDI, [docket], search, 0.00
-Racketeering (RICO), [docket], search, 0.00
-Elder Fraud, [docket], search, 0.00
-Insider Threat, [docket], search, 0.00
-Export Control, [docket], search, 0.00
-Murder for hire, [docket], search, 0.00
-Kidnapping, [docket], search, 0.00
-Assault + Attempted Murder, [docket], search, 0.00
+Cryptocurrency, 1:23-cr-00239, courtlistener, 0.00
+Espionage / NDI, 1:23-cr-10159, courtlistener, 0.00
+Insider Threat, 3:24-cr-00141, courtlistener, 0.00
+Racketeering (RICO), 1:24-cr-00417, courtlistener, 0.00
+Racketeering (RICO), 1:24-cr-00417, docket, 3.00
+Racketeering (RICO), 1:24-cr-00417, statement of offense, 0.70
+Racketeering (RICO), 1:24-cr-00417, sentencing memorandum, 2.00
+Elder Fraud, 2:22-cr-00115, docket, 0.80
+Elder Fraud, 2:22-cr-00115, superseding indictment, 1.00
+Elder Fraud, 2:22-cr-00115, factual basis, 0.90
+Elder Fraud, 2:22-cr-00115, judgement, 0.70
+Export Control, 3:20-cr-00446-WHA, search (1/2), 0.10
+Export Control, 3:20-cr-00446-WHA, search (2/2), 0.10
+Export Control, 3:20-cr-00446-WHA, docket, 0.90
+Export Control, 3:20-cr-00446-WHA, indictment, 1.50
+Export Control, 3:20-cr-00446-WHA, sentencing memorandum, 1.10
+Murder for hire, 2:23-cr-20121, docket, 2.30
+Murder for Hire, 2:23-cr-20121, indictment -- RESTRICTED (no access), 0.00
+Murder for Hire, 2:23-cr-20121, govt PSR position -- RESTRICTED (no access), 0.00  
+Murder for Hire, 2:23-cr-20121, redacted judgment -- RESTRICTED (no access), 0.00
+Kidnapping, 3:25-cr-00005-PDW, search, 0.10
+Kidnapping, 3:25-cr-00005-PDW, docket, 1.40
+Kidnapping, 3:25-cr-00005-PDW, second superseding indictment, 0.90
+Kidnapping, 3:25-cr-00005-PDW, plea agreement, 1.00
+Kidnapping, 3:25-cr-00005-PDW, judgement, 0.80
+Assault + Attempted Murder, 2:22-cr-04065-BCW, search (1/2), 0.10
+Assault + Attempted Murder, 2:22-cr-04065-BCW, search (2/2), 0.10
+Assault + Attempted Murder, 2:22-cr-04065-BCW, docket, 3.00
+Assault + Attempted Murder, 2:22-cr-04065-BCW, third superseding indictment, 2.80
+Assault + Attempted Murder, 2:22-cr-04065-BCW, sentencing memorandum, 1.70
 
 
-, , TOTAL, 0
+, , TOTAL, 27.00
+
+, , PACER Total, 43.10
 
