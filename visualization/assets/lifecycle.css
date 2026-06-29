@@ -280,24 +280,12 @@ body.lifecycle-page {
   fill: #9ca3af;
 }
 
-.lifecycle-svg .role-pill {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 500;
-}
-
 .lifecycle-svg .coercion-arc {
   fill: none;
   stroke: #f87171;
   stroke-width: 2;
   opacity: 0.85;
   animation: coercionPulse 2.5s ease-in-out infinite;
-}
-
-.lifecycle-svg .coercion-arc-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  fill: #fca5a5;
 }
 
 @keyframes coercionPulse {

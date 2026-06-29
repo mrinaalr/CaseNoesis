@@ -148,9 +148,12 @@ def _build_case_record(
     affordance_rows: list[dict[str, Any]],
     n_canonical: int,
 ) -> dict[str, Any]:
-    # Prefer modality baked into lstar output (compute_lstar) so expansion rows
-    # stay labeled even when CASE_META is stale in a long-running server process.
-    modality = block.get("modality") or infer_modality(case_id, meta)
+    # Prefer explicit CASE_META modality/citation; fall back to lstar block for older rows.
+    explicit_modality = meta.get("modality")
+    if explicit_modality and not meta.get("infer_modality_from_conduct"):
+        modality = str(explicit_modality)
+    else:
+        modality = block.get("modality") or infer_modality(case_id, meta)
     phase_details = block.get("phase_details", [])
     phases = []
     for phase in phase_details:
@@ -167,7 +170,16 @@ def _build_case_record(
         )
 
     title = meta.get("title", case_id.upper())
-    citation = block.get("citation") or meta.get("citation", "")
+    block_citation = block.get("citation", "")
+    meta_citation = meta.get("citation", "")
+    if meta_citation and (
+        not block_citation
+        or block_citation == case_id
+        or not str(block_citation).startswith("United States")
+    ):
+        citation = meta_citation
+    else:
+        citation = block_citation or meta_citation
     if tier == "expansion":
         offense_type = modality_label(modality)
         case_name = citation or title
@@ -188,6 +200,8 @@ def _build_case_record(
         "sting_operation": meta.get("sting_operation") or any(
             p.get("disrupts_chain") for p in phases
         ),
+        "sting_only": meta.get("sting_only"),
+        "victim_harmed": meta.get("victim_harmed"),
         "chain_disrupted": any(p.get("disrupts_chain") for p in phases),
         "trajectory": block.get("phase_sequence", []),
         "trajectory_display": [

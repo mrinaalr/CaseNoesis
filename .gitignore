@@ -131,3 +131,10 @@ config/
 
 # Ontology merged graph caches (rebuilt locally / on Railway)
 ontology/cache/
+
+# ---------------------------------------------------------------------------
+# PACER BULK_FOLDER — raw court OCR/screenshots stay local; facts/jsonld ship.
+# PDFs at repo root / BULK_FOLDER are already covered by *.pdf above.
+# ---------------------------------------------------------------------------
+ontology/PACER/BULK_FOLDER/**/processed/
+ontology/PACER/BULK_FOLDER/outside/

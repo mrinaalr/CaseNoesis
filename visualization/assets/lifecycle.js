@@ -62,17 +62,6 @@
 
   // Enticement victim-exit gate diamonds removed intentionally — do not restore ENTICEMENT_GATES.
 
-  const ENTERPRISE_ROLES = [
-    "Recruiters",
-    "Coordinators",
-    "Coordinators",
-    "Coordinators",
-    "Producers",
-    "Distributors",
-    "Threat actors",
-    null,
-  ];
-
   const NODE_W = 200;
   const NODE_H = 100;
   const COL_W = 240;
@@ -515,19 +504,12 @@
           const cy2 = cy + NODE_H / 2 + 8;
           const arcD = `M${cx},${cy2 + 4} Q${(tx + cx) / 2},${cy + NODE_H + 52} ${tx},${ty + 4}`;
           gRow.append("path").attr("class", "coercion-arc").attr("d", arcD);
-          gRow
-            .append("text")
-            .attr("class", "coercion-arc-label")
-            .attr("x", (tx + cx) / 2)
-            .attr("y", cy + NODE_H + 44)
-            .attr("text-anchor", "middle")
-            .text("retained imagery = perpetual leverage");
           addFlowDots(gRow, arcD, "#f87171");
         }
       }
 
       const nodesG = gRow.append("g").attr("class", "nodes");
-      laid.forEach((item, pi) => {
+      laid.forEach((item) => {
         const { phase, x } = item;
         const nx = x;
         const ny = cy - NODE_H / 2;
@@ -610,27 +592,6 @@
             .attr("y", NODE_H - 10)
             .attr("text-anchor", "end")
             .text("DISRUPTED");
-        }
-
-        if (showDecorations && row.id === "enterprise" && ENTERPRISE_ROLES[pi]) {
-          ng
-            .append("rect")
-            .attr("class", "role-pill-bg")
-            .attr("x", 12)
-            .attr("y", -22)
-            .attr("width", ENTERPRISE_ROLES[pi].length * 6.5 + 16)
-            .attr("height", 18)
-            .attr("rx", 9)
-            .attr("fill", "#1a0d0d")
-            .attr("stroke", row.color)
-            .attr("stroke-width", 1);
-          ng
-            .append("text")
-            .attr("class", "role-pill")
-            .attr("x", 20)
-            .attr("y", -9)
-            .attr("fill", row.color)
-            .text(`[${ENTERPRISE_ROLES[pi]}]`);
         }
       });
     });
