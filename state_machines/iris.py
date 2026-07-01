@@ -33,7 +33,10 @@ CAC_INVESTIGATION = f"{CAC_NS}CACInvestigation"
 PHASE = f"{CORE_NS}Phase"
 
 INITIAL_CONTACT_PHASE = f"{GROOMING_NS}InitialContactPhase"
-TRUST_BUILDING_PHASE = f"{GROOMING_NS}TrustBuildingPhase"
+CONDITIONING_PHASE = f"{GROOMING_NS}ConditioningPhase"
+CONDITIONING_MODE = f"{CORE_NS}conditioningMode"
+# Deprecated alias retained for transitional readers.
+TRUST_BUILDING_PHASE = CONDITIONING_PHASE
 SEXUALIZATION_PHASE = f"{GROOMING_NS}SexualizationPhase"
 EXPLOITATION_PHASE = f"{GROOMING_NS}ExploitationPhase"
 MAINTENANCE_PHASE = f"{GROOMING_NS}MaintenancePhase"

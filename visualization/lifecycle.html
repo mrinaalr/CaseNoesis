@@ -38,11 +38,30 @@
         Five canonical PACER federal cases modeled as CAC ontology state machines, plus expansion cases
         from full federal dockets. Fundamental stages (5/5) represent the invariant exploitation structure.
       </p>
-      <div class="stat-pills">
-        <span class="stat-pill"><strong id="stat-cases">5</strong> CASES</span>
-        <span class="stat-pill"><strong>5</strong> OFFENSE TYPES</span>
-        <span class="stat-pill"><strong id="stat-stages">—</strong> CANONICAL STAGES</span>
-        <span class="stat-pill"><strong id="stat-transitions">—</strong> SHARED TRANSITIONS</span>
+      <div class="lifecycle-header-row">
+        <div class="stat-pills">
+          <span class="stat-pill"><strong id="stat-cases">5</strong> CASES</span>
+          <span class="stat-pill"><strong>5</strong> OFFENSE TYPES</span>
+          <span class="stat-pill"><strong id="stat-stages">—</strong> CANONICAL STAGES</span>
+          <span class="stat-pill"><strong id="stat-transitions">—</strong> SHARED TRANSITIONS</span>
+        </div>
+        <div class="offense-filter" id="offense-filter">
+          <button
+            type="button"
+            class="offense-filter-trigger"
+            id="offense-filter-trigger"
+            aria-expanded="false"
+            aria-controls="offense-filter-panel"
+            aria-label="Filter by offense type"
+          >
+            <span class="offense-filter-eyebrow">Offense</span>
+            <span class="offense-filter-summary" id="offense-filter-summary"></span>
+          </button>
+          <div class="offense-filter-panel" id="offense-filter-panel" hidden>
+            <div class="offense-filter-options" id="offense-filter-options" role="group" aria-label="Offense types"></div>
+            <button type="button" class="offense-filter-all" id="offense-filter-all">All</button>
+          </div>
+        </div>
       </div>
     </header>
 

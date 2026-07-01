@@ -202,7 +202,10 @@ def phase_type_for_instance(cg: ConjunctiveGraph, case_graph: URIRef, phase_uri:
         for _, _, t in ctx.triples((URIRef(phase_uri), RDF.type, None))
         if str(t) not in skip and not str(t).endswith("AffordanceMisuse")
     ]
-    return types[0] if types else None
+    if not types:
+        return None
+    specific = [t for t in types if t != PHASE]
+    return specific[0] if specific else types[0]
 
 
 def ordered_type_sequence(cg: ConjunctiveGraph, case_graph: URIRef) -> list[str]:

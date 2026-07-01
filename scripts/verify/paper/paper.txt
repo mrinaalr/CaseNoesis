@@ -495,7 +495,7 @@ Figure1: CAContologyrepresentationofasinglecaseasemittedbythecase2cac
 pipeline(caseanchorage_pd_2022_007).
 The result is a corpus of 1,500+ SHACL-validated case graphs forming the ev-
 idence base for Q1 analysis. Graph construction at corpus scale is handled by
-the CaseLinker MCP (Model Context Protocol) server: 34 case2cac tools for au-
+the CaseLinker MCP (Model Context Protocol) server: 37 structured tools for au-
 tomatedgraphconstruction,validation,traversal,andexportfrompress-release
 andcase-recordsources.
 Primary-source court record representations — dockets, statements of offense,

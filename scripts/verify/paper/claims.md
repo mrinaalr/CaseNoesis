@@ -138,7 +138,7 @@ Legend: **bold** = headline / table stat picked for high scrutiny.
 | ID | Bold | Kind | Verify | Claim |
 |---|---|---|---|---|
 | `s3.shacl_graphs` |  | corpus_stat | file | 1,500+ SHACL-validated case graphs support Q1 analysis. |
-| `s3.mcp_tools` |  | corpus_stat | computed | CaseLinker MCP server exposes 34 case2cac tools. |
+| `s3.mcp_tools` |  | corpus_stat | computed | CaseLinker MCP server exposes 37 structured tools. |
 | `s3.case_uco_classes` |  | external_citation | external | CASE-UCO SDK implements 428+ ontology classes. |
 
 ## §3.3

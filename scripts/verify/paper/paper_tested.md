@@ -30,7 +30,7 @@ Database: `/Users/mrinaalramachandran/Projects/CaseLinker/caselinker.db`
 - unnamed share=74.8%
 
 ### `s3.mcp_tools`
-- CaseLinker MCP server exposes 34 case2cac tools.
+- CaseLinker MCP server exposes 37 structured tools.
 - @mcp.tool count=37
 
 ### `s3.pacer_expansion_four`
@@ -97,7 +97,7 @@ Database: `/Users/mrinaalramachandran/Projects/CaseLinker/caselinker.db`
 | ✅ pass | `s3.q1_inferred_only` | §3.1 | 134 | 134 | q1_evidence.json | 134 |
 | ✅ pass | `s3.q1_named_only` | §3.1 | 881 | 881 | q1_evidence.json | 881 |
 | ✅ pass | `s3.shacl_graphs` | §3.2 | 2034 | >=1500 | ontology/graph_output/universe | universe/*.ttl count=2034 |
-| ⚠️ warn | `s3.mcp_tools` | §3.2 | 37 | 34 | caselinker_mcp/server.py | @mcp.tool count=37 |
+| ✅ pass | `s3.mcp_tools` | §3.2 | 37 | 37 | caselinker_mcp/server.py | @mcp.tool count=37 |
 | 🌐 external | `s3.case_uco_classes` | §3.2 |  |  | CASE-UCO SDK / Project VIC | Requires manual or web verification against cited primary source. |
 | 🌐 external | `s3.opensource_mit` | §3.1 |  |  | external source | Requires manual or web verification against cited primary source. |
 | ⚠️ warn | `s3.pacer_expansion_four` | §3.3 | 3 | >=4 | BULK_FOLDER | bulk folders=3 |

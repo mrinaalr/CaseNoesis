@@ -1,87 +1,59 @@
 {
   "_note": "Harm and misuse vector analysis: researcher's own affordance reasoning. Keyed by platform name. Never auto-generated.",
-  "chat": {
-    "affordances": [
-      " "
-    ],
-    "misuse_surface": " ",
-    "harm_vector": ""
-  },
-  "social media": {
+  "AOL Instant Messenger": {
     "affordances": [],
     "misuse_surface": "",
     "harm_vector": ""
   },
-  "Snapchat": {
+  "BitTorrent": {
     "affordances": [
-      "Ephemeral messaging (timer-based auto-deletion)",
-      "Disappearing media (view-once photo/video)",
-      "Quick-add / username & QR contact discovery",
-      "Real-time photo/video capture-and-send (camera-first)",
-      "Persistent contact via Snap Map / location",
-      "Low-friction account creation"
+      "Peer-to-peer network linking users' computers for file sharing",
+      "User's computer acts as mini-server making files available to other users",
+      "Download / receive files from the network",
+      "Exchange or trade files with other users on the network",
+      "Search the network by keyword or filename",
+      "Make files available for download from a user's IP address"
     ],
     "misuse_surface": [
-      "Evidence destruction by design: content gone before it can be preserved",
-      "Solicitation and CSAM transmission with reduced forensic trail",
-      "Stranger-to-minor contact via username sharing / quick-add",
-      "Real-time coercion of imagery capture using camera-first send",
-      "Migration target: offenders move victims to Snapchat for the ephemerality"
+      "Download and save CSAM collections from a peer-to-peer file-sharing network",
+      "Exchange or trade CSAM video and image files with other users on the network",
+      "Make CSAM files available for other users to download from the offender's computer",
+      "Search the network for CSAM using known search terms",
+      "Participate in peer-to-peer networks under law-enforcement investigation of CSAM sharing activity"
     ],
     "harm_vector": [
-      "A child is contacted and exploited through ephemeral messaging",
-      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
-      "A child is groomed or enticed toward sexual contact or meeting"
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2024_891; idaho_icac_2024_022; doj_ceos_2026_002)"
     ]
   },
-  "Kik": {
-    "affordances": [
-      "Username-only registration (no phone number required)",
-      "Anonymity by design (no real identity tied to account)",
-      "Pseudonymous handles, easily created and discarded",
-      "Public group/chat discovery by interest or keyword",
-      "Bot and third-party integration within chats",
-      "Image and video sharing in direct and group messages",
-      "Perceived private or encrypted messaging"
-    ],
-    "misuse_surface": [
-      "Anonymous contact with minors without traceable identity",
-      "Account churn; discard and recreate handles to evade blocks and detection",
-      "Interest-based group discovery used to locate victims or trade material",
-      "CSAM trading in direct messages and closed groups with low visibility",
-      "Offenders cite encryption/privacy as operational cover (anchorage_pd_2024_002 calls it \"an encrypted chat platform\")",
-      "Migration target; offenders move victims onto Kik for the anonymity layer"
-    ],
-    "harm_vector": [
-      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child)",
-      "A child is contacted and exploited through anonymous messaging",
-      "A child is groomed or enticed toward sexual contact or meeting"
-    ]
+  "CS:GO": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
   },
-  "Facebook": {
-    "affordances": [
-      "Real-name-oriented profiles with rich personal detail",
-      "Friend network and mutual-connection discovery",
-      "Profile creation with minimal verification (fake accounts trivial)",
-      "Public and private messaging (Messenger)",
-      "Groups, pages, and event surfaces",
-      "Photo/video sharing and tagging",
-      "Search by name, school, location, interests",
-      "Friend suggestions / \"People You May Know\" graph traversal"
-    ],
-    "misuse_surface": [
-      "Fake/impersonation accounts to approach minors under false identity",
-      "Mining public profile detail (school, age, location) to target and tailor approach",
-      "Friend-network traversal to locate a victim's peers and siblings",
-      "Messenger as private channel to move contact out of public view",
-      "Building false rapport using profile-derived personal information",
-      "Migration target; initiate on Facebook, move to private/ephemeral platform"
-    ],
-    "harm_vector": [
-      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
-      "A child is contacted and exploited through profiles and Messenger",
-      "A child is groomed or enticed toward sexual contact or meeting"
-    ]
+  "Call of Duty": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Cash App": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Chat Avenue": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Chatroulette": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Craigslist": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
   },
   "Discord": {
     "affordances": [
@@ -110,140 +82,6 @@
       "A child is groomed or enticed toward sexual contact or meeting"
     ]
   },
-  "Instagram": {
-    "affordances": [
-      "Visual-first profiles (photo/video centric)",
-      "Public-by-default accounts and discoverability",
-      "DM and disappearing-message options",
-      "Follower/following graph and suggested accounts",
-      "Hashtag and explore-page content discovery",
-      "Story format (ephemeral, view-tracked)",
-      "Low-friction account creation, multiple accounts per user",
-      "Identity/handle takeover potential (account compromise)"
-    ],
-    "misuse_surface": [
-      "Public visual profiles used to identify and select minor targets",
-      "DM as direct private contact channel to a minor",
-      "Disappearing messages to reduce forensic trail during solicitation",
-      "Explore/hashtag discovery to find minors by interest or age signal",
-      "Account compromise/identity takeover to contact a victim's network under a trusted handle (ncmec_2023_430)",
-      "Migration target; move contact to ephemeral or encrypted platform"
-    ],
-    "harm_vector": [
-      "A child is contacted and exploited through DMs and visual profiles",
-      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
-      "A child is sextorted (coerced under threat after imagery is obtained)"
-    ]
-  },
-  "TikTok": {
-    "affordances": [
-      "Algorithmic For You feed (content surfaced by engagement, not follows)",
-      "Short-form video creation and discovery",
-      "Public-by-default accounts, broad discoverability",
-      "Direct messaging",
-      "Duet / stitch / comment interaction with strangers",
-      "Live streaming with real-time gifting",
-      "Low-friction account creation, large minor user base",
-      "Profile and content visible without mutual connection"
-    ],
-    "misuse_surface": [
-      "Algorithmic discovery used to surface and reach minors at scale",
-      "Public videos used to identify and select targets by age signal",
-      "DM as private channel to move contact off the public feed",
-      "Comment/duet interaction to initiate contact under low suspicion",
-      "Migration target; initiate on TikTok, move to private/ephemeral platform (pa_ag_2026_004: \"met on TikTok... continued to communicate\")"
-    ],
-    "harm_vector": [
-      "A child is contacted and exploited through TikTok messaging (pa_ag_2026_004; south_florida_icac_2025_005; tbi_icac_2023_003; south_florida_icac_2024_002)",
-      "A child is groomed or enticed toward sexual contact or meeting (pa_ag_2026_004)",
-      "A child is solicited for explicit imagery through TikTok messages (south_florida_icac_2025_005; tbi_icac_2023_003)"
-    ]
-  },
-  "Grindr": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Skout": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Reddit": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Tumblr": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Yubo": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Signal": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Wickr": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Chat Avenue": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Cash App": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "BitTorrent": {
-    "affordances": [
-      "Peer-to-peer network linking users' computers for file sharing",
-      "User's computer acts as mini-server making files available to other users",
-      "Download / receive files from the network",
-      "Exchange or trade files with other users on the network",
-      "Search the network by keyword or filename",
-      "Make files available for download from a user's IP address"
-    ],
-    "misuse_surface": [
-      "Download and save CSAM collections from a peer-to-peer file-sharing network",
-      "Exchange or trade CSAM video and image files with other users on the network",
-      "Make CSAM files available for other users to download from the offender's computer",
-      "Search the network for CSAM using known search terms",
-      "Participate in peer-to-peer networks under law-enforcement investigation of CSAM sharing activity"
-    ],
-    "harm_vector": [
-      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2024_891; idaho_icac_2024_022; doj_ceos_2026_002)"
-    ]
-  },
-  "LimeWire": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "iCloud": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Tor": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "IMVU": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
   "Dropbox": {
     "affordances": [
       "Cloud storage and file hosting without Google account dependency",
@@ -268,153 +106,37 @@
       "A child's abuse imagery is distributed or re-shared via cloud storage links (re-victimizing the depicted child)"
     ]
   },
-  "Telegram": {
+  "Facebook": {
     "affordances": [
-      "End-to-end encryption",
-      "Large-file transfer",
-      "Channel broadcasting",
-      "Self-destruct timers"
+      "Real-name-oriented profiles with rich personal detail",
+      "Friend network and mutual-connection discovery",
+      "Profile creation with minimal verification (fake accounts trivial)",
+      "Public and private messaging (Messenger)",
+      "Groups, pages, and event surfaces",
+      "Photo/video sharing and tagging",
+      "Search by name, school, location, interests",
+      "Friend suggestions / \"People You May Know\" graph traversal"
     ],
     "misuse_surface": [
-      "Encrypted channels distribute CSAM collections outside platform detection range",
-      "Large-file transfer delivers bulk material directly to named recipients",
-      "Broadcast channels reach subscriber audiences of thousands without individual offender-to-recipient contact",
-      "Self-destruct timers reduce the forensic trail from direct exchanges",
-      "Minimal phone-number-only registration enables pseudonymous operation and rapid account replacement after action"
+      "Fake/impersonation accounts to approach minors under false identity",
+      "Mining public profile detail (school, age, location) to target and tailor approach",
+      "Friend-network traversal to locate a victim's peers and siblings",
+      "Messenger as private channel to move contact out of public view",
+      "Building false rapport using profile-derived personal information",
+      "Migration target; initiate on Facebook, move to private/ephemeral platform"
     ],
     "harm_vector": [
-      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2022_546; ncmec_2022_292; ncmec_2023_338; ncmec_2024_214; ncmec_2024_991; ncmec_2025_333; ncmec_2025_437; ncmec_2025_598; ncmec_2025_607; ncmec_2025_672; doj_ceos_2025_014; ncmec_2025_208; wy_dci_2026_001)",
-      "A child is contacted and exploited through Telegram messaging (svicac_2022_001)",
-      "A child is groomed or enticed toward sexual contact or meeting (svicac_2022_001)"
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is contacted and exploited through profiles and Messenger",
+      "A child is groomed or enticed toward sexual contact or meeting"
     ]
   },
-  "Google Drive": {
-    "affordances": [
-      "Cloud storage and file hosting at scale (any file type, any size within quota)",
-      "Shareable links with configurable access controls (anyone-with-link or specific accounts)",
-      "No content-type restriction on upload (documents, images, video, archives)",
-      "Persistent availability — files remain accessible indefinitely without sender action",
-      "Folder-level organization and bulk sharing (entire directory via single link)",
-      "Google account integration with low-friction creation",
-      "Download enablement (recipients can pull local copies of shared content)"
-    ],
-    "misuse_surface": [
-      "Shared links used to distribute CSAM to one or many recipients without direct file transfer",
-      "Folder-level sharing used to hand off an entire collection in a single link",
-      "Persistent hosting — material stays accessible indefinitely unless platform detects and removes it",
-      "Anyone-with-link access removes need for recipient account — lowers barrier to receiving material",
-      "Used as handoff layer: offender hosts on Drive, shares link via separate contact channel",
-      "Lower detection surface than direct file transfer through messaging"
-    ],
-    "harm_vector": [
-      "A child's abuse imagery is possessed or stored in an offender's cloud storage account",
-      "A child's abuse imagery is uploaded to cloud file hosting for distribution or collection",
-      "A child's abuse imagery is distributed or re-shared via cloud storage (re-victimizing the depicted child)"
-    ]
-  },
-  "Twitter / X": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "YouTube": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Webcam platform": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Roblox": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Omegle": {
-    "affordances": [
-      "Random stranger pairing (no mutual connection, no account required)",
-      "Anonymous text and video chat (no persistent identity)",
-      "No account creation required — zero onboarding friction",
-      "Interest tag matching (common tags used to filter pairings)",
-      "Unmonitored by design — no moderation infrastructure at scale",
-      "No logging or message persistence by default"
-    ],
-    "misuse_surface": [
-      "Random pairing used to reach minors at scale without targeting effort",
-      "Zero-identity architecture — no traceability after session ends",
-      "Interest tags used to filter for younger users or shared interests with minors",
-      "Unmonitored video channel used to solicit or produce real-time imagery",
-      "Session ephemerality — no record of contact, no forensic trail",
-      "Migration target — initiate on Omegle, move victim to persistent messaging platform"
-    ],
-    "harm_vector": [
-      "A child is contacted and exploited through anonymous random video or text chat",
-      "A child is groomed or enticed toward sexual contact or meeting",
-      "A child is solicited for explicit imagery or subjected to real-time sexual exhibition in video chat"
-    ]
-  },
-  "Whisper": {
-    "affordances": [
-      "Anonymous posting by default (no account required to browse)",
-      "Location-based content discovery (posts surfaced by geographic proximity)",
-      "Image-based posts with text overlay (visual-first, low-identity format)",
-      "Direct messaging between users with no prior connection required",
-      "Interest/topic-based discovery (posts tagged and surfaced by category)",
-      "No verified identity or phone number required",
-      "Ephemeral community feel — posts decay in visibility over time"
-    ],
-    "misuse_surface": [
-      "Anonymous contact with minors without traceable identity",
-      "Location-based discovery used to identify and approach nearby minors",
-      "DM used to move contact off the anonymous public feed into private channel",
-      "Interest tags used to identify and surface vulnerable or younger users",
-      "Low-identity architecture makes account accountability near-zero",
-      "Migration target — initiate on Whisper, move victim to messaging platform"
-    ],
-    "harm_vector": [
-      "A child is contacted and exploited through anonymous messaging",
-      "A child is groomed or enticed toward sexual contact or meeting",
-      "A child is solicited for explicit imagery through anonymous posts or direct messages"
-    ]
-  },
-  "Mega.nz": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "WhatsApp": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Skype": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Minecraft": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Xbox Live": {
+  "Facebook Messenger": {
     "affordances": [],
     "misuse_surface": "",
     "harm_vector": ""
   },
   "Fortnite": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "Craigslist": {
-    "affordances": [],
-    "misuse_surface": "",
-    "harm_vector": ""
-  },
-  "dark web": {
     "affordances": [],
     "misuse_surface": "",
     "harm_vector": ""
@@ -445,5 +167,353 @@
       "AI-generated or AI-labeled CSAM is possessed or distributed at scale under new statutory charge types (idaho_icac_2026_001; arkansas_dps_2025_005; scag_icac_2025_019)",
       "Stated evidence N=14 (inferred N=9) in Q1 corpus — harm is production/possession-first, not contact-first (contrast TikTok/Instagram)"
     ]
+  },
+  "Google Drive": {
+    "affordances": [
+      "Cloud storage and file hosting at scale (any file type, any size within quota)",
+      "Shareable links with configurable access controls (anyone-with-link or specific accounts)",
+      "No content-type restriction on upload (documents, images, video, archives)",
+      "Persistent availability — files remain accessible indefinitely without sender action",
+      "Folder-level organization and bulk sharing (entire directory via single link)",
+      "Google account integration with low-friction creation",
+      "Download enablement (recipients can pull local copies of shared content)"
+    ],
+    "misuse_surface": [
+      "Shared links used to distribute CSAM to one or many recipients without direct file transfer",
+      "Folder-level sharing used to hand off an entire collection in a single link",
+      "Persistent hosting — material stays accessible indefinitely unless platform detects and removes it",
+      "Anyone-with-link access removes need for recipient account — lowers barrier to receiving material",
+      "Used as handoff layer: offender hosts on Drive, shares link via separate contact channel",
+      "Lower detection surface than direct file transfer through messaging"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is possessed or stored in an offender's cloud storage account",
+      "A child's abuse imagery is uploaded to cloud file hosting for distribution or collection",
+      "A child's abuse imagery is distributed or re-shared via cloud storage (re-victimizing the depicted child)"
+    ]
+  },
+  "Grindr": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "IMVU": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "IRC": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Instagram": {
+    "affordances": [
+      "Visual-first profiles (photo/video centric)",
+      "Public-by-default accounts and discoverability",
+      "DM and disappearing-message options",
+      "Follower/following graph and suggested accounts",
+      "Hashtag and explore-page content discovery",
+      "Story format (ephemeral, view-tracked)",
+      "Low-friction account creation, multiple accounts per user",
+      "Identity/handle takeover potential (account compromise)"
+    ],
+    "misuse_surface": [
+      "Public visual profiles used to identify and select minor targets",
+      "DM as direct private contact channel to a minor",
+      "Disappearing messages to reduce forensic trail during solicitation",
+      "Explore/hashtag discovery to find minors by interest or age signal",
+      "Account compromise/identity takeover to contact a victim's network under a trusted handle (ncmec_2023_430)",
+      "Migration target; move contact to ephemeral or encrypted platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through DMs and visual profiles",
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is sextorted (coerced under threat after imagery is obtained)"
+    ]
+  },
+  "Kazaa": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Kik": {
+    "affordances": [
+      "Username-only registration (no phone number required)",
+      "Anonymity by design (no real identity tied to account)",
+      "Pseudonymous handles, easily created and discarded",
+      "Public group/chat discovery by interest or keyword",
+      "Bot and third-party integration within chats",
+      "Image and video sharing in direct and group messages",
+      "Perceived private or encrypted messaging"
+    ],
+    "misuse_surface": [
+      "Anonymous contact with minors without traceable identity",
+      "Account churn; discard and recreate handles to evade blocks and detection",
+      "Interest-based group discovery used to locate victims or trade material",
+      "CSAM trading in direct messages and closed groups with low visibility",
+      "Offenders cite encryption/privacy as operational cover (anchorage_pd_2024_002 calls it \"an encrypted chat platform\")",
+      "Migration target; offenders move victims onto Kik for the anonymity layer"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child)",
+      "A child is contacted and exploited through anonymous messaging",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
+  },
+  "LimeWire": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "MeWe": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Mega.nz": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Minecraft": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Monkey": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "MySpace": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Oculus": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Omegle": {
+    "affordances": [
+      "Random stranger pairing (no mutual connection, no account required)",
+      "Anonymous text and video chat (no persistent identity)",
+      "No account creation required — zero onboarding friction",
+      "Interest tag matching (common tags used to filter pairings)",
+      "Unmonitored by design — no moderation infrastructure at scale",
+      "No logging or message persistence by default"
+    ],
+    "misuse_surface": [
+      "Random pairing used to reach minors at scale without targeting effort",
+      "Zero-identity architecture — no traceability after session ends",
+      "Interest tags used to filter for younger users or shared interests with minors",
+      "Unmonitored video channel used to solicit or produce real-time imagery",
+      "Session ephemerality — no record of contact, no forensic trail",
+      "Migration target — initiate on Omegle, move victim to persistent messaging platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through anonymous random video or text chat",
+      "A child is groomed or enticed toward sexual contact or meeting",
+      "A child is solicited for explicit imagery or subjected to real-time sexual exhibition in video chat"
+    ]
+  },
+  "OneDrive": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "PlayStation Network": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Reddit": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Roblox": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Skout": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Skype": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Snapchat": {
+    "affordances": [
+      "Ephemeral messaging (timer-based auto-deletion)",
+      "Disappearing media (view-once photo/video)",
+      "Quick-add / username & QR contact discovery",
+      "Real-time photo/video capture-and-send (camera-first)",
+      "Persistent contact via Snap Map / location",
+      "Low-friction account creation"
+    ],
+    "misuse_surface": [
+      "Evidence destruction by design: content gone before it can be preserved",
+      "Solicitation and CSAM transmission with reduced forensic trail",
+      "Stranger-to-minor contact via username sharing / quick-add",
+      "Real-time coercion of imagery capture using camera-first send",
+      "Migration target: offenders move victims to Snapchat for the ephemerality"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through ephemeral messaging",
+      "A child's abuse imagery is distributed or re-shared (re-victimizing the depicted child)",
+      "A child is groomed or enticed toward sexual contact or meeting"
+    ]
+  },
+  "Steam": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Telegram": {
+    "affordances": [
+      "End-to-end encryption",
+      "Large-file transfer",
+      "Channel broadcasting",
+      "Self-destruct timers"
+    ],
+    "misuse_surface": [
+      "Encrypted channels distribute CSAM collections outside platform detection range",
+      "Large-file transfer delivers bulk material directly to named recipients",
+      "Broadcast channels reach subscriber audiences of thousands without individual offender-to-recipient contact",
+      "Self-destruct timers reduce the forensic trail from direct exchanges",
+      "Minimal phone-number-only registration enables pseudonymous operation and rapid account replacement after action"
+    ],
+    "harm_vector": [
+      "A child's abuse imagery is distributed, traded, or re-shared (re-victimizing the depicted child) (ncmec_2022_546; ncmec_2022_292; ncmec_2023_338; ncmec_2024_214; ncmec_2024_991; ncmec_2025_333; ncmec_2025_437; ncmec_2025_598; ncmec_2025_607; ncmec_2025_672; doj_ceos_2025_014; ncmec_2025_208; wy_dci_2026_001)",
+      "A child is contacted and exploited through Telegram messaging (svicac_2022_001)",
+      "A child is groomed or enticed toward sexual contact or meeting (svicac_2022_001)"
+    ]
+  },
+  "TikTok": {
+    "affordances": [
+      "Algorithmic For You feed (content surfaced by engagement, not follows)",
+      "Short-form video creation and discovery",
+      "Public-by-default accounts, broad discoverability",
+      "Direct messaging",
+      "Duet / stitch / comment interaction with strangers",
+      "Live streaming with real-time gifting",
+      "Low-friction account creation, large minor user base",
+      "Profile and content visible without mutual connection"
+    ],
+    "misuse_surface": [
+      "Algorithmic discovery used to surface and reach minors at scale",
+      "Public videos used to identify and select targets by age signal",
+      "DM as private channel to move contact off the public feed",
+      "Comment/duet interaction to initiate contact under low suspicion",
+      "Migration target; initiate on TikTok, move to private/ephemeral platform (pa_ag_2026_004: \"met on TikTok... continued to communicate\")"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through TikTok messaging (pa_ag_2026_004; south_florida_icac_2025_005; tbi_icac_2023_003; south_florida_icac_2024_002)",
+      "A child is groomed or enticed toward sexual contact or meeting (pa_ag_2026_004)",
+      "A child is solicited for explicit imagery through TikTok messages (south_florida_icac_2025_005; tbi_icac_2023_003)"
+    ]
+  },
+  "Tor": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Tumblr": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Twitch": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Twitter / X": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Webcam platform": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "WhatsApp": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Whisper": {
+    "affordances": [
+      "Anonymous posting by default (no account required to browse)",
+      "Location-based content discovery (posts surfaced by geographic proximity)",
+      "Image-based posts with text overlay (visual-first, low-identity format)",
+      "Direct messaging between users with no prior connection required",
+      "Interest/topic-based discovery (posts tagged and surfaced by category)",
+      "No verified identity or phone number required",
+      "Ephemeral community feel — posts decay in visibility over time"
+    ],
+    "misuse_surface": [
+      "Anonymous contact with minors without traceable identity",
+      "Location-based discovery used to identify and approach nearby minors",
+      "DM used to move contact off the anonymous public feed into private channel",
+      "Interest tags used to identify and surface vulnerable or younger users",
+      "Low-identity architecture makes account accountability near-zero",
+      "Migration target — initiate on Whisper, move victim to messaging platform"
+    ],
+    "harm_vector": [
+      "A child is contacted and exploited through anonymous messaging",
+      "A child is groomed or enticed toward sexual contact or meeting",
+      "A child is solicited for explicit imagery through anonymous posts or direct messages"
+    ]
+  },
+  "Wickr": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Wizard 101": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Xbox Live": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "YouTube": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "Yubo": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "chat": {
+    "affordances": [
+      " "
+    ],
+    "misuse_surface": " ",
+    "harm_vector": ""
+  },
+  "iCloud": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
+  },
+  "social media": {
+    "affordances": [],
+    "misuse_surface": "",
+    "harm_vector": ""
   }
 }

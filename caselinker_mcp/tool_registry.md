@@ -1,12 +1,26 @@
 # CaseLinker MCP tool registry
 
-**Total: 37 tools** (as of `tree_traversal`).
+**Total: 37 tools** — count `@mcp.tool()` decorators in `server.py`.
 
-Authoritative implementation: `@mcp.tool()` definitions in `server.py`. This file is the human-readable catalog for docs and agent hosts.
+Authoritative implementation: `caselinker_mcp/server.py`. This file is the human-readable catalog for docs and agent hosts.
+
+## Backend split
+
+| Backend | Count | Notes |
+|---------|------:|-------|
+| REST API wrappers | **29** | Proxy to `GET`/`POST /api/*` |
+| MCP-only | **8** | `tree_traversal`, `list_sources`, `case2cac`, four graph traversal tools, `export_case_graph_ttl` |
+| **Total** | **37** | |
+
+There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
+
+`POST /api/llm/chat` exposes an internal `query_cases_database` function-calling tool to the LLM; that helper is **not** a separate MCP tool. MCP clients use `llm_chat` instead.
+
+No MCP resources (`@mcp.resource`) or prompts (`@mcp.prompt`) are registered.
 
 ## Tier model
 
-Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. **Five** tools require trusted access for full export behavior (see below). The other eleven REST helpers (`get_case_count`, `get_facet_distinct`, `get_unique_tags`, etc.) are **fully public**; API key is needed for full case access, lifecycle export, and removal of rate limits. 
+Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`. **Five** tools require trusted access for full export behavior (see below).
 
 | Category | Count | Meaning |
 |----------|------:|---------|

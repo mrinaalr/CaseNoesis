@@ -6,7 +6,9 @@
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "ConditioningPhase": "cac-grooming:ConditioningPhase",
+    "conditioningMode": "cac-core:conditioningMode"
   },
   "@graph": [
     {
@@ -14,12 +16,24 @@
       "@type": "cacontology:CACInvestigation",
       "rdfs:label": "United States v. Moore · D. Alaska 3:20-cr-00029 · 18 U.S.C. § 1591(a)(1)",
       "cacontology:hasStep": [
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-onset"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-terminal"}
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-onset"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-terminal"
+        }
       ]
     },
     {
@@ -27,14 +41,22 @@
       "@type": "cac-grooming:InitialContactPhase",
       "rdfs:label": "Snapchat Contact with Minor Victim 1",
       "rdfs:comment": "2018 — after supervised release Moore began sexual encounters with 15-year-old V.P. documented on V.P.'s Snapchat account; earliest series dated May 2, 2018 (government trial brief)",
-      "cac-core:precedes": {"@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"}
+      "cac-core:precedes": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
+      }
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota",
-      "@type": "cac-grooming:TrustBuildingPhase",
+      "@type": [
+        "cac-grooming:ConditioningPhase",
+        "cac-core:Phase"
+      ],
       "rdfs:label": "Housing-Conditioned Commercial Sex & Rent Quota",
       "rdfs:comment": "March 2019 — Moore invited V.P. to move into Mayfair Drive apartment when girlfriend Krista Callan moved out, only if she commercial-sex worked for him; set rent-correlated quota (government trial brief)",
-      "cac-core:precedes": {"@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"}
+      "cac-core:precedes": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
+      },
+      "cac-core:conditioningMode": "dependency_creation"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration",
@@ -45,24 +67,34 @@
       "cac-platforms:toPlatform": "SkipTheGames.com",
       "cac-platforms:migrationRationale": "commercial_customer_acquisition",
       "cac-platforms:occursBetween": [
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"},
-        {"@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"}
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
+        },
+        {
+          "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
+        }
       ],
-      "cac-core:precedes": {"@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"}
+      "cac-core:precedes": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
+      }
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation",
       "@type": "cac-grooming:ExploitationPhase",
       "rdfs:label": "Commercial Sex Trafficking Operation",
       "rdfs:comment": "Moore set prices, arranged and drove dates, took proceeds; gave meth when V.P. was too tired; forced Spenard street prostitution in high heels; assaulted V.P. and forced abortion while she was 15 (government trial brief; indictment Count 3)",
-      "cac-core:precedes": {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"}
+      "cac-core:precedes": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
+      }
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance",
       "@type": "cac-grooming:MaintenancePhase",
       "rdfs:label": "Snapchat-Documented Enterprise",
       "rdfs:comment": "Sustained Snapchat encounter documentation on V.P.'s account and Moore's jayinglez80 account through June 2019; price notebook and commercial supplies found at Mayfair Drive search (government trial brief; judgment counts 1–2)",
-      "cac-core:precedes": {"@id": "caselinker:anchorage_pd_2022_004-phase-terminal"}
+      "cac-core:precedes": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-terminal"
+      }
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-phase-terminal",
@@ -74,41 +106,71 @@
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-onset-housing",
       "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-onset"},
-      "cac-platforms:enablesTransitionTo": {"@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"},
-      "cac-platforms:affordanceClass": {"@id": "cac-platforms:UnmonitoredCommunication"},
+      "cac-platforms:enablesTransitionFrom": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-onset"
+      },
+      "cac-platforms:enablesTransitionTo": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
+      },
+      "cac-platforms:affordanceClass": {
+        "@id": "cac-platforms:UnmonitoredCommunication"
+      },
       "cac-platforms:misuseDescription": "Snapchat thread normalizes sexual contact before housing-dependent commercial sex demand"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-housing-skipthegames",
       "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {"@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"},
-      "cac-platforms:enablesTransitionTo": {"@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"},
-      "cac-platforms:affordanceClass": {"@id": "cac-platforms:ContactDiscovery"},
+      "cac-platforms:enablesTransitionFrom": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
+      },
+      "cac-platforms:enablesTransitionTo": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
+      },
+      "cac-platforms:affordanceClass": {
+        "@id": "cac-platforms:ContactDiscovery"
+      },
       "cac-platforms:misuseDescription": "Rent quota and cohabitation pressure drives migration to public prostitution listings"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-skipthegames-commercial",
       "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {"@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"},
-      "cac-platforms:enablesTransitionTo": {"@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"},
-      "cac-platforms:affordanceClass": {"@id": "cac-platforms:DistributionInfrastructure"},
+      "cac-platforms:enablesTransitionFrom": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
+      },
+      "cac-platforms:enablesTransitionTo": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
+      },
+      "cac-platforms:affordanceClass": {
+        "@id": "cac-platforms:DistributionInfrastructure"
+      },
       "cac-platforms:misuseDescription": "SkipTheGames interstate ads route customers to minor commercial sex dates"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-commercial-maintenance",
       "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {"@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"},
-      "cac-platforms:enablesTransitionTo": {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"},
-      "cac-platforms:affordanceClass": {"@id": "cac-platforms:Coordination"},
+      "cac-platforms:enablesTransitionFrom": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
+      },
+      "cac-platforms:enablesTransitionTo": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
+      },
+      "cac-platforms:affordanceClass": {
+        "@id": "cac-platforms:Coordination"
+      },
       "cac-platforms:misuseDescription": "Date scheduling and proceeds collection sustain trafficking through June 2019"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-maintenance-terminal",
       "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {"@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"},
-      "cac-platforms:enablesTransitionTo": {"@id": "caselinker:anchorage_pd_2022_004-phase-terminal"},
-      "cac-platforms:affordanceClass": {"@id": "cac-platforms:Ephemerality"},
+      "cac-platforms:enablesTransitionFrom": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
+      },
+      "cac-platforms:enablesTransitionTo": {
+        "@id": "caselinker:anchorage_pd_2022_004-phase-terminal"
+      },
+      "cac-platforms:affordanceClass": {
+        "@id": "cac-platforms:Ephemerality"
+      },
       "cac-platforms:misuseDescription": "Snapchat-documented abuse archive compounds harm to identified minor victim"
     }
   ]

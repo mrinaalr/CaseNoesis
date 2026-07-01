@@ -372,7 +372,7 @@ def verify_claim(claim: Claim, ctx: VerifyContext) -> VerifyResult:
     if claim.id == "s3.mcp_tools":
         n = _mcp_tool_count_accurate(ctx.root)
         obs = str(n)
-        return VerifyResult(claim.id, "pass" if n == 34 else "warn", f"@mcp.tool count={n}", obs, "34", "caselinker_mcp/server.py")
+        return VerifyResult(claim.id, "pass" if n == 37 else "warn", f"@mcp.tool count={n}", obs, "37", "caselinker_mcp/server.py")
 
     if claim.id == "cover.pacer_records":
         p = _pacer_bulk_stats(ctx.root)

@@ -45,7 +45,7 @@ CaseLinker follows a modular, layered architecture:
 2. **Processing Layer**: Extracts features, assigns comparison values, and fills case schema
 3. **Storage Layer**: PostgreSQL (production) / SQLite (local development) - Database-agnostic implementation
 4. **Clustering & Analysis Layer**: Case comparison, similarity detection, automated grouping, triage, and insights generation
-5. **Visualization Layer**: Interactive web-based dashboards with D3.js visualizations (main charts, Search tree, analysis views)
+5. **Visualization Layer**: Interactive web dashboards (platform harm dashboard, lifecycle state machines, facet tree search, analysis views)
 
 ## Installation
 
@@ -127,7 +127,7 @@ You can process additional PDFs to add more cases to the database.
    - Provides REST API endpoints for case data, analysis, and statistics
 
 3. **`caselinker_mcp/server.py`** — **MCP server for agent and LLM analysis**
-   - Exposes **34 tools**: corpus search, triage, Q1 platform evidence, on-demand `case2cac` cohort graphs, Turtle export (`export_case_graph_ttl`), and graph traversal
+   - Exposes **37 tools**: corpus search, triage, Q1 platform evidence, on-demand `case2cac` cohort graphs, Turtle export (`export_case_graph_ttl`), and graph traversal
    - Read-only; wraps the existing REST API; no database mutation
    - Reach out for private mcp.json keys and review `caselinker_mcp/README.md` & `caselinker_mcp/tool_registry.md` for setup, auth and the full tool catalog
 
@@ -238,14 +238,18 @@ The system will:
 
 ## Using the Visualizations
 
-Access the visualizations via the [live demo](https://caselinker.up.railway.app/visualization) or locally at http://localhost:8000/visualization.
+Access the **Platform Harm Dashboard** via the [live demo](https://caselinker.up.railway.app/visualization) or locally at http://localhost:8000/visualization.
 
-1. **Case Group**: Displays cases matching specific groups (infant, very young, abuse, possession, online) 
-2. **Severity Indicators**: Bar chart with color gradient showing severity levels (multiple perpetrators, hands-on abuse, production, etc.). Click bars to view cases with highlighted severity text.
-3. **Case Visualization**: Enter a Case ID (with autocomplete suggestions) to view comprehensive case details. The visualization displays structured information cards for platforms, severity indicators, case topics, investigation details, demographics, evidence volume, and prosecution outcomes with key information highlighted.
-4. **Previous Perpetrator**: Pie chart showing registered sex offenders vs. non-registered. Click slices to view cases with highlighted perpetrator status.
-5. **Environment**: Bar chart showing distribution of platforms and environments used (Facebook, online, chat, etc.). Click bars to view cases with highlighted platform text.
-6. **Organizations Involved**: Horizontal bar chart showing law enforcement agencies involved (AZICAC, FBI, Phoenix Police, etc.). Click bars to view cases with highlighted agency names.
+**Dashboard features**:
+
+- **Lifecycle map**: platforms placed on six exploitation lanes (distribution, storage, communities, discovery, messaging, production)
+- **Detail panel**: per-platform analysis with four tabs:
+  - **Affordances** → what the medium enables
+  - **Misuse Surface** → how offenders abuse those properties
+  - **Harm Vectors** → victim-facing harm pathways
+  - **Case Evidence** → expandable quotes from `q1_evidence.json`; links to Audit for full case review
+- **Filters**: search by platform name; narrow by evidence tier
+
 
 ## Using Search
 
@@ -306,7 +310,7 @@ python3 ontology/q3/build_candidates.py && python3 ontology/q3/q3_evidence.py
 
 To answer Q1–Q3 at corpus scale, enforcement narratives cannot stay only in relational tables and regex-derived tags. They must be expressed in a **structured, graph-queryable** form so patterns can be queried, validated, and compared across cases. CaseLinker already extracts consistent features from each narrative; the **ontology pipeline** maps those features into a standard investigation vocabulary and builds a validated knowledge graph as the mechanism for cross-case analysis.
 
-**What is an ontology :** The [CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology) (Crimes Against Children Ontology) is a formal vocabulary developed to model the entities of a child-exploitation investigation as typed, related objects: platforms, victims, offenders, investigations, and outcomes. CAC is shepherded by [Project VIC International](https://www.projectvic.org/) and is built on the Linux Foundation's [Cyber Domain Ontology](https://cyberdomainontology.org/) stack ([UCO](https://unifiedcyberontology.org/) and [CASE](https://caseontology.org/)). CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.
+**What is an ontology:** The [CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology) (Crimes Against Children Ontology) is a formal vocabulary developed to model the entities of a child-exploitation investigation as typed, related objects: platforms, victims, offenders, investigations, and outcomes. CAC is shepherded by [Project VIC International](https://www.projectvic.org/) and is built on the Linux Foundation's [Cyber Domain Ontology](https://cyberdomainontology.org/) stack ([UCO](https://unifiedcyberontology.org/) and [CASE](https://caseontology.org/)). CaseLinker case data is being aligned to this vocabulary so graphs can be shared, validated, and queried with the same tools used in forensic and intelligence workflows.
 
 **How CaseLinker uses ontologies :** A deterministic mapping layer translates each case's extracted features into CAC entities and relationships, emits per-case RDF graphs, validates them, and merges conformant graphs into a queryable knowledge graph.
 
@@ -334,7 +338,7 @@ Agents can also build cohort graphs on demand via MCP (`case2cac` → `graph_sum
 - **Clusters Tab**: View pre-computed clusters and analyze case reports
 - **Stats Tab**: Coverage over the dataset and case distributions
 - **Tech Landscape**: Technology revolver (platforms, investigation tech, anonymization, P2P) by era
-- **Lifecycle**: PACER exploitation lifecycles — five offense types as CAC ontology state machines (public page; API export requires trusted `CaseLinker-Key`)
+- **Lifecycle**: PACER exploitation lifecycles. Five offense types as CAC ontology state machines (public page; API export requires trusted `CaseLinker-Key`)
 - **Query**: Custom analysis lab (public APIs)
 - **LLM**: Natural-language queries over case statistics (SQL-backed; rate limited on production)
 - **Case Studies Tab**: Era-organized narrative case studies (`data/case_studies.json`)
@@ -390,7 +394,7 @@ CaseLinker/
 │   │   └── big_bang/                 # half-sample — Big Bang button
 │   ├── big_bang.py                   # ~1k bridge-dense subset for /patterns/graph
 │   └── merge_graph_cache.py          # merged compare / all pools (API)
-├── caselinker_mcp/                   # MCP server (36 tools; SSE + Streamable HTTP on Railway)
+├── caselinker_mcp/                   # MCP server (37 tools; SSE + Streamable HTTP on Railway)
 │   ├── server.py                     # FastMCP entry point
 │   ├── README.md                     # Hosted auth, Cursor config, graph workflow
 │   └── tool_registry.md              # Full tool catalog
@@ -443,7 +447,8 @@ When the ML stack is enabled, NER adds organizations, locations, dates, and ages
 - `GET /api/cases-summaries-chunk` - Public paginated summaries (`offset`, `limit` ≤ 500); UI loads the full timeline via many small responses, not one bulk JSON
 - `POST /api/cases-summaries-by-ids` - Public batched summaries (max 500 ids per request) for cluster membership and similar flows
 - `GET /api/cases/{case_id}` - Single case (public responses omit `raw_data`; narrative available as `case_text` for UI drill-down)
-- `GET /visualization` - Interactive visualization page with multiple chart types (Timeline, Severity Indicators, Prosecution Outcomes, Previous Perpetrator, Environment, Organizations Involved)
+- `GET /visualization` - Platform Harm Dashboard (Q1 affordance-misuse-harm analysis, tiered evidence, manual platform analysis)
+- `GET /api/q1/platform-evidence` - Q1 platform evidence index or per-platform cohort (`platform`, optional `tier`)
 - `GET /search` - Facet decision tree over stored cases (D3); prune filters; cohort case IDs via API
 - `GET /query` - Custom analysis lab (browser-only JavaScript calling public APIs; see page for examples)
 - `GET /lifecycle` - Exploitation lifecycle visualization (public HTML; payload embedded server-side)

@@ -141,7 +141,7 @@ def build_claims() -> list[Claim]:
     add(
         "cover.timespan",
         "Cover",
-        "Corpus timespan is 2002â€“2026.",
+        "Corpus timespan is 2002âÿÿ2026.",
         "corpus_stat",
         "db",
         bold=True,
@@ -307,7 +307,7 @@ def build_claims() -> list[Claim]:
     add(
         "s3.q1_platform_pairs",
         "Â§3.1",
-        "Q1 evidence base: 1,875 cases across 3,128 platformâ€“case records.",
+        "Q1 evidence base: 1,875 cases across 3,128 platformâÿÿcase records.",
         "q1_stat",
         "q1_json",
         why="Platform-case pair count from evidence pipeline.",
@@ -360,11 +360,11 @@ def build_claims() -> list[Claim]:
     add(
         "s3.mcp_tools",
         "Â§3.2",
-        "CaseLinker MCP server exposes 34 case2cac tools.",
+        "CaseLinker MCP server exposes 37 structured tools.",
         "corpus_stat",
         "computed",
         why="Reproducibility / tooling claim.",
-        expected="34",
+        expected="37",
     )
     add(
         "s3.case_uco_classes",
@@ -514,7 +514,7 @@ def build_claims() -> list[Claim]:
     add(
         "s7.law1_contact_primacy",
         "Â§7.3 Law 1",
-        "Law 1 (Contact Primacy): N=7,426 â€” no case documents exploitation without initial contact.",
+        "Law 1 (Contact Primacy): N=7,426 âÿÿ no case documents exploitation without initial contact.",
         "theoretical",
         "lifecycle",
         bold=True,

@@ -11,11 +11,11 @@
   const CAC = "https://cacontology.projectvic.org#";
 
   const CANONICAL_ROWS = [
-    { id: "enticement", color: "#6ee7b7", bg: "#0d1f16" },
-    { id: "production", color: "#f97316", bg: "#1a1008" },
-    { id: "sextortion", color: "#fbbf24", bg: "#1a1608" },
-    { id: "enterprise", color: "#f87171", bg: "#1a0d0d" },
-    { id: "trafficking", color: "#c084fc", bg: "#140d1a" },
+    { id: "enticement", color: "#6ee7b7", bg: "#0d1f16", label: "Enticement", short: "ENT" },
+    { id: "production", color: "#f97316", bg: "#1a1008", label: "Production", short: "PRD" },
+    { id: "sextortion", color: "#fbbf24", bg: "#1a1608", label: "Sextortion", short: "EXT" },
+    { id: "enterprise", color: "#f87171", bg: "#1a0d0d", label: "Enterprise", short: "ENP" },
+    { id: "trafficking", color: "#c084fc", bg: "#140d1a", label: "Trafficking", short: "TRF" },
   ];
 
   const MODALITY_STYLE = {
@@ -29,7 +29,7 @@
 
   const COLUMNS = [
     { key: "initial", type: GROOMING + "InitialContactPhase", label: "InitialContact" },
-    { key: "trust", type: GROOMING + "TrustBuildingPhase", label: "TrustBuilding" },
+    { key: "conditioning", type: GROOMING + "ConditioningPhase", label: "Conditioning" },
     { key: "sexualization", type: GROOMING + "SexualizationPhase", label: "Sexualization" },
     { key: "migration", type: PLATFORMS + "ChannelMigrationEvent", label: "ChannelMigration" },
     { key: "exploitation", type: GROOMING + "ExploitationPhase", terminal: false, label: "Exploitation" },
@@ -175,6 +175,124 @@
   }
 
   let panelEl, backdropEl, payload;
+  let selectedOffenseTypes = new Set(CANONICAL_ROWS.map((r) => r.id));
+  let offenseFilterOpen = false;
+
+  function caseOffenseType(caseData) {
+    return caseData.modality || caseData.id;
+  }
+
+  function filteredCanonicalCases() {
+    const cases = payload.canonical_cases || payload.cases || [];
+    return cases.filter((c) => selectedOffenseTypes.has(caseOffenseType(c)));
+  }
+
+  function filteredCanonicalRows() {
+    return CANONICAL_ROWS.filter((r) => selectedOffenseTypes.has(r.id));
+  }
+
+  function filteredExpansionCases() {
+    return (payload.expansion_cases || []).filter((c) => selectedOffenseTypes.has(caseOffenseType(c)));
+  }
+
+  function updateOffenseSummary() {
+    const summaryEl = document.getElementById("offense-filter-summary");
+    if (!summaryEl) return;
+    const allSelected = selectedOffenseTypes.size === CANONICAL_ROWS.length;
+    if (allSelected) {
+      summaryEl.innerHTML = '<span class="offense-filter-summary-all">All</span>';
+      return;
+    }
+    summaryEl.innerHTML = CANONICAL_ROWS.filter((r) => selectedOffenseTypes.has(r.id))
+      .map(
+        (r) =>
+          `<span class="offense-filter-chip" style="background:${r.color}" title="${escapeHtml(r.label)}"></span>`
+      )
+      .join("");
+  }
+
+  function syncOffenseOptionButtons() {
+    document.querySelectorAll(".offense-filter-option").forEach((btn) => {
+      const on = selectedOffenseTypes.has(btn.dataset.type);
+      btn.classList.toggle("is-on", on);
+      btn.classList.toggle("is-off", !on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  function applyOffenseFilter() {
+    updateOffenseSummary();
+    syncOffenseOptionButtons();
+    renderSwimlanes();
+    renderExpansionSection();
+  }
+
+  function setOffenseFilterOpen(open) {
+    offenseFilterOpen = open;
+    const root = document.getElementById("offense-filter");
+    const panel = document.getElementById("offense-filter-panel");
+    const trigger = document.getElementById("offense-filter-trigger");
+    if (!root || !panel || !trigger) return;
+    root.classList.toggle("open", open);
+    panel.hidden = !open;
+    trigger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function toggleOffenseType(typeId) {
+    if (selectedOffenseTypes.has(typeId)) {
+      if (selectedOffenseTypes.size <= 1) return;
+      selectedOffenseTypes.delete(typeId);
+    } else {
+      selectedOffenseTypes.add(typeId);
+    }
+    applyOffenseFilter();
+  }
+
+  function toggleAllOffenseTypes() {
+    const allSelected = selectedOffenseTypes.size === CANONICAL_ROWS.length;
+    selectedOffenseTypes = allSelected ? new Set(["enticement"]) : new Set(CANONICAL_ROWS.map((r) => r.id));
+    applyOffenseFilter();
+  }
+
+  function renderOffenseFilter() {
+    const optionsEl = document.getElementById("offense-filter-options");
+    const trigger = document.getElementById("offense-filter-trigger");
+    const allBtn = document.getElementById("offense-filter-all");
+    if (!optionsEl || !trigger) return;
+
+    optionsEl.innerHTML = CANONICAL_ROWS.map(
+      (row) =>
+        `<button type="button" class="offense-filter-option is-on" data-type="${row.id}" style="--chip-color:${row.color}" aria-pressed="true">${row.short}</button>`
+    ).join("");
+
+    optionsEl.querySelectorAll(".offense-filter-option").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleOffenseType(btn.dataset.type);
+      });
+    });
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setOffenseFilterOpen(!offenseFilterOpen);
+    });
+
+    if (allBtn) {
+      allBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleAllOffenseTypes();
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      const root = document.getElementById("offense-filter");
+      if (offenseFilterOpen && root && !root.contains(e.target)) {
+        setOffenseFilterOpen(false);
+      }
+    });
+
+    updateOffenseSummary();
+  }
 
   function openPanel(phase, caseData) {
     const crossAll = (payload.cross_case_all || {})[phase.type] || { count: 0, cases: [] };
@@ -254,7 +372,7 @@
     const el = document.getElementById("fundamental-section");
     if (!el) return;
     const names = (payload.fundamental_display || []).map(shortType);
-    const ordered = ["InitialContactPhase", "TrustBuildingPhase", "ExploitationPhase", "MaintenancePhase"].filter(
+    const ordered = ["InitialContactPhase", "ConditioningPhase", "ExploitationPhase", "MaintenancePhase"].filter(
       (n) => names.includes(n) || (payload.fundamental || []).some((iri) => iri.endsWith(n))
     );
     el.innerHTML = `
@@ -321,7 +439,7 @@
         if (iri === GROOMING + "ExploitationPhase" && col.terminal) fundamentalCols.add(i);
       });
     });
-    ["InitialContactPhase", "TrustBuildingPhase", "ExploitationPhase", "MaintenancePhase"].forEach((name) => {
+    ["InitialContactPhase", "ConditioningPhase", "ExploitationPhase", "MaintenancePhase"].forEach((name) => {
       COLUMNS.forEach((col, i) => {
         if (col.label.replace(/Phase$/, "") === name.replace(/Phase$/, "") || col.type.endsWith(name)) {
           if (name === "ExploitationPhase" && col.terminal) fundamentalCols.add(i);
@@ -598,15 +716,16 @@
   }
 
   function renderSwimlanes() {
-    const canonicalCases = payload.canonical_cases || payload.cases || [];
-    renderSwimlaneCanvas("lifecycle-canvas", CANONICAL_ROWS, canonicalCases, {
+    const canonicalCases = filteredCanonicalCases();
+    const rows = filteredCanonicalRows();
+    renderSwimlaneCanvas("lifecycle-canvas", rows, canonicalCases, {
       markerId: "arrow-canonical",
-      showDecorations: true,
+      showDecorations: selectedOffenseTypes.has("sextortion"),
     });
   }
 
   function renderExpansionSection() {
-    const expansionCases = payload.expansion_cases || [];
+    const expansionCases = filteredExpansionCases();
     const section = document.getElementById("expansion-section");
     if (!section || expansionCases.length === 0) {
       if (section) section.hidden = true;
@@ -644,7 +763,10 @@
     backdropEl = document.getElementById("detail-backdrop");
     backdropEl.addEventListener("click", closePanel);
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closePanel();
+      if (e.key === "Escape") {
+        if (offenseFilterOpen) setOffenseFilterOpen(false);
+        else closePanel();
+      }
     });
 
     try {
@@ -653,6 +775,7 @@
         throw new Error("Lifecycle payload missing — open /lifecycle via the CaseLinker server.");
       }
       payload = JSON.parse(embedded.textContent);
+      renderOffenseFilter();
       renderStats();
       renderSwimlanes();
       renderFundamentalSection();
