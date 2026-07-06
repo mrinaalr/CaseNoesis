@@ -1263,7 +1263,7 @@ async def serve_home():
     if html_path.exists():
         return HTMLResponse(content=read_utf8_text_file(html_path))
     else:
-        return HTMLResponse(content="<h1>CaseLinker</h1><p>Home page not found. Go to <a href='/visualization'>/visualization</a></p>", status_code=404)
+        return HTMLResponse(content="<h1>CaseNoesis</h1><p>Home page not found.</p>", status_code=404)
 
 
 @app.get("/api/cases")
@@ -3006,33 +3006,6 @@ def api_root():
     """API root endpoint"""
     return {"message": "CaseLinker API", "version": "1.0"}
 
-@app.get("/visualization", response_class=HTMLResponse)
-async def serve_visualization():
-    """Serve the HTML visualization page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "visualization.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Visualization not found</h1>", status_code=404)
-
-@app.get("/analysis", response_class=HTMLResponse)
-async def serve_analysis():
-    """Serve the HTML analysis page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "analysis.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Analysis page not found</h1>", status_code=404)
-
-@app.get("/clusters", response_class=HTMLResponse)
-async def serve_clusters():
-    """Serve the HTML clusters page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "clusters.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Clusters page not found</h1>", status_code=404)
-
 @app.get("/api/location-stats")
 @limiter.limit("60/minute")
 def get_location_stats(request: Request):
@@ -3096,43 +3069,6 @@ def get_location_stats(request: Request):
         return []
 
 
-@app.get("/stats", response_class=HTMLResponse)
-async def serve_stats():
-    """Serve the HTML stats page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "stats.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Stats page not found</h1>", status_code=404)
-
-@app.get("/search", response_class=HTMLResponse)
-async def serve_search():
-    """Serve the HTML search page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "search.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Search page not found</h1>", status_code=404)
-
-
-@app.get("/query", response_class=HTMLResponse)
-async def serve_query():
-    """Custom analysis: browser-side JS snippets calling public APIs only."""
-    html_path = Path(__file__).parent.parent / "visualization" / "query.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>Query page not found</h1>", status_code=404)
-
-
-@app.get("/llm", response_class=HTMLResponse)
-async def serve_llm():
-    """LLM assistant UI (Groq or Gemini + read-only DB via ``nl_llm`` / ``POST /api/llm/chat``)."""
-    html_path = Path(__file__).parent.parent / "visualization" / "LLM.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>LLM page not found</h1>", status_code=404)
-
-
 @app.post("/api/llm/chat")
 @limiter.limit("15/minute")
 def api_llm_chat(request: Request, body: LlmChatBody):
@@ -3171,51 +3107,6 @@ def api_llm_chat(request: Request, body: LlmChatBody):
         raise HTTPException(status_code=502, detail=str(e)) from e
 
 
-def _lifecycle_payload_html_snippet() -> str:
-    """Embed L* payload in /lifecycle HTML so the public page needs no API key."""
-    try:
-        from state_machines.lifecycle_api import build_lifecycle_payload
-
-        raw = json.dumps(build_lifecycle_payload(), ensure_ascii=False)
-        safe = raw.replace("</", "<\\/")
-        return (
-            f'  <script id="lifecycle-payload" type="application/json">{safe}</script>\n'
-        )
-    except Exception as exc:
-        logging.getLogger(__name__).error("lifecycle payload embed failed: %s", exc, exc_info=True)
-        return ""
-
-
-@app.get("/lifecycle", response_class=HTMLResponse)
-async def serve_lifecycle():
-    """Lifecycle analysis page (public; data embedded server-side)."""
-    viz_dir = Path(__file__).parent.parent / "visualization"
-    html_path = viz_dir / "lifecycle.html"
-    if not html_path.exists():
-        return HTMLResponse(content="<h1>Lifecycle page not found</h1>", status_code=404)
-    html = read_utf8_text_file(html_path)
-    js_path = viz_dir / "assets" / "lifecycle.js"
-    css_path = viz_dir / "assets" / "lifecycle.css"
-    if js_path.is_file():
-        v = int(js_path.stat().st_mtime)
-        html = html.replace(
-            "/viz-assets/lifecycle.js",
-            f"/viz-assets/lifecycle.js?v={v}",
-            1,
-        )
-    if css_path.is_file():
-        v = int(css_path.stat().st_mtime)
-        html = html.replace(
-            "/viz-assets/lifecycle.css",
-            f"/viz-assets/lifecycle.css?v={v}",
-            1,
-        )
-    snippet = _lifecycle_payload_html_snippet()
-    if snippet and "</body>" in html:
-        html = html.replace("</body>", snippet + "</body>", 1)
-    return HTMLResponse(content=html)
-
-
 @app.get("/api/lifecycle/cases")
 @limiter.limit("100/minute")
 def get_lifecycle_cases(request: Request):
@@ -3249,15 +3140,6 @@ def get_lifecycle_lstar(request: Request):
         return load_lstar_raw()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lifecycle L* output unavailable: {e}") from e
-
-
-@app.get("/triage", response_class=HTMLResponse)
-async def serve_triage():
-    """Serve the triage ML evaluation page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "triage.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>Triage page not found</h1>", status_code=404)
 
 
 @app.get("/api/triage-eval")
@@ -3444,16 +3326,6 @@ def api_triage_live(body: LiveTriageRequest):
         "bundle_path": out.get("bundle_path"),
         "use_agencies": out.get("use_agencies"),
     }
-
-
-@app.get("/case-studies", response_class=HTMLResponse)
-async def serve_case_studies():
-    """Serve the HTML case studies page (gate + reading experience)."""
-    html_path = Path(__file__).parent.parent / "visualization" / "case-studies.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Case Studies page not found</h1>", status_code=404)
 
 
 # ---- Case Studies content + community notes ----------------------------------
@@ -3676,87 +3548,6 @@ def api_case_studies_notes_post(request: Request, case_id: str, body: CaseStudyN
         logger.warning("case-studies notes persist failed: %s", e)
         raise HTTPException(status_code=500, detail="Failed to save note")
     return note
-
-
-@app.get("/tech-landscape", response_class=HTMLResponse)
-async def serve_tech_landscape():
-    """Serve the Technology page (/tech-landscape); data from GET /api/technology-revolver."""
-    html_path = Path(__file__).parent.parent / "visualization" / "tech-landscape.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>Tech Landscape</h1><p>Page not found</p>", status_code=404)
-
-
-@app.get("/sources", response_class=HTMLResponse)
-async def serve_sources():
-    """Serve the HTML sources page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "sources.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Sources page not found</h1>", status_code=404)
-
-@app.get("/audit", response_class=HTMLResponse)
-async def serve_audit():
-    """Serve the HTML audit page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "audit.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Audit page not found</h1>", status_code=404)
-
-
-@app.get("/under-the-hood", response_class=HTMLResponse)
-async def serve_under_the_hood():
-    """Serve the HTML under-the-hood architecture page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "under-the-hood.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Under the Hood</h1><p>Page not found</p>", status_code=404)
-
-@app.get("/patterns", response_class=HTMLResponse)
-async def serve_patterns():
-    """Serve the Patterns research documentation page"""
-    html_path = Path(__file__).parent.parent / "visualization" / "patterns.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Patterns page not found</h1>", status_code=404)
-
-
-@app.get("/patterns/graph", response_class=HTMLResponse)
-async def serve_patterns_graph():
-    """Serve the CAC Ontology knowledge graph explorer (Phase 2)"""
-    html_path = Path(__file__).parent.parent / "visualization" / "patterns-graph.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    else:
-        return HTMLResponse(content="<h1>Knowledge graph page not found</h1>", status_code=404)
-
-
-@app.get("/patterns/questions/{question_id}", response_class=HTMLResponse)
-async def serve_patterns_question(question_id: str):
-    """
-    Serve an interactive question findings page (Q1–Q3).
-
-    Expected IDs:
-      - q01 .. q03
-      - q1  .. q3 (normalized to zero-padded)
-    """
-    q = (question_id or "").strip().lower()
-    # Normalize q1 → q01 (and q001 → q01 if someone pastes it)
-    if re.fullmatch(r"q\d{1,3}", q or ""):
-        n = int(q[1:])
-        q = f"q{n:02d}"
-
-    if not re.fullmatch(r"q0[1-3]", q):
-        return HTMLResponse(content="<h1>Question page not found</h1>", status_code=404)
-
-    html_path = Path(__file__).parent.parent / "visualization" / "questions" / f"{q}.html"
-    if html_path.exists():
-        return HTMLResponse(content=read_utf8_text_file(html_path))
-    return HTMLResponse(content="<h1>Question page not found</h1>", status_code=404)
 
 
 _viz_assets = Path(__file__).resolve().parent.parent / "visualization" / "assets"
