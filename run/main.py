@@ -1266,6 +1266,121 @@ async def serve_home():
         return HTMLResponse(content="<h1>CaseNoesis</h1><p>Home page not found.</p>", status_code=404)
 
 
+_TYPOLOGIES = {
+    "elder-fraud": {
+        "title": "Elder Fraud",
+        "tagline": "Trust-based financial exploitation",
+        "statute": "18 U.S.C. § 1343 (wire fraud); § 1349 (conspiracy); § 1028A (aggravated identity theft)",
+        "summary": "Scammers condition elderly victims through impersonation, urgency, and platform-mediated trust signals before extracting assets via wire transfers, gift cards, or cryptocurrency. In <em>United States v. Keel</em>, a nationwide scheme impersonated Treasury agents and targeted elderly victims with in-person cash pickups, including a 77-year-old victim. The sentencing documents three victims (Green Dot cards worth roughly $60,000, a $300,000 cash pickup, and a $36,000 withdrawal) and a co-conspirator travel trail from Seattle to New Orleans on plane tickets purchased with the same credit card, culminating in a sting-operation arrest at a planned pickup. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-edla/pr/florida-man-sentenced-10-years-prison-impersonating-federal-officers-nationwide-elder\" target=\"_blank\" rel=\"noopener\">Sentencing (Oct 2023)</a></span>",
+        "phases": [
+            ("Initial contact", True, "Impersonation of authority: IRS, bank, grandchild, or romance."),
+            ("Conditioning", True, "Urgency, secrecy, and trust-building over voice or messaging."),
+            ("Asset extraction", False, "Directed payment through platform rails or mule networks."),
+            ("Exploitation", True, "Financial drain and identity compromise."),
+            ("Maintenance", True, "Repeat extraction or cover up until discovery or intervention."),
+        ],
+        "harms": ["Financial loss", "Identity compromise", "Psychological distress"],
+    },
+    "trafficking": {
+        "title": "Trafficking",
+        "tagline": "Commercial exploitation networks",
+        "statute": "18 U.S.C. § 1591(a) (sex trafficking); § 1594(c) (conspiracy)",
+        "summary": "Traffickers recruit and maintain victims through classifieds, social platforms, and encrypted messaging, lowering the cost of coordination across a distributed enterprise.",
+        "phases": [
+            ("Initial contact", True, "Recruitment via ads, DMs, or false employment offers."),
+            ("Conditioning", True, "Dependency, isolation, and debt bondage establishment."),
+            ("Commercialization", False, "Listing, scheduling, and payment through platform infra."),
+            ("Exploitation", True, "Commercial sex or forced labor realization."),
+            ("Maintenance", True, "Surveillance, threat cycles, and network coordination."),
+        ],
+        "harms": ["Physical exploitation", "Psychological coercion", "Debt bondage", "Health endangerment"],
+    },
+    "racketeering-enterprises": {
+        "title": "Racketeering & Enterprises",
+        "tagline": "Cyber RICO and coordinated criminal enterprises",
+        "statute": "18 U.S.C. § 1962(c) (conduct of enterprise through racketeering); § 1962(d) (RICO conspiracy)",
+        "summary": "Modern racketeering enterprises form online through gaming communities, encrypted chats, and social graphs, then scale wire fraud and laundering across differentiated roles. In <em>United States v. Lam et al.</em>, the \"Social Engineering Enterprise\" (Malone Lam and 12+ co-defendants) stole $263M+ in Bitcoin through coordinated social engineering, with indictment-level roles spanning database hackers, organizers, target identifiers, callers, money launderers, and residential burglars targeting hardware wallets. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-dc/pr/indictment-charges-two-230-million-cryptocurrency-scam\" target=\"_blank\" rel=\"noopener\">Indictment (Sept 2024)</a> · <a href=\"https://www.justice.gov/usao-dc/pr/california-money-launderer-sentenced-dc-70-months-role-scheme-stole-263-million\" target=\"_blank\" rel=\"noopener\">Sentencing (Apr 2026)</a></span>",
+        "phases": [
+            ("Initial contact", True, "Co-conspirators and targets linked via gaming platforms, DMs, and online social networks."),
+            ("Conditioning", True, "Enterprise cohesion, trust norms, and compartmentalized operational structure."),
+            ("Role specialization", False, "Distributed functions: hackers, organizers, callers, launderers, physical crews."),
+            ("Exploitation", True, "Social engineering, credential and database access, wire fraud, and asset extraction."),
+            ("Maintenance", True, "Laundering chains, operational security, and scheme scaling across platforms."),
+        ],
+        "harms": ["Financial loss", "Identity compromise", "Physical intrusion"],
+    },
+    "extortion": {
+        "title": "Extortion",
+        "tagline": "Coercion leverage cycles",
+        "statute": "18 U.S.C. § 875(d) (interstate extortionate communications); § 1030(a)(7) (computer extortion)",
+        "summary": "Offenders obtain leverage through sensitive material or fabricated threats, then cycle coercion via platforms that preserve leverage and enable rapid, irreversible payment.",
+        "phases": [
+            ("Initial contact", True, "Grooming, breach, or cold-contact threat delivery."),
+            ("Conditioning", True, "Escalating demands and isolation from support networks."),
+            ("Leverage acquisition", False, "CSAM, credentials, or reputational material obtained."),
+            ("Exploitation", True, "Payment demand or continued compliance cycle."),
+            ("Maintenance", True, "Threat renewal and platform-hopping to evade removal."),
+        ],
+        "harms": ["Financial loss", "Psychological trauma", "Reputational harm", "Self-harm risk"],
+    },
+}
+
+
+def _typology_list_html(items: list[str]) -> str:
+    return "".join(f"<li>{item}</li>" for item in items)
+
+
+def _phase_name_to_state_class(phase_name: str) -> str:
+    """Map a trajectory phase label to a CAC ontology offense-phase class name."""
+    return "".join(word.capitalize() for word in phase_name.replace("-", " ").split()) + "Phase"
+
+
+def _typology_states_html(phases: list[tuple]) -> str:
+    states = [_phase_name_to_state_class(name) for name, _, _ in phases]
+    return _typology_list_html(states)
+
+
+def _typology_phases_html(phases: list[tuple]) -> str:
+    parts = []
+    for name, is_fundamental, desc in phases:
+        cls = "typ-phase is-fundamental" if is_fundamental else "typ-phase"
+        parts.append(
+            f'<div class="{cls}"><div class="typ-phase-label">{name}</div>'
+            f'<div class="typ-phase-desc">{desc}</div></div>'
+        )
+    return "".join(parts)
+
+
+@app.get("/typologies", response_class=HTMLResponse)
+async def serve_typologies():
+    """All offense typologies overview."""
+    html_path = Path(__file__).parent.parent / "visualization" / "typologies.html"
+    if not html_path.exists():
+        return HTMLResponse(content="<h1>Typologies page not found</h1>", status_code=404)
+    return HTMLResponse(content=read_utf8_text_file(html_path))
+
+
+@app.get("/typologies/{typology_slug}", response_class=HTMLResponse)
+async def serve_typology(typology_slug: str):
+    """Single typology detail page."""
+    meta = _TYPOLOGIES.get((typology_slug or "").strip())
+    if not meta:
+        return HTMLResponse(content="<h1>Typology not found</h1>", status_code=404)
+    html_path = Path(__file__).parent.parent / "visualization" / "typology.html"
+    if not html_path.exists():
+        return HTMLResponse(content="<h1>Typology page not found</h1>", status_code=404)
+    html = read_utf8_text_file(html_path)
+    html = html.replace("{{TITLE}}", meta["title"])
+    html = html.replace("{{TAGLINE}}", meta["tagline"])
+    html = html.replace("{{STATUTE}}", meta["statute"])
+    html = html.replace("{{SUMMARY}}", meta["summary"])
+    html = html.replace("{{PHASES}}", _typology_phases_html(meta["phases"]))
+    html = html.replace("{{AFFORDANCES}}", "")
+    html = html.replace("{{STATES}}", "")
+    html = html.replace("{{HARMS}}", _typology_list_html(meta["harms"]))
+    return HTMLResponse(content=html)
+
+
 @app.get("/api/cases")
 @limiter.limit("100/minute")
 def get_all_cases(request: Request, include_raw_data: bool = False):

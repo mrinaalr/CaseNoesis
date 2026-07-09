@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} · CaseNoesis</title>
+    <meta name="description" content="{{SUMMARY}}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/viz-assets/noesis-nav.css">
+    <link rel="stylesheet" href="/viz-assets/noesis-typologies.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Case<span>Noesis</span></a>
+        <nav>
+            <a href="/#framework">Framework</a>
+            <a href="/#paper">Paper</a>
+            <div class="nav-item">
+                <a href="/typologies" class="has-menu">Typologies</a>
+                <div class="nav-dropdown">
+                    <div class="dd-label">Browse</div>
+                    <a href="/typologies/elder-fraud">Elder Fraud</a>
+                    <a href="/typologies/trafficking">Trafficking</a>
+                    <a href="/typologies/racketeering-enterprises">Racketeering &amp; Enterprises</a>
+                    <a href="/typologies/extortion">Extortion</a>
+                </div>
+            </div>
+            <a href="/#laws">Laws</a>
+            <a href="https://mrinaalr.github.io/website/Affordance%2C%20Misuse%2C%20Harm%2C%20Kill%20Chain.pdf" target="_blank" rel="noopener">PDF</a>
+            <a class="status-pill" href="https://github.com/built-by-mars/CaseNoesis" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+    </header>
+
+    <main class="typ-page">
+        <a class="typ-back" href="/typologies">← All typologies</a>
+        <div class="typ-hero">
+            <div class="typ-section-label">Typology</div>
+            <h1>{{TITLE}}</h1>
+            <p class="tagline">{{TAGLINE}}</p>
+            <div class="typ-meta">{{STATUTE}}</div>
+            <p class="typ-summary">{{SUMMARY}}</p>
+        </div>
+
+        <div class="typ-section-label">Theoretized trajectory <span class="typ-math">\(L^{*}_{g,A}\)</span></div>
+        <div class="typ-phase-track">
+            {{PHASES}}
+        </div>
+
+        <div class="typ-columns">
+            <div class="typ-column">
+                <h3>A · Affordances</h3>
+                <ul>{{AFFORDANCES}}</ul>
+            </div>
+            <div class="typ-column">
+                <h3>S · States</h3>
+                <ul>{{STATES}}</ul>
+            </div>
+            <div class="typ-column">
+                <h3>ψ · Harm vectors</h3>
+                <ul>{{HARMS}}</ul>
+            </div>
+        </div>
+
+        <section class="typ-status" aria-label="Development status">
+            <h2>Corpus &amp; ontology in development</h2>
+            <p>
+                State machines, lifecycle graphs, and enforcement-case linkage for this typology
+                will be added as ingestion expands beyond the ICAC foundation.
+            </p>
+        </section>
+    </main>
+
+    <footer class="typ-footer">
+        <p>CaseNoesis · Early stage · Typology ontology &amp; corpus under development</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof renderMathInElement === "function") {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "\\(", right: "\\)", display: false },
+                    ],
+                    throwOnError: false,
+                });
+            }
+        });
+    </script>
+</body>
+</html>

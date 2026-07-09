@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typologies · CaseNoesis</title>
+    <meta name="description" content="Offense typologies under the affordance–misuse–harm framework.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/viz-assets/noesis-nav.css">
+    <link rel="stylesheet" href="/viz-assets/noesis-typologies.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Case<span>Noesis</span></a>
+        <nav>
+            <a href="/#framework">Framework</a>
+            <a href="/#paper">Paper</a>
+            <div class="nav-item">
+                <a href="/typologies" class="has-menu">Typologies</a>
+                <div class="nav-dropdown">
+                    <div class="dd-label">Browse</div>
+                    <a href="/typologies/elder-fraud">Elder Fraud</a>
+                    <a href="/typologies/trafficking">Trafficking</a>
+                    <a href="/typologies/racketeering-enterprises">Racketeering &amp; Enterprises</a>
+                    <a href="/typologies/extortion">Extortion</a>
+                </div>
+            </div>
+            <a href="/#laws">Laws</a>
+            <a href="https://mrinaalr.github.io/website/Affordance%2C%20Misuse%2C%20Harm%2C%20Kill%20Chain.pdf" target="_blank" rel="noopener">PDF</a>
+            <a class="status-pill" href="https://github.com/built-by-mars/CaseNoesis" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+    </header>
+
+    <main class="typ-page">
+        <div class="typ-hero">
+            <div class="typ-section-label">Noesis · Typologies</div>
+            <h1>Offense typologies as structured trajectories</h1>
+            <p class="typ-eq-minimal">\(L^{*}_{g,A} = \arg\underset{L \in \mathrm{Seq}(A)}{\max}\,\mathbb{E}\big[U_g(L)\big]\)</p>
+            <p class="lede">
+                Each offense is a goal-dependent trajectory accelerated through platform affordances, realized as a state path
+                in the exploitation state machine.
+            </p>
+        </div>
+
+        <section class="typ-invariants" aria-label="Backbone invariants">
+            <h2>Backbone invariants</h2>
+            <div class="typ-invariant-flow">
+                <span class="typ-invariant-node is-backbone">Initial contact</span>
+                <span class="typ-invariant-arrow" aria-hidden="true">→</span>
+                <span class="typ-invariant-node is-backbone">Conditioning</span>
+                <span class="typ-invariant-arrow" aria-hidden="true">→</span>
+                <span class="typ-invariant-node is-backbone">Exploitation</span>
+                <span class="typ-invariant-arrow" aria-hidden="true">→</span>
+                <span class="typ-invariant-node is-backbone">Maintenance</span>
+            </div>
+            <p>
+                Law 1 (Contact Primacy): every trajectory begins at initial contact.
+                Law 2 (Backbone Invariance): backbone phases appear across typologies.
+                Variant phases between conditioning and exploitation diverge by goal.
+            </p>
+        </section>
+
+        <div class="typ-section-label">All typologies</div>
+        <div class="typ-grid">
+            <a class="typ-card" href="/typologies/elder-fraud" style="--card-accent: var(--spectrum-2);">
+                <h3>Elder Fraud</h3>
+                <div class="typ-card-tagline">Trust-based financial exploitation</div>
+                <p>Scammers condition elderly victims through impersonation, urgency, and platform-mediated trust signals before extracting assets.</p>
+                <div class="typ-affordance-tags">
+                    <span>Contact discovery</span>
+                    <span>Unmonitored comm.</span>
+                    <span>Coordination</span>
+                </div>
+                <span class="typ-card-link">View typology →</span>
+            </a>
+            <a class="typ-card" href="/typologies/trafficking" style="--card-accent: var(--spectrum-5);">
+                <h3>Trafficking</h3>
+                <div class="typ-card-tagline">Commercial exploitation networks</div>
+                <p>Recruitment, conditioning, and maintenance of victims through classifieds, messaging, and payment rails that lower coordination cost.</p>
+                <div class="typ-affordance-tags">
+                    <span>Control</span>
+                    <span>Distribution infra</span>
+                    <span>Coordination</span>
+                </div>
+                <span class="typ-card-link">View typology →</span>
+            </a>
+            <a class="typ-card" href="/typologies/racketeering-enterprises" style="--card-accent: var(--spectrum-3);">
+                <h3>Racketeering &amp; Enterprises</h3>
+                <div class="typ-card-tagline">Cyber RICO and coordinated criminal enterprises</div>
+                <p>Online-formed enterprises coordinate social engineering, wire fraud, and laundering at scale with explicit role differentiation.</p>
+                <div class="typ-affordance-tags">
+                    <span>Coordination</span>
+                    <span>Anonymity</span>
+                    <span>Unmonitored comm.</span>
+                </div>
+                <span class="typ-card-link">View typology →</span>
+            </a>
+            <a class="typ-card" href="/typologies/extortion" style="--card-accent: var(--spectrum-1);">
+                <h3>Extortion</h3>
+                <div class="typ-card-tagline">Coercion leverage cycles</div>
+                <p>Offenders obtain leverage through sensitive material or threats, then cycle coercion via platforms that preserve leverage and enable rapid payment.</p>
+                <div class="typ-affordance-tags">
+                    <span>Coercion leverage</span>
+                    <span>Ephemerality</span>
+                    <span>Unmonitored comm.</span>
+                </div>
+                <span class="typ-card-link">View typology →</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="typ-footer">
+        <p>CaseNoesis · Early stage · Typology ontology &amp; corpus under development</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof renderMathInElement === "function") {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "\\(", right: "\\)", display: false },
+                    ],
+                    throwOnError: false,
+                });
+            }
+        });
+    </script>
+</body>
+</html>

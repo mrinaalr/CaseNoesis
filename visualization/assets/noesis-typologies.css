@@ -1,0 +1,386 @@
+/* CaseNoesis typology views */
+:root {
+    --ink: #1c1b19;
+    --ink-muted: #5c5852;
+    --paper: #f6f3ec;
+    --paper-deep: #ebe6db;
+    --line: rgba(28, 27, 25, 0.12);
+    --accent: #4a5d6b;
+    --accent-soft: #8a9aa6;
+    --invariant: #6b5b4a;
+    --invariant-bg: rgba(107, 91, 74, 0.08);
+    --spectrum-1: #c45c4a;
+    --spectrum-2: #d4a03c;
+    --spectrum-3: #6b8f5e;
+    --spectrum-4: #4a7a9b;
+    --spectrum-5: #6b5b8a;
+    --max: 1080px;
+}
+
+.typ-page {
+    padding: 6.5rem 2rem 5rem;
+    max-width: var(--max);
+    margin: 0 auto;
+}
+
+.typ-hero { margin-bottom: 2.5rem; }
+
+.typ-hero h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+}
+
+.typ-hero .tagline {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--accent);
+    margin-bottom: 0.85rem;
+}
+
+.typ-hero .typ-eq-minimal {
+    margin: 0.2rem 0 0.85rem;
+    text-align: left;
+    overflow-x: auto;
+}
+
+.typ-hero .typ-eq-minimal .katex {
+    font-size: 0.9em;
+    color: var(--ink-muted);
+}
+
+.typ-section-label .typ-math {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+}
+
+.typ-section-label .typ-math .katex {
+    font-size: 1.15em;
+    color: var(--accent);
+}
+
+.typ-hero .lede {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    max-width: 78ch;
+    line-height: 1.65;
+}
+
+.typ-section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    margin-bottom: 0.75rem;
+}
+
+/* Dark backbone panel */
+.typ-invariants {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem 2.25rem;
+    margin-bottom: 3.5rem;
+}
+
+.typ-invariants h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+}
+
+.typ-invariant-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.35rem;
+    margin-bottom: 1.5rem;
+}
+
+.typ-invariant-node {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(246, 243, 236, 0.25);
+    background: rgba(246, 243, 236, 0.08);
+    color: var(--paper);
+}
+
+.typ-invariant-node.is-backbone {
+    border-color: rgba(212, 160, 60, 0.55);
+    background: rgba(212, 160, 60, 0.12);
+}
+
+.typ-invariant-arrow {
+    color: rgba(246, 243, 236, 0.45);
+    font-size: 0.9rem;
+}
+
+.typ-invariants p {
+    font-size: 0.92rem;
+    color: rgba(246, 243, 236, 0.72);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* Typology cards grid */
+.typ-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.typ-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    border-top: 3px solid var(--card-accent, var(--accent));
+}
+
+.typ-card:hover {
+    border-color: rgba(74, 93, 107, 0.28);
+    box-shadow: 0 8px 32px rgba(28, 27, 25, 0.04);
+}
+
+.typ-card h3 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin: 0 0 0.35rem;
+}
+
+.typ-card-tagline {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+.typ-card p {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0 0 1rem;
+    flex: 1;
+}
+
+.typ-affordance-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+}
+
+.typ-affordance-tags span {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.55rem;
+    background: var(--invariant-bg);
+    color: var(--invariant);
+    border: 1px solid rgba(107, 91, 74, 0.15);
+}
+
+.typ-card-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+/* Single typology page */
+.typ-back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    text-decoration: none;
+}
+
+.typ-back:hover { color: var(--ink); }
+
+.typ-meta {
+    font-size: 0.88rem;
+    color: var(--accent-soft);
+    margin-bottom: 1.15rem;
+    line-height: 1.65;
+    max-width: 70ch;
+}
+
+.typ-meta em {
+    font-style: italic;
+    color: var(--ink-muted);
+}
+
+.typ-summary {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    max-width: 70ch;
+    margin: 0 0 2rem;
+    line-height: 1.75;
+}
+
+.typ-summary em {
+    font-style: italic;
+    color: var(--ink);
+}
+
+.typ-summary .typ-source-links {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.typ-summary a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(74, 93, 107, 0.35);
+}
+
+.typ-summary a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+.typ-phase-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    margin-bottom: 3rem;
+    border: 1px solid var(--line);
+    overflow-x: auto;
+}
+
+.typ-phase {
+    min-width: 0;
+    padding: 1.1rem 1rem;
+    border: none;
+    border-right: 1px solid var(--line);
+    background: var(--paper);
+}
+
+.typ-phase:last-child { border-right: none; }
+
+.typ-phase + .typ-phase { border-left: none; }
+
+.typ-phase.is-fundamental {
+    background: var(--invariant-bg);
+    border-color: rgba(107, 91, 74, 0.22);
+}
+
+.typ-phase-label {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+}
+
+.typ-phase-desc {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+}
+
+.typ-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.typ-column {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 1.5rem;
+}
+
+.typ-column h3 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    margin-bottom: 1rem;
+}
+
+.typ-column ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.typ-column li {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.5;
+}
+
+.typ-column li:last-child { border-bottom: none; }
+
+.typ-status {
+    padding: 2rem;
+    border: 1px dashed var(--line);
+    background: var(--invariant-bg);
+    text-align: center;
+}
+
+.typ-status h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 0.65rem;
+}
+
+.typ-status p {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    max-width: 44ch;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.typ-footer {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 2.5rem 2rem 3.5rem;
+    border-top: 1px solid var(--line);
+    margin-top: 3rem;
+}
+
+.typ-footer p {
+    font-size: 0.82rem;
+    color: var(--accent-soft);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .typ-columns { grid-template-columns: 1fr; }
+    .typ-phase-track {
+        grid-template-columns: 1fr;
+    }
+    .typ-phase {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+    }
+    .typ-phase:last-child { border-bottom: none; }
+}
