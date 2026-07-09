@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -117,73 +118,73 @@
     },
     {
       "@id": "caselinker:wy_dci_2023_005-affordance-cybertip-grooming",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:wy_dci_2023_005-phase-icac-cybertip"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv1-grooming"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Snapchat Cybertip surfaces defendant accounts for ICAC investigative pivot to victim contact analysis"
+      "noesis:misuseDescription": "Snapchat Cybertip surfaces defendant accounts for ICAC investigative pivot to victim contact analysis"
     },
     {
       "@id": "caselinker:wy_dci_2023_005-affordance-grooming-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv1-grooming"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv1-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Interstate Internet and cellular messaging used to coerce MV1 into producing depictions"
+      "noesis:misuseDescription": "Interstate Internet and cellular messaging used to coerce MV1 into producing depictions"
     },
     {
       "@id": "caselinker:wy_dci_2023_005-affordance-production-distribution",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv1-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:wy_dci_2023_005-phase-distribution-window"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Overlapping February–April 2022 distribution conduct tied to same device substrate"
+      "noesis:misuseDescription": "Overlapping February–April 2022 distribution conduct tied to same device substrate"
     },
     {
       "@id": "caselinker:wy_dci_2023_005-affordance-mv2-attempt",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv2-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:wy_dci_2023_005-phase-mv2-attempted-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Prior production pattern repeated against second victim via same electronic channels"
+      "noesis:misuseDescription": "Prior production pattern repeated against second victim via same electronic channels"
     },
     {
       "@id": "caselinker:wy_dci_2023_005-affordance-forfeiture-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:wy_dci_2023_005-phase-device-forfeiture"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:wy_dci_2023_005-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Three forfeited smartphones anchor persistent CSAM possession and multi-victim harm"
+      "noesis:misuseDescription": "Three forfeited smartphones anchor persistent CSAM possession and multi-victim harm"
     }
   ]
 }

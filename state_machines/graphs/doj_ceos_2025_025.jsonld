@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -117,87 +118,87 @@
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-a-ranks",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-website-a-admin"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-multi-site-ranks"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Website A administrator status opens parallel recruitment onto Sites B–D"
+      "noesis:misuseDescription": "Website A administrator status opens parallel recruitment onto Sites B–D"
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-ranks-moderation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-multi-site-ranks"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-global-moderation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "High-volume posting across sites earns global moderator authority"
+      "noesis:misuseDescription": "High-volume posting across sites earns global moderator authority"
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-moderation-migration",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-global-moderation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-four-site-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Staff rank consolidates four dedicated CSAM sites under one operator"
+      "noesis:misuseDescription": "Staff rank consolidates four dedicated CSAM sites under one operator"
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-migration-distribution",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-four-site-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-cross-site-distribution"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Public WiFi plus dark-web stack enables cross-site CP distribution"
+      "noesis:misuseDescription": "Public WiFi plus dark-web stack enables cross-site CP distribution"
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-distribution-maintenance",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-cross-site-distribution"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-sustained-administration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Global moderator duties sustain four-site repositories through arrest"
+      "noesis:misuseDescription": "Global moderator duties sustain four-site repositories through arrest"
     },
     {
       "@id": "caselinker:doj_ceos_2025_025-affordance-maintenance-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_025-phase-sustained-administration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_025-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Four-site distributed archives — no single seizure recovers all circulated material"
+      "noesis:misuseDescription": "Four-site distributed archives — no single seizure recovers all circulated material"
     }
   ]
 }

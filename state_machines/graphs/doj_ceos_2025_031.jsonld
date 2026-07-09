@@ -4,6 +4,7 @@
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -129,101 +130,101 @@
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-registration-ladder",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-forum-registration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-promotion-ladder"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Open forum lowers barrier; CP sharing unlocks membership tiers"
+      "noesis:misuseDescription": "Open forum lowers barrier; CP sharing unlocks membership tiers"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-ladder-coaching",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-promotion-ladder"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-staff-coaching"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Staff room training converts contributors into enterprise operators"
+      "noesis:misuseDescription": "Staff room training converts contributors into enterprise operators"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-coaching-migration",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-staff-coaching"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-tiered-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Moderator authority moves users into gated interior rooms"
+      "noesis:misuseDescription": "Moderator authority moves users into gated interior rooms"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-migration-distribution",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-tiered-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-link-distribution"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Specialized rooms channel link posts to external file hosts"
+      "noesis:misuseDescription": "Specialized rooms channel link posts to external file hosts"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-distribution-moderation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-link-distribution"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-gated-moderation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Moderation sustains on-topic CP repositories across rooms"
+      "noesis:misuseDescription": "Moderation sustains on-topic CP repositories across rooms"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-moderation-opsec",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-gated-moderation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-opsec-culture"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "OPSEC room and encryption sustain enterprise despite LE infiltration risk"
+      "noesis:misuseDescription": "OPSEC room and encryption sustain enterprise despite LE infiltration risk"
     },
     {
       "@id": "caselinker:doj_ceos_2025_031-affordance-opsec-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_031-phase-opsec-culture"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_031-phase-terminal-exploitation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Distributed file-host copies and device archives — no single seizure recovers all material"
+      "noesis:misuseDescription": "Distributed file-host copies and device archives — no single seizure recovers all material"
     }
   ]
 }

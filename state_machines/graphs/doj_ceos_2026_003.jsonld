@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:doj_ceos_2026_003-affordance-access-dependency",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_003-phase-residence-access"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_003-phase-dependency-grooming"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Inherited diplomatic-residence trust lowers barriers to dependency grooming"
+      "noesis:misuseDescription": "Inherited diplomatic-residence trust lowers barriers to dependency grooming"
     },
     {
       "@id": "caselinker:doj_ceos_2026_003-affordance-dependency-escalation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_003-phase-dependency-grooming"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_003-phase-physical-escalation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Maternal-illness leverage and poverty dependence enable physical escalation"
+      "noesis:misuseDescription": "Maternal-illness leverage and poverty dependence enable physical escalation"
     },
     {
       "@id": "caselinker:doj_ceos_2026_003-affordance-escalation-assaults",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_003-phase-physical-escalation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_003-phase-hands-on-assaults"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Gated residence privacy and embassy status shield repeated hands-on assaults"
+      "noesis:misuseDescription": "Gated residence privacy and embassy status shield repeated hands-on assaults"
     },
     {
       "@id": "caselinker:doj_ceos_2026_003-affordance-assaults-whatsapp",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_003-phase-hands-on-assaults"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_003-phase-whatsapp-control"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "WhatsApp thread sustains subservience demands parallel to in-person abuse"
+      "noesis:misuseDescription": "WhatsApp thread sustains subservience demands parallel to in-person abuse"
     },
     {
       "@id": "caselinker:doj_ceos_2026_003-affordance-whatsapp-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_003-phase-whatsapp-control"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_003-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Device password control and obstruction compound harm until federal prosecution"
+      "noesis:misuseDescription": "Device password control and obstruction compound harm until federal prosecution"
     }
   ]
 }

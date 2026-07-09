@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:ncmec_2023_190-affordance-onset-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_190-phase-snapchat-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_190-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Rotating Snapchat personas lower victim ability to verify offender identity"
+      "noesis:misuseDescription": "Rotating Snapchat personas lower victim ability to verify offender identity"
     },
     {
       "@id": "caselinker:ncmec_2023_190-affordance-trust-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_190-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_190-phase-jd1-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Instructional grooming on private Snapchat thread precedes first compliance video"
+      "noesis:misuseDescription": "Instructional grooming on private Snapchat thread precedes first compliance video"
     },
     {
       "@id": "caselinker:ncmec_2023_190-affordance-production-multi",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_190-phase-jd1-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_190-phase-multi-victim-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Successful Jane Doe 1 production scales to parallel Snapchat victim threads"
+      "noesis:misuseDescription": "Successful Jane Doe 1 production scales to parallel Snapchat victim threads"
     },
     {
       "@id": "caselinker:ncmec_2023_190-affordance-multi-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_190-phase-multi-victim-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_190-phase-compilation-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Mobizen and device recording capture ephemeral Snapchat productions for retention"
+      "noesis:misuseDescription": "Mobizen and device recording capture ephemeral Snapchat productions for retention"
     },
     {
       "@id": "caselinker:ncmec_2023_190-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_190-phase-compilation-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_190-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Compilation videos and covert recordings sustain persistent harm beyond Snapchat session"
+      "noesis:misuseDescription": "Compilation videos and covert recordings sustain persistent harm beyond Snapchat session"
     }
   ]
 }

@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
@@ -129,101 +130,101 @@
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-catfish-coercion",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-kik-catfish"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-third-party-coercion"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Pseudonymous Kik persona enables cross-border grooming without identity verification"
+      "noesis:misuseDescription": "Pseudonymous Kik persona enables cross-border grooming without identity verification"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-coercion-facetime",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-third-party-coercion"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-facetime-attempt"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Exposure threats force migration to live video channel"
+      "noesis:misuseDescription": "Exposure threats force migration to live video channel"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-facetime-instagram",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-facetime-attempt"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-instagram-lure"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Parallel victim pipeline via Instagram after first victim path established"
+      "noesis:misuseDescription": "Parallel victim pipeline via Instagram after first victim path established"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-instagram-threat",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-instagram-lure"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-dual-persona-coercion"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Modeling pretext lowers guard before linked blackmail scheme surfaces"
+      "noesis:misuseDescription": "Modeling pretext lowers guard before linked blackmail scheme surfaces"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-threat-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-dual-persona-coercion"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-fansign-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Dual-persona threat cycle converts to self-harm coercion and explicit production"
+      "noesis:misuseDescription": "Dual-persona threat cycle converts to self-harm coercion and explicit production"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-production-receipt",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-fansign-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-kik-receipt"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Produced and traded material accumulates in Kik message archive"
+      "noesis:misuseDescription": "Produced and traded material accumulates in Kik message archive"
     },
     {
       "@id": "caselinker:usss_2017_006-affordance-receipt-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2017_006-phase-kik-receipt"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2017_006-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Archived interstate CSAM on defendant devices sustains ongoing possession harm"
+      "noesis:misuseDescription": "Archived interstate CSAM on defendant devices sustains ongoing possession harm"
     }
   ]
 }

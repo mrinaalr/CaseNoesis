@@ -1,0 +1,140 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:70c4fd90-3ebe-5aa6-850e-d6a71565e743",
+      "type": "Annotation",
+      "body": "urn:uuid:9fb67395-766e-5f89-882b-d3e4b8bbc515",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 42,
+            "end": 50
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d817d0dd-5763-5524-9a9c-27330548dc3b",
+      "type": "Annotation",
+      "body": "urn:uuid:7df8a17e-f803-5b57-91b7-210c2d3eafa6",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 105,
+            "end": 113
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:25f415a5-3e95-5d9c-aa9e-77310ff40938",
+      "type": "Annotation",
+      "body": "urn:uuid:49f6520a-b104-53fe-b366-1a4427808c4f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 168,
+            "end": 176
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c22ef488-3a20-56ca-8058-a97a0faf4904",
+      "type": "Annotation",
+      "body": "urn:uuid:c6973ed7-baba-56e8-ad4a-a95568be98e8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 231,
+            "end": 239
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:0c2c6d51-222e-58d7-b605-864eca6a636d",
+      "type": "Annotation",
+      "body": "urn:uuid:ff39da56-d62b-5074-9c53-4b76a237edda",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 294,
+            "end": 302
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e035a42a-355e-596b-83d0-f63c5a6b384e",
+      "type": "Annotation",
+      "body": "urn:uuid:c6a569a9-6dbd-5f4d-b3d6-5c5f7f899324",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 357,
+            "end": 365
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4bb50213-013b-56f2-9003-9c0adec16215",
+      "type": "Annotation",
+      "body": "urn:uuid:938cd2db-8b67-5450-89b7-0fb5e50ab89c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 420,
+            "end": 428
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "12/08/25"
+          }
+        ]
+      }
+    }
+  ]
+}

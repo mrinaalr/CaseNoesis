@@ -1,0 +1,648 @@
+{
+  "@context": {
+    "@vocab": "http://example.org/local#",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "kb": "http://example.org/kb/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-role": "https://ontology.unifiedcyberontology.org/uco/role/",
+    "uco-victim": "https://ontology.unifiedcyberontology.org/uco/victim/",
+    "cacontology": "https://cacontology.projectvic.org#",
+    "cac-core": "https://cacontology.projectvic.org/core#",
+    "cacontology-platforms": "https://cacontology.projectvic.org/platforms#",
+    "cacontology-sextortion": "https://cacontology.projectvic.org/sextortion#",
+    "cacontology-extremist-enterprises": "https://cacontology.projectvic.org/extremist-enterprises#",
+    "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
+    "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
+    "cacontology-multi-jurisdiction": "https://cacontology.projectvic.org/multi-jurisdiction#",
+    "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
+    "cacontology-victim-impact": "https://cacontology.projectvic.org/victim-impact#",
+    "cacontology-grooming": "https://cacontology.projectvic.org/grooming#",
+    "cacontology-us-ncmec": "https://cacontology.projectvic.org/us/ncmec#",
+    "cacontology-production": "https://cacontology.projectvic.org/production#",
+    "cacontology-gufo": "https://cacontology.projectvic.org/gufo#",
+    "gufo": "http://purl.org/nemo/gufo#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-bundle",
+      "@type": "uco-core:Bundle",
+      "uco-core:name": "U.S. District Court, District of Columbia 1:24-cr-00417-CKK (CAC Enhanced \u2014 RICO)",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "CAC knowledge graph for 1:24-cr-00417-CKK derived from PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum. Evidentiary basis: MIXED. Coded extraction only."
+      },
+      "uco-core:object": [
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-investigation"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecution"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecutor"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-pretrial-phase"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-person-defendant"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-fraud-conduct"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-online-gaming-platforms"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-telegram"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-signal"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-virtual-currency-exchanges"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-email-and-cloud-providers"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-sms"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-1"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-2"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-3"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-forfeiture"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-provenance-action"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-provenance"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-inv-indictment"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-prosecution-indictment"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise-indictment"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-1"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-1"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-2"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-2"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-3"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-3"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_formation-online gaming platforms"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-telegram"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-signal"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-impersonation_target_and_laundering_channel-virtual currency exchanges"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-account_intrusion-email and cloud providers"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-sms"
+        }
+      ]
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-investigation",
+      "@type": [
+        "case-investigation:Investigation",
+        "cacontology:CACInvestigation"
+      ],
+      "uco-core:name": "U.S. v. Lam et al. \u2014 1:24-cr-00417-CKK",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Federal RICO social-engineering enterprise prosecution in U.S. District Court, District of Columbia. Minimum 9 named victims; 17 defendants on docket. Operational window 2023-10 to 2025-05. Alleged loss at least USD 263,000,000."
+      },
+      "case-investigation:focus": [
+        "RICO Enterprise",
+        "Wire Fraud Conspiracy",
+        "Virtual Currency Laundering",
+        "Social Engineering"
+      ],
+      "case-investigation:investigationForm": "case",
+      "case-investigation:investigationStatus": "open",
+      "uco-core:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2024-09-17T00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecution",
+      "@type": "cacontology-usa-federal-law:FederalProsecution",
+      "uco-core:name": "Federal prosecution \u2014 1:24-cr-00417-CKK",
+      "rdfs:label": "Federal prosecution \u2014 1:24-cr-00417-CKK",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2024-09-17T00:00:00Z"
+      },
+      "cacontology-usa-federal-law:hasProsecutionBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2024-09-17T00:00:00Z"
+      },
+      "cacontology-usa-federal-law:prosecutedBy": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecutor"
+      },
+      "cacontology-usa-federal-law:hasLegalPhase": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-pretrial-phase"
+      },
+      "cacontology-usa-federal-law:prosecutionComplexity": "highly-complex",
+      "cacontology-usa-federal-law:prosecutionSeverity": "aggravated-felony",
+      "cacontology-usa-federal-law:prosecutionStatus": "active"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecutor",
+      "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+      "uco-core:name": "U.S. District Court, District of Columbia",
+      "rdfs:label": "U.S. District Court, District of Columbia",
+      "cacontology-usa-federal-law:hasRoleBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2024-09-17T00:00:00Z"
+      },
+      "cacontology-usa-federal-law:roleSpecialization": "financial-crimes"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-pretrial-phase",
+      "@type": [
+        "cac-core:Phase",
+        "cacontology-usa-federal-law:PreTrialPhase"
+      ],
+      "uco-core:name": "Pre-trial phase",
+      "rdfs:label": "Pre-trial phase",
+      "cacontology:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-05-19T00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment",
+      "@type": "cacontology:MultiDefendantIndictment",
+      "uco-core:name": "PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum",
+      "rdfs:label": "PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Indictment filed 2024-09-17. 3 counts; 17 defendants on docket."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise",
+      "@type": [
+        "uco-identity:Organization",
+        "cacontology:CriminalEnterprise"
+      ],
+      "uco-core:name": "Social Engineering Enterprise",
+      "rdfs:label": "Social Engineering Enterprise",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed RICO enterprise under 18 U.S.C. \u00a7 1962(d) with minimum 12 co-conspirators. Role specialization: database hacker \u2014 obtain or purchase stolen crypto related databases; organizer target identifier \u2014 collate databases and prioritize high value targets; caller social engineer \u2014 cold call victims impersonating vce or email support; money launderer \u2014 convert stolen virtual currency to fiat cash or wire; residential burglar \u2014 irl break in for hardware wallet theft."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-person-defendant",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Defendant-1",
+      "rdfs:label": "Defendant-1",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Principal placeholder for multi-defendant RICO prosecution (17 defendants)."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-fraud-conduct",
+      "@type": "uco-action:Action",
+      "uco-core:name": "Alleged social-engineering fraud conduct",
+      "rdfs:label": "Alleged social-engineering fraud conduct",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed coordinated virtual-currency theft via social engineering during 2023-10 to 2025-05. Mechanisms include stolen cryptocurrency databases shared as targets, unauthorized account push notifications before fraudulent calls, fraudulent support calls impersonating VCE or email providers, seed phrase and private key harvesting, cloud account intrusion to locate wallet secrets, in-real-life break-ins targeting hardware wallets, virtual currency laundering via privacy coins and offshore exchanges, unlicensed crypto-to-cash exchange, unlicensed crypto-to-wire exchange, luxury spending and mansion rentals funded by stolen assets, straw owner concealment for homes and vehicles, bulk cash shipment concealed in clothing or stuffed animals, post-arrest evidence destruction directed by enterprise members, off-duty law enforcement tip-off alleged."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-online-gaming-platforms",
+      "uco-core:name": "Online gaming platforms",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: enterprise_formation. Affordances abused: pseudonymous friendship graph, cross member recruitment."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-telegram",
+      "uco-core:name": "Telegram",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: enterprise_coordination. Affordances abused: encrypted messaging, rotating usernames opsec."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-signal",
+      "uco-core:name": "Signal",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: enterprise_coordination. Affordances abused: encrypted messaging, rotating usernames opsec."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-virtual-currency-exchanges",
+      "uco-core:name": "Virtual currency exchanges",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: impersonation_target_and_laundering_channel. Affordances abused: fraudulent support impersonation, hosted wallet access, cross chain swaps."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-email-and-cloud-providers",
+      "uco-core:name": "Email and cloud providers",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: account_intrusion. Affordances abused: credential harvesting, icloud and drive search for seed phrases."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-sms",
+      "uco-core:name": "SMS",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed role: enterprise_coordination. Affordances abused: real time theft coordination."
+      },
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-platforms:SocialMediaPlatform"
+      ],
+      "cacontology-platforms:platformType": "social_network"
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-1",
+      "@type": "cacontology-legal-outcomes:FederalCharge",
+      "uco-core:name": "RICO conspiracy",
+      "rdfs:label": "RICO conspiracy",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Count 1 under 18 U.S.C. \u00a7 1962(d). Evidentiary basis: mixed (PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum). Disposition: active multi defendant."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-2",
+      "@type": "cacontology-legal-outcomes:FederalCharge",
+      "uco-core:name": "Conspiracy to commit wire fraud",
+      "rdfs:label": "Conspiracy to commit wire fraud",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Count 2 under 18 U.S.C. \u00a7 1349. Evidentiary basis: mixed (PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum). Disposition: active multi defendant."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-3",
+      "@type": "cacontology-legal-outcomes:FederalCharge",
+      "uco-core:name": "Conspiracy to launder monetary instruments",
+      "rdfs:label": "Conspiracy to launder monetary instruments",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Count 3 under 18 U.S.C. \u00a7 1956(h). Evidentiary basis: mixed (PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum). Disposition: active multi defendant."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-forfeiture",
+      "@type": "cacontology-asset-forfeiture:ForfeitureAllegation",
+      "uco-core:name": "Forfeiture allegation",
+      "rdfs:label": "Forfeiture allegation",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Forfeiture sought under RICO and related statutes for virtual currency, vehicles, and real property."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-provenance-action",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "PACER extraction",
+      "rdfs:label": "PACER extraction",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Extraction from PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum; retrieval=unknown, extraction=agent_formalization_from_pdf_text_extract, human_reviewed=False."
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-provenance",
+      "@type": "case-investigation:ProvenanceRecord",
+      "uco-core:name": "Provenance \u2014 PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Source: PACER, PACER D.D.C. 1:24-cr-00417-CKK \u2014 docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum."
+      },
+      "case-investigation:object": [
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-investigation"
+        },
+        {
+          "@id": "kb:racketeering-1-24-cr-00417-ckk-provenance-action"
+        }
+      ]
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-inv-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation charging instrument",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Prosecution charging instrument",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-prosecution"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise charging instrument",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 1",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 conduct",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-fraud-conduct"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 2",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 conduct",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-fraud-conduct"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-indictment-charge-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 3",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-3"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-charge-conduct-3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 3 conduct",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-charge-3"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-fraud-conduct"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_formation-online gaming platforms",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used Online gaming platforms",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-online-gaming-platforms"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-telegram",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used Telegram",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-telegram"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-signal",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used Signal",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-signal"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-impersonation_target_and_laundering_channel-virtual currency exchanges",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used Virtual currency exchanges",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-virtual-currency-exchanges"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-account_intrusion-email and cloud providers",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used Email and cloud providers",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-email-and-cloud-providers"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:racketeering-1-24-cr-00417-ckk-rel-enterprise_coordination-sms",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conduct used SMS",
+      "uco-core:source": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:racketeering-1-24-cr-00417-ckk-platform-sms"
+      },
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    }
+  ]
+}

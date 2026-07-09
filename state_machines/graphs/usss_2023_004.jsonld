@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cac-undercover": "https://cacontology.projectvic.org/undercover#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
@@ -113,87 +114,87 @@
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-contact-solicitation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-ci-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-child-solicitation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Prostitute-facilitated online channel surfaces commercial sex recruitment without minor safeguards"
+      "noesis:misuseDescription": "Prostitute-facilitated online channel surfaces commercial sex recruitment without minor safeguards"
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-solicitation-uc",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-child-solicitation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-uc-engagement"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "CI relay to law enforcement enables controlled decoy engagement via text"
+      "noesis:misuseDescription": "CI relay to law enforcement enables controlled decoy engagement via text"
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-uc-proof",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-uc-engagement"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-proof-of-life"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "SMS thread enables proof-of-life image demand and UC decoy image transmission"
+      "noesis:misuseDescription": "SMS thread enables proof-of-life image demand and UC decoy image transmission"
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-proof-negotiation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-proof-of-life"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-commercial-negotiation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Image verification escalates thread to explicit commercial price and meet logistics"
+      "noesis:misuseDescription": "Image verification escalates thread to explicit commercial price and meet logistics"
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-negotiation-travel",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-commercial-negotiation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-travel-payment"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Cash-and-CashApp payment structure and meet location converge toward in-person commercial exploitation"
+      "noesis:misuseDescription": "Cash-and-CashApp payment structure and meet location converge toward in-person commercial exploitation"
     },
     {
       "@id": "caselinker:usss_2023_004-affordance-travel-intervention",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:usss_2023_004-phase-travel-payment"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:usss_2023_004-phase-sting-intervention"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Physical arrival with cash payment — J-Town PD and USSS sting interdicts before Maintenance or hands-on terminal"
+      "noesis:misuseDescription": "Physical arrival with cash payment — J-Town PD and USSS sting interdicts before Maintenance or hands-on terminal"
     }
   ]
 }

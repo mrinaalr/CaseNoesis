@@ -1,0 +1,925 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:cb8f4725-af2d-5b42-b3d0-192200012a5d",
+      "type": "Annotation",
+      "body": "urn:uuid:13e73a7c-637c-5f7e-b209-0e0797adb600",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 46,
+            "end": 54
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:bb00bd1f-238c-563b-908d-4d7d8a8711fe",
+      "type": "Annotation",
+      "body": "urn:uuid:9459bc2f-d5fc-53a5-9776-cf1ba53420b8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 113,
+            "end": 121
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:1ece1dfb-13a2-5230-bff7-d87250aa84a8",
+      "type": "Annotation",
+      "body": "urn:uuid:a56fffd6-b8ac-54ed-a36e-0623ba449ec0",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 180,
+            "end": 188
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2cece730-3ae2-579f-9618-a9bb99170900",
+      "type": "Annotation",
+      "body": "urn:uuid:bc9d65f3-133a-5146-a58b-62f559d1ca5b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 247,
+            "end": 255
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:842b26c0-07d2-54d9-96f2-e4f237cd2507",
+      "type": "Annotation",
+      "body": "urn:uuid:64ff6421-d1a0-5cd1-af93-a7c5eaba3830",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 314,
+            "end": 322
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:6ea5c5cd-2f21-58bb-91f2-be380bb920d8",
+      "type": "Annotation",
+      "body": "urn:uuid:3d1912f8-769e-52f8-946d-fea1d9d6d640",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 381,
+            "end": 389
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8bdb6c6f-d9c8-5cc3-a4ca-58e5b25332ba",
+      "type": "Annotation",
+      "body": "urn:uuid:4c5b7dc7-87ac-5c3a-8bfe-f9bdadd63544",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 448,
+            "end": 456
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ec326949-01d7-5cbe-8aeb-2f40469a2fa3",
+      "type": "Annotation",
+      "body": "urn:uuid:df99929e-d2a0-5df1-9aa9-26c927a5c86d",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 470,
+            "end": 481
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Oct 13 2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:3ccad8ed-c705-5c4e-87d6-74fa5eb83ff1",
+      "type": "Annotation",
+      "body": "urn:uuid:1e6c18dd-6cbb-5f47-9b1d-f76c18467752",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 528,
+            "end": 536
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:7ac08d0c-f3c2-5236-a223-eebcc1bde10a",
+      "type": "Annotation",
+      "body": "urn:uuid:2b38e824-b413-5712-a813-2bc9c0962840",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 597,
+            "end": 605
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:dc9a23bf-64a1-53f4-9a85-a8a11e710392",
+      "type": "Annotation",
+      "body": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1244,
+            "end": 1258
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "(504) 680-3000"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:cb9326cd-0c60-5a09-9073-9ded0f347c67",
+      "type": "Annotation",
+      "body": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1550,
+            "end": 1565
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "another Federal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8b8af2fb-a4d8-5297-8fda-5e7362a8c487",
+      "type": "Annotation",
+      "body": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1652,
+            "end": 1667
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "another diskict"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8e902b2b-8292-5cf5-b631-4562137ac27c",
+      "type": "Annotation",
+      "body": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1896,
+            "end": 1920
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "FederalCustody\ndismissed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e0ddc641-2987-5a0d-aaba-4531e1dbd2cd",
+      "type": "Annotation",
+      "body": "urn:uuid:478315a6-89ba-58b7-922e-190350605992",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1950,
+            "end": 1963
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "State Custody"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c02387ba-b90b-529c-af43-fd76b2099124",
+      "type": "Annotation",
+      "body": "urn:uuid:fa9446b9-5e66-504c-989c-0d61be49013d",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2949,
+            "end": 2957
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "10/13/22"
+          }
+        ]
+      }
+    }
+  ]
+}
+        }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:fd7d20f5-d9b9-56c2-8910-212fc0d02f42",
+      "type": "Annotation",
+      "body": "urn:uuid:418f5eb4-5881-5aa7-834d-ea074789ce10",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2463,
+            "end": 2471
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "9/5/2023"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a30b22a4-aabb-5c33-98ee-57758f3e7768",
+      "type": "Annotation",
+      "body": "urn:uuid:c4d28362-7695-55dc-9814-a29557dc313f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2581,
+            "end": 2589
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "9/5/2023"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:f0b8fbe7-f1b3-5ded-b78f-eaeacfc8e1f1",
+      "type": "Annotation",
+      "body": "urn:uuid:732ec4eb-81df-5e3d-97d0-b7e6a07198cc",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2814,
+            "end": 2826
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "504-680-3081"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:6022bdc5-1d50-5178-b0e7-f86eff1e15c7",
+      "type": "Annotation",
+      "body": "urn:uuid:5816144b-d9ee-5270-8a45-c45232721083",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2832,
+            "end": 2844
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "504-589-4014"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c32866ee-5bdf-5698-ac86-e47fd3acbd67",
+      "type": "Annotation",
+      "body": "urn:uuid:48e04006-49e7-5cbd-8cd9-080630208341",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2852,
+            "end": 2875
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "matthew.payne@usdoj.gov"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a8dc7b4b-4c2c-5d2d-96a4-8ecce3eb7cfe",
+      "type": "Annotation",
+      "body": "urn:uuid:b94e6444-c0fb-5099-9bc0-e616667da092",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2976,
+            "end": 2986
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/29/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4b64782a-7c4a-5cd3-946a-7c1cbe2ac894",
+      "type": "Annotation",
+      "body": "urn:uuid:ac4b179f-0b89-5c61-844e-98c1ab58c677",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3165,
+            "end": 3175
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:90eb4fa2-3e53-5aa8-a0e2-7da60e378cdf",
+      "type": "Annotation",
+      "body": "urn:uuid:a3ec8c91-a9de-55cf-9d9b-40dfacc8e1da",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3177,
+            "end": 3187
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/26/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c985ac0f-3476-550b-aba3-2377273a375c",
+      "type": "Annotation",
+      "body": "urn:uuid:caa73f0f-7988-5247-b9cc-1a5bf983fcd1",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3368,
+            "end": 3378
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/26/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:697ae991-aa2f-5818-8a16-2f2d7b81b44d",
+      "type": "Annotation",
+      "body": "urn:uuid:b55224d4-2407-58c3-95e5-2784a1d93726",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3380,
+            "end": 3390
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/27/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:6c8c8c5d-40f5-506d-9a9f-7e3641285e63",
+      "type": "Annotation",
+      "body": "urn:uuid:f3961c3e-8b49-5fd9-9fd9-631b7b296550",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3534,
+            "end": 3543
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "5/27/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:5d0045de-ff2f-5f57-bd17-f35377aab36a",
+      "type": "Annotation",
+      "body": "urn:uuid:b5b894e1-1d3c-50cb-b8d8-a92f28717c8e",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3580,
+            "end": 3590
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/27/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d0f161d9-15cc-5301-966d-2ec7328ceb09",
+      "type": "Annotation",
+      "body": "urn:uuid:6e33644a-a462-5009-8821-add530d2d694",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3592,
+            "end": 3602
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/27/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:12e90684-a79e-5714-8903-efd487e4d90a",
+      "type": "Annotation",
+      "body": "urn:uuid:52da030a-d0a2-5c31-9be8-8ab135997e7d",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3711,
+            "end": 3721
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/27/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e1fb276d-69ce-56e9-9666-a1e297e13f4f",
+      "type": "Annotation",
+      "body": "urn:uuid:bddf9ca0-2d0b-5846-9871-ed2ccc1cfea8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3723,
+            "end": 3733
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:007c64dd-1f8a-5882-bf07-42eadb14dd38",
+      "type": "Annotation",
+      "body": "urn:uuid:864bf771-8161-55e8-9553-5481cfa81bc7",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3860,
+            "end": 3868
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "6/1/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:dc1d475b-5c73-59d0-8872-ee47c9abcbb2",
+      "type": "Annotation",
+      "body": "urn:uuid:3f5d62af-3bfc-5889-be64-db5bc790cd80",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3916,
+            "end": 3924
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "6/3/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:454800de-d37a-59f5-9858-c7f553dd0286",
+      "type": "Annotation",
+      "body": "urn:uuid:f721d4f5-4a39-5da9-b050-eca5e1f03213",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 3986,
+            "end": 3995
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "6/14/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a0c58bab-fb08-57c3-91eb-31c7486fa5fe",
+      "type": "Annotation",
+      "body": "urn:uuid:74f9fdff-1b9a-542b-9749-51590307017f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4102,
+            "end": 4112
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:bc52d3a0-bada-5f59-9eb6-6b26cdaa9690",
+      "type": "Annotation",
+      "body": "urn:uuid:3094a73d-ba08-54f6-b657-2e35455c6668",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4114,
+            "end": 4124
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:32273533-86b7-58ca-a44f-371e1d6446d0",
+      "type": "Annotation",
+      "body": "urn:uuid:25e8ab8a-5d36-507f-b030-8a3e55394631",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4289,
+            "end": 4297
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "6/1/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:b323d9c1-83ca-5277-9c36-62c8ba4a1c71",
+      "type": "Annotation",
+      "body": "urn:uuid:d9b87e0e-bb44-5d3d-9f76-ee038ac2ab9c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4334,
+            "end": 4344
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:f51fdb21-acf2-5146-a7b5-04f9c2b549ec",
+      "type": "Annotation",
+      "body": "urn:uuid:8507b48d-fef6-5999-a6fa-8e5f670ddcde",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4346,
+            "end": 4356
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:90e01383-2e91-5f5b-8c10-7881a7f43ddb",
+      "type": "Annotation",
+      "body": "urn:uuid:a631f6df-a038-5768-bd8d-f50c2aa6162b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4444,
+            "end": 4454
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/01/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d148d63b-b09f-5cef-a363-acd10561bcc1",
+      "type": "Annotation",
+      "body": "urn:uuid:8a528acc-b758-5c18-b676-5fbdcaeaf5d8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4456,
+            "end": 4466
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:5a186d61-13aa-5b97-8ccd-3d968eefa04f",
+      "type": "Annotation",
+      "body": "urn:uuid:07e28acb-8e21-5782-a195-63a8c5d2280b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4819,
+            "end": 4829
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:830685d7-c060-5aa2-a775-53c4b75538d5",
+      "type": "Annotation",
+      "body": "urn:uuid:94c22bff-5e96-5c8e-a4c8-5a251bbb2a2f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4831,
+            "end": 4841
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e7a70517-3b0b-512f-b948-f99184090f72",
+      "type": "Annotation",
+      "body": "urn:uuid:2072a500-d440-52f2-afc3-be85553b2412",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 5008,
+            "end": 5018
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a200c8fd-8f68-505b-be64-4706a9e6edf1",
+      "type": "Annotation",
+      "body": "urn:uuid:59136cbf-a395-5255-9093-fac5c50dbda8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 5020,
+            "end": 5030
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d97ebd8e-2bab-5f06-8879-cb4cfc15fdc4",
+      "type": "Annotation",
+      "body": "urn:uuid:5021a7a1-44fb-587f-bfde-97db065e9b60",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 5099,
+            "end": 5107
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "6/3/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:abb3cb54-f55a-5544-a74c-b915d3593334",
+      "type": "Annotation",
+      "body": "urn:uuid:b36ff8be-e489-52ed-af66-7e065a9a6c90",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 5159,
+            "end": 5169
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/02/2022"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:900c6eaa-2095-5625-a451-95f7c0b4d5f9",
+      "type": "Annotation",
+      "body": "urn:uuid:f317b514-402b-5ba0-8354-b07289ed8f62",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 5171,
+            "end": 5181
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "06/03/2022"
+          }
+        ]
+      }
+    }
+  ]
+}

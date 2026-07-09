@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -105,73 +106,73 @@
     },
     {
       "@id": "caselinker:anchorage_pd_2022_006-affordance-onset-harboring",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-banks-network-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-harboring-control"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "In-person and text contact through Banks network positions vulnerable minors for pimp control"
+      "noesis:misuseDescription": "In-person and text contact through Banks network positions vulnerable minors for pimp control"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_006-affordance-harboring-adultlook",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-harboring-control"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-adultlook-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Shelter and romance grooming lowers resistance to commercial sex advertising setup"
+      "noesis:misuseDescription": "Shelter and romance grooming lowers resistance to commercial sex advertising setup"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_006-affordance-adultlook-commercial",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-adultlook-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-commercial-operation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Adultlook interstate listings and embedded phone numbers route customers to minor commercial sex dates"
+      "noesis:misuseDescription": "Adultlook interstate listings and embedded phone numbers route customers to minor commercial sex dates"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_006-affordance-commercial-enterprise",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-commercial-operation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-multi-victim-enterprise"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Phone/text booking, transportation, and proceeds collection sustain multi-victim trafficking venture"
+      "noesis:misuseDescription": "Phone/text booking, transportation, and proceeds collection sustain multi-victim trafficking venture"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_006-affordance-enterprise-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-multi-victim-enterprise"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_006-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Firearms, drugs, and HU$H-branded depictions compound control until arrest"
+      "noesis:misuseDescription": "Firearms, drugs, and HU$H-branded depictions compound control until arrest"
     }
   ]
 }

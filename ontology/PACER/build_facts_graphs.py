@@ -27,6 +27,9 @@ CHARGE_LABELS: dict[str, str] = {
     "cyberstalking": "Cyberstalking",
     "aggravated_identity_theft": "Aggravated identity theft",
     "wire_fraud": "Wire fraud",
+    "rico_conspiracy": "RICO conspiracy",
+    "wire_fraud_conspiracy": "Conspiracy to commit wire fraud",
+    "money_laundering_conspiracy": "Conspiracy to launder monetary instruments",
     "coercion_enticement_minor": "Coercion and enticement of a minor",
     "travel_intent_illicit_sexual_conduct": "Travel with intent to engage in illicit sexual conduct",
     "sexual_exploitation_of_child": "Sexual exploitation of a child",
@@ -963,6 +966,9 @@ def finalize_graph(nodes: list[dict[str, Any]], bundle_id: str) -> list[dict[str
 
 def build_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
     if "enterprise" in facts:
+        enterprise_type = str(facts.get("enterprise", {}).get("type", ""))
+        if enterprise_type == "rico_social_engineering_enterprise":
+            return build_racketeering_enterprise_graph(facts, slug)
         if slug == "sextortion":
             return build_sextortion_enterprise_graph(facts, slug)
         return build_enterprise_graph(facts, slug)
@@ -1421,6 +1427,246 @@ def build_sextortion_enterprise_graph(facts: dict[str, Any], slug: str) -> list[
 
     nodes.extend(relationships)
 
+    return finalize_graph(nodes, g["bundle"])
+
+
+FRAUD_MECHANISM_LABELS: dict[str, str] = {
+    "stolen_crypto_databases_shared_as_targs": "stolen cryptocurrency databases shared as targets",
+    "unauthorized_account_push_notifications_before_calls": "unauthorized account push notifications before fraudulent calls",
+    "fraudulent_support_calls_impersonating_vce_or_email_provider": "fraudulent support calls impersonating VCE or email providers",
+    "seed_phrase_and_private_key_harvesting": "seed phrase and private key harvesting",
+    "cloud_account_intrusion_for_wallet_secrets": "cloud account intrusion to locate wallet secrets",
+    "cold_storage_hardware_wallet_theft_via_irl_break_in": "in-real-life break-ins targeting hardware wallets",
+    "virtual_currency_laundering_via_privacy_coin_and_offshore_vce": "virtual currency laundering via privacy coins and offshore exchanges",
+    "crypto_to_cash_unlicensed_money_transmission": "unlicensed crypto-to-cash exchange",
+    "crypto_to_wire_unlicensed_money_transmission": "unlicensed crypto-to-wire exchange",
+    "luxury_spending_and_rental_mansions": "luxury spending and mansion rentals funded by stolen assets",
+    "straw_owner_concealment_for_homes_and_vehicles": "straw owner concealment for homes and vehicles",
+    "bulk_cash_shipment_concealed_in_clothing_or_stuffed_animals": "bulk cash shipment concealed in clothing or stuffed animals",
+    "post_arrest_evidence_destruction_directed": "post-arrest evidence destruction directed by enterprise members",
+    "off_duty_law_enforcement_tip_off_alleged": "off-duty law enforcement tip-off alleged",
+}
+
+
+def build_racketeering_enterprise_graph(facts: dict[str, Any], slug: str) -> list[dict[str, Any]]:
+    """RICO social-engineering / wire-fraud enterprise — non-ICAC."""
+    case = facts["case"]
+    offender = facts.get("offender", {})
+    enterprise = facts.get("enterprise", {})
+    platforms = facts.get("platforms", [])
+    fraud_mechanisms = facts.get("fraud_mechanisms", [])
+    enterprise_roles = facts.get("enterprise_roles", [])
+    charges = facts.get("charges", [])
+    forfeiture = facts.get("forfeiture", {})
+    timeline = facts.get("procedural_timeline", [])
+    provenance = facts.get("provenance", {})
+
+    case_number = str(case["case_number"])
+    court = str(case.get("court", "Unknown court"))
+    date_filed = str(case.get("date_filed", "unknown"))
+    evidentiary = str(case.get("evidentiary_basis", "alleged"))
+    status = str(case.get("status", "unknown"))
+    offender_label = str(offender.get("label", "Defendant-1"))
+    basis_word = evidentiary.capitalize()
+
+    g = make_ids(slug, case_number)
+    offense_begin = timeline_date(timeline, "complaint", "docket", "indictment") or f"{date_filed}T00:00:00Z"
+    indictment_date = timeline_date(timeline, "superseding", "indictment") or offense_begin
+
+    co_conspirator_min = int(enterprise.get("co_conspirator_count_min", 2))
+    victim_count = int(enterprise.get("victim_count_minimum_named", 1))
+    defendant_count = offender.get("defendant_count_total_docket", offender.get("defendant_count_named_second_superseding", "?"))
+    enterprise_name = str(enterprise.get("name_alleged", "Alleged criminal enterprise"))
+    operational_window = str(enterprise.get("operational_window", "unknown"))
+    loss_usd = enterprise.get("loss_usd_minimum_alleged")
+
+    platform_iris: dict[str, str] = {}
+    platform_nodes: list[dict[str, Any]] = []
+    for platform in platforms:
+        iri = platform_id(slug, case_number, str(platform["name"]))
+        platform_iris[str(platform["name"]).lower()] = iri
+        platform_nodes.append(
+            build_platform_node(
+                platform=platform,
+                platform_iri=iri,
+                ban_evasion={},
+                basis_word=basis_word,
+            )
+        )
+
+    charge_nodes = build_charge_nodes(
+        charges=charges,
+        slug=slug,
+        case_number=case_number,
+        evidentiary=evidentiary,
+        doc_ref=str(provenance.get("document", "source document")),
+    )
+
+    fraud_text = ", ".join(
+        FRAUD_MECHANISM_LABELS.get(str(item), str(item).replace("_", " ")) for item in fraud_mechanisms
+    )
+    role_text = "; ".join(
+        f"{str(item.get('role', 'role')).replace('_', ' ')} — {str(item.get('function', '')).replace('_', ' ')}"
+        for item in enterprise_roles
+    )
+    loss_text = f" Alleged loss at least USD {loss_usd:,}." if isinstance(loss_usd, int) else ""
+
+    doc_ref = str(provenance.get("document", "source document"))
+    investigation_status = "open"
+    prosecution_status = "active" if status.startswith("pre_trial") else "resolved"
+
+    fraud_conduct_id = f"kb:{slug}-{case_token(case_number)}-fraud-conduct"
+
+    nodes: list[dict[str, Any]] = [
+        {
+            "@id": g["bundle"],
+            "@type": "uco-core:Bundle",
+            "uco-core:name": f"{court} {case_number} (CAC Enhanced — RICO)",
+            "uco-core:description": desc(
+                f"CAC knowledge graph for {case_number} derived from {doc_ref}. "
+                f"Evidentiary basis: {evidentiary.upper()}. Coded extraction only."
+            ),
+        },
+        {
+            "@id": g["investigation"],
+            "@type": ["case-investigation:Investigation", "cacontology:CACInvestigation"],
+            "uco-core:name": f"U.S. v. Lam et al. — {case_number}",
+            "uco-core:description": desc(
+                f"Federal RICO social-engineering enterprise prosecution in {court}. "
+                f"Minimum {victim_count} named victims; {defendant_count} defendants on docket. "
+                f"Operational window {operational_window}.{loss_text}"
+            ),
+            "case-investigation:focus": [
+                "RICO Enterprise",
+                "Wire Fraud Conspiracy",
+                "Virtual Currency Laundering",
+                "Social Engineering",
+            ],
+            "case-investigation:investigationForm": "case",
+            "case-investigation:investigationStatus": investigation_status,
+            "uco-core:startTime": xs(offense_begin, "xsd:dateTime"),
+        },
+        {
+            "@id": g["prosecution"],
+            "@type": "cacontology-usa-federal-law:FederalProsecution",
+            "uco-core:name": f"Federal prosecution — {case_number}",
+            "rdfs:label": f"Federal prosecution — {case_number}",
+            "gufo:hasBeginPointInXSDDateTimeStamp": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:hasProsecutionBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:prosecutedBy": {"@id": g["prosecutor"]},
+            "cacontology-usa-federal-law:hasLegalPhase": {"@id": g["pretrial_phase"]},
+            "cacontology-usa-federal-law:prosecutionComplexity": "highly-complex",
+            "cacontology-usa-federal-law:prosecutionSeverity": "aggravated-felony",
+            "cacontology-usa-federal-law:prosecutionStatus": prosecution_status,
+        },
+        {
+            "@id": g["prosecutor"],
+            "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+            "uco-core:name": court,
+            "rdfs:label": court,
+            "cacontology-usa-federal-law:hasRoleBeginPoint": xs(offense_begin, "xsd:dateTimeStamp"),
+            "cacontology-usa-federal-law:roleSpecialization": "financial-crimes",
+        },
+        {
+            "@id": g["pretrial_phase"],
+            "@type": ["cac-core:Phase", "cacontology-usa-federal-law:PreTrialPhase"],
+            "uco-core:name": "Pre-trial phase",
+            "rdfs:label": "Pre-trial phase",
+            "cacontology:hasPhaseBeginPoint": xs(indictment_date, "xsd:dateTimeStamp"),
+        },
+        {
+            "@id": g["indictment"],
+            "@type": "cacontology:MultiDefendantIndictment",
+            "uco-core:name": doc_ref,
+            "rdfs:label": doc_ref,
+            "uco-core:description": desc(
+                f"Indictment filed {date_filed}. {len(charges)} counts; {defendant_count} defendants on docket."
+            ),
+        },
+        {
+            "@id": g["enterprise"],
+            "@type": ["uco-identity:Organization", "cacontology:CriminalEnterprise"],
+            "uco-core:name": enterprise_name,
+            "rdfs:label": enterprise_name,
+            "uco-core:description": desc(
+                f"{basis_word} RICO enterprise under {enterprise.get('statute_primary', '18 U.S.C. § 1962(d)')} "
+                f"with minimum {co_conspirator_min} co-conspirators. Role specialization: {role_text}."
+            ),
+        },
+        {
+            "@id": g["defendant"],
+            "@type": "uco-identity:Person",
+            "uco-core:name": offender_label,
+            "rdfs:label": offender_label,
+            "uco-core:description": desc(
+                f"Principal placeholder for multi-defendant RICO prosecution ({defendant_count} defendants)."
+            ),
+        },
+        {
+            "@id": fraud_conduct_id,
+            "@type": "uco-action:Action",
+            "uco-core:name": "Alleged social-engineering fraud conduct",
+            "rdfs:label": "Alleged social-engineering fraud conduct",
+            "uco-core:description": desc(
+                f"{basis_word} coordinated virtual-currency theft via social engineering during {operational_window}. "
+                f"Mechanisms include {fraud_text}."
+            ),
+        },
+        *platform_nodes,
+        *charge_nodes,
+    ]
+
+    if forfeiture.get("alleged"):
+        nodes.append(
+            {
+                "@id": g["forfeiture"],
+                "@type": "cacontology-asset-forfeiture:ForfeitureAllegation",
+                "uco-core:name": "Forfeiture allegation",
+                "rdfs:label": "Forfeiture allegation",
+                "uco-core:description": desc(
+                    "Forfeiture sought under RICO and related statutes for virtual currency, vehicles, and real property."
+                ),
+            }
+        )
+
+    nodes.extend(
+        build_provenance_nodes(
+            g,
+            provenance=provenance,
+            doc_ref=doc_ref,
+        )
+    )
+
+    relationships: list[dict[str, Any]] = []
+    relationships.extend(
+        build_federal_prosecution_relationships(
+            g=g,
+            slug=slug,
+            case_number=case_number,
+            charges=charges,
+            conduct_id=fraud_conduct_id,
+            link_enterprise=True,
+            link_conspiracy=False,
+        )
+    )
+
+    for platform in platforms:
+        name = str(platform["name"])
+        iri = platform_iris[name.lower()]
+        role = str(platform.get("role", ""))
+        relationships.append(
+            {
+                "@id": f"kb:{slug}-{case_token(case_number)}-rel-{role}-{name.lower()}",
+                "@type": "uco-core:Relationship",
+                "uco-core:name": f"Enterprise conduct used {name}",
+                "uco-core:source": {"@id": g["enterprise"]},
+                "uco-core:target": {"@id": iri},
+                "uco-core:kindOfRelationship": "used_platform",
+                "uco-core:isDirectional": xs("true", "xsd:boolean"),
+            }
+        )
+
+    nodes.extend(relationships)
     return finalize_graph(nodes, g["bundle"])
 
 

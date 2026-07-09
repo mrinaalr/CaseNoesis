@@ -43,6 +43,7 @@ ORDER BY ?case_graph ?phase
 
 QUERY_TRANSITION_MATRIX = """
 PREFIX cac-core: <https://cacontology.projectvic.org/core#>
+PREFIX noesis: <https://ontology.casenoesis.project/noesis/offense-trajectories#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT ?from_type ?to_type (COUNT(DISTINCT ?case_graph) AS ?case_count)
@@ -50,7 +51,7 @@ WHERE {
   GRAPH ?case_graph {
     ?from_phase rdf:type ?from_type .
     ?to_phase rdf:type ?to_type .
-    ?from_phase cac-core:precedes ?to_phase .
+    ?from_phase (cac-core:precedes|noesis:precedes) ?to_phase .
   }
 }
 GROUP BY ?from_type ?to_type
@@ -59,17 +60,27 @@ ORDER BY DESC(?case_count)
 
 QUERY_AFFORDANCE_ANNOTATIONS = """
 PREFIX cac-platforms: <https://cacontology.projectvic.org/platforms#>
+PREFIX noesis: <https://ontology.casenoesis.project/noesis/offense-trajectories#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT ?from_type ?to_type ?affordance_class (COUNT(DISTINCT ?case_graph) AS ?case_count)
 WHERE {
   GRAPH ?case_graph {
-    ?misuse rdf:type cac-platforms:AffordanceMisuse .
-    ?misuse cac-platforms:enablesTransitionFrom ?from_phase .
-    ?misuse cac-platforms:enablesTransitionTo ?to_phase .
+    {
+      ?misuse rdf:type noesis:AffordanceMisuse .
+      ?misuse noesis:enablesTransitionFrom ?from_phase .
+      ?misuse noesis:enablesTransitionTo ?to_phase .
+      ?misuse noesis:affordanceClass ?affordance_class .
+    }
+    UNION
+    {
+      ?misuse rdf:type cac-platforms:AffordanceMisuse .
+      ?misuse cac-platforms:enablesTransitionFrom ?from_phase .
+      ?misuse cac-platforms:enablesTransitionTo ?to_phase .
+      ?misuse cac-platforms:affordanceClass ?affordance_class .
+    }
     ?from_phase rdf:type ?from_type .
     ?to_phase rdf:type ?to_type .
-    ?misuse cac-platforms:affordanceClass ?affordance_class .
   }
 }
 GROUP BY ?from_type ?to_type ?affordance_class
@@ -140,13 +151,18 @@ def _ctx(cg: ConjunctiveGraph, case_graph: URIRef) -> Graph:
 
 def _phase_nodes_in_graph(cg: ConjunctiveGraph, case_graph: URIRef) -> set[str]:
     ctx = _ctx(cg, case_graph)
+    sequence_predicates = (
+        URIRef(PRECEDES),
+        URIRef("https://ontology.casenoesis.project/noesis/offense-trajectories#precedes"),
+    )
     nodes: set[str] = set()
     for inv in ctx.subjects(RDF.type, URIRef(CAC_INVESTIGATION)):
         for step in ctx.objects(inv, URIRef(HAS_STEP)):
             nodes.add(str(step))
-    for s, _, o in ctx.triples((None, URIRef(PRECEDES), None)):
-        nodes.add(str(s))
-        nodes.add(str(o))
+    for sequence_predicate in sequence_predicates:
+        for s, _, o in ctx.triples((None, sequence_predicate, None)):
+            nodes.add(str(s))
+            nodes.add(str(o))
     return nodes
 
 
@@ -163,11 +179,16 @@ def ordered_phase_sequence(cg: ConjunctiveGraph, case_graph: URIRef) -> list[str
     outgoing: dict[str, str | None] = {n: None for n in nodes}
 
     ctx = _ctx(cg, case_graph)
-    for s, _, o in ctx.triples((None, URIRef(PRECEDES), None)):
-        s_id, o_id = str(s), str(o)
-        if s_id in nodes and o_id in nodes:
-            incoming[o_id].add(s_id)
-            outgoing[s_id] = o_id
+    sequence_predicates = (
+        URIRef(PRECEDES),
+        URIRef("https://ontology.casenoesis.project/noesis/offense-trajectories#precedes"),
+    )
+    for sequence_predicate in sequence_predicates:
+        for s, _, o in ctx.triples((None, sequence_predicate, None)):
+            s_id, o_id = str(s), str(o)
+            if s_id in nodes and o_id in nodes:
+                incoming[o_id].add(s_id)
+                outgoing[s_id] = o_id
 
     starts = [n for n in nodes if not incoming[n]]
     if not starts:
@@ -223,12 +244,27 @@ def affordance_on_arrival(
 ) -> tuple[str | None, str | None]:
     """Return (affordance_class_iri, misuse_description) for transition into phase_uri."""
     ctx = _ctx(cg, case_graph)
-    for misuse in ctx.subjects(RDF.type, URIRef(AFFORDANCE_MISUSE)):
-        target = ctx.value(misuse, URIRef(ENABLES_TRANSITION_TO))
-        if target and str(target) == phase_uri:
-            aff = ctx.value(misuse, URIRef(AFFORDANCE_CLASS))
-            desc = ctx.value(misuse, URIRef(MISUSE_DESCRIPTION))
-            return (str(aff) if aff else None, str(desc) if desc else None)
+    affordance_patterns = (
+        (
+            URIRef(AFFORDANCE_MISUSE),
+            URIRef(ENABLES_TRANSITION_TO),
+            URIRef(AFFORDANCE_CLASS),
+            URIRef(MISUSE_DESCRIPTION),
+        ),
+        (
+            URIRef("https://cacontology.projectvic.org/platforms#AffordanceMisuse"),
+            URIRef("https://cacontology.projectvic.org/platforms#enablesTransitionTo"),
+            URIRef("https://cacontology.projectvic.org/platforms#affordanceClass"),
+            URIRef("https://cacontology.projectvic.org/platforms#misuseDescription"),
+        ),
+    )
+    for misuse_type, transition_to, affordance_class, misuse_description in affordance_patterns:
+        for misuse in ctx.subjects(RDF.type, misuse_type):
+            target = ctx.value(misuse, transition_to)
+            if target and str(target) == phase_uri:
+                aff = ctx.value(misuse, affordance_class)
+                desc = ctx.value(misuse, misuse_description)
+                return (str(aff) if aff else None, str(desc) if desc else None)
     return None, None
 
 

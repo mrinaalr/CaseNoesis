@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:ncmec_2022_586-affordance-onset-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2022_586-phase-snapchat-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2022_586-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Pseudonymous Snapchat handle enables CSAM trade with believed minors"
+      "noesis:misuseDescription": "Pseudonymous Snapchat handle enables CSAM trade with believed minors"
     },
     {
       "@id": "caselinker:ncmec_2022_586-affordance-trust-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2022_586-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2022_586-phase-directed-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Account rotation to outcast_misfit escalates from trade to directed production"
+      "noesis:misuseDescription": "Account rotation to outcast_misfit escalates from trade to directed production"
     },
     {
       "@id": "caselinker:ncmec_2022_586-affordance-production-enticement",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2022_586-phase-directed-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2022_586-phase-continued-enticement"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "First compliance video lowers resistance to continued enticement solicitations"
+      "noesis:misuseDescription": "First compliance video lowers resistance to continued enticement solicitations"
     },
     {
       "@id": "caselinker:ncmec_2022_586-affordance-enticement-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2022_586-phase-continued-enticement"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2022_586-phase-multi-platform-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Produced and traded depictions accumulated into Dropbox folders and device storage"
+      "noesis:misuseDescription": "Produced and traded depictions accumulated into Dropbox folders and device storage"
     },
     {
       "@id": "caselinker:ncmec_2022_586-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2022_586-phase-multi-platform-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2022_586-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Multi-platform archive sustains persistent harm after Snapchat threads end"
+      "noesis:misuseDescription": "Multi-platform archive sustains persistent harm after Snapchat threads end"
     }
   ]
 }

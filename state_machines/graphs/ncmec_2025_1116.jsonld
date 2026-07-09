@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:ncmec_2025_1116-affordance-onset-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2025_1116-phase-kik-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2025_1116-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Sustained sole-handle Kik distribution builds offender confidence before second account opens"
+      "noesis:misuseDescription": "Sustained sole-handle Kik distribution builds offender confidence before second account opens"
     },
     {
       "@id": "caselinker:ncmec_2025_1116-affordance-trust-distribution",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2025_1116-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2025_1116-phase-multi-account-distribution"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Receipt and archive access on noneya66_lpk (Count 6) precede January–February multi-handle scale-up"
+      "noesis:misuseDescription": "Receipt and archive access on noneya66_lpk (Count 6) precede January–February multi-handle scale-up"
     },
     {
       "@id": "caselinker:ncmec_2025_1116-affordance-distribution-novel",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2025_1116-phase-multi-account-distribution"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2025_1116-phase-novel-and-ai-csam"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "High-volume multi-account Kik circulation includes newly created and AI-morphed depictions"
+      "noesis:misuseDescription": "High-volume multi-account Kik circulation includes newly created and AI-morphed depictions"
     },
     {
       "@id": "caselinker:ncmec_2025_1116-affordance-novel-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2025_1116-phase-novel-and-ai-csam"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2025_1116-phase-device-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Distributed material accumulated into device-resident collection on Samsung Galaxy S23 Ultra"
+      "noesis:misuseDescription": "Distributed material accumulated into device-resident collection on Samsung Galaxy S23 Ultra"
     },
     {
       "@id": "caselinker:ncmec_2025_1116-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2025_1116-phase-device-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2025_1116-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Multi-account distribution and on-device archive sustain persistent harm to depicted victims"
+      "noesis:misuseDescription": "Multi-account distribution and on-device archive sustain persistent harm to depicted victims"
     }
   ]
 }

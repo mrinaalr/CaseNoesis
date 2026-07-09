@@ -1,0 +1,695 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:4dd12f2b-9b6f-5982-95f7-9dbc207614ae",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- elder fraud -- superseding indictment.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1012562"
+          }
+        },
+        {
+          "@id": "urn:uuid:2e8b4718-f5b1-52d4-900a-8065db16d6f2",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1012562"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:7286e809-28ff-53b5-b11b-cd928b107ec1",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "058E5F3B83F40333EE7C0D9CE550AAB3447C656E161A1C247C74E5B3C0CC5541"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:83afbfc7-c9c6-5f12-8d76-13bfdb46e20e",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:c9b26150-d3b2-563c-91de-f4a4d93aa760",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 1 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 2 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 3 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 4 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 5 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 6 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 7 of 8\n\nOct 13 2022\nCase 2:22-cr-00115-ILRL-KWR Document 28 Filed 10/13/22 Page 8 of 8\nCase 2:22-cr-00115-ILRL-KWR Document 28-1 Filed 10/13/22 Page 1 of 1\nPER 18 U.S.C. 3170\n\nDEFENDANT INFORMATION RELATIVE TO A CRIMINAL ACTION - IN U.S. DISTRICT COURT\n\nBY: ETNFoRMATToN E tNDtcTMENT CASE No. 22-11s8(4)\n\nMatter Sealed: ! luvenite E otn\", than Juvenile USA vs\nSEALED\nI Pre-lndictment Plea 7l Supersedin s Z Defendant Added JAYESH J. PANCHAL\nDefendant:\nE tndictment [-l Charges/Counts Added\nfl lnformation\nName of District Court, and/or Judge/Magistrate Location (City) Address: Hicksville, NY\nUNITED STATES DISTRICT COURT EASTERN\nDISTRICT OF LOUtSIRNR Divisional Office\n\nD. Stoddard\nName and Office of Person\nFurnishing lnformation on U.S. Atty Other U.S. Agency\nTHIS FORM Phone No (504) 680-3000\nlnterpreterRequired Dialect\nName of Asst.\nMatthew R. Payne\nU.S. Attorney\n(if assigned) Birth\n969\nE ruate ! Rtien\nDate 1\nE Femate (if applicable)\nName of Complainant Agency, or Person (& Title, if any)\nSocial Security Number\nxxx-xx-0291\nSA Dominick Candebat, HSI\n\nperson is awaiting trial in another Federal or State Court\n(give name of court) DEFENDANT\n\nthis person/proceeding transfened from another diskict\nlssue: M Warrant Summons\nper (circle one) FRCrP 20, 21 or 40. Show District\nLocation Status:\nArrest Date- or Date Transferred to Federal Custody-\nthis is a reprosecution of charges\npreviously dismissed which were E Currently in FederalCustody\ndismissed on motion of:\nn Currently in State Custody\nEu.s. Atty E Defense fl writ Required\nSHOW\nI tni. prosecution relatesto a\npending case involving this same\nDOCKET NO.\nEf currently on bond\ndefendant. (Notice of Related\nCase must still be filed with the\ntr Fugitive\nClerk.)\nprior proceedings or appearance(s)\nMAG. JUDGE\nDefense Counsel (if any): nla\nCASE NO.\nbefore U.S. Magistrate Judge\nregarding this defendant were\nrecorded under ! reo fl cm fl Rrt'o\nPlace of\nf] Appointed on Target Letter\noffense\nHammond, LA county TangiPahoa\n\n! fni. report amendsAO 257 previously submitted\nOFFENSE CHARGED - U.S.C. CITATION - STATUTORY MAXIMUM PENALTIES - ADDITIONAL INFORMATION OR GOMMENTS\n\nTotal # of Counts 2 (for this defendant only)\n\nOffense Title & Section/- Description of Offense Charged Count(s)\nLevel (1, 3,4)\n{Pettv = 1 / n isdemeanor = 3 / Felonv = 4)\n4 18 USC SS 1343, 1349 Conspiracy to Commit Wire Fraud 1\n\n4 18 USC SS e12,2 False Personation of an Employee or Officer of the U.S. 2\nCase 2:22-cr-00115-ILRL-KWR Document 28-2 Filed 10/13/22 Page 1 of 1\n\nSEALETJ\n\nTO: DOCKET CLERK\n\nX ]YO MAGISTRATE PAPERS WERE FOU]YD\n\nfor\nIYAME: CHRISTOPHER L. KEEL: JAYESH J.\n\nPAIYCHAL\n\nInitials:\n\nIf you receive this note without any initials,\n\nplease return the entire packet to criminal desk .\n\nThank you"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c3366245-dfd4-53f3-ab09-041cbc39b06b",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.5.0"
+    },
+    {
+      "@id": "urn:uuid:cf5c406c-f62e-560b-a4d4-115aa6fb6d38",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T13:09:18.277477+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T13:09:18.277477+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:c3366245-dfd4-53f3-ab09-041cbc39b06b"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:13e73a7c-637c-5f7e-b209-0e0797adb600"
+        },
+        {
+          "@id": "urn:uuid:9459bc2f-d5fc-53a5-9776-cf1ba53420b8"
+        },
+        {
+          "@id": "urn:uuid:a56fffd6-b8ac-54ed-a36e-0623ba449ec0"
+        },
+        {
+          "@id": "urn:uuid:bc9d65f3-133a-5146-a58b-62f559d1ca5b"
+        },
+        {
+          "@id": "urn:uuid:64ff6421-d1a0-5cd1-af93-a7c5eaba3830"
+        },
+        {
+          "@id": "urn:uuid:3d1912f8-769e-52f8-946d-fea1d9d6d640"
+        },
+        {
+          "@id": "urn:uuid:4c5b7dc7-87ac-5c3a-8bfe-f9bdadd63544"
+        },
+        {
+          "@id": "urn:uuid:df99929e-d2a0-5df1-9aa9-26c927a5c86d"
+        },
+        {
+          "@id": "urn:uuid:1e6c18dd-6cbb-5f47-9b1d-f76c18467752"
+        },
+        {
+          "@id": "urn:uuid:2b38e824-b413-5712-a813-2bc9c0962840"
+        },
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        },
+        {
+          "@id": "urn:uuid:fa9446b9-5e66-504c-989c-0d61be49013d"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:13e73a7c-637c-5f7e-b209-0e0797adb600",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9459bc2f-d5fc-53a5-9776-cf1ba53420b8",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a56fffd6-b8ac-54ed-a36e-0623ba449ec0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:bc9d65f3-133a-5146-a58b-62f559d1ca5b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:64ff6421-d1a0-5cd1-af93-a7c5eaba3830",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3d1912f8-769e-52f8-946d-fea1d9d6d640",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4c5b7dc7-87ac-5c3a-8bfe-f9bdadd63544",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:df99929e-d2a0-5df1-9aa9-26c927a5c86d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date Oct 13 2022",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: Oct 13 2022",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1e6c18dd-6cbb-5f47-9b1d-f76c18467752",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2b38e824-b413-5712-a813-2bc9c0962840",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c",
+      "@type": "uco-observable:PhoneAccount",
+      "uco-core:name": "Phone (504) 680-3000",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c94e4f55-1fb7-538c-8054-01001fefdfaf",
+          "@type": "uco-observable:PhoneAccountFacet",
+          "uco-observable:accountIdentifier": "(504) 680-3000"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location another Federal",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e8ccef1d-d70d-5cd0-affc-84b4da4d5a17",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "another Federal"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location another diskict",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:4e75dd5d-b5a4-5dda-bac9-19c0b07860a2",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "another diskict"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location FederalCustody\ndismissed",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:34d2d075-0491-5be6-be4c-4b655f7b1f27",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "FederalCustody\ndismissed"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location State Custody",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a8c77fa1-6b30-5842-b4f3-68cae9a5292f",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "State Custody"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fa9446b9-5e66-504c-989c-0d61be49013d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 10/13/22",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 10/13/22",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+        },
+        {
+          "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+        },
+        {
+          "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+        },
+        {
+          "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+        },
+        {
+          "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4d059921-b530-5a3a-9790-6a05be75b2b7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:13e73a7c-637c-5f7e-b209-0e0797adb600"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b9040066-7fa9-5e1b-b4a7-63f294d86636",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9459bc2f-d5fc-53a5-9776-cf1ba53420b8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:06cb80ed-71e8-59a3-a842-ea2d098fea67",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a56fffd6-b8ac-54ed-a36e-0623ba449ec0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d8fab3ca-3cfa-5322-9d2f-2eeffb7b059a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:bc9d65f3-133a-5146-a58b-62f559d1ca5b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c30fb004-e10f-52bd-b3e5-e9f2ae8cd8c1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:64ff6421-d1a0-5cd1-af93-a7c5eaba3830"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:be7ab14d-0202-5608-bf48-2440ad7ed177",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3d1912f8-769e-52f8-946d-fea1d9d6d640"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8930a470-d31f-5f49-b254-5fb1f32852a1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4c5b7dc7-87ac-5c3a-8bfe-f9bdadd63544"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f0de8029-0d84-5aec-840a-eca922bcd411",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:df99929e-d2a0-5df1-9aa9-26c927a5c86d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d9b48387-549b-5f8d-b927-f208a60dbc6d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1e6c18dd-6cbb-5f47-9b1d-f76c18467752"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:82942967-e0ce-5319-956b-f3bb0e472e2f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2b38e824-b413-5712-a813-2bc9c0962840"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f9207397-e9ec-51d4-9328-652fd6ed24cc",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:030c643a-21d8-5bb1-b0e0-5cd9e40f9b5c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d288a11b-c270-58f0-904a-b650a502ee52",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:219a039a-7dcd-5f30-9947-1406301a8ba2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:772fb351-cdd1-52f6-a92a-3ff4ef544340",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:cbb62e55-64b1-5134-9fdc-5a06c682537a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:67be4fcd-0805-5c0c-82f1-983ba02fd9b9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ac72f820-fcc9-511c-9970-6d8d2c6ca039"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1e18e8e8-1c3f-5282-806d-c768b9cce209",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:478315a6-89ba-58b7-922e-190350605992"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7ef24641-b909-5a7d-a932-20e6e49d0a98",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- elder fraud -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fa9446b9-5e66-504c-989c-0d61be49013d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:1ab3c52a-21ce-549b-b61b-7d0130bb34c1"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

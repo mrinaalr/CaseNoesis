@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -105,73 +106,73 @@
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-onset-housing",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Snapchat thread normalizes sexual contact before housing-dependent commercial sex demand"
+      "noesis:misuseDescription": "Snapchat thread normalizes sexual contact before housing-dependent commercial sex demand"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-housing-skipthegames",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-housing-quota"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Rent quota and cohabitation pressure drives migration to public prostitution listings"
+      "noesis:misuseDescription": "Rent quota and cohabitation pressure drives migration to public prostitution listings"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-skipthegames-commercial",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-skipthegames-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "SkipTheGames interstate ads route customers to minor commercial sex dates"
+      "noesis:misuseDescription": "SkipTheGames interstate ads route customers to minor commercial sex dates"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-commercial-maintenance",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-commercial-operation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Date scheduling and proceeds collection sustain trafficking through June 2019"
+      "noesis:misuseDescription": "Date scheduling and proceeds collection sustain trafficking through June 2019"
     },
     {
       "@id": "caselinker:anchorage_pd_2022_004-affordance-maintenance-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-snapchat-maintenance"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:anchorage_pd_2022_004-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Ephemerality"
       },
-      "cac-platforms:misuseDescription": "Snapchat-documented abuse archive compounds harm to identified minor victim"
+      "noesis:misuseDescription": "Snapchat-documented abuse archive compounds harm to identified minor victim"
     }
   ]
 }

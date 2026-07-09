@@ -4,6 +4,7 @@
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -129,101 +130,101 @@
     },
     {
       "@id": "caselinker:bermudez-affordance-gaming-recruitment",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-gaming-funnel"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-enterprise-recruitment"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "In-game relationship → Discord invite link; pseudonymous handles persist"
+      "noesis:misuseDescription": "In-game relationship → Discord invite link; pseudonymous handles persist"
     },
     {
       "@id": "caselinker:bermudez-affordance-recruitment-grooming",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-enterprise-recruitment"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-parallel-grooming"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Permission-gated channels assign coordinators to victims"
+      "noesis:misuseDescription": "Permission-gated channels assign coordinators to victims"
     },
     {
       "@id": "caselinker:bermudez-affordance-grooming-migration",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-parallel-grooming"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Gaming recruitment funnel → Discord operational headquarters"
+      "noesis:misuseDescription": "Gaming recruitment funnel → Discord operational headquarters"
     },
     {
       "@id": "caselinker:bermudez-affordance-migration-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-parallel-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Multi-member coordination enables simultaneous production events"
+      "noesis:misuseDescription": "Multi-member coordination enables simultaneous production events"
     },
     {
       "@id": "caselinker:bermudez-affordance-production-distribution",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-parallel-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-gated-distribution"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Discord servers + harassment access gates; distributed storage"
+      "noesis:misuseDescription": "Discord servers + harassment access gates; distributed storage"
     },
     {
       "@id": "caselinker:bermudez-affordance-distribution-threats",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-gated-distribution"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-threats"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Role-specialized threat actors deployed while production continues"
+      "noesis:misuseDescription": "Role-specialized threat actors deployed while production continues"
     },
     {
       "@id": "caselinker:bermudez-affordance-threats-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:bermudez-phase-threats"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:bermudez-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Distributed across six defendants; no single seizure recovers all"
+      "noesis:misuseDescription": "Distributed across six defendants; no single seizure recovers all"
     }
   ]
 }

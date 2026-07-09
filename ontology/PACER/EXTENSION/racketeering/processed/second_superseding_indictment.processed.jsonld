@@ -1,0 +1,1829 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:615c1ffd-91e2-5a28-8b2f-a5bb01c3e8d3",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- racketeering -- second superseding indictment.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "5616946"
+          }
+        },
+        {
+          "@id": "urn:uuid:d38f11a4-be76-53aa-8b88-9a3534712212",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "5616946"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:15e61e46-a5ec-59b4-9978-f218f3255f66",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "F602ADBB26A36B161DF15EEC1975BB3340DF12E41E86487BB7A8A378672A5675"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:7e4c240b-3f1f-5e8f-9530-8fe2b266aab7",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:e19fc630-10b0-5151-9a32-fe2ca4cc023c",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 1 of 46\n\nUNITED STATES DISTRICT COURT\nFOR THE DISTRICT OF COLUMBIA\nHolding a Criminal Term\nGrand Jury Sworn in on January 10, 2025\n\nUNITED STATES OF AMERICA CRIMINAL NO. 24-CR-417 (CKK)\nv. GRAND JURY ORIGINAL\nMALONE LAM, also known as \"King\nGreavys,\" \"$$$,\" \"7,\" \"Kg,\" VIOLATIONS:\n\nKUNAL MEHTA, also known as \"Papa,\" COUNT 1:\n\"The Accountant,\" \"Shrek,\" and \"Neil,\" 18 U.S.C. \u00a7 1962(d)\n(RICO Conspiracy)\nETHAN YARALLY, also known as\n\"Rand,\" and \"15%,\" COUNT 2:\n18 u.s.c. \u00a7 1349\nAAKAASH ANAND, also known as (Conspiracy to Commit Wire Fraud)\n\"Light,\" and \"Dark,\"\nCOUNT 3:\nEVANTANGEMAN, also known as \"E,\" 18 U.S.C. \u00a7 1956(h)\n\"Tate,\" and \"Evan I Exchanger,\" and (Conspiracy to Launder Monetary\nInstruments)\nFNU LNU-1, also known as \"~_~\"\n\"Squiggly,\" and \"CHEN,\"\nFORFEITURE: 18 U.S.C. \u00a7 924(d),\n18 U.S.C. \u00a7 1963, and\n28 U.S.C. \u00a7 2461(c)\n\nDefendants.\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 2 of 46\n\nSECOND SUPERSEDING INDICTMENT\nThe Grand Jury charges that:\n\nGENERAL ALLEGATIONS\nThe Enterprise\n\nAt all times relevant to this indictment:\n\n1. The defendants, MALONE LAM (\"LAM\"), also known as \"King Greavys,\"\n\n\"$$$,\" \"7 ,\" and \"Kg,\"\n\nKUNAL l\\1EHTA (\"MEHTA\"), also known as \"Papa,\" \"The Accountant,\" \"Shrek,\" and \"Neil,\"\n\nETHAN YARALLY (\"YARALLY\"), also known as \"Rand,\" and \"15%,\" AAKAASH ANAND\n\n(\"ANAND\"), also known as \"Light,\" and \"Dark,\" EVAN TANGEMAN (\"TANGEMAN\"), also\n\nknown as \"E,\" \"Tate,\" and \"Evan I Exchanger,\" and FNU LNU-1 (\"CHEN\"), also known as\n\n\"Chen,\" \"~_~\"and \"Squiggly,\" and others known and unknown, were members and associates of\n\nthe Social Engineering Enterprise (the ''SE Enterprise\"). The SE Enterprise, including its leaders,\n\nmembers, and associates, constituted an \"enterprise,\" as that term is defined in Title 18, United\n\nStates Code, Section 1961 (4 ), that is, a group of individuals associated in fact, although not a legal\n\nentity, which engaged in, and the activities of which affected, interstate and foreign commerce.\n\nThe SE Enterprise constituted an ongoing organization whose members functioned as a continuing\n\nunit for a common purpose of achieving the objectives of the enterprise.\n\nDEFINITIONS\n\n2. Bitcoin: Bitcoin (or \"BTC\") is a type of virtual currency. Unlike traditional,\n\ngovernment-controlled currencies (i.e., fiat currencies), such as the U.S. dollar, Bitcoin is not\n\n2\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 3 of 46\n\nmanaged or distributed by a centralized bank or entity. Because of that, Bitcoin can be traded\n\nwithout the need for intermediaries. Bitcoin transactions are approved/verified by computers\n\nrunning Bitcoin's software. Those computers are called network nodes. Each node uses\n\ncryptography to record every Bitcoin transaction on the Bitcoin blockchain. The. Bitcoin\n\nblockchain is a public, distributed ledger. Bitcoin can be exchanged for fiat currency, other virtual\n\ncurrencies, products, and services.\n\n3. Virtual Currency: Virtual currencies are digital representations of value that, like\n\ntraditional coin and paper currency, function as a medium of exchange (i.e., they can be digitally\n\ntraded or transferred, and can be used for payment or investment purposes). Virtual currencies\n\nare a type of digital asset separate and distinct from digital representations of traditional\n\ncurrencies, securities, and other traditional financial assets. The exchange value of a particular\n\nvirtual currency generally is based on agreement or trust among its community of users. Some\n\nvirtual currencies have equivalent values in real currency or can act as a substitute for real\n\ncurrency, while others are specific to particular virtual domains (e.g., online gaming\n\ncommunities) and generally cannot be exchanged for real currency. Cryptocurrencies, like\n\nBitcoin and Ether (\"Eth\"), are types of virtual currencies, which rely on cryptography for security.\n\nCryptocurrencies typically lack a central administrator to issue the currency and maintain\n\npayment ledgers. Instead, cryptocurrencies use algorithms, a distributed ledger known as a\n\nblockchain, and a network of peer-to-peer users to maintain an accurate system of payments and\n\nreceipts.\n\n4. Monero: XMR or Monero. is a virtual currency which uses a blockchain with\n\nprivacy-enhancing technology to obfuscate transactions to achieve anonymity and fungibility. It\n\n3\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 4 of 46\n\nis widely regarded as a privacy coin and believed untraceable by law enforcement.\n\n5. USDT: USDT or Tether is a stablecoin cryptocurrency designed to maintain a\n\nstable value, pegged to the US dollar (approximately $1).\n\n6. Virtual Currency Address: A virtual currency address is an alphanumeric string\n\nthat designates the virtual location on a blockchain where virtual currency can be sent and\n\nreceived. A virtual currency address is associated with a virtual currency wallet.\n\n7. Virtual Currency Exchange: A virtual currency exchange (\"VCE\"), also called\n\na cryptocurrency exchange, is a platform used to buy and sell virtual currencies. VCEs allow\n\nusers to exchange their virtual currency for other virtual currencies or fiat currency, and vice\n\nversa. Many VCEs also store their customers' virtual currency addresses in hosted wallets. VCEs\n\ncan be centralized (i.e., an entity or organization that facilitates virtual currency trading between\n\nparties on a large scale and often resembles traditional asset exchanges like the exchange of\n\nstocks) or decentralized (i.e., a peer-to-peer marketplace where transactions occur directly\n\nbetween parties). Coinbase, Gemini, Thorswap, Tradeogre, and eXch are examples ofVCEs.\n\n8. Virtual Currency Wallet: A virtual currency wallet (e.g., a hardware wallet,\n\nsoftware wallet, or paper wallet) stores a user's public and private keys, allowing a user to send\n\nand receive virtual currency stored on the blockchain. Multiple virtual currency addresses can be\n\ncontrolled by one wallet.\n\n9. Hardware Wallet: A hardware wallet is a physical, removable device that stores\n\na user's private keys and can be connected to a computer when a user wishes to use the keys\n\nstored on the wallet for virtual currency transactions. Hardware wallets can be secured with PINs\n\nand passphrases and can be backed up or regenerated with a recovery phrase. Trezor and Ledger\n\nare some examples of the types of hardware wallets on the market.\n\n4\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 5 of 46\n\n10. Hosted Wallet: A hosted wallet, also known as a custodial wallet, is a virtual\n\ncurrency wallet through which a third party, e.g., a virtual currency exchange, holds a user's\n\nprivate keys. The third party maintains the hosted wallet on its platform akin to how a bank\n\nmaintains a bank account for a customer, allowing the customer to authorize virtual currency\n\ntransactions involving the hosted wallet only by logging into/engaging with the third party's\n\nplatform.\n\n11. Software Wallet: A software wallet is an internet-connected virtual currency\n\nwallet in the form of a software application on a desktop or mobile device or a web-based platform\n\naccessible through a web browser. The software will store and usually encrypt the user's public\n\nand private keys.\n\n12. Unhosted Wallet: An unhosted wallet, also known as a self-hosted or non-\n\ncustodial wallet, is a virtual currency wallet through which the user has complete control over\n\nstoring and securing their private keys and virtual currency. Unhosted wallets do not require a\n\nthird party's involvement (e.g., a virtual currency exchange) to facilitate a transaction involving\n\nthe wallet.\n\n13. Private Key: A private key is a cryptographic key that is uniquely associated with\n\nan entity and not made public. In the blockchain and virtual currency context, virtual currency\n\naddresses are controlled using a unique corresponding private key, the equivalent of a password,\n\nwhich is needed to access the funds associated with the address. Only the holder of an address's\n\nprivate key can authorize a transfer of virtual currency from that address to another address.\n\n14. Seed Phrase: A seed phrase, also known as a recovery phrase or mnemonic\n\nphrase, is a list of 12 to 24 randomly generated words that acts as a backup for your\n\n5\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 6 of 46\n\ncryptocurrency wallet, allowing you to regain access to your funds if you lose access to your\n\nwallet or device. A social engineer in possession of a victim's seed phrase can reconstitute the\n\nvirtual currency wallet and take possession of a victim's virtual currency.\n\n15. Social Engineering: Social Engineering is a type of fraud scheme wherein\n\nindividuals call a potential victim and \"socially engineer,\" or trick them into providing passwords,\n\npins, and other personal information that the callers use to gain unauthorized access to the victim's\n\nprivate accounts, including cryptocurrency accounts, Google drive files, iCloud accounts, and\n\nother valuable personal files.\n\n16. Caller: A \"Caller\" or \"se'er\" is the name commonly used for the individuals\n\ninvolved in social engineering schemes who place calls to potential victims and falsely portray\n\nthemselves as security technicians from well known email providers such as Google and Yahoo!\n\nor representatives from VCEs such as Gemini or Coinbase. Their goal is to give the victim\n\nenough confidence in their character that the victim will provide access to their online accounts.\n\n17. IRL Break-in: An IRL Break-in or In Real Life Break-in refers to the act of\n\nsending a SE Enterprise member to a victim's residence for the purpose of breaking in and\n\nstealing the victim's hardware wallet.\n\n18. Targs: Targs or Targets are terms used by the SE Enterprise to describe potential\n\nvictims of social engineering schemes.\n\n19. Dbs: Dbs or databases, are stolen virtual currency related databases shared among\n\nthe SE Enterprise and used to develop targets for callers.\n\n20. Crypto-to-Cash: Crypto-to-cash exchangers refers to unlicensed money\n\ntransmitters who receive stolen virtual currency and provide customers with physical fiat US\n\ncurrency. Due to its illegality, the fee charged for this service is exorbitant compared to fees\n\n6\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 7 of 46\n\ncharged by VCEs that perform know your customer (\"KYC\") anti-money laundering protocols.\n\n21. Crypto-to-Wire: Crypto-to-wire exchangers refers to unlicensed money\n\ntransmitters who receive stolen virtual currency and bring the currency into the US banking\n\nsystem for the customer through laundering techniques in the form ofbank wire transfers. Due to\n\nits illegality, the fee charged for this service is exorbitant compared to fees charged by VCEs that\n\nperform \ufffdow your customer (\"KYC\") anti-money laundering protocols.\n\n22. Straw Signer: A straw signer or straw owner is a person who agrees to hold title\n\nto another's automobile or home, for a fee, in order to disguise and conceal the true owner ofthe\n\nitems when the true owner wants to conceal their identity from law enforcement.\n\nBACKGROUND OF THE ENTERPRISE\n\n23. The SE Enterprise began on a date unknown but by no later than October of2023\n\nand continued through at least in or around May 2025.\n\n24. The SE enterprise largely grew from friendships developed among its members\n\nand associates through online gaming platforms. The friendships evolved into agreements to\n\ncommit cyber-enabled criminal offenses throughout the United States and abroad.\n\n25. Members and associates of the SE enterprise served different roles and held\n\ndifferent responsibilities. The roles included database hackers, organizers, target identifiers,\n\ncallers, money launderers, and residential burglars targeting hardware vhtual currency wallets.\n\n26. Database hackers were responsible for hacking websites and servers to obtain\n\ncryptocurrency related databases or purchasing databases on the dark web. Organizers and target\n\nidentifiers were responsible for organizing and collating information across various databases to\n\ndetermine the most valuable targets. Callers were responsible for cold-calling victims and\n\n7\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 8 of 46\n\nconvincing them their accounts were the subject of a cyber-attack and the callers were attempting\n\nto help secure their accounts against cyber-attacks. Money launderers were responsible for\n\nreceiving stolen virtual currency and turning the virtual currency into fiat US currency in the form\n\nof bulk cash or wire transfer, or providing luxury services such as exotic car purchases, private\n\njet rentals, international vacations, or shipping bulk cash across the United States.\n\nPURPOSES OF THE ENTERPRISE\n\n27. The purposes of the SE Enterprise included, but were not limited to the following:\n\na. Stealing virtual currency from victims throughout the United States through\n\nfraudulent pretenses;\n\nb. Disguising, concealing, and obfuscating the source and ownership of the stolen\n\nfunds through the use of virtual currency laundering techniques; and\n\nc. Converting laundered virtual currency into fiat currency and wire transfers for use\n\nat nightclubs, for the purchase of exotic cars, jewelry, luxury handbags, clothing,\n\nprivate jet rentals, along with other items, property, goods, and services, and rental\n\nmansions in Los Angeles, the Hamptons, Miami, and elsewhere.\n\nDEFENDANTS' ROLES IN THE ENTERPRISE\n\n28. CHEN, COCONSPIRATOR-C.F. and others served\n\nas database hackers on behalf of the SE Enterprise or otherwise acquired databases for the SE\n\nEnterprise.\n\n29. LAM, COCONSPIRATOR-C.F., and others served as organizers\n\nfor the SE Enterprise and identified targets for callers.\n\n30. COCONSPIRATOR-1, COCONSPIRATOR-2, YARALLY,\n\nCOCONSPIRATOR C.D., ANAND, COCONSPIRATOR C.F., and others served as callers\n\n8\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 9 of 46\n\nfor the SE Enterprise.\n\n31. COCONSPIRATOR H.D., MEHTA, COCONSPIRATOR J.C., MONEY\n\nEXCHANGER-1, COCONSPIRATOR M.F., TANGEMAN, ANAND, and others served as\n\nmoney launderers for the SE Enterprise.\n\n32. COCONSPIRATOR M.F. served as a residential burglar or IRL (in real life)\n\nBreak-in member of the SE Enterprise.\n\nMEANS AND METHODS OF THE ENTERPRISE\n\n33. The means and methods by which the defendants, and other members and\n\nassociates of the SE Enterprise, conducted and participated in the conduct of the affairs of the SE\n\nEnterprise included, but was not limited to, the following:\n\na. Members and associates of the SE Enterprise obtained and collected stolen\n\ndatabases primarily relating to virtual currency assets in order to identify potential\n\nvictims who held vast amounts of virtual currency across different VCEs.\n\nb. Members and associates of the SE Enterprise caused unauthorized account\n\naccess push notifications to be sent to potential victims in the leadup to a social\n\nengineering attack in order for the fraudulent \"support\" call to seem more\n\nlegitimate.\n\nc. Members and associates of the SE Enterprise made fraudulent \"support\"\n\ncalls in which they called victims and identified themselves as employees from\n\nmajor VCEs or email account providers and tricked victims into providing email\n\naccount passwords, cloud storage account passwords, seed phrases, private keys,\n\nand VCE logins.\n\n9\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 10 of 46\n\nd. Members and associates of the SE Enterprise used victim passwords for\n\nemail accounts, Google Drive accounts, iCloud accounts, and virtual currency\n\naccounts to access victim files and private information and search for seed phrases\n\nand private keys.\n\ne. Members and associates of the SE Enterprises used stolen seed phrases and\n\nprivate keys to access victims' virtual currency and transfer the virtual currency\n\ninto their possession.\n\n\u00a3 Members and associates of the SE Enterprise planned and executed home\n\nbreak-ins to recover physical hardware wallets when SE Enterprise members\n\nidentified substantial virtual currency holdings on cold-storage physical devices.\n\ng. Members and associates of the SE Enterprise stole victim virtual currency\n\nand laundered it through off-shore VCEs and converting it to XMR to conceal the\n\nownership and location of the stolen virtual currency.\n\nh. Members and associates of the SE Enterprise sent laundered virtual\n\ncurrency to other members of the SE Enterprise who accepted stolen virtual\n\ncurrency and exchanged the cmTency for bags of fiat currency and wire transfers.\n\ni. Members and associates of the SE Enterprise used stolen virtual currency\n\nto purchase, among other things, (1) nightclub services ranging up to $500,000 per\n\nevening, (2) luxury handbags valued in the tens of thousands of dollars which were\n\ngiven away at nightclub parties, (3) luxu\u00b7ry watches valued between $100;000 up .to\n\nover $500,000, (4) luxury clothing valued in the tens of thousands of dollars, (5)\n\nrental homes in Los Angeles, the Hamptons, and Miami, (6) private jet rentals for\n\ntravel, (7) a team of private security guards, and (8) a fleet of exotic cars, ranging\n\n10\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 11 of 46\n\nin value from $100,000 up to $3,800,000.\n\nj. Members and associates of the SE Enterprise used various \"nightclub\n\npromoters\" to pay for their nightclub services in exchange for stolen cryptocurrency\n\nand up to a 20% fee for the unlicensed conversions.\n\nk. Members and associates of the SE Enterprise placed their homes and\n\nautomobiles in the names of straw owners, signers, or shell companies to disguise\n\nand conceal their ownership and conceal their identity from law enforcement.\n\n1. Members and associates of the SE Enterprise shipped fiat currency across\n\nthe country to other members, sometimes hidden in clothing or stuffed animals.\n\nm. Members and associates of the SE Enterprise communicated on encrypted\n\nmessaging applications such as Telegram and Signal and changed their usemame\n\non a regular basis to maintain their security.\n\nn. Members and associates of the SE Enterprise obtained firearms for their\n\nprotection from rival cybercrime enterprises and stored the firearms at their group\n\nresidences.\n\no. Members and associates of the SE Enterprise obtained information from\n\noff-duty law enforcement officers regarding investigations of the SE Enterprise.\n\nCOUNT ONE\n(18 U.S.C. \u00a7 1962(d))\n(RICO Conspiracy)\n\n34. Paragraphs 1 through 33 are re-alleged herein.\n\nOBJECT OF THE CONSPIRACY\n\n35. Beginning on a date unknown to the Grand Jury, but from at least on or abou,t\n\nOctober 2023, and continuing through at least in or around May 2025, in the District of Columbia\n11\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 12 of 46\n\nand elsewhere, the defendants,\n\nMALONE LAM,\nalso known as \"King Greavys,\" \"$$$,\" \"7,\" \"Kg,\"\n\nKUNAL MEHTA,\nalso known as \"Papa,\" \"The Accountant,\" \"Shrek,\" and \"Neil,\"\nETHAN YARALLY,\nalso known as \"Rand,\" and \"15%,\"\nAAKAASH ANAND,\nalso known as \"Light,\" and \"Dark,\"\nEVAN TANGEMAN,\nalso known as \"E,\" \"Tate,\" \"Evan I Exchanger\" and,\nFNULNU-1,\nAlso known as\"~_~\" \"Squiggly,\" and \"CHEN,\"\n\nand others known and unknown to the grand jury, being persons employed by and associated\n\nwith the SE Enterprise, an enterprise engaged in, and the activities of which affected, interstate\n\nand foreign commerce, did knowingly, and intentionally combine, conspire, confederate, and\n\nagree to violate Title 18, United States Code, Section 1962(c), that is to conduct and participate,\n\ndirectly and indirectly, in the conduct of the affairs of the enterprise through a pattern of\n\nracketeering activity, as defined in Title 18, United States Code, Sections 1961(1) and (5),\n\nconsisting of multiple acts indictable under Title 18, United States Code:\n\na. Section 1028 (relating to fraud and related activity in connection with\n\nidentification documents);\n\nb. Section 1029 (relating to fraud and related activity in connection with\n\naccess devices);\n\nc. Section 1343 (relating to wire fraud);\n\n12\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 13 of 46\n\nd. Section 1512 (relating to tampering with a witness, victim, or an\n\ninfmmant);\n\ne. Section 1956 (relating to laundering of monetary instruments);\n\nf. Section 1957 (relating to engaging in monetary transactions in property\n\nderived from specified unlawful activity);\n\ng. Section 1960 (relating to illegal money transmitters); and\n\nh. Section 2314 (relating to interstate transportation of stolen property).\n\n36. It was a further part of the conspiracy that each defendant agreed that a conspirator\n\nwould commit at least two acts of racketeering activity in the conduct of the affairs of the\n\nenterprise.\n\nOvert Acts\n\n37. In furtherance of the conspiracy, and to achieve the objectives thereof, each\n\ndefendant and their co-conspirators committed and caused to be committed the following overt\n\nacts, among others, in the District of Columbia, and elsewhere:\n\na. In or around October 2023, LAM, COCONSPIRATOR C.F., and\n\nCOCONSPIRATOR-2 moved in together in Texas and began discussing\n\ncyberfraud schemes, to include database thefts, social engineering schemes, and\n\nemail account intrusions.\n\nb. In or around October 2023, LAM, COCONSPIRATOR C.F., and\n\nCOCONSPIRATOR-2 began committing social engineering attacks in various\n\ncombinations.\n\nc. While in Texas from October 2023 through December 2023, LAM,\n\n13\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 14 of 46\n\nCOCONSPIRATOR C.F., and COCONSPIRATOR-2 funded their lifestyles and\n\npaid rent with profits from their cybercrime activities, which included social\n\nengineering schemes.\n\nd. While in Texas from October 2023 through December 2023,\n\nCOCONSPIRATOR-2 and others used MONEY EXCHANGER-I to receive\n\nstolen cryptocunency and exchange it into fiat cash in the form of Cashapp\n\ndeposits. MONEY EXCHANGER-I charged a 10% fee for using his unlicensed\n\nmoney service business.\n\ne. In or around December 2024, LAM, COCONSPIRATOR C.F., and\n\nCOCONSPIRATOR-2 moved to Los Angeles, California and enlisted the\n\nassistance of MONEY EXCHANGER-1 and TANGEMAN to help them obtain\n\nshort and long-term rental homes paid for with stolen virtual CUTI'ency in fraudulent\n\nnames.\n\nf. In December 2023, LAM, COCONSPIRATOR C.F., and\n\nCOCONSPIRATOR-2 used MONEY EXCHANGER-I to illegally convert stolen\n\ncryptocunency into fiat cash in amounts ranging from $10,000 - $50,000.\n\ng. Between in or around December 2023 and September 2024, TANGEMAN\n\nassisted various coconspirators, including LAM, COCONSPIRATOR C.F,\n\nCOCONSPIRA TOR-2, and others in obtaining luxury rental homes in Los Angeles\n\nusing stolen virtual cunency.\n\nh. Between in or around December 2023 and September 2024, TANGEMAN\n\nand MONEY EXCHANGER-I received stolen cryptocunency from LAM,\n\nCOCONSPIRATOR-2, COCONSPIRATOR C.F, and others and used Money\n\n14\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 15 of 46\n\nExchanger-2 and MEHTA to convert the stolen cryptocun-ency into U.S. dollars.\n\n1. In or around January 2024 and continuing through at least September 2024,\n\non behalf of members of the SE Enterprise, TANGEMAN placed various rental\n\nhomes in false names, listed fictitious tenants, and paid deposits in large cash sums,\n\nin excess of hundreds of thousands of dollars, in order to disguise and conceal the\n\ntrue ownership of the rental homes on behalf of the SE Enterprise.\n\nj. From in or around December 2023 and continuing through around\n\nSeptember 2024, TANGEMAN charged a fee for his anonymizing services and his\n\ncrypto-to-cash services.\n\nk. Between December 2023 and April 2024, MONEY EXCHANGER-1\n\nassisted LAM, COCONSPIRATOR C.F, COCONSPIRATOR-2, and others with\n\nexchanging stolen cryptocurrency for US dollars, in exchange for a 10% fee.\n\n1. In or around the beginning of 2024, TANGEMAN assisted LAM,\n\nCOCONSPIRATOR C.F, COCONSPIRATOR-2, and others to obtain a rental\n\nhome located on Clear Valley Drive, Encino, California, a six-bedroom, 11-\n\nbathroom, 11,000 square foot home and paid for with stolen cryptocurrency.\n\nm. In or around the beginning of 2024, LAM, COCONSPIRATOR C.F,\n\nCOCONSPIRATOR-2, and others set up computer terminals at the Clear Valley\n\nDrive rental home, in Encino, California for the purposes of executing cybercrime\n\nschemes including social engineering attacks.\n\nn. Beginning in or around January 2024 and continuing through at least\n\nSeptember 2024, LAM, COCONSPIRATOR-1, COCONSPIRATOR-2, and\n\n15\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 16 of 46\n\nCOCONSPIRATOR C.F began targeting victim Gmail accounts for social\n\nengineering attacks.\n\no. In or around early 2024, and CHEN shared breached\n\ncryptocurrency related databases with LAM and others for use in social engineering\n\nfraud schemes.\n\np. In or around February 2024, COCONSPIRATOR H.D. joined the SE\n\nEnterprise and offered additional crypto-to-cash money laundering services for a\n\nfee. Soon thereafter, COCONSPIRATOR H.D. and MONEY EXCHANGER-I\n\nbegan working together to service the SE Enterprise's need for currency exchanges.\n\nq. In or around early 2024, MEHTA was introduced to the SE Enterprise and\n\noffered additional crypto-to-cash money laundering services for a fee, as well as\n\ncrypto-to-wire money laundering services.\n\nr. From in or around early 2024 and continuing through at least May 2025,\n\nMEHTA laundered millions of dollars' worth of virtual currency through a\n\nsophisticated virtual currency money laundering ring and received \"clean\" currency\n\nthrough wire transfers and cash deliveries.\n\ns. From in or around early 2024 and continuing through at least September\n\n2024, MEHTA assisted COCONSPIRATOR M.F. and other members of the SE\n\nEnterprise in obtaining firearms for their protection against rival cybercrime groups.\n\nt. In or around early 2024, COCONSPIRATOR J.C. began assisting various\n\nmoney launderers with retrieving and delivering bags of fiat cash to members of the\n\nSE Enterprise.\n\nu. In or around early 2024, and continuing until at least September 2024,\n\n16\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 17 of 46\n\nCOCONSPIRATOR J.C. assisted members of the SE Enterprise in changing stolen\n\nvirtual currency into fiat currency anti shipping the cmTency across the United\n\nStates, hidden in squishmallow\u00ae stuffed animals, each containing approximately\n\n$25,000 apiece.\n\nv. From in or around early 2024 and continuing through at least May of 2025,\n\nCOCONSPIRATOR C.F. and others reached an agreement to split\n\nprofits from social engineering schemes with one another based on their role in the\n\ntheft, whether they found the victim's information, and who obtained the breached\n\ndatabases that contained the information.\n\nw. In or around early 2024, MEHTA began assisting the SE Enterprise in\n\nlaundering stolen virtual currency so that it could be used to purchase exotic cars\n\nfrom Exotic Car Dealership-I. MEHTA also agreed to find straw signers for the\n\nautomobiles or hold the automobiles in his name to disguise and conceal the true\n\nownership of the automobiles.\n\nx. In or around March 2024, TANGEMAN assisted COCONSPIRATOR C.F.,\n\nCOCONSPIRATOR-2, and others in obtaining another rental home located on\n\nHesby Street, a 7000 square foot, 6 bed, 8 bath single-family home in Encino,\n\nCalifornia (the \"Hesby House\"). COCONSPIRATOR C.F ., LAM,\n\nCOCONSPIRATOR-2 and others paid for this home through stolen cryptocurrency\n\nwhich TANGEMAN received and changed into fiat currency for cash payments to\n\nthe property owners.\n\ny. In or around March 2024, TANGEMAN arranged the lease documents for\n\n17\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 18 of 46\n\nCOCONSPIRATOR C.F., COCONSPIRATOR-2, and others at the Hesby House\n\nand used fake names and fake identity documents to execute the lease for the\n\npurpose of concealing their identities.\n\nz. In or around March 13, 2024, LAM, COCONSPIRATOR-\n\n1, and another coconspirator executed a social engineering fraud scheme against\n\nVictim-I and stole over $600,000 in virtual currency from Victim-I.\n\naa. In or around May 2024, COCONSPIRA TOR H.D. informed LAM that\n\nCOCONSPIRATOR H.D. could obtain various private jet rentals for LAM and his\n\nassociates and COCONSPIRATOR H.D. could arrange air travel for LAM and\n\nothers where they would not need to provide any identification documents to travel\n\non private jets.\n\nbb. On or about May 15, 2024, COCONSPIRATOR-1, YARALLY, and another\n\ncoconspirator executed a social engineering fraud scheme against Victim-2 and\n\nstole approximately $2,900,000 in virtual currency from Victim-2.\n\ncc. In or around June 2024, COCONSPIRATOR J.C., MEHTA, MONEY\n\nEXCHANGER-1, the owner of Exotic Car Dealership- I, and others,rented a private\n\njet and flew from Los Angeles to the Hamptons for a weekend party thrown by\n\nCOCONSPIRATOR-1, paid for with stolen virtual currency.\n\ndd. In or around June 2024, COCONSPIRATOR H.D. and MEHTA assisted\n\nCOCONSPIRATOR-1 in arranging for a rental mansion in the Hamptons and a fleet\n\nof exotic car rentals. MEHTA and COCONSPIRATOR H.D. used MEHTA's\n\ncrypto-to-wire transfer exchange service to assist COCONSPIRATOR-1 in paying\n\nfor these items with stolen virtual currency.\n\n18\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 19 of 46\n\nee. Throughout the summer months in 2024, and at times both before and after,\n\nlaundered stolen cryptocurrency through COCONSPIRA TOR H.D.\n\nto obtain fiat cash and to obtain private jet rentals, Miami rental mansions, and\n\nnightclub services.\n\nff. On or about June 21, 2024, LAM informed COCONSPIRATOR-1 that he\n\nwas \"trying to make $5m[illion] for us atm [at the moment].\"\n\ngg. On or around June 23, 2024, LAM, CHEN, and another coconspirator,\n\nexecuted a social engineering fraud scheme against Victim-3 and stole\n\napproximately $870,000 worth of virtual currency.\n\nhh. In or around July 2024, COCONSPIRATOR-1, MONEY EXCHANGER-!,\n\nYARALLY, COCONSPIRATOR C.D., ANAND, COCONSPIRATORH.D., and\n\nothers traveled to Miami as a group. While in Miami, COCONSPIRATOR H.D.\n\nand MONEY EXCHANGER-I assisted the group in exchanging hundreds of\n\nthousands of dollars in stolen virtual cu1Tency for fiat cash through\n\nCOCONSPIRATOR H.D.'S network in Miami.\n\n11. In or around July 2024, LAM, and COCONSPIRATOR-1\n\nexecuted a social engineering fraud scheme against Victim-4.\n\njj. In or around July 2024, LAM accessed Victim-4's Apple iCloud account to\n\nmonitor Victim-4's location in real time.\n\nkk. In or around July 2024, COCONSPIRATOR M.F. flew to New Mexico to\n\nbreak into Victim 4's home for the purpose of stellling Victim-4's virtual currency\n\nhardware wallet.\n\n19\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 20 of 46\n\n11. In or around July 2024, while in New Mexico, COCONSPIRATOR M.F. set\n\nup a telephone (which had a video camera) across from Victim-4's home to\n\nlivestream the home during the break-in so that other enterprise members could alert\n\nCOCONSPIRATOR M.F. if the victim returned during the break-in.\n\n\u2022 mm. On July 8, 2024, COCONSPIRATOR M.F., in coordination with LAM and\n\nothers, broke into Victim-4's home in search of hardware virtual currency devices.\n\nnn . On or about July 17, 2024, TANGEMAN directed LAM to send $194,000\n\nin stolen virtual currency to TANGEMAN's \"cash guy\" so that TANGEMAN\n\ncould retrieve fiat cash and use it to pay a security deposit at one of LAM's Los\n\nAngeles rental homes.\n\noo. On or about July 19, 2024, LAM asked TANGEMAN to find him $300,000\n\nin fiat cash in exchange for stolen virtual currency. TANGEMAN responded \"Yeah\n\nlet me see if I can get that much cash tonight might have to be in the morning.\"\n\nTANGEMAN later responded to LAM that if LAM had USDT or ETH, he could\n\nobtain the full $300,000 immediately, but if not, TANGEMAN could only obtain\n\n$100,000 that day and $200,000 the following date.\n\npp. On or about July 21, 2024, LAM, CHEN, and another co-conspirator\n\nexecuted a social engineering fraud scheme against Victim-5 and stole\n\napproximately $1,740,000 in virtual currency from Victim-5.\n\nqq. On or about July 24, 2024, LAM, CHEN, and another coconspirator executed\n\na social engineering fraud scheme against Victim-6 and stole approximately\n\n$14,000,000 in virtual currency from Victim-6.\n\nrr. On a date unknown, but shortly after July 24, 2024, LAM sent MEHTA over\n\n20\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 21 of 46\n\n*\n\n$500,000 in virtual currency stolen during the Victim-6 theft and MEHTA in tum\n\npersonally delivered a duffel bag containing approximately $500,000 in US\n\ncurrency to LAM and his associates.\n\nss. In or around August and September of 2024, COCONSPIRATOR M.F.\n\ncreated a digital payment card on the site ReDotPay using fake documents from\n\nCOCONSPIRATOR M.F.'s \"KYC guy,\" and agreed with COCONSPIRATOR-2,\n\nLAM, and others that he would receive their stolen virtual currency, load it onto the\n\nvirtual payment card, and allow members of the SE Enterprise to use the card in\n\nperson at retail stores.\n\ntt. On August 3, 2024, LAM asked COCONSPIRATOR J.C. to get him\n\n$100,000 in fiat cash and COCONSPIRATOR J.C. responded \"bet, bet. .. I'm\n\ngetting the cash right now.\"\n\nuu. On or about August 19, 2024, LAM, COCONSPIRATOR-1,\n\nCOCONSPIRATOR-2, CHEN, and executed a social engineering\n\nfraud scheme againstVictim-7 while Victim-7 was at his home in Washington. D.C.\n\nIn doing so, they stole approximately $245,093,239.00 in virtual currency from\n\nVictim-7.\n\nvv. On or about August 19, 2024, LAM, COCONSPIRATOR-1,\n\nCOCONSPIRATOR-2, CHEN, and convinced Victim-7 to download\n\na remote desktop connection program onto his computer in Washington, D.C.\n\nLAM, COCONSPIRATOR-1, COCONSPIRATOR-2, CHEN, and\n\nthen accessed Victim-7' s computer during their social engineering fraud scheme.\n\n21\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 22 of 46\n\nww. Following the Victim-7 theft, LAM, COCONSPIRATOR-1,\n\nCOCONSPIRATOR-2, and CHEN, used sophisticated virtual\n\ncurrency laundering techniques to \"clean\" the stolen currency.\n\nxx. Following the Victim-7 theft, ANAND assisted COCONSPIRATOR-1 with\n\nlaundering the stolen virtual currency on various virtual currency exchanges that are\n\nImown for not requiring any identity documents for financial transactions.\n\nyy. Between August 19, 2024 and September 10, 2024, LAM and his associates\n\nspent over $4,000,000 in stolen virtual currency at Los Angeles nightclubs.\n\nzz. On or about August 23, 2024, TANGEMAN assisted LAM in securing an\n\nadditional Los Angeles rental home in exchange for stolen virtual currency.\n\nTANGEMAN directed LAM to send $337,050 in USDT to TANGEMAN's\n\n\"exchanger\" which included a 7% commission for unlicensed crypto-to-cash\n\nservices.\n\naaa. On or about August 25 and 26, 2024, LAM used TANGEMAN and MONEY\n\nEXCHANGER-I to launder approximately $3,000,000 in cryptocurrency in order\n\nfor LAM to obtain a new Los Angeles rental home.\n\nbbb. Between August 25 and 28, 2024, TANGEMAN and MONEY\n\nEXCHANGER-I received $3,000,000 in stolen virtual currency from LAM and\n\nworked with \u00b7MEHTA to exchange the virtual currency for fiat cash.\n\nccc. On August 26, 2024, LAM requested to tour the home before paying the full\n\n$3,000,000 but TANGEMAN told LAM this was not a good idea because the\n\nrealtor had placed the home under the name of a 55-year-old living at the residence\n\nwith his family, all in an effort to conceal LAM's payment and ownership of the\n\n22\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 23 of 46\n\nhome.\n\nddd. On or about August 23, 2024, MEHTA agreed to ship COCONSPIRATOR-\n\n1 $50,000 in fiat cash in exchange for stolen virtual currency and a fee for his\n\nservices.\n\neee. On or about August 26, 2024, COCONSPIRATOR J.C. informed\n\nCOCONSPIRATOR-1 that he was shipping his fiat cash in the mail. Soon\n\nthereafter, COCONSPIRATOR-1 received squishmallow\u00ae stuffed animals filled\n\nwith $50,000 in fiat currency.\n\nfff. On or about August 26, 2024, ANAND asked COCONSPIRATOR-1 to\n\nsearch four email addresses through the SE Enterprise's virtual currency databases\n\nto see if any of the targets were valuable.\n\nggg. On or about August 29 and 30, 2024, ANAND discussed new social\n\nengineering callers who he was recruiting to work directly for them including\n\nCOCONSPIRATOR C.D. ANAND told COCONSPIRATOR-1 that the callers\n\nknow what they are doing because they also work with COCONSPIRATOR C.F.\n\nCOCONSPIRATOR-1 replied, \"if it's for Gmails, I'd have to get Malone [LAM\n\nbecause] he signs in[to accounts] and stuff.\"\n\nhhh. On September 3, 2024, LAM asked COCONSPIRATOR H.D. in a sms\n\nmessage \"who do you get cash off,\" and COCONSPIRATOR H.D. replied\n\n\"Message me on si gnal.\"\n\niii. On or about September 4, 2024, COCONSPIRATOR C.F., and\n\nothers executed a social engineering scheme against Victim-8 and stole\n\n23\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 24 of 46\n\napproximately $5,000,000 in virtual currency.\n\nJJJ. In or around September 4, 2024, COCONSPIRATOR C.F., and\n\nothers, split the profits from the $5,000,000 theft, with receiving\n\napproximately 25% of the profits.\n\nkkk.. In or around September 2024, LAM requested that COCONSPIRATOR J.C.\n\nand COCONSPIRATOR H.D. assist him in exchanging $400,000 in stolen virtual\n\ncurrency.\n\n111. In or around September 2024, ANAND traveled to the United States from\n\nNew Zealand to visit COCONSPIRATOR-1 and retrieve luxury clothing purchased\n\nwith stolen virtual currency.\n\nmmm. On or about September 6, 2024, COCONSPIRATOR H.D. and\n\nCOCONSPIRATOR-1 discussed the Victim-7 theft and COCONSPIRATORH.D.\n\ntold COCONSPIRATOR-1 that \"I genuinely think Malone [LAM] has a huge\n\nchance of getting caught compared to you[,] keep your profile the way that you do.\"\n\nCOCONSPIRATOR-1 responded, \"Yeah he's gonna simmer down hopefully.\"\n\nCOCONSPIRATOR H.D. replied and told COCONSPIRATOR-1 \"Bro delete your\n\nTele[gram] chats and setup your new phone.\"\n\nnnn. On or about September 7, 2024, COCONSPIRATOR M.F. and\n\nCOCONSPIRATOR-1 discussed the Victim-7 theft and COCONSPIRATOR-2's\n\ninvolvement. COCONSPIRATOR M.F. stated \"Bro [COCONSPIRATOR-2] is so\n\nfucking stupid. It fucking hurts ... What's so hard about waiting to clean 50 million\n\ndollars. Why is he so impatient knowing he has trusted people cleaning it. Like what\n\nwas the point of Malone [LAM] sweating his ass off cleaning\n\n24\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 25 of 46\n\n[COCONSPIRATOR-2's] shit little by little ... Bro he just fumbled a 250m lick just\n\nby being stupid.\"\n\nooo. On or about September 7, 2024, YARALLY sent COCONSPIRATOR-1 a\n\nmessage stating \"just got into a rich Indian bitch ... but she signed us out\" followed\n\nby a screenshot of a an excel spreadsheet from the victim's computer showing all\n\nof the victim's virtual currency holdings. YARALLY continued on saying that she\n\nis \"stupid\" on the phone and asked how he could bypass a google security feature.\n\nYARALLY then told COCONSPIRATOR-1 \"[w]ere back in ... Kody\n\n[COCONSPIRATOR C.D.] se'd [social engineered] her \u2022 for her\n\npassword ... [password redacted] ... this is her password btw.\" YARALLY finally\n\nsent COCONSPIRATOR-1 a screenshot of his computer screen showing\n\nCOCONSPIRATOR C.D. accessing a victim's Gmail account during a social\n\nengineering scheme in real-time.\n\nppp. On or about September 8, 2024, LAM shared approximately 40 organized\n\nand stolen cryptocurrency-related databases with COCONSPIRATOR\n\nC.F., and other co-conspirators for the purpose of using the databases to target\n\nvictims and committing wire fraud.\n\nqqq. On or about September 8, 2024, COCONSPIRATOR-1 and YARALLY\n\ndiscussed a profit-sharing agreement for current social engineering victims.\n\nCOCONSPIRATOR-1 stated \"30/30/30/10 is how we're going to do shit. 30\n\n[M]alone [LAM] 30 me 30 you 10 se'r\" referring to the social engineer caller.\n\nYARALLY responded, \"I'll take 25 and give ma[il] se'er 15 ... cus mail se'ers r\n\n25\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 26 of 46\n\nRuben and Cody [COCONSPIRATOR C.D.] too.\"\n\nrrr. On or about September 8, 2024, LAM, and\n\nCOCONSPIRATOR C.F. discussed an arrangement in a group chat wherein LAM\n\nagreed to send all his databases to and COCONSPIRATOR C.F. if\n\nCOCONSPIRATOR C.F. and agreed that they would send LAM and\n\nCOCONSPIRATOR-1 20% of any successful social engineering targets where the\n\ntheft was over $10,000,000. COCONSPIRATOR C.F. agreed and stated \"[w]e\n\nhackin, all day every day.\"\n\nsss. On September 8, 2024, COCONSPIRATOR-2 asked COCONSPIRATOR\n\nJ.C. if he knew who was sending cash to his Hesby House address.\n\nCOCONSPIRATOR J.C. informed him that COCONSPIRATOR H.D. was having\n\ncash delivered there for LAM and explained that this was a $400,000 crypto-to\n\ncash exchange.\n\nttt. On September 8, 2024, MEHTA messaged COCONSPIRATOR-2 to\n\nexplain the manner in which he disguises and conceals the true owners of the exotic\n\ncar purchases and told COCONSPIRATOR-2 that \"[o]ur goal is to cover our tracks\n\nin a way that if anything comes back ever we are covered and have no stress.\"\n\nuuu. On or about September 9, 2024, MEHTA and COCONSPIRATOR J.C.\n\nspoke with COCONSPIRATOR-2 about paying for his security detail. MEHTA\n\nasked COCONSPIRATOR-2 to send the XMR to COCONSPIRATOR J.C. who\n\nwould then convert the virtual currency into USDT and send it to MEHTA for\n\npayment.\n\nvvv. On or about September 9, 2024, LAM bragged to\n\n26\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 27 of 46\n\nCOCONSPIRATOR C.F., and COCONSPIRATOR-1 about successfully stealing\n\nvirtual currency from Victim-5, Victim-6, and Victim-7. LAM stated in part \"bro\n\n[Victim-6] a dumb fuck too,\" \"[Victim-5] dumb fuck.\" COCONSPIRATOR C.F.\n\nresponded \"[a]ll these kids that been doing it forever suck.\" LAM replied \"[Victim-\n\n7] shouldn't even of took long. [COCONSPIRATOR-2] and I just played it smart\n\nand calm. And extra cautious. But other than that think abt it all big ass licks.\" LAM\n\nwent on to state \"theyjust stupid,just gotta find the right one.\" COCONSPIRATOR\n\nC.F. agreed and asked \"[h]ow are we all so much better than everyone\" and \"[h]ow\n\nhave we surpassed all the kids that have been around for 8 years, in a few months.\"\n\nwww. On September 9, 2024 YARALLY requested an email target database from\n\nCOCONSPIRATOR-1 and COCONSPIRATOR-1 sent him a document containing\n\nemails and identifiers for over 1,000 targets, titled \"good ass Yahoos to run.\"\n\nCOCONSPIRATOR-1 then asked YARALLY which callers were working for him\n\nat the moment and YARALLY responded \"kody,\" referring to COCONSPIRATOR\n\nC.D.\n\nxxx. On or about September 9, 2024, COCONSPIRATOR C.F. and LAM\n\ndiscussed past victims and COCONSPIRATOR C.F. told LAM \"100%. We hit the\n\nguy for 2160 eth 12 btc. Dumb as shit. Gave us his Gmail pw [password] and input\n\nseed within 5 mins basically.\" LAM replied \"bro, Conor [COCONSPIRATOR\n\nC.F.], we, not me, we have the most Dbs [databases] in this world, in this\n\ncommunity bro.\" COCONSPIRATOR C.F. replied \"oh ye, it's not even close.\"\n\nyyy. In or around September 2024, an off-duty law enforcement officer informed\n\n27\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 28 of 46\n\nMONEY EXCHANGER-I that federal law enforcement was investigating\n\nmembers of the SE Enterprise. MONEY EXCHANGER-I relayed this information\n\nto COCONSPIRATOR-2 and recommended that COCONSPIRATOR-2 stay in the\n\nMaldives instead of returning to the United States.\n\nzz:z.. In or around September 2024, COCONSPIRATOR-2 sent MEHTA\n\napproximately $500,000 in stolen virtual currency for MEHTA to exchange for fiat\n\ncurrency and wire transfers that MEHTA agreed to launder to\n\nCOCONSPIRATOR-2's mother in the form of cash, wire transfers, and an\n\nautomobile.\n\naaaa. In September 2024, COCONSPIRATOR-2 paid COCONSPIRATOR H.D.\n\nin stolen virtual currency to arrange travel for himself and two others to travel to\n\nthe Maldives. COCONSPIRATOR-2 paid COCONSPIRATOR H.D. during the trip\n\nand during one payment of $32,200 on September 12, 2024, COCONSPIRATOR\n\nH.D. stated \"got KYC on the funds, I just wanna make sure it was clean right?\"\n\nCOCONSPIRATOR-2 replied \"Yes the funds were clean brotha.\"\n\nbbbb. In August and September of 2024, LAM purchased over 30 automobiles\n\nfrom Exotic Car Dealership-2 using stolen virtual currency and created a fictitious\n\nholding company named Crypto Administration LLC to hold title to the cars, all\n\nwith the goal of disguising and concealing the true ownership of the automobiles.\n\nThe automobiles included Ferraris, Lamborghinis, Mercedez G Wagons, Rolls\n\nRoyce, a Mcclaren, and a Pagani among several others.\n\ncccc. On or about September 12, 2024, COCONSPIRATOR H.D. informed\n\nCOCONSPIRATOR-2 about being \"beamed\" or robbed of $400,000 during a\n\n28\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 29 of 46\n\ncrypto-to-cash exchange on behalf of LAM. COCONSPIRATOR-2 asked \"[t]hat's\n\nterrible bro. So you sent them 400k for free?\" COCONSPIRATOR H.D. responded\n\n\"[y]ou're making me sound dumb but cash people every cash person always\n\nrequires it first and he's fronted money for me before so it was just a show for me\n\n- but a few racks is fine bro. Never been burned in my life and highest I did with\n\nthese people are like 500k on tx [transaction].\"\n\ndddd. On or around September 13, 2024, LAM,\n\nCOCONSPIRATOR-1, and others engaged in a group chat discussing social\n\nengineering thefts. LAM stated \"man let's just say the tbi better arrest me before\n\nOctober.\" responded \"LOL.\" LAM replied \"if not I swear to all of\n\nyou we will make 50m ++ before December lol. I am going to grind so hard.\"\n\neeee. On or around September 13, 2024, LAM, and others\n\nparticipated in a group chat titled \"money,\" that had victim information, including\n\nphone number, full name, and suspected crypto holdings, pinned to the top of the\n\ngroup chat.\n\nffff. On or about September 13, 2024, LAM shared a 4.5 gb data package with\n\nand others for use in social engineering fraud schemes. LAM stated\n\n\"wait until you open the folder. LOL it's go niode. Every single thing I've ever\n\nworked on ... is in there.\" responded \"I needa get some fucking\n\npopcorn.\"\n\ngggg. On or about September 14, 2024, COCONSPIRATOR-2 and\n\nCOCONSPIRA TOR C.F. discussed the new cars LAM was purchasing with stolen\n\n29\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 30 of 46\n\nvirtual currency. COCONSPIRATOR-2 then asked if the cars were under\n\nMEHTA's name.COCONSPIRATOR C.F. responded \"All my cars are chilling.I\n\ngot all mine under him [MEHTA]. I got no clue how he [LAM] has his set up.\"\n\nhhhh. On or about September 15, 2024, MEHTA informed COCONSPIRATOR-\n\n2 that MEHTA could assist in exchanging virtual currency to fiat cash and sending\n\nit to COCONSPIRATOR-2's inother.MEHTA stated \"[c]ash exchange we can do\n\nhere brother...[s]ame like always my g . 10%. Since day 1... So $550k when you\n\nready...If you want I can even wire half to her account and half cash.I'm sure it's\n\ngoing to be easier for her to spend if it's in her account than $500k cash.\"\n\niiii. On or about September 15, 2024, MEHTA informed COCONSPIRATOR-2\n\nthat MEHTA could funnel $250,000 in stolen virtual currency to\n\nCOCONSPIRATOR-2's mother in the form of wire transfers. MEHTA informed\n\nCOCONSPIRATOR-2 that MEHTA would insulate them from federal\n\ninvestigators by sending COCONSPIRATOR-2's mother $30,000 at a time and\n\ncreating \"some kind of work for her and show[ing] that I paid her for that and at the\n\nend of the year once she files her taxes I can help her get refund as well.\" MEHTA\n\nwent on to explain that if COCONSPIRATOR-2 wanted \"some cash to give with\n\nthe [mom's new] car then I think we should do like 250k and rest I can do wires\n\nslowly.\"\n\njjjj. On or about September 16, 2024, COCONSPIRATOR C.F. told\n\nCOCONSPIRATOR-2 \"look what I smacked.\" COCONSPIRATOR-2 responded,\n\n\"I heard a crazy seed [phrase].\" COCONSPIRATOR C.F.replied \"ended up being\n\n5.8\" million, referring to the Victim-8 theft. COCONSPIRATOR-2 replied\n\n30\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 31 of 46\n\n\"Bonkers... that must've been [a] new car that day for u. New Newport house too.\n\n1 yr lease.\" COCONSPIRATOR C.F. then sent COCONSPIRATOR-2 a photo of a\n\nluxury watch he purchased with the stolen virtual currency.\n\n\ufffd. On or about September 16, 2024, COCONSPIRATOR C.F. and\n\nCOCONSPIRATOR-2 discussed all of LAM's recent spending, including\n\npurchasing over 30 cars, multiple homes in Miami and Los Angeles, a two-million\n\ndollar watch, along with the multiple private jets LAM rented to fly friends from\n\nLos Angeles to Miami.\n\nllll. On or about September 16, 2024, COCONSPIRATOR-2 told\n\nCOCONSPIRATOR C.F. that he had spent $200,000 on .his Maldives trip,\n\nincluding $125,000 on travel and two payments of $25,000 and $40,000 to\n\nCOCONSPIRATOR H.D. to perform the unlicensed virtual currency exchange to\n\nfiat cmTency with COCONSPIRATOR-2's stolen virtual currency.\n\nmmmm. On September 17, 2024, COCONSPIRATOR H.D. told\n\nCOCONSPIRATOR-2 to delete his phone applications before returning from the\n\nMaldives because customs could go through his phone and this happened to another\n\nassociate recently where they discovered $500,000.\n\nnnnn. On or about September 17, 2024, COCONSPIRATOR H.D. told\n\nCOCONSPIRATOR-2 that he could procure iPhones for COCONSPIRATOR-2 for\n\na fee where the phones would be placed under a fake identity and\n\nCOCONSPIRATOR-2 would be notified if the phone numbers were ever the\n\nsubject of a law enforcement subpoena.\n\n31\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 32 of 46\n\n0000. Throughout September 2024, LAM, COCONSPIRATOR H.D., and others\n\nworked to together to exchange stolen virtual currency to fiat currency that could\n\nbe used for nightclub services and bulk cash conversions in Miami, Florida.\n\npppp. On or about September 18, 2024, LAM obtained information about the\n\ninvestigation of the SE Enterprise originating from an off-duty law enforcement\n\nofficer, specifically, that law enforcement were on their way to arrest LAM.\n\nqqqq. On or about September 18, 2024, LAM walked to the rear of his Miami\n\nrental home and tossed his mobile telephone off the boat dock and into Biscayne\n\nBay to destroy incriminating evidence, after being advised that law enforcement\n\nwere on their way to arrest LAM.\n\nrrrr. On or about September 18, 2024, while in Los Angeles, TANGEMAN used\n\nhis remote access to the security cameras located at LAM' sMiami rental homes to\n\nwatch FBI Agents search the residence, inventory evidence, and share the video\n\nwith other members of the SE Enterprise.\n\nssss. Following LAM's arrest on or about September 18, 2024, TANGEMAN\n\nsolicited other members of the S.E. Enterprise to retrieve digital devices owned by\n\nLAM and COCONSPIRATORM.F. and destroy them.\n\ntttt. Following LAM's arrest on or about September 18, 2024, TANGEMAN\n\nand others recovered digital devices belonging to COCONSPIRATOR M.F. and\n\nLAM in Los Angeles and destroyed the devices for the purpose of obstructing the\n\nJaw enforcement investigation.\n\nuuuu. Following LAM's arrest on September 18, 2024 and continuing through\n\nOctober 2024, YARALLY regularly spoke with LAM from inside of aMiami jail\n\n32\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 33 of 46\n\nand relayed messages from various SE Enterprise members to LAM and relayed\n\nmessages from LAM to other SE Enterprise members.\n\nvvvv. On or about September 23, 2024, LAM spoke with YARALLY and\n\nCOCONSPIRATOR C.D. and asked if they had been in contact with \"Nie\n\nand told them to \"tell Nie to give [them] a\n\nnumber where [LAM] can call him,\" because \"Nic's loyalty dies with me.\" LAM\n\nfurther stated that \"both their loyalty dies with me.\" LAM then asked YARALLY\n\nand COCONSPIRATOR C.D. if the video that was released of the Victim-7 theft\n\nwas \"my screen.\" They responded \"no, it's [Co-Conspirator 1 's screen].\" LAM\n\nfinally told YARALLY and COCONSPIRATOR C.D. that and\n\ntwo other co-conspirators' \"loyalty dies with me\" and \"they'll take care of all y'all\n\nfor like for 5-10 years until I'm on the outside ... Nie especially\n\nNie will do anything for me.\" LAM, YARALLY, and\n\nCOCONSPIRATOR C.D. then discussed being excited that LAM was \"TikTok\n\nfamous,\" for the cryptocurrency thefts.\n\nwww.w. On or about September 27, 2024, LAM asked YARALLY ifhe had spoken\nwith and YARALLY responded \"yeah, we're about to go see them\n\non the jet right now.\" LAM then informed YARALLY that\u2022 and\n\nother coconspirators \"will pay anything for me, I'm confident they'll pay anything\n\nfor me.\" YARALLY then facilitated a three-way phone call between LAM and\n\nanother co-conspirator where LAM told this co-conspirator that he and\n\nneeded to provide anything that YARALL Y needed until LAM\n\n33\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 34 of 46\n\nwas out of jail.\n\nxxxx. On or about September 27, 2024, helped YARALLY and\n\nCOCONSPIRATOR C.D. flee Miami after LAM's arrest using a private jet\n\npaid for with stolen cryptocurrency and arranged through\n\nCOCONSPIRATOR H.D.\n\nyyyy. On or about September 27, 2024, YARALLY executed a three-way phone\n\ncall for LAM to COCONSPIRATOR-1. LAM told COCONSPIRATOR-1 \"[y]ou\n\nknow I'm taking this for you right? ... you know I'm in here and it's not my\n\nmistake.\" LAM then said \"you're the only people .... ya'll have the money. You\n\nknow how it works, the lawyers care about the money ... I'm talking about pay the\n\nlawyers.\" LAM then explained that he had already given his money \"back to the\n\nfeds.\" YAR.ALLY then informed him not to worry about the lawyers because \"I'm\n\ngetting it right now ... We have Hamza [COCONSPIRATOR H.D.] helping\n\neveryone out here too.\" LAM concluded by telling the group, \"we always talked\n\nabout what it would be like if I were to go down, but never thought it would be this\n\ncrazy.\"\n\n2222. On or about September 28, 2024, YARALLY informed LAM that\n\nCOCONSPIRATOR C.F. was selling a car to pay for lawyers. LAM responded\n\n\"Why is he selling [their) M3s ... Tell Conor [COCONSPIRATOR C.F.] not to give\n\nback those other cars. It's fucking 200k, I wipe that shit with my ass. I don't want\n\nthat. I want my people to have their shit. .. if he wants me out, tell him to get his\n\nmoney to the lawyers, not by selling cars.\"\n\naaaaa. On or about October 2, 2024, YARALLY informed LAM that law\n\n34\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 35 of 46\n\nenforcement did not recover all of LAM' s cars and YARALLY told LAM that he\n\ndid not want to identify their location over the recorded line.\n\nbbbbb. From in or around November 2024 and continuing through at least March\n\n2024, COCONSPIRATOR M.F. held onto a portion of LAM's funds while\n\nincarcerated and used LAM' s funds to arrange for the purchase of multiple Hermes\n\nBirkin purses for LAM's girlfriend with the assistance of TANGEMAN and other\n\ncoconspirators.\n\nccccc. On or about October 21, 2024, and other co-conspirators\n\nexecuted a social engineering fraud scheme against Victim-9 and stole\n\napproximately $2,000,000 in virtual currency from Victim-9.\n\nddddd. On or about October 21, 2024, and others laundered the\n\nVictim-9 stolen virtual currency using the same process employed during the\n\nVictim-7 theft. They then split the funds among one another and sent some of the\n\nstolen funds to COCONSPIRATOR-1.\n\neeeee. From in or around November 2024 and continuing through at least March\n\n2024, COCONSPIRATOR M.F. used the remainder of LAM's stolen virtual\n\ncurrency, and other stolen funds sent to COCONSPIRATOR M.F. by members of\n\nthe SE Enterprise, including YARALLY, to fund LAM' s defense team.\n\nfffff. In or around November and December 2024, YARALLY sent\n\nCOCONSPIRATOR M.F. approximately $55,000 in fraud proceeds to support\n\nLAM.\n\nggggg. From in or around November 2024 and continuing through March 2025,\n\n35\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 36 of 46\n\nCOCONSPIRATOR M.F. regularly passed messages on LAM's behalf inside of\n\njail to members of the SE Enterprise, to include COCONSPIRATOR C.F .,\n\nYARALLY, TANGEMAN, COCONSPIRATORH.D., and others.\n\nhhhhh. In or around January 2025, YARALLY and COCONSPIRATOR C.D.\n\nregularly shared their computer screen views with COCONSPIRATOR-1 so that\n\nCOCONSPIRATOR-1 could watch them performing social engineering attacks.\n\niiiii. In or around January and February 2025, COCONSPIRATOR H.D.,\n\nYARALLY, COCONSPIRATOR C.D., and others communicated with\n\nCOCONSPIRATOR-1 in jail and spoke in code regarding social engineering\n\nschemes. The group used coded language such as \"playing tournaments,\" \"winning\n\ngames,\" or \"being really good players.\"\n\njjjjj. In or around February or March of 2025, YARALLY,\n\nCOCONSPIRATOR C.F. and others attempted to execute social engineering fraud\n\nschemes from Dubai in the United Arab Emirates.\n\nkkkkk. In or around April of 2025, used the money laundering\n\nservices of MEHTA and COCONSPIRATOR H.D. to rent a luxury penthouse\n\napartment in Miami, Florida.\n\nIllll. On or about May 13, 2025, COCONSPIRATOR C.F. possessed\n\napproximately $8,000,000 in stolen cryptocurrency.\n\nrnmmmrn. On or about May 13, 2025, MEHTA possessed approximately $300,000 in\n\nfiat cash that was being used in a crypto-to-cash money laundering transaction.\n\nnnnnn. On or about May 13, 2025, TANGEMAN possessed over $10,000 in fiat\n\ncash in his apartment.\n\n36\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 37 of 46\n\n00000. On or about May 13, 2025, COCONSPIRATOR M.F. possessed two\n\nfirearms in his residence, one which was given to him by MEHTA.\n\n(In violation of Title 18, United States Code, Section 1962(d))\n\nCOUNT TWO\n(18 u.s.c. \u00a7 1349)\n(Conspiracy to Commit Wire Fraud)\n\n38. Paragraphs 1 through 33 and 37 are re-alleged herein.\n\n39. Beginning on a date unknown, but no later than in or around October 2023 and\n\ncontinuing until at least in or around May 2025, within the District of Columbia and elsewhere,\n\nthe defendants,\n\nMALONE LAM,\nalso known as \"Kin!! Greavvs.\" \"$$$,\" \"7,\" \"Kg,\"\n\nETHAN YA.RALLY,\nalso known as \"Rand,\" and \"15%,\"\nAAKAASH ANAND,\nalso known as \"Light,\" and \"Dark,\" and\nFNULNU-1,\nAlso known as\"~_~\" \"Squiggly,\" and \"CHEN,\"\n\ndid knowingly and willfully conspire, confederate, and agree, with each other and with other\n\npersons, to commit wire fraud by devising, intending to devise, and engaging in a scheme to\n\ndefraud and to obtain money, property, and cryptocurrency from Victim-1, Victim-2, Victim-3,\n\nVictim-4, Victim-5, Victim-6, Victim-7, Victim-8, Victim-9 and others by means of materially\n\nfalse and fraudulent pretenses, representations, and promises, and for the purpose of executing and\n\n37\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 38 of 46\n\nattempting to execute the scheme to defraud, did knowingly cause to be transmitted by means of\n\nwire communications in interstate commerce, writings, signs, signals, pictures, and sounds.\n\n(In violation of Title 18, United States Code, Section 1349)\n\nCOUNT THREE\n(18 U.S.C. \u00a7 1956(h))\n(Conspiracy to Launder Monetary Instruments)\n\n40. Paragraphs 1 through 33 and 37 are re-alleged herein.\n\n41. From in or around at least October 2023 and continuing until at least in or around\n\nMay 2025, within the District of Columbia and elsewhere, the defendants,\n\nMALONE LAM,\nalso known as \"King Greavys,\" \"$$$,\" \"7,\" \"Kg,\"\n\nKUNAL MEHTA,\nalso known as \"Papa,\" \"The Accountant,\" \"Shrek,\" and \"Neil,\"\nAAKAASH ANAND,\nalso known as \"Light,\" and \"Dark,\" and\nEVAN TANGEMAN,\nalso known as \"E,\" \"Tate,\" \"Evan I Exchanger,\"\n\ndid knowingly combine, conspire, and agree with each other and with other persons known and\n\nunknown to the Grand Jury to commit offenses against the United States in violation of Title 18,\n\nUnited States Code, Sections 1956(a)(l)(B)(i) and 1957, to wit: (1) the movement of\n\n$245,093,239.00 in stolen cryptocurrency, along with other stolen cryptocurrency, which involved\n\nthe proceeds of a specified unlawful activity and the numerous financial transactions designed in\n\nwhole or in part to conceal or disguise the nature, location, source, ownership, and control of the\n\nproceeds of the conspiracy to commit wire fraud charged in Count Two of the Indictment, and that\n\n38\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 39 of 46\n\nwhile conducting and attempting to conduct such financial transactions, knew that the property\n\ninvolved in the financial transactions represented the proceeds of some form of unlawful activity,\n\nin violation of Title 18, United States Code, Section 1956(a)(l)(B)(i) and (2) knowingly engage\n\nand attempt to engage in monetary transactions in criminally derived property of a value greater\n\nthan $10,000 that was derived from specific unlawful activity, that is the conspiracy to commit\n\nwire fraud charged in Count Two of the Indictment, in violation of Title 18, United States Code,\n\nSection 1957.\n\nMANNER AND MEANS\n\n42. The manner and means used to accomplish the objectives of the conspiracy\n\nincluded, among others,\n\na. LAM, CHEN, and others transferring portions of the\n\n$245,093,239.00 stolen from Victim-7 between multiple cryptocurrency\n\naddresses and through cryptocurrency .mixers and exchanges for the\n\npurpose of concealing ownership and disguising the origin and current\n\nlocation of the stolen funds.\n\nb. LAM, YARALLY,\n\nCOCONSPIRATOR-1, COCONSPIRATOR-2, COCONSPIRATOR C.F.,\n\nCOCONSPIRA TOR C.D., and others, using various virtual currency\n\nexchanges (\"VCEs\") that require little to no identifying information such as\n\nThorswap or eXch to change stolen cryptocurrency into privacy coins such\n\nas Monero (X:MR), in order to disguise and conceal the location, ownership,\n\nand origin of the cryptocurrency.\n\n39\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 40 of 46\n\n*\n\nc. Co-conspirators including LAM, CHEN, and others using\n\npeel chains and pass-through wallet addresses for the purpose of concealing\n\nownership and disguising the location of the stolen funds.\n\nd. COCONSPIRATOR M.F. creating a digital payment card to assist members\n\nof the conspiracy in engaging in financial transactions in excess of $10,000\n\nin criminally derived property;\n\ne. TANGEMAN exchanging stolen virtual currency for fiat currency to help\n\nLAM and others obtain rental homes paid with cash deposits and placing\n\nfictitious names on the lease documents to conceal the ownership and\n\ncontrol of the funds and homes.\n\nf. COCONSPIRATORS H.D., J.C., MEHTA, and others changing criminally\n\nderived virtual currency into fiat cash, in excess of $10,000 at a time,\n\nknowing that the transactions were also designed to conceal the source,\n\nownership, and control of the currency.\n\ng. COCONSPIRATOR J.C. shipping squishmallow\u00ae stuffed animals\n\ncontaining fiat cash across the country, knowing the funds represented\n\ncriminally derived proceeds.\n\nh. COCONSPIRATOR T.D. delivering fiat cash for members of the\n\nconspiracy and assisting LAM in procuring luxury handbags valued at over\n\n$10,000 and flying the handbags to LAM's girlfriend in Miami while LAM\n\nwas incarcerated.\n\ni. ANAND assisting with swapping and laundering stolen virtual currency on\n\nvarious VCE platforms.\n\n40\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 41 of 46\n\nj. Co-conspirators including LAM and others attempting to obfuscate their\n\nidentities by using virtual private network (\"VPN\") services to attempt to\n\nmask their true IP addresses.\n\nk. LAM, META, COCONSPIRATOR H.D., ANAND, COCONSPIRATOR\n\nJ.C., COCONSPIRATOR T.D., COCONSPIRATOR M.F., CHEN,\n\nand TANGEMAN, engaging\n\nin financial transactions in excess of $10,000, knowing that the transactions\n\nrepresented criminal proceeds generated through specified unlawful\n\nactivity.\n\n(In violation of Title 18, United States Code, Sections 1956(h), 1956(a)(l)(B)(i) and 1957)\n\nFORFEITURE\n\n43. The allegations contained in COUNT ONE of this Indictment are hereby real!eged\n\nand incorporated by reference for the purpose of alleging forfeitures pursuant Title 18, United\n\nStates Code, Section 1963. Pursuant to Title 18, United States Code, Section 1963, upon conviction\n\nof an offense in violation of Title 18, United States Code, Section 1962, the defendant(s) shall\n\nforfeit to the United States of America:\n\na. any interest acquired or maintained in violation of section 1962;\n\nb. any interest in, security of, claim against, or property or contractual right of\n\nany kind affording a source of influence over, any enterprise which the\n\ndefendant(s) established, operated, controlled, conducted, or participated in\n\nthe conduct of, in violation of section 1962; and\n\nC. any property constituting, or derived from, any proceeds obtained, directly\n\n41\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 42 of 46\n\nor indirectly, from racketeering activity in violation of 1962.\n\n44. The allegations contained in COUNT TWO of this Indictment is hereby realleged\n\nand incorporated by reference for the purpose of alleging forfeitures pursuant to Title 18, United\n\nStates Code, Section 981(a)(l)(C) and Title 28, United States Code, Section 2461(c). Upon\n\nconviction of the offense in violation of Title 18, United States Code, Section 1349 set forth in\n\nCOUNT TWO of this Indictment, the defendant(s), shall forfeit to the United States of America,\n\npursuant to Title 18, United States Code, Section 981(a)(l)(C) and Title 28, United States Code,\n\nSection 2461(c), any property, real or personal, which constitutes or is derived from proceeds\n\ntraceable to the offense.\n\n45. The allegations contained in COUNT THREE of this Indictment are hereby\n\nrealleged and incorporated by reference for the purpose of alleging forfeitures pursuant to Title 18,\n\nUnited States Code, Sections 982(a)(l). Pursuant to Title 18, United States Code, Section\n\n982(a)(l), upon conviction of an offense in violation of Title 18, United States Code, Section 1956,\n\nthe defendant(s), shall forfeit to the United States of America any property, real or personal,\n\ninvolved in such offense, and any property traceable to such property.\n\nSPECIFIC PROPERTY SUBJECT TO FORFEITURE\n\n46. The property to be forfeited includes, but is not limited to, the following:\n\nCryptocurrency\nCl) 457,997.495978 USDT ($458,256.26) currently located at virtual currency\naddress 0xc63f4l909DfeDEE97Cf88Ac3EfE7a5e2c3F7a462\nC2) 1,020,392 USDT ($1,020,968.52) currently located at virtual currency\naddress 0x588d86Fb0B8d8A3l8aDc5cFc7Dd460El794D 1e5c\nC3) 6.72069 ETH ($26,769.31) currently located at virtual currency address\n0x588d86FbOB8d8A3l 8aDc5cFc7Dd460El794Dle5c\nC4) 0.2 ETH ($827.52) transferred from virtual currency address\n0xe8bde8169a2f6ed6855201afcac7be05a5639b25\n\n42\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 43 of 46\n\nCS) 1,033.12224964 ETH ($4,274,667.28) transferred from virtual currency\naddress 0xe8bde8169a2f6ed685520lafcac7be05a5639b25\nC6) 499.99917711 ETH ($2,068,806.60) transferred from virtual currency\naddress 0xf40d997d76ld39c57d57e9c7c39a8adflb9bb3b3\nC7) 3.45229143 ETH ($14,284.27) transferred from virtual currency address\n0x7c3b327a07d0e27e4724510fbb05bcl22dddlfc6\nC8) 0.74997756 ETH ($3,103.12) transferred from virtual currency address\n0xbeea5140b0476b821dbb3ba410e02da39dl41234\nC9) 0.5563215 ETH ($2,301.85) transferred from virtual currency address\n0xd2a61dade9fe4ald4908fe68527b627cbe20d67e\nCl0) 0.50262729 ETH ($2,079.68) transferred from vittual currency address\n0x74d579ab0aa2e610ab2bla5c5fa32a32625679ca\nCl1) 1031.68 USDT ($1,032.26) transferred from virtual currency address\n0x5a04e69Al70FEE08Fa7Ce6530B3l 76a50D4754c5\nCl2) 960.640622 USDT ($961.18) transferred from virtual currency address\n0x6A7633590095708ca4a3EE5l ba2478A85ae2CfC 1\nC13) 0.39913449 ETH ($1,651.47) transferred from virtual currency address\n0x494la7be8441ffcc8f448aa5ff7bb3lfleaf592f\nC14) 0.35656158 ETH ($1,475.32) transferred from virtual cu1Tency address\n0xd2e50f7dldcblcd3959ldd2b9c7clf482c9a70e7\nCl5) 0.01004729 ETH ($41.57) transfe1Ted from virtual currency address\n0x2lc90cl635afbbd5c09be0447eb929lle8fb02d3\nCl6) 704.383325 USDT ($704.78) transferred from virtual currency address\n0x067ba3e7Ecbc4f6822f49271712a5e0120DF0c4d\nCl7) 635.40673 USDT ($635.77) transferred from virtual currency address\n0xf4F49357fEF859a2DF8c40235C641D5eB08f6clb\nVehicles\nVl) 2022 Ferrari SF90 Stradale, VIN: ZFF95NLA2N0274061\nV2) 2024 Mercedes-Benz G Class, VIN: W1NYC7HJ6RX512875\nV3) 2022 Mercedes-Benz s580, VIN: W1K6G7GB7NA126661\nV4) 2021 Bentley Flying Spur, VIN SCBBB6ZG0MC085063\nVS) 2024 Mercedes-Benz G, VIN: W1NYC7HJ8RX503658\nV6) 2019 Lamborghini Aventador LP770, VIN: ZHWUM6ZD24LA08868\nV7) 2023 Ferrari SF90 Spider, VIN ZFF96NMA0P0291651, with accessories\nV8) 2019 Rolls Royce Ghost, VIN SCATV0CO2MU27053\nV9) 2023 Mercedes-Benz G Wagon, VIN W1NYC7HJ9PX489640\nVlO) 2024 Porsche 911 GT3 RS, VIN WP0AF2A96RS272078\nVll) 2022 Rolls Royce Ghost, VIN SCATV0C05NU211485\n\n43\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 44 of 46\n\nCash\nCl) Cash in brown Louis Vuitton bag totaling $169,700\nC2) Cash in black Samsonite bag totaling $44,714\nC3) Cash in bag totaling $275,212\nC4) Orie Hundred Ten (110) $100 bills totaling $11,000\n\nMiscellaneous\nMl) Louis Vuitton bag\nM2) Black Samsonite bag\nM3) Black Louis Vuitton keychain\nM4) Diamond-encrusted bracelet\nMS) Seveh bracelets\nM6) Key Fobs - Ferrari xl BMW x3 Mercedes Benz xl\nM7) Louis Vuitton suitcase Brown and orange\nM8) Louis Vuitton Duffel Bag Black Check\nM9) Louis Vuitton Suitcase Bag\nMl0) Louis Vuitton Small suitcase\nMl1) Louis Vuitton Dop Kit\nMl2) Louis Vuitton Wallet Black check full zip\nMl3) Louis Vuitton Roll case Black\nM14) Louis Vuitton backpack Brown and orange\nMIS) Louis Vuitton backpack black check\nM16) Louis Vuitton card case black\nMl7) Louis Vuitton wallet Blackcheck, no zipper\nMl8) Designer shirts, pants, belts, and jackets (Louis Vuitton etc.) A-E 2 boxes,\n3 bags\nMl9) Royal Oak Offshore Automatic Watch\nM20) Louis Vuitton et al receipts\nM21) Cartier Bracelet white gold with diamonds\nM22) Diamond Ring with solitaire cut\nM23) Cartier bracelet gold with diamonds\nM24) Cartier chain bracelet gold with diamonds\nM2S) Diamond Stud earring (single)\nM26) White gold diamond ring band\nM27) Gold/diamond ring band\nM28) Cross pendant gold diamond earrings\nM29) Cartier chain white gold with diamonds\nM30) Gold diamond bracelet\nM3l) Cartier bracelet, gold with diamonds\nM32) Louis Vuitton bracelet with clear stones SN 154502, Au750\nM33) Swarovski diamond bracelet\nM34) Rolex watch #116233\nM35) Richard Mille watch RM 35-01 SN RM3501 AOCA/203\nM36) Van Cleefbracelet, blue\nM37) Van Cleefbracelet, black\n\n44\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 45 of 46\n\nM38) Van Cleef bracelet, white\nM39) Van Cleefbracelet, red\nM40) Rolex watch rose gold & silver with diamonds\nM41) Audemars Piguet Royal Oak Offshore - WF4785K\nM42) Richard Mille 11-03 watch SN RMl1-03 RG/2748\nM43) Richard Mille 055 watch SN RM055 AATJ/214\nM44) Richard Mille 11-03 watch, SN RMll-03 FQ1819\nM45) Richard Mille 30-01 watch, SIN RM30-0l Tirg/456\nM46) Richard Mille 65-01 watch, multiple bands\nM47) Van Cleef& Arpels bracelet 5 Motifgreen, yellow gold, malachite\ndiamonds\nM48) Van Cleef& Arpels bracelet Alhambra 5 motif, yellow gold, Guilloche\ndiamonds\nM49) Shotgun, Hawk Model 981R SN 0099154\nM50) 4x mags (1 empty) & 45mm ammo\nM51) Camo Handgun ammunition, 8 rounds\nM52) Camo Handgun Serial BXST341\nM53) Smith & Wesson ammo. 6 rounds and 2 magazines\nM54) Smith & Wesson Pistol JRPl176\nM55) 16 rounds of9mm ammunition\nM56) Springfield Pistol\nM57) Black Geisler Pistol, SL-1071 Solarfish Light Attached, with one (1) empty\n9mm 18 capacity magazine\nM58) Two 9mm Luger R-P Rounds\nM59) Black Chanel Boots\nM60) Wells Fargo Statements\nM61) Gray Louis Vuitton Backpack\nM62) Green Rene Caovilla Sandals\nM63) Black Chanel Purse with Gold Chain\nM64) Pink Hermes Slides\nM65) Black Louis Vuitton Case\nM66) Black Hermes Slides with Sheepskin\nM67) Brown Hermes Slides with Sheepskin\nM68) White Hermes Sandals with Velcro Straps\nM69) Black Hermes Sandals\nM70) White Hermes Sandals\nM71) Brown Hermes Sandals\nM72) Black Rubber Chanel Rain Boots\nM73) Black Louboutin Heeled Boots\nM74) Silver and Clear Femine Heels\nM75) Pink Patent Leather Louboutin Heels\nM76) White Louboutin Heels\nM77) Black Louboutin Sandals with Metal Studs\nM78) Black Louboutin Heels\n\n45\nCase 1:24-cr-00417-CKK Document 245 Filed 11/17/25 Page 46 of 46\n\nM79) Patek Philippe Watch, REF 39701 W\nM80) Necklace with clear gems\n\nMONEY JUDGMENT\n47. In the event of conviction, the United States may seek a money judgment.\n\nSUBSTITUTE ASSETS\n48. If any of the property described above, as a result of any act or omission\n\nof the defeQ.dant(s):\n\na. cannot be located upon the exercise of due diligence;\n\nb, has been transferred or sold to, or deposited with, a third party;\n\nc. has been placed beyond the jurisdiction of the court;\n\nd. has been substantially diminished in value; or\n\ne. has been commingled with other property which cannot be divided\n\nwithout difficulty,\n\nthe United States of America shall be entitled to forfeiture of substitute property pursuant to Title\n\n18, United States Code, Section 1963(m) and Title 21, United States Code, Section 853(p), as\n\nincorporated by Title 28, United States Code, Section 246l(c).\n\nA TRUE BILL\n\nFOREPERSON\n\n\u2022 ,//\n\ufffdLl 4 d,\nANINE FE s PIRRO //1......_\n:ATTORNEY \u00b7OR THE UNITED STATES\nIN AND FOR THE DISTRICT OF COLUMBIA\n\n46"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:35d14c41-b791-576e-b9e6-fc0b8c96fbf8",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.5.0"
+    },
+    {
+      "@id": "urn:uuid:11f9200d-5573-54cf-808b-7eb4f370caca",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T10:46:16.760678+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T10:46:16.760678+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:35d14c41-b791-576e-b9e6-fc0b8c96fbf8"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:ff02a016-8224-5e70-97e3-60e1843fb3f1"
+        },
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:09b98f31-c3c9-5937-8f37-39b31c5bdcca"
+        },
+        {
+          "@id": "urn:uuid:30bea51f-866a-5778-899a-e745a9dc1b4e"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:b57708dc-7b19-5082-8fab-06ad7e58b12a"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:734dda03-29f8-5136-8200-2aef436006e0"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:2c511637-d90a-51f7-bf89-3026dc023b94"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:ff4022a1-5bd9-5655-86b7-5063777919a4"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        },
+        {
+          "@id": "urn:uuid:d4348ede-17ef-5b39-87f4-4aff639cee5c"
+        },
+        {
+          "@id": "urn:uuid:442b033a-8645-537d-a823-7f22801a87f4"
+        },
+        {
+          "@id": "urn:uuid:b8648125-f1f4-5f25-9851-009fd75455a8"
+        },
+        {
+          "@id": "urn:uuid:5a310f64-bd40-5315-b349-acb11c0a00de"
+        },
+        {
+          "@id": "urn:uuid:156aa8e4-e777-52dd-9676-cb2300c4bd88"
+        },
+        {
+          "@id": "urn:uuid:9a0cdb47-844c-5b00-ae9d-95a704098e41"
+        },
+        {
+          "@id": "urn:uuid:c563dc0b-3ad3-5bff-b4e6-7423a3d3ef59"
+        },
+        {
+          "@id": "urn:uuid:e418b0b7-5b8b-59cf-bdd4-43920d3e4be4"
+        },
+        {
+          "@id": "urn:uuid:799c7050-fd85-5099-9e17-3944fd4c294a"
+        },
+        {
+          "@id": "urn:uuid:997cc3a6-e73c-5408-b05c-4814b2c29924"
+        },
+        {
+          "@id": "urn:uuid:f71ab136-82fd-586e-8e36-ceb79bf0fe87"
+        },
+        {
+          "@id": "urn:uuid:57078566-1848-5313-af4a-201128b2d9e6"
+        },
+        {
+          "@id": "urn:uuid:6e33d1a0-d254-5817-9a3d-7a912e465d3b"
+        },
+        {
+          "@id": "urn:uuid:74b91ac2-a722-520e-97f3-2f4c497b7c16"
+        },
+        {
+          "@id": "urn:uuid:6f38f885-692b-5c93-92c1-e99f042adde0"
+        },
+        {
+          "@id": "urn:uuid:83ca3627-ef1f-5d47-a8fc-83d50b2bf3b7"
+        },
+        {
+          "@id": "urn:uuid:35473a2e-8d77-55da-b803-9dbaacd7465f"
+        },
+        {
+          "@id": "urn:uuid:57a9bf24-2b96-5105-9be9-02e2e8457bba"
+        },
+        {
+          "@id": "urn:uuid:07b09749-4830-5e4e-9f93-71012d23b25a"
+        },
+        {
+          "@id": "urn:uuid:5e244953-efcb-5887-bdcf-68f7bee55df0"
+        },
+        {
+          "@id": "urn:uuid:d93f296b-a4a9-548b-9b37-4cc3744d3c23"
+        },
+        {
+          "@id": "urn:uuid:b8faaa9a-4f11-58e6-a16f-58cd0603131d"
+        },
+        {
+          "@id": "urn:uuid:7b7264cd-9bb5-51a0-b3e9-40d8f0b3f493"
+        },
+        {
+          "@id": "urn:uuid:127689e9-67f8-5bae-966b-cdde5d9933a2"
+        },
+        {
+          "@id": "urn:uuid:57f3211b-bcb4-5e9d-ac8b-b8e6d30c530c"
+        },
+        {
+          "@id": "urn:uuid:4665f53d-3f4b-5b23-b81f-d9f8c57895cf"
+        },
+        {
+          "@id": "urn:uuid:2f330d90-8221-50fd-b6f6-dab28373aebc"
+        },
+        {
+          "@id": "urn:uuid:71b42981-37bc-599d-b238-a9468f22a6e6"
+        },
+        {
+          "@id": "urn:uuid:d364bb99-5006-513d-a5d3-3fbcfebd96b2"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ff02a016-8224-5e70-97e3-60e1843fb3f1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location on January",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:272e364d-9db1-513f-8e0b-716b04c0026d",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "on January"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:09b98f31-c3c9-5937-8f37-39b31c5bdcca",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date January 10, 2025",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: January 10, 2025",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:30bea51f-866a-5778-899a-e745a9dc1b4e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location all times",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:85d4a8cf-aac0-5890-a108-2940a4d88400",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "all times"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location Title",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:72e8e310-0cc2-58e6-b58f-216cead99ff8",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "Title"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location fact",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5f48a1d0-234e-50ae-8a67-9bf77fbcab6f",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "fact"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b57708dc-7b19-5082-8fab-06ad7e58b12a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location digital representations",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e85385ee-50bb-57d7-9d0c-f70bc6542933",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "digital representations"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location real currency",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:072f723e-48d2-5e21-96ed-44313c43a6ed",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "real currency"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:734dda03-29f8-5136-8200-2aef436006e0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:555b5ce2-13c7-5d26-80fa-1ab5f6bb8613",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:fcb0b067-fcd8-52d5-a228-6611549661a4",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location hosted wallets",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:7c3a1f2f-3285-50de-95f6-3a7580213276",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "hosted wallets"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2c511637-d90a-51f7-bf89-3026dc023b94",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the form",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:bf7fa8e6-cf2d-5530-98ff-7b7a5756c6e4",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the form"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the blockchain",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:7432e259-8fc6-543c-b7e6-4661ec7be56c",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the blockchain"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location that address",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5bc855a0-b38c-55fd-834f-4ffac60b192e",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "that address"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ff4022a1-5bd9-5655-86b7-5063777919a4",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location possession of",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ca3def8c-08a7-5643-b91a-f698252cdec5",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "possession of"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d4348ede-17ef-5b39-87f4-4aff639cee5c",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location social engineering",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ed0c4fd7-bfb2-594c-8a72-b1d86af5344d",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "social engineering"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:442b033a-8645-537d-a823-7f22801a87f4",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location well known",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:424ac8d1-cebd-50f7-965d-11647b05c273",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "well known"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b8648125-f1f4-5f25-9851-009fd75455a8",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location VCEs such",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:11f8c3ac-d16c-5ea8-a6dc-aa924392de6d",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "VCEs such"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5a310f64-bd40-5315-b349-acb11c0a00de",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location their character",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a0f1345c-37e3-52da-8069-31756c788e26",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "their character"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:156aa8e4-e777-52dd-9676-cb2300c4bd88",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location or In",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f8425c54-3c2b-5a3c-ad35-d0b6e6b10d39",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "or In"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9a0cdb47-844c-5b00-ae9d-95a704098e41",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location refers to",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d0c217be-a62d-5622-9371-50f75f8dbc98",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "refers to"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c563dc0b-3ad3-5bff-b4e6-7423a3d3ef59",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location and\n\nstealing",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0706ebe1-0773-5f04-937b-59a622f2d94b",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "and\n\nstealing"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e418b0b7-5b8b-59cf-bdd4-43920d3e4be4",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:799c7050-fd85-5099-9e17-3944fd4c294a",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the form",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6bd5eadc-ef82-5199-a66e-e4c7a10270d9",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the form"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:997cc3a6-e73c-5408-b05c-4814b2c29924",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location order to",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:27f5b15c-c4fd-5235-9b44-6af6538d2069",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "order to"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f71ab136-82fd-586e-8e36-ceb79bf0fe87",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location law enforcement",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6d1e54dc-c4d1-5048-81d9-1e2fe2d68df8",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "law enforcement"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:57078566-1848-5313-af4a-201128b2d9e6",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location least in",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:19a96155-bae8-5fec-ae04-7a8717907114",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "least in"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6e33d1a0-d254-5817-9a3d-7a912e465d3b",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location friendships developed",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:21f58868-3765-5f2c-9eff-70904ffffb8c",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "friendships developed"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:74b91ac2-a722-520e-97f3-2f4c497b7c16",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6f38f885-692b-5c93-92c1-e99f042adde0",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the form",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b3663d0c-28c4-5fd7-a592-be218edada39",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the form"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:83ca3627-ef1f-5d47-a8fc-83d50b2bf3b7",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location victims throughout",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3a453cc5-cd94-5eb2-9cb1-93e907971a5d",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "victims throughout"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:35473a2e-8d77-55da-b803-9dbaacd7465f",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location nightclubs",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:caa0e4ad-090b-553b-a8d5-b3c3ed9620f3",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "nightclubs"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:57a9bf24-2b96-5105-9be9-02e2e8457bba",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location Los Angeles",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b64f62e4-c503-5b1e-af5a-be1fa41e3f0d",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "Los Angeles"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:07b09749-4830-5e4e-9f93-71012d23b25a",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location THE ENTERPRISE",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:840a83f9-8fd3-5bbb-88d0-3edd6e2106d2",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "THE ENTERPRISE"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5e244953-efcb-5887-bdcf-68f7bee55df0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d93f296b-a4a9-548b-9b37-4cc3744d3c23",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location real life",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:303ab7c0-ff24-506c-97bd-0d06d8c8f636",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "real life"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b8faaa9a-4f11-58e6-a16f-58cd0603131d",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location member of",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:53a02075-9a29-55e5-93d7-8e42ef33f1fe",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "member of"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7b7264cd-9bb5-51a0-b3e9-40d8f0b3f493",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the conduct",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5df21820-57a8-59c9-9266-082d61f99916",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the conduct"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:127689e9-67f8-5bae-966b-cdde5d9933a2",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location order to",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:01e55912-0d17-500c-8a3e-638b2a407818",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "order to"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:57f3211b-bcb4-5e9d-ac8b-b8e6d30c530c",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location the leadup",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:416f5eb2-eee8-59a9-8aca-445f859af2c1",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "the leadup"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4665f53d-3f4b-5b23-b81f-d9f8c57895cf",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location order for",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:da11e56f-14a5-51be-ae57-a603006342ce",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "order for"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2f330d90-8221-50fd-b6f6-dab28373aebc",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location which they",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c5208797-39f6-5868-8883-8c1dc30bf285",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "which they"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:71b42981-37bc-599d-b238-a9468f22a6e6",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Location major VCEs",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0f640459-3be7-5871-ae0b-dc3e1dbbbcca",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:locality": "major VCEs"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d364bb99-5006-513d-a5d3-3fbcfebd96b2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 11/17/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 11/17/25",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+        },
+        {
+          "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+        },
+        {
+          "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+        },
+        {
+          "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+        },
+        {
+          "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+        },
+        {
+          "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+        },
+        {
+          "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+        },
+        {
+          "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+        },
+        {
+          "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+        },
+        {
+          "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+        },
+        {
+          "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+        },
+        {
+          "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d0adf535-b89c-58cd-8514-7f70b80129f1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ff02a016-8224-5e70-97e3-60e1843fb3f1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f9ccc907-52dc-5878-bd67-93eaba071bba",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:37d4efea-75ac-5891-ac6e-a6f49d8face6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7c30b1c0-a4a7-528a-a99f-45b1cd996d5d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:09b98f31-c3c9-5937-8f37-39b31c5bdcca"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4b294537-e744-50a7-bcff-351ab7258189",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:30bea51f-866a-5778-899a-e745a9dc1b4e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0781e4f8-d23e-54a4-b598-2de73b3de03f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f82ece39-748b-554e-bbf8-17a7cf0085ac"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1da837f5-4144-5c27-9302-58a0dce5e6b3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fe469174-395c-52ea-8316-0f1f27b5e2ad"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f0601a3d-80bf-56bd-9d20-95d312ca29f7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:de09fe64-9d23-57bb-9163-59f6a89b256c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ef7e64a6-07fa-50f3-9eb9-b6634fa66ab5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b57708dc-7b19-5082-8fab-06ad7e58b12a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b4ce1298-23b8-5b9e-aee9-2afc07280ca7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:29e2df8a-64f3-56cd-a5e5-1831a85dbde5"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b62811c9-6c20-51c5-8927-0c5a626b46da",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:df01aa24-589d-560f-a231-a85097254913"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9e978185-26e1-5bec-a6c2-c766a7600fae",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:734dda03-29f8-5136-8200-2aef436006e0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cab7e6e3-ccfd-5013-b0ee-8be45d125a9a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:33a84022-aaeb-5c55-b253-9f0f95640299"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:14e74160-0bc5-53d6-b1f8-dc4c7b5eb4bc",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7c5ff660-32f1-5a9d-81b6-c1b5f7d06fad"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c64b0b19-4e2a-561f-9c77-ef2df4fd0a66",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2c511637-d90a-51f7-bf89-3026dc023b94"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:09ddb8bf-d123-5e1f-adbe-6d72f42af227",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ff965641-5ffd-54c2-b75f-c59573529cc0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5ecec450-1b9d-58b7-9e36-0ea4344ae14a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:226ada9c-bccb-5b46-8422-7940d91fd1c9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e152efe5-0570-59b9-a398-a3f3887f7f71",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:800dbc9d-d869-5f7f-9eeb-9e228a25c8a8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9af0f6cd-eab7-5e78-8a02-ff20a00ecc4e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ff4022a1-5bd9-5655-86b7-5063777919a4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:614f1e11-fe1c-57a9-97ca-47148c9dc9de",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0fcbc6e0-ed27-53dc-9fb4-d1d2bc8e9c7e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5e0be9d5-e420-54b9-b3d0-5522e956ddf8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d4348ede-17ef-5b39-87f4-4aff639cee5c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:879f3a84-5a85-5490-ad25-b79c273e2d73",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:442b033a-8645-537d-a823-7f22801a87f4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1d8486bf-b182-5424-8879-9e4b27216d89",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b8648125-f1f4-5f25-9851-009fd75455a8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:65c6a62e-e79f-53ee-bf00-52995d2e8a76",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5a310f64-bd40-5315-b349-acb11c0a00de"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6811a34c-07a7-579e-815c-4d7c5c5a023c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:156aa8e4-e777-52dd-9676-cb2300c4bd88"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c849f381-c0e9-5dbd-a210-307587593cda",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9a0cdb47-844c-5b00-ae9d-95a704098e41"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4cd74c77-e940-5437-a35b-d3cead382f34",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c563dc0b-3ad3-5bff-b4e6-7423a3d3ef59"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0ec957db-9d2b-5eff-aa4c-f288c39c6d7f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e418b0b7-5b8b-59cf-bdd4-43920d3e4be4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d83d60d1-1194-5bd0-8074-f3b5bafeb007",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:799c7050-fd85-5099-9e17-3944fd4c294a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8699e212-af22-5cb3-8efe-b5e091ab39f4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:997cc3a6-e73c-5408-b05c-4814b2c29924"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9d23c0c4-fecb-5e29-ace1-4b0de3fae398",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f71ab136-82fd-586e-8e36-ceb79bf0fe87"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7baea85e-15f3-5a22-bf60-2c289c552b5e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:57078566-1848-5313-af4a-201128b2d9e6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a6cc1c1f-a199-5499-aaf1-dee818dd7927",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6e33d1a0-d254-5817-9a3d-7a912e465d3b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bde7907e-ac10-54d1-a465-515291e7cd4b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:74b91ac2-a722-520e-97f3-2f4c497b7c16"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a25e8f99-2da2-5b7b-8a2a-ed31c59a5657",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6f38f885-692b-5c93-92c1-e99f042adde0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5a6dc1a5-b4b1-5244-85c0-cbc6c060f7fb",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:83ca3627-ef1f-5d47-a8fc-83d50b2bf3b7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dc303e05-0552-5d89-830f-856f84d0cb3d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:35473a2e-8d77-55da-b803-9dbaacd7465f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a6cba5f2-917c-50c0-8b88-cde38d3e6bbf",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:57a9bf24-2b96-5105-9be9-02e2e8457bba"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:481113c8-f3f5-5550-bb9e-d646d7159e6b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:07b09749-4830-5e4e-9f93-71012d23b25a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:701f8f33-7f68-52b1-b68e-306a685be5b2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5e244953-efcb-5887-bdcf-68f7bee55df0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:547a9e5d-d241-5a1a-a1a2-086540e1e581",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d93f296b-a4a9-548b-9b37-4cc3744d3c23"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:af08534c-4dd5-5b02-a285-55b712ee55f9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b8faaa9a-4f11-58e6-a16f-58cd0603131d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cfbf0e79-db83-5fe4-be15-f974d70be3d1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7b7264cd-9bb5-51a0-b3e9-40d8f0b3f493"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8fa55387-7d92-571c-890c-093ea8624a09",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 43 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:127689e9-67f8-5bae-966b-cdde5d9933a2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c8f16d0f-45e7-536e-87f6-94ac4daa4ded",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 44 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:57f3211b-bcb4-5e9d-ac8b-b8e6d30c530c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e9943593-3777-5557-82a0-001d3458c126",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 45 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4665f53d-3f4b-5b23-b81f-d9f8c57895cf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cdca84c2-886f-518b-a92d-458f31ee9e80",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 46 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2f330d90-8221-50fd-b6f6-dab28373aebc"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:23d98ce5-079a-5294-ad42-2bd6c2397649",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 47 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:71b42981-37bc-599d-b238-a9468f22a6e6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:67990356-1bc6-5d27-98c4-5b2c2ed487cd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 48 derived from pacer -- racketeering -- second superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d364bb99-5006-513d-a5d3-3fbcfebd96b2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d87436fd-cc2c-5d08-827c-e78bd43ca4e9"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

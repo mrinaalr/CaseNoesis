@@ -1,0 +1,215 @@
+# CASE FACTS — structured extraction for CAC graph construction
+# Source: PACER, D.D.C. 1:24-cr-00417-CKK (docket; second superseding indictment Doc 245;
+#         Tangeman sentencing memorandum; statement of offense for Mehta/Tangeman pleas)
+# Corpus link: racketeering (Social Engineering Enterprise / United States v. Lam et al.)
+# Evidentiary status: MIXED — enterprise conduct alleged in indictment; multiple co-defendant
+#                     guilty pleas to RICO conspiracy (Count 1ss) documented on docket
+# Extraction discipline: coded signals only — no raw explicit text, no victim-identifying detail
+
+case:
+  case_number: "1:24-cr-00417-CKK"
+  court: "U.S. District Court, District of Columbia"
+  jurisdiction: federal
+  date_filed: "2024-09-17"
+  status: pre_trial_partial_pleas
+  evidentiary_basis: mixed
+
+offender:
+  label: "Defendant-1"
+  role: enterprise_leader_alleged
+  defendant_count_named_second_superseding: 6
+  defendant_count_total_docket: 17
+  location_at_offense: domestic_and_foreign_associates
+
+enterprise:
+  name_alleged: "Social Engineering Enterprise"
+  type: rico_social_engineering_enterprise
+  statute_primary: "18 U.S.C. § 1962(d)"
+  statute_conduct: "18 U.S.C. § 1962(c)"
+  scale: large
+  operational_window: "2023-10 to 2025-05"
+  offense_window_charged: "2023-10 to 2025-05"
+  co_conspirators_alleged: true
+  co_conspirator_count_min: 12
+  victim_count_minimum_named: 9
+  additional_victims_alleged: true
+  loss_usd_minimum_alleged: 263000000
+  loss_usd_victim7_forfeiture_alleged: 245093239
+  predicate_statutes_alleged:
+    - "18 U.S.C. § 1028"
+    - "18 U.S.C. § 1029"
+    - "18 U.S.C. § 1343"
+    - "18 U.S.C. § 1512"
+    - "18 U.S.C. § 1956"
+    - "18 U.S.C. § 1957"
+    - "18 U.S.C. § 1960"
+    - "18 U.S.C. § 2314"
+
+enterprise_roles:
+  - role: database_hacker
+    function: obtain_or_purchase_stolen_crypto_related_databases
+  - role: organizer_target_identifier
+    function: collate_databases_and_prioritize_high_value_targets
+  - role: caller_social_engineer
+    function: cold_call_victims_impersonating_vce_or_email_support
+  - role: money_launderer
+    function: convert_stolen_virtual_currency_to_fiat_cash_or_wire
+  - role: residential_burglar
+    function: irl_break_in_for_hardware_wallet_theft
+
+platforms:
+  - name: Online gaming platforms
+    role: enterprise_formation
+    affordances_abused:
+      - pseudonymous_friendship_graph
+      - cross_member_recruitment
+  - name: Telegram
+    role: enterprise_coordination
+    affordances_abused:
+      - encrypted_messaging
+      - rotating_usernames_opsec
+  - name: Signal
+    role: enterprise_coordination
+    affordances_abused:
+      - encrypted_messaging
+      - rotating_usernames_opsec
+  - name: Virtual currency exchanges
+    role: impersonation_target_and_laundering_channel
+    affordances_abused:
+      - fraudulent_support_impersonation
+      - hosted_wallet_access
+      - cross_chain_swaps
+  - name: Email and cloud providers
+    role: account_intrusion
+    affordances_abused:
+      - credential_harvesting
+      - icloud_and_drive_search_for_seed_phrases
+  - name: SMS
+    role: enterprise_coordination
+    affordances_abused:
+      - real_time_theft_coordination
+
+fraud_mechanisms:
+  - stolen_crypto_databases_shared_as_targs
+  - unauthorized_account_push_notifications_before_calls
+  - fraudulent_support_calls_impersonating_vce_or_email_provider
+  - seed_phrase_and_private_key_harvesting
+  - cloud_account_intrusion_for_wallet_secrets
+  - cold_storage_hardware_wallet_theft_via_irl_break_in
+  - virtual_currency_laundering_via_privacy_coin_and_offshore_vce
+  - crypto_to_cash_unlicensed_money_transmission
+  - crypto_to_wire_unlicensed_money_transmission
+  - luxury_spending_and_rental_mansions
+  - straw_owner_concealment_for_homes_and_vehicles
+  - bulk_cash_shipment_concealed_in_clothing_or_stuffed_animals
+  - post_arrest_evidence_destruction_directed
+  - off_duty_law_enforcement_tip_off_alleged
+
+virtual_currency_context:
+  - bitcoin_btc
+  - monero_xmr_privacy_coin
+  - usdt_tether_stablecoin
+  - hardware_wallets_trezor_ledger
+  - seed_phrase_wallet_recovery_abuse
+
+charges:
+  - count: 1
+    statute: "18 U.S.C. § 1962(d)"
+    label: rico_conspiracy
+    disposition: active_multi_defendant
+  - count: 2
+    statute: "18 U.S.C. § 1349"
+    label: wire_fraud_conspiracy
+    disposition: active_multi_defendant
+  - count: 3
+    statute: "18 U.S.C. § 1956(h)"
+    label: money_laundering_conspiracy
+    disposition: active_multi_defendant
+
+partial_pleas_documented:
+  - defendant: Kunal Mehta
+    plea_date: "2025-11-17"
+    count: "1ss"
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Joel Cortes
+    plea_date: "2025-07-31"
+    count: 1
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Hamza Doost
+    plea_date: "2025-08-28"
+    count: 1
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Conor Flansburg
+    plea_date: "2025-09-26"
+    count: 1
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Cody Demirtas
+    plea_date: "2025-10-14"
+    count: 1
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Marlon Ferro
+    plea_date: "2025-10-17"
+    count: 1
+    statute: "18 U.S.C. § 1962(d)"
+  - defendant: Tucker Desmond
+    plea_date: "2025-10-15"
+    count: 4
+    statute: "18 U.S.C. § 1512"
+    note: obstruction_related_plea_not_rico_count
+  - defendant: Evan Tangeman
+    plea_date: "2025-12-08"
+    count: "1ss"
+    statute: "18 U.S.C. § 1962(d)"
+    government_sentencing_request_months: 70
+  - defendant: Ethan Yarally
+    plea_date: "2026-01-08"
+    count: "1s"
+    statute: "18 U.S.C. § 1962(d)"
+
+key_events:
+  - date: "2024-09-18"
+    event: lam_and_serrano_arrests_miami
+  - date: "2024-07-08"
+    event: irl_break_in_victim4_new_mexico_alleged
+  - date: "2025-05-13"
+    event: tangeman_arrest_california
+  - date: "2025-11-17"
+    event: second_superseding_indictment_filed
+
+forfeiture:
+  alleged: true
+  statutes:
+    - "18 U.S.C. § 924(d)"
+    - "18 U.S.C. § 1963"
+    - "28 U.S.C. § 2461(c)"
+  assets_alleged_include:
+    - virtual_currency_wallets_and_addresses
+    - luxury_vehicles_fleet
+    - rental_properties_miami_los_angeles_hamptons
+    - bulk_cash_and_bank_accounts
+
+procedural_timeline:
+  - "2024-09-17: criminal complaint and docket opened (USA v. Lam et al.)"
+  - "2024-09-18: arrests of Malone Lam and Jeandiel Serrano in Miami"
+  - "2024-11-01: Lam arraignment, not guilty"
+  - "2025-05-13: Tangeman arrest warrant executed in California"
+  - "2025-05-19: superseding indictment arraignments for additional defendants"
+  - "2025-07-31: Cortes guilty plea Count 1 RICO conspiracy"
+  - "2025-09-26: Flansburg guilty plea Count 1 RICO conspiracy"
+  - "2025-10-14 to 2025-10-17: Demirtas and Ferro guilty pleas Count 1"
+  - "2025-11-17: second superseding indictment; Mehta guilty plea Count 1ss"
+  - "2025-12-08: Tangeman guilty plea Count 1ss; government seeks 70 months"
+  - "2026-01-08: Yarally guilty plea Count 1s"
+  - "ongoing: Lam and remaining defendants pre-trial"
+
+provenance:
+  document: "PACER D.D.C. 1:24-cr-00417-CKK — docket; Doc 245 Second Superseding Indictment; Tangeman sentencing memorandum"
+  extraction_method: "agent_formalization_from_pdf_text_extract"
+  processed_artifacts:
+    - "EXTENSION/racketeering/processed/second_superseding_indictment.processed.jsonld"
+
+ontology_gaps_noted:
+  - no_dedicated_rico_or_social_engineering_enterprise_class_in_cac
+  - child_exploitation_enterprise_builder_not_applicable
+  - criminal_enterprise_class_description_is_csam_scoped
+  - grooming_phase_iris_reused_for_non_icac_racketeering_typology

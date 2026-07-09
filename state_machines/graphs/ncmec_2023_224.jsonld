@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:ncmec_2023_224-affordance-onset-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_224-phase-kik-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_224-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Pseudonymous Kik handle enables false-age persona toward 13-year-old victim"
+      "noesis:misuseDescription": "Pseudonymous Kik handle enables false-age persona toward 13-year-old victim"
     },
     {
       "@id": "caselinker:ncmec_2023_224-affordance-trust-enticement",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_224-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_224-phase-video-enticement"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Private Kik channel and adult-content normalization lower resistance to nudity solicitation and video calls"
+      "noesis:misuseDescription": "Private Kik channel and adult-content normalization lower resistance to nudity solicitation and video calls"
     },
     {
       "@id": "caselinker:ncmec_2023_224-affordance-enticement-parallel",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_224-phase-video-enticement"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_224-phase-parallel-solicitation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Same false-age playbook scaled to parallel believed-minor threads on Kik"
+      "noesis:misuseDescription": "Same false-age playbook scaled to parallel believed-minor threads on Kik"
     },
     {
       "@id": "caselinker:ncmec_2023_224-affordance-parallel-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_224-phase-parallel-solicitation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_224-phase-device-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Solicited and obtained depictions accumulated into phone and Kik account archive"
+      "noesis:misuseDescription": "Solicited and obtained depictions accumulated into phone and Kik account archive"
     },
     {
       "@id": "caselinker:ncmec_2023_224-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncmec_2023_224-phase-device-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncmec_2023_224-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "319-file archive on device and messaging account sustains persistent harm to depicted victims"
+      "noesis:misuseDescription": "319-file archive on device and messaging account sustains persistent harm to depicted victims"
     }
   ]
 }

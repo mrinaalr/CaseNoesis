@@ -1,0 +1,102 @@
+# CASE FACTS — grounded extraction from PACER PDFs
+# Source set:
+# - pacer -- elder fraud -- docket.pdf
+# - pacer -- elder fraud -- superseding indictment.pdf
+# - pacer -- elder fraud -- factual basis.pdf
+# - pacer -- elder fraud -- judgment.pdf
+# All claims below are constrained to extracted source content.
+
+case:
+  case_number: "2:22-cr-00115-ILRL-KWR"
+  court: "U.S. District Court, Eastern District of Louisiana"
+  jurisdiction: federal
+  status: sentenced
+  evidentiary_basis: mixed
+
+offender:
+  label: "Defendant-1"
+  role: fraud_operator
+  defendants_named:
+    - "Christopher L. Keel"
+    - "Jayesh J. Panchal"
+
+enterprise:
+  type: elder_fraud_impersonation_scheme
+  statute_primary: "18 U.S.C. § 1349"
+  co_conspirators_alleged: true
+
+charges:
+  - count: 1
+    statute: "18 U.S.C. §§ 1343, 1349"
+    label: conspiracy_to_commit_wire_fraud
+  - count: 2
+    statute: "18 U.S.C. § 912 and 2"
+    label: false_personation_of_us_officer
+
+disposition:
+  defendant: "Christopher L. Keel"
+  plea: guilty
+  plea_date: "2023-06-14"
+  sentence_imposed_date: "2023-10-25"
+  sentence_months_total: 125
+  supervised_release_years: 3
+
+provenance:
+  document_set: "PACER elder fraud PDF bundle in ontology/PACER/EXTENSION"
+  extraction_method: "pdf-to-text and CASE/UCO document normalization"
+  processed_artifacts:
+    - "EXTENSION/elder_fraud/processed/docket.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/superseding_indictment.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/factual_basis.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/judgment.processed.jsonld"
+# CASE FACTS — grounded extraction from PACER PDFs
+# Source set:
+# - pacer -- elder fraud -- docket.pdf
+# - pacer -- elder fraud -- superseding indictment.pdf
+# - pacer -- elder fraud -- factual basis.pdf
+# - pacer -- elder fraud -- judgment.pdf
+# All claims below are limited to values visible in extracted source artifacts.
+
+case:
+  case_number: "2:22-cr-00115-ILRL-KWR"
+  court: "U.S. District Court, Eastern District of Louisiana"
+  jurisdiction: federal
+  status: sentenced
+  evidentiary_basis: mixed
+
+offender:
+  label: "Defendant-1"
+  role: fraud_operator
+  defendants_named:
+    - "Christopher L. Keel"
+    - "Jayesh J. Panchal"
+
+enterprise:
+  type: elder_fraud_impersonation_scheme
+  statute_primary: "18 U.S.C. § 1349"
+  co_conspirators_alleged: true
+
+charges:
+  - count: 1
+    statute: "18 U.S.C. §§ 1343, 1349"
+    label: conspiracy_to_commit_wire_fraud
+  - count: 2
+    statute: "18 U.S.C. § 912 and 2"
+    label: false_personation_of_us_officer
+
+disposition:
+  defendant: "Christopher L. Keel"
+  plea: guilty
+  plea_date: "2023-06-14"
+  sentence_imposed_date: "2023-10-25"
+  sentence_months_total: 125
+  supervised_release_years: 3
+
+provenance:
+  document_set: "PACER elder fraud PDF bundle in ontology/PACER/EXTENSION"
+  extraction_method: "pdf-to-text and CASE/UCO document normalization"
+  processed_artifacts:
+    - "EXTENSION/elder_fraud/processed/docket.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/superseding_indictment.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/factual_basis.processed.jsonld"
+    - "EXTENSION/elder_fraud/processed/judgment.processed.jsonld"

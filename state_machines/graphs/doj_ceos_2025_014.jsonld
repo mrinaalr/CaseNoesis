@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -116,87 +117,87 @@
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-catfish-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-catfish-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-cp-group-access"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Age misrepresentation on Grindr lowers victim guard before group exposure"
+      "noesis:misuseDescription": "Age misrepresentation on Grindr lowers victim guard before group exposure"
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-trust-migration",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-cp-group-access"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-encrypted-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Group CP normalization precedes move to E2E apps"
+      "noesis:misuseDescription": "Group CP normalization precedes move to E2E apps"
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-migration-funnel",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-encrypted-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-omegle-funnel"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Encrypted handles bridge group trading to live victim discovery on Omegle"
+      "noesis:misuseDescription": "Encrypted handles bridge group trading to live victim discovery on Omegle"
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-funnel-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-omegle-funnel"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-directed-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Ephemeral Snapchat + cross-app funnel enables directed production"
+      "noesis:misuseDescription": "Ephemeral Snapchat + cross-app funnel enables directed production"
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-production-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-directed-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Produced and traded material archived on seized mobile devices"
+      "noesis:misuseDescription": "Produced and traded material archived on seized mobile devices"
     },
     {
       "@id": "caselinker:doj_ceos_2025_014-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2025_014-phase-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2025_014-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Large local archive sustains harm as persistent possession and trading substrate"
+      "noesis:misuseDescription": "Large local archive sustains harm as persistent possession and trading substrate"
     }
   ]
 }

@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:doj_ceos_2026_008-affordance-onset-grooming",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_008-phase-facebook-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_008-phase-financial-grooming"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Cross-border Facebook messaging opens paid commissioning channel to Dominican Republic minor"
+      "noesis:misuseDescription": "Cross-border Facebook messaging opens paid commissioning channel to Dominican Republic minor"
     },
     {
       "@id": "caselinker:doj_ceos_2026_008-affordance-grooming-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_008-phase-financial-grooming"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_008-phase-directed-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Money transfers and scripted requests lower resistance to first compliance video"
+      "noesis:misuseDescription": "Money transfers and scripted requests lower resistance to first compliance video"
     },
     {
       "@id": "caselinker:doj_ceos_2026_008-affordance-production-solicitation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_008-phase-directed-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_008-phase-paid-solicitation"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "First compliance enables continued paid solicitation on same Facebook thread"
+      "noesis:misuseDescription": "First compliance enables continued paid solicitation on same Facebook thread"
     },
     {
       "@id": "caselinker:doj_ceos_2026_008-affordance-solicitation-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_008-phase-paid-solicitation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_008-phase-device-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Commissioned depictions and other CSAM accumulated onto device archive"
+      "noesis:misuseDescription": "Commissioned depictions and other CSAM accumulated onto device archive"
     },
     {
       "@id": "caselinker:doj_ceos_2026_008-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:doj_ceos_2026_008-phase-device-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:doj_ceos_2026_008-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Laptop work-folder archive sustains persistent harm beyond Facebook sessions"
+      "noesis:misuseDescription": "Laptop work-folder archive sustains persistent harm beyond Facebook sessions"
     }
   ]
 }

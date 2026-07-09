@@ -4,6 +4,7 @@
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -118,101 +119,101 @@
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-contact-grooming",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-mobile-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-grooming-coercion"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Mobile chat apps enable pseudonymous interstate contact with minor victims"
+      "noesis:misuseDescription": "Mobile chat apps enable pseudonymous interstate contact with minor victims"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-grooming-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-grooming-coercion"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-first-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Coercive messaging escalates to first compliant production"
+      "noesis:misuseDescription": "Coercive messaging escalates to first compliant production"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-production-threat",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-first-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-threat-mechanism"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Harvested imagery converted to threat-to-disseminate leverage"
+      "noesis:misuseDescription": "Harvested imagery converted to threat-to-disseminate leverage"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-threat-escalation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-threat-mechanism"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-escalating-demands"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "§ 875(d) threat sustains ongoing production demands"
+      "noesis:misuseDescription": "§ 875(d) threat sustains ongoing production demands"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-escalation-cycle",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-escalating-demands"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-coercion-cycle"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Each fulfilled demand resets the coercion loop for further production"
+      "noesis:misuseDescription": "Each fulfilled demand resets the coercion loop for further production"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-cycle-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-coercion-cycle"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-device-archive"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Each compliance episode adds to local device archive"
+      "noesis:misuseDescription": "Each compliance episode adds to local device archive"
     },
     {
       "@id": "caselinker:texas_ag_2019_013-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:texas_ag_2019_013-phase-device-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:texas_ag_2019_013-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Archived depictions sustain persistent harm independent of ongoing contact"
+      "noesis:misuseDescription": "Archived depictions sustain persistent harm independent of ongoing contact"
     }
   ]
 }

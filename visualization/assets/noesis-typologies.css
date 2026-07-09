@@ -23,7 +23,12 @@
     margin: 0 auto;
 }
 
+.typ-page:has(.typ-machine-wrap) {
+    max-width: min(1280px, 96vw);
+}
+
 .typ-hero { margin-bottom: 2.5rem; }
+.typ-hero { position: relative; }
 
 .typ-hero h1 {
     font-family: "Cormorant Garamond", Georgia, serif;
@@ -243,30 +248,103 @@
     color: var(--ink);
 }
 
-.typ-summary .typ-source-links {
+.typ-hero-layout {
     display: block;
-    margin-top: 1rem;
-    font-size: 0.9rem;
 }
 
-.typ-summary a {
+.typ-source-rail {
+    position: absolute;
+    top: 5.2rem;
+    right: 0;
+    width: 25rem;
+    text-align: left;
+    margin-top: 0;
+}
+
+.typ-source-rail:empty {
+    display: none;
+}
+
+.typ-source-links {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0.45rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.typ-source-links a,
+.typ-source-embed a {
     color: var(--accent);
     text-decoration: none;
     border-bottom: 1px solid rgba(74, 93, 107, 0.35);
 }
 
-.typ-summary a:hover {
+.typ-source-links a:hover,
+.typ-source-embed a:hover {
     color: var(--ink);
     border-bottom-color: var(--ink);
+}
+
+.typ-source-embed {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 0.75rem;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+}
+
+.typ-source-embed h3 {
+    margin: 0 0 0.45rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+}
+
+.typ-source-embed iframe {
+    width: 100%;
+    height: 290px;
+    border: 1px solid var(--line);
+    background: #fff;
+}
+
+.typ-source-embed p {
+    margin: 0.5rem 0 0;
+    font-size: 0.78rem;
+    color: var(--ink-muted);
 }
 
 .typ-phase-track {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     border: 1px solid var(--line);
     overflow-x: auto;
+}
+
+.typ-phase-track.cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.typ-phase-legend {
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    margin: 0 0 2.5rem;
+    letter-spacing: 0.02em;
+}
+
+.typ-phase-legend a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(74, 93, 107, 0.25);
+}
+
+.typ-phase-legend a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
 }
 
 .typ-phase {
@@ -284,6 +362,14 @@
 .typ-phase.is-fundamental {
     background: var(--invariant-bg);
     border-color: rgba(107, 91, 74, 0.22);
+}
+
+.typ-phase.is-variant {
+    background: var(--paper);
+}
+
+.typ-phase.is-terminal {
+    background: rgba(0, 0, 0, 0.02);
 }
 
 .typ-phase-label {
@@ -337,6 +423,41 @@
 
 .typ-column li:last-child { border-bottom: none; }
 
+.typ-aff-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.typ-aff-name {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.typ-aff-misuse {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    line-height: 1.45;
+}
+
+.typ-case-strip {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.typ-case-caption {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 0 0 0.85rem;
+    line-height: 1.45;
+}
+
+.typ-role-tags {
+    margin-bottom: 0;
+}
+
 .typ-status {
     padding: 2rem;
     border: 1px dashed var(--line);
@@ -375,6 +496,14 @@
 
 @media (max-width: 768px) {
     .typ-columns { grid-template-columns: 1fr; }
+    .typ-hero-layout { display: block; }
+    .typ-source-rail {
+        position: static;
+        width: auto;
+        text-align: left;
+        margin-top: 0;
+    }
+    .typ-source-embed iframe { height: 320px; }
     .typ-phase-track {
         grid-template-columns: 1fr;
     }

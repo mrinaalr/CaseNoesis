@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -94,73 +95,73 @@
     },
     {
       "@id": "caselinker:ncis_2022_002-affordance-onset-grooming",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2022_002-phase-dating-app-onset"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2022_002-phase-jeff-grooming"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Dating-app discovery opens multi-year false-identity grooming channel"
+      "noesis:misuseDescription": "Dating-app discovery opens multi-year false-identity grooming channel"
     },
     {
       "@id": "caselinker:ncis_2022_002-affordance-grooming-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2022_002-phase-jeff-grooming"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2022_002-phase-minor1-enticement"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Voice/video trust on Application A enables parallel victim threads"
+      "noesis:misuseDescription": "Voice/video trust on Application A enables parallel victim threads"
     },
     {
       "@id": "caselinker:ncis_2022_002-affordance-enticement-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2022_002-phase-minor1-enticement"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2022_002-phase-minor2-production"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Nov 2021 Minor 1 enticement precedes Feb 2022 directed production from groomed Minor 2"
+      "noesis:misuseDescription": "Nov 2021 Minor 1 enticement precedes Feb 2022 directed production from groomed Minor 2"
     },
     {
       "@id": "caselinker:ncis_2022_002-affordance-production-enterprise",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2022_002-phase-minor2-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2022_002-phase-csam-enterprise"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Application B group trading and encrypted laptop archives accumulate CSAM corpus"
+      "noesis:misuseDescription": "Application B group trading and encrypted laptop archives accumulate CSAM corpus"
     },
     {
       "@id": "caselinker:ncis_2022_002-affordance-enterprise-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2022_002-phase-csam-enterprise"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2022_002-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Screen-recorded production and encrypted zip sustain persistent harm beyond live sessions"
+      "noesis:misuseDescription": "Screen-recorded production and encrypted zip sustain persistent harm beyond live sessions"
     }
   ]
 }

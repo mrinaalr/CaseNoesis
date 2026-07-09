@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="/viz-assets/noesis-nav.css">
     <link rel="stylesheet" href="/viz-assets/noesis-typologies.css">
+    {{MACHINE_ASSETS}}
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 </head>
@@ -44,13 +45,19 @@
             <h1>{{TITLE}}</h1>
             <p class="tagline">{{TAGLINE}}</p>
             <div class="typ-meta">{{STATUTE}}</div>
-            <p class="typ-summary">{{SUMMARY}}</p>
+            <div class="typ-hero-layout">
+                <p class="typ-summary">{{SUMMARY}}</p>
+                <aside class="typ-source-rail">
+                    {{SOURCE_LINKS}}
+                    {{SENTENCING_EMBED}}
+                </aside>
+            </div>
         </div>
 
         <div class="typ-section-label">Theoretized trajectory <span class="typ-math">\(L^{*}_{g,A}\)</span></div>
-        <div class="typ-phase-track">
-            {{PHASES}}
-        </div>
+        {{TRAJECTORY_SECTION}}
+
+        {{CASE_STRIP}}
 
         <div class="typ-columns">
             <div class="typ-column">
@@ -67,13 +74,7 @@
             </div>
         </div>
 
-        <section class="typ-status" aria-label="Development status">
-            <h2>Corpus &amp; ontology in development</h2>
-            <p>
-                State machines, lifecycle graphs, and enforcement-case linkage for this typology
-                will be added as ingestion expands beyond the ICAC foundation.
-            </p>
-        </section>
+        {{STATUS_SECTION}}
     </main>
 
     <footer class="typ-footer">

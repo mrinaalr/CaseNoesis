@@ -4,6 +4,7 @@
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -119,101 +120,101 @@
     },
     {
       "@id": "caselinker:external_extortion-affordance-contact-deception",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-persona-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-teen-girl-deception"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:Anonymity"
+      "noesis:affordanceClass": {
+        "@id": "noesis:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Fake teenage girl personas on Snapchat lower victim guard at scale"
+      "noesis:misuseDescription": "Fake teenage girl personas on Snapchat lower victim guard at scale"
     },
     {
       "@id": "caselinker:external_extortion-affordance-deception-production",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-teen-girl-deception"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-first-production"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:UnmonitoredCommunication"
+      "noesis:affordanceClass": {
+        "@id": "noesis:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Ephemeral messaging enables first compliant production"
+      "noesis:misuseDescription": "Ephemeral messaging enables first compliant production"
     },
     {
       "@id": "caselinker:external_extortion-affordance-production-threat",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-first-production"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-exposure-threats"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:CoercionLeverage"
+      "noesis:affordanceClass": {
+        "@id": "noesis:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Harvested imagery converted to threat-to-expose leverage"
+      "noesis:misuseDescription": "Harvested imagery converted to threat-to-expose leverage"
     },
     {
       "@id": "caselinker:external_extortion-affordance-threat-degradation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-exposure-threats"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-degradation-demands"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:CoercionLeverage"
+      "noesis:affordanceClass": {
+        "@id": "noesis:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Exposure threats sustain escalating degradation commands"
+      "noesis:misuseDescription": "Exposure threats sustain escalating degradation commands"
     },
     {
       "@id": "caselinker:external_extortion-affordance-degradation-cycle",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-degradation-demands"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-coercion-cycle"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:UnmonitoredCommunication"
+      "noesis:affordanceClass": {
+        "@id": "noesis:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Each compliance episode resets coercion loop and expands victim pool"
+      "noesis:misuseDescription": "Each compliance episode resets coercion loop and expands victim pool"
     },
     {
       "@id": "caselinker:external_extortion-affordance-cycle-archive",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-coercion-cycle"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-device-archive"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Account takeover and third-party sends compound device-resident archive"
+      "noesis:misuseDescription": "Account takeover and third-party sends compound device-resident archive"
     },
     {
       "@id": "caselinker:external_extortion-affordance-archive-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:external_extortion-phase-device-archive"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:external_extortion-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Serial victimization across forfeited devices — harm persists beyond any single thread"
+      "noesis:misuseDescription": "Serial victimization across forfeited devices — harm persists beyond any single thread"
     }
   ]
 }

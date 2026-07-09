@@ -4,6 +4,7 @@
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-sextortion": "https://cacontology.projectvic.org/sextortion#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -134,87 +135,87 @@
     },
     {
       "@id": "caselinker:amin-affordance-initial-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-initial-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:Anonymity"
+      "noesis:affordanceClass": {
+        "@id": "noesis:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Impersonation account; victim cannot verify identity; 80+ accounts at scale"
+      "noesis:misuseDescription": "Impersonation account; victim cannot verify identity; 80+ accounts at scale"
     },
     {
       "@id": "caselinker:amin-affordance-trust-exploitation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-exploitation-first"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:Ephemerality"
+      "noesis:affordanceClass": {
+        "@id": "noesis:Ephemerality"
       },
-      "cac-platforms:misuseDescription": "Victim believes content ephemeral; offender retains screenshot"
+      "noesis:misuseDescription": "Victim believes content ephemeral; offender retains screenshot"
     },
     {
       "@id": "caselinker:amin-affordance-exploitation-threat",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-exploitation-first"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-threat"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Distribution capability converts retained image to coercion instrument"
+      "noesis:misuseDescription": "Distribution capability converts retained image to coercion instrument"
     },
     {
       "@id": "caselinker:amin-affordance-threat-cycle",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-threat"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-coercion-cycle"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:CoercionLeverage"
+      "noesis:affordanceClass": {
+        "@id": "noesis:CoercionLeverage"
       },
-      "cac-platforms:misuseDescription": "Same retained material redeployed continuously; fear response enters cycle"
+      "noesis:misuseDescription": "Same retained material redeployed continuously; fear response enters cycle"
     },
     {
       "@id": "caselinker:amin-affordance-cycle-maintenance",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-coercion-cycle"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-maintenance"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Closed-group sharing; co-conspirators harass victims for access"
+      "noesis:misuseDescription": "Closed-group sharing; co-conspirators harass victims for access"
     },
     {
       "@id": "caselinker:amin-affordance-maintenance-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:amin-phase-maintenance"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:amin-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Distributed across accounts; no single seizure recovers all copies"
+      "noesis:misuseDescription": "Distributed across accounts; no single seizure recovers all copies"
     }
   ]
 }

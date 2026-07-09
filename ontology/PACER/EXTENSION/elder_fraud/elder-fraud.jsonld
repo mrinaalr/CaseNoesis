@@ -1,0 +1,743 @@
+{
+  "@context": {
+    "@vocab": "http://example.org/local#",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "kb": "http://example.org/kb/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-role": "https://ontology.unifiedcyberontology.org/uco/role/",
+    "uco-victim": "https://ontology.unifiedcyberontology.org/uco/victim/",
+    "cacontology": "https://cacontology.projectvic.org#",
+    "cac-core": "https://cacontology.projectvic.org/core#",
+    "cacontology-platforms": "https://cacontology.projectvic.org/platforms#",
+    "cacontology-sextortion": "https://cacontology.projectvic.org/sextortion#",
+    "cacontology-extremist-enterprises": "https://cacontology.projectvic.org/extremist-enterprises#",
+    "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
+    "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
+    "cacontology-multi-jurisdiction": "https://cacontology.projectvic.org/multi-jurisdiction#",
+    "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
+    "cacontology-victim-impact": "https://cacontology.projectvic.org/victim-impact#",
+    "cacontology-grooming": "https://cacontology.projectvic.org/grooming#",
+    "cacontology-us-ncmec": "https://cacontology.projectvic.org/us/ncmec#",
+    "cacontology-production": "https://cacontology.projectvic.org/production#",
+    "cacontology-gufo": "https://cacontology.projectvic.org/gufo#",
+    "gufo": "http://purl.org/nemo/gufo#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-bundle",
+      "@type": "uco-core:Bundle",
+      "uco-core:name": "U.S. District Court, Eastern District of Louisiana 2:22-cr-00115-ILRL-KWR (CAC Enhanced)",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "CAC knowledge graph for 2:22-cr-00115-ILRL-KWR derived from source document. Evidentiary basis: MIXED. Coded extraction only \u2014 no victim-identifying detail."
+      },
+      "uco-core:object": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-investigation"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecution"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecutor"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-pretrial-phase"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise-hierarchy"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-leadership-relator"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-exploitation-relator"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-subject"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-victim-role"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-conspiracy"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-location-court"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-forfeiture-asset"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-forfeiture"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-impact"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-provenance-action"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-provenance"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-co-conspirator-2"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-venue-u-s-district-court-eastern-district-of-louisiana"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-subject"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-enterprise-csam"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-investigation-jurisdiction"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-inv-indictment"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-prosecution-indictment"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-conspiracy-indictment"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-enterprise-indictment"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-indictment-charge-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-conduct-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-indictment-charge-2"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-conduct-2"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-venue-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-venue-2"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-investigation",
+      "@type": [
+        "case-investigation:Investigation",
+        "cacontology:CACInvestigation"
+      ],
+      "uco-core:name": "U.S. v. Defendant-1 et al. \u2014 2:22-cr-00115-ILRL-KWR",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Federal child exploitation enterprise prosecution in U.S. District Court, Eastern District of Louisiana. Approximately 1 alleged victims; ? defendants. Operational window unknown; charged conduct unknown."
+      },
+      "case-investigation:focus": [
+        "Child Sexual Exploitation Enterprise",
+        "Live CSAM Production",
+        "Group Coercion and Harassment",
+        "Interstate Threats"
+      ],
+      "case-investigation:investigationForm": "case",
+      "case-investigation:investigationStatus": "closed",
+      "uco-core:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "unknownT00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecution",
+      "@type": "cacontology-usa-federal-law:FederalProsecution",
+      "uco-core:name": "Federal prosecution \u2014 2:22-cr-00115-ILRL-KWR",
+      "rdfs:label": "Federal prosecution \u2014 2:22-cr-00115-ILRL-KWR",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-usa-federal-law:hasProsecutionBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-usa-federal-law:prosecutedBy": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecutor"
+      },
+      "cacontology-usa-federal-law:hasLegalPhase": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-pretrial-phase"
+      },
+      "cacontology-usa-federal-law:prosecutionComplexity": "highly-complex",
+      "cacontology-usa-federal-law:prosecutionSeverity": "aggravated-felony",
+      "cacontology-usa-federal-law:prosecutionStatus": "resolved"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecutor",
+      "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+      "uco-core:name": "U.S. District Court, Eastern District of Louisiana",
+      "rdfs:label": "U.S. District Court, Eastern District of Louisiana",
+      "cacontology-usa-federal-law:hasRoleBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-usa-federal-law:roleSpecialization": "child-exploitation"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-pretrial-phase",
+      "@type": [
+        "cac-core:Phase",
+        "cacontology-usa-federal-law:PreTrialPhase"
+      ],
+      "uco-core:name": "Pre-trial phase",
+      "rdfs:label": "Pre-trial phase",
+      "cacontology:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment",
+      "@type": "cacontology:MultiDefendantIndictment",
+      "uco-core:name": "source document",
+      "rdfs:label": "source document",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Indictment filed unknown. 2 counts; ? defendants alleged."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise",
+      "@type": [
+        "uco-identity:Organization",
+        "cacontology-extremist-enterprises:ChildExploitationEnterprise"
+      ],
+      "uco-core:name": "Alleged child exploitation enterprise",
+      "rdfs:label": "Alleged child exploitation enterprise",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed enterprise under 18 U.S.C. 2252A(g) with minimum 2 co-conspirators and approximately 1 victims."
+      },
+      "cacontology-extremist-enterprises:leadershipCount": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "1"
+      },
+      "cacontology-extremist-enterprises:membershipRequirements": "Alleged members coordinated systematic online child exploitation using multiple platforms including live video and group harassment.",
+      "cacontology-extremist-enterprises:hasHierarchy": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise-hierarchy"
+      },
+      "cacontology-extremist-enterprises:hasLeadershipRelation": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-leadership-relator"
+      },
+      "cacontology-extremist-enterprises:hasExploitationRelation": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-exploitation-relator"
+      },
+      "cacontology-extremist-enterprises:hasMember": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-co-conspirator-2"
+        }
+      ],
+      "cacontology-extremist-enterprises:hasOperationalBeginDate": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise-hierarchy",
+      "@type": "cacontology-extremist-enterprises:EnterpriseHierarchy",
+      "uco-core:name": "Mixed enterprise hierarchy",
+      "rdfs:label": "Mixed enterprise hierarchy",
+      "cacontology-extremist-enterprises:hierarchyComplexity": "moderate"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-leadership-relator",
+      "@type": "gufo:Relator",
+      "rdfs:label": "Mixed enterprise leadership relation",
+      "gufo:hasParticipant": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-co-conspirator-2"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-exploitation-relator",
+      "@type": "gufo:Relator",
+      "rdfs:label": "Mixed perpetrator-victim exploitation relation",
+      "gufo:hasParticipant": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-victim-role"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Defendant-1",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Principal alleged offender; unknown."
+      },
+      "cacontology-legal-outcomes:chargedWith": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-subject",
+      "@type": [
+        "case-investigation:Subject",
+        "cacontology:OffenderRole"
+      ],
+      "uco-core:name": "Defendant-1 \u2014 principal subject",
+      "rdfs:label": "Defendant-1 \u2014 principal subject",
+      "cacontology:hasRoleBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology:participatesInEvent": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-conspiracy"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-victim-role",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology:VictimRole"
+      ],
+      "uco-core:name": "Alleged victim population (aggregate)",
+      "rdfs:label": "Alleged victim population (aggregate)",
+      "cacontology:hasRoleBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology:participatesInEvent": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-conspiracy"
+        }
+      ],
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Aggregate victim role for approximately 1 alleged victims; no identifying detail."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-content-facet",
+      "@type": "uco-observable:ContentDataFacet"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident",
+      "@type": "cacontology:CSAMIncident",
+      "uco-core:name": "Mixed CSAM production and distribution (alleged)",
+      "rdfs:label": "Mixed CSAM production and distribution (alleged)",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "uco-core:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "unknownT00:00:00Z"
+      },
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-content-facet"
+        }
+      ],
+      "cacontology:participatesInEvent": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-subject"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-victim-role"
+        }
+      ],
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Mixed enterprise CSAM conduct unknown. Coercion via ."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-conspiracy",
+      "@type": "cacontology:ConspiracyToCommitCSA",
+      "uco-core:name": "Mixed conspiracy to commit CSA",
+      "rdfs:label": "Mixed conspiracy to commit CSA",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-location-court",
+      "@type": "uco-location:Location",
+      "uco-core:name": "U.S. District Court, Eastern District of Louisiana"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-forfeiture-asset",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Mixed criminal proceeds and digital devices (forfeiture target)"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-forfeiture",
+      "@type": "cacontology-asset-forfeiture:AssetForfeitureAction",
+      "uco-core:name": "Mixed asset forfeiture under 18 U.S.C. 2253",
+      "rdfs:label": "Mixed asset forfeiture under 18 U.S.C. 2253",
+      "gufo:hasBeginPointInXSDDateTimeStamp": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-gufo:forfeitureBeginTime": {
+        "@type": "xsd:dateTime",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-asset-forfeiture:targetedAsset": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-forfeiture-asset"
+      },
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Forfeiture status: unknown."
+      },
+      "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-impact",
+      "@type": "cacontology-victim-impact:ComprehensiveImpactAssessment",
+      "uco-core:name": "Mixed victim harm indicators",
+      "rdfs:label": "Mixed victim harm indicators",
+      "cacontology-victim-impact:assessmentDate": {
+        "@type": "xsd:dateTime",
+        "@value": "unknownT00:00:00Z"
+      },
+      "cacontology-victim-impact:assessmentType": "documented_harm_indicators",
+      "cacontology-victim-impact:assessorCredentials": "indictment_extraction_agent",
+      "cac-core:assesses": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+      },
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Coded harm indicators only: ."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-provenance-action",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "PACER extraction",
+      "rdfs:label": "PACER extraction",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Extraction from source document; retrieval=unknown, extraction=pdf-to-text and CASE/UCO document normalization, human_reviewed=False."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-provenance",
+      "@type": "case-investigation:ProvenanceRecord",
+      "uco-core:name": "Provenance \u2014 source document",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Source: PACER, source document."
+      },
+      "case-investigation:object": [
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-investigation"
+        },
+        {
+          "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-provenance-action"
+        }
+      ]
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-co-conspirator-2",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Alleged co-conspirator 1",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Unnamed alleged co-conspirator in enterprise (minimum 2 total)."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1",
+      "@type": "cacontology-legal-outcomes:FederalCharge",
+      "uco-core:name": "Conspiracy To Commit Wire Fraud",
+      "rdfs:label": "Conspiracy To Commit Wire Fraud",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Count 1 under 18 U.S.C. \u00a7\u00a7 1343, 1349. Evidentiary basis: mixed (source document)."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2",
+      "@type": "cacontology-legal-outcomes:FederalCharge",
+      "uco-core:name": "False Personation Of Us Officer",
+      "rdfs:label": "False Personation Of Us Officer",
+      "uco-core:description": {
+        "@type": "xsd:string",
+        "@value": "Count 2 under 18 U.S.C. \u00a7 912 and 2. Evidentiary basis: mixed (source document)."
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-venue-u-s-district-court-eastern-district-of-louisiana",
+      "@type": "uco-location:Location",
+      "uco-core:name": "U.S. District Court, Eastern District of Louisiana"
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-subject",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Defendant-1 subject role",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-person-defendant"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-subject"
+      },
+      "uco-core:kindOfRelationship": "has_role",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-enterprise-csam",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise conducted CSAM offenses",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "conducted",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-investigation-jurisdiction",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation jurisdiction",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-location-court"
+      },
+      "uco-core:kindOfRelationship": "located_at",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-inv-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Investigation charging instrument",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-investigation"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Prosecution charging instrument",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-prosecution"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-conspiracy-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Conspiracy resulted in indictment",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-conspiracy"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-enterprise-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Enterprise charging instrument",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-enterprise"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-indictment-charge-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 1",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-conduct-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 conduct",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-indictment-charge-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Indictment count 2",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-indictment"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-conduct-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 conduct",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-csam-incident"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-venue-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 1 venue",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-1"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-venue-u-s-district-court-eastern-district-of-louisiana"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-rel-charge-venue-2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Count 2 venue",
+      "uco-core:source": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-charge-2"
+      },
+      "uco-core:target": {
+        "@id": "kb:elder-fraud-2-22-cr-00115-ilrl-kwr-venue-u-s-district-court-eastern-district-of-louisiana"
+      },
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    }
+  ]
+}

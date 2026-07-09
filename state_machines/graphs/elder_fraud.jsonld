@@ -1,0 +1,99 @@
+{
+  "@context": {
+    "cac-core": "https://cacontology.projectvic.org/core#",
+    "cac-grooming": "https://cacontology.projectvic.org/grooming#",
+    "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
+    "cacontology": "https://cacontology.projectvic.org#",
+    "caselinker": "https://caselinker.projectvic.app/cases#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "ConditioningPhase": "cac-grooming:ConditioningPhase",
+    "conditioningMode": "cac-core:conditioningMode"
+  },
+  "@graph": [
+    {
+      "@id": "caselinker:elder-fraud-investigation",
+      "@type": "cacontology:CACInvestigation",
+      "rdfs:label": "United States v. Keel et al. · E.D. La. 2:22-cr-00115 · Elder Fraud Impersonation Scheme",
+      "cacontology:hasStep": [
+        { "@id": "caselinker:elder-fraud-phase-initial-contact" },
+        { "@id": "caselinker:elder-fraud-phase-conditioning" },
+        { "@id": "caselinker:elder-fraud-phase-exploitation" },
+        { "@id": "caselinker:elder-fraud-phase-maintenance" },
+        { "@id": "caselinker:elder-fraud-phase-terminal" }
+      ]
+    },
+    {
+      "@id": "caselinker:elder-fraud-phase-initial-contact",
+      "@type": "cac-grooming:InitialContactPhase",
+      "rdfs:label": "Initial Victim Contact",
+      "rdfs:comment": "Initial outreach to elder victims in furtherance of charged false-personation and wire-fraud conduct.",
+      "cac-core:precedes": { "@id": "caselinker:elder-fraud-phase-conditioning" }
+    },
+    {
+      "@id": "caselinker:elder-fraud-phase-conditioning",
+      "@type": [ "cac-grooming:ConditioningPhase", "cac-core:Phase" ],
+      "rdfs:label": "Authority Impersonation Conditioning",
+      "rdfs:comment": "Victims are conditioned through authority-claim narratives consistent with 18 U.S.C. 912 and charged conspiracy conduct.",
+      "cac-core:conditioningMode": "authority_and_urgency",
+      "cac-core:precedes": { "@id": "caselinker:elder-fraud-phase-exploitation" }
+    },
+    {
+      "@id": "caselinker:elder-fraud-phase-exploitation",
+      "@type": "cac-grooming:ExploitationPhase",
+      "rdfs:label": "Financial Extraction",
+      "rdfs:comment": "Scheme execution through fraud-based value transfer behavior linked to conspiracy to commit wire fraud (18 U.S.C. 1349).",
+      "cac-core:precedes": { "@id": "caselinker:elder-fraud-phase-maintenance" }
+    },
+    {
+      "@id": "caselinker:elder-fraud-phase-maintenance",
+      "@type": "cac-grooming:MaintenancePhase",
+      "rdfs:label": "Sustained Scheme Operation",
+      "rdfs:comment": "Continued operation and victim targeting prior to adjudication in federal court.",
+      "cac-core:precedes": { "@id": "caselinker:elder-fraud-phase-terminal" }
+    },
+    {
+      "@id": "caselinker:elder-fraud-phase-terminal",
+      "@type": [
+        "cacontology:ConclusionPhase"
+      ],
+      "rdfs:label": "Conviction and Sentencing",
+      "rdfs:comment": "Judgment reflects guilty plea and sentence for charged counts in case 2:22-cr-00115-ILRL-KWR.",
+      "caselinker:is_terminal": true,
+      "noesis:terminalReason": "prosecution_transition"
+    },
+    {
+      "@id": "caselinker:elder-fraud-affordance-contact-conditioning",
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": { "@id": "caselinker:elder-fraud-phase-initial-contact" },
+      "noesis:enablesTransitionTo": { "@id": "caselinker:elder-fraud-phase-conditioning" },
+      "noesis:affordanceClass": { "@id": "noesis:ImpersonationOfAuthority" },
+      "noesis:misuseDescription": "False personation framing is used to establish victim trust and urgency."
+    },
+    {
+      "@id": "caselinker:elder-fraud-affordance-conditioning-exploitation",
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": { "@id": "caselinker:elder-fraud-phase-conditioning" },
+      "noesis:enablesTransitionTo": { "@id": "caselinker:elder-fraud-phase-exploitation" },
+      "noesis:affordanceClass": { "@id": "noesis:PaymentRailAbuse" },
+      "noesis:misuseDescription": "Conditioned authority narratives are converted into payment or transfer actions."
+    },
+    {
+      "@id": "caselinker:elder-fraud-affordance-exploitation-maintenance",
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": { "@id": "caselinker:elder-fraud-phase-exploitation" },
+      "noesis:enablesTransitionTo": { "@id": "caselinker:elder-fraud-phase-maintenance" },
+      "noesis:affordanceClass": { "@id": "noesis:Coordination" },
+      "noesis:misuseDescription": "Ongoing coordination maintains scheme continuity across victims and transactions."
+    },
+    {
+      "@id": "caselinker:elder-fraud-affordance-maintenance-terminal",
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": { "@id": "caselinker:elder-fraud-phase-maintenance" },
+      "noesis:enablesTransitionTo": { "@id": "caselinker:elder-fraud-phase-terminal" },
+      "noesis:affordanceClass": { "@id": "noesis:DistributionInfrastructure" },
+      "noesis:misuseDescription": "Operational infrastructure sustains conduct until legal intervention and sentencing."
+    }
+  ]
+}

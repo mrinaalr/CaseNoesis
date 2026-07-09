@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cac-undercover": "https://cacontology.projectvic.org/undercover#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
@@ -108,73 +109,73 @@
     },
     {
       "@id": "caselinker:ncis_2023_001-affordance-bait-engagement",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2023_001-phase-public-bait"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2023_001-phase-uc-engagement"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Public anonymous group posting surfaces minors without identity verification"
+      "noesis:misuseDescription": "Public anonymous group posting surfaces minors without identity verification"
     },
     {
       "@id": "caselinker:ncis_2023_001-affordance-engagement-sms",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2023_001-phase-uc-engagement"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2023_001-phase-sms-migration"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:ContactDiscovery"
       },
-      "cac-platforms:misuseDescription": "Phone number handoff moves enticement off app moderation surface"
+      "noesis:misuseDescription": "Phone number handoff moves enticement off app moderation surface"
     },
     {
       "@id": "caselinker:ncis_2023_001-affordance-sms-sexualization",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2023_001-phase-sms-migration"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2023_001-phase-sexualized-texting"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Burner SMS thread enables explicit solicitation away from app"
+      "noesis:misuseDescription": "Burner SMS thread enables explicit solicitation away from app"
     },
     {
       "@id": "caselinker:ncis_2023_001-affordance-sexualization-meet",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2023_001-phase-sexualized-texting"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2023_001-phase-meet-planning"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "Escalation from images to in-person sexual act planning"
+      "noesis:misuseDescription": "Escalation from images to in-person sexual act planning"
     },
     {
       "@id": "caselinker:ncis_2023_001-affordance-meet-intervention",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:ncis_2023_001-phase-meet-planning"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:ncis_2023_001-phase-sting-intervention"
       },
-      "cac-platforms:affordanceClass": {
+      "noesis:affordanceClass": {
         "@id": "cac-platforms:Coordination"
       },
-      "cac-platforms:misuseDescription": "Meet logistics converge — law enforcement sting interdicts before Maintenance or hands-on terminal"
+      "noesis:misuseDescription": "Meet logistics converge — law enforcement sting interdicts before Maintenance or hands-on terminal"
     }
   ]
 }

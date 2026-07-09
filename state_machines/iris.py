@@ -11,6 +11,7 @@ STATE_MACHINES_WORKSPACE = PKG_DIR
 REPO_ROOT = PKG_DIR.parent
 ONTOLOGY_DIR = REPO_ROOT / "ontology"
 PACER_BULK_DIR = ONTOLOGY_DIR / "PACER" / "BULK_FOLDER"
+PACER_EXTENSION_DIR = ONTOLOGY_DIR / "PACER" / "EXTENSION"
 GRAPHS_DIR = PKG_DIR / "graphs"
 LSTAR_JSON = PKG_DIR / "data" / "lstar_all_cases.json"
 
@@ -19,6 +20,7 @@ CAC_NS = "https://cacontology.projectvic.org#"
 GROOMING_NS = "https://cacontology.projectvic.org/grooming#"
 SEXTORTION_NS = "https://cacontology.projectvic.org/sextortion#"
 PLATFORMS_NS = "https://cacontology.projectvic.org/platforms#"
+NOESIS_TRAJ_NS = "https://ontology.casenoesis.project/noesis/offense-trajectories#"
 UNDERCOVER_NS = "https://cacontology.projectvic.org/undercover#"
 CASELINKER_NS = "https://caselinker.projectvic.app/cases#"
 RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
@@ -48,19 +50,19 @@ CONCLUSION_PHASE = f"{CAC_NS}ConclusionPhase"
 DISRUPTS_CHAIN = f"{CASELINKER_NS}disruptsChain"
 DISRUPTED_TARGET = f"{CASELINKER_NS}disruptedTarget"
 
-AFFORDANCE_MISUSE = f"{PLATFORMS_NS}AffordanceMisuse"
-ENABLES_TRANSITION_FROM = f"{PLATFORMS_NS}enablesTransitionFrom"
-ENABLES_TRANSITION_TO = f"{PLATFORMS_NS}enablesTransitionTo"
-AFFORDANCE_CLASS = f"{PLATFORMS_NS}affordanceClass"
-MISUSE_DESCRIPTION = f"{PLATFORMS_NS}misuseDescription"
+AFFORDANCE_MISUSE = f"{NOESIS_TRAJ_NS}AffordanceMisuse"
+ENABLES_TRANSITION_FROM = f"{NOESIS_TRAJ_NS}enablesTransitionFrom"
+ENABLES_TRANSITION_TO = f"{NOESIS_TRAJ_NS}enablesTransitionTo"
+AFFORDANCE_CLASS = f"{NOESIS_TRAJ_NS}affordanceClass"
+MISUSE_DESCRIPTION = f"{NOESIS_TRAJ_NS}misuseDescription"
 
-ANONYMITY = f"{PLATFORMS_NS}Anonymity"
-EPHEMERALITY = f"{PLATFORMS_NS}Ephemerality"
-UNMONITORED_COMMUNICATION = f"{PLATFORMS_NS}UnmonitoredCommunication"
-CONTACT_DISCOVERY = f"{PLATFORMS_NS}ContactDiscovery"
-DISTRIBUTION_INFRASTRUCTURE = f"{PLATFORMS_NS}DistributionInfrastructure"
-COORDINATION = f"{PLATFORMS_NS}Coordination"
-COERCION_LEVERAGE = f"{PLATFORMS_NS}CoercionLeverage"
+ANONYMITY = f"{NOESIS_TRAJ_NS}Anonymity"
+EPHEMERALITY = f"{NOESIS_TRAJ_NS}Ephemerality"
+UNMONITORED_COMMUNICATION = f"{NOESIS_TRAJ_NS}UnmonitoredCommunication"
+CONTACT_DISCOVERY = f"{NOESIS_TRAJ_NS}ContactDiscovery"
+DISTRIBUTION_INFRASTRUCTURE = f"{NOESIS_TRAJ_NS}DistributionInfrastructure"
+COORDINATION = f"{NOESIS_TRAJ_NS}Coordination"
+COERCION_LEVERAGE = f"{NOESIS_TRAJ_NS}CoercionLeverage"
 
 CANONICAL_CASE_IDS = (
     "enticement",
@@ -95,7 +97,9 @@ EXPANSION_CASE_IDS = (
     "doj_ceos_2026_003", # Mara — extraterritorial embassy residence abuse (D. Md. PACER)
     "doj_ceos_2025_025", # Mendonsa — four-site dark-web CSAM enterprise (E.D. Cal. PACER)
     "ncmec_2025_1116",    # David — production / multi-account Kik distribution (D. Wyo. PACER)
-    "external_extortion", # Murphy — serial multi-persona Snapchat sextortion (D. Mass. PACER) — last
+    "external_extortion", # Murphy — serial multi-persona Snapchat sextortion (D. Mass. PACER)
+    "racketeering",       # Lam et al. — RICO social engineering enterprise (D.D.C. PACER)
+    "elder_fraud",        # Keel et al. — elder fraud impersonation scheme (E.D. La. PACER)
 )
 
 CASE_FILES = (
@@ -109,6 +113,8 @@ MODALITY_LABELS = {
     "sextortion": "SEXTORTION",
     "enterprise": "ENTERPRISE",
     "trafficking": "TRAFFICKING",
+    "racketeering": "RACKETEERING",
+    "elder_fraud": "ELDER FRAUD",
 }
 
 CASE_META = {
@@ -426,6 +432,42 @@ CASE_META = {
             "serial_multi_victim",
         ],
     },
+    "racketeering": {
+        "title": "Lam",
+        "citation": "United States v. Lam et al. (D.D.C. 1:24-cr-00417)",
+        "statute": "18 U.S.C. § 1962(d)",
+        "modality": "racketeering",
+        "corpus_id": "racketeering",
+        "defendant": "Malone Lam",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "rico_enterprise",
+            "social_engineering",
+            "virtual_currency_theft",
+            "money_laundering",
+            "role_specialization",
+            "irl_hardware_wallet_break_in",
+            "multi_defendant",
+        ],
+    },
+    "elder_fraud": {
+        "title": "Keel",
+        "citation": "United States v. Keel et al. (E.D. La. 2:22-cr-00115)",
+        "statute": "18 U.S.C. §§ 1349, 912",
+        "modality": "elder_fraud",
+        "corpus_id": "elder_fraud",
+        "defendant": "Christopher L. Keel & Jayesh J. Panchal",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "elder_fraud",
+            "impersonation",
+            "wire_fraud_conspiracy",
+            "false_personation",
+        ],
+    },
+
 }
 
 def get_case_meta(case_id: str) -> dict:
@@ -440,7 +482,7 @@ _STATUTE_MODALITY = (
     (re.compile(r"\b2422\b"), "enticement"),
     (re.compile(r"\b1591\b|\b2423\b"), "trafficking"),
     (re.compile(r"\bsextortion\b", re.I), "sextortion"),
-    (re.compile(r"\benterprise\b", re.I), "enterprise"),
+    (re.compile(r"\b1962\b"), "racketeering"),
     (re.compile(r"\b2251\b|\b2252\b"), "production"),
 )
 
@@ -471,9 +513,13 @@ def _case_corpus_id(case_id: str, meta: dict) -> str:
 
 def _read_case_facts(case_id: str, meta: dict) -> str:
     corpus_id = _case_corpus_id(case_id, meta)
-    facts_path = PACER_BULK_DIR / corpus_id / f"{corpus_id}_facts.txt"
-    if facts_path.is_file():
-        return facts_path.read_text(encoding="utf-8", errors="replace")
+    candidates = (
+        PACER_BULK_DIR / corpus_id / f"{corpus_id}_facts.txt",
+        PACER_EXTENSION_DIR / corpus_id / f"{corpus_id}_facts.txt",
+    )
+    for facts_path in candidates:
+        if facts_path.is_file():
+            return facts_path.read_text(encoding="utf-8", errors="replace")
     return ""
 
 

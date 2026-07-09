@@ -1330,9 +1330,338 @@ def _typology_list_html(items: list[str]) -> str:
     return "".join(f"<li>{item}</li>" for item in items)
 
 
+def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
+    summary = str(summary_html or "")
+    m = re.search(r'<span class="typ-source-links">(.*?)</span>', summary, flags=re.IGNORECASE | re.DOTALL)
+    if not m:
+        return summary, "", ""
+    source_links = m.group(1).strip()
+    clean_summary = re.sub(
+        r'\s*<span class="typ-source-links">.*?</span>\s*',
+        "",
+        summary,
+        flags=re.IGNORECASE | re.DOTALL,
+    ).strip()
+
+    sentencing_url = ""
+    for href, label in re.findall(r'<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', source_links, flags=re.IGNORECASE | re.DOTALL):
+        if "sentenc" in re.sub(r"<[^>]+>", "", label).lower():
+            sentencing_url = href
+            break
+
+    if not sentencing_url:
+        return clean_summary, source_links, ""
+
+    safe_url = sentencing_url.replace('"', "&quot;")
+    embed = (
+        '<section class="typ-source-embed" aria-label="Sentencing source embed">'
+        "<h3>Sentencing source</h3>"
+        f'<iframe src="{safe_url}" title="Sentencing source" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        "<p>If the source blocks embedding, "
+        f'<a href="{safe_url}" target="_blank" rel="noopener">open sentencing link</a>.'
+        "</p>"
+        "</section>"
+    )
+    return clean_summary, source_links, embed
+
+
+_TYPOLOGY_GRAPH_IDS: dict[str, str] = {
+    "elder-fraud": "elder_fraud",
+    "racketeering-enterprises": "racketeering",
+}
+
+_BACKBONE_PHASE_TYPES = frozenset({
+    "InitialContactPhase",
+    "ConditioningPhase",
+    "ExploitationPhase",
+    "MaintenancePhase",
+})
+
+_TERMINAL_PHASE_TYPES = frozenset({
+    "ConclusionPhase",
+    "TerminalPhase",
+})
+
+_AFFORDANCE_LABELS: dict[str, str] = {
+    "Anonymity": "Anonymity",
+    "Ephemerality": "Ephemerality",
+    "UnmonitoredCommunication": "Unmonitored communication",
+    "ContactDiscovery": "Contact discovery",
+    "DistributionInfrastructure": "Distribution infrastructure",
+    "Coordination": "Coordination",
+    "CoercionLeverage": "Coercion leverage",
+    "ImpersonationOfAuthority": "Impersonation of authority",
+    "RemoteAccessTakeover": "Remote access takeover",
+    "CredentialHarvesting": "Credential harvesting",
+    "BlockchainObfuscation": "Blockchain obfuscation",
+    "PaymentRailAbuse": "Payment rail abuse",
+    "PhysicalConvergence": "Physical convergence",
+    "SolicitationAnonymity": "Solicitation anonymity",
+}
+
+_RACKETEERING_PHASE_BLURBS: dict[str, str] = {
+    "caselinker:racketeering-phase-gaming-formation": (
+        "Gaming friendships recruit co-conspirators; Texas cohabitation by Oct 2023."
+    ),
+    "caselinker:racketeering-phase-scheme-conditioning": (
+        "Database theft, email intrusions, and shared crypto target lists."
+    ),
+    "caselinker:racketeering-phase-role-specialization": (
+        "Hackers, organizers, callers, launderers, and residential burglary crews."
+    ),
+    "caselinker:racketeering-phase-theft-exploitation": (
+        "~$259M in VCE impersonation and seed-phrase theft; hardware-wallet break-in."
+    ),
+    "caselinker:racketeering-phase-laundering-maintenance": (
+        "XMR/USDT chains, luxury rentals, exotic vehicles; post-arrest OpSec."
+    ),
+    "caselinker:racketeering-phase-terminal": (
+        "Sept 2024 arrests; partial RICO pleas (Mehta, Tangeman, Yarally)."
+    ),
+}
+
+_RACKETEERING_ENTERPRISE_ROLES = (
+    "database hackers",
+    "organizers",
+    "callers",
+    "launderers",
+    "residential burglars",
+)
+
+_TYPOLOGY_CASE_TAGS: dict[str, tuple[str, ...]] = {
+    "racketeering": _RACKETEERING_ENTERPRISE_ROLES,
+    "elder_fraud": (
+        "wire fraud conspiracy",
+        "false personation of U.S. officer",
+        "elder fraud impersonation scheme",
+        "sting operation",
+        "125-month federal sentence",
+    ),
+}
+
+
+def _iri_local(iri: object) -> str:
+    if not iri:
+        return ""
+    if isinstance(iri, dict):
+        iri = iri.get("@id", "")
+    text = str(iri)
+    return text.rsplit("#", 1)[-1].rsplit("/", 1)[-1].rsplit(":", 1)[-1]
+
+
+def _clean_machine_text(value: object) -> str:
+    text = str(value or "")
+    text = text.replace("—", ", ")
+    text = text.replace("–", " to ")
+    text = re.sub(r"¶+", "", text)
+    return " ".join(text.split())
+
+
+def _node_types(node: dict) -> set[str]:
+    raw = node.get("@type", [])
+    if isinstance(raw, str):
+        raw = [raw]
+    return {_iri_local(item) for item in raw}
+
+
+def _load_typology_graph(case_id: str) -> dict | None:
+    path = _REPO_ROOT / "state_machines" / "graphs" / f"{case_id}.jsonld"
+    if not path.is_file():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _phase_style_from_node(node: dict) -> str:
+    if node.get("caselinker:is_terminal"):
+        return "terminal"
+    types = _node_types(node)
+    if types <= {"Phase"}:
+        return "variant"
+    if types & _BACKBONE_PHASE_TYPES:
+        return "fundamental"
+    return "plain"
+
+
+def _state_label_from_node(node: dict) -> str:
+    types = _node_types(node)
+    if "ConclusionPhase" in types:
+        return "ConclusionPhase (terminal)"
+    if node.get("caselinker:is_terminal"):
+        return "ConclusionPhase (terminal)"
+    grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
+    if grooming:
+        return grooming[0]
+    return "Phase (variant)"
+
+
+def _phase_short_type(node: dict) -> str:
+    types = _node_types(node)
+    if "ConclusionPhase" in types:
+        return "ConclusionPhase"
+    if node.get("caselinker:is_terminal"):
+        return "ConclusionPhase"
+    grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
+    if grooming:
+        return grooming[0]
+    if "Phase" in types:
+        return "Phase"
+    return next(iter(types), "Phase")
+
+
+def _misuse_edges(graph: dict) -> dict[tuple[str, str], dict[str, str]]:
+    edges: dict[tuple[str, str], dict[str, str]] = {}
+    for node in graph.get("@graph", []):
+        if "AffordanceMisuse" not in str(node.get("@type", "")):
+            continue
+        from_ref = node.get("noesis:enablesTransitionFrom", node.get("cac-platforms:enablesTransitionFrom", {}))
+        to_ref = node.get("noesis:enablesTransitionTo", node.get("cac-platforms:enablesTransitionTo", {}))
+        from_id = from_ref.get("@id") if isinstance(from_ref, dict) else from_ref
+        to_id = to_ref.get("@id") if isinstance(to_ref, dict) else to_ref
+        if not from_id or not to_id:
+            continue
+        aff_class = _iri_local(node.get("noesis:affordanceClass", node.get("cac-platforms:affordanceClass", {})))
+        edges[(str(from_id), str(to_id))] = {
+            "affordance_name": aff_class,
+            "affordance_label": _AFFORDANCE_LABELS.get(aff_class, aff_class),
+            "misuse_description": _clean_machine_text(
+                node.get("noesis:misuseDescription", node.get("cac-platforms:misuseDescription", ""))
+            ),
+        }
+    return edges
+
+
+def _build_typology_state_machine(
+    graph_id: str,
+    graph: dict,
+    investigation: dict,
+    phase_nodes: list[dict],
+) -> dict:
+    misuse_edges = _misuse_edges(graph)
+    sm_phases: list[dict[str, Any]] = []
+    for phase in phase_nodes:
+        phase_id = phase["@id"]
+        style = _phase_style_from_node(phase)
+        comment = _clean_machine_text(phase.get("rdfs:comment", ""))
+        blurb = _clean_machine_text(_RACKETEERING_PHASE_BLURBS.get(phase_id, comment))
+        if " — " in blurb:
+            blurb = blurb.split(" — ", 1)[1]
+        short_type = _phase_short_type(phase)
+        sm_phases.append(
+            {
+                "id": phase_id,
+                "label": _clean_machine_text(phase.get("rdfs:label", _iri_local(phase_id))),
+                "comment": comment,
+                "blurb": blurb,
+                "short_type": short_type,
+                "state_label": _state_label_from_node(phase),
+                "style": style,
+                "is_fundamental": style == "fundamental",
+                "is_variant": style == "variant",
+                "is_terminal": bool(phase.get("caselinker:is_terminal")),
+                "conditioning_mode": _clean_machine_text(phase.get("cac-core:conditioningMode")),
+            }
+        )
+
+    transitions: list[dict[str, Any]] = []
+    for i in range(len(sm_phases) - 1):
+        src = sm_phases[i]
+        dst = sm_phases[i + 1]
+        edge = misuse_edges.get((src["id"], dst["id"]), {})
+        transitions.append(
+            {
+                "from_id": src["id"],
+                "to_id": dst["id"],
+                "from_label": src["label"],
+                "to_label": dst["label"],
+                "affordance_name": edge.get("affordance_name"),
+                "affordance_label": edge.get("affordance_label"),
+                "misuse_description": edge.get("misuse_description", ""),
+            }
+        )
+
+    return {
+        "modality": graph_id.replace("_", "-"),
+        "modality_label": graph_id.replace("_", " ").upper(),
+        "accent": "#4a7a9b",
+        "citation": investigation.get("rdfs:label", ""),
+        "enterprise_roles": list(_RACKETEERING_ENTERPRISE_ROLES),
+        "phases": sm_phases,
+        "transitions": transitions,
+    }
+
+
+def _parse_typology_graph(graph: dict, graph_id: str) -> dict:
+    nodes = {node["@id"]: node for node in graph.get("@graph", []) if "@id" in node}
+    investigation = next(
+        (
+            node
+            for node in graph.get("@graph", [])
+            if "CACInvestigation" in str(node.get("@type", ""))
+        ),
+        None,
+    )
+    if not investigation:
+        return {}
+
+    phase_nodes: list[dict] = []
+    for ref in investigation.get("cacontology:hasStep", []):
+        phase_id = ref.get("@id") if isinstance(ref, dict) else ref
+        phase = nodes.get(phase_id)
+        if phase:
+            phase_nodes.append(phase)
+
+    phases: list[tuple[str, str, str]] = []
+    states: list[str] = []
+    for phase in phase_nodes:
+        phase_id = phase["@id"]
+        label = _clean_machine_text(phase.get("rdfs:label", _iri_local(phase_id)))
+        blurb = _clean_machine_text(_RACKETEERING_PHASE_BLURBS.get(phase_id) or phase.get("rdfs:comment", ""))
+        if " — " in blurb:
+            blurb = blurb.split(" — ", 1)[1]
+        phases.append((label, _phase_style_from_node(phase), blurb))
+        states.append(_state_label_from_node(phase))
+
+    affordances: list[tuple[str, str]] = [
+        (edge["affordance_label"], edge["misuse_description"])
+        for edge in _misuse_edges(graph).values()
+    ]
+
+    case_caption = investigation.get("rdfs:label", "")
+    case_tags = _TYPOLOGY_CASE_TAGS.get(graph_id, ())
+    role_tags = "".join(f"<span>{role}</span>" for role in case_tags)
+    case_strip = (
+        '<section class="typ-case-strip" aria-label="Instantiated case">'
+        '<div class="typ-section-label">Instantiated case</div>'
+        f'<p class="typ-case-caption">{case_caption}</p>'
+        f'<div class="typ-affordance-tags typ-role-tags">{role_tags}</div>'
+        "</section>"
+    )
+
+    state_machine = _build_typology_state_machine(graph_id, graph, investigation, phase_nodes)
+
+    return {
+        "phases": phases,
+        "states": states,
+        "affordances": affordances,
+        "case_strip": case_strip,
+        "state_machine": state_machine,
+        "phase_cols": f"cols-{len(phases)}",
+        "phase_legend": (
+            '<p class="typ-phase-legend">'
+            'Shaded phases · backbone invariant '
+            '(<a href="/typologies#invariants">Law 2</a>)'
+            "</p>"
+        ),
+    }
+
+
 def _phase_name_to_state_class(phase_name: str) -> str:
     """Map a trajectory phase label to a CAC ontology offense-phase class name."""
     return "".join(word.capitalize() for word in phase_name.replace("-", " ").split()) + "Phase"
+
+
+def _legacy_phase_style(is_fundamental: bool) -> str:
+    return "fundamental" if is_fundamental else "variant"
 
 
 def _typology_states_html(phases: list[tuple]) -> str:
@@ -1340,15 +1669,65 @@ def _typology_states_html(phases: list[tuple]) -> str:
     return _typology_list_html(states)
 
 
+def _typology_affordances_html(affordances: list[tuple[str, str]]) -> str:
+    parts = []
+    for label, misuse in affordances:
+        parts.append(
+            '<li class="typ-aff-item">'
+            f'<span class="typ-aff-name">{label}</span>'
+            f'<span class="typ-aff-misuse">{misuse}</span>'
+            "</li>"
+        )
+    return "".join(parts)
+
+
 def _typology_phases_html(phases: list[tuple]) -> str:
     parts = []
-    for name, is_fundamental, desc in phases:
-        cls = "typ-phase is-fundamental" if is_fundamental else "typ-phase"
+    for item in phases:
+        if len(item) == 3 and isinstance(item[1], str):
+            name, style, desc = item
+        else:
+            name, is_fundamental, desc = item
+            style = _legacy_phase_style(is_fundamental)
+        cls = "typ-phase"
+        if style == "fundamental":
+            cls += " is-fundamental"
+        elif style == "variant":
+            cls += " is-variant"
+        elif style == "terminal":
+            cls += " is-terminal"
         parts.append(
             f'<div class="{cls}"><div class="typ-phase-label">{name}</div>'
             f'<div class="typ-phase-desc">{desc}</div></div>'
         )
     return "".join(parts)
+
+
+def _typology_status_html() -> str:
+    return (
+        '<section class="typ-status" aria-label="Development status">'
+        "<h2>Corpus &amp; ontology in development</h2>"
+        "<p>"
+        "State machines, lifecycle graphs, and enforcement-case linkage for this typology "
+        "will be added as ingestion expands beyond the ICAC foundation."
+        "</p>"
+        "</section>"
+    )
+
+
+def _typology_machine_section_html(state_machine: dict) -> str:
+    payload = json.dumps(state_machine, ensure_ascii=False)
+    payload = payload.replace("</", "<\\/")
+    return (
+        '<section class="typ-machine-wrap" aria-label="Interactive state machine">'
+        '<p class="typ-machine-hint">Click any phase for ontology detail · affordance-misuse on transitions</p>'
+        '<div class="typ-machine-scroll"><div id="typ-machine-canvas"></div></div>'
+        '<div id="typ-machine-legend" class="typ-machine-legend"></div>'
+        f'<script type="application/json" id="typ-machine-payload">{payload}</script>'
+        "</section>"
+        '<div id="typ-machine-backdrop" class="typ-machine-backdrop" aria-hidden="true"></div>'
+        '<aside id="typ-machine-panel" class="typ-machine-panel" aria-label="Phase detail"></aside>'
+    )
 
 
 @app.get("/typologies", response_class=HTMLResponse)
@@ -1373,11 +1752,51 @@ async def serve_typology(typology_slug: str):
     html = html.replace("{{TITLE}}", meta["title"])
     html = html.replace("{{TAGLINE}}", meta["tagline"])
     html = html.replace("{{STATUTE}}", meta["statute"])
-    html = html.replace("{{SUMMARY}}", meta["summary"])
-    html = html.replace("{{PHASES}}", _typology_phases_html(meta["phases"]))
-    html = html.replace("{{AFFORDANCES}}", "")
-    html = html.replace("{{STATES}}", "")
+    summary_body, source_links, sentencing_embed = _extract_sources_from_summary(meta["summary"])
+    html = html.replace("{{SUMMARY}}", summary_body)
+    html = html.replace("{{SOURCE_LINKS}}", source_links)
+    html = html.replace("{{SENTENCING_EMBED}}", sentencing_embed)
+    graph_id = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip())
+    graph_data: dict = {}
+    if graph_id:
+        graph = _load_typology_graph(graph_id)
+        if graph:
+            graph_data = _parse_typology_graph(graph, graph_id)
+
+    phases = graph_data.get("phases") or meta["phases"]
+    state_machine = graph_data.get("state_machine")
+    if state_machine:
+        html = html.replace("{{TRAJECTORY_SECTION}}", _typology_machine_section_html(state_machine))
+        html = html.replace("{{MACHINE_ASSETS}}", (
+            '<link rel="stylesheet" href="/viz-assets/typology-machine.css">'
+            '<script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>'
+            '<script defer src="/viz-assets/typology-machine.js"></script>'
+        ))
+    else:
+        trajectory = (
+            f'<div class="typ-phase-track {graph_data.get("phase_cols", "")}">'
+            f"{_typology_phases_html(phases)}"
+            "</div>"
+            f'{graph_data.get("phase_legend", "")}'
+        )
+        html = html.replace("{{TRAJECTORY_SECTION}}", trajectory)
+        html = html.replace("{{MACHINE_ASSETS}}", "")
+    html = html.replace("{{CASE_STRIP}}", graph_data.get("case_strip", ""))
+    affordances = graph_data.get("affordances")
+    html = html.replace(
+        "{{AFFORDANCES}}",
+        _typology_affordances_html(affordances) if affordances else "",
+    )
+    states = graph_data.get("states")
+    html = html.replace(
+        "{{STATES}}",
+        _typology_list_html(states) if states else _typology_states_html(phases),
+    )
     html = html.replace("{{HARMS}}", _typology_list_html(meta["harms"]))
+    html = html.replace(
+        "{{STATUS_SECTION}}",
+        "" if graph_data.get("case_strip") else _typology_status_html(),
+    )
     return HTMLResponse(content=html)
 
 

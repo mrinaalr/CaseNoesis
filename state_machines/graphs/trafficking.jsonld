@@ -3,6 +3,7 @@
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cac-grooming": "https://cacontology.projectvic.org/grooming#",
     "cac-platforms": "https://cacontology.projectvic.org/platforms#",
+    "noesis": "https://ontology.casenoesis.project/noesis/offense-trajectories#",
     "cacontology": "https://cacontology.projectvic.org#",
     "caselinker": "https://caselinker.projectvic.app/cases#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -81,59 +82,59 @@
     },
     {
       "@id": "caselinker:riley-affordance-initial-trust",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:riley-phase-initial-contact"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:riley-phase-trust-building"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:Anonymity"
+      "noesis:affordanceClass": {
+        "@id": "noesis:Anonymity"
       },
-      "cac-platforms:misuseDescription": "Grindr pseudonymous contact; adult poses as peer for sexual encounter coordination"
+      "noesis:misuseDescription": "Grindr pseudonymous contact; adult poses as peer for sexual encounter coordination"
     },
     {
       "@id": "caselinker:riley-affordance-trust-exploitation",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:riley-phase-trust-building"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:riley-phase-exploitation"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:UnmonitoredCommunication"
+      "noesis:affordanceClass": {
+        "@id": "noesis:UnmonitoredCommunication"
       },
-      "cac-platforms:misuseDescription": "SMS persistent solicitation and payment negotiation outside parental visibility"
+      "noesis:misuseDescription": "SMS persistent solicitation and payment negotiation outside parental visibility"
     },
     {
       "@id": "caselinker:riley-affordance-exploitation-maintenance",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:riley-phase-exploitation"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:riley-phase-maintenance"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:Coordination"
+      "noesis:affordanceClass": {
+        "@id": "noesis:Coordination"
       },
-      "cac-platforms:misuseDescription": "Transportation inducement and multi-victim scheduling across conduct window"
+      "noesis:misuseDescription": "Transportation inducement and multi-victim scheduling across conduct window"
     },
     {
       "@id": "caselinker:riley-affordance-maintenance-terminal",
-      "@type": "cac-platforms:AffordanceMisuse",
-      "cac-platforms:enablesTransitionFrom": {
+      "@type": "noesis:AffordanceMisuse",
+      "noesis:enablesTransitionFrom": {
         "@id": "caselinker:riley-phase-maintenance"
       },
-      "cac-platforms:enablesTransitionTo": {
+      "noesis:enablesTransitionTo": {
         "@id": "caselinker:riley-phase-terminal"
       },
-      "cac-platforms:affordanceClass": {
-        "@id": "cac-platforms:DistributionInfrastructure"
+      "noesis:affordanceClass": {
+        "@id": "noesis:DistributionInfrastructure"
       },
-      "cac-platforms:misuseDescription": "Snapchat image/video transmission sustains exploitation across victim cohort"
+      "noesis:misuseDescription": "Snapchat image/video transmission sustains exploitation across victim cohort"
     }
   ]
 }
