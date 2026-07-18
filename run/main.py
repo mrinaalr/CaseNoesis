@@ -1578,7 +1578,6 @@ _BACKBONE_PHASE_TYPES = frozenset({
 })
 
 _TERMINAL_PHASE_TYPES = frozenset({
-    "ConclusionPhase",
     "TerminalPhase",
 })
 
@@ -1684,10 +1683,10 @@ def _phase_style_from_node(node: dict) -> str:
 
 def _state_label_from_node(node: dict) -> str:
     types = _node_types(node)
-    if "ConclusionPhase" in types:
-        return "ConclusionPhase (terminal)"
+    if "TerminalPhase" in types:
+        return "TerminalPhase"
     if node.get("caselinker:is_terminal"):
-        return "ConclusionPhase (terminal)"
+        return "TerminalPhase"
     grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
     if grooming:
         return grooming[0]
@@ -1696,10 +1695,10 @@ def _state_label_from_node(node: dict) -> str:
 
 def _phase_short_type(node: dict) -> str:
     types = _node_types(node)
-    if "ConclusionPhase" in types:
-        return "ConclusionPhase"
+    if "TerminalPhase" in types:
+        return "TerminalPhase"
     if node.get("caselinker:is_terminal"):
-        return "ConclusionPhase"
+        return "TerminalPhase"
     grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
     if grooming:
         return grooming[0]

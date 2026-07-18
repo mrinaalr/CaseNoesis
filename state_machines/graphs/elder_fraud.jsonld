@@ -56,7 +56,7 @@
     {
       "@id": "caselinker:elder-fraud-phase-terminal",
       "@type": [
-        "cacontology:ConclusionPhase"
+        "cacontology:TerminalPhase"
       ],
       "rdfs:label": "Conviction and Sentencing",
       "rdfs:comment": "Judgment reflects guilty plea and sentence for charged counts in case 2:22-cr-00115-ILRL-KWR.",
