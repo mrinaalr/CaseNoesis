@@ -1578,7 +1578,8 @@ _BACKBONE_PHASE_TYPES = frozenset({
 })
 
 _TERMINAL_PHASE_TYPES = frozenset({
-    "TerminalPhase",
+    # Terminal is a role (caselinker:is_terminal), not a CAC class.
+    # Closing offense occupancy is usually typed ExploitationPhase.
 })
 
 _AFFORDANCE_LABELS: dict[str, str] = {
@@ -1683,22 +1684,21 @@ def _phase_style_from_node(node: dict) -> str:
 
 def _state_label_from_node(node: dict) -> str:
     types = _node_types(node)
-    if "TerminalPhase" in types:
-        return "TerminalPhase"
-    if node.get("caselinker:is_terminal"):
-        return "TerminalPhase"
     grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
     if grooming:
-        return grooming[0]
-    return "Phase (variant)"
+        base = grooming[0]
+    elif "Phase" in types:
+        base = "Phase (variant)"
+    else:
+        base = next(iter(types), "Phase (variant)")
+    # Terminal is a role flag, not a class — keep the real offense phase type.
+    if node.get("caselinker:is_terminal"):
+        return f"{base} [terminal]"
+    return base
 
 
 def _phase_short_type(node: dict) -> str:
     types = _node_types(node)
-    if "TerminalPhase" in types:
-        return "TerminalPhase"
-    if node.get("caselinker:is_terminal"):
-        return "TerminalPhase"
     grooming = sorted(t for t in types if t.endswith("Phase") and t != "Phase")
     if grooming:
         return grooming[0]

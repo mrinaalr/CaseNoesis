@@ -63,9 +63,9 @@
     },
     {
       "@id": "caselinker:racketeering-phase-terminal",
-      "@type": "cacontology:TerminalPhase",
-      "rdfs:label": "Prosecution & Partial Resolutions",
-      "rdfs:comment": "Terminal state — Sept 2024 arrests; multi-defendant superseding indictments; partial guilty pleas to RICO conspiracy (e.g., Mehta 11/17/2025, Tangeman 12/8/2025, Yarally 1/8/2026); Lam pre-trial",
+      "@type": "cac-grooming:ExploitationPhase",
+      "rdfs:label": "Enterprise Harm Terminus",
+      "rdfs:comment": "Terminal offense state — enterprise theft/laundering harm realized until Sept 2024 arrests cut the trajectory; multi-defendant superseding indictments and partial RICO pleas (e.g., Mehta, Tangeman, Yarally) occur after this offense terminus",
       "caselinker:is_terminal": true
     },
     {

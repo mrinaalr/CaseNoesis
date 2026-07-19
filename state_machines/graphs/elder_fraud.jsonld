@@ -55,13 +55,11 @@
     },
     {
       "@id": "caselinker:elder-fraud-phase-terminal",
-      "@type": [
-        "cacontology:TerminalPhase"
-      ],
-      "rdfs:label": "Conviction and Sentencing",
-      "rdfs:comment": "Judgment reflects guilty plea and sentence for charged counts in case 2:22-cr-00115-ILRL-KWR.",
+      "@type": "cac-grooming:ExploitationPhase",
+      "rdfs:label": "Scheme Harm Terminus",
+      "rdfs:comment": "Terminal offense state — sustained elder-fraud extraction harm realized prior to law-enforcement disruption and later adjudication in case 2:22-cr-00115-ILRL-KWR.",
       "caselinker:is_terminal": true,
-      "noesis:terminalReason": "prosecution_transition"
+      "noesis:terminalReason": "law_enforcement_disruption"
     },
     {
       "@id": "caselinker:elder-fraud-affordance-contact-conditioning",

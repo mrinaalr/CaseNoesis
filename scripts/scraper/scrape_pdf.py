@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import re
 import sys
 import time
@@ -2258,6 +2259,14 @@ def extract(html: str, url: str) -> tuple[str, str, str, date | None] | None:
             or soup.select_one(".field--name-body")
             or soup.select_one("main")
         )
+    elif netloc in ("www.michigan.gov", "michigan.gov"):
+        # Plain `main` also picks up a hidden browser-detection modal and a
+        # "related news" widget that inlines FULL bodies of other releases
+        # (not just teaser links) — this selector is the isolated article only.
+        container = (
+            soup.select_one(".news-item__section-content")
+            or soup.select_one("main")
+        )
     elif netloc in ("www.secretservice.gov", "secretservice.gov"):
         h1 = soup.select_one("h1")
         if h1:
@@ -2438,11 +2447,154 @@ def _per_url_cache_pdf(tmp_dir: Path, index: int, url: str) -> Path:
     return tmp_dir / f"{index:04d}_{h}.pdf"
 
 
+def resolve_url_content(
+    url: str, args: argparse.Namespace, verify_tls: bool
+) -> tuple[str, str, str, date | None] | None:
+    """
+    Fetch + extract a single URL into (title, byline, body, pub_date), applying the
+    existing native-PDF / Jina-first-host / fallback / njoag / ncis-follow logic.
+    Returns None when the URL could not be resolved into a usable article.
+
+    Shared by the plain --url-file pipeline and --noesis-file "scrape"-mode entries
+    (non-DOJ URLs passed through unchanged by scrape_noesis.py).
+    """
+    parsed = urlparse(url)
+    ref = args.referer or f"{parsed.scheme}://{parsed.netloc}/"
+    hdrs = _default_headers(referer=ref)
+    path_lower = parsed.path.lower()
+
+    if path_lower.endswith(".pdf"):
+        raw = fetch_bytes(url, hdrs, verify=verify_tls)
+        if not raw:
+            return None
+        result = extract_from_native_pdf(raw, url)
+        if not result:
+            print("    [FAILED] native PDF: body too thin")
+            return None
+        title, byline, body, pub_date = result
+        if "njoag.gov" in url.lower():
+            body = _clean_njoag_scraped_body(body)
+            if not body or len(body) < MIN_BODY_CHARS:
+                print("    [FAILED] njoag: body too thin after clean")
+                return None
+        return title, byline, body, pub_date
+
+    use_jina_first = args.jina_fallback and (
+        "cbp.gov" in url.lower()
+        or "usmarshals.gov" in url.lower()
+        or "troopers.ny.gov" in url.lower()
+    )
+    if use_jina_first:
+        if "cbp.gov" in url.lower():
+            tag = "cbp"
+        elif "usmarshals.gov" in url.lower():
+            tag = "usms"
+        else:
+            tag = "nysp"
+        print(f"    [{tag}] r.jina.ai reader ...")
+        html = fetch_via_jina_reader(url, verify=verify_tls)
+    else:
+        html = fetch(url, hdrs, verify=verify_tls)
+        if not html and args.jina_fallback:
+            print("    [fallback] r.jina.ai reader ...")
+            html = fetch_via_jina_reader(url, verify=verify_tls)
+    if not html:
+        return None
+
+    is_jina = html.lstrip().startswith("Title:") and "Markdown Content:" in html
+    html_j: str | None = None
+    if is_jina:
+        result = extract_from_jina_reader(html, url)
+    else:
+        result = extract(html, url)
+    body_len = len(((result[2] if result else "") or "").strip())
+    needs_jina = (
+        args.jina_fallback
+        and not is_jina
+        and (
+            not result
+            or (
+                "troopers.ny.gov" in url.lower()
+                and body_len < THIN_HTML_RETRY_CHARS
+            )
+            or (
+                "njoag.gov" in url.lower()
+                and (
+                    body_len < THIN_HTML_RETRY_CHARS
+                    or not _njoag_body_ok((result[2] if result else "") or "")
+                )
+            )
+        )
+    )
+    if needs_jina:
+        print("    [fallback] r.jina.ai reader (thin or empty extract) ...")
+        html_j = fetch_via_jina_reader(url, verify=verify_tls)
+        if html_j:
+            is_j2 = html_j.lstrip().startswith("Title:") and "Markdown Content:" in html_j
+            if is_j2:
+                result = extract_from_jina_reader(html_j, url)
+            else:
+                result = extract(html_j, url)
+    body_so_far = ((result[2] if result else "") or "").strip()
+    doj_url = (
+        _ncis_doj_follow_url(url, body_so_far, html, html_j)
+        if args.jina_fallback
+        else None
+    )
+    if doj_url:
+        print(f"    [ncis] follow DOJ release …")
+        doj_blob = fetch_via_jina_reader(doj_url, verify=verify_tls)
+        if doj_blob:
+            if doj_blob.lstrip().startswith("Title:"):
+                doj_result = extract_from_jina_reader(doj_blob, doj_url)
+            else:
+                doj_result = extract(doj_blob, doj_url)
+            if doj_result and (
+                not result or len(doj_result[2]) > len((result[2] if result else "") or "")
+            ):
+                result = doj_result
+    if not result:
+        print("    [FAILED] extract: body too thin")
+        return None
+
+    title, byline, body, pub_date = result
+    if "njoag.gov" in url.lower():
+        body = _clean_njoag_scraped_body(body)
+        if not body or len(body) < MIN_BODY_CHARS:
+            print("    [FAILED] njoag: body too thin after clean")
+            return None
+    return title, byline, body, pub_date
+
+
+def load_noesis_records(path: Path) -> list[dict]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _parse_iso_date(raw: str | None) -> date | None:
+    if not raw:
+        return None
+    try:
+        return date.fromisoformat(raw)
+    except ValueError:
+        return None
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Scrape HTML URLs from a list into one merged PDF.",
     )
     ap.add_argument("--url-file", type=Path, default=DEFAULT_URL_FILE)
+    ap.add_argument(
+        "--noesis-file",
+        type=Path,
+        default=None,
+        help=(
+            "JSON produced by scrape_noesis.py (list of {source_url, mode, ...}). "
+            "mode=resolved skips fetch/extract entirely (e.g. DOJ API records); "
+            "mode=scrape reuses the normal fetch/extract pipeline. "
+            "Alternative to --url-file; takes precedence when set."
+        ),
+    )
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     ap.add_argument("--out-name", default=DEFAULT_OUT_NAME)
     ap.add_argument("--limit", type=int, default=None)
@@ -2478,21 +2630,51 @@ def main():
         except Exception:
             pass
 
-    if not args.url_file.is_file():
-        sys.exit(f"URL file not found: {args.url_file}")
+    # work_items: list of (url, resolved_or_None). resolved is a (title, byline, body,
+    # pub_date) tuple already in hand (noesis mode=resolved -> skip fetch entirely);
+    # None means run it through resolve_url_content() same as the plain url-file path.
+    work_items: list[tuple[str, tuple[str, str, str, date | None] | None]] = []
 
-    all_urls = load_urls(args.url_file)
-    if args.filter_njoag:
-        before = len(all_urls)
-        all_urls = filter_njoag_icac_urls(all_urls)
-        print(f"  NJ filter  : {before} -> {len(all_urls)} URLs")
-    urls = all_urls[: args.limit] if args.limit else all_urls
-
-    print(f"\n{'='*55}")
-    print(f"  URL file  : {args.url_file}")
-    print(f"  Total URLs: {len(all_urls)}  |  processing: {len(urls)}")
-    print(f"  Output    : {args.out_dir / args.out_name}")
-    print(f"{'='*55}\n")
+    if args.noesis_file:
+        if not args.noesis_file.is_file():
+            sys.exit(f"Noesis file not found: {args.noesis_file}")
+        records = load_noesis_records(args.noesis_file)
+        if args.limit:
+            records = records[: args.limit]
+        for rec in records:
+            url = rec.get("source_url") or rec.get("url")
+            if not url:
+                continue
+            if rec.get("mode") == "resolved":
+                resolved = (
+                    rec.get("title") or _title_from_url(url),
+                    rec.get("byline") or "",
+                    rec.get("body") or "",
+                    _parse_iso_date(rec.get("pub_date")),
+                )
+            else:
+                resolved = None
+            work_items.append((url, resolved))
+        print(f"\n{'='*55}")
+        print(f"  Noesis file: {args.noesis_file}")
+        print(f"  Total items: {len(work_items)}")
+        print(f"  Output     : {args.out_dir / args.out_name}")
+        print(f"{'='*55}\n")
+    else:
+        if not args.url_file.is_file():
+            sys.exit(f"URL file not found: {args.url_file}")
+        all_urls = load_urls(args.url_file)
+        if args.filter_njoag:
+            before = len(all_urls)
+            all_urls = filter_njoag_icac_urls(all_urls)
+            print(f"  NJ filter  : {before} -> {len(all_urls)} URLs")
+        urls = all_urls[: args.limit] if args.limit else all_urls
+        work_items = [(u, None) for u in urls]
+        print(f"\n{'='*55}")
+        print(f"  URL file  : {args.url_file}")
+        print(f"  Total URLs: {len(all_urls)}  |  processing: {len(urls)}")
+        print(f"  Output    : {args.out_dir / args.out_name}")
+        print(f"{'='*55}\n")
 
     tmp_dir = args.out_dir / "tmp"
     tmp_dir.mkdir(parents=True, exist_ok=True)
@@ -2500,9 +2682,9 @@ def main():
     successes: list[Path] = []
     failures: list[str] = []
 
-    for i, url in enumerate(urls, start=1):
+    for i, (url, resolved) in enumerate(work_items, start=1):
         slug = url.rstrip("/").split("/")[-1][:65]
-        print(f"  [{i}/{len(urls)}] {slug}")
+        print(f"  [{i}/{len(work_items)}] {slug}")
 
         out_pdf = _per_url_cache_pdf(tmp_dir, i, url)
         if out_pdf.exists() and out_pdf.stat().st_size > 500:
@@ -2510,132 +2692,29 @@ def main():
             successes.append(out_pdf)
             continue
 
-        parsed = urlparse(url)
-        ref = args.referer or f"{parsed.scheme}://{parsed.netloc}/"
-        hdrs = _default_headers(referer=ref)
-        path_lower = parsed.path.lower()
-        if path_lower.endswith(".pdf"):
-            raw = fetch_bytes(url, hdrs, verify=verify_tls)
-            if not raw:
+        if resolved is not None:
+            title, byline, body, pub_date = resolved
+            if len(body.strip()) < MIN_BODY_CHARS:
+                print("    [FAILED] noesis: resolved body too thin")
                 failures.append(url)
-                time.sleep(args.delay)
                 continue
-            result = extract_from_native_pdf(raw, url)
-            if not result:
-                print("    [FAILED] native PDF: body too thin")
-                failures.append(url)
-                time.sleep(args.delay)
-                continue
-            title, byline, body, pub_date = result
-            if "njoag.gov" in url.lower():
-                body = _clean_njoag_scraped_body(body)
-                if not body or len(body) < MIN_BODY_CHARS:
-                    print("    [FAILED] njoag: body too thin after clean")
-                    failures.append(url)
-                    time.sleep(args.delay)
-                    continue
             ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
             if ok:
                 kb = out_pdf.stat().st_size // 1024
-                print(f"    [ok pdf] {kb} KB - {title[:65]}")
+                print(f"    [ok resolved] {kb} KB - {title[:65]}")
                 successes.append(out_pdf)
             else:
                 failures.append(url)
-            time.sleep(args.delay)
-            continue
+            continue  # no network call made -> no rate-limit delay needed
 
-        use_jina_first = args.jina_fallback and (
-            "cbp.gov" in url.lower()
-            or "usmarshals.gov" in url.lower()
-            or "troopers.ny.gov" in url.lower()
-        )
-        if use_jina_first:
-            if "cbp.gov" in url.lower():
-                tag = "cbp"
-            elif "usmarshals.gov" in url.lower():
-                tag = "usms"
-            else:
-                tag = "nysp"
-            print(f"    [{tag}] r.jina.ai reader ...")
-            html = fetch_via_jina_reader(url, verify=verify_tls)
-        else:
-            html = fetch(url, hdrs, verify=verify_tls)
-            if not html and args.jina_fallback:
-                print("    [fallback] r.jina.ai reader ...")
-                html = fetch_via_jina_reader(url, verify=verify_tls)
-        if not html:
-            failures.append(url)
-            time.sleep(args.delay)
-            continue
-
-        is_jina = html.lstrip().startswith("Title:") and "Markdown Content:" in html
-        html_j: str | None = None
-        if is_jina:
-            result = extract_from_jina_reader(html, url)
-        else:
-            result = extract(html, url)
-        body_len = len(((result[2] if result else "") or "").strip())
-        needs_jina = (
-            args.jina_fallback
-            and not is_jina
-            and (
-                not result
-                or (
-                    "troopers.ny.gov" in url.lower()
-                    and body_len < THIN_HTML_RETRY_CHARS
-                )
-                or (
-                    "njoag.gov" in url.lower()
-                    and (
-                        body_len < THIN_HTML_RETRY_CHARS
-                        or not _njoag_body_ok((result[2] if result else "") or "")
-                    )
-                )
-            )
-        )
-        if needs_jina:
-            print("    [fallback] r.jina.ai reader (thin or empty extract) ...")
-            html_j = fetch_via_jina_reader(url, verify=verify_tls)
-            if html_j:
-                is_j2 = html_j.lstrip().startswith("Title:") and "Markdown Content:" in html_j
-                if is_j2:
-                    result = extract_from_jina_reader(html_j, url)
-                else:
-                    result = extract(html_j, url)
-        body_so_far = ((result[2] if result else "") or "").strip()
-        doj_url = (
-            _ncis_doj_follow_url(url, body_so_far, html, html_j)
-            if args.jina_fallback
-            else None
-        )
-        if doj_url:
-            print(f"    [ncis] follow DOJ release …")
-            doj_blob = fetch_via_jina_reader(doj_url, verify=verify_tls)
-            if doj_blob:
-                if doj_blob.lstrip().startswith("Title:"):
-                    doj_result = extract_from_jina_reader(doj_blob, doj_url)
-                else:
-                    doj_result = extract(doj_blob, doj_url)
-                if doj_result and (
-                    not result or len(doj_result[2]) > len((result[2] if result else "") or "")
-                ):
-                    result = doj_result
-        if not result:
-            print("    [FAILED] extract: body too thin")
+        result = resolve_url_content(url, args, verify_tls)
+        if result is None:
             failures.append(url)
             time.sleep(args.delay)
             continue
 
         title, byline, body, pub_date = result
-        if "njoag.gov" in url.lower():
-            body = _clean_njoag_scraped_body(body)
-            if not body or len(body) < MIN_BODY_CHARS:
-                print("    [FAILED] njoag: body too thin after clean")
-                failures.append(url)
-                time.sleep(args.delay)
-                continue
         ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
-
         if ok:
             kb = out_pdf.stat().st_size // 1024
             print(f"    [ok] {kb} KB - {title[:65]}")

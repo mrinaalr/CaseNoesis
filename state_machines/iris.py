@@ -46,7 +46,8 @@ THREAT_MECHANISM = f"{SEXTORTION_NS}ThreatMechanism"
 COERCION_CYCLE = f"{SEXTORTION_NS}CoercionCycle"
 CHANNEL_MIGRATION_EVENT = f"{PLATFORMS_NS}ChannelMigrationEvent"
 STING_OPERATION = f"{UNDERCOVER_NS}StingOperation"
-TERMINAL_PHASE = f"{CAC_NS}TerminalPhase"
+# Terminality is caselinker:is_terminal on the last offense phase
+# (usually cac-grooming:ExploitationPhase), not a CAC TerminalPhase class.
 DISRUPTS_CHAIN = f"{CASELINKER_NS}disruptsChain"
 DISRUPTED_TARGET = f"{CASELINKER_NS}disruptedTarget"
 
