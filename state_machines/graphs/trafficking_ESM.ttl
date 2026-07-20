@@ -1,0 +1,248 @@
+# Sex-Trafficking extension — real exemplar
+# United States v. Chase Anthony Young (N.D. Tex.). Source: USAO-NDTX
+# press release "Dallas Man Sentenced to 30 Years in Federal Prison for
+# Sex Trafficking," 2026-06-15 ("PR").
+#
+# Press-release-only source (no affidavit/plea agreement text available):
+# built from exactly what PR states about the three victims of the
+# admitted conduct, plus the one bounding organizational fact (nine total
+# victims, "dating back to at least 2017"). No victim names, specific
+# dates, ad platform names, or dollar amounts are given in the source, so
+# none are invented here. Recruitment method for the three admitted
+# victims is not described in the source; the Recruitment phase assertion
+# is scoped strictly to the organizational-duration fact and carries lower
+# confidence accordingly.
+
+@prefix traf: <http://example.org/ontology/trafficking/> .
+@prefix trfx: <http://example.org/trafficking/young/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Actors
+#################################################################
+
+trfx:person-young
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Chase Anthony Young" ;
+	uco-core:description "Age 34, of Dallas, Texas. Pled guilty (October 2025) to federal sex trafficking through force, fraud, or coercion; admitted causing three adult victims to engage in commercial sex. Sentenced to 30 years in federal prison (announced 2026-06-15) by Senior U.S. District Judge David C. Godbey. Investigated by Homeland Security Investigations; prosecuted by AUSA Brandie Wade. Source: PR paras. 1-2, 6." .
+
+#################################################################
+# Evidence nodes
+#################################################################
+
+trfx:evidence-org-history
+	a uco-core:UcoObject ;
+	uco-core:name "Sex-trafficking organization history" ;
+	uco-core:description "At sentencing, the prosecutor asked the Court to consider that Young had a total of nine identified victims of his sex trafficking organization, dating back to at least 2017. Source: PR para. 4. (Recruitment method for the three victims of the admitted conduct is not described in the source.)" .
+
+trfx:evidence-coercion
+	a uco-core:UcoObject ;
+	uco-core:name "Force/fraud/coercion admission and victim impact statement" ;
+	uco-core:description "Young admitted to causing three adult victims to engage in commercial sex by force, threats of force, fraud, or coercion, and to setting pricing and rules for the victims; the victims received beatings and scars. One victim's statement, read in part at sentencing, described being made to feel 'worthless and only existed to be used' and lasting trauma to her ability to trust, feel safe, and believe in herself. Source: PR paras. 3-5." .
+
+trfx:evidence-ads-hotels
+	a uco-core:UcoObject ;
+	uco-core:name "Online ad placement and hotel-room rental" ;
+	uco-core:description "Young admitted to placing online ads for the victims and renting hotel rooms in which the commercial sex acts performed by the victims occurred. Source: PR para. 3." .
+
+trfx:evidence-proceeds
+	a uco-core:UcoObject ;
+	uco-core:name "Proceeds collection admission" ;
+	uco-core:description "Young admitted to taking the proceeds from the commercial sex acts performed by the victims; at sentencing the prosecutor noted that Young received all the proceeds while the victims received beatings and scars. Source: PR paras. 3-4." .
+
+#################################################################
+# Enacted actions (Technique-typed instances carrying the affordance)
+#################################################################
+
+trfx:instrument-coercive-means
+	a uco-core:UcoObject ;
+	uco-core:name "Force, threats of force, fraud, or coercion" ;
+	uco-core:description "The coercive means Young used to compel the victims' compliance, including setting pricing and rules for them. Source: PR paras. 2, 4-5." .
+
+trfx:action-coerce
+	a uco-action:Action , traf:a_coerce ;
+	uco-core:name "Compel victim compliance by force, threats, fraud, or coercion" ;
+	uco-action:performer trfx:person-young ;
+	uco-action:instrument trfx:instrument-coercive-means ;
+	prov:wasDerivedFrom trfx:evidence-coercion .
+
+trfx:instrument-online-ad-platform
+	a uco-core:UcoObject ;
+	uco-core:name "Online advertising platform (unnamed in source)" ;
+	uco-core:description "The online platform on which Young placed advertisements for the victims to solicit commercial sex buyers; the specific platform is not named in the source. Source: PR para. 3." .
+
+trfx:action-advertise
+	a uco-action:Action , traf:a_advertise ;
+	uco-core:name "Place online ads for the victims" ;
+	uco-action:performer trfx:person-young ;
+	uco-action:instrument trfx:instrument-online-ad-platform ;
+	prov:wasDerivedFrom trfx:evidence-ads-hotels .
+
+trfx:instrument-commercial-sex-proceeds
+	a uco-core:UcoObject ;
+	uco-core:name "Commercial sex act proceeds" ;
+	uco-core:description "Proceeds from commercial sex acts performed by the victims, taken in full by Young. Source: PR paras. 3-4." .
+
+trfx:action-collect-earnings
+	a uco-action:Action , traf:a_collect_earnings ;
+	uco-core:name "Take proceeds from commercial sex acts" ;
+	uco-action:performer trfx:person-young ;
+	uco-action:instrument trfx:instrument-commercial-sex-proceeds ;
+	prov:wasDerivedFrom trfx:evidence-proceeds .
+
+#################################################################
+# Trajectory — three admitted victims (organizational span: 2017-2025)
+#################################################################
+
+trfx:confidence-1 a uco-core:ConfidenceFacet ; uco-core:confidence "55"^^xsd:nonNegativeInteger .
+trfx:confidence-2 a uco-core:ConfidenceFacet ; uco-core:confidence "90"^^xsd:nonNegativeInteger .
+trfx:confidence-3 a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+trfx:confidence-4 a uco-core:ConfidenceFacet ; uco-core:confidence "90"^^xsd:nonNegativeInteger .
+
+trfx:interval-org-span
+	a time:ProperInterval ;
+	time:hasBeginning trfx:instant-2017-01-01 ;
+	time:hasEnd trfx:instant-2025-10-01 .
+trfx:instant-2017-01-01 a time:Instant ; time:inXSDDateTimeStamp "2017-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+trfx:instant-2025-10-01 a time:Instant ; time:inXSDDateTimeStamp "2025-10-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+trfx:phase-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0" ;
+	uco-core:description "Onset of Young's sex-trafficking organization; source gives only the organization's documented span and total victim count (nine), not a recruitment method or date for the three admitted victims specifically. Interval is bounded by the organizational span given in the source, not a claimed precise date." ;
+	traj:assertsState traf:Recruitment ;
+	traj:atInterval trfx:interval-org-span ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom trfx:evidence-org-history ;
+	uco-core:hasFacet trfx:confidence-1 .
+
+trfx:phase-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1" ;
+	uco-core:description "Victims caused to engage in commercial sex by force, threats of force, fraud, or coercion; pricing and rules set by Young. Source: PR paras. 2, 4-5." ;
+	traj:assertsState traf:Control ;
+	traj:atInterval trfx:interval-org-span ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom trfx:evidence-coercion ;
+	uco-core:hasFacet trfx:confidence-2 .
+
+trfx:phase-3
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 2" ;
+	uco-core:description "Online ads placed for the victims; hotel rooms rented for the commercial sex acts. Source: PR para. 3." ;
+	traj:assertsState traf:Exploitation ;
+	traj:atInterval trfx:interval-org-span ;
+	traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom trfx:evidence-ads-hotels ;
+	uco-core:hasFacet trfx:confidence-3 .
+
+trfx:phase-4
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 3" ;
+	uco-core:description "Young took the proceeds from the commercial sex acts performed by the victims. The modeled victim-journey chain (recruitment -> control -> exploitation -> earnings collection) finished in the source; terminalPolarity is completed. Later guilty plea (Oct. 2025) and 30-year sentence (announced 2026-06-15) are outside this machine and do not convert a finished chain into disrupted." ;
+	traj:assertsState traf:EarningsCollection ;
+	traj:atInterval trfx:interval-org-span ;
+	traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "completed" ;
+	prov:wasDerivedFrom trfx:evidence-proceeds ;
+	uco-core:hasFacet trfx:confidence-4 .
+
+trfx:trajectory-three-victims
+	a traj:Trajectory ;
+	uco-core:name "Sex-trafficking trajectory: Chase Anthony Young, three admitted victims" ;
+	uco-core:description "United States v. Chase Anthony Young (N.D. Tex.) — 4-phase victim-journey occupancy from organizational recruitment through earnings collection; modeled chain completed (later prosecution is not mid-chain disruption)." ;
+	traj:hasPhaseAssertion
+		trfx:phase-1 ,
+		trfx:phase-2 ,
+		trfx:phase-3 ,
+		trfx:phase-4 .
+
+#################################################################
+# Machine layer — Transitions + inferred StateMachineModel
+#################################################################
+
+trfx:trigger-victim-secured a uco-core:UcoObject ; uco-core:name "Trigger: victim brought under the organization's control" .
+trfx:trigger-compliance-established a uco-core:UcoObject ; uco-core:name "Trigger: victim compliance established via force/fraud/coercion" .
+trfx:trigger-buyer-engaged a uco-core:UcoObject ; uco-core:name "Trigger: commercial sex buyer engaged via ad response" .
+
+trfx:transition-1
+	a traj:Transition ;
+	uco-core:name "Recruitment -> Control" ;
+	traj:fromState traf:Recruitment ;
+	traj:toState traf:Control ;
+	traj:trigger trfx:trigger-victim-secured ;
+	traj:enactsAction trfx:action-coerce .
+
+trfx:transition-2
+	a traj:Transition ;
+	uco-core:name "Control -> Exploitation" ;
+	traj:fromState traf:Control ;
+	traj:toState traf:Exploitation ;
+	traj:trigger trfx:trigger-compliance-established ;
+	traj:enactsAction trfx:action-advertise .
+
+trfx:transition-3
+	a traj:Transition ;
+	uco-core:name "Exploitation -> EarningsCollection" ;
+	traj:fromState traf:Exploitation ;
+	traj:toState traf:EarningsCollection ;
+	traj:trigger trfx:trigger-buyer-engaged ;
+	traj:enactsAction trfx:action-collect-earnings .
+
+trfx:tool-esm-estimator
+	a uco-tool:Tool ;
+	uco-core:name "ESM trajectory estimator (illustrative)" ;
+	uco-core:description "version 0.1.0-dev" .
+
+trfx:action-estimate-transitions
+	a uco-action:Action ;
+	uco-core:name "Estimate trafficking transition probabilities (illustrative)" ;
+	uco-action:instrument trfx:tool-esm-estimator ;
+	prov:wasAssociatedWith trfx:tool-esm-estimator .
+
+trfx:estimate-1
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Recruitment -> Control)" ;
+	traj:ofTransition trfx:transition-1 ;
+	traj:transitionProbability "0.80"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy trfx:action-estimate-transitions .
+
+trfx:estimate-2
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Control -> Exploitation)" ;
+	traj:ofTransition trfx:transition-2 ;
+	traj:transitionProbability "0.85"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy trfx:action-estimate-transitions .
+
+trfx:estimate-3
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Exploitation -> EarningsCollection)" ;
+	traj:ofTransition trfx:transition-3 ;
+	traj:transitionProbability "0.90"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy trfx:action-estimate-transitions .
+
+trfx:model
+	a traj:StateMachineModel ;
+	uco-core:name "Sex-trafficking (Young) state-machine estimate (v0)" ;
+	traj:initialState traf:Recruitment ;
+	traj:learnedFrom trfx:trajectory-three-victims ;
+	traj:hasTransition
+		trfx:transition-1 ,
+		trfx:transition-2 ,
+		trfx:transition-3 ;
+	traj:hasTransitionEstimate
+		trfx:estimate-1 ,
+		trfx:estimate-2 ,
+		trfx:estimate-3 ;
+	prov:wasGeneratedBy trfx:action-estimate-transitions .

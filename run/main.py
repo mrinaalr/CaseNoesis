@@ -24,7 +24,9 @@ import gc
 import asyncio
 import requests
 from datetime import datetime
+from html import escape as html_escape
 from pathlib import Path
+from urllib.parse import quote, urlparse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -1485,7 +1487,7 @@ _TYPOLOGIES = {
         "title": "Trafficking",
         "tagline": "Commercial exploitation networks",
         "statute": "18 U.S.C. § 1591(a) (sex trafficking); § 1594(c) (conspiracy)",
-        "summary": "Traffickers recruit and maintain victims through classifieds, social platforms, and encrypted messaging, lowering the cost of coordination across a distributed enterprise.",
+        "summary": "Traffickers recruit and maintain victims through classifieds, social platforms, and encrypted messaging, lowering the cost of coordination across a distributed enterprise. In <em>United States v. Chase Anthony Young</em>, a Dallas operator ran a sex-trafficking organization dating to at least 2017 with nine identified victims. He pled guilty to causing three adult victims to engage in commercial sex by force, fraud, or coercion, placing online ads, renting hotel rooms, setting pricing and rules, and taking all proceeds while victims received beatings and scars, and was sentenced to 30 years in federal prison. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-ndtx/pr/dallas-man-sentenced-30-years-federal-prison-sex-trafficking\" target=\"_blank\" rel=\"noopener\">Sentencing (Jun 2026)</a></span>",
         "phases": [
             ("Initial contact", True, "Recruitment via ads, DMs, or false employment offers."),
             ("Conditioning", True, "Dependency, isolation, and debt bondage establishment."),
@@ -1513,7 +1515,7 @@ _TYPOLOGIES = {
         "title": "Extortion",
         "tagline": "Coercion leverage cycles",
         "statute": "18 U.S.C. § 875(d) (interstate extortionate communications); § 1030(a)(7) (computer extortion)",
-        "summary": "Offenders obtain leverage through sensitive material or fabricated threats, then cycle coercion via platforms that preserve leverage and enable rapid, irreversible payment.",
+        "summary": "Offenders obtain leverage through sensitive material or fabricated threats, then cycle coercion via platforms that preserve leverage and enable rapid, irreversible payment. In <em>United States v. Matthew D. Lane</em>, a former Assumption University student hacked two U.S. companies and ran cyber-extortion leak threats, including using stolen credentials to exfiltrate student and teacher PII to a server he leased in Ukraine and threatening worldwide disclosure absent ransom. He pled guilty to cyber extortion conspiracy, cyber extortion, unauthorized access, and aggravated identity theft, and was sentenced to four years in prison plus more than $14M in restitution. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-ma/pr/worcester-college-student-sentenced-four-years-prison-cyber-extortions\" target=\"_blank\" rel=\"noopener\">Sentencing (Nov 2025)</a></span>",
         "phases": [
             ("Initial contact", True, "Grooming, breach, or cold-contact threat delivery."),
             ("Conditioning", True, "Escalating demands and isolation from support networks."),
@@ -1528,6 +1530,289 @@ _TYPOLOGIES = {
 
 def _typology_list_html(items: list[str]) -> str:
     return "".join(f"<li>{item}</li>" for item in items)
+
+
+# justice.gov sets CSP frame-ancestors to self only, so a direct iframe never
+# works. Serve a same-origin scrollable page built from the public DOJ API body.
+_DOJ_API_URL = "https://www.justice.gov/api/v1/press_releases.json"
+_DOJ_API_PAGESIZE = 50
+_DOJ_API_MAX_PAGES = 6
+_DOJ_API_MIN_DELAY = 0.3
+_DOJ_EMBED_TTL_S = 3600.0
+_DOJ_EMBED_CACHE: dict[str, tuple[float, str]] = {}
+_DOJ_EMBED_LOCK = threading.Lock()
+_DOJ_EMBED_CACHE_VER = "v2"
+_last_doj_api_call = 0.0
+_DOJ_STOPWORDS = frozenset({
+    "a", "an", "the", "of", "to", "in", "on", "at", "by", "for", "and", "or",
+    "with", "from", "into", "his", "her", "its", "their", "s",
+})
+_DOJ_BODY_ALLOWED_TAGS = frozenset({
+    "p", "a", "br", "strong", "em", "b", "i", "ul", "ol", "li",
+    "table", "thead", "tbody", "tr", "td", "th",
+    "h1", "h2", "h3", "h4", "blockquote", "div", "span", "hr", "sup", "sub",
+})
+_DOJ_USAO_HOST_RE = re.compile(r"^usao-[a-z0-9]+(?:-[a-z0-9]+)*\.justice\.gov$")
+
+
+def _is_allowed_justice_embed_host(hostname: Optional[str]) -> bool:
+    """Allow only justice.gov, www.justice.gov, and usao-*.justice.gov hosts."""
+    host = (hostname or "").lower().rstrip(".")
+    if not host or ".." in host:
+        return False
+    if host in ("justice.gov", "www.justice.gov"):
+        return True
+    return bool(_DOJ_USAO_HOST_RE.fullmatch(host))
+
+
+def _normalize_typology_source_embed_url(url: str) -> Optional[str]:
+    """
+    Canonicalize a candidate embed URL, or return None if it fails hard checks.
+
+    Rejects non-https, credentials, non-default ports, queries, and non-allowlisted hosts.
+    """
+    raw = (url or "").strip()
+    if not raw or len(raw) > 500 or any(ch.isspace() for ch in raw):
+        return None
+    if raw.startswith("//"):
+        return None
+    try:
+        parsed = urlparse(raw)
+    except Exception:
+        return None
+    if parsed.scheme != "https":
+        return None
+    if parsed.username is not None or parsed.password is not None:
+        return None
+    if parsed.port is not None:
+        return None
+    if parsed.query or parsed.params:
+        return None
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if not _is_allowed_justice_embed_host(host):
+        return None
+    path = parsed.path or ""
+    if not path.startswith("/") or path == "/":
+        return None
+    if "\\" in path or "/." in path or "//" in path:
+        return None
+    # Press-release shaped paths only (www.justice.gov/usao-*/pr/... or host/pr/...).
+    path_l = path.lower().rstrip("/")
+    if "/pr/" not in path_l and not path_l.endswith("/pr"):
+        return None
+    return f"https://{host}{path_l}"
+
+
+def _collect_typology_source_embed_allowlist() -> frozenset[str]:
+    """Exact sentencing URLs referenced by typology pages — not an open DOJ proxy."""
+    allowed: set[str] = set()
+    for meta in _TYPOLOGIES.values():
+        summary = str(meta.get("summary") or "")
+        m = re.search(
+            r'<span class="typ-source-links">(.*?)</span>',
+            summary,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if not m:
+            continue
+        for href, label in re.findall(
+            r'<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+            m.group(1),
+            flags=re.IGNORECASE | re.DOTALL,
+        ):
+            if "sentenc" not in re.sub(r"<[^>]+>", "", label).lower():
+                continue
+            normalized = _normalize_typology_source_embed_url(href)
+            if normalized:
+                allowed.add(normalized)
+    return frozenset(allowed)
+
+
+_TYPOLOGY_SOURCE_EMBED_ALLOWLIST = _collect_typology_source_embed_allowlist()
+
+
+def _is_allowed_typology_source_embed_url(url: str) -> tuple[bool, Optional[str]]:
+    """Return (ok, normalized_url). Only allowlisted typology sentencing sources pass."""
+    normalized = _normalize_typology_source_embed_url(url)
+    if not normalized:
+        return False, None
+    if normalized not in _TYPOLOGY_SOURCE_EMBED_ALLOWLIST:
+        return False, None
+    return True, normalized
+
+
+def _doj_url_slug(url: str) -> str:
+    return url.rstrip("/").split("/")[-1].lower()
+
+
+def _doj_slug_query_terms(slug: str, *, max_terms: int = 8) -> str:
+    # Prefer enough trailing content words (e.g. "sex trafficking") so title
+    # search is specific — first-6 alone often matches unrelated DOJ PRs.
+    words = [w for w in slug.split("-") if len(w) > 2 and w not in _DOJ_STOPWORDS]
+    return " ".join(words[:max_terms])
+
+
+def _doj_api_get(params: dict) -> dict:
+    global _last_doj_api_call
+    wait = _DOJ_API_MIN_DELAY - (time.monotonic() - _last_doj_api_call)
+    if wait > 0:
+        time.sleep(wait)
+    response = requests.get(
+        _DOJ_API_URL,
+        params=params,
+        timeout=30,
+        headers={"User-Agent": "CaseNoesis/1.0 (typology source embed)"},
+    )
+    _last_doj_api_call = time.monotonic()
+    response.raise_for_status()
+    return response.json()
+
+
+def _find_doj_press_release(url: str) -> Optional[dict]:
+    """Match a justice.gov press URL to its DOJ API record by exact slug."""
+    target_slug = _doj_url_slug(url)
+    query = _doj_slug_query_terms(target_slug)
+    if not query:
+        return None
+    for page in range(_DOJ_API_MAX_PAGES):
+        data = _doj_api_get(
+            {"parameters[title]": query, "pagesize": _DOJ_API_PAGESIZE, "page": page}
+        )
+        results = data.get("results") or []
+        for rec in results:
+            if _doj_url_slug(str(rec.get("url") or "")) == target_slug:
+                return rec
+        total = int(data.get("metadata", {}).get("resultset", {}).get("count", 0) or 0)
+        if (page + 1) * _DOJ_API_PAGESIZE >= total or not results:
+            break
+    return None
+
+
+def _sanitize_doj_body_html(html_body: str) -> str:
+    """Strip scripts/handlers from DOJ API HTML while keeping readable structure."""
+    try:
+        from bs4 import BeautifulSoup
+    except ImportError:
+        return html_escape(re.sub(r"<[^>]+>", " ", html_body or ""))
+
+    soup = BeautifulSoup(html_body or "", "html.parser")
+    for tag in soup(["script", "style", "iframe", "object", "embed", "form", "input", "button", "noscript"]):
+        tag.decompose()
+    for el in soup.find_all(True):
+        for attr in list(el.attrs):
+            low = attr.lower()
+            if low.startswith("on") or low in ("srcset", "style"):
+                del el.attrs[attr]
+                continue
+            if low in ("href", "src"):
+                val = str(el.attrs.get(attr) or "").strip().lower()
+                if val.startswith("javascript:") or val.startswith("data:"):
+                    del el.attrs[attr]
+        if el.name not in _DOJ_BODY_ALLOWED_TAGS:
+            el.unwrap()
+    return str(soup)
+
+
+def _render_doj_source_embed_page(
+    *,
+    title: str,
+    body_html: str,
+    source_url: str,
+    error: str = "",
+) -> str:
+    safe_title = html_escape(title or "Sentencing source")
+    safe_url = html_escape(source_url, quote=True)
+    if error:
+        body = f'<p class="err">{html_escape(error)}</p>'
+    else:
+        body = body_html or "<p><em>No article body available.</em></p>"
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{safe_title}</title>
+<style>
+  html, body {{ margin: 0; padding: 0; background: #fff; color: #1a1a1a; }}
+  body {{
+    padding: 0.65rem 0.75rem 0.9rem;
+    font: 13px/1.5 Georgia, "Times New Roman", serif;
+  }}
+  h1 {{
+    margin: 0 0 0.35rem;
+    font: 650 0.95rem/1.3 system-ui, -apple-system, sans-serif;
+    color: #16202a;
+  }}
+  .meta {{
+    margin: 0 0 0.65rem;
+    font: 0.68rem/1.35 system-ui, -apple-system, sans-serif;
+    color: #667;
+  }}
+  .meta a {{ color: #4a5d6b; }}
+  .body p {{ margin: 0 0 0.7rem; }}
+  .body a {{ color: #2c4a5e; }}
+  .body table {{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin: 0.7rem 0;
+  }}
+  .body td, .body th {{
+    border: 1px solid #cfc8bc;
+    padding: 0.3rem 0.4rem;
+    text-align: left;
+    vertical-align: top;
+  }}
+  .err {{ color: #7a3b2e; font: 0.85rem/1.45 system-ui, sans-serif; }}
+</style>
+</head>
+<body>
+<article>
+  <h1>{safe_title}</h1>
+  <p class="meta">Source:
+    <a href="{safe_url}" target="_blank" rel="noopener">justice.gov</a>
+  </p>
+  <div class="body">{body}</div>
+</article>
+</body>
+</html>"""
+
+
+def _cached_doj_source_embed_html(url: str) -> str:
+    cache_key = f"{_DOJ_EMBED_CACHE_VER}:{url}"
+    now = time.monotonic()
+    with _DOJ_EMBED_LOCK:
+        hit = _DOJ_EMBED_CACHE.get(cache_key)
+        if hit and (now - hit[0]) < _DOJ_EMBED_TTL_S:
+            return hit[1]
+
+    try:
+        rec = _find_doj_press_release(url)
+    except Exception as exc:
+        logging.getLogger(__name__).warning("DOJ embed lookup failed for %s: %s", url, exc)
+        page = _render_doj_source_embed_page(
+            title="Sentencing source unavailable",
+            body_html="",
+            source_url=url,
+            error="Could not load this press release right now. Use the link below the embed.",
+        )
+        return page
+
+    if not rec:
+        page = _render_doj_source_embed_page(
+            title="Sentencing source unavailable",
+            body_html="",
+            source_url=url,
+            error="No matching justice.gov press release was found for this URL.",
+        )
+        return page
+
+    title = str(rec.get("title") or "Sentencing source").strip()
+    body = _sanitize_doj_body_html(str(rec.get("body") or ""))
+    page = _render_doj_source_embed_page(title=title, body_html=body, source_url=url)
+    with _DOJ_EMBED_LOCK:
+        _DOJ_EMBED_CACHE[cache_key] = (time.monotonic(), page)
+    return page
 
 
 def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
@@ -1553,10 +1838,13 @@ def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
         return clean_summary, source_links, ""
 
     safe_url = sentencing_url.replace('"', "&quot;")
+    # Same-origin proxy (layout matches Railway; justice.gov blocks direct iframes).
+    embed_src = f"/api/typology/source-embed?url={quote(sentencing_url, safe='')}"
     embed = (
         '<section class="typ-source-embed" aria-label="Sentencing source embed">'
         "<h3>Sentencing source</h3>"
-        f'<iframe src="{safe_url}" title="Sentencing source" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>'
+        f'<iframe src="{embed_src}" title="Sentencing source" loading="eager" '
+        'referrerpolicy="no-referrer-when-downgrade"></iframe>'
         "<p>If the source blocks embedding, "
         f'<a href="{safe_url}" target="_blank" rel="noopener">open sentencing link</a>.'
         "</p>"
@@ -1565,9 +1853,11 @@ def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
     return clean_summary, source_links, embed
 
 
-_TYPOLOGY_GRAPH_IDS: dict[str, str] = {
-    "elder-fraud": "elder_fraud",
-    "racketeering-enterprises": "racketeering",
+_TYPOLOGY_GRAPH_IDS: dict[str, tuple[str, ...]] = {
+    "elder-fraud": ("elder_fraud", "elder_scheme"),
+    "racketeering-enterprises": ("racketeering",),
+    "extortion": ("extortion_ESM",),
+    "trafficking": ("trafficking_ESM",),
 }
 
 _BACKBONE_PHASE_TYPES = frozenset({
@@ -1618,6 +1908,54 @@ _RACKETEERING_PHASE_BLURBS: dict[str, str] = {
     "caselinker:racketeering-phase-terminal": (
         "Sept 2024 arrests; partial RICO pleas (Mehta, Tangeman, Yarally)."
     ),
+    "caselinker:elder-scheme-phase-cold-call-contact": (
+        "Dominican call-center 'Opener' cold-calls elderly victims, impersonating a grandchild in an accident."
+    ),
+    "caselinker:elder-scheme-phase-attorney-impersonation-conditioning": (
+        "'Closer' poses as the grandchild's attorney, claims a DUI arrest, demands secret bail money."
+    ),
+    "caselinker:elder-scheme-phase-runner-network": (
+        "Operators dispatch U.S. runners who direct unwitting rideshare drivers to the victim's address."
+    ),
+    "caselinker:elder-scheme-phase-cash-extraction": (
+        "Victims hand cash to rideshare drivers, mail it via UPS, or withdraw more at repeat callbacks."
+    ),
+    "caselinker:elder-scheme-phase-structured-laundering": (
+        "Runners deposit sub-$10K structured cash into shell accounts; an 8% courier fee moves it abroad."
+    ),
+    "caselinker:elder-scheme-phase-terminal": (
+        "400+ victims, avg. age 84, $5M+ lost before the May 2024 indictment and 2025 extradition/arrests."
+    ),
+    "caselinker:extortion-esm-phase-initial-access": (
+        "Stolen login credentials give unauthorized access to a school-systems cloud provider's network."
+    ),
+    "caselinker:extortion-esm-phase-exfiltration": (
+        "Student and teacher PII is transferred out to a server Lane leased in Ukraine."
+    ),
+    "caselinker:extortion-esm-phase-demand": (
+        "A ~$2.85M Bitcoin ransom is demanded in exchange for not disseminating the stolen data."
+    ),
+    "caselinker:extortion-esm-phase-leak-threat": (
+        "Threats to 'leak worldwide' the data of 60M+ students and 10M+ teachers renew the leverage."
+    ),
+    "caselinker:extortion-esm-phase-terminal": (
+        "Chain completed against two victim companies; guilty plea (June 2024) and 4-year sentence (Oct 2025)."
+    ),
+    "caselinker:trafficking-esm-phase-recruitment": (
+        "Onset of a trafficking organization dating to at least 2017 with nine identified victims."
+    ),
+    "caselinker:trafficking-esm-phase-control": (
+        "Victims coerced into commercial sex by force, fraud, or coercion; operator sets pricing and rules."
+    ),
+    "caselinker:trafficking-esm-phase-exploitation": (
+        "Online ads placed for victims and hotel rooms rented for commercial sex acts."
+    ),
+    "caselinker:trafficking-esm-phase-earnings-collection": (
+        "Operator takes all proceeds from the commercial sex acts performed by the victims."
+    ),
+    "caselinker:trafficking-esm-phase-terminal": (
+        "Sustained exploitation before the guilty plea (Oct 2025) and 30-year sentence (June 2026)."
+    ),
 }
 
 _RACKETEERING_ENTERPRISE_ROLES = (
@@ -1636,6 +1974,30 @@ _TYPOLOGY_CASE_TAGS: dict[str, tuple[str, ...]] = {
         "elder fraud impersonation scheme",
         "sting operation",
         "125-month federal sentence",
+    ),
+    "elder_scheme": (
+        "transnational call-center scheme",
+        "grandparent-scam impersonation",
+        "rideshare courier cash pickups",
+        "structured cash deposits",
+        "cross-border money laundering",
+        "400+ victims, $5M+ losses",
+    ),
+    "extortion_ESM": (
+        "cyber-extortion conspiracy",
+        "stolen-credential network access",
+        "data exfiltration to leased server",
+        "leak-as-leverage ransom threat",
+        "$2.85M Bitcoin demand",
+        "4-year federal sentence",
+    ),
+    "trafficking_ESM": (
+        "sex trafficking by force, fraud, or coercion",
+        "individual-operator organization",
+        "online-advertisement solicitation",
+        "operator pricing and rule-setting",
+        "earnings confiscation",
+        "30-year federal sentence",
     ),
 }
 
@@ -1669,6 +2031,188 @@ def _load_typology_graph(case_id: str) -> dict | None:
     if not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _esm_phase_style(index: int, total: int) -> str:
+    """Every state of an ESM machine is on that machine's own backbone; the
+    last occupied state is terminal. No CAC fundamental/variant crosswalk."""
+    return "terminal" if index == total - 1 else "fundamental"
+
+
+def _esm_domain_extension_prefix(state_iris: list[str]) -> str | None:
+    """Return the SDK domain-extension prefix (ef/ex/traf) when every state
+    IRI is in that extension; None when states are case-local traj:State
+    instances with no domain extension (e.g. racketeering)."""
+    from state_machines.iris import ESM_DISPLAY_PREFIXES
+
+    if not state_iris:
+        return None
+    matched: set[str] = set()
+    for iri in state_iris:
+        for ns, prefix in ESM_DISPLAY_PREFIXES:
+            if prefix == "traj":
+                continue
+            if iri.startswith(ns):
+                matched.add(prefix)
+                break
+        else:
+            return None
+    return next(iter(matched)) if len(matched) == 1 else None
+
+
+def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) -> dict | None:
+    """Build a typology entry natively from a real CASE-UCO SDK trajectories
+    (.ttl) ESM graph: each state shown under its OWN name (ef:/ex:/traf:/…),
+    affordance read from the incoming Transition's enactsAction -> instrument.
+    No cac-core:precedes, no noesis:AffordanceMisuse, no CAC phase columns."""
+    from state_machines.iris import (
+        case_graph_filename,
+        get_case_meta,
+    )
+    from state_machines.sparql_queries import (
+        esm_case_summary,
+        is_esm_graph,
+        known_case_graph_uris,
+        load_state_machine_graphs,
+    )
+
+    graphs_dir = _REPO_ROOT / "state_machines" / "graphs"
+    if not (graphs_dir / case_graph_filename(case_id)).is_file():
+        return None
+    cg = load_state_machine_graphs(graphs_dir, (case_graph_filename(case_id),))
+    graph_uri = known_case_graph_uris((case_graph_filename(case_id),))[0]
+    if not is_esm_graph(cg, graph_uri):
+        return None
+
+    summary = esm_case_summary(cg, graph_uri)
+    details = summary["phase_details"]
+    total = len(details)
+    meta = get_case_meta(case_id)
+    domain_prefix = _esm_domain_extension_prefix([p["uri"] for p in details])
+    has_domain_extension = domain_prefix is not None
+
+    sm_phases: list[dict[str, Any]] = []
+    phases: list[tuple[str, str, str]] = []
+    states: list[str] = []
+    from state_machines.iris import local_name as _iri_local_name
+    from state_machines.sparql_queries import _humanize_camel_local_name
+
+    for phase in details:
+        idx = phase["index"] - 1
+        style = _esm_phase_style(idx, total)
+        # Human UI label — never the prefixed ontology id (ex:InitialAccess).
+        # Domain membership is shown by the typology domain badge, not every header.
+        label = _clean_machine_text(phase.get("label") or "")
+        if not label or (":" in label and " " not in label):
+            raw = phase.get("uri") or phase.get("state_display") or ""
+            label = _humanize_camel_local_name(_iri_local_name(str(raw)))
+        blurb = _clean_machine_text(phase.get("comment") or "")
+        if ". " in blurb:
+            blurb = blurb.split(". ")[0]
+        # Avoid repeating the title when the definition opens with the same phrase.
+        if blurb.lower().startswith(label.lower().rstrip(".") + "."):
+            blurb = blurb[len(label) + 1 :].lstrip(" .")
+        sm_phases.append(
+            {
+                "id": phase["uri"],
+                "label": label,
+                "comment": _clean_machine_text(phase.get("comment") or ""),
+                "blurb": blurb,
+                "short_type": label,
+                "state_label": label,
+                "ontology_id": phase.get("state_display"),
+                "style": style,
+                "is_fundamental": style == "fundamental",
+                "is_variant": False,
+                "is_terminal": bool(phase.get("is_terminal")),
+                "terminal_polarity": phase.get("terminal_polarity"),
+                "conditioning_mode": "",
+            }
+        )
+        phases.append((label, style, blurb))
+        states.append(label)
+
+    transitions: list[dict[str, Any]] = []
+    affordances: list[tuple[str, str]] = []
+    seen_aff: set[tuple[str, str]] = set()
+    for i in range(total - 1):
+        src, dst = sm_phases[i], sm_phases[i + 1]
+        aff_label = details[i + 1].get("affordance_on_arrival")
+        aff_desc = _clean_machine_text(details[i + 1].get("affordance_on_arrival_desc") or "")
+        transitions.append(
+            {
+                "from_id": src["id"],
+                "to_id": dst["id"],
+                "from_label": src["label"],
+                "to_label": dst["label"],
+                "affordance_name": aff_label,
+                "affordance_label": aff_label,
+                "misuse_description": aff_desc,
+            }
+        )
+        if aff_label and (aff_label, aff_desc) not in seen_aff:
+            seen_aff.add((aff_label, aff_desc))
+            affordances.append((aff_label, aff_desc))
+
+    citation = meta.get("citation", "")
+    case_tags = _TYPOLOGY_CASE_TAGS.get(case_id, ())
+    role_tags = "".join(f"<span>{role}</span>" for role in case_tags)
+    if has_domain_extension:
+        domain_badge = ""
+        phase_legend = (
+            '<p class="typ-phase-legend">'
+            f"State names are this machine\u2019s own {domain_prefix}: SDK "
+            "domain-extension states (traj:assertsState); terminal marks the "
+            "final occupied state."
+            "</p>"
+        )
+    else:
+        domain_badge = (
+            '<span class="typ-domain-badge is-absent" '
+            'title="Case-local traj:State instances; validated against trajectories only">'
+            "no domain extension yet</span>"
+        )
+        phase_legend = (
+            '<p class="typ-phase-legend">'
+            "Unprefixed state names are intentional: this machine uses "
+            "case-local <code>traj:State</code> instances (no SDK domain "
+            "extension yet). Validated against <code>[\"trajectories\"]</code> "
+            "alone; terminal marks the final occupied state."
+            "</p>"
+        )
+    domain_meta = (
+        f'<div class="typ-domain-meta">{domain_badge}</div>' if domain_badge else ""
+    )
+    case_strip = (
+        '<section class="typ-case-strip" aria-label="Instantiated case">'
+        '<div class="typ-section-label">Instantiated case</div>'
+        f'<p class="typ-case-caption">{citation}</p>'
+        f"{domain_meta}"
+        f'<div class="typ-affordance-tags typ-role-tags">{role_tags}</div>'
+        "</section>"
+    )
+
+    state_machine = {
+        "modality": case_id.replace("_", "-"),
+        "modality_label": modality_label or meta.get("title", case_id).upper(),
+        "accent": "#4a7a9b",
+        "citation": citation,
+        "enterprise_roles": [],
+        "domain_extension": domain_prefix,
+        "no_domain_extension": not has_domain_extension,
+        "phases": sm_phases,
+        "transitions": transitions,
+    }
+
+    return {
+        "phases": phases,
+        "states": states,
+        "affordances": affordances,
+        "case_strip": case_strip,
+        "state_machine": state_machine,
+        "phase_cols": f"cols-{len(phases)}",
+        "phase_legend": phase_legend,
+    }
 
 
 def _phase_style_from_node(node: dict) -> str:
@@ -1734,6 +2278,7 @@ def _build_typology_state_machine(
     graph: dict,
     investigation: dict,
     phase_nodes: list[dict],
+    modality_label: str | None = None,
 ) -> dict:
     misuse_edges = _misuse_edges(graph)
     sm_phases: list[dict[str, Any]] = []
@@ -1780,7 +2325,7 @@ def _build_typology_state_machine(
 
     return {
         "modality": graph_id.replace("_", "-"),
-        "modality_label": graph_id.replace("_", " ").upper(),
+        "modality_label": modality_label or graph_id.replace("_", " ").upper(),
         "accent": "#4a7a9b",
         "citation": investigation.get("rdfs:label", ""),
         "enterprise_roles": list(_RACKETEERING_ENTERPRISE_ROLES),
@@ -1789,7 +2334,7 @@ def _build_typology_state_machine(
     }
 
 
-def _parse_typology_graph(graph: dict, graph_id: str) -> dict:
+def _parse_typology_graph(graph: dict, graph_id: str, modality_label: str | None = None) -> dict:
     nodes = {node["@id"]: node for node in graph.get("@graph", []) if "@id" in node}
     investigation = next(
         (
@@ -1836,7 +2381,9 @@ def _parse_typology_graph(graph: dict, graph_id: str) -> dict:
         "</section>"
     )
 
-    state_machine = _build_typology_state_machine(graph_id, graph, investigation, phase_nodes)
+    state_machine = _build_typology_state_machine(
+        graph_id, graph, investigation, phase_nodes, modality_label=modality_label
+    )
 
     return {
         "phases": phases,
@@ -1914,18 +2461,51 @@ def _typology_status_html() -> str:
     )
 
 
-def _typology_machine_section_html(state_machine: dict) -> str:
+def _typology_machine_block_html(state_machine: dict, case_strip: str, show_hint: bool) -> str:
     payload = json.dumps(state_machine, ensure_ascii=False)
     payload = payload.replace("</", "<\\/")
+    hint = (
+        '<p class="typ-machine-hint">Click any phase for ontology detail · affordance-misuse on transitions</p>'
+        if show_hint
+        else ""
+    )
     return (
         '<section class="typ-machine-wrap" aria-label="Interactive state machine">'
-        '<p class="typ-machine-hint">Click any phase for ontology detail · affordance-misuse on transitions</p>'
-        '<div class="typ-machine-scroll"><div id="typ-machine-canvas"></div></div>'
-        '<div id="typ-machine-legend" class="typ-machine-legend"></div>'
-        f'<script type="application/json" id="typ-machine-payload">{payload}</script>'
+        f"{hint}"
+        '<div class="typ-machine-scroll"><div class="typ-machine-canvas"></div></div>'
+        '<div class="typ-machine-legend"></div>'
+        f'<script type="application/json" class="typ-machine-payload">{payload}</script>'
         "</section>"
-        '<div id="typ-machine-backdrop" class="typ-machine-backdrop" aria-hidden="true"></div>'
-        '<aside id="typ-machine-panel" class="typ-machine-panel" aria-label="Phase detail"></aside>'
+        f"{case_strip}"
+    )
+
+
+def _typology_machine_section_html(entries: list[dict]) -> str:
+    """entries: [{"state_machine": dict, "case_strip": str}, ...] — one block per instantiated case."""
+    blocks = "".join(
+        _typology_machine_block_html(entry["state_machine"], entry.get("case_strip", ""), show_hint=(i == 0))
+        for i, entry in enumerate(entries)
+    )
+    return (
+        blocks
+        + '<div id="typ-machine-backdrop" class="typ-machine-backdrop" aria-hidden="true"></div>'
+        + '<aside id="typ-machine-panel" class="typ-machine-panel" aria-label="Phase detail"></aside>'
+    )
+
+
+@app.get("/api/typology/source-embed", response_class=HTMLResponse)
+async def typology_source_embed(url: str = Query(..., min_length=12, max_length=500)):
+    """Same-origin scrollable press release (DOJ API body). justice.gov blocks iframes."""
+    allowed, target = _is_allowed_typology_source_embed_url((url or "").strip())
+    if not allowed or not target:
+        raise HTTPException(
+            status_code=400,
+            detail="URL is not an allowed typology sentencing source",
+        )
+    page = await asyncio.to_thread(_cached_doj_source_embed_html, target)
+    return HTMLResponse(
+        content=page,
+        headers={"Cache-Control": "public, max-age=1800"},
     )
 
 
@@ -1955,46 +2535,78 @@ async def serve_typology(typology_slug: str):
     html = html.replace("{{SUMMARY}}", summary_body)
     html = html.replace("{{SOURCE_LINKS}}", source_links)
     html = html.replace("{{SENTENCING_EMBED}}", sentencing_embed)
-    graph_id = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip())
-    graph_data: dict = {}
-    if graph_id:
+    graph_ids = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip(), ())
+    modality_label = meta["title"].upper()
+    from state_machines.iris import is_esm_case
+    graph_entries: list[dict] = []
+    for graph_id in graph_ids:
+        if is_esm_case(graph_id):
+            entry = _load_esm_typology_entry(graph_id, modality_label=modality_label)
+            if entry:
+                graph_entries.append(entry)
+            continue
         graph = _load_typology_graph(graph_id)
-        if graph:
-            graph_data = _parse_typology_graph(graph, graph_id)
+        if not graph:
+            continue
+        entry = _parse_typology_graph(graph, graph_id, modality_label=modality_label)
+        if entry:
+            graph_entries.append(entry)
 
-    phases = graph_data.get("phases") or meta["phases"]
-    state_machine = graph_data.get("state_machine")
-    if state_machine:
-        html = html.replace("{{TRAJECTORY_SECTION}}", _typology_machine_section_html(state_machine))
+    phases = graph_entries[0]["phases"] if graph_entries else meta["phases"]
+    state_machines = [e for e in graph_entries if e.get("state_machine")]
+    if state_machines:
+        html = html.replace(
+            "{{TRAJECTORY_SECTION}}",
+            _typology_machine_section_html(state_machines),
+        )
         html = html.replace("{{MACHINE_ASSETS}}", (
             '<link rel="stylesheet" href="/viz-assets/typology-machine.css">'
-            '<script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>'
+            # Serve D3 from our origin — jsdelivr is often blocked on deployed
+            # hosts (privacy filters / regional DNS), which leaves an empty canvas.
+            '<script defer src="/viz-assets/d3.v7.min.js"></script>'
             '<script defer src="/viz-assets/typology-machine.js"></script>'
         ))
+        html = html.replace("{{CASE_STRIP}}", "")
     else:
+        first = graph_entries[0] if graph_entries else {}
         trajectory = (
-            f'<div class="typ-phase-track {graph_data.get("phase_cols", "")}">'
+            f'<div class="typ-phase-track {first.get("phase_cols", "")}">'
             f"{_typology_phases_html(phases)}"
             "</div>"
-            f'{graph_data.get("phase_legend", "")}'
+            f'{first.get("phase_legend", "")}'
         )
         html = html.replace("{{TRAJECTORY_SECTION}}", trajectory)
         html = html.replace("{{MACHINE_ASSETS}}", "")
-    html = html.replace("{{CASE_STRIP}}", graph_data.get("case_strip", ""))
-    affordances = graph_data.get("affordances")
+        html = html.replace("{{CASE_STRIP}}", first.get("case_strip", ""))
+
+    affordances: list[tuple[str, str]] = []
+    seen_affordances: set[tuple[str, str]] = set()
+    for entry in graph_entries:
+        for item in entry.get("affordances") or []:
+            if item not in seen_affordances:
+                seen_affordances.add(item)
+                affordances.append(item)
     html = html.replace(
         "{{AFFORDANCES}}",
         _typology_affordances_html(affordances) if affordances else "",
     )
-    states = graph_data.get("states")
+
+    states: list[str] = []
+    seen_states: set[str] = set()
+    for entry in graph_entries:
+        for s in entry.get("states") or []:
+            if s not in seen_states:
+                seen_states.add(s)
+                states.append(s)
     html = html.replace(
         "{{STATES}}",
         _typology_list_html(states) if states else _typology_states_html(phases),
     )
+
     html = html.replace("{{HARMS}}", _typology_list_html(meta["harms"]))
     html = html.replace(
         "{{STATUS_SECTION}}",
-        "" if graph_data.get("case_strip") else _typology_status_html(),
+        "" if graph_entries else _typology_status_html(),
     )
     return HTMLResponse(content=html)
 
@@ -3746,10 +4358,15 @@ async def robots_txt():
     return PlainTextResponse(content=body)
 
 
+_favicon_path = Path(__file__).resolve().parent.parent / "visualization" / "assets" / "favicon.ico"
+
+
 @app.get("/favicon.ico")
 async def favicon():
-    """Minimal favicon so crawlers/browsers stop probing other routes."""
-    # 16x16 indigo pixel PNG
+    """Prism/spectrum favicon (matches the hero motif and paper/ink/spectrum palette)."""
+    if _favicon_path.is_file():
+        return FileResponse(str(_favicon_path), media_type="image/x-icon")
+    # 16x16 indigo pixel PNG fallback so crawlers/browsers stop probing other routes.
     import base64
     png = base64.b64decode(
         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="

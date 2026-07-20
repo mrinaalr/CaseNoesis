@@ -1,0 +1,535 @@
+# Elder-Fraud extension — real exemplar
+# United States v. Oscar Manuel Castanos Garcia, et al., No. 1:24-cr-10138-LTS
+# (D. Mass.). Both sources are public DOJ URLs — no PACER, nothing vendored
+# in-repo:
+#   PR  -- USAO-MA press release "Operators of Transnational Elder Fraud
+#          Scheme Plead Guilty," 2026-07-15:
+#          https://www.justice.gov/usao-ma/pr/operators-transnational-elder-fraud-scheme-plead-guilty
+#   Aff -- Detention Affidavit, USA v. Oscar Manuel Castanos Garcia, et al.,
+#          publicly hosted at:
+#          https://www.justice.gov/usao-ma/media/1410886/dl?inline
+#          (Affiant identity and internal paragraph numbering are not
+#          asserted below — not traceable without fetching the PDF, which
+#          this extension does not vendor. Citations are document-level:
+#          "Aff." vs "PR", not pinpoint.)
+#
+# Two Trajectory instances over the same shared phase/action vocabulary:
+#   1. cg:trajectory-agawam-2023 — full run through Completed (February 2023
+#      Agawam, MA rideshare cash pickup + standard laundering/transmit
+#      pipeline), traj:terminalPolarity "completed".
+#   2. cg:trajectory-attleboro-2022 — short run disrupted mid-chain at
+#      ProceedsCollection (Attleboro UPS: Sept. 2022 instruction / Oct. 2022
+#      arrest of Tavarez Jimenez), traj:terminalPolarity "disrupted".
+#
+# Authoritative T (arriving-state; multi-valued enactsAction). FACT
+# CORRECTION: Aff. secrecy line is in the OPENER script, so a_secrecy is on
+# InitialContact -> Conditioning (with a_spoof, a_script). a_direct (Closer
+# payment-mechanism direction) produces ExtractionInstruction.
+#
+#   InitialContact --a_spoof, a_script, a_secrecy--> Conditioning
+#   Conditioning --a_direct--> ExtractionInstruction
+#   ExtractionInstruction --a_coopt--> ProceedsCollection
+#   ProceedsCollection --a_fakeid, a_deposit--> Laundering
+#   Laundering --a_transmit--> Completed
+#
+# Exogenous pre-s0: cg:activity-target-acquisition (prov:Activity) — victim-
+# list purchase feeding InitialContact; NOT a traj:State.
+#
+# No invented amounts, dates, or actors beyond the affidavit/press release;
+# where only month/year precision is given, intervals are month-bounded
+# rather than fabricated to the day.
+
+@prefix ef: <http://example.org/ontology/elder-fraud/> .
+@prefix cg: <http://example.org/elder-fraud/castanos-garcia/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Actors (kept minimal — only those tied to a modeled action)
+#################################################################
+
+cg:person-castanos-garcia
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Oscar Manuel Castanos Garcia" ;
+	uco-core:description "Lead operator of Dominican Republic-based grandparent-scam call centers (Santiago de los Caballeros, Puerto Plata). Source: Aff." .
+
+cg:person-baez-santana
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Andry Joel Baez Santana" ;
+	uco-core:description "Runner who, with Silverio Balbuena, directed a Lyft driver to an elderly victim's address in Agawam, MA (February 2023). Source: Aff." .
+
+cg:person-silverio-balbuena
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Chaman Samael Silverio Balbuena, a/k/a \"Chammy\"" ;
+	uco-core:description "Runner, co-directed the February 2023 Agawam, MA Lyft cash pickup with Baez Santana. Source: Aff." .
+
+cg:person-tavarez-jimenez
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Ransel Starlin Tavarez Jimenez" ;
+	uco-core:description "Recruited and organized runners; collected a UPS cash package at the first of two Attleboro, MA addresses and was arrested attempting to collect the second (Aff.: arrest in October 2022; the call-center UPS instruction to the Texas victim was September 2022). Source: Aff." .
+
+cg:person-nunez-nunez
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Gerardo Heriberto Nuñez Nuñez" ;
+	uco-core:description "Dominican Republic money transmitter; supplied purported-business bank accounts for runner deposits and charged an eight percent fee to move proceeds to the Dominican Republic. Source: Aff." .
+
+#################################################################
+# Evidence nodes (document-level citations)
+#################################################################
+
+cg:evidence-victim-list-purchase
+	a uco-core:UcoObject ;
+	uco-core:name "Elderly-victim list purchase (exogenous pre-s0)" ;
+	uco-core:description "Call-center operators purchased lists of information about elderly victims from other individuals in the Dominican Republic who obtained such information. Exogenous to S — feeds InitialContact (s0), not itself a traj:State. Source: Aff." .
+
+cg:evidence-call-center-scripts
+	a uco-core:UcoObject ;
+	uco-core:name "Call-center opener/closer scripts" ;
+	uco-core:description "Photographed opener script recovered from a CASTANOS GARCIA call center: the Opener impersonates a grandchild after a DUI accident, is granted a 5-minute phone call, asks the victim to 'keep this between us until i get out,' and introduces a public defender (Mark Steven) / bail ask within the same opener script text. Aff. separately states closers impersonated attorneys and directed victims to send cash. Source: Aff. (script photos + opener/closer role description)." .
+
+cg:evidence-agawam-victim-instruction
+	a uco-core:UcoObject ;
+	uco-core:name "Agawam victim cash-payment instruction (Feb. 2023)" ;
+	uco-core:description "Call-center operators instructed the elderly Agawam, MA victim to hand a cash package (framed as 'documents') to a rideshare driver dispatched to the victim's home — the operation's standard rideshare cash-payment mechanism. Source: Aff." .
+
+cg:evidence-payment-direction
+	a uco-core:UcoObject ;
+	uco-core:name "Closer payment-mechanism direction (cash form + hand-off)" ;
+	uco-core:description "Aff.: closers 'impersonated attorneys for the grandchildren and directed the victims to send or deliver cash to aid the grandchildren.' Aff. further attests the concrete hand-off methods the operation used once the victim was directed to send cash: (i) rideshare pickup of a cash package framed as 'documents' from the victim's home (e.g. Agawam, Feb. 2023); (ii) commercial-carrier shipment of cash to runner-adjacent addresses (e.g. Texas victim instructed to send cash via UPS to two Attleboro, MA addresses, Sept. 2022). Source: Aff." .
+
+cg:evidence-agawam-coopt
+	a uco-core:UcoObject ;
+	uco-core:name "Agawam rideshare co-opt / cash pickup (Feb. 2023)" ;
+	uco-core:description "BAEZ SANTANA directed a Lyft driver to the address of an elderly victim in Agawam, Massachusetts, messaging: 'Hello, my grandmother will send some documents, can you bring them to me, please? I'm going to tip you, university documents.' The rideshare driver then delivered the victim's cash package to the runners' location. Source: Aff." .
+
+cg:evidence-laundering-pipeline
+	a uco-core:UcoObject ;
+	uco-core:name "Structured deposit / cross-border transmission pipeline" ;
+	uco-core:description "NUÑEZ NUÑEZ supplied CASTANOS GARCIA with a Bank of America account in the name of a purported vape-supply wholesaler; runners deposited at least $674,982 in scam cash into it between 2022 and May 2023 in amounts structured between $7,000 and $9,500 to avoid the $10,000 currency-transaction-report threshold. NUÑEZ NUÑEZ and his New York-based nephew charged an eight percent fee to transmit deposited/hand-delivered proceeds to the Dominican Republic (runners deposited at least approximately $1.4M into accounts NUÑEZ NUÑEZ provided by messages alone; approximately $2M was delivered to NUÑEZ NUÑEZ's nephew between Oct. 2022 and May 2023). Source: Aff." .
+
+cg:evidence-attleboro-instruction
+	a uco-core:UcoObject ;
+	uco-core:name "Attleboro UPS cash-shipment instruction (Sept. 2022)" ;
+	uco-core:description "As alleged in the indictment, call-center employees instructed a Texas-based victim to ship cash via UPS to two addresses in Attleboro, Massachusetts. Source: Aff." .
+
+cg:evidence-attleboro-disrupted
+	a uco-core:UcoObject ;
+	uco-core:name "Attleboro second-package arrest (Oct. 2022)" ;
+	uco-core:description "TAVAREZ JIMENEZ picked up the UPS package delivered to the first Attleboro address; when he attempted to collect the package at the second address, Attleboro police arrested him (Aff.: October 2022). At CASTANOS GARCIA's request, SANTOS BURGOS then sent two of his relatives to pick up the package at the second address instead. Source: Aff." .
+
+#################################################################
+# Exogenous pre-s0: TargetAcquisition (prov:Activity, NOT in S)
+#################################################################
+
+cg:activity-target-acquisition
+	a prov:Activity ;
+	uco-core:name "Target acquisition — elderly-victim list purchase" ;
+	uco-core:description "Exogenous pre-s0 feeder: purchase of elderly-victim contact lists that supply InitialContact. Not a traj:State. Linked to s0 by shared evidence: InitialContact PhaseAssertion prov:wasDerivedFrom the same victim-list evidence this Activity prov:used. Source: Aff." ;
+	prov:used cg:evidence-victim-list-purchase .
+
+#################################################################
+# Enacted actions (Technique-typed instances carrying the affordance)
+#################################################################
+
+cg:instrument-voip-platform
+	a uco-core:UcoObject ;
+	uco-core:name "Call-center VoIP calling platform" ;
+	uco-core:description "VoIP technology used to place calls over the internet so they appear to originate from U.S. telephone numbers. Source: Aff." .
+
+cg:action-spoofed-opener-call
+	a uco-action:Action , ef:a_spoof ;
+	uco-core:name "Spoofed 'Opener' cold call" ;
+	uco-action:performer cg:person-castanos-garcia ;
+	uco-action:instrument cg:instrument-voip-platform ;
+	prov:wasDerivedFrom cg:evidence-call-center-scripts .
+
+cg:instrument-opener-script
+	a uco-core:UcoObject ;
+	uco-core:name "Pre-authored opener call-center script" ;
+	uco-core:description "Fixed script openers follow when cold-calling victims (photographed opener script). Source: Aff." .
+
+cg:action-deploy-opener-script
+	a uco-action:Action , ef:a_script ;
+	uco-core:name "Deploy fixed opener script" ;
+	uco-action:performer cg:person-castanos-garcia ;
+	uco-action:instrument cg:instrument-opener-script ;
+	prov:wasDerivedFrom cg:evidence-call-center-scripts .
+
+cg:instrument-isolation-instruction
+	a uco-core:UcoObject ;
+	uco-core:name "Opener isolation / secrecy instruction" ;
+	uco-core:description "The opener-script line asking the victim to isolate the matter: 'keep this between us until i get out.' Source: Aff. (opener script photos)." .
+
+cg:action-opener-secrecy
+	a uco-action:Action , ef:a_secrecy ;
+	uco-core:name "Opener secrecy / isolation instruction" ;
+	uco-core:description "Aff. opener script (grandchild persona): 'Please, promise that you will keep this between us until i get out. I am ashamed about this ... Ok'." ;
+	uco-action:performer cg:person-castanos-garcia ;
+	uco-action:instrument cg:instrument-isolation-instruction ;
+	prov:wasDerivedFrom cg:evidence-call-center-scripts .
+
+cg:instrument-closer-attorney-channel
+	a uco-core:UcoObject ;
+	uco-core:name "Impersonated-attorney persona / closer phone channel" ;
+	uco-core:description "The fabricated grandchild's-attorney persona and call-center phone channel through which the Closer delivers the cash-form and hand-off directive. Source: Aff. (closers impersonated attorneys and directed victims to send or deliver cash)." .
+
+cg:action-direct-payment-mechanism
+	a uco-action:Action , ef:a_direct ;
+	uco-core:name "Closer directs cash payment mechanism" ;
+	uco-core:description "Closer (attorney persona) directs the victim to send or deliver cash and specifies the operational hand-off (rideshare 'documents' pickup or carrier shipment). Produces ExtractionInstruction. Source: Aff." ;
+	uco-action:performer cg:person-castanos-garcia ;
+	uco-action:instrument cg:instrument-closer-attorney-channel ;
+	prov:wasDerivedFrom
+		cg:evidence-payment-direction ,
+		cg:evidence-agawam-victim-instruction .
+
+cg:instrument-rideshare-platform
+	a uco-core:UcoObject ;
+	uco-core:name "Rideshare driver dispatch (Lyft/rideshare account)" ;
+	uco-core:description "A rideshare account (the runner's own, or a girlfriend's/friend's) used to dispatch an unwitting driver to the victim's address to collect a cash package framed as 'documents.' Source: Aff." .
+
+cg:action-coopt-rideshare-driver
+	a uco-action:Action , ef:a_coopt ;
+	uco-core:name "Co-opt unwitting rideshare driver (Agawam, Feb. 2023)" ;
+	uco-core:description "Directed with Silverio Balbuena; message quoted in Aff., sent from Baez Santana's device." ;
+	uco-action:performer cg:person-baez-santana ;
+	uco-action:instrument cg:instrument-rideshare-platform ;
+	prov:wasDerivedFrom cg:evidence-agawam-coopt .
+
+cg:instrument-vape-wholesaler-account
+	a uco-core:UcoObject ;
+	uco-core:name "Bank of America account, purported vape-supply wholesaler" ;
+	uco-core:description "Business bank account NUÑEZ NUÑEZ supplied in the name of a purported (non-existent) vape electronic-cigarette wholesale distributor, used to receive structured cash deposits. Source: Aff." .
+
+cg:action-purported-business-account
+	a uco-action:Action , ef:a_fakeid ;
+	uco-core:name "Route proceeds via purported-business bank account" ;
+	uco-action:performer cg:person-nunez-nunez ;
+	uco-action:instrument cg:instrument-vape-wholesaler-account ;
+	prov:wasDerivedFrom cg:evidence-laundering-pipeline .
+
+cg:action-structure-deposits
+	a uco-action:Action , ef:a_deposit ;
+	uco-core:name "Structure cash deposits below CTR threshold" ;
+	uco-action:performer cg:person-nunez-nunez ;
+	uco-action:instrument cg:instrument-vape-wholesaler-account ;
+	prov:wasDerivedFrom cg:evidence-laundering-pipeline .
+
+cg:instrument-transmitter-network
+	a uco-core:UcoObject ;
+	uco-core:name "Dominican Republic money-transmitter / courier network" ;
+	uco-core:description "NUÑEZ NUÑEZ's fee-based (eight percent) transmitter/courier network, including a New York-based nephew who received hand-delivered cash, used to move deposited/collected proceeds to Dominican Republic call-center operators. Source: Aff." .
+
+cg:action-transmit-proceeds
+	a uco-action:Action , ef:a_transmit ;
+	uco-core:name "Transmit proceeds to Dominican Republic" ;
+	uco-action:performer cg:person-nunez-nunez ;
+	uco-action:instrument cg:instrument-transmitter-network ;
+	prov:wasDerivedFrom cg:evidence-laundering-pipeline .
+
+#################################################################
+# Trajectory 1 — Agawam, MA (Feb. 2023) — completed through Completed
+#################################################################
+
+cg:confidence-agawam-1
+	a uco-core:ConfidenceFacet ; uco-core:confidence "85"^^xsd:nonNegativeInteger .
+cg:confidence-agawam-2
+	a uco-core:ConfidenceFacet ; uco-core:confidence "85"^^xsd:nonNegativeInteger .
+cg:confidence-agawam-3
+	a uco-core:ConfidenceFacet ; uco-core:confidence "92"^^xsd:nonNegativeInteger .
+cg:confidence-agawam-4
+	a uco-core:ConfidenceFacet ; uco-core:confidence "92"^^xsd:nonNegativeInteger .
+cg:confidence-agawam-5
+	a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+cg:confidence-agawam-6
+	a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+
+cg:interval-2023-02
+	a time:ProperInterval ;
+	time:hasBeginning cg:instant-2023-02-01 ;
+	time:hasEnd cg:instant-2023-02-28 .
+cg:instant-2023-02-01 a time:Instant ; time:inXSDDateTimeStamp "2023-02-01T00:00:00Z"^^xsd:dateTimeStamp .
+cg:instant-2023-02-28 a time:Instant ; time:inXSDDateTimeStamp "2023-02-28T23:59:00Z"^^xsd:dateTimeStamp .
+
+cg:interval-laundering-window
+	a time:ProperInterval ;
+	time:hasBeginning cg:instant-2022-01-01 ;
+	time:hasEnd cg:instant-2023-05-31 .
+cg:instant-2022-01-01 a time:Instant ; time:inXSDDateTimeStamp "2022-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+cg:instant-2023-05-31 a time:Instant ; time:inXSDDateTimeStamp "2023-05-31T23:59:00Z"^^xsd:dateTimeStamp .
+
+cg:phase-agawam-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0 (Agawam trajectory)" ;
+	uco-core:description "Opener cold-call: grandchild-in-trouble persona via VoIP, fixed opener script, and isolation line 'keep this between us until i get out.' Fed by exogenous victim-list purchase (pre-s0). Source: Aff." ;
+	traj:assertsState ef:InitialContact ;
+	traj:atInterval cg:interval-2023-02 ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom
+		cg:evidence-call-center-scripts ,
+		cg:evidence-victim-list-purchase ;
+	uco-core:hasFacet cg:confidence-agawam-1 .
+
+cg:phase-agawam-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1 (Agawam trajectory)" ;
+	uco-core:description "Closer follow-up: Aff. states closers impersonated attorneys for the grandchildren (bail/fee demand / emotional conditioning). Secrecy language is NOT attributed here — Aff. places 'keep this between us' in the opener script. Payment-mechanism logistics are the next phase (a_direct). Source: Aff." ;
+	traj:assertsState ef:Conditioning ;
+	traj:atInterval cg:interval-2023-02 ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom cg:evidence-call-center-scripts ;
+	uco-core:hasFacet cg:confidence-agawam-2 .
+
+cg:phase-agawam-3
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 2 (Agawam trajectory)" ;
+	uco-core:description "Closer payment-mechanism direction: Aff. closers 'directed the victims to send or deliver cash'; for the Agawam victim that meant handing a cash package (framed as 'documents') to a rideshare driver at the home — the pivot from conditioning into logistics. Source: Aff." ;
+	traj:assertsState ef:ExtractionInstruction ;
+	traj:atInterval cg:interval-2023-02 ;
+	traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom
+		cg:evidence-payment-direction ,
+		cg:evidence-agawam-victim-instruction ;
+	uco-core:hasFacet cg:confidence-agawam-3 .
+
+cg:phase-agawam-4
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 3 (Agawam trajectory)" ;
+	uco-core:description "Runner (Baez Santana / Silverio Balbuena) co-opts an unwitting Lyft driver to collect the victim's cash package at the Agawam address and deliver it to the runners' location. Source: Aff." ;
+	traj:assertsState ef:ProceedsCollection ;
+	traj:atInterval cg:interval-2023-02 ;
+	traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom cg:evidence-agawam-coopt ;
+	uco-core:hasFacet cg:confidence-agawam-4 .
+
+cg:phase-agawam-5
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 4 (Agawam trajectory)" ;
+	uco-core:description "Collected proceeds enter structured deposit into a purported-business Bank of America account (general laundering pipeline; not a per-pickup-traced deposit record). Source: Aff." ;
+	traj:assertsState ef:Laundering ;
+	traj:atInterval cg:interval-laundering-window ;
+	traj:sequenceIndex "4"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom cg:evidence-laundering-pipeline ;
+	uco-core:hasFacet cg:confidence-agawam-5 .
+
+cg:phase-agawam-6
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 5 (Agawam trajectory)" ;
+	uco-core:description "Cross-border transmission of deposited/hand-delivered proceeds to the Dominican Republic via NUÑEZ NUÑEZ's eight-percent transmitter network — modeled offense endpoint. Source: Aff." ;
+	traj:assertsState ef:Completed ;
+	traj:atInterval cg:interval-laundering-window ;
+	traj:sequenceIndex "5"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "completed" ;
+	prov:wasDerivedFrom cg:evidence-laundering-pipeline ;
+	uco-core:hasFacet cg:confidence-agawam-6 .
+
+cg:trajectory-agawam-2023
+	a traj:Trajectory ;
+	uco-core:name "Elder-fraud trajectory: Agawam, MA rideshare cash pickup (Feb. 2023)" ;
+	uco-core:description "United States v. Castanos Garcia et al., 1:24-cr-10138-LTS (D. Mass.) — full occupancy through Completed (laundering + cross-border transmit); no mid-chain interception for this pickup." ;
+	traj:hasPhaseAssertion
+		cg:phase-agawam-1 ,
+		cg:phase-agawam-2 ,
+		cg:phase-agawam-3 ,
+		cg:phase-agawam-4 ,
+		cg:phase-agawam-5 ,
+		cg:phase-agawam-6 .
+
+#################################################################
+# Trajectory 2 — Attleboro, MA (Sept.–Oct. 2022) — disrupted mid-chain
+#################################################################
+
+cg:confidence-attleboro-1
+	a uco-core:ConfidenceFacet ; uco-core:confidence "95"^^xsd:nonNegativeInteger .
+cg:confidence-attleboro-2
+	a uco-core:ConfidenceFacet ; uco-core:confidence "97"^^xsd:nonNegativeInteger .
+
+cg:interval-2022-09
+	a time:ProperInterval ;
+	time:hasBeginning cg:instant-2022-09-01 ;
+	time:hasEnd cg:instant-2022-09-30 .
+cg:instant-2022-09-01 a time:Instant ; time:inXSDDateTimeStamp "2022-09-01T00:00:00Z"^^xsd:dateTimeStamp .
+cg:instant-2022-09-30 a time:Instant ; time:inXSDDateTimeStamp "2022-09-30T23:59:00Z"^^xsd:dateTimeStamp .
+
+cg:interval-2022-10
+	a time:ProperInterval ;
+	time:hasBeginning cg:instant-2022-10-01 ;
+	time:hasEnd cg:instant-2022-10-31 .
+cg:instant-2022-10-01 a time:Instant ; time:inXSDDateTimeStamp "2022-10-01T00:00:00Z"^^xsd:dateTimeStamp .
+cg:instant-2022-10-31 a time:Instant ; time:inXSDDateTimeStamp "2022-10-31T23:59:00Z"^^xsd:dateTimeStamp .
+
+cg:phase-attleboro-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0 (Attleboro trajectory)" ;
+	uco-core:description "Payment-mechanism direction: call-center employees instructed a Texas-based victim to ship cash via UPS to two addresses in Attleboro, MA (Aff.-attested carrier hand-off). Source: Aff." ;
+	traj:assertsState ef:ExtractionInstruction ;
+	traj:atInterval cg:interval-2022-09 ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom
+		cg:evidence-attleboro-instruction ,
+		cg:evidence-payment-direction ;
+	uco-core:hasFacet cg:confidence-attleboro-1 .
+
+cg:phase-attleboro-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1 (Attleboro trajectory)" ;
+	uco-core:description "Tavarez Jimenez collects the first UPS package but is arrested by Attleboro police attempting to collect the second (Oct. 2022) — mid-chain interruption before Laundering/Completed; Santos Burgos's relatives later collect the second package. Source: Aff." ;
+	traj:assertsState ef:ProceedsCollection ;
+	traj:atInterval cg:interval-2022-10 ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "disrupted" ;
+	prov:wasDerivedFrom cg:evidence-attleboro-disrupted ;
+	uco-core:hasFacet cg:confidence-attleboro-2 .
+
+cg:trajectory-attleboro-2022
+	a traj:Trajectory ;
+	uco-core:name "Elder-fraud trajectory: Attleboro, MA UPS cash pickup (Sept.–Oct. 2022)" ;
+	uco-core:description "United States v. Castanos Garcia et al., 1:24-cr-10138-LTS (D. Mass.) — short occupancy disrupted mid-chain at ProceedsCollection by police arrest (modeled endpoint Completed was not reached on this path)." ;
+	traj:hasPhaseAssertion
+		cg:phase-attleboro-1 ,
+		cg:phase-attleboro-2 .
+
+#################################################################
+# Machine layer — Transitions + inferred StateMachineModel
+#
+# traj:enactsAction: arriving-state convention; multi-valued when an edge
+# is gated by co-occurring techniques (trajectories SHACL: no maxCount).
+#
+#   transition-1 InitialContact -> Conditioning:
+#     a_spoof, a_script, a_secrecy  (FACT: secrecy is opener-script language)
+#   transition-2 Conditioning -> ExtractionInstruction: a_direct
+#   transition-3 ExtractionInstruction -> ProceedsCollection: a_coopt
+#   transition-4 ProceedsCollection -> Laundering: a_fakeid, a_deposit
+#   transition-5 Laundering -> Completed: a_transmit
+#################################################################
+
+cg:trigger-opener-call a uco-core:UcoObject ; uco-core:name "Trigger: Opener call placed" .
+cg:trigger-closer-directs-cash a uco-core:UcoObject ; uco-core:name "Trigger: Closer directs victim into payment logistics" .
+cg:trigger-cash-instruction a uco-core:UcoObject ; uco-core:name "Trigger: victim agrees to send cash" .
+cg:trigger-proceeds-routed a uco-core:UcoObject ; uco-core:name "Trigger: collected cash routed to deposit channel" .
+cg:trigger-transmit a uco-core:UcoObject ; uco-core:name "Trigger: proceeds handed to transmitter/courier network" .
+
+cg:transition-1
+	a traj:Transition ;
+	uco-core:name "InitialContact -> Conditioning" ;
+	traj:fromState ef:InitialContact ;
+	traj:toState ef:Conditioning ;
+	traj:trigger cg:trigger-opener-call ;
+	traj:enactsAction
+		cg:action-spoofed-opener-call ,
+		cg:action-deploy-opener-script ,
+		cg:action-opener-secrecy .
+
+cg:transition-2
+	a traj:Transition ;
+	uco-core:name "Conditioning -> ExtractionInstruction" ;
+	traj:fromState ef:Conditioning ;
+	traj:toState ef:ExtractionInstruction ;
+	traj:trigger cg:trigger-closer-directs-cash ;
+	traj:enactsAction cg:action-direct-payment-mechanism .
+
+cg:transition-3
+	a traj:Transition ;
+	uco-core:name "ExtractionInstruction -> ProceedsCollection" ;
+	traj:fromState ef:ExtractionInstruction ;
+	traj:toState ef:ProceedsCollection ;
+	traj:trigger cg:trigger-cash-instruction ;
+	traj:enactsAction cg:action-coopt-rideshare-driver .
+
+cg:transition-4
+	a traj:Transition ;
+	uco-core:name "ProceedsCollection -> Laundering" ;
+	traj:fromState ef:ProceedsCollection ;
+	traj:toState ef:Laundering ;
+	traj:trigger cg:trigger-proceeds-routed ;
+	traj:enactsAction
+		cg:action-purported-business-account ,
+		cg:action-structure-deposits .
+
+cg:transition-5
+	a traj:Transition ;
+	uco-core:name "Laundering -> Completed" ;
+	traj:fromState ef:Laundering ;
+	traj:toState ef:Completed ;
+	traj:trigger cg:trigger-transmit ;
+	traj:enactsAction cg:action-transmit-proceeds .
+
+cg:tool-esm-estimator
+	a uco-tool:Tool ;
+	uco-core:name "ESM trajectory estimator (illustrative)" ;
+	uco-core:description "version 0.1.0-dev" .
+
+cg:action-estimate-transitions
+	a uco-action:Action ;
+	uco-core:name "Estimate elder-fraud transition probabilities (illustrative)" ;
+	uco-action:instrument cg:tool-esm-estimator ;
+	prov:wasAssociatedWith cg:tool-esm-estimator .
+
+cg:estimate-1
+	a traj:TransitionEstimate ;
+	uco-core:name "P(InitialContact -> Conditioning)" ;
+	traj:ofTransition cg:transition-1 ;
+	traj:transitionProbability "0.93"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .
+
+cg:estimate-2
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Conditioning -> ExtractionInstruction)" ;
+	traj:ofTransition cg:transition-2 ;
+	traj:transitionProbability "0.88"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .
+
+cg:estimate-3
+	a traj:TransitionEstimate ;
+	uco-core:name "P(ExtractionInstruction -> ProceedsCollection)" ;
+	traj:ofTransition cg:transition-3 ;
+	traj:transitionProbability "0.71"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data — this is also the transition disrupted in the Attleboro trajectory."^^xsd:string ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .
+
+cg:estimate-4
+	a traj:TransitionEstimate ;
+	uco-core:name "P(ProceedsCollection -> Laundering)" ;
+	traj:ofTransition cg:transition-4 ;
+	traj:transitionProbability "0.90"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .
+
+cg:estimate-5
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Laundering -> Completed)" ;
+	traj:ofTransition cg:transition-5 ;
+	traj:transitionProbability "0.85"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .
+
+cg:model
+	a traj:StateMachineModel ;
+	uco-core:name "Elder-fraud (Castanos Garcia) state-machine estimate (v0)" ;
+	traj:initialState ef:InitialContact ;
+	traj:learnedFrom
+		cg:trajectory-agawam-2023 ,
+		cg:trajectory-attleboro-2022 ;
+	traj:hasTransition
+		cg:transition-1 ,
+		cg:transition-2 ,
+		cg:transition-3 ,
+		cg:transition-4 ,
+		cg:transition-5 ;
+	traj:hasTransitionEstimate
+		cg:estimate-1 ,
+		cg:estimate-2 ,
+		cg:estimate-3 ,
+		cg:estimate-4 ,
+		cg:estimate-5 ;
+	prov:wasGeneratedBy cg:action-estimate-transitions .

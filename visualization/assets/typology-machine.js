@@ -25,7 +25,6 @@
   const LEFT_PAD = 160;
   const TOP_PAD = 44;
 
-  let payload = null;
   let panelEl = null;
   let backdropEl = null;
 
@@ -113,7 +112,7 @@
     return "rgba(28, 27, 25, 0.7)";
   }
 
-  function transitionForPhase(phaseId, direction) {
+  function transitionForPhase(payload, phaseId, direction) {
     const transitions = payload.transitions || [];
     if (direction === "in") {
       return transitions.find((t) => t.to_id === phaseId);
@@ -121,9 +120,9 @@
     return transitions.find((t) => t.from_id === phaseId);
   }
 
-  function openPanel(phase) {
-    const transIn = transitionForPhase(phase.id, "in");
-    const transOut = transitionForPhase(phase.id, "out");
+  function openPanel(phase, payload) {
+    const transIn = transitionForPhase(payload, phase.id, "in");
+    const transOut = transitionForPhase(payload, phase.id, "out");
 
     const badges = [];
     if (phase.is_fundamental) {
@@ -146,7 +145,13 @@
 
     panelEl.innerHTML = `
       <h3>${escapeHtml(phase.label)}</h3>
-      <div class="panel-type">${escapeHtml(phase.state_label || phase.short_type)}</div>
+      ${
+        phase.ontology_id
+          ? `<div class="panel-type">${escapeHtml(phase.ontology_id)}</div>`
+          : phase.state_label && phase.state_label !== phase.label
+            ? `<div class="panel-type">${escapeHtml(phase.state_label)}</div>`
+            : ""
+      }
       ${badges.length ? `<div class="panel-section">${badges.join(" ")}</div>` : ""}
       <div class="panel-section">
         <h4>Description</h4>
@@ -179,8 +184,7 @@
     backdropEl.classList.remove("open");
   }
 
-  function renderLegend() {
-    const el = document.getElementById("typ-machine-legend");
+  function renderLegend(payload, el) {
     if (!el) return;
     const used = new Set();
     (payload.transitions || []).forEach((t) => {
@@ -201,8 +205,7 @@
     `;
   }
 
-  function renderMachine() {
-    const host = document.getElementById("typ-machine-canvas");
+  function renderMachine(payload, host, instanceId) {
     if (!host || !payload) return;
     host.innerHTML = "";
 
@@ -211,6 +214,9 @@
     const width = LEFT_PAD + phases.length * COL_W + 48;
     const height = TOP_PAD + ROW_H + 36;
     const cy = TOP_PAD + ROW_H / 2;
+    const uid = instanceId || `m${Math.random().toString(36).slice(2, 8)}`;
+    const arrowId = `typ-machine-arrow-${uid}`;
+    const railClipId = `typ-machine-left-rail-clip-${uid}`;
 
     const svg = d3
       .select(host)
@@ -223,7 +229,7 @@
     const defs = svg.append("defs");
     defs
       .append("marker")
-      .attr("id", "typ-machine-arrow")
+      .attr("id", arrowId)
       .attr("viewBox", "0 -4 8 8")
       .attr("refX", 7)
       .attr("refY", 0)
@@ -232,13 +238,13 @@
       .attr("orient", "auto")
       .append("path")
       .attr("d", "M0,-4L8,0L0,4")
-      .attr("fill", "context-stroke");
+      .attr("fill", "#8a9aa6");
 
     // Keep row metadata text strictly in the left rail so it never
     // bleeds under phase cards when citations are long.
     defs
       .append("clipPath")
-      .attr("id", "typ-machine-left-rail-clip")
+      .attr("id", railClipId)
       .append("rect")
       .attr("x", 18)
       .attr("y", TOP_PAD - 8)
@@ -264,7 +270,11 @@
         .attr("x", LEFT_PAD + i * COL_W + NODE_W / 2)
         .attr("y", TOP_PAD - 14)
         .attr("text-anchor", "middle")
-        .text(phase.short_type === "Phase" ? "Variant" : phase.short_type.replace(/Phase$/, ""));
+        .text(
+          phase.short_type === "Phase"
+            ? "Variant"
+            : String(phase.short_type || phase.label || "").replace(/Phase$/, "")
+        );
     });
 
     const gRow = svg.append("g").attr("class", "machine-row");
@@ -284,7 +294,7 @@
       .attr("x", 22)
       .attr("y", cy - 10)
       .attr("fill", accent)
-      .attr("clip-path", "url(#typ-machine-left-rail-clip)")
+      .attr("clip-path", `url(#${railClipId})`)
       .text(payload.modality_label || "CASE");
 
     const cite = shortCourtCitation(payload.citation || "");
@@ -294,7 +304,7 @@
       .attr("class", "row-citation")
       .attr("x", 22)
       .attr("y", cy + 8)
-      .attr("clip-path", "url(#typ-machine-left-rail-clip)")
+      .attr("clip-path", `url(#${railClipId})`)
       .text(citeShort);
 
     const laid = phases.map((phase, i) => ({
@@ -321,16 +331,16 @@
         .attr("fill", "none")
         .attr("stroke", color)
         .attr("stroke-width", 2)
-        .attr("marker-end", "url(#typ-machine-arrow)");
+        .attr("marker-end", `url(#${arrowId})`);
 
       const lx = (x1 + x2) / 2;
       const label = trans.affordance_label || "";
       if (label) {
-        const clipId = `edge-label-clip-${i}`;
+        const edgeClipId = `edge-label-clip-${uid}-${i}`;
         const gapWidth = Math.max(0, x2 - x1);
         defs
           .append("clipPath")
-          .attr("id", clipId)
+          .attr("id", edgeClipId)
           .append("rect")
           .attr("x", x1 + 2)
           .attr("y", cy - 8)
@@ -344,7 +354,7 @@
           .attr("y", cy + 10)
           .attr("text-anchor", "middle")
           .attr("fill", "rgba(28, 27, 25, 0.35)")
-          .attr("clip-path", `url(#${clipId})`)
+          .attr("clip-path", `url(#${edgeClipId})`)
           .text(label);
       }
 
@@ -362,7 +372,7 @@
         .attr("transform", `translate(${nx},${ny})`)
         .on("click", (event) => {
           event.stopPropagation();
-          openPanel(phase);
+          openPanel(phase, payload);
         });
 
       ng
@@ -374,13 +384,24 @@
         .attr("stroke", nodeStroke(phase, accent))
         .attr("stroke-width", 1.5);
 
-      ng
-        .append("text")
-        .attr("class", "node-class")
-        .attr("x", 10)
-        .attr("y", 18)
-        .attr("fill", nodeMetaColor(phase, accent))
-        .text(phase.short_type === "Phase" ? "Phase (variant)" : phase.short_type);
+      // Card eyebrow: human short name only when it differs from the serif title.
+      // Never paint prefixed ontology ids (ex:InitialAccess) into the card face.
+      const eyebrow =
+        phase.short_type &&
+        phase.short_type !== "Phase" &&
+        phase.short_type !== phase.label
+          ? phase.short_type
+          : "";
+      const titleY = eyebrow ? 40 : 28;
+      if (eyebrow) {
+        ng
+          .append("text")
+          .attr("class", "node-class")
+          .attr("x", 10)
+          .attr("y", 18)
+          .attr("fill", nodeMetaColor(phase, accent))
+          .text(eyebrow);
+      }
 
       if (phase.is_fundamental) {
         ng
@@ -408,7 +429,7 @@
           .append("text")
           .attr("class", "node-label")
           .attr("x", 10)
-          .attr("y", 40 + li * 14)
+          .attr("y", titleY + li * 14)
           .attr("fill", nodeTextColor(phase))
           .text(line);
       });
@@ -419,18 +440,33 @@
           .append("text")
           .attr("class", "node-blurb")
           .attr("x", 10)
-          .attr("y", 78 + li * 11)
+          .attr("y", titleY + 38 + li * 11)
           .attr("fill", nodeBlurbColor(phase))
           .text(line);
       });
     });
   }
 
-  function init() {
-    const embedded = document.getElementById("typ-machine-payload");
-    if (!embedded || !embedded.textContent.trim()) return;
+  function showD3Fallback(wraps) {
+    wraps.forEach((wrap) => {
+      const canvasHost = wrap.querySelector(".typ-machine-canvas");
+      if (!canvasHost || canvasHost.querySelector("svg")) return;
+      canvasHost.innerHTML =
+        '<p class="typ-machine-fallback">State machine could not render (graphics library failed to load). Refresh, or check that /viz-assets/d3.v7.min.js is reachable.</p>';
+    });
+  }
+
+  function init(attempt) {
+    const wraps = document.querySelectorAll(".typ-machine-wrap");
+    if (!wraps.length) return;
     if (typeof d3 === "undefined") {
+      const n = typeof attempt === "number" ? attempt : 0;
+      if (n < 40) {
+        window.setTimeout(() => init(n + 1), 50);
+        return;
+      }
       console.error("D3 required for typology state machine");
+      showD3Fallback(wraps);
       return;
     }
 
@@ -438,25 +474,33 @@
     backdropEl = document.getElementById("typ-machine-backdrop");
     if (!panelEl || !backdropEl) return;
 
-    try {
-      payload = JSON.parse(embedded.textContent);
-    } catch (err) {
-      console.error("Invalid typology machine payload", err);
-      return;
-    }
-
     backdropEl.addEventListener("click", closePanel);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closePanel();
     });
 
-    renderLegend();
-    renderMachine();
+    wraps.forEach((wrap, idx) => {
+      const embedded = wrap.querySelector(".typ-machine-payload");
+      if (!embedded || !embedded.textContent.trim()) return;
+
+      let payload;
+      try {
+        payload = JSON.parse(embedded.textContent);
+      } catch (err) {
+        console.error("Invalid typology machine payload", err);
+        return;
+      }
+
+      const canvasHost = wrap.querySelector(".typ-machine-canvas");
+      const legendEl = wrap.querySelector(".typ-machine-legend");
+      renderLegend(payload, legendEl);
+      renderMachine(payload, canvasHost, `i${idx}`);
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => init(0));
   } else {
-    init();
+    init(0);
   }
 })();

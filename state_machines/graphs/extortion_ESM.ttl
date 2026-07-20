@@ -1,0 +1,268 @@
+# Cyber-Extortion extension — real exemplar
+# United States v. Matthew D. Lane (D. Mass.). Source: USAO-MA press
+# release "Worcester College Student Sentenced to Four Years in Prison for
+# Cyber Extortions," 2025-11-13 ("PR").
+#
+# Built from the second of the two described cyber-extortion incidents
+# (Aug.-Dec. 2024): the software/cloud-storage company serving school
+# systems in the US, Canada, and elsewhere — the only incident the press
+# release describes with an explicit access -> exfiltration -> demand ->
+# leak-threat chain. The first incident (Apr.-May 2024, a
+# telecommunications company, $200,000 ransom) is not separately modeled
+# as a trajectory because the press release gives no access/exfiltration
+# detail for it; its directly quoted threat language is carried as
+# corroborating evidence text only (same leak-as-leverage MO), not
+# asserted as a separate phase occupancy.
+#
+# Only month-level date precision is given in the source ("Between August
+# and December 2024"); the same interval is therefore used across all four
+# phase assertions rather than fabricating finer-grained dates.
+
+@prefix ex: <http://example.org/ontology/extortion/> .
+@prefix exx: <http://example.org/extortion/lane/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Actors
+#################################################################
+
+exx:person-lane
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Matthew D. Lane" ;
+	uco-core:description "Age 20, of Sterling, Mass.; former Assumption University student. Pleaded guilty (June 2024) to cyber extortion conspiracy, cyber extortion, unauthorized access to protected computers, and aggravated identity theft; sentenced Oct. 14, 2025 to 4 years in prison, 3 years supervised release, a $25,000 fine, restitution of $14,075,540.58, and forfeiture. Source: PR paras. 1-2." .
+
+exx:org-victim-school-systems
+	a uco-identity:Organization , uco-core:UcoObject ;
+	uco-core:name "Second victim company (unnamed in source)" ;
+	uco-core:description "A software and cloud storage company serving school systems in the United States, Canada, and elsewhere. Source: PR para. 3." .
+
+#################################################################
+# Evidence nodes
+#################################################################
+
+exx:evidence-access-exfil
+	a uco-core:UcoObject ;
+	uco-core:name "Stolen-credential access and exfiltration (Aug.-Dec. 2024)" ;
+	uco-core:description "Between August and December 2024, Lane used stolen login credentials to access the computer network of the second victim company. Lane caused personally identifying information of students and teachers stored on that company's networks to be transferred to a computer server Lane leased in Ukraine. Source: PR para. 3." .
+
+exx:evidence-demand
+	a uco-core:UcoObject ;
+	uco-core:name "Ransom demand (~$2.85M Bitcoin)" ;
+	uco-core:description "The second victim company and others received threats that the names, email addresses, phone numbers, Social Security numbers, dates of birth, medical information, residential addresses, parent and guardian information, and passwords, among other data, of more than 60 million students and 10 million teachers would be leaked worldwide if the company did not pay a ransom of approximately $2.85 million in Bitcoin. Source: PR para. 3." .
+
+exx:evidence-leak-threat
+	a uco-core:UcoObject ;
+	uco-core:name "Leak-as-leverage threat execution" ;
+	uco-core:description "Threat that the exfiltrated data 'would be \"leak[ed] ... worldwide\"' absent ransom payment (PR para. 3). Corroborating same-MO quote from the separate, earlier April-May 2024 telecommunications-company incident, not the same event: Lane responded to the victim's question whether payment would end the threat with, 'We are the only ones with a copy of this data now. Stop this nonsense [or] your executives and employees will see the same fate . . . . Make the correct decision and pay the ransom. If you keep stalling, it will be leaked.' Source: PR para. 2." .
+
+#################################################################
+# Enacted actions (Technique-typed instances carrying the affordance)
+#################################################################
+
+exx:instrument-stolen-credentials
+	a uco-core:UcoObject ;
+	uco-core:name "Stolen login credentials" ;
+	uco-core:description "Login credentials for the second victim company's computer network, stolen and used by Lane to gain unauthorized access. Source: PR para. 3." .
+
+exx:action-credential-access
+	a uco-action:Action , ex:a_credential_theft ;
+	uco-core:name "Access victim network with stolen credentials" ;
+	uco-action:performer exx:person-lane ;
+	uco-action:instrument exx:instrument-stolen-credentials ;
+	prov:wasDerivedFrom exx:evidence-access-exfil .
+
+exx:instrument-leased-server
+	a uco-core:UcoObject ;
+	uco-core:name "Computer server leased by Lane in Ukraine" ;
+	uco-core:description "Attacker-controlled server infrastructure to which exfiltrated student/teacher PII was transferred. Source: PR para. 3." .
+
+exx:action-exfiltrate-data
+	a uco-action:Action , ex:a_exfiltrate ;
+	uco-core:name "Exfiltrate student/teacher PII to leased server" ;
+	uco-action:performer exx:person-lane ;
+	uco-action:instrument exx:instrument-leased-server ;
+	prov:wasDerivedFrom exx:evidence-access-exfil .
+
+exx:instrument-exfiltrated-dataset
+	a uco-core:UcoObject ;
+	uco-core:name "Exfiltrated student/teacher PII dataset" ;
+	uco-core:description "The names, email addresses, phone numbers, Social Security numbers, dates of birth, medical information, residential addresses, parent/guardian information, and passwords of 60M+ students and 10M+ teachers, held as leverage for the ransom demand. Source: PR para. 3." .
+
+exx:action-leak-threat
+	a uco-action:Action , ex:a_leak_threat ;
+	uco-core:name "Threaten worldwide leak of exfiltrated dataset" ;
+	uco-action:performer exx:person-lane ;
+	uco-action:instrument exx:instrument-exfiltrated-dataset ;
+	prov:wasDerivedFrom exx:evidence-leak-threat .
+
+#################################################################
+# Trajectory — school-systems software company (Aug.-Dec. 2024)
+#################################################################
+
+exx:confidence-1 a uco-core:ConfidenceFacet ; uco-core:confidence "90"^^xsd:nonNegativeInteger .
+exx:confidence-2 a uco-core:ConfidenceFacet ; uco-core:confidence "90"^^xsd:nonNegativeInteger .
+exx:confidence-3 a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+exx:confidence-4 a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+
+exx:interval-2024-08-12
+	a time:ProperInterval ;
+	time:hasBeginning exx:instant-2024-08-01 ;
+	time:hasEnd exx:instant-2024-12-31 .
+exx:instant-2024-08-01 a time:Instant ; time:inXSDDateTimeStamp "2024-08-01T00:00:00Z"^^xsd:dateTimeStamp .
+exx:instant-2024-12-31 a time:Instant ; time:inXSDDateTimeStamp "2024-12-31T23:59:00Z"^^xsd:dateTimeStamp .
+
+exx:phase-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0" ;
+	uco-core:description "Lane used stolen login credentials to access the second victim company's computer network. Source: PR para. 3." ;
+	traj:assertsState ex:InitialAccess ;
+	traj:atInterval exx:interval-2024-08-12 ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom exx:evidence-access-exfil ;
+	uco-core:hasFacet exx:confidence-1 .
+
+exx:phase-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1" ;
+	uco-core:description "PII of students and teachers was transferred to a computer server Lane leased in Ukraine. Source: PR para. 3." ;
+	traj:assertsState ex:Exfiltration ;
+	traj:atInterval exx:interval-2024-08-12 ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom exx:evidence-access-exfil ;
+	uco-core:hasFacet exx:confidence-2 .
+
+exx:phase-3
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 2" ;
+	uco-core:description "A ransom of approximately $2.85 million in Bitcoin was demanded to prevent worldwide disclosure of the exfiltrated data. Source: PR para. 3." ;
+	traj:assertsState ex:Demand ;
+	traj:atInterval exx:interval-2024-08-12 ;
+	traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom exx:evidence-demand ;
+	uco-core:hasFacet exx:confidence-3 .
+
+exx:phase-4
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 3" ;
+	uco-core:description "Threats reiterated that the data of 60M+ students and 10M+ teachers would be leaked worldwide absent payment. Source is silent on whether the ransom was ultimately paid or the data ultimately leaked; the modeled offense chain (access -> exfiltration -> demand -> leak-threat) finished, so terminalPolarity is completed. Later prosecution/sentencing is outside this machine and does not convert a finished chain into disrupted." ;
+	traj:assertsState ex:LeakThreat ;
+	traj:atInterval exx:interval-2024-08-12 ;
+	traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "completed" ;
+	prov:wasDerivedFrom exx:evidence-leak-threat ;
+	uco-core:hasFacet exx:confidence-4 .
+
+exx:trajectory-school-systems-2024
+	a traj:Trajectory ;
+	uco-core:name "Cyber-extortion trajectory: Lane / school-systems software company (Aug.-Dec. 2024)" ;
+	uco-core:description "United States v. Matthew D. Lane (D. Mass.) — 4-phase occupancy from stolen-credential access through the worldwide leak threat; modeled chain completed (later prosecution is not mid-chain disruption)." ;
+	traj:hasPhaseAssertion
+		exx:phase-1 ,
+		exx:phase-2 ,
+		exx:phase-3 ,
+		exx:phase-4 .
+
+#################################################################
+# Machine layer — Transitions + inferred StateMachineModel
+#
+# traj:enactsAction convention (see trajectories/README.md
+# "enactsAction convention: arriving state, not leaving state"):
+# wired to the transition ARRIVING at the phase the action produces.
+#   - exx:action-credential-access (a_credential_theft) produces s0
+#     (InitialAccess) itself; s0 has no incoming transition, so it is
+#     not wired here (mirrors elder-fraud's a_spoof / trafficking's
+#     absent Recruitment technique).
+#   - exx:action-exfiltrate-data (a_exfiltrate) produces Exfiltration ->
+#     wired to transition-1 (arrives Exfiltration).
+#   - transition-2 (arrives Demand) has no enactsAction: the catalog has
+#     no technique distinct from exfiltration for the demand step itself.
+#     traj:enactsAction is optional, so this is conformant.
+#   - exx:action-leak-threat (a_leak_threat) produces LeakThreat -> wired
+#     to transition-3 (arrives LeakThreat) — unchanged, was already
+#     correct under this convention.
+#################################################################
+
+exx:trigger-network-compromised a uco-core:UcoObject ; uco-core:name "Trigger: network access confirmed" .
+exx:trigger-data-staged a uco-core:UcoObject ; uco-core:name "Trigger: exfiltrated data staged on leased infrastructure" .
+exx:trigger-demand-unmet a uco-core:UcoObject ; uco-core:name "Trigger: ransom demand unmet / victim questions threat" .
+
+exx:transition-1
+	a traj:Transition ;
+	uco-core:name "InitialAccess -> Exfiltration" ;
+	traj:fromState ex:InitialAccess ;
+	traj:toState ex:Exfiltration ;
+	traj:trigger exx:trigger-network-compromised ;
+	traj:enactsAction exx:action-exfiltrate-data .
+
+exx:transition-2
+	a traj:Transition ;
+	uco-core:name "Exfiltration -> Demand" ;
+	traj:fromState ex:Exfiltration ;
+	traj:toState ex:Demand ;
+	traj:trigger exx:trigger-data-staged .
+
+exx:transition-3
+	a traj:Transition ;
+	uco-core:name "Demand -> LeakThreat" ;
+	traj:fromState ex:Demand ;
+	traj:toState ex:LeakThreat ;
+	traj:trigger exx:trigger-demand-unmet ;
+	traj:enactsAction exx:action-leak-threat .
+
+exx:tool-esm-estimator
+	a uco-tool:Tool ;
+	uco-core:name "ESM trajectory estimator (illustrative)" ;
+	uco-core:description "version 0.1.0-dev" .
+
+exx:action-estimate-transitions
+	a uco-action:Action ;
+	uco-core:name "Estimate extortion transition probabilities (illustrative)" ;
+	uco-action:instrument exx:tool-esm-estimator ;
+	prov:wasAssociatedWith exx:tool-esm-estimator .
+
+exx:estimate-1
+	a traj:TransitionEstimate ;
+	uco-core:name "P(InitialAccess -> Exfiltration)" ;
+	traj:ofTransition exx:transition-1 ;
+	traj:transitionProbability "0.85"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy exx:action-estimate-transitions .
+
+exx:estimate-2
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Exfiltration -> Demand)" ;
+	traj:ofTransition exx:transition-2 ;
+	traj:transitionProbability "0.80"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy exx:action-estimate-transitions .
+
+exx:estimate-3
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Demand -> LeakThreat)" ;
+	traj:ofTransition exx:transition-3 ;
+	traj:transitionProbability "0.65"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy exx:action-estimate-transitions .
+
+exx:model
+	a traj:StateMachineModel ;
+	uco-core:name "Cyber-extortion (Lane) state-machine estimate (v0)" ;
+	traj:initialState ex:InitialAccess ;
+	traj:learnedFrom exx:trajectory-school-systems-2024 ;
+	traj:hasTransition
+		exx:transition-1 ,
+		exx:transition-2 ,
+		exx:transition-3 ;
+	traj:hasTransitionEstimate
+		exx:estimate-1 ,
+		exx:estimate-2 ,
+		exx:estimate-3 ;
+	prov:wasGeneratedBy exx:action-estimate-transitions .

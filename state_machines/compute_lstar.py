@@ -19,18 +19,24 @@ from state_machines.bellman import (  # noqa: E402
     matrix_from_sequences,
 )
 from state_machines.iris import (  # noqa: E402
+    CAC_CASE_FILES,
     get_case_meta,
     EXPLOITATION_PHASE,
     INITIAL_CONTACT_PHASE,
     LSTAR_JSON,
     MAINTENANCE_PHASE,
     display_type,
+    esm_display_name,
     infer_modality,
+    is_esm_case,
     local_name,
 )
 from state_machines.sparql_queries import (  # noqa: E402
     affordance_on_arrival,
     case_graphs,
+    esm_affordance_on_arrival,
+    esm_case_summary,
+    is_esm_graph,
     load_state_machine_graphs,
     ordered_phase_sequence,
     ordered_type_sequence,
@@ -63,7 +69,11 @@ def _format_phase_line(
 ) -> list[str]:
     lines = []
     type_display = display_type(meta["type"] or "")
-    terminal = " [TERMINAL]" if is_terminal else ""
+    if is_terminal:
+        polarity = meta.get("terminal_polarity")
+        terminal = f" [TERMINAL:{polarity}]" if polarity else " [TERMINAL]"
+    else:
+        terminal = ""
     lines.append(f"  {index}. {type_display}{terminal}")
     if meta["label"]:
         detail = meta["label"]
@@ -86,9 +96,57 @@ def _serialize_bellman(result: dict) -> dict:
     }
 
 
+def _esm_case_result(cg, graph, case_id: str) -> dict:
+    """Native ESM case block: own state names, occupancy detail, affordance on
+    arrival from enactsAction->instrument. NOT pooled into the CAC matrix."""
+    meta = get_case_meta(case_id)
+    summary = esm_case_summary(cg, graph)
+    states = summary["phase_sequence"]
+    modality = meta.get("modality") or infer_modality(case_id, meta)
+
+    print("═" * 55)
+    print(f"{meta.get('title', case_id)} — {meta.get('citation', case_id)}")
+    print("═" * 55)
+    print("Phases (SDK trajectories ESM — native traj: read):")
+    for phase in summary["phase_details"]:
+        terminal = ""
+        if phase["is_terminal"]:
+            pol = phase.get("terminal_polarity")
+            terminal = f" [TERMINAL:{pol}]" if pol else " [TERMINAL]"
+        print(f"  {phase['index']}. {phase['state_display']}{terminal}")
+        if phase.get("label"):
+            print(f'     "{phase["label"]}"')
+        if phase.get("affordance_on_arrival"):
+            print(f"     Affordance on arrival: {phase['affordance_on_arrival']}")
+    traj = " → ".join(summary["phase_sequence_display"])
+    print(f"\nESM machine (native): {traj}")
+    print("─" * 55)
+    print()
+
+    return {
+        "machine_kind": "esm",
+        "title": meta.get("title", case_id.upper()),
+        "citation": meta.get("citation", case_id),
+        "modality": modality,
+        "phase_sequence": states,
+        "phase_sequence_display": summary["phase_sequence_display"],
+        "phase_details": summary["phase_details"],
+        "empirical_lstar": {
+            "trajectory": states,
+            "trajectory_display": summary["phase_sequence_display"],
+            "method": "esm_native_transition_chain",
+        },
+        "bellman_lstar": None,
+        "path_weight": None,
+    }
+
+
 def main() -> None:
     cg = load_state_machine_graphs()
-    matrix, n_cases = weighted_transition_matrix(cg)
+    # CAC cross-case matrix is computed over CAC-native CSAM graphs only; the
+    # SDK trajectories ESM graphs are structurally different machines with their
+    # own state spaces and are read natively (no crosswalk into CAC columns).
+    matrix, n_cases = weighted_transition_matrix(cg, filenames=CAC_CASE_FILES)
     raw_transitions = query_transition_matrix(cg)
     affordances = query_affordance_annotations(cg)
     phases_per_case = query_phases_per_case(cg)
@@ -105,6 +163,11 @@ def main() -> None:
 
     for graph in case_graphs(cg):
         case_id = _case_id_from_graph(str(graph))
+
+        if is_esm_case(case_id) or is_esm_graph(cg, graph):
+            case_results[case_id] = _esm_case_result(cg, graph, case_id)
+            continue
+
         phase_uris = ordered_phase_sequence(cg, graph)
         type_seq = ordered_type_sequence(cg, graph)
         sequences[case_id] = type_seq

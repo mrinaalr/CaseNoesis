@@ -16,6 +16,7 @@ from state_machines.iris import (
     STATE_MACHINES_WORKSPACE,
     display_type,
     infer_modality,
+    is_esm_case,
     local_name,
     modality_label,
 )
@@ -190,6 +191,7 @@ def _build_case_record(
     return {
         "id": case_id,
         "tier": tier,
+        "machine_kind": block.get("machine_kind") or ("esm" if is_esm_case(case_id) else "cac"),
         "case_name": case_name,
         "citation": citation,
         "offense_type": offense_type,

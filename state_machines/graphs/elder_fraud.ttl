@@ -1,0 +1,244 @@
+# Elder-Fraud ESM graph — United States v. Keel et al., 2:22-cr-00115-ILRL-KWR
+# (E.D. La.). Uses the SDK elder-fraud (ef:) shared phase vocabulary; occupancy
+# specifics are Keel-grounded, NOT Castanos-Garcia-grounded.
+#
+# Sources (press-release / docket level — no affidavit narrative available
+# in-repo; the PACER text layers for this case extracted as blank pages, so
+# confidence is set lower than the affidavit-grounded Castanos Garcia exemplar):
+#   PR  -- USAO-EDLA press release "Florida Man Sentenced to 10 Years in Prison
+#          for Impersonating Federal Officers in Nationwide Elder Fraud"
+#          (sentencing, Oct. 2023).
+#   Dkt -- PACER docket / charging record 2:22-cr-00115 (18 U.S.C. §§ 1343,
+#          1349 conspiracy to commit wire fraud; 18 U.S.C. § 912 false
+#          personation of a U.S. officer; Keel sentenced 125 months, 2023-10-25).
+#
+# Technique wiring is deliberately sparse: the source supports the
+# payment-mechanism direction technique (ef:a_direct) but does NOT attest VoIP
+# caller-ID spoofing, unwitting-intermediary co-option, or a laundering
+# pipeline for this defendant, so those Castanos-Garcia-specific ef: techniques
+# are NOT force-fit here. traj:enactsAction is optional (trajectories-shapes),
+# so technique-free transitions are conformant.
+#
+# Terminal: proceeds were realized from three victims (Green Dot cards ~$60,000,
+# a $300,000 cash pickup, a $36,000 withdrawal), so the modeled chain COMPLETED
+# through ProceedsCollection. The sting-operation arrest at a separate planned
+# pickup is post-terminal law-enforcement action, not mid-chain disruption
+# (same treatment as later prosecution in the SDK exemplars).
+
+@prefix ef: <http://example.org/ontology/elder-fraud/> .
+@prefix kl: <http://example.org/elder-fraud/keel/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Actors
+#################################################################
+
+kl:person-keel
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Christopher L. Keel" ;
+	uco-core:description "Defendant-1; pleaded guilty (2023-06-14) to conspiracy to commit wire fraud (18 U.S.C. §§ 1343, 1349) and false personation of an employee or officer of the United States (18 U.S.C. § 912); sentenced 2023-10-25 to 125 months. Source: Dkt; PR." .
+
+#################################################################
+# Evidence nodes (document-level)
+#################################################################
+
+kl:evidence-impersonation
+	a uco-core:UcoObject ;
+	uco-core:name "Federal-officer impersonation contact" ;
+	uco-core:description "The scheme placed calls to elderly victims nationwide in which co-conspirators impersonated federal officers (e.g. Treasury agents), invoking government authority. Charged as false personation of a U.S. officer (18 U.S.C. § 912). Source: PR; Dkt (charge)." .
+
+kl:evidence-authority-pressure
+	a uco-core:UcoObject ;
+	uco-core:name "Authority / urgency conditioning" ;
+	uco-core:description "Victims were pressured under the false authority claim to comply with payment instructions; the scheme targeted elderly victims including a 77-year-old. Source: PR." .
+
+kl:evidence-payment-instruction
+	a uco-core:UcoObject ;
+	uco-core:name "Payment-mechanism instruction (gift cards / cash)" ;
+	uco-core:description "Victims were directed into concrete payment mechanisms: purchasing Green Dot prepaid cards and providing cash for in-person pickups. Source: PR (Green Dot cards worth roughly $60,000; $300,000 cash pickup; $36,000 withdrawal)." .
+
+kl:evidence-proceeds-collection
+	a uco-core:UcoObject ;
+	uco-core:name "Proceeds collection from three victims" ;
+	uco-core:description "Proceeds were obtained from three documented victims: Green Dot prepaid cards worth roughly $60,000, a $300,000 cash pickup, and a $36,000 withdrawal. Co-conspirators traveled from Seattle to New Orleans on plane tickets purchased with the same credit card; the scheme culminated in a sting-operation arrest at a separate planned pickup. Source: PR." .
+
+#################################################################
+# Enacted action (only the technique the source supports)
+#################################################################
+
+kl:instrument-authority-payment-channel
+	a uco-core:UcoObject ;
+	uco-core:name "Impersonated-authority phone channel / prepaid-card instruction" ;
+	uco-core:description "The false-federal-officer phone channel through which victims were directed to buy Green Dot prepaid cards or provide cash for pickup — the abused affordance that converts authority pressure into a concrete payment. Source: PR." .
+
+kl:action-direct-payment
+	a uco-action:Action , ef:a_direct ;
+	uco-core:name "Direct victim into gift-card / cash payment mechanism" ;
+	uco-core:description "Under the false federal-officer authority claim, victims are directed to purchase Green Dot prepaid cards or hand over cash for pickup. Produces ExtractionInstruction. Source: PR." ;
+	uco-action:performer kl:person-keel ;
+	uco-action:instrument kl:instrument-authority-payment-channel ;
+	prov:wasDerivedFrom kl:evidence-payment-instruction .
+
+#################################################################
+# Trajectory — realized-harm chain (completed through ProceedsCollection)
+#################################################################
+
+kl:confidence-1 a uco-core:ConfidenceFacet ; uco-core:confidence "70"^^xsd:nonNegativeInteger .
+kl:confidence-2 a uco-core:ConfidenceFacet ; uco-core:confidence "65"^^xsd:nonNegativeInteger .
+kl:confidence-3 a uco-core:ConfidenceFacet ; uco-core:confidence "75"^^xsd:nonNegativeInteger .
+kl:confidence-4 a uco-core:ConfidenceFacet ; uco-core:confidence "80"^^xsd:nonNegativeInteger .
+
+# No per-phase dates in the source; interval is bounded by the case span
+# (offense conduct through the 2022-06-02 indictment filing), not a claimed
+# precise date.
+kl:interval-case-span
+	a time:ProperInterval ;
+	time:hasBeginning kl:instant-2021-01-01 ;
+	time:hasEnd kl:instant-2022-06-02 .
+kl:instant-2021-01-01 a time:Instant ; time:inXSDDateTimeStamp "2021-01-01T00:00:00Z"^^xsd:dateTimeStamp .
+kl:instant-2022-06-02 a time:Instant ; time:inXSDDateTimeStamp "2022-06-02T23:59:00Z"^^xsd:dateTimeStamp .
+
+kl:phase-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0" ;
+	uco-core:description "Initial contact: co-conspirators cold-call elderly victims nationwide impersonating federal officers (e.g. Treasury agents). Source: PR; Dkt (18 U.S.C. § 912)." ;
+	traj:assertsState ef:InitialContact ;
+	traj:atInterval kl:interval-case-span ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom kl:evidence-impersonation ;
+	uco-core:hasFacet kl:confidence-1 .
+
+kl:phase-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1" ;
+	uco-core:description "Conditioning: victims are pressured under the false government-authority claim to comply. Source: PR." ;
+	traj:assertsState ef:Conditioning ;
+	traj:atInterval kl:interval-case-span ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom kl:evidence-authority-pressure ;
+	uco-core:hasFacet kl:confidence-2 .
+
+kl:phase-3
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 2" ;
+	uco-core:description "Extraction instruction: victims are directed to buy Green Dot prepaid cards or provide cash for pickup — the pivot from authority pressure into payment logistics. Source: PR." ;
+	traj:assertsState ef:ExtractionInstruction ;
+	traj:atInterval kl:interval-case-span ;
+	traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom kl:evidence-payment-instruction ;
+	uco-core:hasFacet kl:confidence-3 .
+
+kl:phase-4
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 3" ;
+	uco-core:description "Proceeds collection: proceeds obtained from three victims (Green Dot cards ~$60,000, a $300,000 cash pickup, a $36,000 withdrawal). Modeled realized-harm endpoint; terminalPolarity completed. The sting-operation arrest at a separate planned pickup is post-terminal law-enforcement action, not mid-chain disruption. The source attests no cross-border laundering pipeline for this defendant, so the chain is not extended to ef:Laundering/ef:Completed. Source: PR." ;
+	traj:assertsState ef:ProceedsCollection ;
+	traj:atInterval kl:interval-case-span ;
+	traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "completed" ;
+	prov:wasDerivedFrom kl:evidence-proceeds-collection ;
+	uco-core:hasFacet kl:confidence-4 .
+
+kl:trajectory-keel
+	a traj:Trajectory ;
+	uco-core:name "Elder-fraud trajectory: Keel federal-officer impersonation (E.D. La.)" ;
+	uco-core:description "United States v. Keel et al., 2:22-cr-00115-ILRL-KWR — 4-phase occupancy from federal-officer impersonation contact through proceeds collection from three victims; modeled chain completed (later sting arrest is post-terminal)." ;
+	traj:hasPhaseAssertion
+		kl:phase-1 ,
+		kl:phase-2 ,
+		kl:phase-3 ,
+		kl:phase-4 .
+
+#################################################################
+# Machine layer — Transitions + inferred StateMachineModel
+#
+# enactsAction (arriving-state convention): only transition-2 (arrives
+# ExtractionInstruction) is wired, to kl:action-direct-payment (ef:a_direct).
+# The other transitions are technique-free — the source does not attest a
+# distinct, typed technique for the contact or collection steps, and
+# traj:enactsAction is optional.
+#################################################################
+
+kl:trigger-contact a uco-core:UcoObject ; uco-core:name "Trigger: impersonation call placed" .
+kl:trigger-pressure a uco-core:UcoObject ; uco-core:name "Trigger: victim complies under authority pressure" .
+kl:trigger-proceeds a uco-core:UcoObject ; uco-core:name "Trigger: victim provides cards / cash" .
+
+kl:transition-1
+	a traj:Transition ;
+	uco-core:name "InitialContact -> Conditioning" ;
+	traj:fromState ef:InitialContact ;
+	traj:toState ef:Conditioning ;
+	traj:trigger kl:trigger-contact .
+
+kl:transition-2
+	a traj:Transition ;
+	uco-core:name "Conditioning -> ExtractionInstruction" ;
+	traj:fromState ef:Conditioning ;
+	traj:toState ef:ExtractionInstruction ;
+	traj:trigger kl:trigger-pressure ;
+	traj:enactsAction kl:action-direct-payment .
+
+kl:transition-3
+	a traj:Transition ;
+	uco-core:name "ExtractionInstruction -> ProceedsCollection" ;
+	traj:fromState ef:ExtractionInstruction ;
+	traj:toState ef:ProceedsCollection ;
+	traj:trigger kl:trigger-proceeds .
+
+kl:tool-esm-estimator
+	a uco-tool:Tool ;
+	uco-core:name "ESM trajectory estimator (illustrative)" ;
+	uco-core:description "version 0.1.0-dev" .
+
+kl:action-estimate-transitions
+	a uco-action:Action ;
+	uco-core:name "Estimate elder-fraud (Keel) transition probabilities (illustrative)" ;
+	uco-action:instrument kl:tool-esm-estimator ;
+	prov:wasAssociatedWith kl:tool-esm-estimator .
+
+kl:estimate-1
+	a traj:TransitionEstimate ;
+	uco-core:name "P(InitialContact -> Conditioning)" ;
+	traj:ofTransition kl:transition-1 ;
+	traj:transitionProbability "0.90"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy kl:action-estimate-transitions .
+
+kl:estimate-2
+	a traj:TransitionEstimate ;
+	uco-core:name "P(Conditioning -> ExtractionInstruction)" ;
+	traj:ofTransition kl:transition-2 ;
+	traj:transitionProbability "0.80"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy kl:action-estimate-transitions .
+
+kl:estimate-3
+	a traj:TransitionEstimate ;
+	uco-core:name "P(ExtractionInstruction -> ProceedsCollection)" ;
+	traj:ofTransition kl:transition-3 ;
+	traj:transitionProbability "0.72"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy kl:action-estimate-transitions .
+
+kl:model
+	a traj:StateMachineModel ;
+	uco-core:name "Elder-fraud (Keel) state-machine estimate (v0)" ;
+	traj:initialState ef:InitialContact ;
+	traj:learnedFrom kl:trajectory-keel ;
+	traj:hasTransition
+		kl:transition-1 ,
+		kl:transition-2 ,
+		kl:transition-3 ;
+	traj:hasTransitionEstimate
+		kl:estimate-1 ,
+		kl:estimate-2 ,
+		kl:estimate-3 ;
+	prov:wasGeneratedBy kl:action-estimate-transitions .

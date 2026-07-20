@@ -51,11 +51,60 @@ STING_OPERATION = f"{UNDERCOVER_NS}StingOperation"
 DISRUPTS_CHAIN = f"{CASELINKER_NS}disruptsChain"
 DISRUPTED_TARGET = f"{CASELINKER_NS}disruptedTarget"
 
+# Mirrors traj:terminalPolarity (CASE-UCO SDK trajectories extension v0.2.0) in the
+# noesis: namespace already used by these graphs — traj: properties carry
+# rdfs:domain traj:PhaseAssertion, so asserting them directly on a cac-grooming
+# phase node would make an RDFS reasoner infer full (and unsatisfied)
+# traj:PhaseAssertion membership. Same controlled vocabulary: completed | disrupted.
+TERMINAL_POLARITY = f"{NOESIS_TRAJ_NS}terminalPolarity"
+
 AFFORDANCE_MISUSE = f"{NOESIS_TRAJ_NS}AffordanceMisuse"
 ENABLES_TRANSITION_FROM = f"{NOESIS_TRAJ_NS}enablesTransitionFrom"
 ENABLES_TRANSITION_TO = f"{NOESIS_TRAJ_NS}enablesTransitionTo"
 AFFORDANCE_CLASS = f"{NOESIS_TRAJ_NS}affordanceClass"
 MISUSE_DESCRIPTION = f"{NOESIS_TRAJ_NS}misuseDescription"
+
+# ---------------------------------------------------------------------------
+# CASE-UCO SDK trajectories ESM vocabulary (feat/exploitation-state-machine).
+# These graphs use the real traj: metamodel + per-domain SKOS state schemes
+# (ef:/ex:/traf:) and are read natively (see sparql_queries ESM branch), NOT
+# through the CAC cac-core:precedes / noesis:AffordanceMisuse spine.
+# ---------------------------------------------------------------------------
+TRAJ_NS = "http://example.org/ontology/trajectories/"
+EF_NS = "http://example.org/ontology/elder-fraud/"
+EX_NS = "http://example.org/ontology/extortion/"
+TRAF_NS = "http://example.org/ontology/trafficking/"
+
+TRAJ_TRAJECTORY = f"{TRAJ_NS}Trajectory"
+TRAJ_PHASE_ASSERTION = f"{TRAJ_NS}PhaseAssertion"
+TRAJ_STATE = f"{TRAJ_NS}State"
+TRAJ_STATE_MACHINE_MODEL = f"{TRAJ_NS}StateMachineModel"
+TRAJ_TRANSITION = f"{TRAJ_NS}Transition"
+TRAJ_ASSERTS_STATE = f"{TRAJ_NS}assertsState"
+TRAJ_AT_INTERVAL = f"{TRAJ_NS}atInterval"
+TRAJ_SEQUENCE_INDEX = f"{TRAJ_NS}sequenceIndex"
+TRAJ_IS_TERMINAL = f"{TRAJ_NS}isTerminal"
+TRAJ_TERMINAL_POLARITY = f"{TRAJ_NS}terminalPolarity"
+TRAJ_FROM_STATE = f"{TRAJ_NS}fromState"
+TRAJ_TO_STATE = f"{TRAJ_NS}toState"
+TRAJ_TRIGGER = f"{TRAJ_NS}trigger"
+TRAJ_ENACTS_ACTION = f"{TRAJ_NS}enactsAction"
+TRAJ_INITIAL_STATE = f"{TRAJ_NS}initialState"
+TRAJ_HAS_TRANSITION = f"{TRAJ_NS}hasTransition"
+TRAJ_HAS_PHASE_ASSERTION = f"{TRAJ_NS}hasPhaseAssertion"
+
+UCO_ACTION_INSTRUMENT = "https://ontology.unifiedcyberontology.org/uco/action/instrument"
+SKOS_PREF_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel"
+SKOS_DEFINITION = "http://www.w3.org/2004/02/skos/core#definition"
+
+# Namespace → display prefix for ESM state / vocabulary IRIs, so a typology
+# renders its OWN state names (ef:InitialContact, ex:Demand, traf:Control, …).
+ESM_DISPLAY_PREFIXES = (
+    (EF_NS, "ef"),
+    (EX_NS, "ex"),
+    (TRAF_NS, "traf"),
+    (TRAJ_NS, "traj"),
+)
 
 ANONYMITY = f"{NOESIS_TRAJ_NS}Anonymity"
 EPHEMERALITY = f"{NOESIS_TRAJ_NS}Ephemerality"
@@ -101,12 +150,53 @@ EXPANSION_CASE_IDS = (
     "external_extortion", # Murphy — serial multi-persona Snapchat sextortion (D. Mass. PACER)
     "racketeering",       # Lam et al. — RICO social engineering enterprise (D.D.C. PACER)
     "elder_fraud",        # Keel et al. — elder fraud impersonation scheme (E.D. La. PACER)
+    "elder_scheme",       # Castanos Garcia et al. — transnational grandparent-scam call-center enterprise (D. Mass. PACER)
+    "extortion_ESM",      # Lane — cyber-extortion data-breach / leak-threat scheme (D. Mass. press release)
+    "trafficking_ESM",    # Young — individual-operator sex-trafficking scheme (N.D. Tex. press release)
 )
 
-CASE_FILES = (
-    *(f"{case_id}.jsonld" for case_id in CANONICAL_CASE_IDS),
-    *(f"{case_id}.jsonld" for case_id in EXPANSION_CASE_IDS),
+# ESM cases carry real CASE-UCO SDK trajectories graphs (.ttl), read natively.
+# Every other case is a CAC-native CSAM graph (.jsonld) on the cac-core:precedes
+# spine. These two families are structurally different machines and are NOT
+# pooled into one shared-column comparison (no crosswalk).
+ESM_CASE_IDS = (
+    "elder_fraud",     # Keel — ef: federal-officer impersonation (E.D. La.)
+    "elder_scheme",    # Castanos Garcia — ef: grandparent-scam call center (D. Mass.)
+    "extortion_ESM",   # Lane — ex: cyber-extortion leak-threat (D. Mass.)
+    "trafficking_ESM", # Young — traf: individual-operator sex trafficking (N.D. Tex.)
+    "racketeering",    # Lam — case-local traj:State RICO enterprise (D.D.C.)
 )
+
+# CAC-native CSAM cases only (drives the shared-column L* cross-case analysis).
+CAC_CASE_IDS = tuple(
+    cid for cid in (*CANONICAL_CASE_IDS, *EXPANSION_CASE_IDS) if cid not in ESM_CASE_IDS
+)
+
+
+def case_graph_filename(case_id: str) -> str:
+    """ESM cases resolve to .ttl (real SDK trajectories graphs); others .jsonld."""
+    return f"{case_id}.ttl" if case_id in ESM_CASE_IDS else f"{case_id}.jsonld"
+
+
+def is_esm_case(case_id: str) -> bool:
+    return case_id in ESM_CASE_IDS
+
+
+CASE_FILES = (
+    *(case_graph_filename(case_id) for case_id in CANONICAL_CASE_IDS),
+    *(case_graph_filename(case_id) for case_id in EXPANSION_CASE_IDS),
+)
+
+# CAC-only file tuple for the cross-case CAC transition matrix (N excludes ESM).
+CAC_CASE_FILES = tuple(f"{cid}.jsonld" for cid in CAC_CASE_IDS)
+
+
+def esm_display_name(iri: str) -> str:
+    """Render an ESM state/vocab IRI with its domain prefix, e.g. ef:InitialContact."""
+    for ns, prefix in ESM_DISPLAY_PREFIXES:
+        if iri.startswith(ns):
+            return f"{prefix}:{local_name(iri)}"
+    return local_name(iri)
 
 MODALITY_LABELS = {
     "enticement": "ENTICEMENT",
@@ -116,6 +206,8 @@ MODALITY_LABELS = {
     "trafficking": "TRAFFICKING",
     "racketeering": "RACKETEERING",
     "elder_fraud": "ELDER FRAUD",
+    "extortion": "EXTORTION",
+    "trafficking": "TRAFFICKING",
 }
 
 CASE_META = {
@@ -468,6 +560,61 @@ CASE_META = {
             "false_personation",
         ],
     },
+    "elder_scheme": {
+        "title": "Castanos Garcia",
+        "citation": "United States v. Castanos Garcia et al. (D. Mass. 1:24-cr-10138)",
+        "statute": "18 U.S.C. §§ 1349, 1956(h)",
+        "modality": "elder_fraud",
+        "corpus_id": "elder_scheme",
+        "defendant": "Oscar Manuel Castanos Garcia et al.",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "elder_fraud",
+            "transnational_call_center",
+            "grandparent_scam",
+            "impersonation",
+            "rideshare_courier_network",
+            "structured_deposits",
+            "cross_border_money_laundering",
+            "multi_defendant",
+        ],
+    },
+    "extortion_ESM": {
+        "title": "Lane",
+        "citation": "United States v. Matthew D. Lane (D. Mass.)",
+        "statute": "18 U.S.C. §§ 875(d), 1030(a)(7), 1028A",
+        "modality": "extortion",
+        "corpus_id": "extortion_ESM",
+        "defendant": "Matthew D. Lane",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "cyber_extortion",
+            "data_breach",
+            "credential_theft",
+            "data_exfiltration",
+            "leak_threat",
+            "bitcoin_ransom",
+        ],
+    },
+    "trafficking_ESM": {
+        "title": "Young",
+        "citation": "United States v. Chase Anthony Young (N.D. Tex.)",
+        "statute": "18 U.S.C. § 1591(a)",
+        "modality": "trafficking",
+        "corpus_id": "trafficking_ESM",
+        "defendant": "Chase Anthony Young",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "sex_trafficking",
+            "force_fraud_coercion",
+            "online_advertising",
+            "individual_operator",
+            "earnings_confiscation",
+        ],
+    },
 
 }
 
@@ -688,6 +835,11 @@ def local_name(iri: str) -> str:
 
 
 def display_type(iri: str) -> str:
+    # SDK trajectories ESM states carry their OWN prefixed names (ef:/ex:/traf:/traj:),
+    # never CAC's shared phase columns.
+    for ns, prefix in ESM_DISPLAY_PREFIXES:
+        if iri.startswith(ns):
+            return f"{prefix}:{local_name(iri)}"
     name = local_name(iri)
     if iri.startswith(GROOMING_NS):
         return f"cacontology-grooming:{name}"

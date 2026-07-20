@@ -1,0 +1,324 @@
+# Racketeering ESM graph — United States v. Lam et al., 1:24-cr-00417 (D.D.C.).
+# RICO social-engineering / virtual-currency-theft enterprise.
+#
+# No SDK domain extension exists for racketeering, so this graph mints
+# CASE-LOCAL traj:State instances (SKOS concepts in rc:PhaseScheme) and plain
+# uco-action:Action instances (NOT Technique-metaclass-punned). The abused
+# affordance is carried on uco-action:instrument of each enacted action, the
+# same φ seam the SDK domain extensions use. Validated against
+# extensions=["trajectories"] only.
+#
+# Source: second superseding indictment and sentencing memoranda, 1:24-cr-00417
+# (paragraph pinpoints from the charging record; "SSI" = second superseding
+# indictment). Realized enterprise harm (~$259M in charged thefts) COMPLETED
+# the modeled chain; the September 2024 arrests and later partial RICO pleas are
+# post-terminal law-enforcement action, not mid-chain disruption.
+
+@prefix rc: <http://example.org/racketeering/lam/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Case-local phase vocabulary: traj:State instances in a SKOS scheme
+#################################################################
+
+rc:PhaseScheme
+	a skos:ConceptScheme ;
+	skos:prefLabel "RICO social-engineering enterprise offense phases"@en ;
+	dcterms:source "United States v. Lam et al., 1:24-cr-00417 (D.D.C.), second superseding indictment."@en .
+
+rc:GamingFormation
+	a traj:State , skos:Concept ;
+	uco-core:name "Gaming formation" ;
+	skos:prefLabel "Gaming formation"@en ;
+	skos:definition "Enterprise members form relationships through online gaming platforms and consolidate (Texas cohabitation) into a coordinated cyber-fraud group. Source: SSI paras. 23-24, 37a."@en ;
+	skos:inScheme rc:PhaseScheme .
+
+rc:SchemeConditioning
+	a traj:State , skos:Concept ;
+	uco-core:name "Scheme conditioning" ;
+	skos:prefLabel "Scheme conditioning"@en ;
+	skos:definition "Database theft, email intrusions, and social-engineering methods are discussed and initiated; stolen crypto-related databases are shared as target lists. Source: SSI paras. 25, 33a, 37a-c."@en ;
+	skos:inScheme rc:PhaseScheme .
+
+rc:RoleSpecialization
+	a traj:State , skos:Concept ;
+	uco-core:name "Role specialization" ;
+	skos:prefLabel "Role specialization"@en ;
+	skos:definition "Differentiated enterprise roles emerge: database hackers, organizers/target identifiers, callers/social engineers, money launderers, and in-real-life residential burglars for hardware wallets. Source: SSI paras. 25-32."@en ;
+	skos:inScheme rc:PhaseScheme .
+
+rc:TheftExploitation
+	a traj:State , skos:Concept ;
+	uco-core:name "Theft exploitation" ;
+	skos:prefLabel "Theft exploitation"@en ;
+	skos:definition "Fraudulent virtual-currency-exchange and email-support calls, seed-phrase harvesting, and coordinated thefts (including Victim-6 ~$14M and Victim-7 ~$245M) plus a July 2024 hardware-wallet residential break-in. Source: SSI overt acts / forfeiture allegation."@en ;
+	skos:inScheme rc:PhaseScheme .
+
+rc:LaunderingMaintenance
+	a traj:State , skos:Concept ;
+	uco-core:name "Laundering" ;
+	skos:prefLabel "Laundering"@en ;
+	skos:definition "Monero/USDT laundering, crypto-to-cash exchangers, mansion rentals, an exotic-car fleet, and straw owners sustain and conceal the enterprise; terminal realized-harm state before the September 2024 arrests. Source: SSI paras. 33g-l; Tangeman sentencing memorandum."@en ;
+	skos:inScheme rc:PhaseScheme .
+
+#################################################################
+# Actors
+#################################################################
+
+rc:person-lam
+	a uco-identity:Person , uco-core:UcoObject ;
+	uco-core:name "Malone Lam" ;
+	uco-core:description "Charged member of the social-engineering enterprise; RICO conspiracy (18 U.S.C. § 1962(d)). Source: SSI." .
+
+#################################################################
+# Evidence nodes
+#################################################################
+
+rc:evidence-gaming a uco-core:UcoObject ;
+	uco-core:name "Gaming-platform relationships and consolidation" ;
+	uco-core:description "Members formed friendships through online gaming platforms and cohabited in Texas while planning cyber fraud. Source: SSI paras. 23-24, 37a." .
+
+rc:evidence-databases a uco-core:UcoObject ;
+	uco-core:name "Stolen crypto-database target lists" ;
+	uco-core:description "Database theft and email intrusions produced stolen crypto-related databases shared as target lists. Source: SSI paras. 25, 33a, 37a-c." .
+
+rc:evidence-roles a uco-core:UcoObject ;
+	uco-core:name "Role differentiation" ;
+	uco-core:description "Enterprise roles differentiated into hackers, organizers, callers, launderers, and residential burglars. Source: SSI paras. 25-32." .
+
+rc:evidence-thefts a uco-core:UcoObject ;
+	uco-core:name "Social-engineering thefts and break-in" ;
+	uco-core:description "Fraudulent VCE/email-support calls and seed-phrase harvesting produced coordinated thefts (Victim-6 ~$14M, Victim-7 ~$245M); July 2024 hardware-wallet residential break-in. Source: SSI overt acts." .
+
+rc:evidence-laundering a uco-core:UcoObject ;
+	uco-core:name "Laundering and luxury conversion" ;
+	uco-core:description "Monero/USDT laundering, crypto-to-cash exchangers, mansion rentals, exotic cars, and straw owners. Source: SSI paras. 33g-l." .
+
+#################################################################
+# Enacted actions (plain uco-action:Action; affordance on instrument)
+#################################################################
+
+rc:instrument-gaming-platform a uco-core:UcoObject ;
+	uco-core:name "Online gaming platform (contact discovery)" ;
+	uco-core:description "Gaming platform used to discover and recruit co-conspirators — abused affordance: contact discovery." .
+
+rc:action-recruit a uco-action:Action ;
+	uco-core:name "Recruit co-conspirators via gaming platform" ;
+	uco-action:performer rc:person-lam ;
+	uco-action:instrument rc:instrument-gaming-platform ;
+	prov:wasDerivedFrom rc:evidence-gaming .
+
+rc:instrument-stolen-databases a uco-core:UcoObject ;
+	uco-core:name "Stolen crypto databases (distribution infrastructure)" ;
+	uco-core:description "Shared stolen databases used as target lists — abused affordance: distribution infrastructure." .
+
+rc:action-target a uco-action:Action ;
+	uco-core:name "Assign targets from stolen databases" ;
+	uco-action:performer rc:person-lam ;
+	uco-action:instrument rc:instrument-stolen-databases ;
+	prov:wasDerivedFrom rc:evidence-databases .
+
+rc:instrument-comm-channels a uco-core:UcoObject ;
+	uco-core:name "Private voice / encrypted messaging channels (unmonitored communication)" ;
+	uco-core:description "Private voice and encrypted messaging channels used for credential solicitation and seed-phrase capture at scale — abused affordance: unmonitored communication." .
+
+rc:action-social-engineer a uco-action:Action ;
+	uco-core:name "Solicit credentials / seed phrases via impersonation calls" ;
+	uco-action:performer rc:person-lam ;
+	uco-action:instrument rc:instrument-comm-channels ;
+	prov:wasDerivedFrom rc:evidence-thefts .
+
+rc:instrument-crypto-rails a uco-core:UcoObject ;
+	uco-core:name "Monero/USDT crypto rails (blockchain obfuscation)" ;
+	uco-core:description "Monero/USDT chains and crypto-to-cash exchangers used to launder and conceal proceeds — abused affordance: blockchain obfuscation." .
+
+rc:action-launder a uco-action:Action ;
+	uco-core:name "Launder proceeds via Monero/USDT and convert to luxury assets" ;
+	uco-action:performer rc:person-lam ;
+	uco-action:instrument rc:instrument-crypto-rails ;
+	prov:wasDerivedFrom rc:evidence-laundering .
+
+#################################################################
+# Trajectory
+#################################################################
+
+rc:confidence-1 a uco-core:ConfidenceFacet ; uco-core:confidence "82"^^xsd:nonNegativeInteger .
+rc:confidence-2 a uco-core:ConfidenceFacet ; uco-core:confidence "85"^^xsd:nonNegativeInteger .
+rc:confidence-3 a uco-core:ConfidenceFacet ; uco-core:confidence "85"^^xsd:nonNegativeInteger .
+rc:confidence-4 a uco-core:ConfidenceFacet ; uco-core:confidence "90"^^xsd:nonNegativeInteger .
+rc:confidence-5 a uco-core:ConfidenceFacet ; uco-core:confidence "88"^^xsd:nonNegativeInteger .
+
+rc:interval-enterprise-span
+	a time:ProperInterval ;
+	time:hasBeginning rc:instant-2023-10-01 ;
+	time:hasEnd rc:instant-2024-09-18 .
+rc:instant-2023-10-01 a time:Instant ; time:inXSDDateTimeStamp "2023-10-01T00:00:00Z"^^xsd:dateTimeStamp .
+rc:instant-2024-09-18 a time:Instant ; time:inXSDDateTimeStamp "2024-09-18T23:59:00Z"^^xsd:dateTimeStamp .
+
+rc:phase-1
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 0" ;
+	uco-core:description "Gaming-community formation and Texas consolidation. Source: SSI paras. 23-24, 37a." ;
+	traj:assertsState rc:GamingFormation ;
+	traj:atInterval rc:interval-enterprise-span ;
+	traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom rc:evidence-gaming ;
+	uco-core:hasFacet rc:confidence-1 .
+
+rc:phase-2
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 1" ;
+	uco-core:description "Scheme conditioning: database theft, email intrusions, shared crypto target lists. Source: SSI paras. 25, 33a, 37a-c." ;
+	traj:assertsState rc:SchemeConditioning ;
+	traj:atInterval rc:interval-enterprise-span ;
+	traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom rc:evidence-databases ;
+	uco-core:hasFacet rc:confidence-2 .
+
+rc:phase-3
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 2" ;
+	uco-core:description "Role specialization across hackers, organizers, callers, launderers, and residential burglars. Source: SSI paras. 25-32." ;
+	traj:assertsState rc:RoleSpecialization ;
+	traj:atInterval rc:interval-enterprise-span ;
+	traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom rc:evidence-roles ;
+	uco-core:hasFacet rc:confidence-3 .
+
+rc:phase-4
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 3" ;
+	uco-core:description "Social-engineering thefts (Victim-6 ~$14M, Victim-7 ~$245M) and hardware-wallet residential break-in. Source: SSI overt acts." ;
+	traj:assertsState rc:TheftExploitation ;
+	traj:atInterval rc:interval-enterprise-span ;
+	traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+	prov:wasDerivedFrom rc:evidence-thefts ;
+	uco-core:hasFacet rc:confidence-4 .
+
+rc:phase-5
+	a traj:PhaseAssertion ;
+	uco-core:name "Occupancy assertion 4" ;
+	uco-core:description "Laundering, luxury spending, and operational security sustain the enterprise until the September 2024 arrests. Modeled realized-harm endpoint; terminalPolarity completed. Later arrests and partial RICO pleas are post-terminal law-enforcement action, not mid-chain disruption. Source: SSI paras. 33g-l." ;
+	traj:assertsState rc:LaunderingMaintenance ;
+	traj:atInterval rc:interval-enterprise-span ;
+	traj:sequenceIndex "4"^^xsd:nonNegativeInteger ;
+	traj:isTerminal true ;
+	traj:terminalPolarity "completed" ;
+	prov:wasDerivedFrom rc:evidence-laundering ;
+	uco-core:hasFacet rc:confidence-5 .
+
+rc:trajectory-lam
+	a traj:Trajectory ;
+	uco-core:name "RICO enterprise trajectory: Lam et al. (D.D.C.)" ;
+	uco-core:description "United States v. Lam et al., 1:24-cr-00417 — 5-phase occupancy from gaming-community formation through laundering/maintenance; modeled chain completed (later arrests are post-terminal)." ;
+	traj:hasPhaseAssertion
+		rc:phase-1 ,
+		rc:phase-2 ,
+		rc:phase-3 ,
+		rc:phase-4 ,
+		rc:phase-5 .
+
+#################################################################
+# Machine layer — Transitions + inferred StateMachineModel
+# enactsAction wired arriving-state: the action producing each toState.
+#################################################################
+
+rc:trigger-recruited a uco-core:UcoObject ; uco-core:name "Trigger: co-conspirators recruited" .
+rc:trigger-targets a uco-core:UcoObject ; uco-core:name "Trigger: target lists distributed" .
+rc:trigger-roles a uco-core:UcoObject ; uco-core:name "Trigger: roles assigned" .
+rc:trigger-proceeds a uco-core:UcoObject ; uco-core:name "Trigger: stolen crypto obtained" .
+
+rc:transition-1
+	a traj:Transition ;
+	uco-core:name "GamingFormation -> SchemeConditioning" ;
+	traj:fromState rc:GamingFormation ;
+	traj:toState rc:SchemeConditioning ;
+	traj:trigger rc:trigger-recruited ;
+	traj:enactsAction rc:action-target .
+
+rc:transition-2
+	a traj:Transition ;
+	uco-core:name "SchemeConditioning -> RoleSpecialization" ;
+	traj:fromState rc:SchemeConditioning ;
+	traj:toState rc:RoleSpecialization ;
+	traj:trigger rc:trigger-targets ;
+	traj:enactsAction rc:action-recruit .
+
+rc:transition-3
+	a traj:Transition ;
+	uco-core:name "RoleSpecialization -> TheftExploitation" ;
+	traj:fromState rc:RoleSpecialization ;
+	traj:toState rc:TheftExploitation ;
+	traj:trigger rc:trigger-roles ;
+	traj:enactsAction rc:action-social-engineer .
+
+rc:transition-4
+	a traj:Transition ;
+	uco-core:name "TheftExploitation -> LaunderingMaintenance" ;
+	traj:fromState rc:TheftExploitation ;
+	traj:toState rc:LaunderingMaintenance ;
+	traj:trigger rc:trigger-proceeds ;
+	traj:enactsAction rc:action-launder .
+
+rc:tool-esm-estimator a uco-tool:Tool ;
+	uco-core:name "ESM trajectory estimator (illustrative)" ;
+	uco-core:description "version 0.1.0-dev" .
+
+rc:action-estimate-transitions a uco-action:Action ;
+	uco-core:name "Estimate racketeering transition probabilities (illustrative)" ;
+	uco-action:instrument rc:tool-esm-estimator ;
+	prov:wasAssociatedWith rc:tool-esm-estimator .
+
+rc:estimate-1 a traj:TransitionEstimate ;
+	uco-core:name "P(GamingFormation -> SchemeConditioning)" ;
+	traj:ofTransition rc:transition-1 ;
+	traj:transitionProbability "0.88"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy rc:action-estimate-transitions .
+
+rc:estimate-2 a traj:TransitionEstimate ;
+	uco-core:name "P(SchemeConditioning -> RoleSpecialization)" ;
+	traj:ofTransition rc:transition-2 ;
+	traj:transitionProbability "0.85"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy rc:action-estimate-transitions .
+
+rc:estimate-3 a traj:TransitionEstimate ;
+	uco-core:name "P(RoleSpecialization -> TheftExploitation)" ;
+	traj:ofTransition rc:transition-3 ;
+	traj:transitionProbability "0.80"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy rc:action-estimate-transitions .
+
+rc:estimate-4 a traj:TransitionEstimate ;
+	uco-core:name "P(TheftExploitation -> LaunderingMaintenance)" ;
+	traj:ofTransition rc:transition-4 ;
+	traj:transitionProbability "0.90"^^xsd:decimal ;
+	traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data."^^xsd:string ;
+	prov:wasGeneratedBy rc:action-estimate-transitions .
+
+rc:model
+	a traj:StateMachineModel ;
+	uco-core:name "RICO enterprise (Lam) state-machine estimate (v0)" ;
+	traj:initialState rc:GamingFormation ;
+	traj:learnedFrom rc:trajectory-lam ;
+	traj:hasTransition
+		rc:transition-1 ,
+		rc:transition-2 ,
+		rc:transition-3 ,
+		rc:transition-4 ;
+	traj:hasTransitionEstimate
+		rc:estimate-1 ,
+		rc:estimate-2 ,
+		rc:estimate-3 ,
+		rc:estimate-4 ;
+	prov:wasGeneratedBy rc:action-estimate-transitions .

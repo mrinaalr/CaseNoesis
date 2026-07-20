@@ -15,6 +15,15 @@
     letter-spacing: 0.02em;
 }
 
+.typ-machine-fallback {
+    font-size: 0.78rem;
+    color: rgba(196, 92, 74, 0.92);
+    margin: 0.5rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed rgba(196, 92, 74, 0.45);
+    background: rgba(196, 92, 74, 0.06);
+}
+
 .typ-machine-scroll {
     overflow-x: auto;
     overflow-y: visible;
@@ -22,7 +31,7 @@
     -webkit-overflow-scrolling: touch;
 }
 
-#typ-machine-canvas {
+.typ-machine-canvas {
     min-height: 200px;
 }
 
@@ -195,6 +204,13 @@
     font-family: "Source Sans 3", system-ui, sans-serif;
     font-size: 9px;
     fill: rgba(28, 27, 25, 0.62);
+}
+
+.typ-machine-svg .row-domain-note {
+    font-family: "Source Sans 3", system-ui, sans-serif;
+    font-size: 8.5px;
+    font-style: italic;
+    letter-spacing: 0.02em;
 }
 
 .typ-machine-svg .fundamental-col {

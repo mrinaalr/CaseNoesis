@@ -454,6 +454,32 @@
     line-height: 1.45;
 }
 
+.typ-domain-meta {
+    margin: -0.35rem 0 0.85rem;
+}
+
+.typ-domain-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+    background: rgba(74, 122, 155, 0.10);
+    color: rgba(74, 93, 107, 0.92);
+    border: 1px solid rgba(74, 122, 155, 0.28);
+}
+
+.typ-domain-badge.is-absent {
+    background: rgba(107, 91, 74, 0.08);
+    color: rgba(107, 91, 74, 0.78);
+    border: 1px dashed rgba(107, 91, 74, 0.45);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+}
+
 .typ-role-tags {
     margin-bottom: 0;
 }
