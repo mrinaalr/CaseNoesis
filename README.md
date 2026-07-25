@@ -1,6 +1,6 @@
 # CaseNoesis
 
-**CaseNoesis** aggregates, structures, and analyzes case data across the full range of modern offense types to understand how platform affordances are misused and crime types evolve alongside technology.
+**CaseNoesis** aggregates, structures, and decomposes case data across offense types, modeling exploitation as state machines and Markov decision processes to understand how platform affordances are misused, how crime types evolve alongside technology, and where intervention is possible.
 
 ## Origin & Framework
 
