@@ -11,16 +11,16 @@ Output naming (flat in BULK_FOLDER):
 
 Usage:
   # Safe: audit what's free vs needs PACER (no downloads, no charges)
-  python ontology/PACER/cases2records.py --preset wayerski --dry-run
+  python data/PACER/cases2records.py --preset wayerski --dry-run
 
   # Safe: pull only free key docs (indictment/plea/sentencing), max 4 per case
-  python ontology/PACER/cases2records.py --preset wayerski --key-docs --log-cost
+  python data/PACER/cases2records.py --preset wayerski --key-docs --log-cost
 
   # Berger + 3 more bridge cases, free RECAP only
-  python ontology/PACER/cases2records.py --batch bridge4 --key-docs --log-cost
+  python data/PACER/cases2records.py --batch bridge4 --key-docs --log-cost
 
   # PAID — only when you explicitly want PACER charges via CourtListener recap-fetch
-  python ontology/PACER/cases2records.py --preset wayerski --key-docs --charge-pacer --log-cost
+  python data/PACER/cases2records.py --preset wayerski --key-docs --charge-pacer --log-cost
 """
 
 from __future__ import annotations

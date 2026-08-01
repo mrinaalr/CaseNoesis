@@ -9,11 +9,11 @@ PACER eligibility heuristic (no single field is definitive):
 
 Cases matching any tier are included; confidence is high (A), medium (A+B or B+C), or low (C only).
 
-Output: ontology/PACER/pacer_cases.json
+Output: data/PACER/pacer_cases.json
 
 Usage:
-  python ontology/PACER/corpus2pacer.py
-  python ontology/PACER/corpus2pacer.py --db /path/to/caselinker.db --min-confidence medium
+  python data/PACER/corpus2pacer.py
+  python data/PACER/corpus2pacer.py --db /path/to/caselinker.db --min-confidence medium
 """
 
 from __future__ import annotations
@@ -295,7 +295,7 @@ def main() -> int:
         "--output",
         type=Path,
         default=OUTPUT_PATH,
-        help="Output JSON path (default: ontology/PACER/pacer_cases.json)",
+        help="Output JSON path (default: data/PACER/pacer_cases.json)",
     )
     args = parser.parse_args()
 

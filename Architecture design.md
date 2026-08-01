@@ -34,7 +34,7 @@ CaseNoesis identifies points for intervention under counterfactual transition re
 │  - retrieval & document-type routing│
 │  - text extraction                  │
 │  - case-boundary detection          │
-│  - produce structured PDFs          │
+│  - normalize → structured records   │
 └────────┬────────────────────────────┘
          │
          ▼
@@ -188,7 +188,7 @@ ICAC-specific severity scoring and operational triage weights live in the profil
 
 **Purpose**: Express extracted case content as CASE/UCO-conformant graph objects so the state machine is interoperable with practitioner tooling rather than a bespoke research artifact.
 
-Modeling substrate: [CASE/UCO SDK](https://github.com/vulnmaster/CASE-UCO-SDK/tree/main) **v1.22.4**, with Crimes Against Children Ontology (CAC) **v3.0.0** for offense-phase vocabulary. Pin details under SHACL validation.
+Built on: [CASE/UCO SDK](https://github.com/vulnmaster/CASE-UCO-SDK) and the Crimes Against Children Ontology (CAC) for offense-phase vocabulary. **All version pins and resolving refs live only in the SHACL validation block below** — that block is authoritative; do not duplicate version numbers elsewhere in this document.
 
 **Feature → ontology mapping** (conceptual):
 
@@ -205,20 +205,39 @@ Modeling substrate: [CASE/UCO SDK](https://github.com/vulnmaster/CASE-UCO-SDK/tr
 **Offense phases**:
 
 - Spine macro-phases include `InitialContactPhase`, `ConditioningPhase`, `ExploitationPhase`, `MaintenancePhase`
-- `ConditioningPhase` is the canonical preparatory macro-phase between contact and exploitation (CAC-Ontology PR #39). `TrustBuildingPhase` is a deprecated alias re-parented under Conditioning; existing graphs remain readable via alias
+- `ConditioningPhase` is the canonical preparatory macro-phase between contact and exploitation (introduced in CAC-Ontology PR #39; see pin block for merge status). `TrustBuildingPhase` is a deprecated alias re-parented under Conditioning; existing graphs remain readable via alias
 - Terminal states are modeled as terminal phase instances (typically Exploitation or domain-specific terminal marks) with terminal polarity (`completed` | `disrupted`) — not a separate ad-hoc “done” flag outside the graph
 
-**Trajectories extension** (CASE/UCO SDK **trajectories 0.3.1**): domain-agnostic metamodel — `traj:State`, `traj:Transition`, `traj:Trajectory`, `traj:PhaseAssertion`, `traj:StateMachineModel`, `traj:TransitionEstimate`. Domain SKOS schemes plug state labels into the shared metamodel. Observed phase occupancy (`PhaseAssertion`) is shape-separated from inferred analytics (`StateMachineModel` / `TransitionEstimate`): observed ≠ inferred is enforced in SHACL, not left to convention.
+**Trajectories extension**: domain-agnostic metamodel — `traj:State`, `traj:Transition`, `traj:Trajectory`, `traj:PhaseAssertion`, `traj:StateMachineModel`, `traj:TransitionEstimate`. Domain SKOS schemes plug state labels into the shared metamodel. Observed phase occupancy (`PhaseAssertion`) is shape-separated from inferred analytics (`StateMachineModel` / `TransitionEstimate`): observed ≠ inferred is enforced in SHACL, not left to convention. Extension version and resolving ref: SHACL validation block only.
 
-**SHACL validation**: conformance is a pipeline gate. Graphs that do not pass the pinned shapes suite are not treated as publishable analytical inputs. The check is the CAC and trajectories test suites at the versions below — an unversioned “conforms to CAC/CASE” claim is not part of this design.
+**SHACL validation**: conformance is a pipeline gate. Graphs that do not pass the pinned shapes suite are not treated as publishable analytical inputs. An unversioned “conforms to CAC/CASE” claim is not part of this design.
 
-| Surface | Pin | Check |
-|---|---|---|
-| CAC Ontology | **v3.0.0** (`owl:versionInfo` / `owl:versionIRI` `…/3.0.0` on core and module shapes) | [Project-VIC-International/CAC-Ontology](https://github.com/Project-VIC-International/CAC-Ontology) tag `v3.0.0` (`a923beb`); conformance surface for CaseNoesis phase graphs includes ConditioningPhase + state-machine shapes at commit `b73b51b` (PRs #33 / #39 on top of v3.0.0) |
-| CASE/UCO SDK | **v1.22.4** | [vulnmaster/CASE-UCO-SDK](https://github.com/vulnmaster/CASE-UCO-SDK) tag `v1.22.4` (`732733e`) |
-| trajectories extension | **0.3.1** (`extensions/trajectories/manifest.json`) | SHACL in `trajectories-shapes.ttl`; observed≠inferred firewall; validated with SDK `case_uco.validation` against v1.22.4 |
-| CASE built ontology (case_validate path) | **case-1.4.0** | `--built-version case-1.4.0` |
-| pyshacl path (CAC core shapes) | **pyshacl 0.31.0** / **rdflib 7.6.0** | Against `cacontology-*-shapes.ttl` at the CAC pin above |
+**This block is the single source of truth for all pinned dependency refs in this document** (checked 2026-07-25 UTC).
+
+| Surface | Status | Resolving ref | Notes |
+|---|---|---|---|
+| CAC Ontology release baseline | **Merged release tag** | [Project-VIC-International/CAC-Ontology](https://github.com/Project-VIC-International/CAC-Ontology) tag `v3.0.0` → `a923bebb28571b91e19c4c4acc788c7870b28e45` (`owl:versionInfo` / `owl:versionIRI` `…/3.0.0`) | Release-line pin. Does **not** include ConditioningPhase or post-tag state-machine shape deltas. |
+| CAC ConditioningPhase + state-machine shapes | **Open PR** (as of 2026-07-25) | Upstream `refs/pull/39/head` → `b73b51bc3583b95cf6ef9a55dc798bb7b15dc2d5`; also `https://github.com/mrinaalr/CAC-Ontology` (PR head fork). **Not** on tag `v3.0.0`. `git merge-base --is-ancestor b73b51b… v3.0.0` is false; v3.0.0 **is** an ancestor of the PR tip. | CAC-Ontology **PR #39** @ `b73b51bc3583b95cf6ef9a55dc798bb7b15dc2d5` (open as of 2026-07-25; resolves via `refs/pull/39/head`; shape definitions may change on merge). Phase-graph conformance against these shapes is **locally verified pending upstream merge**. |
+| CAC state-machine shape precursors | **Open PR** (as of 2026-07-25) | Upstream `refs/pull/33/head` → `4e397f0d9a5e48cef3c2ddab28d52e9adb7a025b`; fork `https://github.com/mrinaalr/CAC-Ontology`. PR #39 depends on #33. | CAC-Ontology **PR #33** @ `4e397f0d9a5e48cef3c2ddab28d52e9adb7a025b` (open as of 2026-07-25; resolves via `refs/pull/33/head`; shape definitions may change on merge). Platforms / sextortion / core shape bytes differ from `v3.0.0`. |
+| CASE/UCO SDK release baseline | **Merged release tag** | [vulnmaster/CASE-UCO-SDK](https://github.com/vulnmaster/CASE-UCO-SDK) tag `v1.22.4` → `732733e434dc67e790f5a8f371b315d79237641d` (`python/pyproject.toml` `version = "1.22.4"`) | Real tagged release. **Does not contain** `extensions/trajectories/`. |
+| trajectories extension (candidate metamodel) | **Open PR** (as of 2026-07-25) | Upstream `refs/pull/86/head` → `15d25c7dbeeef0abe48c4f93fb2656473dbcfdba`; fork `https://github.com/built-by-mars/CaseNoesis-Ontology`. Manifest version **0.1.0** at `extensions/trajectories/manifest.json`. | SDK **PR #86** @ `15d25c7dbeeef0abe48c4f93fb2656473dbcfdba` (open as of 2026-07-25; resolves via `refs/pull/86/head`; shape definitions may change on merge). **Not** in tag `v1.22.4`. |
+| trajectories extension (ESM-expanded shapes) | **Open PR** (as of 2026-07-25) | Upstream `refs/pull/87/head` → `6754face0e1e5dc9d093de32384215768b4eb1ac`; fork `https://github.com/built-by-mars/CaseNoesis-Ontology` branch `feat/exploitation-state-machine`. Manifest version **0.3.1**. | SDK **PR #87** @ `6754face0e1e5dc9d093de32384215768b4eb1ac` (open as of 2026-07-25; resolves via `refs/pull/87/head`; shape definitions may change on merge). This is the source of the former “trajectories 0.3.1” string — **not** a release artifact and **not** PR #86. |
+| CASE built ontology (`case_validate`) | **Tool enum / env** | `case_validate --built-version case-1.4.0` via `case-utils==0.17.0` (SDK `.venv` `pip freeze`, 2026-07-25) | CASE **1.4.0** here means the built-in CASE ontology bundle selected by `case_validate`, not an SDK tag. |
+| pyshacl / rdflib (CAC pyshacl path) | **Pinned in requirements + resolved env** | CaseNoesis `requirements.txt`: `pyshacl==0.31.0`, `rdflib==7.6.0`; CaseNoesis `.venv` `pip freeze` matches those exact versions (2026-07-25). **No lockfile** in-repo. | Primary CAC gate in `features_to_cac.py` loads sibling `../CAC-Ontology/ontology/cacontology-core-shapes.ttl` through pyshacl. |
+
+**Shapes files the gates load** (SHA-256 of file bytes; survives PR force-push). Hashes below are for the open-PR tips named above unless marked `v3.0.0`.
+
+| File | SHA-256 | Bytes | Source tip |
+|---|---|---:|---|
+| `cacontology-core-shapes.ttl` | `5dc73fda06f8fccaa67af571cc2d6c41fb28ef22ed11621150cb7e552e6d638f` | 21187 | PR #39 `b73b51bc3583b95cf6ef9a55dc798bb7b15dc2d5` (also matches CaseNoesis vendored copy; **differs** from `v3.0.0`) |
+| `cacontology-core-spine-shapes.ttl` | `231b6f4d3cb1bf8c2fc987d6652a2dfd9f45a63c944014e1b0fd78e4e98f19ff` | 9221 | PR #39 `b73b51bc3583b95cf6ef9a55dc798bb7b15dc2d5` |
+| `cacontology-grooming-shapes.ttl` | `1a2b66632764b94334e9e0c855f44b1a7a8b749b33f0701756976a65672cec55` | 41663 | PR #39 `b73b51bc3583b95cf6ef9a55dc798bb7b15dc2d5` |
+| `cacontology-platforms-shapes.ttl` | `401fbd924c094132b6effc675b5af49bc23a15cb87fa6d9d781266888fab9ed4` | 35458 | PR #33/`#39` tips (same bytes; **differs** from `v3.0.0`) |
+| `cacontology-sextortion-shapes.ttl` | `573d190935c9a569ba8e0559736e1acdc45cd238910bdeb40228bcc822825330` | 30971 | PR #33/`#39` tips (same bytes; **differs** from `v3.0.0`) |
+| `extensions/trajectories/trajectories-shapes.ttl` | `7eb09c1185e7181ccbf81bd0d3a34db7751a5d2f7f8c029d9cf5b1025eb47eeb` | 4705 | PR #86 `15d25c7dbeeef0abe48c4f93fb2656473dbcfdba` (manifest **0.1.0**) |
+| `extensions/trajectories/trajectories-shapes.ttl` | `c454ae4480813ec0b8f4c1e184a756c04b97b8ebf10a9eb7b5d8f999ab4424c7` | 6156 | PR #87 `6754face0e1e5dc9d093de32384215768b4eb1ac` (manifest **0.3.1**; local CaseNoesis SDK worktree matches this tip) |
+
+`features_to_cac.py`’s pyshacl gate currently loads **only** `cacontology-core-shapes.ttl` from the sibling CAC checkout. Broader phase-graph / trajectories checks use the additional rows above; until PRs #33 / #39 / #86 / #87 merge, treat those conformance results as **locally verified pending upstream merge**, not as release-line certification.
 
 ### 4. Storage
 

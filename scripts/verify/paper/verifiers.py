@@ -163,7 +163,7 @@ def _ttl_graph_count(root: Path) -> int:
 
 
 def _pacer_bulk_stats(root: Path) -> dict[str, Any]:
-    bulk = root / "ontology" / "PACER" / "BULK_FOLDER"
+    bulk = root / "data" / "PACER" / "BULK_FOLDER"
     folders = [p for p in bulk.iterdir() if p.is_dir()] if bulk.is_dir() else []
     cost_csv = bulk / "pacer_cost.csv"
     total_cost = None
@@ -176,7 +176,7 @@ def _pacer_bulk_stats(root: Path) -> dict[str, Any]:
                         total_cost = float(parts[-1])
                     except ValueError:
                         pass
-    canonical = root / "ontology" / "PACER"
+    canonical = root / "data" / "PACER"
     canon_dirs = [
         p.name
         for p in canonical.iterdir()
@@ -382,7 +382,7 @@ def verify_claim(claim: Claim, ctx: VerifyContext) -> VerifyResult:
         status = "pass" if p["total_pacer_dirs"] >= 8 else "warn"
         if p["bulk_folders"] == 3:
             notes.append("BULK_FOLDER has 3 expansion pulls; paper cites 8 including 5 canonical textbook PACER cases.")
-        return VerifyResult(claim.id, status, f"total PACER dirs={obs}", obs, "8", "ontology/PACER", notes)
+        return VerifyResult(claim.id, status, f"total PACER dirs={obs}", obs, "8", "data/PACER", notes)
 
     if claim.id == "s3.pacer_expansion_four":
         p = _pacer_bulk_stats(ctx.root)

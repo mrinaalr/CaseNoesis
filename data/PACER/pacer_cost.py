@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append rows to ontology/PACER/BULK_FOLDER/pacer_cost.csv (manual PACER log format)."""
+"""Append rows to data/PACER/BULK_FOLDER/pacer_cost.csv (manual PACER log format)."""
 
 from __future__ import annotations
 

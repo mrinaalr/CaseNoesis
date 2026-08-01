@@ -72,7 +72,7 @@ Database: `/Users/mrinaalramachandran/Projects/CaseLinker/caselinker.db`
 | ✅ pass | `cover.sources` | Cover | 56 | 56 | cases.source | distinct sources=56 |
 | ✅ pass | `cover.task_forces` | Cover | 61 | 61 | icac_tf_verify | ICAC geographic roster |
 | ✅ pass | `cover.agencies` | Cover | 3778 | >=3500 | extracted_features | agencies_involved unique=3778 |
-| ✅ pass | `cover.pacer_records` | Cover | 8 | 8 | ontology/PACER | total PACER dirs=8 |
+| ✅ pass | `cover.pacer_records` | Cover | 8 | 8 | data/PACER | total PACER dirs=8 |
 | ✅ pass | `cover.timespan` | Cover | 1992–2026 | 2002-2026 | cases.date_start | 1992–2026 |
 | ✅ pass | `cover.platforms_analyzed` | Cover | 56 | >=30 | platforms_used | distinct platform labels=56 |
 | ✅ pass | `abstract.corpus` | Abstract | 7427 | 7426 | caselinker.db | cases.count=7427 |

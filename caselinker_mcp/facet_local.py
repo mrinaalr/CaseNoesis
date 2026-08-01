@@ -28,7 +28,7 @@ from facet_tree import (  # noqa: E402
 )
 from storage import CaseStorage  # noqa: E402
 
-PACER_CASES_JSON = _REPO_ROOT / "ontology" / "PACER" / "pacer_cases.json"
+PACER_CASES_JSON = _REPO_ROOT / "data" / "PACER" / "pacer_cases.json"
 
 # Ten-level partition order matching the search UI (excludes perp_admission).
 SEARCH_UI_FACET_ORDER: Sequence[Tuple[str, str]] = tuple(
@@ -110,7 +110,7 @@ def load_cases_by_ids(case_ids: Sequence[str]) -> List[Dict[str, Any]]:
 def load_pacer_case_ids(min_confidence: str = "low") -> List[str]:
     if not PACER_CASES_JSON.exists():
         raise FileNotFoundError(
-            f"PACER pool not found: {PACER_CASES_JSON}. Run: python ontology/PACER/corpus2pacer.py"
+            f"PACER pool not found: {PACER_CASES_JSON}. Run: python data/PACER/corpus2pacer.py"
         )
     data = json.loads(PACER_CASES_JSON.read_text(encoding="utf-8"))
     rank = {"high": 3, "medium": 2, "low": 1}

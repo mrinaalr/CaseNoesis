@@ -42,7 +42,7 @@ disposition:
   supervised_release_years: 3
 
 provenance:
-  document_set: "PACER elder fraud PDF bundle in ontology/PACER/EXTENSION"
+  document_set: "PACER elder fraud PDF bundle in data/PACER/EXTENSION"
   extraction_method: "pdf-to-text and CASE/UCO document normalization"
   processed_artifacts:
     - "EXTENSION/elder_fraud/processed/docket.processed.jsonld"
@@ -93,7 +93,7 @@ disposition:
   supervised_release_years: 3
 
 provenance:
-  document_set: "PACER elder fraud PDF bundle in ontology/PACER/EXTENSION"
+  document_set: "PACER elder fraud PDF bundle in data/PACER/EXTENSION"
   extraction_method: "pdf-to-text and CASE/UCO document normalization"
   processed_artifacts:
     - "EXTENSION/elder_fraud/processed/docket.processed.jsonld"

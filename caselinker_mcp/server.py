@@ -722,10 +722,10 @@ async def tree_traversal(
     leaf cohorts (or an explicit targeted_path).
 
     Typical workflow for the 50-case PACER lookup:
-      1. python ontology/PACER/corpus2pacer.py  →  pacer_cases.json
+      1. python data/PACER/corpus2pacer.py  →  pacer_cases.json
       2. tree_traversal(use_pacer_pool=true, random_count=25, targeted_count=25)
 
-    use_pacer_pool: load IDs from ontology/PACER/pacer_cases.json instead of case_ids.
+    use_pacer_pool: load IDs from data/PACER/pacer_cases.json instead of case_ids.
     pacer_min_confidence: low | medium | high when use_pacer_pool is true.
     max_depth: 0 = full facet depth for the included dimensions; else cap levels.
     targeted_path: optional explicit facet path for the targeted half; else auto-diverse leaves.
