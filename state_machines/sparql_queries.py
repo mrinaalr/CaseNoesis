@@ -452,7 +452,7 @@ def _domain_state_label_map() -> dict[str, str]:
     labels: dict[str, str] = {}
     # CaseNoesis and CASE-UCO-SDK are sibling repos under Projects/
     sdk_root = Path(__file__).resolve().parents[2] / "CASE-UCO-SDK" / "extensions"
-    for folder in ("elder-fraud", "extortion", "trafficking"):
+    for folder in ("elder-fraud", "extortion", "trafficking", "forced-labor"):
         path = sdk_root / folder / f"{folder}.ttl"
         if not path.is_file():
             continue
@@ -523,7 +523,14 @@ def esm_state_metadata(
     recs = assertions_by_state.get(state_iri, [])
     # Terminal status is a property of the last machine state; use its assertion.
     terminal_rec = next((r for r in recs if r["is_terminal"]), None)
-    blurb = str(definition) if definition is not None else (recs[0]["description"] if recs else None)
+    # Prefer this case's PhaseAssertion description over the shared domain
+    # skos:definition (T-box defs are often multi-exemplar and would leak
+    # other press-release facts into a case-scoped UI).
+    assertion_desc = next(
+        (r["description"] for r in recs if r.get("description")),
+        None,
+    )
+    blurb = assertion_desc or (str(definition) if definition is not None else None)
     is_terminal = is_last and terminal_rec is not None
     return {
         "uri": state_iri,

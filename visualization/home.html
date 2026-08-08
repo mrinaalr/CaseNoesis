@@ -512,6 +512,7 @@
                     <div class="dd-label">Browse</div>
                     <a href="/typologies/elder-fraud">Elder Fraud</a>
                     <a href="/typologies/trafficking">Trafficking</a>
+                    <a href="/typologies/slavery">Slavery</a>
                     <a href="/typologies/racketeering-enterprises">Racketeering &amp; Enterprises</a>
                     <a href="/typologies/extortion">Extortion</a>
                 </div>
@@ -616,15 +617,16 @@
             <div class="machine-grid">
                 <div class="machine-cell">
                     <h4>\(S\)</h4>
-                    <p>Finite offense-phase classes from the CAC ontology: \(S \supseteq \{\mathrm{InitialContactPhase},\, \mathrm{ConditioningPhase},\,\)<br>\(\mathrm{ExploitationPhase},\, \ldots\}\).</p>
+                    <p>Finite offense-phase states from the CASE-UCO-SDK:<br>
+                    \(S \supseteq \{\mathrm{InitialContactPhase},\, \mathrm{ConditioningPhase},\,\)<br>\(\mathrm{ExploitationPhase},\, \ldots\}\).</p>
                 </div>
                 <div class="machine-cell">
                     <h4>\(A\)</h4>
-                    <p>Affordance environment: anonymity, ephemerality, contact discovery, unmonitored communication, distribution infrastructure, generative synthesis.</p>
+                    <p>Action and affordance environment: the possible action space for offenders, and the technological affordances offenders can misuse.</p>
                 </div>
                 <div class="machine-cell">
                     <h4>\(T : S \times A \to \Delta(S)\)</h4>
-                    <p>\(T\) is represented as CAC phase edges between states, accelerated by affordances. Edges run state-to-state, with affordances attached where present.</p>
+                    <p>\(T\) is the CASE-UCO-SDK trajectories extension: directed transitions between states, accelerated by affordances. Edges represent state-to-state offender progression, with affordances attached where present.</p>
                 </div>
                 <div class="machine-cell">
                     <h4>\(R_G\)</h4>
@@ -711,6 +713,7 @@
             <p>
                 Induced from the complete observable ICAC universe (7,426 enforcement records, 24 years, 30+ platforms).
                 Each is stated as a falsifiable universal.
+                CaseNoesis tests them outside that domain — elder fraud, extortion, trafficking — toward a more complete model of exploitation mechanics.
             </p>
 
             <div class="theorem-block">

@@ -75,6 +75,7 @@ TRAJ_NS = "http://example.org/ontology/trajectories/"
 EF_NS = "http://example.org/ontology/elder-fraud/"
 EX_NS = "http://example.org/ontology/extortion/"
 TRAF_NS = "http://example.org/ontology/trafficking/"
+FL_NS = "http://example.org/ontology/forced-labor/"
 
 TRAJ_TRAJECTORY = f"{TRAJ_NS}Trajectory"
 TRAJ_PHASE_ASSERTION = f"{TRAJ_NS}PhaseAssertion"
@@ -104,6 +105,7 @@ ESM_DISPLAY_PREFIXES = (
     (EF_NS, "ef"),
     (EX_NS, "ex"),
     (TRAF_NS, "traf"),
+    (FL_NS, "fl"),
     (TRAJ_NS, "traj"),
 )
 
@@ -154,6 +156,8 @@ EXPANSION_CASE_IDS = (
     "elder_scheme",       # Castanos Garcia et al. — transnational grandparent-scam call-center enterprise (D. Mass. PACER)
     "extortion_ESM",      # Lane — cyber-extortion data-breach / leak-threat scheme (D. Mass. press release)
     "trafficking_ESM",    # Young — individual-operator sex-trafficking scheme (N.D. Tex. press release)
+    "slavery_ibanez",     # Ibanez-Olea — forced labor with trafficking vector (N.D. Ill. press release)
+    "slavery_luong",      # Luong — pure forced labor / servitude (W.D.N.C. press release)
 )
 
 # ESM cases carry real CASE-UCO SDK trajectories graphs (.ttl), read natively.
@@ -166,6 +170,8 @@ ESM_CASE_IDS = (
     "extortion_ESM",   # Lane — ex: cyber-extortion leak-threat (D. Mass.)
     "trafficking_ESM", # Young — traf: individual-operator sex trafficking (N.D. Tex.)
     "racketeering",    # Lam — case-local traj:State RICO enterprise (D.D.C.)
+    "slavery_ibanez",  # Ibanez-Olea — fl: forced labor + trafficking vector (N.D. Ill.)
+    "slavery_luong",   # Luong — fl: pure servitude, disrupted mid-chain (W.D.N.C.)
 )
 
 # CAC-native CSAM cases only (drives the shared-column L* cross-case analysis).
@@ -208,7 +214,7 @@ MODALITY_LABELS = {
     "racketeering": "RACKETEERING",
     "elder_fraud": "ELDER FRAUD",
     "extortion": "EXTORTION",
-    "trafficking": "TRAFFICKING",
+    "slavery": "SLAVERY",
 }
 
 CASE_META = {
@@ -614,6 +620,41 @@ CASE_META = {
             "online_advertising",
             "individual_operator",
             "earnings_confiscation",
+        ],
+    },
+    # Slavery typology cases — wired to fl: forced-labor ESM graphs.
+    "slavery_ibanez": {
+        "title": "Ibanez-Olea",
+        "citation": "United States v. Ibanez-Olea (N.D. Ill.)",
+        "statute": "18 U.S.C. § 1589",
+        "modality": "slavery",
+        "corpus_id": "slavery_ibanez",
+        "defendant": "Ibanez-Olea",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "forced_labor",
+            "debt_bondage",
+            "trafficking_vector",
+            "family_threats",
+            "cartel_recruitment",
+        ],
+    },
+    "slavery_luong": {
+        "title": "Luong",
+        "citation": "United States v. Thuy Tien Luong (W.D.N.C.)",
+        "statute": "18 U.S.C. § 1589",
+        "modality": "slavery",
+        "corpus_id": "slavery_luong",
+        "defendant": "Thuy Tien Luong",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "forced_labor",
+            "debt_bondage",
+            "pure_servitude",
+            "no_trafficking_vector",
+            "threat_to_expose",
         ],
     },
 

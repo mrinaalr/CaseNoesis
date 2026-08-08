@@ -1485,9 +1485,9 @@ _TYPOLOGIES = {
     },
     "trafficking": {
         "title": "Trafficking",
-        "tagline": "Commercial exploitation networks",
-        "statute": "18 U.S.C. § 1591(a) (sex trafficking); § 1594(c) (conspiracy)",
-        "summary": "Traffickers recruit and maintain victims through classifieds, social platforms, and encrypted messaging, lowering the cost of coordination across a distributed enterprise. In <em>United States v. Chase Anthony Young</em>, a Dallas operator ran a sex-trafficking organization dating to at least 2017 with nine identified victims. He pled guilty to causing three adult victims to engage in commercial sex by force, fraud, or coercion, placing online ads, renting hotel rooms, setting pricing and rules, and taking all proceeds while victims received beatings and scars, and was sentenced to 30 years in federal prison. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-ndtx/pr/dallas-man-sentenced-30-years-federal-prison-sex-trafficking\" target=\"_blank\" rel=\"noopener\">Sentencing (Jun 2026)</a></span>",
+        "tagline": "Recruitment, transport, or harboring for commercial exploitation",
+        "statute": "18 U.S.C. § 1590 (trafficking into servitude or forced labor); § 1591(a) (sex trafficking); § 1594(c) (conspiracy)",
+        "summary": "Trafficking is the recruitment, transportation, or harboring of persons for the purposes of exploitation, most frequently commercial sexual exploitation or compelled labor. Platform surfaces such as classifieds, social apps, and encrypted messaging lower the cost of acquisition and maintenance. In <em>United States v. Chase Anthony Young</em>, a Dallas operator ran a sex-trafficking organization dating to at least 2017 with nine identified victims. He pled guilty to causing three adult victims to engage in commercial sex by force, fraud, or coercion, placing online ads, renting hotel rooms, setting pricing and rules, and taking all proceeds while victims received beatings and scars, and was sentenced to 30 years in federal prison. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-ndtx/pr/dallas-man-sentenced-30-years-federal-prison-sex-trafficking\" target=\"_blank\" rel=\"noopener\">Sentencing (Jun 2026)</a></span>",
         "phases": [
             ("Initial contact", True, "Recruitment via ads, DMs, or false employment offers."),
             ("Conditioning", True, "Dependency, isolation, and debt bondage establishment."),
@@ -1524,6 +1524,20 @@ _TYPOLOGIES = {
             ("Maintenance", True, "Threat renewal and platform-hopping to evade removal."),
         ],
         "harms": ["Financial loss", "Psychological trauma", "Reputational harm", "Self-harm risk"],
+    },
+    "slavery": {
+        "title": "Slavery",
+        "tagline": "Compelled labor through force, fraud, or coercion",
+        "statute": "18 U.S.C. § 1581 (peonage); § 1589 (forced labor); § 1584 (involuntary servitude); § 1594 (attempt / conspiracy)",
+        "summary": "Slavery is compelled labor or service through force, fraud, or coercion: peonage and involuntary servitude that extract work from a person under threat. Trafficking may deliver the victim; slavery is the compelled-labor offense itself. In <em>United States v. Ibanez-Olea</em>, a Juarez Cartel recruiter smuggled victims from Mexico, harbored them in Highland Park, Illinois, and forced labor to pay fabricated debts under threats to their families, receiving 108 months in July 2026. In <em>United States v. Thuy Tien Luong</em>, a Charlotte nail-salon owner compelled an existing employee through physical violence, a fabricated $180,000 debt contract, paycheck confiscation, and threats of violence and reputational harm, among other coercive means. <span class=\"typ-source-links\"><a href=\"https://www.justice.gov/usao-ndil/pr/cartel-member-who-trafficked-victims-mexico-chicagoland-forced-labor-sentenced-more-9\" target=\"_blank\" rel=\"noopener\">Sentencing — Ibanez-Olea (Jul 2026)</a> · <a href=\"https://www.justice.gov/opa/pr/north-carolina-nail-salon-owner-convicted-forced-labor\" target=\"_blank\" rel=\"noopener\">Conviction — Luong</a></span>",
+        "phases": [
+            ("Initial contact", True, "Recruitment, hire, or custody of a worker already in place."),
+            ("Conditioning", True, "Fabricated debt, isolation, and threat cycles that make exit costly."),
+            ("Control", False, "Harbor, withhold documents, or threaten family / immigration exposure."),
+            ("Exploitation", True, "Compelled labor or service under peonage or involuntary servitude."),
+            ("Maintenance", True, "Continued coercion until escape, rescue, or prosecution."),
+        ],
+        "harms": ["Forced labor", "Debt bondage", "Psychological coercion", "Physical endangerment", "Family intimidation"],
     },
 }
 
@@ -1858,6 +1872,7 @@ _TYPOLOGY_GRAPH_IDS: dict[str, tuple[str, ...]] = {
     "racketeering-enterprises": ("racketeering",),
     "extortion": ("extortion_ESM",),
     "trafficking": ("trafficking_ESM",),
+    "slavery": ("slavery_ibanez", "slavery_luong"),
 }
 
 _BACKBONE_PHASE_TYPES = frozenset({
@@ -1998,6 +2013,21 @@ _TYPOLOGY_CASE_TAGS: dict[str, tuple[str, ...]] = {
         "operator pricing and rule-setting",
         "earnings confiscation",
         "30-year federal sentence",
+    ),
+    # Reserved chips for slavery ESM cases (also used when machines render).
+    "slavery_ibanez": (
+        "forced labor with trafficking vector",
+        "cartel recruitment from Mexico",
+        "fabricated debt peonage",
+        "threats against victims' families",
+        "108-month federal sentence",
+    ),
+    "slavery_luong": (
+        "pure forced labor / servitude",
+        "no trafficking or transport step",
+        "fabricated $180,000 debt contract",
+        "threats to expose personal information",
+        "nail-salon workplace compulsion",
     ),
 }
 
@@ -2470,13 +2500,13 @@ def _typology_machine_block_html(state_machine: dict, case_strip: str, show_hint
         else ""
     )
     return (
+        f"{case_strip}"
         '<section class="typ-machine-wrap" aria-label="Interactive state machine">'
         f"{hint}"
         '<div class="typ-machine-scroll"><div class="typ-machine-canvas"></div></div>'
         '<div class="typ-machine-legend"></div>'
         f'<script type="application/json" class="typ-machine-payload">{payload}</script>'
         "</section>"
-        f"{case_strip}"
     )
 
 
@@ -2536,19 +2566,19 @@ async def serve_typology(typology_slug: str):
     html = html.replace("{{SOURCE_LINKS}}", source_links)
     html = html.replace("{{SENTENCING_EMBED}}", sentencing_embed)
     graph_ids = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip(), ())
-    modality_label = meta["title"].upper()
-    from state_machines.iris import is_esm_case
+    from state_machines.iris import is_esm_case, get_case_meta as _get_case_meta
     graph_entries: list[dict] = []
     for graph_id in graph_ids:
+        case_modality = (_get_case_meta(graph_id).get("title") or graph_id).upper()
         if is_esm_case(graph_id):
-            entry = _load_esm_typology_entry(graph_id, modality_label=modality_label)
+            entry = _load_esm_typology_entry(graph_id, modality_label=case_modality)
             if entry:
                 graph_entries.append(entry)
             continue
         graph = _load_typology_graph(graph_id)
         if not graph:
             continue
-        entry = _parse_typology_graph(graph, graph_id, modality_label=modality_label)
+        entry = _parse_typology_graph(graph, graph_id, modality_label=case_modality)
         if entry:
             graph_entries.append(entry)
 

@@ -1,0 +1,277 @@
+# Forced-labor ESM — United States v. Gladys Ibanez-Olea (N.D. Ill.)
+# Split from CASE-UCO-SDK extensions/forced-labor/forced-labor-exemplar.ttl
+# for CaseNoesis typology wiring (one trajectory per graph file).
+# Source: state_machines/data/press release slavery ibanez.pdf
+# Press: https://www.justice.gov/usao-ndil/pr/cartel-member-who-trafficked-victims-mexico-chicagoland-forced-labor-sentenced-more-9
+
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix fl: <http://example.org/ontology/forced-labor/> .
+@prefix flx: <http://example.org/forced-labor/machine/> .
+@prefix ibx: <http://example.org/forced-labor/ibanez/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ibx:org-juarez-cartel a uco-core:UcoObject,
+        uco-identity:Organization ;
+    uco-core:description "Transnational criminal organization in which Ibanez-Olea served as a mid-level member / recruiter. Source: Ibanez PR (government sentencing memorandum quote: 'used her role as a recruiter in the cartel')." ;
+    uco-core:name "Juarez Cartel" .
+
+flx:model a traj:StateMachineModel ;
+    traj:hasTransition flx:transition-1,
+        flx:transition-2,
+        flx:transition-3 ;
+    traj:hasTransitionEstimate flx:estimate-1,
+        flx:estimate-2,
+        flx:estimate-3 ;
+    traj:initialState fl:Recruitment ;
+    traj:learnedFrom ibx:trajectory-highland-park ;
+    prov:wasGeneratedBy flx:action-estimate-transitions ;
+    uco-core:name "Forced-labor (Ibanez) state-machine estimate (v0)" .
+
+ibx:action-coerce a fl:a_coerce,
+        uco-action:Action ;
+    prov:wasDerivedFrom ibx:evidence-threats ;
+    uco-action:instrument ibx:affordance-kin-threat-surface ;
+    uco-action:performer ibx:person-ibanez ;
+    uco-core:name "Threaten serious harm to maintain captivity and compliance" .
+
+ibx:action-compel-labor a fl:a_compel_labor,
+        uco-action:Action ;
+    prov:wasDerivedFrom ibx:evidence-forced-labor-wages ;
+    uco-action:instrument ibx:affordance-opaque-labor-placement ;
+    uco-action:performer ibx:person-ibanez ;
+    uco-core:name "Force victims to work multiple jobs" .
+
+ibx:action-harbor a fl:a_harbor,
+        uco-action:Action ;
+    prov:wasDerivedFrom ibx:evidence-recruit-smuggle-harbor ;
+    uco-action:instrument ibx:affordance-private-residence ;
+    uco-action:performer ibx:person-ibanez ;
+    uco-core:name "Harbor victims in Highland Park home" .
+
+ibx:action-seize-wages a fl:a_seize_wages,
+        uco-action:Action ;
+    prov:wasDerivedFrom ibx:evidence-forced-labor-wages ;
+    uco-action:instrument ibx:affordance-wage-debt-rails ;
+    uco-action:performer ibx:person-ibanez ;
+    uco-core:name "Take victims' earned income under claimed debts" .
+
+ibx:action-smuggle a fl:a_smuggle,
+        uco-action:Action ;
+    prov:wasDerivedFrom ibx:evidence-recruit-smuggle-harbor ;
+    uco-action:instrument ibx:affordance-clandestine-transport ;
+    uco-action:performer ibx:person-ibanez ;
+    uco-core:name "Arrange smuggling of victims from Mexico into the United States" .
+
+ibx:confidence-1 a uco-core:ConfidenceFacet ;
+    uco-core:confidence "88"^^xsd:nonNegativeInteger .
+
+ibx:confidence-2 a uco-core:ConfidenceFacet ;
+    uco-core:confidence "90"^^xsd:nonNegativeInteger .
+
+ibx:confidence-3 a uco-core:ConfidenceFacet ;
+    uco-core:confidence "90"^^xsd:nonNegativeInteger .
+
+ibx:confidence-4 a uco-core:ConfidenceFacet ;
+    uco-core:confidence "88"^^xsd:nonNegativeInteger .
+
+ibx:instant-2022-09-01 a time:Instant ;
+    time:inXSDDateTimeStamp "2022-09-01T00:00:00Z"^^xsd:dateTimeStamp .
+
+ibx:instant-2024-02-29 a time:Instant ;
+    time:inXSDDateTimeStamp "2024-02-29T23:59:00Z"^^xsd:dateTimeStamp .
+
+ibx:affordance-kin-threat-surface a uco-core:UcoObject ;
+    uco-core:name "Cross-border kin vulnerability" ;
+    uco-core:description "Neutral property: transnational family ties and geographic distance afford credible threats against relatives the victim cannot protect. Misuse: Ibanez threatened to kill victims' families and sell victims into slavery to maintain captivity (Ibanez PR)." .
+
+ibx:affordance-wage-debt-rails a uco-core:UcoObject ;
+    uco-core:name "Wage-payment and debt-collection channels" ;
+    uco-core:description "Neutral property: ordinary wage payout and claimed-debt repayment rails afford diverting a worker's earnings. Misuse: Ibanez took victims' income as repayment of debts she claimed they owed so entire salaries belonged to her (Ibanez PR)." .
+
+ibx:affordance-private-residence a uco-core:UcoObject ;
+    uco-core:name "Private residential enclosure" ;
+    uco-core:description "Neutral property: private housing affords custody and daily life outside public or workplace oversight. Misuse: Ibanez harbored victims in her Highland Park home under harsh conditions (Ibanez PR)." .
+
+ibx:affordance-opaque-labor-placement a uco-core:UcoObject ;
+    uco-core:name "Opaque multi-employer labor placement" ;
+    uco-core:description "Neutral property: fragmented, weakly supervised multi-job placement affords compelling work without a single visible employer of record. Misuse: Ibanez forced victims to work multiple jobs while harbored (Ibanez PR)." .
+
+ibx:affordance-clandestine-transport a uco-core:UcoObject ;
+    uco-core:name "Clandestine cross-border transport networks" ;
+    uco-core:description "Neutral property: covert Mexico-to-US movement channels afford relocating people outside lawful inspection. Misuse: Ibanez arranged smuggling of recruited victims into the United States (Ibanez PR)." .
+
+ibx:phase-1 a traj:PhaseAssertion ;
+    traj:assertsState fl:Recruitment ;
+    traj:atInterval ibx:interval-scheme ;
+    traj:sequenceIndex "0"^^xsd:nonNegativeInteger ;
+    prov:wasDerivedFrom ibx:evidence-recruit-smuggle-harbor ;
+    uco-core:description "Ibanez-Olea recruited victims in Mexico for the Juarez Cartel forced-labor scheme. Interval bounded by the scheme span given in the source (Sept. 2022 – Feb. 2024). Source: Ibanez PR." ;
+    uco-core:hasFacet ibx:confidence-1 ;
+    uco-core:name "Occupancy assertion 0 — Recruitment" .
+
+ibx:phase-2 a traj:PhaseAssertion ;
+    traj:assertsState fl:Control ;
+    traj:atInterval ibx:interval-scheme ;
+    traj:sequenceIndex "1"^^xsd:nonNegativeInteger ;
+    prov:wasDerivedFrom ibx:evidence-recruit-smuggle-harbor,
+        ibx:evidence-threats ;
+    uco-core:description "Victims smuggled into the United States and harbored in the Highland Park home under harsh conditions; threats of serious harm (kill families / sell into slavery) maintained captivity. Source: Ibanez PR." ;
+    uco-core:hasFacet ibx:confidence-2 ;
+    uco-core:name "Occupancy assertion 1 — Control" .
+
+ibx:phase-3 a traj:PhaseAssertion ;
+    traj:assertsState fl:ForcedLabor ;
+    traj:atInterval ibx:interval-scheme ;
+    traj:sequenceIndex "2"^^xsd:nonNegativeInteger ;
+    prov:wasDerivedFrom ibx:evidence-forced-labor-wages ;
+    uco-core:description "Victims forced to work multiple jobs by means of serious harm or abuse and threats thereof. Source: Ibanez PR." ;
+    uco-core:hasFacet ibx:confidence-3 ;
+    uco-core:name "Occupancy assertion 2 — ForcedLabor" .
+
+ibx:phase-4 a traj:PhaseAssertion ;
+    traj:assertsState fl:WageAppropriation ;
+    traj:atInterval ibx:interval-scheme ;
+    traj:isTerminal true ;
+    traj:sequenceIndex "3"^^xsd:nonNegativeInteger ;
+    traj:terminalPolarity "completed" ;
+    prov:wasDerivedFrom ibx:evidence-forced-labor-wages ;
+    uco-core:description "Ibanez-Olea took any income victims earned to pay off debts she claimed they owed ('entire salaries belonged to defendant'). Modeled victim-journey chain finished; terminalPolarity is completed. Later plea (Feb. 2026) and 108-month sentence (July 2026) are outside this machine and do not convert a finished chain into disrupted." ;
+    uco-core:hasFacet ibx:confidence-4 ;
+    uco-core:name "Occupancy assertion 3 — WageAppropriation" .
+
+ibx:trajectory-highland-park a traj:Trajectory ;
+    traj:hasPhaseAssertion ibx:phase-1,
+        ibx:phase-2,
+        ibx:phase-3,
+        ibx:phase-4 ;
+    uco-core:description "United States v. Gladys Ibanez-Olea (N.D. Ill.) — 4-phase victim-journey from Mexico recruitment through wage appropriation; modeled chain completed (later prosecution is not mid-chain disruption)." ;
+    uco-core:name "Forced-labor trajectory: Gladys Ibanez-Olea, Highland Park harboring scheme" .
+
+flx:estimate-1 a traj:TransitionEstimate ;
+    traj:ofTransition flx:transition-1 ;
+    traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data (n=2 trajectories in this exemplar)."^^xsd:string ;
+    traj:transitionProbability 0.85 ;
+    prov:wasGeneratedBy flx:action-estimate-transitions ;
+    uco-core:name "P(Recruitment -> Control)" .
+
+flx:estimate-2 a traj:TransitionEstimate ;
+    traj:ofTransition flx:transition-2 ;
+    traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data — this is also the transition at which the Luong trajectory terminates disrupted."^^xsd:string ;
+    traj:transitionProbability 0.90 ;
+    prov:wasGeneratedBy flx:action-estimate-transitions ;
+    uco-core:name "P(Control -> ForcedLabor)" .
+
+flx:estimate-3 a traj:TransitionEstimate ;
+    traj:ofTransition flx:transition-3 ;
+    traj:sampleBasis "Illustrative estimate for ESM demonstration; not derived from case-specific frequency data (traversed by Ibanez completed run only in this exemplar)."^^xsd:string ;
+    traj:transitionProbability 0.75 ;
+    prov:wasGeneratedBy flx:action-estimate-transitions ;
+    uco-core:name "P(ForcedLabor -> WageAppropriation)" .
+
+flx:trigger-labor-compelled a uco-core:UcoObject ;
+    uco-core:name "Trigger: victim compelled to perform labor" .
+
+flx:trigger-victim-under-control a uco-core:UcoObject ;
+    uco-core:name "Trigger: victim placed under offender control" .
+
+flx:trigger-wages-taken a uco-core:UcoObject ;
+    uco-core:name "Trigger: victim wages appropriated under claimed debt" .
+
+ibx:evidence-threats a uco-core:UcoObject ;
+    prov:wasDerivedFrom ibx:evidence-press-release ;
+    uco-core:description "Evidence of cruel treatment; threats she made to victims that she would kill their families and sell them into slavery. Source: Ibanez PR (government sentencing recommendation basis)." ;
+    uco-core:name "Threats of serious harm" .
+
+flx:tool-esm-estimator a uco-tool:Tool ;
+    uco-core:description "version 0.1.0-dev" ;
+    uco-core:name "ESM trajectory estimator (illustrative)" .
+
+flx:transition-1 a traj:Transition ;
+    traj:enactsAction ibx:action-harbor ;
+    traj:fromState fl:Recruitment ;
+    traj:toState fl:Control ;
+    traj:trigger flx:trigger-victim-under-control ;
+    uco-core:name "Recruitment -> Control" .
+
+flx:transition-2 a traj:Transition ;
+    traj:enactsAction ibx:action-compel-labor ;
+    traj:fromState fl:Control ;
+    traj:toState fl:ForcedLabor ;
+    traj:trigger flx:trigger-labor-compelled ;
+    uco-core:name "Control -> ForcedLabor" .
+
+flx:transition-3 a traj:Transition ;
+    traj:enactsAction ibx:action-seize-wages ;
+    traj:fromState fl:ForcedLabor ;
+    traj:toState fl:WageAppropriation ;
+    traj:trigger flx:trigger-wages-taken ;
+    uco-core:name "ForcedLabor -> WageAppropriation" .
+
+fl:WageAppropriation a traj:State,
+        skos:Concept ;
+    skos:definition "Terminal modeled endpoint for a finished chain: offender takes the victim's earned income and/or enforces debt bondage over wages claimed as repayment of a fabricated or inflated debt."@en ;
+    skos:inScheme fl:PhaseScheme ;
+    skos:prefLabel "Wage appropriation"@en ;
+    uco-core:name "Wage appropriation" .
+
+ibx:evidence-press-release a uco-core:UcoObject ;
+    uco-core:description "Public DOJ press release dated 2026-07-24 announcing the 108-month sentence of Gladys Ibanez-Olea. Document-level citation only (no pinpoint paragraph numbers asserted beyond narrative paraphrase). Source URL: https://www.justice.gov/usao-ndil/pr/cartel-member-who-trafficked-victims-mexico-chicagoland-forced-labor-sentenced-more-9" ;
+    uco-core:name "USAO-NDIL Ibanez-Olea forced-labor sentencing press release" .
+
+fl:Control a traj:State,
+        skos:Concept ;
+    skos:definition "Victim is held under the offender's control — harboring/captivity and/or workplace domination — by force, threats of serious harm, fraud, or coercion, including fabricated debt."@en ;
+    skos:inScheme fl:PhaseScheme ;
+    skos:prefLabel "Control"@en ;
+    uco-core:name "Control" .
+
+fl:ForcedLabor a traj:State,
+        skos:Concept ;
+    skos:definition "Victim is compelled to work by means of serious harm or abuse, or threats of serious harm or abuse. See 18 U.S.C. § 1589 (https://www.law.cornell.edu/uscode/text/18/1589)."@en ;
+    skos:inScheme fl:PhaseScheme ;
+    skos:prefLabel "Forced labor"@en ;
+    uco-core:name "Forced labor" .
+
+fl:Recruitment a traj:State,
+        skos:Concept ;
+    skos:definition "Victim is brought into the forced-labor scheme (recruitment into an employment or trafficking relationship that leads to compelled labor). See 18 U.S.C. § 1589 and TVPA victim-journey practice."@en ;
+    skos:inScheme fl:PhaseScheme ;
+    skos:prefLabel "Recruitment"@en ;
+    uco-core:name "Recruitment" .
+
+ibx:evidence-forced-labor-wages a uco-core:UcoObject ;
+    prov:wasDerivedFrom ibx:evidence-press-release ;
+    uco-core:description "Ibanez-Olea forced the victims to work, took any income they earned to pay off debts she claimed the victims owed, and effectively held the victims in captivity under harsh conditions as she continued to demand they pay her. AUSA Zenner: defendant created 'a cadre of indentured servants whose entire salaries belonged to defendant.' Source: Ibanez PR." ;
+    uco-core:name "Forced labor and wage appropriation facts" .
+
+ibx:evidence-recruit-smuggle-harbor a uco-core:UcoObject ;
+    prov:wasDerivedFrom ibx:evidence-press-release ;
+    uco-core:description "Ibanez-Olea would recruit victims in Mexico, arrange for them to be smuggled into the United States, and then harbor them in her home in Highland Park, Illinois. Source: Ibanez PR." ;
+    uco-core:name "Recruitment, smuggling, and harboring facts" .
+
+ibx:interval-scheme a time:ProperInterval ;
+    time:hasBeginning ibx:instant-2022-09-01 ;
+    time:hasEnd ibx:instant-2024-02-29 .
+
+flx:action-estimate-transitions a uco-action:Action ;
+    prov:wasAssociatedWith flx:tool-esm-estimator ;
+    uco-action:instrument flx:tool-esm-estimator ;
+    uco-core:name "Estimate forced-labor transition probabilities (illustrative)" .
+
+fl:PhaseScheme a skos:ConceptScheme ;
+    dcterms:source "United States v. Gladys Ibanez-Olea (N.D. Ill.), USAO-NDIL press release 2026-07-24; United States v. Thuy Tien Luong (W.D.N.C.), DOJ OPA press release 2021-01-08"@en ;
+    skos:prefLabel "Forced-labor (debt-bondage) offense phases"@en .
+
+ibx:person-ibanez a uco-core:UcoObject,
+        uco-identity:Person ;
+    uco-core:description "Age 37. Mid-level member of the Juarez Cartel. From September 2022 to February 2024 recruited victims in Mexico, arranged smuggling into the United States, harbored them in her Highland Park, Illinois home, forced them to work multiple jobs, and took their income under claimed debts. Pleaded guilty (February 2026) to illegally bringing unauthorized aliens into the United States and to forcing individuals to work by means of serious harm or abuse and threats of serious harm or abuse. Sentenced 2026-07-21 by U.S. District Judge Robert W. Gettleman to 108 months in prison. Source: Ibanez PR." ;
+    uco-core:name "Gladys Ibanez-Olea" .
+
