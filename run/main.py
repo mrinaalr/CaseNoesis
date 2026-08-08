@@ -1539,6 +1539,29 @@ _TYPOLOGIES = {
         ],
         "harms": ["Forced labor", "Debt bondage", "Psychological coercion", "Physical endangerment", "Family intimidation"],
     },
+    "icac": {
+        "title": "ICAC",
+        "tagline": "Internet Crimes Against Children",
+        "statute": "18 U.S.C. § 2422(b) (enticement); § 2251 (production); § 2252 / § 2252A (CSAM); § 1591 (sex trafficking of a minor)",
+        "summary": "Internet Crimes Against Children (ICAC) is the U.S. enforcement response for technology-facilitated child sexual exploitation: online enticement, CSAM production and distribution, sextortion, sex trafficking of minors, and related offenses. It is enforced through the OJJDP-funded ICAC Task Force Program — a multinational, multijurisdictional network of 61 coordinated task forces spanning more than 6,200 federal, state, local, and Tribal law enforcement and prosecutorial agencies that run proactive and reactive investigations, forensic exams, and prosecutions. Much of the caseload is tip-driven: NCMEC’s CyberTipline is the centralized reporting channel for suspected online exploitation (public and electronic service providers), receiving on the order of tens of millions of reports a year — 21.3 million in 2025 alone. <span class=\"typ-source-links\"><a href=\"https://ojjdp.ojp.gov/programs/internet-crimes-against-children-task-force-program\" target=\"_blank\" rel=\"noopener\">OJJDP — ICAC Task Force Program</a> · <a href=\"https://www.justice.gov/opa/pr/operation-grayskull-culminates-lengthy-sentences-managers-dark-web-site-dedicated-sexual\" target=\"_blank\" rel=\"noopener\">Sentencing — Operation Grayskull (CEOS)</a></span>",
+        # Sentencing embed (source rail keeps OJJDP / CaseLinker links).
+        "sentencing_source_url": (
+            "https://www.justice.gov/opa/pr/operation-grayskull-culminates-lengthy-sentences-managers-dark-web-site-dedicated-sexual"
+        ),
+        "phases": [
+            ("Initial contact", True, "Platform-mediated approach to a minor or co-conspirator."),
+            ("Conditioning", True, "Trust-building, normalization, or enterprise recruitment."),
+            ("Sexualization / specialization", False, "Content escalation, role differentiation, or leverage acquisition."),
+            ("Exploitation", True, "Enticement, production, coercion, enterprise distribution, or trafficking."),
+            ("Maintenance", True, "Continued contact, storage, or gated distribution until terminal."),
+        ],
+        "harms": [
+            "Sexual exploitation of minors",
+            "CSAM production and distribution",
+            "Coercion and psychological trauma",
+            "Enterprise-scale facilitation",
+        ],
+    },
 }
 
 
@@ -1621,6 +1644,12 @@ def _collect_typology_source_embed_allowlist() -> frozenset[str]:
     """Exact sentencing URLs referenced by typology pages — not an open DOJ proxy."""
     allowed: set[str] = set()
     for meta in _TYPOLOGIES.values():
+        for href in (
+            str(meta.get("sentencing_source_url") or ""),
+        ):
+            normalized = _normalize_typology_source_embed_url(href)
+            if normalized:
+                allowed.add(normalized)
         summary = str(meta.get("summary") or "")
         m = re.search(
             r'<span class="typ-source-links">(.*?)</span>',
@@ -1829,32 +1858,12 @@ def _cached_doj_source_embed_html(url: str) -> str:
     return page
 
 
-def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
-    summary = str(summary_html or "")
-    m = re.search(r'<span class="typ-source-links">(.*?)</span>', summary, flags=re.IGNORECASE | re.DOTALL)
-    if not m:
-        return summary, "", ""
-    source_links = m.group(1).strip()
-    clean_summary = re.sub(
-        r'\s*<span class="typ-source-links">.*?</span>\s*',
-        "",
-        summary,
-        flags=re.IGNORECASE | re.DOTALL,
-    ).strip()
-
-    sentencing_url = ""
-    for href, label in re.findall(r'<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', source_links, flags=re.IGNORECASE | re.DOTALL):
-        if "sentenc" in re.sub(r"<[^>]+>", "", label).lower():
-            sentencing_url = href
-            break
-
+def _sentencing_embed_html(sentencing_url: str) -> str:
     if not sentencing_url:
-        return clean_summary, source_links, ""
-
+        return ""
     safe_url = sentencing_url.replace('"', "&quot;")
-    # Same-origin proxy (layout matches Railway; justice.gov blocks direct iframes).
     embed_src = f"/api/typology/source-embed?url={quote(sentencing_url, safe='')}"
-    embed = (
+    return (
         '<section class="typ-source-embed" aria-label="Sentencing source embed">'
         "<h3>Sentencing source</h3>"
         f'<iframe src="{embed_src}" title="Sentencing source" loading="eager" '
@@ -1864,7 +1873,37 @@ def _extract_sources_from_summary(summary_html: str) -> tuple[str, str, str]:
         "</p>"
         "</section>"
     )
-    return clean_summary, source_links, embed
+
+
+def _extract_sources_from_summary(
+    summary_html: str,
+    *,
+    sentencing_url: str = "",
+) -> tuple[str, str, str]:
+    summary = str(summary_html or "")
+    m = re.search(r'<span class="typ-source-links">(.*?)</span>', summary, flags=re.IGNORECASE | re.DOTALL)
+    if not m:
+        return summary, "", _sentencing_embed_html(sentencing_url)
+    source_links = m.group(1).strip()
+    clean_summary = re.sub(
+        r'\s*<span class="typ-source-links">.*?</span>\s*',
+        "",
+        summary,
+        flags=re.IGNORECASE | re.DOTALL,
+    ).strip()
+
+    resolved_sentencing_url = (sentencing_url or "").strip()
+    if not resolved_sentencing_url:
+        for href, label in re.findall(
+            r'<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+            source_links,
+            flags=re.IGNORECASE | re.DOTALL,
+        ):
+            if "sentenc" in re.sub(r"<[^>]+>", "", label).lower():
+                resolved_sentencing_url = href
+                break
+
+    return clean_summary, source_links, _sentencing_embed_html(resolved_sentencing_url)
 
 
 _TYPOLOGY_GRAPH_IDS: dict[str, tuple[str, ...]] = {
@@ -2029,6 +2068,36 @@ _TYPOLOGY_CASE_TAGS: dict[str, tuple[str, ...]] = {
         "threats to expose personal information",
         "nail-salon workplace compulsion",
     ),
+    # ICAC canonical machines (CaseLinker /api/lifecycle/canonical ids).
+    "enticement": (
+        "§2422(b) enticement",
+        "platform contact",
+        "pseudonymous approach",
+        "PACER-grounded lifecycle",
+    ),
+    "production": (
+        "CSAM production",
+        "directed media capture",
+        "channel migration",
+        "PACER-grounded lifecycle",
+    ),
+    "sextortion": (
+        "coercion leverage cycle",
+        "threat mechanism",
+        "sextortion modality",
+        "PACER-grounded lifecycle",
+    ),
+    "enterprise": (
+        "gaming-funnel recruitment",
+        "gated distribution",
+        "parallel grooming / production",
+        "PACER-grounded lifecycle",
+    ),
+    "trafficking": (
+        "sex trafficking of a minor",
+        "trust-building to exploitation",
+        "PACER-grounded lifecycle",
+    ),
 }
 
 
@@ -2070,9 +2139,9 @@ def _esm_phase_style(index: int, total: int) -> str:
 
 
 def _esm_domain_extension_prefix(state_iris: list[str]) -> str | None:
-    """Return the SDK domain-extension prefix (ef/ex/traf) when every state
+    """Return the SDK domain-extension prefix (ef/ex/traf/fl) when every state
     IRI is in that extension; None when states are case-local traj:State
-    instances with no domain extension (e.g. racketeering)."""
+    instances (e.g. racketeering phases under rc:)."""
     from state_machines.iris import ESM_DISPLAY_PREFIXES
 
     if not state_iris:
@@ -2088,6 +2157,16 @@ def _esm_domain_extension_prefix(state_iris: list[str]) -> str | None:
         else:
             return None
     return next(iter(matched)) if len(matched) == 1 else None
+
+
+def _esm_graph_uses_rico(cg, case_graph) -> bool:
+    """True when the case graph asserts a rico:RacketeeringEnterprise
+    (CASE-UCO-SDK rico extension — enterprise/roles, not a phase SKOS)."""
+    from rdflib import RDF, URIRef
+
+    rico_enterprise = URIRef("http://example.org/ontology/rico/RacketeeringEnterprise")
+    ctx = cg.get_context(case_graph)
+    return next(ctx.subjects(RDF.type, rico_enterprise), None) is not None
 
 
 def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) -> dict | None:
@@ -2119,7 +2198,8 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
     total = len(details)
     meta = get_case_meta(case_id)
     domain_prefix = _esm_domain_extension_prefix([p["uri"] for p in details])
-    has_domain_extension = domain_prefix is not None
+    uses_rico = _esm_graph_uses_rico(cg, graph_uri)
+    has_domain_extension = domain_prefix is not None or uses_rico
 
     sm_phases: list[dict[str, Any]] = []
     phases: list[tuple[str, str, str]] = []
@@ -2187,13 +2267,24 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
     citation = meta.get("citation", "")
     case_tags = _TYPOLOGY_CASE_TAGS.get(case_id, ())
     role_tags = "".join(f"<span>{role}</span>" for role in case_tags)
-    if has_domain_extension:
+    if domain_prefix:
         domain_badge = ""
         phase_legend = (
             '<p class="typ-phase-legend">'
             f"State names are this machine\u2019s own {domain_prefix}: SDK "
             "domain-extension states (traj:assertsState); terminal marks the "
             "final occupied state."
+            "</p>"
+        )
+    elif uses_rico:
+        domain_badge = ""
+        phase_legend = (
+            '<p class="typ-phase-legend">'
+            "Enterprise and roles use the CASE-UCO-SDK <code>rico:</code> "
+            "extension (<code>RacketeeringEnterprise</code> / "
+            "<code>EnterpriseRole</code>). Offense phases are case-local "
+            "<code>traj:State</code> instances (<code>rico</code> has no phase "
+            "SKOS); terminal marks the final occupied state."
             "</p>"
         )
     else:
@@ -2213,14 +2304,7 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
     domain_meta = (
         f'<div class="typ-domain-meta">{domain_badge}</div>' if domain_badge else ""
     )
-    case_strip = (
-        '<section class="typ-case-strip" aria-label="Instantiated case">'
-        '<div class="typ-section-label">Instantiated case</div>'
-        f'<p class="typ-case-caption">{citation}</p>'
-        f"{domain_meta}"
-        f'<div class="typ-affordance-tags typ-role-tags">{role_tags}</div>'
-        "</section>"
-    )
+    case_strip = _typology_case_details_html(citation, role_tags, domain_meta)
 
     state_machine = {
         "modality": case_id.replace("_", "-"),
@@ -2228,7 +2312,7 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
         "accent": "#4a7a9b",
         "citation": citation,
         "enterprise_roles": [],
-        "domain_extension": domain_prefix,
+        "domain_extension": domain_prefix or ("rico" if uses_rico else None),
         "no_domain_extension": not has_domain_extension,
         "phases": sm_phases,
         "transitions": transitions,
@@ -2243,6 +2327,222 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
         "phase_cols": f"cols-{len(phases)}",
         "phase_legend": phase_legend,
     }
+
+
+# Public CaseLinker Railway API — same shape as local build_lifecycle_payload().
+_CASELINKER_API_BASE = (
+    os.environ.get("CASELINKER_API_URL") or "https://caselinker.up.railway.app"
+).rstrip("/")
+_ICAC_CANONICAL_CACHE: dict[str, Any] = {"ts": 0.0, "cases": None}
+_ICAC_CANONICAL_TTL_S = 300.0
+
+
+def _fetch_caselinker_canonical_cases() -> list[dict[str, Any]]:
+    """Load the five ICAC canonical machines from CaseLinker public API.
+
+    Prefers GET {CASELINKER_API_URL}/api/lifecycle/canonical (no key, rate-limited).
+    Falls back to local build_lifecycle_payload() so offline/dev still renders.
+    """
+    cached = _ICAC_CANONICAL_CACHE.get("cases")
+    ts = float(_ICAC_CANONICAL_CACHE.get("ts") or 0.0)
+    if cached is not None and (time.time() - ts) < _ICAC_CANONICAL_TTL_S:
+        return cached
+
+    cases: list[dict[str, Any]] | None = None
+    url = f"{_CASELINKER_API_BASE}/api/lifecycle/canonical"
+    try:
+        resp = requests.get(url, timeout=12)
+        if resp.status_code == 200:
+            payload = resp.json()
+            remote = payload.get("canonical_cases") or []
+            if isinstance(remote, list) and remote:
+                cases = remote
+                logging.getLogger(__name__).info(
+                    "ICAC typology: loaded %s canonical cases from %s",
+                    len(cases),
+                    url,
+                )
+    except Exception as exc:
+        logging.getLogger(__name__).warning(
+            "ICAC typology: CaseLinker canonical fetch failed (%s); using local fallback",
+            exc,
+        )
+
+    if not cases:
+        from state_machines.lifecycle_api import build_lifecycle_payload
+
+        cases = list(build_lifecycle_payload().get("canonical_cases") or [])
+        logging.getLogger(__name__).info(
+            "ICAC typology: using local lifecycle payload (%s cases)",
+            len(cases),
+        )
+
+    _ICAC_CANONICAL_CACHE["ts"] = time.time()
+    _ICAC_CANONICAL_CACHE["cases"] = cases
+    return cases
+
+
+def _caselinker_phase_style(phase: dict[str, Any]) -> str:
+    if phase.get("is_terminal"):
+        return "terminal"
+    if phase.get("is_fundamental"):
+        return "fundamental"
+    return "variant"
+
+
+def _load_caselinker_typology_entry(case: dict[str, Any]) -> dict[str, Any] | None:
+    """Convert one CaseLinker canonical_cases[] row into a typology machine entry."""
+    case_id = str(case.get("id") or "").strip()
+    phase_rows = case.get("phases") or []
+    if not case_id or not phase_rows:
+        return None
+
+    sm_phases: list[dict[str, Any]] = []
+    phases: list[tuple[str, str, str]] = []
+    states: list[str] = []
+    phase_by_uri: dict[str, dict[str, Any]] = {}
+
+    for phase in phase_rows:
+        style = _caselinker_phase_style(phase)
+        label = _clean_machine_text(phase.get("label") or phase.get("short_type") or "")
+        comment = _clean_machine_text(phase.get("comment") or "")
+        blurb = comment
+        if ". " in blurb:
+            blurb = blurb.split(". ")[0]
+        short_type = str(phase.get("short_type") or label)
+        phase_id = str(phase.get("uri") or f"{case_id}-phase-{phase.get('index')}")
+        entry = {
+            "id": phase_id,
+            "label": label,
+            "comment": comment,
+            "blurb": blurb,
+            "short_type": short_type,
+            "state_label": short_type,
+            "ontology_id": phase.get("type_display") or phase.get("type"),
+            "style": style,
+            "is_fundamental": bool(phase.get("is_fundamental")),
+            "is_variant": style == "variant",
+            "is_terminal": bool(phase.get("is_terminal")),
+            "terminal_polarity": phase.get("terminal_polarity"),
+            "conditioning_mode": "",
+        }
+        sm_phases.append(entry)
+        phase_by_uri[phase_id] = entry
+        phases.append((label, style, blurb))
+        states.append(
+            f"{short_type} [terminal]" if phase.get("is_terminal") else short_type
+        )
+
+    transitions: list[dict[str, Any]] = []
+    affordances: list[tuple[str, str]] = []
+    seen_aff: set[tuple[str, str]] = set()
+
+    for edge in case.get("transitions") or []:
+        from_id = str(edge.get("from_uri") or "")
+        to_id = str(edge.get("to_uri") or "")
+        if not from_id or not to_id:
+            continue
+        aff_name = edge.get("affordance_name")
+        aff_label = _AFFORDANCE_LABELS.get(str(aff_name), aff_name) if aff_name else None
+        transitions.append(
+            {
+                "from_id": from_id,
+                "to_id": to_id,
+                "from_label": edge.get("from_label")
+                or (phase_by_uri.get(from_id) or {}).get("label"),
+                "to_label": edge.get("to_label")
+                or (phase_by_uri.get(to_id) or {}).get("label"),
+                "affordance_name": aff_name,
+                "affordance_label": aff_label,
+                "misuse_description": "",
+            }
+        )
+        if aff_label and (aff_label, "") not in seen_aff:
+            seen_aff.add((aff_label, ""))
+            affordances.append((aff_label, ""))
+
+    # If the API omitted transitions, synthesize sequential edges from phase order.
+    if not transitions and len(sm_phases) > 1:
+        for i in range(len(sm_phases) - 1):
+            src, dst = sm_phases[i], sm_phases[i + 1]
+            aff_iri = (phase_rows[i + 1] or {}).get("affordance_on_arrival")
+            aff_name = _iri_local(aff_iri) if aff_iri else None
+            aff_label = _AFFORDANCE_LABELS.get(str(aff_name), aff_name) if aff_name else None
+            transitions.append(
+                {
+                    "from_id": src["id"],
+                    "to_id": dst["id"],
+                    "from_label": src["label"],
+                    "to_label": dst["label"],
+                    "affordance_name": aff_name,
+                    "affordance_label": aff_label,
+                    "misuse_description": "",
+                }
+            )
+            if aff_label and (aff_label, "") not in seen_aff:
+                seen_aff.add((aff_label, ""))
+                affordances.append((aff_label, ""))
+
+    citation = _clean_machine_text(case.get("citation") or "")
+    modality_label = (
+        case.get("modality_label")
+        or case.get("case_name")
+        or case.get("offense_type")
+        or case_id
+    ).upper()
+    case_tags = _TYPOLOGY_CASE_TAGS.get(case_id, ())
+    role_tags = "".join(f"<span>{role}</span>" for role in case_tags)
+    case_strip = _typology_case_details_html(
+        html_escape(citation),
+        role_tags,
+        (
+            '<div class="typ-domain-meta">'
+            '<a class="typ-domain-badge" href="https://caselinker.up.railway.app/lifecycle" '
+            'target="_blank" rel="noopener" '
+            'title="Loaded from CaseLinker GET /api/lifecycle/canonical">'
+            "CaseLinker state machine API</a>"
+            "</div>"
+        ),
+    )
+    phase_legend = (
+        '<p class="typ-phase-legend">'
+        "Shaded phases · backbone invariant "
+        '(<a href="/typologies#invariants">Law 2</a>). '
+        "Machine serialized from CaseLinker "
+        "<code>/api/lifecycle/canonical</code>."
+        "</p>"
+    )
+    state_machine = {
+        "modality": case_id.replace("_", "-"),
+        "modality_label": modality_label,
+        "accent": "#2f6f7a",
+        "citation": citation,
+        "enterprise_roles": [],
+        "domain_extension": "cac-grooming",
+        "no_domain_extension": False,
+        "phases": sm_phases,
+        "transitions": transitions,
+        "source": "caselinker:/api/lifecycle/canonical",
+    }
+    return {
+        "phases": phases,
+        "states": states,
+        "affordances": affordances,
+        "case_strip": case_strip,
+        "state_machine": state_machine,
+        "phase_cols": f"cols-{len(phases)}",
+        "phase_legend": phase_legend,
+    }
+
+
+def _load_icac_typology_entries() -> list[dict[str, Any]]:
+    """Five ICAC canonical offense machines for /typologies/icac."""
+    entries: list[dict[str, Any]] = []
+    for case in _fetch_caselinker_canonical_cases():
+        entry = _load_caselinker_typology_entry(case)
+        if entry:
+            entries.append(entry)
+    return entries
 
 
 def _phase_style_from_node(node: dict) -> str:
@@ -2403,13 +2703,7 @@ def _parse_typology_graph(graph: dict, graph_id: str, modality_label: str | None
     case_caption = investigation.get("rdfs:label", "")
     case_tags = _TYPOLOGY_CASE_TAGS.get(graph_id, ())
     role_tags = "".join(f"<span>{role}</span>" for role in case_tags)
-    case_strip = (
-        '<section class="typ-case-strip" aria-label="Instantiated case">'
-        '<div class="typ-section-label">Instantiated case</div>'
-        f'<p class="typ-case-caption">{case_caption}</p>'
-        f'<div class="typ-affordance-tags typ-role-tags">{role_tags}</div>'
-        "</section>"
-    )
+    case_strip = _typology_case_details_html(case_caption, role_tags)
 
     state_machine = _build_typology_state_machine(
         graph_id, graph, investigation, phase_nodes, modality_label=modality_label
@@ -2491,7 +2785,47 @@ def _typology_status_html() -> str:
     )
 
 
-def _typology_machine_block_html(state_machine: dict, case_strip: str, show_hint: bool) -> str:
+def _typology_trajectory_label_html() -> str:
+    return (
+        '<div class="typ-section-label">Offense trajectory '
+        '<span class="typ-math">\\(L^{*}_{g,A}\\)</span></div>'
+    )
+
+
+def _typology_case_details_html(
+    citation: str,
+    role_tags: str,
+    domain_meta: str = "",
+) -> str:
+    """Caption + tags only — Instantiated case label is rendered by the caller."""
+    return (
+        f'<p class="typ-case-caption">{citation}</p>'
+        f"{domain_meta}"
+        f'<div class="typ-affordance-tags typ-role-tags">{role_tags}</div>'
+    )
+
+
+def _typology_case_strip_html(
+    citation: str,
+    role_tags: str,
+    domain_meta: str = "",
+) -> str:
+    """Standalone Instantiated case block (non-machine / phase-track pages)."""
+    return (
+        '<section class="typ-case-strip" aria-label="Instantiated case">'
+        '<div class="typ-section-label">Instantiated case</div>'
+        f"{_typology_case_details_html(citation, role_tags, domain_meta)}"
+        "</section>"
+    )
+
+
+def _typology_machine_block_html(
+    state_machine: dict,
+    case_strip: str,
+    show_hint: bool,
+    show_case_label: bool,
+) -> str:
+    """Swimlane + case details. Instantiated case label is emitted once by the section."""
     payload = json.dumps(state_machine, ensure_ascii=False)
     payload = payload.replace("</", "<\\/")
     hint = (
@@ -2499,21 +2833,34 @@ def _typology_machine_block_html(state_machine: dict, case_strip: str, show_hint
         if show_hint
         else ""
     )
+    case_label = (
+        '<div class="typ-section-label">Instantiated case</div>'
+        if show_case_label
+        else ""
+    )
     return (
-        f"{case_strip}"
-        '<section class="typ-machine-wrap" aria-label="Interactive state machine">'
+        '<section class="typ-case-instance" aria-label="Instantiated case">'
+        f"{case_label}"
+        '<div class="typ-machine-wrap" aria-label="Interactive state machine">'
         f"{hint}"
         '<div class="typ-machine-scroll"><div class="typ-machine-canvas"></div></div>'
         '<div class="typ-machine-legend"></div>'
         f'<script type="application/json" class="typ-machine-payload">{payload}</script>'
+        "</div>"
+        f'<div class="typ-case-details">{case_strip}</div>'
         "</section>"
     )
 
 
 def _typology_machine_section_html(entries: list[dict]) -> str:
-    """entries: [{"state_machine": dict, "case_strip": str}, ...] — one block per instantiated case."""
+    """Under Offense trajectory: Instantiated case once, then swimlane + details per case."""
     blocks = "".join(
-        _typology_machine_block_html(entry["state_machine"], entry.get("case_strip", ""), show_hint=(i == 0))
+        _typology_machine_block_html(
+            entry["state_machine"],
+            entry.get("case_strip", ""),
+            show_hint=(i == 0),
+            show_case_label=(i == 0),
+        )
         for i, entry in enumerate(entries)
     )
     return (
@@ -2561,26 +2908,32 @@ async def serve_typology(typology_slug: str):
     html = html.replace("{{TITLE}}", meta["title"])
     html = html.replace("{{TAGLINE}}", meta["tagline"])
     html = html.replace("{{STATUTE}}", meta["statute"])
-    summary_body, source_links, sentencing_embed = _extract_sources_from_summary(meta["summary"])
+    summary_body, source_links, sentencing_embed = _extract_sources_from_summary(
+        meta["summary"],
+        sentencing_url=str(meta.get("sentencing_source_url") or ""),
+    )
     html = html.replace("{{SUMMARY}}", summary_body)
     html = html.replace("{{SOURCE_LINKS}}", source_links)
     html = html.replace("{{SENTENCING_EMBED}}", sentencing_embed)
-    graph_ids = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip(), ())
-    from state_machines.iris import is_esm_case, get_case_meta as _get_case_meta
     graph_entries: list[dict] = []
-    for graph_id in graph_ids:
-        case_modality = (_get_case_meta(graph_id).get("title") or graph_id).upper()
-        if is_esm_case(graph_id):
-            entry = _load_esm_typology_entry(graph_id, modality_label=case_modality)
+    if typology_slug.strip() == "icac":
+        graph_entries = _load_icac_typology_entries()
+    else:
+        graph_ids = _TYPOLOGY_GRAPH_IDS.get(typology_slug.strip(), ())
+        from state_machines.iris import is_esm_case, get_case_meta as _get_case_meta
+        for graph_id in graph_ids:
+            case_modality = (_get_case_meta(graph_id).get("title") or graph_id).upper()
+            if is_esm_case(graph_id):
+                entry = _load_esm_typology_entry(graph_id, modality_label=case_modality)
+                if entry:
+                    graph_entries.append(entry)
+                continue
+            graph = _load_typology_graph(graph_id)
+            if not graph:
+                continue
+            entry = _parse_typology_graph(graph, graph_id, modality_label=case_modality)
             if entry:
                 graph_entries.append(entry)
-            continue
-        graph = _load_typology_graph(graph_id)
-        if not graph:
-            continue
-        entry = _parse_typology_graph(graph, graph_id, modality_label=case_modality)
-        if entry:
-            graph_entries.append(entry)
 
     phases = graph_entries[0]["phases"] if graph_entries else meta["phases"]
     state_machines = [e for e in graph_entries if e.get("state_machine")]
@@ -2607,7 +2960,16 @@ async def serve_typology(typology_slug: str):
         )
         html = html.replace("{{TRAJECTORY_SECTION}}", trajectory)
         html = html.replace("{{MACHINE_ASSETS}}", "")
-        html = html.replace("{{CASE_STRIP}}", first.get("case_strip", ""))
+        details = first.get("case_strip", "")
+        case_html = (
+            '<section class="typ-case-strip" aria-label="Instantiated case">'
+            '<div class="typ-section-label">Instantiated case</div>'
+            f"{details}"
+            "</section>"
+            if details
+            else ""
+        )
+        html = html.replace("{{CASE_STRIP}}", case_html)
 
     affordances: list[tuple[str, str]] = []
     seen_affordances: set[tuple[str, str]] = set()

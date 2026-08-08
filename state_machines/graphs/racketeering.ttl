@@ -1,12 +1,11 @@
 # Racketeering ESM graph — United States v. Lam et al., 1:24-cr-00417 (D.D.C.).
 # RICO social-engineering / virtual-currency-theft enterprise.
 #
-# No SDK domain extension exists for racketeering, so this graph mints
-# CASE-LOCAL traj:State instances (SKOS concepts in rc:PhaseScheme) and plain
-# uco-action:Action instances (NOT Technique-metaclass-punned). The abused
-# affordance is carried on uco-action:instrument of each enacted action, the
-# same φ seam the SDK domain extensions use. Validated against
-# extensions=["trajectories"] only.
+# Consumes the CASE-UCO-SDK rico extension for the charged enterprise and
+# functional roles (rico:RacketeeringEnterprise / rico:EnterpriseRole). Offense
+# phases remain case-local traj:State instances in rc:PhaseScheme — rico has no
+# phase SKOS vocab (unlike ef:/ex:/traf:/fl:). Affordance rides on
+# uco-action:instrument. Validated against trajectories (+ rico for enterprise).
 #
 # Source: second superseding indictment and sentencing memoranda, 1:24-cr-00417
 # (paragraph pinpoints from the charging record; "SSI" = second superseding
@@ -15,6 +14,7 @@
 # post-terminal law-enforcement action, not mid-chain disruption.
 
 @prefix rc: <http://example.org/racketeering/lam/> .
+@prefix rico: <http://example.org/ontology/rico/> .
 @prefix traj: <http://example.org/ontology/trajectories/> .
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
@@ -71,13 +71,86 @@ rc:LaunderingMaintenance
 	skos:inScheme rc:PhaseScheme .
 
 #################################################################
-# Actors
+# Actors + rico: enterprise / roles (CASE-UCO-SDK rico extension)
 #################################################################
+
+rc:enterprise-se
+	a rico:RacketeeringEnterprise , uco-identity:Organization ;
+	uco-core:name "The Social Engineering Enterprise (SE Enterprise)" ;
+	uco-core:description "Association-in-fact enterprise (18 U.S.C. § 1961(4)) engaged in virtual-currency theft through social engineering and laundering of proceeds. Source: SSI." ;
+	rico:enterpriseType "association-in-fact" .
+
+rc:role-database-hacker
+	a rico:EnterpriseRole ;
+	uco-core:name "Database hacker" ;
+	rico:roleFunction "database-hacker" .
+
+rc:role-organizer
+	a rico:EnterpriseRole ;
+	uco-core:name "Organizer / target identifier" ;
+	rico:roleFunction "organizer" .
+
+rc:role-caller
+	a rico:EnterpriseRole ;
+	uco-core:name "Caller / social engineer" ;
+	rico:roleFunction "caller" .
+
+rc:role-launderer
+	a rico:EnterpriseRole ;
+	uco-core:name "Money launderer" ;
+	rico:roleFunction "money-launderer" .
+
+rc:role-residential-burglar
+	a rico:EnterpriseRole ;
+	uco-core:name "Residential burglar (hardware wallets)" ;
+	rico:roleFunction "residential-burglar" .
 
 rc:person-lam
 	a uco-identity:Person , uco-core:UcoObject ;
 	uco-core:name "Malone Lam" ;
 	uco-core:description "Charged member of the social-engineering enterprise; RICO conspiracy (18 U.S.C. § 1962(d)). Source: SSI." .
+
+rc:rel-lam-member
+	a uco-core:Relationship ;
+	uco-core:source rc:person-lam ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Member_Of" ;
+	uco-core:isDirectional true .
+
+rc:rel-role-hacker-within
+	a uco-core:Relationship ;
+	uco-core:source rc:role-database-hacker ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .
+
+rc:rel-role-organizer-within
+	a uco-core:Relationship ;
+	uco-core:source rc:role-organizer ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .
+
+rc:rel-role-caller-within
+	a uco-core:Relationship ;
+	uco-core:source rc:role-caller ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .
+
+rc:rel-role-launderer-within
+	a uco-core:Relationship ;
+	uco-core:source rc:role-launderer ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .
+
+rc:rel-role-burglar-within
+	a uco-core:Relationship ;
+	uco-core:source rc:role-residential-burglar ;
+	uco-core:target rc:enterprise-se ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .
 
 #################################################################
 # Evidence nodes

@@ -158,6 +158,7 @@ EXPANSION_CASE_IDS = (
     "trafficking_ESM",    # Young — individual-operator sex-trafficking scheme (N.D. Tex. press release)
     "slavery_ibanez",     # Ibanez-Olea — forced labor with trafficking vector (N.D. Ill. press release)
     "slavery_luong",      # Luong — pure forced labor / servitude (W.D.N.C. press release)
+    "layered",            # Atkinson — multi-offense layered composition (E.D. Wash. news account)
 )
 
 # ESM cases carry real CASE-UCO SDK trajectories graphs (.ttl), read natively.
@@ -172,6 +173,7 @@ ESM_CASE_IDS = (
     "racketeering",    # Lam — case-local traj:State RICO enterprise (D.D.C.)
     "slavery_ibanez",  # Ibanez-Olea — fl: forced labor + trafficking vector (N.D. Ill.)
     "slavery_luong",   # Luong — fl: pure servitude, disrupted mid-chain (W.D.N.C.)
+    "layered",         # Atkinson — lay:+fl: multi-offense composition (E.D. Wash.)
 )
 
 # CAC-native CSAM cases only (drives the shared-column L* cross-case analysis).
@@ -655,6 +657,26 @@ CASE_META = {
             "pure_servitude",
             "no_trafficking_vector",
             "threat_to_expose",
+        ],
+    },
+    # Layered multi-offense composition — four coupled ESMs in one graph.
+    "layered": {
+        "title": "Atkinson (layered)",
+        "citation": "United States v. Jonathan Michael Atkinson (E.D. Wash.)",
+        "statute": "18 U.S.C. §§ 1591, 1589, 2251, 2422; alien harboring",
+        "modality": "layered",
+        "corpus_id": "layered",
+        "defendant": "Jonathan Michael Atkinson",
+        "victim_harmed": True,
+        "sting_only": False,
+        "conduct_tags": [
+            "layered_composition",
+            "csea_grooming",
+            "csam_leverage",
+            "child_sex_trafficking",
+            "forced_labor",
+            "alien_harboring",
+            "cross_border_transit",
         ],
     },
 

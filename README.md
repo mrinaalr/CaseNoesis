@@ -25,21 +25,21 @@ The pipeline turns public enforcement records into structured features, knowledg
 
 ```mermaid
 flowchart TD
-    P["PRESS / AGENCY<br/>scale · discovery"] 
-    C["PACER / RECAP<br/>lifecycle fidelity"]
+    P["PRESS / AGENCY <br/> scale · discovery"]
+    C["PACER / RECAP <br/> lifecycle fidelity"]
 
-    P --> ACQ["COLLECTION<br/>harvest → PDF → resolve"]
-    C --> ENR["COURT ENRICHMENT<br/>docket correlate · evidence extraction"]
+    P --> ACQ["COLLECTION <br/> harvest → PDF → resolve"]
+    C --> ENR["COURT ENRICHMENT <br/> docket correlate · evidence extraction"]
 
-    ACQ --> PROC["PROCESSING<br/>case schema ·<br/>deterministic extraction"]
+    ACQ --> PROC["PROCESSING <br/> case schema · <br/> deterministic extraction"]
     ENR --> PROC
 
-    PROC --> ENC["SEMANTIC ENCODING<br/>CASE/UCO + Extensions · trajectories<br/>SHACL gate · observed ≠ inferred"]
-    ENC --> STORE["STORAGE<br/>JSON-LD/TTL · PostgreSQL"]
+    PROC --> ENC["SEMANTIC ENCODING <br/> CASE/UCO + Extensions · trajectories <br/> SHACL gate · observed ≠ inferred"]
+    ENC --> STORE["STORAGE <br/> JSON-LD/TTL · PostgreSQL"]
 
-    STORE --> ESM["FORMAL MODELING<br/>M = (S, A, T, R_G, s₀, F)<br/>φ / η / ψ · L* <br/> intervention points"]
-    ESM --> AN["ANALYSIS<br/>Laws 1–4 · backbone · affordance structure"]
-    AN --> VIZ["VIEWS<br/>machines · trajectories · case explorers"]
+    STORE --> ESM["FORMAL MODELING <br/> M = (S, A, T, R_G, s₀, F) <br/> φ / η / ψ · L* <br/> intervention points"]
+    ESM --> AN["ANALYSIS <br/> Laws 1–4 · backbone · affordance structure"]
+    AN --> VIZ["VIEWS <br/> machines · trajectories · case explorers"]
 
     STORE -.-> API["FastAPI · MCP"]
     VIZ -.-> API
@@ -59,20 +59,20 @@ CaseNoesis is primarily built from public press releases — agency newsrooms, s
 
 ```mermaid
 flowchart TD
-    SRC["sources/urls.txt<br/>~56 sources · agency · state AG · DOJ"]
+    SRC["sources/urls.txt <br/> ~56 sources · agency · state AG · DOJ"]
 
-    SRC --> L["LISTING CRAWL<br/>paginate listing/search → article URLs"]
-    SRC --> D["DOJ API<br/>press_releases.json → resolved records"]
-    SRC --> M["MANUAL SEED<br/>one-off article URLs"]
+    SRC --> L["LISTING CRAWL <br/> paginate listing/search → article URLs"]
+    SRC --> D["DOJ API <br/> press_releases.json → resolved records"]
+    SRC --> M["MANUAL SEED <br/> one-off article URLs"]
 
-    L --> F["FETCH<br/>delay · retry · Jina fallback"]
+    L --> F["FETCH <br/> delay · retry · Jina fallback"]
     D --> F
     M --> F
 
-    F --> R["RENDER<br/>ReportLab page: title · date · source URL · body"]
-    R --> B["BUNDLE<br/>one PDF per source<br/>e.g. SVICAC_All.pdf"]
-    B --> E["EXTRACT<br/>text · entities · dates"]
-    E --> V["RESOLVE<br/>link releases + merge features<br/>case_resolve.py"]
+    F --> R["RENDER <br/> ReportLab page: title · date · source URL · body"]
+    R --> B["BUNDLE <br/> one PDF per source <br/> e.g. SVICAC_All.pdf"]
+    B --> E["EXTRACT <br/> text · entities · dates"]
+    E --> V["RESOLVE <br/> link releases + merge features <br/> case_resolve.py"]
 ```
 
 Scrape tools live under [`scripts/scraper/`](scripts/scraper/). Extract + resolve live under [`src/Processing Layer/`](src/Processing%20Layer/) (`batching.py`, [`case_resolve.py`](src/Processing%20Layer/case_resolve.py)). Analysis and CASE/UCO graphs are a separate layer downstream — not collection.

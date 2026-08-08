@@ -57,6 +57,18 @@ python3 scrape_pdf.py --url-file sources/urls.txt \
   --out-dir ../.. --out-name MY_SOURCE_All.pdf --jina-fallback
 ```
 
+That same path is the **generic URL → structured PDF** converter for any public article (agency PR, newsroom story, etc.): one URL per line in the url-file, ReportLab layout with title / date / `Source:` URL / body. Example (non-DOJ news):
+
+```bash
+printf '%s\n' 'https://www.spokesman.com/stories/2025/apr/13/tri-cities-business-owner-accused-of-grooming-sex-/' \
+  > sources/atkinson_spokesman_urls.txt
+python3 scrape_pdf.py --url-file sources/atkinson_spokesman_urls.txt \
+  --out-dir ../../state_machines/data \
+  --out-name 'layered press release atkinson.pdf' \
+  --jina-fallback
+```
+
+Use `--jina-fallback` when the host is thin or bot-gated; many news hosts extract cleanly on the direct HTML path and Jina is only a safety net.
 If the list might include `justice.gov` URLs (DOJ press releases, USAO releases), route through `scrape_noesis.py` first — this avoids the Akamai bot-wall entirely by using the DOJ API instead of scraping:
 
 ```bash

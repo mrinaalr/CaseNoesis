@@ -288,24 +288,15 @@
       .attr("fill", accent)
       .attr("rx", 2);
 
+    // Modality only on the rail — full citation lives in Instantiated case above.
     gRow
       .append("text")
       .attr("class", "row-modality")
       .attr("x", 22)
-      .attr("y", cy - 10)
+      .attr("y", cy + 4)
       .attr("fill", accent)
       .attr("clip-path", `url(#${railClipId})`)
       .text(payload.modality_label || "CASE");
-
-    const cite = shortCourtCitation(payload.citation || "");
-    const citeShort = cite.length > 52 ? `${cite.slice(0, 50)}…` : cite;
-    gRow
-      .append("text")
-      .attr("class", "row-citation")
-      .attr("x", 22)
-      .attr("y", cy + 8)
-      .attr("clip-path", `url(#${railClipId})`)
-      .text(citeShort);
 
     const laid = phases.map((phase, i) => ({
       phase,

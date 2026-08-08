@@ -452,7 +452,7 @@ def _domain_state_label_map() -> dict[str, str]:
     labels: dict[str, str] = {}
     # CaseNoesis and CASE-UCO-SDK are sibling repos under Projects/
     sdk_root = Path(__file__).resolve().parents[2] / "CASE-UCO-SDK" / "extensions"
-    for folder in ("elder-fraud", "extortion", "trafficking", "forced-labor"):
+    for folder in ("elder-fraud", "extortion", "trafficking", "forced-labor", "layered"):
         path = sdk_root / folder / f"{folder}.ttl"
         if not path.is_file():
             continue
