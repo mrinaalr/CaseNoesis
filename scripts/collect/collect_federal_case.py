@@ -173,7 +173,8 @@ _SINGLE_DISTRICT_NAME_RE = re.compile(
 # Name tokens must stay on one line (never cross a paragraph boundary) and
 # must not end mid-name with a sentence period.
 _DEFENDANT_AGE_RE = re.compile(
-    r"\b([A-Z][A-Za-z'’\-]+(?: [A-Z]\.)?(?: [A-Z][A-Za-z'’\-]+){0,3}),\s+(?:age\s+)?\d{1,3},"
+    r"\b([A-Z][A-Za-z'’\-]+(?: [A-Z]\.)?(?: [\"“'‘][A-Z][A-Za-z'’\-]+[\"”'’])?"
+    r"(?: [A-Z][A-Za-z'’\-]+){0,3}),\s+(?:age\s+)?\d{1,3},"
 )
 _US_V_RE = re.compile(r"United States v\.?\s+([A-Z][A-Za-z'’\-]+(?: [A-Z][A-Za-z'’\-]+){0,3})")
 
@@ -328,6 +329,7 @@ def run_pacer_stage(
     loc: dict[str, Any],
     args: argparse.Namespace,
     pacer_out: Path,
+    pub_date: Optional[date] = None,
 ) -> dict[str, Any]:
     court = args.court or loc["court"]
     docket = args.docket or loc["docket"]
@@ -337,15 +339,24 @@ def run_pacer_stage(
     if not docket and not defendant:
         return {"status": "skipped", "reason": "no docket and no defendant to search with"}
 
+    # Federal captions are styled "United States v. <surname>", so search and
+    # score on the surname; nicknames/quotes in the full name poison the query.
+    surname = re.sub(r"[\"“”'‘’]", "", defendant.split()[-1]) if defendant else ""
+
     spec = cases2records.CaseSpec(
         slug=slug,
-        defendant=defendant or slug,
-        case_name=f"United States v. {defendant}" if defendant else "",
+        defendant=surname or slug,
+        case_name=f"United States v. {surname}" if surname else "",
         district=court,
         court=court,
         docket=docket,
         corpus_id=slug,
     )
+
+    # Anchor caption searches to the press date: charges are filed before the
+    # press release, rarely more than ~8 years before it.
+    filed_after = (pub_date.replace(year=pub_date.year - 8)).isoformat() if pub_date else None
+    filed_before = pub_date.isoformat() if pub_date else None
 
     def _run(dry: bool) -> "cases2records.FetchResult":
         return cases2records.fetch_case_records(
@@ -362,6 +373,8 @@ def run_pacer_stage(
             pacer_username=None if dry else args.pacer_username,
             pacer_password=None if dry else args.pacer_password,
             max_search_hits=8,
+            filed_after=filed_after,
+            filed_before=filed_before,
         )
 
     dry_run = not args.retrieve
@@ -379,6 +392,8 @@ def run_pacer_stage(
                     "reason": "raise --max-est-cost or lower --max-docs to proceed",
                 }
         result = _run(dry=dry_run)
+    except cases2records.RateLimitExceeded as exc:
+        return {"status": "rate-limited", "reason": str(exc)}
     except LookupError as exc:
         return {"status": "not-found", "reason": str(exc)}
     except Exception as exc:  # noqa: BLE001 — report per-case, keep batch alive
@@ -473,7 +488,8 @@ def collect_one(url: str, args: argparse.Namespace, client: Optional[Any]) -> di
 
     pacer_out = args.out_root / "pacer" / slug
     manifest["pacer"] = run_pacer_stage(
-        client, slug=slug, loc=loc, args=args, pacer_out=pacer_out
+        client, slug=slug, loc=loc, args=args, pacer_out=pacer_out,
+        pub_date=press["pub_date"],
     )
     return manifest
 
@@ -500,6 +516,13 @@ def main() -> int:
         "~5000/hr; cases2records' 12.5s default is far more cautious than needed)",
     )
     ap.add_argument("--token", default=None, help="CourtListener API token")
+    ap.add_argument(
+        "--max-quota-wait",
+        type=float,
+        default=120.0,
+        help="Total seconds to tolerate CourtListener 429 sleeps before aborting "
+        "the batch (hourly quota exhausted — re-run later)",
+    )
     ap.add_argument(
         "--retrieve",
         action="store_true",
@@ -534,7 +557,11 @@ def main() -> int:
     client = None
     if not args.skip_pacer:
         if token:
-            client = cases2records.CourtListenerClient(token, min_interval=args.cl_interval)
+            client = cases2records.CourtListenerClient(
+                token,
+                min_interval=args.cl_interval,
+                max_quota_wait_s=args.max_quota_wait,
+            )
         else:
             print(
                 "  [warn] no COURTLISTENER_API_TOKEN found (.env / CaseLinker/.env) — "
@@ -563,6 +590,14 @@ def main() -> int:
         print(f"  manifest: {mpath.relative_to(REPO_ROOT)}")
         if manifest.get("press", {}).get("status") != "ok":
             failures += 1
+        if manifest.get("pacer", {}).get("status") == "rate-limited":
+            print(
+                "\n[stop] CourtListener hourly quota exhausted — aborting the rest of "
+                "the batch. Press PDFs collected so far are kept; re-run the remaining "
+                "URLs after the quota window resets (~1 hour).",
+                file=sys.stderr,
+            )
+            break
 
     print(f"\nDone: {len(urls) - failures}/{len(urls)} press releases collected.")
     return 1 if failures else 0

@@ -53,6 +53,10 @@ STORAGE_BASE = "https://storage.courtlistener.com/"
 # CourtListener rate limits are tight on free tokens; stay under ~5 req/min.
 MIN_REQUEST_INTERVAL_S = 12.5
 
+
+class RateLimitExceeded(RuntimeError):
+    """CourtListener hourly quota exhausted; stop and re-run after the window resets."""
+
 # Pull priority for --key-docs (matches manual ICAC workflow in pacer_cost.csv).
 KEY_DOC_SKIP = re.compile(
     r"minute order|notice of .*hearing|order of detention|scheduling order|"
@@ -279,7 +283,12 @@ def _sort_key_num(val: Any) -> Tuple[int, str]:
 
 
 class CourtListenerClient:
-    def __init__(self, token: str, min_interval: float = MIN_REQUEST_INTERVAL_S) -> None:
+    def __init__(
+        self,
+        token: str,
+        min_interval: float = MIN_REQUEST_INTERVAL_S,
+        max_quota_wait_s: float = 300.0,
+    ) -> None:
         if not token:
             raise ValueError(
                 "CourtListener API token required. Set COURTLISTENER_API_TOKEN in "
@@ -289,11 +298,32 @@ class CourtListenerClient:
         self._session.headers["Authorization"] = f"Token {token}"
         self._min_interval = min_interval
         self._last_request = 0.0
+        # Cumulative budget for sleeping through 429s. When the server's
+        # Retry-After demands exceed it, raise RateLimitExceeded instead of
+        # silently grinding — the caller should stop and re-run later.
+        self._max_quota_wait_s = max_quota_wait_s
+        self._quota_slept_s = 0.0
 
     def _throttle(self) -> None:
         elapsed = time.monotonic() - self._last_request
         if elapsed < self._min_interval:
             time.sleep(self._min_interval - elapsed)
+
+    def _handle_429(self, resp: requests.Response) -> None:
+        wait = int(resp.headers.get("Retry-After", "15")) + 2
+        if self._quota_slept_s + wait > self._max_quota_wait_s:
+            raise RateLimitExceeded(
+                f"CourtListener hourly quota exhausted: server asks for {wait}s more "
+                f"and {self._quota_slept_s:.0f}s of the {self._max_quota_wait_s:.0f}s "
+                "wait budget is already spent. Re-run after the quota window resets."
+            )
+        print(
+            f"    [rate-limit] CourtListener 429 — sleeping {wait}s "
+            f"({self._quota_slept_s:.0f}s/{self._max_quota_wait_s:.0f}s budget used)",
+            file=sys.stderr,
+        )
+        time.sleep(wait)
+        self._quota_slept_s += wait
 
     def _request(self, method: str, path: str, **kwargs: Any) -> requests.Response:
         url = urljoin(API_BASE, path.lstrip("/"))
@@ -302,8 +332,7 @@ class CourtListenerClient:
             resp = self._session.request(method, url, timeout=120, **kwargs)
             self._last_request = time.monotonic()
             if resp.status_code == 429 and attempt < 3:
-                retry_after = int(resp.headers.get("Retry-After", "15"))
-                time.sleep(retry_after + 2)
+                self._handle_429(resp)
                 continue
             if resp.status_code == 401:
                 raise PermissionError(
@@ -324,7 +353,7 @@ class CourtListenerClient:
                 resp = self._session.get(url, timeout=120)
                 self._last_request = time.monotonic()
                 if resp.status_code == 429:
-                    time.sleep(int(resp.headers.get("Retry-After", "15")) + 2)
+                    self._handle_429(resp)
                     continue
                 resp.raise_for_status()
             else:
@@ -342,6 +371,8 @@ class CourtListenerClient:
         case_name: str,
         defendant: str,
         max_search_hits: Optional[int] = None,
+        filed_after: Optional[str] = None,
+        filed_before: Optional[str] = None,
     ) -> Dict[str, Any]:
         candidates: List[Dict[str, Any]] = []
 
@@ -358,16 +389,16 @@ class CourtListenerClient:
 
         if not candidates:
             query = case_name or f"United States v. {defendant}"
+            search_params: Dict[str, Any] = {"type": "r", "q": query, "court": court}
+            # Caption searches are fuzzy; a filed-date window (e.g. anchored to
+            # the press-release date) keeps decades-old same-surname cases out.
+            if filed_after:
+                search_params["filed_after"] = filed_after
+            if filed_before:
+                search_params["filed_before"] = filed_before
             # Each hit costs a throttled GET for its docket; max_search_hits
             # caps a bad/ambiguous caption query from crawling every result.
-            for hit in self.paginate(
-                "search/",
-                {
-                    "type": "r",
-                    "q": query,
-                    "court": court,
-                },
-            ):
+            for hit in self.paginate("search/", search_params):
                 docket_id = hit.get("docket_id")
                 if not docket_id:
                     continue
@@ -630,6 +661,8 @@ def fetch_case_records(
     pacer_username: Optional[str] = None,
     pacer_password: Optional[str] = None,
     max_search_hits: Optional[int] = None,
+    filed_after: Optional[str] = None,
+    filed_before: Optional[str] = None,
 ) -> FetchResult:
     court = district_to_court(spec.district, spec.court)
     docket = client.find_docket(
@@ -638,6 +671,8 @@ def fetch_case_records(
         case_name=spec.case_name,
         defendant=spec.defendant,
         max_search_hits=max_search_hits,
+        filed_after=filed_after,
+        filed_before=filed_before,
     )
     docket_id = docket["id"]
     case_id = case_id_for(spec)
