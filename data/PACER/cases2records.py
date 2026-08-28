@@ -341,6 +341,7 @@ class CourtListenerClient:
         docket_number: Optional[str],
         case_name: str,
         defendant: str,
+        max_search_hits: Optional[int] = None,
     ) -> Dict[str, Any]:
         candidates: List[Dict[str, Any]] = []
 
@@ -357,6 +358,8 @@ class CourtListenerClient:
 
         if not candidates:
             query = case_name or f"United States v. {defendant}"
+            # Each hit costs a throttled GET for its docket; max_search_hits
+            # caps a bad/ambiguous caption query from crawling every result.
             for hit in self.paginate(
                 "search/",
                 {
@@ -370,6 +373,8 @@ class CourtListenerClient:
                     continue
                 d = self._request("GET", f"dockets/{docket_id}/").json()
                 candidates.append(d)
+                if max_search_hits and len(candidates) >= max_search_hits:
+                    break
 
         if not candidates:
             raise LookupError(
@@ -624,6 +629,7 @@ def fetch_case_records(
     charge_pacer: bool = False,
     pacer_username: Optional[str] = None,
     pacer_password: Optional[str] = None,
+    max_search_hits: Optional[int] = None,
 ) -> FetchResult:
     court = district_to_court(spec.district, spec.court)
     docket = client.find_docket(
@@ -631,6 +637,7 @@ def fetch_case_records(
         docket_number=spec.docket,
         case_name=spec.case_name,
         defendant=spec.defendant,
+        max_search_hits=max_search_hits,
     )
     docket_id = docket["id"]
     case_id = case_id_for(spec)
