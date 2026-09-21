@@ -1,0 +1,31 @@
+{
+  "id": "csea",
+  "domain": "csea",
+  "slug": "doj_csea",
+  "source": "DOJ CaseNoesis CSEA",
+  "skip_cac": false,
+  "keep_early": true,
+  "title_terms": [
+    "child pornography",
+    "child sexual abuse material",
+    "child exploitation",
+    "child sexual",
+    "CSAM",
+    "enticement of a minor",
+    "coercion and enticement",
+    "child sex trafficking",
+    "sex trafficking of a child",
+    "sex trafficking of a minor",
+    "illicit sexual conduct",
+    "sextortion",
+    "production of child",
+    "possessing child",
+    "possession of child"
+  ],
+  "require": "child pornograph|child sexual|\\bCSAM\\b|enticement of a minor|child exploitation|child sex trafficking|sex trafficking of a (child|minor)|sextortion|illicit sexual conduct|Internet Crimes Against Children|\\bICAC\\b",
+  "court_queries": [
+    "child exploitation",
+    "child pornography",
+    "enticement of a minor"
+  ]
+}

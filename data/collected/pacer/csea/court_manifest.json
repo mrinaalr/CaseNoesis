@@ -1,0 +1,43 @@
+[
+  {
+    "search_type": "r",
+    "case_name": "United States v. SEARCH OF A WESTERN DIGITAL 2 TB HARD DRIVE, CURRENTLY STORED BY THE CHILD EXPLOITATION AND OBSCENITY SECTION OF THE DEPARTMENT OF JUSTICE, LOCATED AT 1301 NEW YORK AVENUE, WASHINGTON, DC 20530",
+    "docket_number": "1:25-sw-00051",
+    "court": "District Court, District of Columbia",
+    "date_filed": "2025-03-03",
+    "docket_id": 69824539,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69824539/united-states-v-search-of-a-western-digital-2-tb-hard-drive-currently/",
+    "free_nested_documents": [
+      {
+        "id": 434919028,
+        "description": "Application and Affidavit for Search/Seizure Warrant under Rule 41 by USA as toSEARCH OF A WESTERN DIGITAL 2 TB HARD DRIVE, CURRENTLY STORED BY THE CHILD EXPLOITATION AND OBSCENITY SECTION OF THE DEPARTMENT OF JUSTICE, LOCATED AT 1301 NEW YORK AVENUE, WASHINGTON, DC 20530. (Iyengar, Janani) (Entered: 03/04/2025)",
+        "filepath_local": "recap/gov.uscourts.dcd.277976/gov.uscourts.dcd.277976.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.277976/gov.uscourts.dcd.277976.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69824539/1/united-states-v-search-of-a-western-digital-2-tb-hard-drive-currently/"
+      }
+    ],
+    "query": "child exploitation",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 434919028,
+      "description": "Application and Affidavit for Search/Seizure Warrant under Rule 41 by USA as toSEARCH OF A WESTERN DIGITAL 2 TB HARD DRIVE, CURRENTLY STORED BY THE CHILD EXPLOITATION AND OBSCENITY SECTION OF THE DEPARTMENT OF JUSTICE, LOCATED AT 1301 NEW YORK AVENUE, WASHINGTON, DC 20530. (Iyengar, Janani) (Entered: 03/04/2025)",
+      "filepath_local": "recap/gov.uscourts.dcd.277976/gov.uscourts.dcd.277976.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.277976/gov.uscourts.dcd.277976.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69824539/1/united-states-v-search-of-a-western-digital-2-tb-hard-drive-currently/"
+    },
+    "download": {
+      "ok": true,
+      "path": "/Users/mrinaalramachandran/Projects/CaseNoesis/data/collected/pacer/csea/434919028.pdf",
+      "bytes": 807905,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.277976/gov.uscourts.dcd.277976.1.0.pdf",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  }
+]

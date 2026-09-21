@@ -138,7 +138,7 @@ def _feature_leaf_count(conn: sqlite3.Connection) -> int:
 
 
 def _count_mcp_tools(root: Path) -> int:
-    server = root / "caselinker_mcp" / "server.py"
+    server = root / "casenoesis_mcp" / "server.py"
     if not server.is_file():
         return 0
     text = server.read_text(encoding="utf-8")
@@ -149,7 +149,7 @@ def _count_mcp_tools(root: Path) -> int:
 
 def _mcp_tool_count_accurate(root: Path) -> int:
     """Count @mcp.tool decorators in MCP server."""
-    server = root / "caselinker_mcp" / "server.py"
+    server = root / "casenoesis_mcp" / "server.py"
     if not server.is_file():
         return 0
     return len(re.findall(r"@mcp\.tool", server.read_text(encoding="utf-8")))
@@ -372,7 +372,7 @@ def verify_claim(claim: Claim, ctx: VerifyContext) -> VerifyResult:
     if claim.id == "s3.mcp_tools":
         n = _mcp_tool_count_accurate(ctx.root)
         obs = str(n)
-        return VerifyResult(claim.id, "pass" if n == 37 else "warn", f"@mcp.tool count={n}", obs, "37", "caselinker_mcp/server.py")
+        return VerifyResult(claim.id, "pass" if n >= 37 else "fail", f"@mcp.tool count={n}", obs, ">=37 (CaseNoesis local)", "casenoesis_mcp/server.py")
 
     if claim.id == "cover.pacer_records":
         p = _pacer_bulk_stats(ctx.root)

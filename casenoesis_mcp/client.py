@@ -1,4 +1,8 @@
-"""Thin async HTTP client for the CaseLinker REST API."""
+"""Thin async HTTP client for the local CaseNoesis REST API.
+
+Corpus tools wrap localhost FastAPI. Collector WRITE tools do not need it.
+This MCP is stdio-only — it is not a public CaseLinker-style hosted endpoint.
+"""
 
 from __future__ import annotations
 
@@ -8,13 +12,18 @@ from typing import Any
 
 import httpx
 
-BASE_URL = os.getenv("CASELINKER_API_URL", "https://caselinker.up.railway.app").rstrip("/")
+BASE_URL = (
+    os.getenv("CASENOESIS_API_URL")
+    or os.getenv("CASELINKER_API_URL")
+    or "http://localhost:8000"
+).rstrip("/")
 DEFAULT_TIMEOUT = 30.0
 BULK_TIMEOUT = 180.0
 
 _TRUSTED_KEY_HINT = (
-    "Set CASELINKER_KEY env (stdio) or CaseLinker-Key header (SSE) to a value listed "
-    "in CASELINKER_TRUSTED_KEYS on the server."
+    "Local CaseNoesis: start `python3 run/main.py` so CASENOESIS_API_URL "
+    "(default http://localhost:8000) is reachable. Optional CASELINKER_KEY "
+    "unlocks bulk/narrative tools on that local server."
 )
 
 _request_caselinker_key: ContextVar[str | None] = ContextVar(

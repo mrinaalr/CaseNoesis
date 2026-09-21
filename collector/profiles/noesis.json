@@ -1,0 +1,31 @@
+{
+  "id": "noesis",
+  "domain": "mixed",
+  "slug": "doj_noesis",
+  "source": "DOJ CaseNoesis mixed",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "elder fraud",
+    "romance scam",
+    "wire fraud",
+    "labor trafficking",
+    "forced labor",
+    "sex trafficking",
+    "child exploitation",
+    "child pornography",
+    "ransomware",
+    "business email compromise",
+    "pig butchering",
+    "human trafficking"
+  ],
+  "require": "fraud|scam|embezzl|traffick|forced labou?r|ransomware|business email|pig butcher|wire fraud|romance|peonage|involuntary servitude|child pornograph|child sexual|\\bCSAM\\b|child exploitation|enticement of a minor|sextortion|\\bICAC\\b",
+  "court_queries": [
+    "elder fraud",
+    "labor trafficking",
+    "child exploitation",
+    "ransomware",
+    "romance scam",
+    "business email compromise"
+  ]
+}

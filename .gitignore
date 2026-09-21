@@ -68,15 +68,22 @@ models/*
 !models/triage_bundle.joblib
 
 # JSON data dumps (corpus predictions, extract_evaluation.json, semantic exports, etc.)
-# Whitelist only standard JS/TS config files and the authored Case Studies content.
+# Whitelist JS/TS config, collector profiles, and every JSON under data/ (manifests
+# for collabs). PDFs stay ignored — never commit collected/PACER PDFs.
 *.json
 !package.json
 !package-lock.json
 !tsconfig.json
 !jsconfig.json
+!data/**/*.json
 # Case Studies authored content (read by the /case-studies tab and the /api/case-studies
 # endpoint). Must ship with the deploy or Railway shows "No content yet."
 !data/case_studies.json
+# Collector domain profiles (authored; must ship).
+!collector/profiles/
+!collector/profiles/*.json
+collector_output/
+data/collected/**/tmp/
 # Q1 platform harm pipeline — authored + generated artifacts ship with deploy.
 !ontology/q1/
 !ontology/q1/*.json
@@ -97,10 +104,8 @@ state_machines/*
 !state_machines/graphs/*.jsonld
 !state_machines/data/
 !state_machines/data/lstar_all_cases.json
-# NOTE: data/case_study_notes.json is intentionally NOT whitelisted. It holds
-# user-submitted community notes; committing it would overwrite live notes on every
-# deploy. The loader returns [] when the file is absent, which is the correct default
-# on Railway's ephemeral filesystem. Mount a volume or swap to the DB for durability.
+# Community notes live in the DB on Railway. data/case_study_notes.json, if present,
+# is covered by !data/**/*.json; prefer not to treat it as the production notes store.
 
 # Serialized models / checkpoints (also covered by models/; these catch stray files)
 *.joblib
@@ -139,3 +144,5 @@ ontology/cache/
 # ---------------------------------------------------------------------------
 data/PACER/BULK_FOLDER/**/processed/
 data/PACER/BULK_FOLDER/outside/
+# EXTENSION OCR sidecars — local only, not the collector harvest catalog.
+data/PACER/EXTENSION/**/extracted-content.json

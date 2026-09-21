@@ -1,4 +1,9 @@
-"""CaseLinker MCP server — structured tools over the CaseLinker REST API."""
+"""CaseNoesis MCP server — local stdio tools for collection and analysis.
+
+Not hosted. Agents talk to this process over stdio; corpus tools wrap the
+local FastAPI at CASENOESIS_API_URL (default http://localhost:8000).
+Collector WRITE tools write files on this machine and do not need the API.
+"""
 
 from __future__ import annotations
 
@@ -16,10 +21,29 @@ from urllib.parse import urlparse
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 
-from caselinker_mcp.client import BULK_TIMEOUT, DEFAULT_TIMEOUT, api_get, api_post, require_caselinker_key
+from casenoesis_mcp.client import BULK_TIMEOUT, DEFAULT_TIMEOUT, api_get, api_post, require_caselinker_key
 
 PORT = int(os.getenv("PORT", 8001))
 MCP_TRANSPORT = os.getenv("MCP_TRANSPORT", "stdio")
+
+
+def collector_disk_write_enabled() -> bool:
+    """Collector WRITE tools write to this machine's disk.
+
+    Local stdio: enabled. Railway (if this process were ever started there): off.
+    Override with MCP_COLLECTOR_WRITE=1|0.
+    """
+    flag = os.getenv("MCP_COLLECTOR_WRITE", "").strip().lower()
+    if flag in {"1", "true", "yes", "on"}:
+        return True
+    if flag in {"0", "false", "no", "off"}:
+        return False
+    if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_SERVICE_NAME"):
+        return False
+    return True
+
+
+_COLLECTOR_WRITE_ENABLED = collector_disk_write_enabled()
 
 _GRAPH_TTL = 7200
 _GRAPH_KEY_PREFIX = "caselinker:mcp:graph:"
@@ -44,14 +68,14 @@ except ImportError:
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [caselinker_mcp] %(levelname)s %(message)s",
+    format="%(asctime)s [casenoesis_mcp] %(levelname)s %(message)s",
     stream=sys.stderr,
 )
-logger = logging.getLogger("caselinker_mcp")
+logger = logging.getLogger("casenoesis_mcp")
 
 # message_path without trailing slash: Mount("/messages/") 307-redirects POST /messages,
 # which breaks MCP clients that strip the slash when parsing the SSE endpoint event.
-mcp = FastMCP("CaseLinker", message_path="/messages")
+mcp = FastMCP("CaseNoesis", message_path="/messages")
 
 # Tag string -> API category for POST /api/return-tagged-cases
 _TAG_CATEGORIES: dict[str, str] = {
@@ -420,7 +444,7 @@ def _wrap_mcp_request_context(asgi_app: Any) -> Any:
     """Bind inbound CaseLinker-Key header to per-request context for REST API calls."""
     from starlette.types import Receive, Scope, Send
 
-    from caselinker_mcp.client import bind_request_caselinker_key, reset_request_caselinker_key
+    from casenoesis_mcp.client import bind_request_caselinker_key, reset_request_caselinker_key
 
     async def middleware(scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
@@ -1318,13 +1342,302 @@ async def llm_chat(question: str, model: str = "", provider: str = "") -> dict[s
         return {"error": str(e)}
 
 
+# --- Free public records (outside corpus) ---
+
+
+@mcp.tool()
+async def search_doj_press_releases(
+    title_term: str,
+    page: int = 0,
+    pagesize: int = 20,
+    require_regex: str = "",
+) -> dict[str, Any]:
+    """Search the public DOJ News API by title substring (free, no key).
+
+    Use for press releases. Does not fetch justice.gov HTML (Akamai).
+    Optional require_regex filters title+body.
+    """
+    try:
+        from casenoesis_mcp.public_records import search_doj_press_releases as _search
+
+        return await _search(
+            title_term,
+            page=page,
+            pagesize=pagesize,
+            require_regex=require_regex,
+        )
+    except Exception as e:
+        logger.exception("search_doj_press_releases failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def search_courtlistener(
+    query: str,
+    search_type: str = "r",
+    free_only: bool = True,
+    max_results: int = 10,
+) -> dict[str, Any]:
+    """Search CourtListener / RECAP for free public court records (no PACER fees).
+
+    search_type: r=dockets+nested filings, rd=filings only, d=docket metadata, o=opinions.
+    free_only=True keeps only RECAP-available downloads. Never buys PACER pages.
+    """
+    try:
+        from casenoesis_mcp.public_records import search_courtlistener as _search
+
+        return await _search(
+            query,
+            search_type=search_type,
+            free_only=free_only,
+            max_results=max_results,
+        )
+    except Exception as e:
+        logger.exception("search_courtlistener failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def list_free_recap_documents(
+    docket_id: str,
+    max_results: int = 20,
+) -> dict[str, Any]:
+    """List RECAP filings for a CourtListener docket_id that are free to download ($0)."""
+    try:
+        from casenoesis_mcp.public_records import list_free_recap_documents as _list
+
+        return await _list(docket_id, max_results=max_results)
+    except Exception as e:
+        logger.exception("list_free_recap_documents failed")
+        return {"error": str(e)}
+
+
+@mcp.tool()
+async def resolve_free_recap_download(document_id: str) -> dict[str, Any]:
+    """Resolve a RECAP document id to a free storage.courtlistener.com URL when available.
+
+    Returns cost=not free via RECAP when the filing is not in the free archive (do not PACER-fetch).
+    """
+    try:
+        from casenoesis_mcp.public_records import resolve_free_recap_download as _resolve
+
+        return await _resolve(document_id)
+    except Exception as e:
+        logger.exception("resolve_free_recap_download failed")
+        return {"error": str(e)}
+
+
+# --- Press-release collector suite: READ always; WRITE local only ---
+
+logger.info(
+    "Collector disk WRITE tools %s (MCP_COLLECTOR_WRITE / Railway gate)",
+    "enabled" if _COLLECTOR_WRITE_ENABLED else "disabled",
+)
+
+
+@mcp.tool()
+async def probe_press_url(url: str, jina_fallback: bool = True) -> dict[str, Any]:
+    """READ. Probe one press-release URL without writing a PDF.
+
+    justice.gov uses DOJ API resolve (Akamai blocks live HTML). Other hosts use HTML/Jina extract.
+    """
+    try:
+        from casenoesis_mcp.collector_tools import probe_press_url as _probe
+
+        return await asyncio.to_thread(_probe, url, jina_fallback=jina_fallback)
+    except Exception as e:
+        logger.exception("probe_press_url failed")
+        return {"error": str(e), "write": False}
+
+
+if _COLLECTOR_WRITE_ENABLED:
+
+    @mcp.tool()
+    async def harvest_doj_press_topic(
+        title_term: str,
+        require_regex: str = "",
+        max_keep: int = 1,
+        limit_pages: int = 1,
+        slug: str = "",
+        keep_early: bool = True,
+        out_dir: str = "",
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). DOJ News API harvest → resolved JSON on disk.
+
+        Creates files under collector/sources/ or out_dir. Does not ingest into sqlite.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import harvest_doj_press_topic as _harvest
+
+            return await asyncio.to_thread(
+                _harvest,
+                title_term,
+                require_regex=require_regex,
+                max_keep=max_keep,
+                limit_pages=limit_pages,
+                slug=slug,
+                keep_early=keep_early,
+                out_dir=out_dir,
+            )
+        except Exception as e:
+            logger.exception("harvest_doj_press_topic failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def fetch_press_listing_urls(
+        listing_url: str,
+        out_name: str = "mcp_listing_urls.txt",
+        same_host: bool = True,
+        path_prefix: str = "",
+        require_any: str = "",
+        max_urls: int = 20,
+        out_dir: str = "",
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Listing/search page → url-file."""
+        try:
+            from casenoesis_mcp.collector_tools import fetch_press_listing_urls as _fetch
+
+            return await asyncio.to_thread(
+                _fetch,
+                listing_url,
+                out_name=out_name,
+                same_host=same_host,
+                path_prefix=path_prefix,
+                require_any=require_any,
+                max_urls=max_urls,
+                out_dir=out_dir,
+            )
+        except Exception as e:
+            logger.exception("fetch_press_listing_urls failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def resolve_press_urls(
+        urls: list[str] | None = None,
+        url_file: str = "",
+        out_name: str = "mcp_urls_resolved.json",
+        out_dir: str = "",
+        limit: int = 0,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). URL-path router → resolved JSON for build_press_pdf."""
+        try:
+            from casenoesis_mcp.collector_tools import resolve_press_urls as _resolve
+
+            return await asyncio.to_thread(
+                _resolve,
+                urls,
+                url_file=url_file,
+                out_name=out_name,
+                out_dir=out_dir,
+                limit=limit,
+            )
+        except Exception as e:
+            logger.exception("resolve_press_urls failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def build_press_pdf(
+        doj_file: str = "",
+        url_file: str = "",
+        out_name: str = "MCP_PRESS.pdf",
+        out_dir: str = "",
+        limit: int = 1,
+        jina_fallback: bool = True,
+        insecure: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Build merged press-release PDF under out_dir.
+
+        Does NOT ingest into the database.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import build_press_pdf as _build
+
+            return await asyncio.to_thread(
+                _build,
+                doj_file=doj_file,
+                url_file=url_file,
+                out_name=out_name,
+                out_dir=out_dir,
+                limit=limit,
+                jina_fallback=jina_fallback,
+                insecure=insecure,
+            )
+        except Exception as e:
+            logger.exception("build_press_pdf failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def collect_case_dual_path(
+        title_term: str,
+        topic_slug: str = "",
+        require_regex: str = "",
+        out_dir: str = "",
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Dual-path A/B collect + CourtListener search for one topic."""
+        try:
+            from casenoesis_mcp.collector_tools import collect_case_dual_path as _dual
+
+            return await asyncio.to_thread(
+                _dual,
+                title_term,
+                topic_slug=topic_slug,
+                require_regex=require_regex,
+                out_dir=out_dir,
+            )
+        except Exception as e:
+            logger.exception("collect_case_dual_path failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def collect_bulk(
+        press_count: int = 100,
+        court_count: int = 5,
+        domains: str = "fraud,trafficking,cyber,csea",
+        out_dir: str = "",
+        skip_court: bool = False,
+        no_pdf: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Bulk harvest: DOJ press + free RECAP court PDFs.
+
+        Covers fraud, trafficking, cyber, and CSEA (ICAC is one type among those).
+        Drops grant/award/prevention noise, not CSEA cases. Never purchases PACER.
+        Default 100 press / 5 court for the NHSR #8252 pilot. Scale to 1000 / 50
+        with the same flags. Does not auto-ingest.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import collect_bulk as _bulk
+
+            return await asyncio.to_thread(
+                _bulk,
+                press_count=press_count,
+                court_count=court_count,
+                domains=domains,
+                out_dir=out_dir,
+                skip_court=skip_court,
+                no_pdf=no_pdf,
+            )
+        except Exception as e:
+            logger.exception("collect_bulk failed")
+            return {"error": str(e), "write": True}
+
+
 if __name__ == "__main__":
-    if MCP_TRANSPORT == "sse":
-        mcp.settings.host = "0.0.0.0"
+    # CaseNoesis MCP is a private local agent host (stdio). It is not a public
+    # CaseLinker-style SSE/HTTP service. Opt in to local HTTP only with
+    # CASENOESIS_MCP_HTTP=1 (still bind localhost, never 0.0.0.0).
+    allow_http = os.getenv("CASENOESIS_MCP_HTTP", "").strip().lower() in {"1", "true", "yes", "on"}
+    if MCP_TRANSPORT != "stdio" and not allow_http:
+        logger.error(
+            "CaseNoesis MCP is stdio-only. Use Cursor mcp.json, or set "
+            "CASENOESIS_MCP_HTTP=1 MCP_TRANSPORT=sse for a local loopback debug server."
+        )
+        sys.exit(2)
+    if MCP_TRANSPORT == "sse" and allow_http:
+        mcp.settings.host = "127.0.0.1"
         mcp.settings.port = PORT
         _sse_app = build_mcp_sse_app()
         import uvicorn
 
-        uvicorn.run(_sse_app, host="0.0.0.0", port=PORT)
+        uvicorn.run(_sse_app, host="127.0.0.1", port=PORT)
     else:
         mcp.run(transport="stdio")

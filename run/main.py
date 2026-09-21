@@ -1,6 +1,8 @@
 """
-FastAPI Backend for CaseLinker
-Provides API endpoints for visualization frontend
+FastAPI backend for CaseNoesis.
+
+Local: website + researcher APIs. Railway: website/docs only — no public MCP,
+OpenAPI disabled. Agents collect via local stdio (`casenoesis_mcp`).
 """
 
 from fastapi import FastAPI, Request, Query, HTTPException
@@ -10,7 +12,6 @@ from starlette.middleware.gzip import GZipMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
-from contextlib import asynccontextmanager
 from typing import List, Dict, Any, Optional, Tuple
 import sys
 import json
@@ -101,26 +102,14 @@ except ImportError:
     def get_cache_key(endpoint, **kwargs):
         return f"caselinker:{endpoint}"
 
-_mcp_streamable_enabled = False
 
-
-@asynccontextmanager
-async def _app_lifespan(application: FastAPI):
-    """FastAPI lifespan — starts Streamable HTTP session manager when MCP is mounted."""
-    cm = None
-    if _mcp_streamable_enabled:
-        from caselinker_mcp.server import get_mcp_streamable_session_manager
-
-        mgr = get_mcp_streamable_session_manager()
-        cm = mgr.run()
-        await cm.__aenter__()
-        application.state.mcp_streamable_cm = cm
-    yield
-    if cm is not None:
-        await cm.__aexit__(None, None, None)
-
-
-app = FastAPI(title="CaseLinker API", lifespan=_app_lifespan)
+_HOSTED = bool(os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_SERVICE_NAME"))
+app = FastAPI(
+    title="CaseNoesis",
+    docs_url=None if _HOSTED else "/docs",
+    redoc_url=None if _HOSTED else "/redoc",
+    openapi_url=None if _HOSTED else "/openapi.json",
+)
 
 # Trust Railway / reverse-proxy X-Forwarded-* headers for scheme and client IP.
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
@@ -2329,7 +2318,7 @@ def _load_esm_typology_entry(case_id: str, modality_label: str | None = None) ->
     }
 
 
-# Public CaseLinker Railway API — same shape as local build_lifecycle_payload().
+# Public CaseLinker ICAC corpus (read-only). CaseNoesis MCP does not use this URL.
 _CASELINKER_API_BASE = (
     os.environ.get("CASELINKER_API_URL") or "https://caselinker.up.railway.app"
 ).rstrip("/")
@@ -2338,10 +2327,10 @@ _ICAC_CANONICAL_TTL_S = 300.0
 
 
 def _fetch_caselinker_canonical_cases() -> list[dict[str, Any]]:
-    """Load the five ICAC canonical machines from CaseLinker public API.
+    """Optional read of CaseLinker's *public* ICAC canonical machines.
 
-    Prefers GET {CASELINKER_API_URL}/api/lifecycle/canonical (no key, rate-limited).
-    Falls back to local build_lifecycle_payload() so offline/dev still renders.
+    This is not CaseNoesis MCP. CaseLinker stays the public ICAC collector.
+    Offline/dev falls back to local build_lifecycle_payload().
     """
     cached = _ICAC_CANONICAL_CACHE.get("cases")
     ts = float(_ICAC_CANONICAL_CACHE.get("ts") or 0.0)
@@ -5599,19 +5588,8 @@ def api_ontology_cache_warm(
     return {"warmed": results}
 
 
-# MCP mounts: legacy SSE at /mcp/sse + Streamable HTTP at /mcp-http
-try:
-    if str(_REPO_ROOT) not in sys.path:
-        sys.path.insert(0, str(_REPO_ROOT))
-    from caselinker_mcp.server import build_mcp_sse_app, build_mcp_streamable_app
-
-    app.mount("/mcp", build_mcp_sse_app())
-    # Legacy SSE: GET /mcp/sse, POST /mcp/messages?session_id=...
-    app.mount("/mcp-http", build_mcp_streamable_app())
-    # Streamable HTTP: GET+POST /mcp-http/ (single endpoint; trailing slash avoids 307)
-    globals()["_mcp_streamable_enabled"] = True
-except Exception as _mcp_mount_err:
-    print(f"Warning: MCP mount failed: {_mcp_mount_err}", file=sys.stderr)
+# CaseNoesis does not host MCP. Agents use local stdio (`python -m casenoesis_mcp.server`).
+# CaseLinker remains the public ICAC MCP at caselinker.up.railway.app.
 
 
 if __name__ == "__main__":

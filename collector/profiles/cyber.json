@@ -1,0 +1,22 @@
+{
+  "id": "cyber",
+  "domain": "cyber",
+  "slug": "doj_cyber",
+  "source": "DOJ CaseNoesis cyber",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "ransomware",
+    "business email compromise",
+    "romance scam",
+    "pig butchering",
+    "cryptocurrency fraud",
+    "computer fraud"
+  ],
+  "require": "ransomware|business email|\\bBEC\\b|romance scam|pig butcher|crypto|computer fraud|phishing|wire fraud",
+  "court_queries": [
+    "ransomware",
+    "business email compromise",
+    "pig butchering cryptocurrency"
+  ]
+}

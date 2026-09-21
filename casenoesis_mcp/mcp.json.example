@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "casenoesis": {
+      "command": "python3",
+      "args": ["-m", "casenoesis_mcp.server"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "CASENOESIS_API_URL": "http://localhost:8000",
+        "MCP_COLLECTOR_WRITE": "1",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    }
+  }
+}

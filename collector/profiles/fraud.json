@@ -1,0 +1,26 @@
+{
+  "id": "fraud",
+  "domain": "fraud",
+  "slug": "doj_fraud",
+  "source": "DOJ CaseNoesis fraud",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "elder fraud",
+    "elder financial",
+    "romance scam",
+    "romance fraud",
+    "wire fraud",
+    "business email compromise",
+    "pig butchering",
+    "investment fraud",
+    "lottery scam",
+    "grandparent scam"
+  ],
+  "require": "fraud|scam|embezzl|swindle|scheme to defraud|pig butcher|business email|wire fraud|romance",
+  "court_queries": [
+    "elder fraud",
+    "romance scam wire fraud",
+    "business email compromise"
+  ]
+}

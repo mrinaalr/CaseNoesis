@@ -1,0 +1,25 @@
+{
+  "id": "trafficking",
+  "domain": "trafficking",
+  "slug": "doj_trafficking",
+  "source": "DOJ CaseNoesis trafficking",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "labor trafficking",
+    "forced labor",
+    "human trafficking",
+    "sex trafficking",
+    "child sex trafficking",
+    "involuntary servitude",
+    "peonage",
+    "forced labour"
+  ],
+  "require": "traffick|forced labou?r|peonage|involuntary servitude",
+  "court_queries": [
+    "labor trafficking",
+    "forced labor involuntary servitude",
+    "sex trafficking",
+    "human trafficking"
+  ]
+}

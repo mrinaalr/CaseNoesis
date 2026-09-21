@@ -10,9 +10,10 @@ text. Emits ``Publication date: YYYY-MM-DD`` before ``Source:`` for merged-PDF b
 
 deps:  pip install requests beautifulsoup4 reportlab pypdf pdfplumber
 usage:
-    python3 scrape_pdf.py --url-file source_urls.txt --out-dir ./out --out-name batch.pdf
-    python3 scrape_pdf.py --url-file source_urls.txt --limit 5
-    python3 scrape_pdf.py --url-file urls.txt --jina-fallback   # hosts that return 403 to bots
+    python3 build_press_pdf.py --url-file source_urls.txt --out-dir ./out --out-name batch.pdf
+    python3 build_press_pdf.py --url-file source_urls.txt --limit 5
+    python3 build_press_pdf.py --url-file urls.txt --jina-fallback   # hosts that return 403 to bots
+    python3 build_press_pdf.py --doj-file sources/urls_resolved.json  # after resolve_press_urls.py
 """
 
 from __future__ import annotations
@@ -23,9 +24,34 @@ import json
 import re
 import sys
 import time
-from datetime import date, datetime
+from dataclasses import dataclass
+from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
+
+_STORAGE_LAYER = Path(__file__).resolve().parents[1] / "src" / "Storage Layer"
+if str(_STORAGE_LAYER) not in sys.path:
+    sys.path.insert(0, str(_STORAGE_LAYER))
+try:
+    from provenance import (
+        DEFAULT_DOCUMENT_TYPE,
+        JINA_DOCUMENT_TYPE,
+        JINA_PARSER_NAME,
+        BUILD_PRESS_PDF_PARSER_NAME,
+        FetchedCapture,
+        date_to_utc_midnight,
+        load_provenance_sidecar,
+        mime_type_from_header,
+        parse_http_datetime,
+        provenance_sidecar_path,
+        utcnow,
+        write_provenance_sidecar,
+    )
+
+    _PROVENANCE_AVAILABLE = True
+except Exception:
+    FetchedCapture = None  # type: ignore[assignment]
+    _PROVENANCE_AVAILABLE = False
 
 try:
     import requests
@@ -53,7 +79,7 @@ except ImportError:
     pdfplumber = None  # type: ignore[assignment]
 
 DEFAULT_URL_FILE = Path.cwd() / "source_urls.txt"
-DEFAULT_OUT_DIR = Path.cwd() / "scrape_output"
+DEFAULT_OUT_DIR = Path.cwd() / "collector_output"
 DEFAULT_OUT_NAME = "scraped_cases.pdf"
 REQUEST_DELAY = 1.2
 REQUEST_TIMEOUT = 30
@@ -369,36 +395,88 @@ def load_urls(path: Path) -> list[str]:
     return urls
 
 
-def fetch(url: str, headers: dict[str, str], *, verify: bool = True) -> str | None:
+@dataclass
+class HttpFetch:
+    """Raw HTTP result used for provenance; PDF merge still uses text/bytes only."""
+
+    content: bytes
+    text: str
+    status: int
+    mime_type: str
+    etag: str | None
+    last_modified: datetime | None
+    retrieved_at: datetime
+    via_jina: bool = False
+
+
+def _http_fetch_from_response(r, *, fallback_mime: str, via_jina: bool = False) -> HttpFetch:
+    mime = fallback_mime
+    etag = None
+    last_modified = None
+    if _PROVENANCE_AVAILABLE:
+        mime = mime_type_from_header(r.headers.get("Content-Type"), fallback=fallback_mime)
+        raw_etag = r.headers.get("ETag") or r.headers.get("Etag")
+        etag = raw_etag.strip() if isinstance(raw_etag, str) and raw_etag.strip() else None
+        last_modified = parse_http_datetime(r.headers.get("Last-Modified"))
+        retrieved = utcnow()
+    else:
+        retrieved = datetime.now(timezone.utc)
+    encoding = r.encoding or "utf-8"
     try:
+        text = r.content.decode(encoding, errors="replace")
+    except LookupError:
+        text = r.content.decode("utf-8", errors="replace")
+    return HttpFetch(
+        content=r.content,
+        text=text,
+        status=int(r.status_code),
+        mime_type=mime,
+        etag=etag,
+        last_modified=last_modified,
+        retrieved_at=retrieved,
+        via_jina=via_jina,
+    )
+
+
+def fetch_http(
+    url: str,
+    headers: dict[str, str],
+    *,
+    verify: bool = True,
+    accept: str | None = None,
+) -> HttpFetch | None:
+    try:
+        request_headers = dict(headers)
+        if accept:
+            request_headers["Accept"] = accept
         r = requests.get(
             url,
-            headers=headers,
+            headers=request_headers,
             timeout=REQUEST_TIMEOUT,
             allow_redirects=True,
             verify=verify,
         )
         r.raise_for_status()
-        return r.text
+        fallback = "application/pdf" if (accept or "").startswith("application/pdf") else "text/html"
+        return _http_fetch_from_response(r, fallback_mime=fallback)
     except Exception as e:
         print(f"    [fetch error] {e}", file=sys.stderr)
         return None
+
+
+def fetch(url: str, headers: dict[str, str], *, verify: bool = True) -> str | None:
+    got = fetch_http(url, headers, verify=verify)
+    return got.text if got else None
 
 
 def fetch_bytes(url: str, headers: dict[str, str], *, verify: bool = True) -> bytes | None:
-    try:
-        r = requests.get(
-            url,
-            headers={**headers, "Accept": "application/pdf,*/*;q=0.8"},
-            timeout=REQUEST_TIMEOUT,
-            allow_redirects=True,
-            verify=verify,
-        )
-        r.raise_for_status()
-        return r.content
-    except Exception as e:
-        print(f"    [fetch error] {e}", file=sys.stderr)
-        return None
+    got = fetch_http(
+        url,
+        headers,
+        verify=verify,
+        accept="application/pdf,*/*;q=0.8",
+    )
+    return got.content if got else None
 
 
 def _publication_date_from_filename(url: str) -> date | None:
@@ -491,7 +569,7 @@ def extract_from_native_pdf(pdf_bytes: bytes, url: str) -> tuple[str, str, str, 
     return title, byline, body.strip(), pub_date
 
 
-def fetch_via_jina_reader(target_url: str, *, verify: bool = True, retries: int = 5) -> str | None:
+def fetch_jina_http(target_url: str, *, verify: bool = True, retries: int = 5) -> HttpFetch | None:
     """Some hosts (e.g. mass.gov) block datacenter IPs; Jina Reader returns markdown + metadata."""
     jina_url = "https://r.jina.ai/" + target_url
     hdrs = {
@@ -514,7 +592,7 @@ def fetch_via_jina_reader(target_url: str, *, verify: bool = True, retries: int 
                 time.sleep(wait)
                 continue
             r.raise_for_status()
-            return r.text
+            return _http_fetch_from_response(r, fallback_mime="text/plain", via_jina=True)
         except Exception as e:
             last_err = e
             if attempt + 1 < retries:
@@ -522,6 +600,11 @@ def fetch_via_jina_reader(target_url: str, *, verify: bool = True, retries: int 
     if last_err is not None:
         print(f"    [jina fetch error] {last_err}", file=sys.stderr)
     return None
+
+
+def fetch_via_jina_reader(target_url: str, *, verify: bool = True, retries: int = 5) -> str | None:
+    got = fetch_jina_http(target_url, verify=verify, retries=retries)
+    return got.text if got else None
 
 
 def _parse_jina_published_time(raw: str) -> date | None:
@@ -2438,6 +2521,38 @@ def merge(pdf_paths: list[Path], out_path: Path) -> bool:
     return True
 
 
+def _capture_row_from_fetch(
+    url: str,
+    http_fetch: HttpFetch | None,
+    body: str | None,
+    pub_date: date | None,
+) -> dict | None:
+    """Build a sidecar row from the fetched bytes. Does not change the merged PDF."""
+    if not _PROVENANCE_AVAILABLE or FetchedCapture is None or http_fetch is None:
+        return None
+    if http_fetch.status != 200:
+        return None
+    try:
+        via_jina = bool(getattr(http_fetch, "via_jina", False))
+        capture = FetchedCapture(
+            url=url,
+            content=http_fetch.content,
+            retrieved_at=http_fetch.retrieved_at,
+            mime_type=http_fetch.mime_type,
+            http_status=http_fetch.status,
+            http_etag=http_fetch.etag,
+            http_last_modified=http_fetch.last_modified,
+            published_at=date_to_utc_midnight(pub_date),
+            normalized_text=body,
+            parser_name=JINA_PARSER_NAME if via_jina else BUILD_PRESS_PDF_PARSER_NAME,
+            document_type=JINA_DOCUMENT_TYPE if via_jina else DEFAULT_DOCUMENT_TYPE,
+        )
+        return capture.to_sidecar_row()
+    except Exception as e:
+        print(f"    [provenance skip] {e}", file=sys.stderr)
+        return None
+
+
 def _per_url_cache_pdf(tmp_dir: Path, index: int, url: str) -> Path:
     """
     Per-URL cache filename under tmp_dir (index prefix keeps merge order).
@@ -2449,22 +2564,26 @@ def _per_url_cache_pdf(tmp_dir: Path, index: int, url: str) -> Path:
 
 def resolve_url_content(
     url: str, args: argparse.Namespace, verify_tls: bool
-) -> tuple[str, str, str, date | None] | None:
+) -> tuple[tuple[str, str, str, date | None], HttpFetch | None] | None:
     """
-    Fetch + extract a single URL into (title, byline, body, pub_date), applying the
-    existing native-PDF / Jina-first-host / fallback / njoag / ncis-follow logic.
-    Returns None when the URL could not be resolved into a usable article.
+    Fetch + extract a single URL into (title, byline, body, pub_date) plus the
+    raw HttpFetch used for provenance. Returns None when the URL could not be
+    resolved into a usable article.
 
-    Shared by the plain --url-file pipeline and --noesis-file "scrape"-mode entries
-    (non-DOJ URLs passed through unchanged by scrape_noesis.py).
+    Shared by the plain --url-file pipeline and --doj-file "scrape"-mode entries
+    (non-DOJ URLs passed through unchanged by resolve_press_urls.py).
     """
     parsed = urlparse(url)
     ref = args.referer or f"{parsed.scheme}://{parsed.netloc}/"
     hdrs = _default_headers(referer=ref)
     path_lower = parsed.path.lower()
+    http_fetch: HttpFetch | None = None
 
     if path_lower.endswith(".pdf"):
-        raw = fetch_bytes(url, hdrs, verify=verify_tls)
+        http_fetch = fetch_http(
+            url, hdrs, verify=verify_tls, accept="application/pdf,*/*;q=0.8"
+        )
+        raw = http_fetch.content if http_fetch else None
         if not raw:
             return None
         result = extract_from_native_pdf(raw, url)
@@ -2477,7 +2596,7 @@ def resolve_url_content(
             if not body or len(body) < MIN_BODY_CHARS:
                 print("    [FAILED] njoag: body too thin after clean")
                 return None
-        return title, byline, body, pub_date
+        return (title, byline, body, pub_date), http_fetch
 
     use_jina_first = args.jina_fallback and (
         "cbp.gov" in url.lower()
@@ -2492,12 +2611,15 @@ def resolve_url_content(
         else:
             tag = "nysp"
         print(f"    [{tag}] r.jina.ai reader ...")
-        html = fetch_via_jina_reader(url, verify=verify_tls)
+        http_fetch = fetch_jina_http(url, verify=verify_tls)
+        html = http_fetch.text if http_fetch else None
     else:
-        html = fetch(url, hdrs, verify=verify_tls)
+        http_fetch = fetch_http(url, hdrs, verify=verify_tls)
+        html = http_fetch.text if http_fetch else None
         if not html and args.jina_fallback:
             print("    [fallback] r.jina.ai reader ...")
-            html = fetch_via_jina_reader(url, verify=verify_tls)
+            http_fetch = fetch_jina_http(url, verify=verify_tls)
+            html = http_fetch.text if http_fetch else None
     if not html:
         return None
 
@@ -2528,7 +2650,10 @@ def resolve_url_content(
     )
     if needs_jina:
         print("    [fallback] r.jina.ai reader (thin or empty extract) ...")
-        html_j = fetch_via_jina_reader(url, verify=verify_tls)
+        jina_fetch = fetch_jina_http(url, verify=verify_tls)
+        html_j = jina_fetch.text if jina_fetch else None
+        if jina_fetch:
+            http_fetch = jina_fetch
         if html_j:
             is_j2 = html_j.lstrip().startswith("Title:") and "Markdown Content:" in html_j
             if is_j2:
@@ -2563,10 +2688,10 @@ def resolve_url_content(
         if not body or len(body) < MIN_BODY_CHARS:
             print("    [FAILED] njoag: body too thin after clean")
             return None
-    return title, byline, body, pub_date
+    return (title, byline, body, pub_date), http_fetch
 
 
-def load_noesis_records(path: Path) -> list[dict]:
+def load_doj_records(path: Path) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -2581,18 +2706,22 @@ def _parse_iso_date(raw: str | None) -> date | None:
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Scrape HTML URLs from a list into one merged PDF.",
+        description="Build a merged press-release PDF from a URL list or resolved JSON.",
     )
     ap.add_argument("--url-file", type=Path, default=DEFAULT_URL_FILE)
     ap.add_argument(
+        "--doj-file",
+        "--resolved-file",
         "--noesis-file",
+        dest="doj_file",
         type=Path,
         default=None,
         help=(
-            "JSON produced by scrape_noesis.py (list of {source_url, mode, ...}). "
-            "mode=resolved skips fetch/extract entirely (e.g. DOJ API records); "
-            "mode=scrape reuses the normal fetch/extract pipeline. "
-            "Alternative to --url-file; takes precedence when set."
+            "JSON from resolve_press_urls.py / harvest_doj_press.py "
+            "(list of {source_url, mode, ...}). "
+            "mode=resolved skips fetch/extract; mode=scrape uses the normal pipeline. "
+            "--resolved-file is the preferred alias; --doj-file remains accepted. "
+            "Takes precedence over --url-file when set."
         ),
     )
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
@@ -2630,33 +2759,38 @@ def main():
         except Exception:
             pass
 
-    # work_items: list of (url, resolved_or_None). resolved is a (title, byline, body,
-    # pub_date) tuple already in hand (noesis mode=resolved -> skip fetch entirely);
+    # work_items: (url, resolved_or_None). resolved is a (title, byline, body,
+    # pub_date) tuple already in hand (doj-file mode=resolved -> skip fetch entirely);
     # None means run it through resolve_url_content() same as the plain url-file path.
     work_items: list[tuple[str, tuple[str, str, str, date | None] | None]] = []
+    unresolved_urls: set[str] = set()
 
-    if args.noesis_file:
-        if not args.noesis_file.is_file():
-            sys.exit(f"Noesis file not found: {args.noesis_file}")
-        records = load_noesis_records(args.noesis_file)
+    if args.doj_file:
+        if not args.doj_file.is_file():
+            sys.exit(f"DOJ records file not found: {args.doj_file}")
+        records = load_doj_records(args.doj_file)
         if args.limit:
             records = records[: args.limit]
         for rec in records:
             url = rec.get("source_url") or rec.get("url")
             if not url:
                 continue
-            if rec.get("mode") == "resolved":
+            mode = rec.get("mode")
+            if mode == "unresolved":
+                unresolved_urls.add(url)
+                work_items.append((url, None))
+            elif mode == "resolved":
                 resolved = (
                     rec.get("title") or _title_from_url(url),
                     rec.get("byline") or "",
                     rec.get("body") or "",
                     _parse_iso_date(rec.get("pub_date")),
                 )
+                work_items.append((url, resolved))
             else:
-                resolved = None
-            work_items.append((url, resolved))
+                work_items.append((url, None))
         print(f"\n{'='*55}")
-        print(f"  Noesis file: {args.noesis_file}")
+        print(f"  DOJ records file: {args.doj_file}")
         print(f"  Total items: {len(work_items)}")
         print(f"  Output     : {args.out_dir / args.out_name}")
         print(f"{'='*55}\n")
@@ -2681,10 +2815,27 @@ def main():
 
     successes: list[Path] = []
     failures: list[str] = []
+    capture_rows: dict[str, dict] = {}
+    merged_out = args.out_dir / args.out_name
+    if _PROVENANCE_AVAILABLE:
+        existing_sidecar = provenance_sidecar_path(merged_out)
+        if existing_sidecar.is_file():
+            try:
+                for row in load_provenance_sidecar(existing_sidecar):
+                    key = str(row.get("original_url") or row.get("canonical_url") or "")
+                    if key:
+                        capture_rows[key] = row
+            except Exception as e:
+                print(f"  [provenance] could not reload sidecar: {e}", file=sys.stderr)
 
     for i, (url, resolved) in enumerate(work_items, start=1):
         slug = url.rstrip("/").split("/")[-1][:65]
         print(f"  [{i}/{len(work_items)}] {slug}")
+
+        if url in unresolved_urls:
+            print("    [FAILED] doj: unresolved (no DOJ API match)")
+            failures.append(url)
+            continue
 
         out_pdf = _per_url_cache_pdf(tmp_dir, i, url)
         if out_pdf.exists() and out_pdf.stat().st_size > 500:
@@ -2695,7 +2846,7 @@ def main():
         if resolved is not None:
             title, byline, body, pub_date = resolved
             if len(body.strip()) < MIN_BODY_CHARS:
-                print("    [FAILED] noesis: resolved body too thin")
+                print("    [FAILED] doj: resolved body too thin")
                 failures.append(url)
                 continue
             ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
@@ -2707,18 +2858,21 @@ def main():
                 failures.append(url)
             continue  # no network call made -> no rate-limit delay needed
 
-        result = resolve_url_content(url, args, verify_tls)
-        if result is None:
+        got = resolve_url_content(url, args, verify_tls)
+        if got is None:
             failures.append(url)
             time.sleep(args.delay)
             continue
 
-        title, byline, body, pub_date = result
+        (title, byline, body, pub_date), http_fetch = got
         ok = write_pdf(out_pdf, title, byline, body, url, pub_date)
         if ok:
             kb = out_pdf.stat().st_size // 1024
             print(f"    [ok] {kb} KB - {title[:65]}")
             successes.append(out_pdf)
+            row = _capture_row_from_fetch(url, http_fetch, body, pub_date)
+            if row:
+                capture_rows[url] = row
         else:
             failures.append(url)
 
@@ -2734,6 +2888,9 @@ def main():
     if merge(successes, out_pdf):
         mb = out_pdf.stat().st_size / 1024 / 1024
         print(f"-> {out_pdf}  ({mb:.2f} MB)\n")
+        if _PROVENANCE_AVAILABLE and capture_rows:
+            sidecar = write_provenance_sidecar(out_pdf, list(capture_rows.values()))
+            print(f"  Provenance sidecar: {sidecar} ({len(capture_rows)} article(s))")
     else:
         sys.exit("Merge failed.")
 

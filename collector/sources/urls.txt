@@ -1,0 +1,2 @@
+# one URL per line. Comments start with #
+# Example: python3 collector/build_press_pdf.py --url-file collector/sources/urls.txt

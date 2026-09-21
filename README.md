@@ -10,10 +10,10 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 ## Scope
 
-- Multi-offense-category ingestion and processing pipeline (fraud, cyber-enabled crime, trafficking, and others to be defined as the project develops)
-- Interfaced via MCP, command-line tools, and public dashboard
-- Local database and external API integrations
-- Runnable via localhost for collaborators and cloners
+- Multi-offense ingestion (fraud, trafficking, cyber-enabled crime, CSEA/ICAC)
+- **Private** local MCP + CLI collector for researchers (`casenoesis_mcp`, `collector/`)
+- Website/docs may run on Railway; **no public query MCP/API** (that is CaseLinker)
+- Local FastAPI + sqlite for collaborators and cloners
 
 ## Status
 
@@ -41,7 +41,7 @@ flowchart TD
     ESM --> AN["ANALYSIS <br/> Laws 1–4 · backbone · affordance structure"]
     AN --> VIZ["VIEWS <br/> machines · trajectories · case explorers"]
 
-    STORE -.-> API["FastAPI · MCP"]
+    STORE -.-> API["local FastAPI · local stdio MCP"]
     VIZ -.-> API
 ```
 
@@ -49,7 +49,7 @@ flowchart TD
 
 **Cross domain analysis.** Processing extracts comparable features under a domain-agnostic offense record (domain profiles specialize; they do not redefine the core). Graphs are CASE/UCO + Extensions with the trajectories metamodel; SHACL is a publish gate, and inferred analytics are never typed as observed facts.
 
-**What the system is for.** The primary purpose is to build formal models, specifically the *Exploitation State Machine*. Analysis tests Theorem 1 and Laws 1–4 across domains, annotates affordances, and *ranks intervention points*. Visualization and API/MCP expose machines, data, and analysis views.
+**What the system is for.** The primary purpose is to build formal models, specifically the *Exploitation State Machine*. Analysis tests Theorem 1 and Laws 1–4 across domains, annotates affordances, and *ranks intervention points*. The local website and stdio MCP expose machines and collection tools to the researcher — not to the public internet. CaseLinker remains the public ICAC collector.
 
 ## Collection
 
@@ -75,7 +75,7 @@ flowchart TD
     E --> V["RESOLVE <br/> link releases + merge features <br/> case_resolve.py"]
 ```
 
-Scrape tools live under [`scripts/scraper/`](scripts/scraper/). Extract + resolve live under [`src/Processing Layer/`](src/Processing%20Layer/) (`batching.py`, [`case_resolve.py`](src/Processing%20Layer/case_resolve.py)). Analysis and CASE/UCO graphs are a separate layer downstream — not collection.
+Scrape tools live under [`collector/`](collector/README.md). MCP for agents: [`casenoesis_mcp/`](casenoesis_mcp/README.md) (local stdio only). Outputs land in [`data/collected/`](data/collected/README.md).
 
 ### How a press release becomes a case
 
@@ -114,7 +114,7 @@ Collection keeps documents and cases distinct. Counts are not interchangeable:
 | Sources bundled | 56 |
 | Bundled pages | 4,860 |
 | Largest bundle | `SCAG_ICAC_All.pdf` — 633 pages |
-| Coverage | ICAC corpus (CaseLinker lineage, same scraper). Elder fraud, trafficking, and extortion: pipeline-ready, not collected yet. |
+| Coverage | AfH ICAC corpus (CaseLinker lineage) plus CaseNoesis harvests (fraud, trafficking, cyber, CSEA) via `collector/run_bulk.py` under NHSR #8252. |
 
 The collection layer is crime-type agnostic. Extending to a new domain means a new source list and search terms — not a new pipeline.
 
