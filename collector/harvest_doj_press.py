@@ -322,6 +322,12 @@ def main() -> None:
         help="Extra merged PDF to treat as already-seen justice.gov URLs (repeatable).",
     )
     ap.add_argument(
+        "--skip-url-file",
+        type=Path,
+        default=None,
+        help="Text file of source URLs already collected; drop these instead of keeping them.",
+    )
+    ap.add_argument(
         "--until",
         default=None,
         help="Keep records with pub_date strictly before this YYYY-MM-DD (e.g. 2010-01-01).",
@@ -377,6 +383,15 @@ def main() -> None:
     print("Loading existing DOJ PDF URLs for novelty…", file=sys.stderr)
     seen_urls = existing_doj_urls(args.baseline_pdf)
     print(f"  baseline unique justice.gov URLs: {len(seen_urls)}", file=sys.stderr)
+    skip_urls: set[str] = set()
+    if args.skip_url_file:
+        skip_path = args.skip_url_file if args.skip_url_file.is_absolute() else (HERE / args.skip_url_file)
+        if skip_path.is_file():
+            for line in skip_path.read_text(encoding="utf-8").splitlines():
+                u = _normalize_url(line.strip())
+                if u:
+                    skip_urls.add(u)
+            print(f"  skip-url-file {len(skip_urls)} already-collected URLs", file=sys.stderr)
     other_hits = justice_gov_in_other_corpus_pdfs()
     if other_hits:
         print(f"  justice.gov already in non-DOJ PDFs: {other_hits}", file=sys.stderr)
@@ -432,6 +447,9 @@ def main() -> None:
             return False
         if not url:
             stats["drop_no_url"] += 1
+            return False
+        if skip_urls and _normalize_url(url) in skip_urls:
+            stats["drop_already_collected"] += 1
             return False
         if verify_cac is not None:
             cac_case = {

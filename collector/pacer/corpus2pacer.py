@@ -12,8 +12,8 @@ Cases matching any tier are included; confidence is high (A), medium (A+B or B+C
 Output: data/PACER/pacer_cases.json
 
 Usage:
-  python data/PACER/corpus2pacer.py
-  python data/PACER/corpus2pacer.py --db /path/to/caselinker.db --min-confidence medium
+  python collector/pacer/corpus2pacer.py
+  python collector/pacer/corpus2pacer.py --db /path/to/caselinker.db --min-confidence medium
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-PACER_DIR = Path(__file__).resolve().parent
+PACER_DIR = REPO_ROOT / "data" / "PACER"
 OUTPUT_PATH = PACER_DIR / "pacer_cases.json"
 
 sys.path.insert(0, str(REPO_ROOT / "src" / "Storage Layer"))

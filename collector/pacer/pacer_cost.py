@@ -7,7 +7,9 @@ import re
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-PACER_DIR = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parents[1]
+PACER_DIR = REPO_ROOT / "data" / "PACER"
 BULK_DIR = PACER_DIR / "BULK_FOLDER"
 DEFAULT_CSV = BULK_DIR / "pacer_cost.csv"
 

@@ -11,16 +11,16 @@ Output naming (flat in BULK_FOLDER):
 
 Usage:
   # Safe: audit what's free vs needs PACER (no downloads, no charges)
-  python data/PACER/cases2records.py --preset wayerski --dry-run
+  python collector/pacer/cases2records.py --preset wayerski --dry-run
 
   # Safe: pull only free key docs (indictment/plea/sentencing), max 4 per case
-  python data/PACER/cases2records.py --preset wayerski --key-docs --log-cost
+  python collector/pacer/cases2records.py --preset wayerski --key-docs --log-cost
 
   # Berger + 3 more bridge cases, free RECAP only
-  python data/PACER/cases2records.py --batch bridge4 --key-docs --log-cost
+  python collector/pacer/cases2records.py --batch bridge4 --key-docs --log-cost
 
   # PAID — only when you explicitly want PACER charges via CourtListener recap-fetch
-  python data/PACER/cases2records.py --preset wayerski --key-docs --charge-pacer --log-cost
+  python collector/pacer/cases2records.py --preset wayerski --key-docs --charge-pacer --log-cost
 """
 
 from __future__ import annotations
@@ -39,12 +39,13 @@ from urllib.parse import urljoin
 
 import requests
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PACER_DIR = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parents[1]
+PACER_DIR = REPO_ROOT / "data" / "PACER"
 BULK_DIR = PACER_DIR / "BULK_FOLDER"
 DEFAULT_ENV = REPO_ROOT / ".env"
 
-sys.path.insert(0, str(PACER_DIR))
+sys.path.insert(0, str(HERE))
 from pacer_cost import append_cost_row, append_cost_rows, estimate_pacer_pdf_cost  # noqa: E402
 
 API_BASE = "https://www.courtlistener.com/api/rest/v4/"

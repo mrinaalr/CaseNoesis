@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
-"""Bulk public-record harvest for CaseNoesis (NHSR #8252).
+"""Sequential public-record harvest for CaseNoesis (NHSR #8252).
 
-Press: DOJ News API via harvest_doj_press.py (free, no key).
-Court: CourtListener / RECAP only — never PACER purchase.
+Press: DOJ News API via harvest_doj_press.py (free, no key). One HTTP page at a
+time; each kept record is written (JSON + PDF) before the next.
+Court: CourtListener / RECAP only — never PACER purchase. One PDF at a time.
 
-Writes ``data/collected/{press_releases,pacer,manifests}/<domain>/``.
+Writes ``data/collected/{press_releases,recap,manifests}/<domain>/``.
 Does not auto-ingest.
 
 usage:
-    python3 collector/run_bulk.py --press-count 100 --court-count 5
+    python3 collector/run_bulk.py --one
     python3 collector/run_bulk.py --press-count 1000 --court-count 50
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
-import shutil
 import subprocess
 import sys
 import time
@@ -46,34 +45,12 @@ def _slug_for(url: str, title: str = "") -> str:
 def _dirs(root: Path, domain: str) -> dict[str, Path]:
     paths = {
         "press": root / "press_releases" / domain,
-        "pacer": root / "pacer" / domain,
+        "recap": root / "recap" / domain,
         "manifests": root / "manifests" / domain,
     }
     for p in paths.values():
         p.mkdir(parents=True, exist_ok=True)
     return paths
-
-
-def _promote_individuals(tmp_dir: Path, records: list[dict], dest_dir: Path) -> list[Path]:
-    """Copy build_press_pdf tmp/{index}_{sha16}.pdf → press_releases/{domain}/{slug}.pdf."""
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    out: list[Path] = []
-    for i, rec in enumerate(records, start=1):
-        url = rec.get("source_url") or ""
-        if not url:
-            continue
-        h = hashlib.sha256(url.strip().encode("utf-8")).hexdigest()[:16]
-        src = tmp_dir / f"{i:04d}_{h}.pdf"
-        if not src.is_file():
-            matches = list(tmp_dir.glob(f"*_{h}.pdf"))
-            src = matches[0] if matches else None
-        if src is None or not src.is_file():
-            continue
-        dest = dest_dir / f"{_slug_for(url, rec.get('title') or '')}.pdf"
-        shutil.copy2(src, dest)
-        rec["pdf"] = str(dest)
-        out.append(dest)
-    return out
 
 
 def _load_profile(name: str) -> dict:
@@ -97,21 +74,79 @@ def _run(cmd: list[str], *, cwd: Path, timeout: int) -> subprocess.CompletedProc
 def _split_counts(total: int, n: int) -> list[int]:
     if n <= 0:
         return []
-    base, rem = divmod(max(0, total), n)
-    return [base + (1 if i < rem else 0) for i in range(n)]
+    base, remnant = divmod(max(0, total), n)
+    return [base + (1 if i < remnant else 0) for i in range(n)]
 
 
-def harvest_domain(
+def harvest_one(
+    *,
+    python: str,
+    profile_name: str,
+    out_dir: Path,
+    skip_url_file: Path,
+    keep_early: bool,
+) -> dict:
+    """Harvest a single new press record for one domain (max-keep 1)."""
+    profile = _load_profile(profile_name)
+    one_dir = out_dir / "_one"
+    one_dir.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        python,
+        str(HERE / "harvest_doj_press.py"),
+        "--profile",
+        profile_name,
+        "--max-keep",
+        "1",
+        "--out-dir",
+        str(one_dir),
+        "--slug",
+        "one",
+        "--skip-url-file",
+        str(skip_url_file),
+    ]
+    if profile.get("skip_cac", True):
+        cmd.append("--skip-cac")
+    if keep_early:
+        cmd.append("--keep-early")
+    try:
+        proc = _run(cmd, cwd=HERE, timeout=240)
+        code = proc.returncode
+        stderr = proc.stderr or ""
+    except subprocess.TimeoutExpired as exc:
+        code = 124
+        stderr = (exc.stderr or "") if isinstance(exc.stderr, str) else ""
+    resolved = one_dir / "one_resolved.json"
+    records: list[dict] = []
+    if resolved.is_file():
+        try:
+            records = json.loads(resolved.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            records = []
+    rec = records[0] if records else None
+    return {
+        "ok": rec is not None,
+        "exit_code": code,
+        "profile": profile_name,
+        "record": rec,
+        "stderr_tail": stderr[-1500:],
+    }
+
+
+def harvest_many(
     *,
     python: str,
     profile_name: str,
     max_keep: int,
     out_dir: Path,
+    skip_url_file: Path,
     keep_early: bool,
 ) -> dict:
+    """Page the DOJ API sequentially until max_keep new records. One HTTP request at a time."""
     if max_keep <= 0:
-        return {"ok": True, "kept": 0, "records": [], "profile": profile_name}
+        return {"ok": True, "records": [], "profile": profile_name}
     profile = _load_profile(profile_name)
+    batch_dir = out_dir / "_batch"
+    batch_dir.mkdir(parents=True, exist_ok=True)
     cmd = [
         python,
         str(HERE / "harvest_doj_press.py"),
@@ -120,36 +155,183 @@ def harvest_domain(
         "--max-keep",
         str(max_keep),
         "--out-dir",
-        str(out_dir),
+        str(batch_dir),
+        "--slug",
+        "batch",
+        "--skip-url-file",
+        str(skip_url_file),
     ]
     if profile.get("skip_cac", True):
         cmd.append("--skip-cac")
     if keep_early:
         cmd.append("--keep-early")
-    # 100 records can page several title terms; stay under API 4 req/s.
-    timeout = max(300, max_keep * 12)
-    proc = _run(cmd, cwd=HERE, timeout=timeout)
-    slug = profile.get("slug") or f"doj_{profile_name}"
-    resolved = out_dir / f"{slug}_resolved.json"
+    try:
+        proc = _run(cmd, cwd=HERE, timeout=max(600, max_keep * 25))
+        code = proc.returncode
+        stderr = proc.stderr or ""
+        stdout = proc.stdout or ""
+    except subprocess.TimeoutExpired as exc:
+        code = 124
+        stderr = (exc.stderr or "") if isinstance(exc.stderr, str) else ""
+        stdout = (exc.stdout or "") if isinstance(exc.stdout, str) else ""
+        print("harvest_many timed out; using whatever resolved JSON exists", file=sys.stderr)
+    resolved = batch_dir / "batch_resolved.json"
     records: list[dict] = []
     if resolved.is_file():
         try:
-            records = json.loads(resolved.read_text(encoding="utf-8"))
+            loaded = json.loads(resolved.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                records = loaded
         except json.JSONDecodeError:
             records = []
-    ok = proc.returncode == 0 and bool(records)
-    if not ok:
-        print(proc.stderr[-2000:] if proc.stderr else proc.stdout[-1000:], file=sys.stderr)
+    if code != 0:
+        print((stderr or stdout)[-2000:], file=sys.stderr)
     return {
-        "ok": ok,
-        "exit_code": proc.returncode,
+        "ok": bool(records),
+        "exit_code": code,
         "profile": profile_name,
-        "slug": slug,
-        "resolved_json": str(resolved) if resolved.is_file() else None,
-        "kept": len(records),
         "records": records,
-        "stderr_tail": (proc.stderr or "")[-1500:],
+        "stderr_tail": stderr[-1500:],
     }
+
+
+def _iter_kind(root: Path, domain: str, kind: str) -> list[dict]:
+    folder = root / "manifests" / domain
+    out: list[dict] = []
+    if not folder.is_dir():
+        return out
+    for path in sorted(folder.glob("*.json")):
+        if path.name in {"MANIFEST.json", "COLLECTION.json"}:
+            continue
+        if "resolved" in path.name or "harvest" in path.name:
+            continue
+        if kind == "court" and not path.name.startswith("court_"):
+            continue
+        if kind == "press" and path.name.startswith("court_"):
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(data, dict):
+            continue
+        if data.get("kind") == kind:
+            out.append(data)
+    return out
+
+
+def _press_pdf_count(root: Path, domain: str) -> int:
+    folder = root / "press_releases" / domain
+    if not folder.is_dir():
+        return 0
+    return sum(
+        1
+        for p in folder.glob("*.pdf")
+        if p.is_file() and not p.name.endswith("_All.pdf")
+    )
+
+
+def _court_pdf_count(root: Path, domain: str) -> int:
+    folder = root / "recap" / domain
+    if not folder.is_dir():
+        return 0
+    return sum(1 for p in folder.glob("*.pdf") if p.is_file())
+
+
+def collected_press_urls(root: Path) -> set[str]:
+    urls: set[str] = set()
+    man_root = root / "manifests"
+    if not man_root.is_dir():
+        return urls
+
+    def _add(obj: object) -> None:
+        if isinstance(obj, dict):
+            if obj.get("kind") == "court":
+                return
+            url = obj.get("source_url") or (obj.get("record") or {}).get("source_url")
+            if url:
+                urls.add(str(url).strip())
+            return
+        if isinstance(obj, list):
+            for item in obj:
+                _add(item)
+
+    for path in man_root.rglob("*.json"):
+        if path.name in {"COLLECTION.json", "MANIFEST.json"}:
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        _add(data)
+    return urls
+
+
+def _write_skip_url_file(root: Path) -> Path:
+    path = root / "manifests" / "_skip_urls.txt"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    urls = sorted(collected_press_urls(root))
+    path.write_text("\n".join(urls) + ("\n" if urls else ""), encoding="utf-8")
+    return path
+
+
+def _append_resolved(path: Path, rec: dict) -> None:
+    records: list[dict] = []
+    if path.is_file():
+        try:
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                records = loaded
+        except json.JSONDecodeError:
+            records = []
+    url = rec.get("source_url")
+    if url and any(r.get("source_url") == url for r in records):
+        return
+    records.append(rec)
+    path.write_text(json.dumps(records, indent=2, default=str), encoding="utf-8")
+
+
+def write_collection_json(root: Path, domains: list[str], *, press_target: int, court_target: int) -> Path:
+    stats: dict[str, dict] = {}
+    press_kept = 0
+    court_kept = 0
+    for domain in domains:
+        press = _iter_kind(root, domain, "press")
+        court = _iter_kind(root, domain, "court")
+        n_press = max(len(press), _press_pdf_count(root, domain))
+        n_court = max(len(court), _court_pdf_count(root, domain))
+        merged = root / "press_releases" / domain / f"{domain.upper()}_All.pdf"
+        stats[domain] = {
+            "press": n_press,
+            "court": n_court,
+            "merged_pdf": str(merged) if merged.is_file() else None,
+            "individuals": n_press,
+        }
+        press_kept += n_press
+        court_kept += n_court
+    payload = {
+        "nhsr": NHSR,
+        "nhsr_title": NHSR_TITLE,
+        "cost": "free",
+        "pacer_purchases": 0,
+        "observed": True,
+        "inferred": False,
+        "mode": "sequential",
+        "collected_at": datetime.now(timezone.utc).isoformat(),
+        "layout": {
+            "press_releases": str(root / "press_releases" / "<domain>" / "{slug}.pdf"),
+            "recap": str(root / "recap" / "<domain>"),
+            "manifests": str(root / "manifests" / "<domain>"),
+        },
+        "press_target": press_target,
+        "press_kept": press_kept,
+        "court_target": court_target,
+        "court_kept": court_kept,
+        "domains": stats,
+    }
+    path = root / "manifests" / "COLLECTION.json"
+    path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    return path
 
 
 def build_pdf(*, python: str, doj_file: Path, out_dir: Path, out_name: str, limit: int) -> dict:
@@ -168,7 +350,7 @@ def build_pdf(*, python: str, doj_file: Path, out_dir: Path, out_name: str, limi
         "--limit",
         str(limit),
     ]
-    proc = _run(cmd, cwd=HERE, timeout=max(300, limit * 5))
+    proc = _run(cmd, cwd=HERE, timeout=max(300, limit * 8))
     pdf_path = out_dir / out_name
     return {
         "ok": proc.returncode == 0 and pdf_path.is_file(),
@@ -191,7 +373,7 @@ def _write_record_manifest(path: Path, rec: dict, *, domain: str, kind: str) -> 
         "inferred": False,
         "domain": domain,
         "kind": kind,
-        "title": rec.get("title"),
+        "title": rec.get("title") or rec.get("case_name"),
         "source_url": rec.get("source_url") or rec.get("absolute_url"),
         "pub_date": rec.get("pub_date") or rec.get("date_filed"),
         "agency": rec.get("agency") or rec.get("court"),
@@ -201,10 +383,132 @@ def _write_record_manifest(path: Path, rec: dict, *, domain: str, kind: str) -> 
     path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
 
 
+def collect_one_press(*, python: str, domain: str, root: Path, no_pdf: bool = False) -> dict:
+    dirs = _dirs(root, domain)
+    skip_file = _write_skip_url_file(root)
+    harvested = harvest_one(
+        python=python,
+        profile_name=domain,
+        out_dir=dirs["manifests"],
+        skip_url_file=skip_file,
+        keep_early=True,
+    )
+    rec = harvested.get("record")
+    if not harvested.get("ok") or not rec:
+        return {
+            "ok": False,
+            "kind": "press",
+            "domain": domain,
+            "error": "harvest returned no new record",
+            "stderr_tail": harvested.get("stderr_tail"),
+            "pacer_purchases": 0,
+            "cost": "free",
+        }
+    return _persist_press_record(python=python, domain=domain, root=root, rec=rec, no_pdf=no_pdf)
+
+
+def collect_one_court(*, domain: str, root: Path) -> dict:
+    from court_records import collect_free_court_records, load_token_from_env_files
+
+    load_token_from_env_files([REPO / ".env", REPO.parent / "CaseLinker" / ".env"])
+    dirs = _dirs(root, domain)
+    queries = list(_load_profile(domain).get("court_queries") or [])
+    for rec in _iter_kind(root, domain, "press")[:40]:
+        title = (rec.get("title") or "").strip()
+        if title:
+            queries.append(title[:80])
+    before = {p.name for p in dirs["recap"].glob("*.pdf")}
+    recs = collect_free_court_records(
+        queries, dest_dir=dirs["recap"], max_records=1, per_query=8
+    )
+    new = [
+        r
+        for r in recs
+        if Path((r.get("download") or {}).get("path") or "").name not in before
+        and (r.get("download") or {}).get("ok")
+    ]
+    if not new:
+        return {
+            "ok": False,
+            "kind": "court",
+            "domain": domain,
+            "error": "no new free RECAP PDF",
+            "pacer_purchases": 0,
+            "cost": "free",
+        }
+    rec = new[0]
+    rec["domain"] = domain
+    rec["pdf"] = (rec.get("download") or {}).get("path")
+    slug = _slug_for(
+        rec.get("absolute_url") or rec.get("docket_number") or "docket",
+        rec.get("case_name") or "",
+    )
+    _write_record_manifest(
+        dirs["manifests"] / f"court_{slug}.json", rec, domain=domain, kind="court"
+    )
+    return {
+        "ok": True,
+        "kind": "court",
+        "domain": domain,
+        "title": rec.get("case_name"),
+        "source_url": rec.get("absolute_url"),
+        "pdf": rec.get("pdf"),
+        "pacer_purchases": 0,
+        "cost": "free",
+    }
+
+
+def _persist_press_record(*, python: str, domain: str, root: Path, rec: dict, no_pdf: bool) -> dict:
+    dirs = _dirs(root, domain)
+    rec = dict(rec)
+    rec["domain"] = domain
+    slug = _slug_for(rec.get("source_url") or "", rec.get("title") or "")
+    man_path = dirs["manifests"] / f"{slug}.json"
+    pdf_path = dirs["press"] / f"{slug}.pdf"
+    if man_path.is_file() and (no_pdf or pdf_path.is_file()):
+        return {
+            "ok": True,
+            "skipped": True,
+            "kind": "press",
+            "domain": domain,
+            "source_url": rec.get("source_url"),
+            "pacer_purchases": 0,
+            "cost": "free",
+        }
+    if not no_pdf and not pdf_path.is_file():
+        one_json = dirs["manifests"] / "_one_rec.json"
+        one_json.write_text(json.dumps([rec], indent=2), encoding="utf-8")
+        info = build_pdf(
+            python=python,
+            doj_file=one_json,
+            out_dir=dirs["press"],
+            out_name=f"{slug}.pdf",
+            limit=1,
+        )
+        rec["pdf"] = str(pdf_path) if info.get("ok") else None
+    elif pdf_path.is_file():
+        rec["pdf"] = str(pdf_path)
+    _append_resolved(dirs["manifests"] / f"{domain}_resolved.json", rec)
+    _write_record_manifest(man_path, rec, domain=domain, kind="press")
+    return {
+        "ok": True,
+        "kind": "press",
+        "domain": domain,
+        "title": rec.get("title"),
+        "source_url": rec.get("source_url"),
+        "pdf": rec.get("pdf"),
+        "pacer_purchases": 0,
+        "cost": "free",
+    }
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser(description="CaseNoesis bulk public-record harvest (free sources only).")
-    ap.add_argument("--press-count", type=int, default=100, help="Target exploitation press records.")
-    ap.add_argument("--court-count", type=int, default=5, help="Target free RECAP court PDFs.")
+    ap = argparse.ArgumentParser(
+        description="CaseNoesis harvest. DOJ API is sequential (one page at a time). "
+        "Each kept press record is written before the next PDF. Never purchases PACER."
+    )
+    ap.add_argument("--press-count", type=int, default=1, help="Target total press records on disk.")
+    ap.add_argument("--court-count", type=int, default=0, help="Target total free RECAP PDFs on disk.")
     ap.add_argument(
         "--domains",
         default=",".join(DEFAULT_DOMAINS),
@@ -214,10 +518,12 @@ def main() -> None:
         "--out-dir",
         type=Path,
         default=COLLECTED_ROOT,
-        help="Root of data/collected (press_releases/, pacer/, manifests/).",
+        help="Root of data/collected (press_releases/, recap/, manifests/).",
     )
     ap.add_argument("--no-pdf", action="store_true", help="Skip press PDFs (JSON only).")
     ap.add_argument("--skip-court", action="store_true")
+    ap.add_argument("--one", action="store_true", help="Pull a single new press record and exit.")
+    ap.add_argument("--one-court", action="store_true", help="Pull a single new free RECAP PDF and exit.")
     args = ap.parse_args()
 
     domains = [d.strip() for d in args.domains.split(",") if d.strip()]
@@ -225,187 +531,103 @@ def main() -> None:
         sys.exit("need at least one domain")
     root = args.out_dir if args.out_dir.is_absolute() else (REPO / args.out_dir)
     (root / "press_releases").mkdir(parents=True, exist_ok=True)
-    (root / "pacer").mkdir(parents=True, exist_ok=True)
+    (root / "recap").mkdir(parents=True, exist_ok=True)
     (root / "manifests").mkdir(parents=True, exist_ok=True)
 
     python = sys.executable
     sys.path.insert(0, str(HERE))
-    shares = _split_counts(args.press_count, len(domains))
-    court_shares = _split_counts(args.court_count, len(domains))
-    harvests: list[dict] = []
-    domain_bundles: dict[str, list[dict]] = {d: [] for d in domains}
-    seen_urls: set[str] = set()
-    pdf_by_domain: dict[str, dict] = {}
-    court_by_domain: dict[str, list[dict]] = {d: [] for d in domains}
+    prior_press, prior_court = 1000, 50
+    prior_path = root / "manifests" / "COLLECTION.json"
+    if prior_path.is_file():
+        try:
+            prior = json.loads(prior_path.read_text(encoding="utf-8"))
+            prior_press = int(prior.get("press_target") or prior_press)
+            prior_court = int(prior.get("court_target") or prior_court)
+        except (json.JSONDecodeError, TypeError, ValueError):
+            pass
+    if args.one:
+        press_target = max(args.press_count, prior_press)
+        court_target = max(args.court_count, prior_court)
+    elif args.one_court:
+        press_target = max(args.press_count, prior_press)
+        court_target = max(args.court_count, prior_court, 1)
+    else:
+        press_target = args.press_count
+        court_target = 0 if args.skip_court else args.court_count
+    shares = _split_counts(press_target, len(domains))
+    court_shares = _split_counts(court_target, len(domains))
+
+    if args.one:
+        counts = {d: max(len(_iter_kind(root, d, "press")), _press_pdf_count(root, d)) for d in domains}
+        domain = min(domains, key=lambda d: counts[d] / max(shares[domains.index(d)], 1))
+        result = collect_one_press(python=python, domain=domain, root=root, no_pdf=args.no_pdf)
+        write_collection_json(root, domains, press_target=press_target, court_target=court_target)
+        print(json.dumps(result, indent=2, default=str))
+        if not result.get("ok"):
+            sys.exit(1)
+        return
+
+    if args.one_court:
+        counts = {d: max(len(_iter_kind(root, d, "court")), _court_pdf_count(root, d)) for d in domains}
+        domain = min(domains, key=lambda d: counts[d] / max(court_shares[domains.index(d)], 1))
+        result = collect_one_court(domain=domain, root=root)
+        write_collection_json(root, domains, press_target=press_target, court_target=court_target)
+        print(json.dumps(result, indent=2, default=str))
+        if not result.get("ok"):
+            sys.exit(1)
+        return
+
+    write_collection_json(root, domains, press_target=press_target, court_target=court_target)
 
     for domain, n in zip(domains, shares):
+        have = max(len(_iter_kind(root, domain, "press")), _press_pdf_count(root, domain))
+        need = max(0, n - have)
+        print(f"\n=== {domain} press have={have} need={need} target={n} ===", file=sys.stderr)
+        if need <= 0:
+            continue
+        skip_file = _write_skip_url_file(root)
         dirs = _dirs(root, domain)
-        print(f"\n=== harvest {domain} target={n} → {dirs['manifests']} ===", file=sys.stderr)
-        result = harvest_domain(
+        harvested = harvest_many(
             python=python,
             profile_name=domain,
-            max_keep=n,
+            max_keep=need,
             out_dir=dirs["manifests"],
+            skip_url_file=skip_file,
             keep_early=True,
         )
-        harvests.append({k: v for k, v in result.items() if k != "records"})
-        for rec in result.get("records") or []:
-            rec["domain"] = domain
-            url = rec.get("source_url") or ""
-            if url and url not in seen_urls:
-                seen_urls.add(url)
-                domain_bundles[domain].append(rec)
-
-    all_records = [r for d in domains for r in domain_bundles[d]]
-    shortfall = args.press_count - len(all_records)
-    if shortfall > 0:
-        fill_domain = domains[0]
-        dirs = _dirs(root, fill_domain)
-        print(f"\n=== backfill {shortfall} via noesis → {fill_domain} ===", file=sys.stderr)
-        extra = harvest_domain(
-            python=python,
-            profile_name="noesis",
-            max_keep=shortfall + 10,
-            out_dir=dirs["manifests"],
-            keep_early=True,
-        )
-        harvests.append({k: v for k, v in extra.items() if k != "records"})
-        for rec in extra.get("records") or []:
-            rec["domain"] = rec.get("domain") or fill_domain
-            url = rec.get("source_url") or ""
-            if url and url not in seen_urls:
-                seen_urls.add(url)
-                domain_bundles[fill_domain].append(rec)
-            if sum(len(v) for v in domain_bundles.values()) >= args.press_count:
-                break
-
-    # Cap per domain to share, then leftover into first domain.
-    kept: dict[str, list[dict]] = {d: domain_bundles[d][: shares[i]] for i, d in enumerate(domains)}
-    leftover = args.press_count - sum(len(v) for v in kept.values())
-    if leftover > 0:
-        extra_pool = domain_bundles[domains[0]][len(kept[domains[0]]) :]
-        kept[domains[0]].extend(extra_pool[:leftover])
-
-    if not args.no_pdf:
-        for domain, recs in kept.items():
-            if not recs:
-                continue
-            dirs = _dirs(root, domain)
-            resolved = dirs["manifests"] / f"{domain}_resolved.json"
-            resolved.write_text(json.dumps(recs, indent=2), encoding="utf-8")
-            merged_name = f"{domain.upper()}_All.pdf"
-            try:
-                info = build_pdf(
-                    python=python,
-                    doj_file=resolved,
-                    out_dir=dirs["press"],
-                    out_name=merged_name,
-                    limit=len(recs),
-                )
-            except Exception as exc:  # noqa: BLE001
-                info = {"ok": False, "error": str(exc)}
-            individuals = []
-            if info.get("ok"):
-                individuals = _promote_individuals(
-                    dirs["press"] / "tmp", recs, dirs["press"]
-                )
-            for rec in recs:
-                slug = _slug_for(rec.get("source_url") or "", rec.get("title") or "")
-                _write_record_manifest(
-                    dirs["manifests"] / f"{slug}.json", rec, domain=domain, kind="press"
-                )
-            domain_summary = {
-                "domain": domain,
-                "press_kept": len(recs),
-                "individuals": [str(p) for p in individuals],
-                "merged_pdf": info.get("pdf_path"),
-                "resolved_json": str(resolved),
-            }
-            (dirs["manifests"] / "MANIFEST.json").write_text(
-                json.dumps(domain_summary, indent=2, default=str), encoding="utf-8"
+        for rec in harvested.get("records") or []:
+            _persist_press_record(
+                python=python, domain=domain, root=root, rec=rec, no_pdf=args.no_pdf
             )
-            pdf_by_domain[domain] = {**info, "individuals": len(individuals)}
+            write_collection_json(root, domains, press_target=press_target, court_target=court_target)
 
-    if not args.skip_court and args.court_count > 0:
-        from court_records import collect_free_court_records, load_token_from_env_files
-
-        load_token_from_env_files(
-            [
-                REPO / ".env",
-                REPO.parent / "CaseLinker" / ".env",
-            ]
-        )
-        for i, (domain, n_court) in enumerate(zip(domains, court_shares)):
-            if n_court <= 0:
-                continue
-            if i:
-                time.sleep(3)
-            dirs = _dirs(root, domain)
-            queries = list(_load_profile(domain).get("court_queries") or [])[:4]
-            for r in (kept.get(domain) or [])[:2]:
-                title = (r.get("title") or "").strip()
-                if title:
-                    queries.append(title[:80])
-            recs = collect_free_court_records(
-                queries, dest_dir=dirs["pacer"], max_records=n_court, per_query=3
-            )
-            for rec in recs:
-                rec["domain"] = domain
-                pdf = (rec.get("download") or {}).get("path")
-                rec["pdf"] = pdf
-                slug = _slug_for(
-                    rec.get("absolute_url") or rec.get("docket_number") or "docket",
-                    rec.get("case_name") or "",
+    if court_target > 0:
+        for domain, n_court in zip(domains, court_shares):
+            have = max(len(_iter_kind(root, domain, "court")), _court_pdf_count(root, domain))
+            need = max(0, n_court - have)
+            print(f"\n=== {domain} recap have={have} need={need} target={n_court} ===", file=sys.stderr)
+            for _ in range(need):
+                result = collect_one_court(domain=domain, root=root)
+                write_collection_json(root, domains, press_target=press_target, court_target=court_target)
+                if not result.get("ok"):
+                    print(result.get("error"), file=sys.stderr)
+                    break
+                print(
+                    f"  recap +1 {domain}: {result.get('title')}",
+                    file=sys.stderr,
                 )
-                _write_record_manifest(
-                    dirs["manifests"] / f"court_{slug}.json",
-                    rec,
-                    domain=domain,
-                    kind="court",
-                )
-            court_by_domain[domain] = recs
+                time.sleep(2)
 
-    all_press = [r for d in domains for r in kept.get(d) or []]
-    all_court = [c for d in domains for c in court_by_domain.get(d) or []]
-    collection = {
-        "nhsr": NHSR,
-        "nhsr_title": NHSR_TITLE,
-        "cost": "free",
-        "pacer_purchases": 0,
-        "observed": True,
-        "inferred": False,
-        "collected_at": datetime.now(timezone.utc).isoformat(),
-        "layout": {
-            "press_releases": str(root / "press_releases" / "<domain>" / "{slug}.pdf + DOMAIN_All.pdf"),
-            "pacer": str(root / "pacer" / "<domain>"),
-            "manifests": str(root / "manifests" / "<domain>"),
-        },
-        "press_target": args.press_count,
-        "press_kept": len(all_press),
-        "court_target": args.court_count,
-        "court_kept": len(all_court),
-        "domains": {
-            d: {
-                "press": len(kept.get(d) or []),
-                "court": len(court_by_domain.get(d) or []),
-                "merged_pdf": (pdf_by_domain.get(d) or {}).get("pdf_path"),
-                "individuals": (pdf_by_domain.get(d) or {}).get("individuals"),
-            }
-            for d in domains
-        },
-        "harvests": harvests,
-        "pdf_by_domain": pdf_by_domain,
-        "ingest_hint": (
-            "Outputs do not auto-ingest. Example: "
-            f"python3 src/main.py {root / 'press_releases' / 'fraud' / 'FRAUD_All.pdf'}"
-        ),
-    }
-    collection_path = root / "manifests" / "COLLECTION.json"
-    collection_path.write_text(json.dumps(collection, indent=2, default=str), encoding="utf-8")
+    collection_path = write_collection_json(
+        root, domains, press_target=press_target, court_target=court_target
+    )
+    collection = json.loads(collection_path.read_text(encoding="utf-8"))
     print(json.dumps(
         {
             "nhsr": collection["nhsr"],
             "cost": collection["cost"],
+            "mode": "sequential",
+            "pacer_purchases": 0,
             "press_kept": collection["press_kept"],
             "court_kept": collection["court_kept"],
             "domains": collection["domains"],
@@ -415,12 +637,12 @@ def main() -> None:
         default=str,
     ))
     print(f"Wrote {collection_path}")
-    if len(all_press) < args.press_count:
-        sys.exit(f"press shortfall: {len(all_press)}/{args.press_count}")
-    if not args.skip_court and len(all_court) < args.court_count:
+    if collection["press_kept"] < press_target:
+        sys.exit(f"press shortfall: {collection['press_kept']}/{press_target}")
+    if court_target and collection["court_kept"] < court_target:
         print(
-            f"warning: court shortfall {len(all_court)}/{args.court_count} "
-            "(RECAP rate limit or no free filings). Press harvest is complete.",
+            f"warning: court shortfall {collection['court_kept']}/{court_target} "
+            "(RECAP rate limit or no free filings).",
             file=sys.stderr,
         )
 

@@ -258,6 +258,8 @@ def collect_free_court_records(
                 seen_urls.add(url)
                 slug = str(doc.get("id") or len(collected) + 1)
                 dest = dest_dir / f"{slug}.pdf"
+                if dest.is_file() and dest.stat().st_size > 0:
+                    continue
                 result = download_free_pdf(url, dest)
                 record = {
                     **hit,
@@ -268,8 +270,247 @@ def collect_free_court_records(
                 if result.get("ok"):
                     collected.append(record)
                     break
-    (dest_dir / "court_manifest.json").write_text(
-        json.dumps(collected, indent=2, default=str),
-        encoding="utf-8",
-    )
+    man_path = dest_dir / "court_manifest.json"
+    prior: list[dict[str, Any]] = []
+    if man_path.is_file():
+        try:
+            loaded = json.loads(man_path.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                prior = loaded
+        except json.JSONDecodeError:
+            prior = []
+    seen_paths = {
+        (r.get("download") or {}).get("path")
+        for r in prior
+        if isinstance(r, dict)
+    }
+    for rec in collected:
+        path = (rec.get("download") or {}).get("path")
+        if path and path not in seen_paths:
+            prior.append(rec)
+            seen_paths.add(path)
+    man_path.write_text(json.dumps(prior, indent=2, default=str), encoding="utf-8")
     return collected
+
+
+NHSR = "UMass HRPO NHSR #8252 (16 Sep 2026)"
+
+
+def recap_document_meta(document_id: int | str) -> dict[str, Any]:
+    """Look up one RECAP document. Returns download_url only when is_available."""
+    try:
+        doc_id = int(str(document_id).strip())
+    except ValueError:
+        return {"ok": False, "error": "document_id must be an integer", "cost": "blocked"}
+    item: dict[str, Any] | None = None
+    token = (os.getenv("COURTLISTENER_API_TOKEN") or os.getenv("COURTLISTENER_TOKEN") or "").strip()
+    if token:
+        try:
+            resp = requests.get(
+                f"https://www.courtlistener.com/api/rest/v4/recap-documents/{doc_id}/",
+                headers=_headers(),
+                timeout=DEFAULT_TIMEOUT,
+            )
+        except requests.RequestException:
+            resp = None
+        if resp is not None and resp.status_code == 200:
+            payload = resp.json()
+            if isinstance(payload, dict):
+                item = payload
+    if item is None:
+        hits = search_free(f"id:{doc_id}", search_type="rd", max_results=5)
+        item = next((h for h in hits if h.get("document_id") == doc_id or h.get("id") == doc_id), None)
+        if item is None and hits:
+            item = hits[0]
+    if not item:
+        return {
+            "ok": False,
+            "error": f"No RECAP document found for id={doc_id}",
+            "document_id": doc_id,
+            "cost": "unknown",
+        }
+    fp = item.get("filepath_local")
+    available = bool(item.get("is_available") and fp) or bool(item.get("download_url"))
+    download_url = item.get("download_url")
+    if not download_url and fp:
+        download_url = f"{COURTLISTENER_STORAGE}/{fp}"
+        available = True
+    abs_url = item.get("absolute_url") or item.get("page_url") or ""
+    if abs_url and not str(abs_url).startswith("http"):
+        abs_url = f"https://www.courtlistener.com{abs_url}"
+    if not available or not download_url:
+        return {
+            "ok": False,
+            "error": "not free via RECAP (would require PACER)",
+            "document_id": doc_id,
+            "cost": "not free via RECAP (would require PACER)",
+            "is_available": False,
+        }
+    return {
+        "ok": True,
+        "document_id": doc_id,
+        "docket_id": item.get("docket_id"),
+        "case_name": item.get("caseName") or item.get("case_name") or item.get("description"),
+        "description": item.get("description") or item.get("short_description"),
+        "docket_number": item.get("docketNumber") or item.get("docket_number"),
+        "court": item.get("court"),
+        "date_filed": item.get("dateFiled") or item.get("date_filed"),
+        "filepath_local": fp,
+        "download_url": download_url,
+        "absolute_url": abs_url,
+        "cost": "free",
+        "is_available": True,
+        "observed": True,
+        "inferred": False,
+    }
+
+
+def _write_court_record_manifest(path: Path, rec: dict[str, Any], *, domain: str) -> None:
+    payload = {
+        "nhsr": NHSR,
+        "cost": "free",
+        "pacer_purchases": 0,
+        "observed": True,
+        "inferred": False,
+        "domain": domain,
+        "kind": "court",
+        "title": rec.get("case_name") or rec.get("description") or rec.get("title"),
+        "source_url": rec.get("absolute_url") or rec.get("source_url"),
+        "pub_date": rec.get("date_filed") or rec.get("pub_date"),
+        "agency": rec.get("court") or rec.get("agency"),
+        "pdf": rec.get("pdf"),
+        "record": rec,
+    }
+    path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+
+
+def download_targeted_recap(
+    *,
+    dest_dir: Path,
+    manifest_dir: Path,
+    domain: str,
+    document_id: str = "",
+    docket_id: str = "",
+    max_docs: int = 1,
+) -> dict[str, Any]:
+    """Download one or more already-free RECAP PDFs. Never purchases PACER."""
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    manifest_dir.mkdir(parents=True, exist_ok=True)
+    ids: list[str] = []
+    if (document_id or "").strip():
+        ids = [str(document_id).strip()]
+    elif (docket_id or "").strip():
+        try:
+            did = int(str(docket_id).strip())
+        except ValueError:
+            return {"ok": False, "error": "docket_id must be an integer", "pacer_purchases": 0}
+        hits = search_free(f"docket_id:{did}", search_type="rd", max_results=max(1, min(int(max_docs), 20)))
+        for hit in hits:
+            hid = hit.get("document_id") or hit.get("id")
+            if hid:
+                ids.append(str(hid))
+            for nested in hit.get("free_nested_documents") or []:
+                nid = nested.get("id")
+                if nid:
+                    ids.append(str(nid))
+        # de-dupe, cap
+        seen: set[str] = set()
+        ordered: list[str] = []
+        for i in ids:
+            if i not in seen:
+                seen.add(i)
+                ordered.append(i)
+            if len(ordered) >= max(1, min(int(max_docs), 20)):
+                break
+        ids = ordered
+    else:
+        return {
+            "ok": False,
+            "error": "pass document_id or docket_id",
+            "pacer_purchases": 0,
+            "cost": "blocked",
+        }
+
+    saved: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
+    for doc_id in ids:
+        meta = recap_document_meta(doc_id)
+        if not meta.get("ok"):
+            errors.append(meta)
+            continue
+        dest = dest_dir / f"{meta['document_id']}.pdf"
+        skipped = dest.is_file() and dest.stat().st_size > 0
+        if skipped:
+            result = {"ok": True, "path": str(dest), "bytes": dest.stat().st_size, "skipped": True, "cost": "free"}
+        else:
+            result = download_free_pdf(meta["download_url"], dest)
+        if not result.get("ok"):
+            errors.append({**meta, "download": result})
+            continue
+        rec = {
+            **meta,
+            "domain": domain,
+            "pdf": result.get("path"),
+            "download": result,
+        }
+        slug = re.sub(r"[^a-z0-9\-]+", "-", (rec.get("case_name") or str(doc_id)).lower())[:70].strip("-") or str(doc_id)
+        _write_court_record_manifest(
+            manifest_dir / f"court_{slug}_{doc_id}.json", rec, domain=domain
+        )
+        saved.append(rec)
+    return {
+        "ok": bool(saved) and not errors,
+        "cost": "free",
+        "pacer_purchases": 0,
+        "domain": domain,
+        "requested": ids,
+        "saved": [
+            {
+                "document_id": r.get("document_id"),
+                "title": r.get("case_name") or r.get("description"),
+                "pdf": r.get("pdf"),
+                "source_url": r.get("absolute_url"),
+            }
+            for r in saved
+        ],
+        "errors": errors,
+        "nhsr": NHSR,
+    }
+
+
+def main() -> None:
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Download a free RECAP PDF. Never purchases PACER.")
+    ap.add_argument("--document-id", default="", help="CourtListener RECAP document id")
+    ap.add_argument("--docket-id", default="", help="CourtListener docket id (downloads up to --max-docs free filings)")
+    ap.add_argument("--domain", default="fraud", help="fraud, trafficking, cyber, or csea")
+    ap.add_argument("--max-docs", type=int, default=1)
+    ap.add_argument(
+        "--out-dir",
+        type=Path,
+        default=Path(__file__).resolve().parent.parent / "data" / "collected",
+    )
+    args = ap.parse_args()
+    root = args.out_dir if args.out_dir.is_absolute() else (Path(__file__).resolve().parent.parent / args.out_dir)
+    load_token_from_env_files(
+        [
+            Path(__file__).resolve().parent.parent / ".env",
+            Path(__file__).resolve().parent.parent.parent / "CaseLinker" / ".env",
+        ]
+    )
+    result = download_targeted_recap(
+        dest_dir=root / "recap" / args.domain,
+        manifest_dir=root / "manifests" / args.domain,
+        domain=args.domain,
+        document_id=args.document_id,
+        docket_id=args.docket_id,
+        max_docs=args.max_docs,
+    )
+    print(json.dumps(result, indent=2, default=str))
+    if not result.get("ok"):
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

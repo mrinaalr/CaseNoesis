@@ -541,16 +541,76 @@ def collect_case_dual_path(
     }
 
 
+def collect_record(
+    *,
+    domains: str = "fraud,trafficking,cyber,csea",
+    out_dir: str = "",
+    no_pdf: bool = False,
+    court: bool = False,
+) -> dict[str, Any]:
+    """WRITE: pull one new press record (or one free RECAP PDF). Never PACER."""
+    if not collector_disk_write_enabled():
+        return _write_disabled_error()
+    out = _ensure_out(out_dir or "data/collected")
+    cmd = [
+        sys.executable,
+        str(_COLLECTOR / "run_bulk.py"),
+        "--domains",
+        domains or "fraud,trafficking,cyber,csea",
+        "--out-dir",
+        str(out),
+        "--one-court" if court else "--one",
+    ]
+    if no_pdf:
+        cmd.append("--no-pdf")
+    proc = subprocess.run(
+        cmd,
+        cwd=str(_REPO),
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    manifest_path = out / "manifests" / "COLLECTION.json"
+    manifest: dict[str, Any] = {}
+    if manifest_path.is_file():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            manifest = {}
+    record: dict[str, Any] = {}
+    try:
+        record = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        record = {}
+    return {
+        "write": True,
+        "tool_kind": "WRITE",
+        "method": "collect_record",
+        "ok": proc.returncode == 0,
+        "exit_code": proc.returncode,
+        "record": record,
+        "press_kept": manifest.get("press_kept"),
+        "court_kept": manifest.get("court_kept"),
+        "pacer_purchases": 0,
+        "cost": "free",
+        "stderr_tail": (proc.stderr or "")[-1200:],
+    }
+
+
 def collect_bulk(
     *,
-    press_count: int = 100,
-    court_count: int = 5,
+    press_count: int = 1,
+    court_count: int = 0,
     domains: str = "fraud,trafficking,cyber,csea",
     out_dir: str = "",
     skip_court: bool = False,
     no_pdf: bool = False,
 ) -> dict[str, Any]:
-    """WRITE: run collector/run_bulk.py (DOJ press + free RECAP). Never PACER."""
+    """WRITE: run collector/run_bulk.py (DOJ press + free RECAP). Never PACER.
+
+    MCP default is 1 press so the tool does not time out. For 1000/50 use the CLI:
+    ``python collector/run_bulk.py --press-count 1000 --court-count 50``.
+    """
     if not collector_disk_write_enabled():
         return _write_disabled_error()
     out = _ensure_out(out_dir or "data/collected")
@@ -600,4 +660,42 @@ def collect_bulk(
         "nhsr": manifest.get("nhsr"),
         "stdout_tail": (proc.stdout or "")[-1500:],
         "stderr_tail": (proc.stderr or "")[-1500:],
+    }
+
+
+def download_free_recap(
+    *,
+    document_id: str = "",
+    docket_id: str = "",
+    domain: str = "fraud",
+    out_dir: str = "",
+    max_docs: int = 1,
+) -> dict[str, Any]:
+    """WRITE: download a known free RECAP PDF into data/collected/recap/<domain>/. Never PACER."""
+    if not collector_disk_write_enabled():
+        return _write_disabled_error()
+    domain = (domain or "fraud").strip().lower()
+    if domain not in {"fraud", "trafficking", "cyber", "csea"}:
+        return {"error": "domain must be fraud, trafficking, cyber, or csea", "write": True}
+    if not (document_id or "").strip() and not (docket_id or "").strip():
+        return {"error": "pass document_id or docket_id", "write": True, "pacer_purchases": 0}
+    out = _ensure_out(out_dir or "data/collected")
+    court_mod = _load_module("court_records_mcp", _COLLECTOR / "court_records.py")
+    court_mod.load_token_from_env_files(
+        [_REPO / ".env", _REPO.parent / "CaseLinker" / ".env"]
+    )
+    result = court_mod.download_targeted_recap(
+        dest_dir=out / "recap" / domain,
+        manifest_dir=out / "manifests" / domain,
+        domain=domain,
+        document_id=document_id,
+        docket_id=docket_id,
+        max_docs=max(1, int(max_docs)),
+    )
+    return {
+        "write": True,
+        "tool_kind": "WRITE",
+        "method": "download_free_recap",
+        "pacer_purchases": 0,
+        **result,
     }

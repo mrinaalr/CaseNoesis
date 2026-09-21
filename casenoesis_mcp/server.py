@@ -746,7 +746,7 @@ async def tree_traversal(
     leaf cohorts (or an explicit targeted_path).
 
     Typical workflow for the 50-case PACER lookup:
-      1. python data/PACER/corpus2pacer.py  →  pacer_cases.json
+      1. python collector/pacer/corpus2pacer.py  →  data/PACER/pacer_cases.json
       2. tree_traversal(use_pacer_pool=true, random_count=25, targeted_count=25)
 
     use_pacer_pool: load IDs from data/PACER/pacer_cases.json instead of case_ids.
@@ -1589,20 +1589,47 @@ if _COLLECTOR_WRITE_ENABLED:
             return {"error": str(e), "write": True}
 
     @mcp.tool()
+    async def collect_record(
+        domains: str = "fraud,trafficking,cyber,csea",
+        out_dir: str = "",
+        no_pdf: bool = False,
+        court: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Pull one new public record: a DOJ press release, or one free RECAP PDF.
+
+        Picks the domain furthest from its share of fraud,trafficking,cyber,csea.
+        Never purchases PACER. This is not a targeted fetch of a URL you already know.
+        For the 1000/50 fill, use the CLI ``run_bulk.py``.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import collect_record as _record
+
+            return await asyncio.to_thread(
+                _record,
+                domains=domains,
+                out_dir=out_dir,
+                no_pdf=no_pdf,
+                court=court,
+            )
+        except Exception as e:
+            logger.exception("collect_record failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
     async def collect_bulk(
-        press_count: int = 100,
-        court_count: int = 5,
+        press_count: int = 1,
+        court_count: int = 0,
         domains: str = "fraud,trafficking,cyber,csea",
         out_dir: str = "",
         skip_court: bool = False,
         no_pdf: bool = False,
     ) -> dict[str, Any]:
-        """WRITE (local MCP only). Bulk harvest: DOJ press + free RECAP court PDFs.
+        """WRITE (local MCP only). Harvest DOJ press + free RECAP court PDFs.
 
         Covers fraud, trafficking, cyber, and CSEA (ICAC is one type among those).
         Drops grant/award/prevention noise, not CSEA cases. Never purchases PACER.
-        Default 100 press / 5 court for the NHSR #8252 pilot. Scale to 1000 / 50
-        with the same flags. Does not auto-ingest.
+        Default is 1 press so MCP does not time out. Scale with CLI:
+        python collector/run_bulk.py --press-count 1000 --court-count 50
         """
         try:
             from casenoesis_mcp.collector_tools import collect_bulk as _bulk
@@ -1618,6 +1645,35 @@ if _COLLECTOR_WRITE_ENABLED:
             )
         except Exception as e:
             logger.exception("collect_bulk failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def download_free_recap(
+        document_id: str = "",
+        docket_id: str = "",
+        domain: str = "fraud",
+        out_dir: str = "",
+        max_docs: int = 1,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Download a known free RECAP filing into data/collected/recap/.
+
+        Pass document_id for one filing, or docket_id to take up to max_docs free
+        documents on that docket. Refuses PACER/ECF. Pair with search_courtlistener
+        → list_free_recap_documents → resolve_free_recap_download when scouting.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import download_free_recap as _dl
+
+            return await asyncio.to_thread(
+                _dl,
+                document_id=document_id,
+                docket_id=docket_id,
+                domain=domain,
+                out_dir=out_dir,
+                max_docs=max_docs,
+            )
+        except Exception as e:
+            logger.exception("download_free_recap failed")
             return {"error": str(e), "write": True}
 
 

@@ -1,6 +1,6 @@
 # CaseNoesis MCP tool registry (local stdio)
 
-**48 tools**, all on the researcher’s machine. There is **no hosted CaseNoesis MCP**. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
+**50 tools**, all on the researcher’s machine. There is **no hosted CaseNoesis MCP**. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
 
 Authoritative implementation: `casenoesis_mcp/server.py`.
 
@@ -12,8 +12,8 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (corpus graphs) | **8** | `tree_traversal`, `list_sources`, `case2cac`, four graph tools, `export_case_graph_ttl` |
 | MCP-only (free public records) | **4** | DOJ press search + CourtListener/RECAP (`public_records.py`) |
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
-| MCP-only (press collector WRITE) | **6** | Harvest / listing / PDF / dual / bulk — disk only, no sqlite ingest |
-| **Total (local stdio)** | **48** | |
+| MCP-only (press collector WRITE) | **8** | Harvest / listing / PDF / dual / record / bulk / targeted RECAP — disk only, no sqlite ingest |
+| **Total (local stdio)** | **50** | |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
 
@@ -23,7 +23,7 @@ No MCP resources (`@mcp.resource`) or prompts (`@mcp.prompt`) are registered.
 
 ## Collector (press + court)
 
-On disk: repo-root `collector/`. WRITE tools create files under `collector_output/` and do **not** auto-ingest. Never purchase PACER.
+On disk: repo-root `collector/`. WRITE tools create files under `data/collected/` and do **not** auto-ingest. Never purchase PACER.
 
 | Tool | Kind | Notes |
 |------|------|-------|
@@ -32,12 +32,14 @@ On disk: repo-root `collector/`. WRITE tools create files under `collector_outpu
 | `search_courtlistener` | READ | Free RECAP / opinion search |
 | `list_free_recap_documents` | READ | Free filings for a `docket_id` |
 | `resolve_free_recap_download` | READ | Free storage URL when `is_available` |
+| `download_free_recap` | WRITE local | Known `document_id` or `docket_id` → `data/collected/recap/<domain>/` PDF + manifest |
 | `harvest_doj_press_topic` | WRITE local | DOJ API harvest JSON |
 | `fetch_press_listing_urls` | WRITE local | Listing → url-file |
 | `resolve_press_urls` | WRITE local | URL-path resolve JSON |
 | `build_press_pdf` | WRITE local | Merged PDF |
 | `collect_case_dual_path` | WRITE local | A+B dual collect |
-| `collect_bulk` | WRITE local | N press + M free court (`run_bulk.py`) |
+| `collect_record` | WRITE local | One new press record, or one free RECAP PDF (`run_bulk.py --one`) |
+| `collect_bulk` | WRITE local | N press + M free court (`run_bulk.py`); MCP default 1 / 0 so it does not time out |
 
 `POST /api/llm/chat` exposes an internal `query_cases_database` function-calling tool to the LLM; that helper is **not** a separate MCP tool. MCP clients use `llm_chat` instead.
 

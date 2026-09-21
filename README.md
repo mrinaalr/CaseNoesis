@@ -11,9 +11,9 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 ## Scope
 
 - Multi-offense ingestion (fraud, trafficking, cyber-enabled crime, CSEA/ICAC)
-- **Private** local MCP + CLI collector for researchers (`casenoesis_mcp`, `collector/`)
-- Website/docs may run on Railway; **no public query MCP/API** (that is CaseLinker)
-- Local FastAPI + sqlite for collaborators and cloners
+- **Private** local collector (`collector/`) plus local stdio MCP to orchestrate it (`casenoesis_mcp`)
+- Website/docs may run on Railway. There is **no public MCP**. CaseLinker remains the public ICAC collector and query API.
+- Local FastAPI + sqlite for the researcher site and corpus tools (`python3 run/main.py`)
 
 ## Status
 
@@ -49,7 +49,7 @@ flowchart TD
 
 **Cross domain analysis.** Processing extracts comparable features under a domain-agnostic offense record (domain profiles specialize; they do not redefine the core). Graphs are CASE/UCO + Extensions with the trajectories metamodel; SHACL is a publish gate, and inferred analytics are never typed as observed facts.
 
-**What the system is for.** The primary purpose is to build formal models, specifically the *Exploitation State Machine*. Analysis tests Theorem 1 and Laws 1–4 across domains, annotates affordances, and *ranks intervention points*. The local website and stdio MCP expose machines and collection tools to the researcher — not to the public internet. CaseLinker remains the public ICAC collector.
+**What the system is for.** The primary purpose is to build formal models, specifically the *Exploitation State Machine*. Analysis tests Theorem 1 and Laws 1–4 across domains, annotates affordances, and *ranks intervention points*. The local website and stdio MCP expose machines and collection tools to the researcher — not to the public internet. CaseLinker remains the public ICAC collector and query API.
 
 ## Collection
 
@@ -75,7 +75,7 @@ flowchart TD
     E --> V["RESOLVE <br/> link releases + merge features <br/> case_resolve.py"]
 ```
 
-Scrape tools live under [`collector/`](collector/README.md). MCP for agents: [`casenoesis_mcp/`](casenoesis_mcp/README.md) (local stdio only). Outputs land in [`data/collected/`](data/collected/README.md).
+Scrape tools live under [`collector/`](collector/README.md). The pipeline is the same whether you run those scripts on the CLI or an agent calls them through local MCP ([`casenoesis_mcp/`](casenoesis_mcp/README.md), stdio only). Outputs land in [`data/collected/`](data/collected/README.md) and do not auto-ingest.
 
 ### How a press release becomes a case
 
@@ -111,16 +111,18 @@ Collection keeps documents and cases distinct. Counts are not interchangeable:
 
 | | |
 |--|--|
-| Sources bundled | 56 |
+| Sources bundled (ICAC lineage) | 56 |
 | Bundled pages | 4,860 |
 | Largest bundle | `SCAG_ICAC_All.pdf` — 633 pages |
-| Coverage | AfH ICAC corpus (CaseLinker lineage) plus CaseNoesis harvests (fraud, trafficking, cyber, CSEA) via `collector/run_bulk.py` under NHSR #8252. |
+| NHSR #8252 harvest | 1,000 DOJ press PDFs + 50 free RECAP filings under `data/collected/` (fraud, trafficking, cyber, CSEA). Not auto-ingested. |
 
-The collection layer is crime-type agnostic. Extending to a new domain means a new source list and search terms — not a new pipeline.
+The collection layer is crime-type agnostic. Extending to a new domain means a new source list and search terms — not a new pipeline. The 1,000/50 fill uses that same discover → fetch → render path, via `collector/run_bulk.py`, with one PDF per press URL instead of a per-source bundle.
 
 ## Court records & enrichment
 
 Press releases are the discovery surface. Federal **PACER** filings (and free **CourtListener / RECAP** copies when available) are the supplementing sources including: indictments, superseding indictments, statements of offense, plea agreements, sentencing memoranda, docket sheets.
+
+**Free RECAP collection** is part of the same collector: `collector/court_records.py` writes unpaid PDFs to [`data/collected/recap/`](data/collected/README.md). Never PACER from that path.
 
 Court records **enrich** a press-release case already resolved in collection:
 
@@ -130,7 +132,7 @@ Court records **enrich** a press-release case already resolved in collection:
 4. **Correlate** — attach filings to the same `prosecution_id` as the press releases (docket is the hard key; link press release and court records).
 5. **Enrich** — merge court-extracted facts into the canonical case the same way *resolve* merges press releases (OR/union for charges, platforms, co-defendants; court filing wins on statute text and formal disposition when both exist). Court record provenance over press-release extracted features.
 
-Early scaffolding for PACER eligibility and RECAP fetch lives under [`data/PACER/`](data/PACER/). Document-type extraction and the enrich path are being rebuilt with the rest of processing — not production-ready yet.
+Paid-PACER scaffolding lives under [`collector/pacer/`](collector/pacer/). Filings and facts stay in [`data/PACER/`](data/PACER/). Document-type extraction and the enrich path (step 3–5) are being rebuilt with the rest of processing — not production-ready yet.
 
 ### State open records
 
@@ -144,9 +146,25 @@ Where a federal docket is thin or the matter is state-charged, **public records 
 
 These are **opt-in enrichment channels**, not scrapers. Nothing is collected under them until the request is lawful, approved where required, and logged with provenance like every other document.
 
+## Local MCP & orchestration
+
+The collector is unchanged. Local MCP is how an agent on this machine drives those same scripts. It is **stdio-only** (`python -m casenoesis_mcp.server`). It is not mounted on Railway. Cursor config: [`.cursor/mcp.json`](.cursor/mcp.json) (see [`casenoesis_mcp/mcp.json.example`](casenoesis_mcp/mcp.json.example)).
+
+| Job | How |
+|-----|-----|
+| Fill a quota (hundreds–thousands) | CLI: `python3 collector/run_bulk.py --press-count 1000 --court-count 50` |
+| One more record from domain profiles | MCP `collect_record` (or `run_bulk.py --one`) |
+| Small agent batch | MCP `collect_bulk` (default 1 press / 0 court so the client does not time out) |
+| Known press URL | MCP `probe_press_url` → `resolve_press_urls` → `build_press_pdf` |
+| Known free court filing | MCP `search_courtlistener` → `list_free_recap_documents` → `download_free_recap` |
+
+WRITE tools write under `data/collected/` and do **not** ingest into sqlite. Collector tools do not need FastAPI. Corpus/graph/triage tools do: `python3 run/main.py` on localhost.
+
+Tool catalog: [`casenoesis_mcp/README.md`](casenoesis_mcp/README.md) and [`casenoesis_mcp/tool_registry.md`](casenoesis_mcp/tool_registry.md). Engine: [`collector/README.md`](collector/README.md).
+
 ## Data & Ethics
 
-Case data is drawn exclusively from publicly available enforcement records (press releases, court filings) and from open-records releases obtained through lawful request. 
+Case data is drawn exclusively from publicly available enforcement records (press releases, court filings already in the public domain) and from open-records releases obtained through lawful request. CaseNoesis public-record collection is authorized by **[UMass HRPO NHSR #8252](docs/ethics/NHSR_8252.md)** (16 Sep 2026). 
 
 
 ## Contributing
