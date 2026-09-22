@@ -1,7 +1,7 @@
-# CaseNoesis MCP (local, private)
+# CaseNoesis MCP (local)
 
 CaseLinker is the **public ICAC collector** (hosted MCP + query APIs).  
-CaseNoesis is the **private research engine**: heterogeneous press + court collection, analysis, and falsification of AfH outside CSEA.
+This server runs on your machine: press and free-court collection, plus local corpus tools.
 
 This MCP server is **stdio-only**. It is not mounted on Railway. Strangers do not get a CaseLinker-style `/mcp-http/` against this repo.
 

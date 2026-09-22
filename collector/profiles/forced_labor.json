@@ -1,0 +1,24 @@
+{
+  "id": "forced_labor",
+  "domain": "forced_labor",
+  "slug": "doj_forced_labor",
+  "source": "DOJ CaseNoesis forced labor",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "forced labor",
+    "forced labour",
+    "labor trafficking",
+    "labour trafficking",
+    "involuntary servitude",
+    "peonage"
+  ],
+  "require": "forced labou?r|labor trafficking|labour trafficking|peonage|involuntary servitude",
+  "exclude": "\\b(?:grant|awareness month|scam alert|consumer alert)\\b",
+  "court_queries": [
+    "forced labor",
+    "labor trafficking",
+    "involuntary servitude",
+    "peonage"
+  ]
+}

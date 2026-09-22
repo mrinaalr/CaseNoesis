@@ -9,7 +9,7 @@ PACER eligibility heuristic (no single field is definitive):
 
 Cases matching any tier are included; confidence is high (A), medium (A+B or B+C), or low (C only).
 
-Output: data/PACER/pacer_cases.json
+Output: data/collected/PACER/pacer_cases.json
 
 Usage:
   python collector/pacer/corpus2pacer.py
@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-PACER_DIR = REPO_ROOT / "data" / "PACER"
+PACER_DIR = REPO_ROOT / "data" / "collected" / "PACER"
 OUTPUT_PATH = PACER_DIR / "pacer_cases.json"
 
 sys.path.insert(0, str(REPO_ROOT / "src" / "Storage Layer"))
@@ -295,7 +295,7 @@ def main() -> int:
         "--output",
         type=Path,
         default=OUTPUT_PATH,
-        help="Output JSON path (default: data/PACER/pacer_cases.json)",
+        help="Output JSON path (default: data/collected/PACER/pacer_cases.json)",
     )
     args = parser.parse_args()
 

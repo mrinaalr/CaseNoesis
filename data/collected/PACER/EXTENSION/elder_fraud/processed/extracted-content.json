@@ -1,0 +1,30 @@
+{
+  "case_slug": "elder_fraud",
+  "source_policy": "grounded_only_no_invention",
+  "records": [
+    {
+      "source_pdf": "pacer -- elder fraud -- docket.pdf",
+      "output_text": "pacer -- elder fraud -- docket.txt",
+      "page_count": 9,
+      "extracted_at_utc": "2026-07-09T13:09:27.584567+00:00"
+    },
+    {
+      "source_pdf": "pacer -- elder fraud -- factual basis.pdf",
+      "output_text": "pacer -- elder fraud -- factual basis.txt",
+      "page_count": 9,
+      "extracted_at_utc": "2026-07-09T13:09:27.587673+00:00"
+    },
+    {
+      "source_pdf": "pacer -- elder fraud -- judgment.pdf",
+      "output_text": "pacer -- elder fraud -- judgment.txt",
+      "page_count": 7,
+      "extracted_at_utc": "2026-07-09T13:09:27.645121+00:00"
+    },
+    {
+      "source_pdf": "pacer -- elder fraud -- superseding indictment.pdf",
+      "output_text": "pacer -- elder fraud -- superseding indictment.txt",
+      "page_count": 10,
+      "extracted_at_utc": "2026-07-09T13:09:27.721920+00:00"
+    }
+  ]
+}

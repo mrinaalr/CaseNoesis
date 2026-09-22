@@ -28,7 +28,7 @@ from facet_tree import (  # noqa: E402
 )
 from storage import CaseStorage  # noqa: E402
 
-PACER_CASES_JSON = _REPO_ROOT / "data" / "PACER" / "pacer_cases.json"
+PACER_CASES_JSON = _REPO_ROOT / "data" / "collected" / "PACER" / "pacer_cases.json"
 
 # Ten-level partition order matching the search UI (excludes perp_admission).
 SEARCH_UI_FACET_ORDER: Sequence[Tuple[str, str]] = tuple(

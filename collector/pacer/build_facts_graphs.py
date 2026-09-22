@@ -15,7 +15,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
-PACER_DIR = REPO_ROOT / "data" / "PACER"
+PACER_DIR = REPO_ROOT / "data" / "collected" / "PACER"
 DEFAULT_MANIFEST = PACER_DIR / "facts.txt"
 SDK_ROOT = REPO_ROOT.parent / "CASE-UCO-SDK"
 CASE_VALIDATE = SDK_ROOT / ".venv/bin/case_validate"

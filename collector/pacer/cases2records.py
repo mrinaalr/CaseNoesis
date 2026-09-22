@@ -41,7 +41,7 @@ import requests
 
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
-PACER_DIR = REPO_ROOT / "data" / "PACER"
+PACER_DIR = REPO_ROOT / "data" / "collected" / "PACER"
 BULK_DIR = PACER_DIR / "BULK_FOLDER"
 DEFAULT_ENV = REPO_ROOT / ".env"
 

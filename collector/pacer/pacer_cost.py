@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append rows to data/PACER/BULK_FOLDER/pacer_cost.csv (manual PACER log format)."""
+"""Append rows to data/collected/PACER/BULK_FOLDER/pacer_cost.csv (manual PACER log format)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import List, Optional, Tuple
 
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
-PACER_DIR = REPO_ROOT / "data" / "PACER"
+PACER_DIR = REPO_ROOT / "data" / "collected" / "PACER"
 BULK_DIR = PACER_DIR / "BULK_FOLDER"
 DEFAULT_CSV = BULK_DIR / "pacer_cost.csv"
 

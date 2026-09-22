@@ -11,13 +11,13 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 ## Scope
 
 - Multi-offense ingestion (fraud, trafficking, cyber-enabled crime, CSEA/ICAC)
-- **Private** local collector (`collector/`) plus local stdio MCP to orchestrate it (`casenoesis_mcp`)
+- **Local-machine** collector (`collector/`) plus local stdio MCP to orchestrate it (`casenoesis_mcp`)
 - Website/docs may run on Railway. There is **no public MCP**. CaseLinker remains the public ICAC collector and query API.
 - Local FastAPI + sqlite for the researcher site and corpus tools (`python3 run/main.py`)
 
 ## Status
 
-Early stage. Ingestion architecture and offense-category taxonomy are under active development. No public data release yet.
+The collector, the press lookup, and the CourtListener link manifest are in this repo. Ingestion architecture and offense-category taxonomy are under active development. No public data release yet.
 
 ## Architecture
 
@@ -114,9 +114,9 @@ Collection keeps documents and cases distinct. Counts are not interchangeable:
 | Sources bundled (ICAC lineage) | 56 |
 | Bundled pages | 4,860 |
 | Largest bundle | `SCAG_ICAC_All.pdf` — 633 pages |
-| NHSR #8252 harvest | 1,000 DOJ press PDFs + 50 free RECAP filings under `data/collected/` (fraud, trafficking, cyber, CSEA). Not auto-ingested. |
+| NHSR #8252 harvest | Press lookup for 13,047 releases, and a CourtListener link manifest for 500+ free RECAP filings (trafficking and forced labor). Article text and PDFs are local only. |
 
-The collection layer is crime-type agnostic. Extending to a new domain means a new source list and search terms — not a new pipeline. The 1,000/50 fill uses that same discover → fetch → render path, via `collector/run_bulk.py`, with one PDF per press URL instead of a per-source bundle.
+The collection layer is crime-type agnostic. A new topic is a new profile (`title_terms`, `court_queries`), not a new pipeline. Bulk collection runs through `collector/run_bulk.py`.
 
 ## Court records & enrichment
 
@@ -132,7 +132,7 @@ Court records **enrich** a press-release case already resolved in collection:
 4. **Correlate** — attach filings to the same `prosecution_id` as the press releases (docket is the hard key; link press release and court records).
 5. **Enrich** — merge court-extracted facts into the canonical case the same way *resolve* merges press releases (OR/union for charges, platforms, co-defendants; court filing wins on statute text and formal disposition when both exist). Court record provenance over press-release extracted features.
 
-Paid-PACER scaffolding lives under [`collector/pacer/`](collector/pacer/). Filings and facts stay in [`data/PACER/`](data/PACER/). Document-type extraction and the enrich path (step 3–5) are being rebuilt with the rest of processing — not production-ready yet.
+Paid-PACER scaffolding lives under [`collector/pacer/`](collector/pacer/). Filings and facts stay in [`data/collected/PACER/`](data/collected/PACER/). Document-type extraction and the enrich path (step 3–5) are being rebuilt with the rest of processing — not production-ready yet.
 
 ### State open records
 
@@ -164,7 +164,7 @@ Tool catalog: [`casenoesis_mcp/README.md`](casenoesis_mcp/README.md) and [`casen
 
 ## Data & Ethics
 
-Case data is drawn exclusively from publicly available enforcement records (press releases, court filings already in the public domain) and from open-records releases obtained through lawful request. CaseNoesis public-record collection is authorized by **[UMass HRPO NHSR #8252](docs/ethics/NHSR_8252.md)** (16 Sep 2026). 
+Case data is drawn exclusively from publicly available enforcement records (press releases, court filings already in the public domain) and from open-records releases obtained through lawful request. CaseNoesis public-record collection is completed in accordance with **[UMass HRPO NHSR #8252](docs/ethics/NHSR_8252.md)** (16 Sep 2026). 
 
 
 ## Contributing

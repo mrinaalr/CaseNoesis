@@ -30,7 +30,7 @@ REPO = HERE.parent
 NHSR = "UMass HRPO NHSR #8252 (16 Sep 2026)"
 NHSR_TITLE = "On the Mechanics of Exploitation: State-Machine Modeling of Public Exploitation-Related Case Records"
 
-DEFAULT_DOMAINS = ("fraud", "trafficking", "cyber", "csea")
+DEFAULT_DOMAINS = ("fraud", "trafficking", "cyber", "forced_labor", "csea")
 COLLECTED_ROOT = REPO / "data" / "collected"
 
 

@@ -15,9 +15,12 @@
     "pig butchering",
     "investment fraud",
     "lottery scam",
-    "grandparent scam"
+    "grandparent scam",
+    "mail fraud",
+    "bank fraud"
   ],
   "require": "fraud|scam|embezzl|swindle|scheme to defraud|pig butcher|business email|wire fraud|romance",
+  "exclude": "\\b(?:scam alert|consumer alert|how to avoid|tips for (?:avoiding|spotting)|awareness month|civil settlement|assurance of voluntary compliance)\\b",
   "court_queries": [
     "elder fraud",
     "romance scam wire fraud",

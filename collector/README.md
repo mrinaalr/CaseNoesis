@@ -1,7 +1,7 @@
 # CaseNoesis collector — personal collecting suite
 
 **CaseLinker** (public): ICAC / CSEA press corpus, hosted demo, public MCP.  
-**CaseNoesis** (this tree): personal super-engine for thousands of **heterogeneous** press releases and court records (fraud, trafficking, cyber, CSEA). NHSR **#8252**. CSEA/ICAC is one exploitation type among those — it is not filtered out.
+**CaseNoesis** (this tree): personal super-engine for thousands of **heterogeneous** press releases and court records (fraud, trafficking, cyber, CSEA). NHSR **#8252**. 
 
 Railway may host the CaseNoesis **website**. Collection and MCP stay **on your machine**. Outputs: `data/collected/{press_releases,recap,manifests}/<domain>/`. Nothing auto-ingests.
 
@@ -16,7 +16,7 @@ listing page ──► fetch_source_urls.py ──► urls.txt ─┐
 DOJ topic    ──► harvest_doj_press.py ──────────────┼─► resolve JSON ──► build_press_pdf.py ──► merged PDF
 known URLs   ──► resolve_press_urls.py ─────────────┘
 CourtListener ─► court_records.py ──► data/collected/recap/  (free, never PACER)
-                 pacer/*.py ────────► data/PACER/           (paid opt-in)
+                 pacer/*.py ────────► data/collected/PACER/  (paid opt-in)
                  run_bulk.py ──► N press + M court + MANIFEST.json
 ```
 
@@ -28,7 +28,7 @@ CourtListener ─► court_records.py ──► data/collected/recap/  (free, ne
 | `build_press_pdf.py` | Core engine: one ReportLab page per URL + provenance sidecars |
 | `fetch_source_urls.py` | HTML / Squarespace / CSE / usa.gov / WordPress REST listings |
 | `court_records.py` | Free RECAP search + download. Refuses PACER/ECF |
-| `pacer/` | Paid-PACER opt-in: corpus eligibility, CourtListener fetch, cost log, facts→graphs. Writes `data/PACER/` |
+| `pacer/` | Paid-PACER opt-in: corpus eligibility, CourtListener fetch, cost log, facts→graphs. Writes `data/collected/PACER/` |
 | `run_bulk.py` | Sequential harvest to a press/court quota. Never purchases PACER. |
 | `filter_merged_pdf.py` / `remove_pdf_pages_by_text.py` / `check_expand_novelty.py` | Quality gates |
 | `PRESS_RELEASE_COLLECTION.md` | Extractors, DOJ API quirks, when to stop |
@@ -70,7 +70,12 @@ python3 src/main.py data/collected/press_releases/fraud/FRAUD_All.pdf
 
 ```bash
 pip install requests beautifulsoup4 reportlab pypdf pdfplumber httpx
+export COURTLISTENER_API_TOKEN=your_token
 ```
+
+Create the token at [CourtListener's API help page](https://www.courtlistener.com/help/api/rest/). The court downloader reads `COURTLISTENER_API_TOKEN` from the environment or from a `.env` file in this repo. Do not commit the token.
+
+`run_bulk.py` never purchases PACER. Search terms live in `collector/profiles/<domain>.json` (`title_terms` for press, `court_queries` for CourtListener). Copy a profile to point the same engine at a new topic. A default token is rate-limited (about 5/minute, 125/day). Only filings already in free RECAP can be downloaded.
 
 Python 3.14 in `.venv` currently breaks `pyexpat` (`pypdf`). Harvest JSON and RECAP downloads still work. PDF merge uses `runtime.py` to pick a working interpreter.
 

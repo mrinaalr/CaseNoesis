@@ -68,14 +68,19 @@ models/*
 !models/triage_bundle.joblib
 
 # JSON data dumps (corpus predictions, extract_evaluation.json, semantic exports, etc.)
-# Whitelist JS/TS config, collector profiles, and every JSON under data/ (manifests
-# for collabs). PDFs stay ignored — never commit collected/PACER PDFs.
+# Whitelist JS/TS config, collector profiles, and JSON under data/ except raw press text.
+# PDFs stay ignored — never commit collected court or press PDFs.
 *.json
 !package.json
 !package-lock.json
 !tsconfig.json
 !jsconfig.json
 !data/**/*.json
+# Raw press text, URL caches, and first-batch manifests stay on disk.
+# Public tree keeps data/collected/press_releases/press_lookup.jsonl only.
+data/collected/manifests/
+data/collected/press_releases/*
+!data/collected/press_releases/press_lookup.jsonl
 # Case Studies authored content (read by the /case-studies tab and the /api/case-studies
 # endpoint). Must ship with the deploy or Railway shows "No content yet."
 !data/case_studies.json
