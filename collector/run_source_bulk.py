@@ -622,6 +622,12 @@ def label_domain(title: str, body: str) -> str | None:
         return "forced_labor"
     if TRAFFICK_RE.search(blob):
         return "trafficking"
+    if CYBER_RE.search(blob) and FRAUD_RE.search(blob):
+        return "fraud"
+    if CYBER_RE.search(blob):
+        return "cyber"
+    if FRAUD_RE.search(blob):
+        return "fraud"
     return None
 
 
@@ -775,12 +781,13 @@ def _exploitation_listing(url: str) -> bool:
     return True
 
 
-def discover_html_source(src: dict) -> list[str]:
+def discover_html_source(src: dict, listing_ok=None) -> list[str]:
     mode = src.get("mode") or "html"
     found: list[str] = []
     seen: set[str] = set()
     src = dict(src)
-    src["queries"] = [q for q in src["queries"] if _exploitation_listing(q)]
+    ok = listing_ok or _exploitation_listing
+    src["queries"] = [q for q in src["queries"] if ok(q)]
     if mode == "squarespace":
         for q in src["queries"]:
             try:
@@ -851,10 +858,11 @@ def discover_html_source(src: dict) -> list[str]:
     return found
 
 
-def discover_usa(src: dict) -> list[str]:
+def discover_usa(src: dict, listing_ok=None) -> list[str]:
     found: list[str] = []
     seen: set[str] = set()
-    queries = [q for q in src["queries"] if _exploitation_listing(q)]
+    ok = listing_ok or _exploitation_listing
+    queries = [q for q in src["queries"] if ok(q)]
     for query in queries:
         try:
             batch = collect_usa_search_urls(
@@ -947,11 +955,20 @@ def ingest_resolved_list(source_id: str, source_name: str, records: list[dict], 
     return stats
 
 
-def extract_urls(source_id: str, source_name: str, urls: list[str], seen: set[str], *, delay: float) -> Counter:
+def extract_urls(
+    source_id: str,
+    source_name: str,
+    urls: list[str],
+    seen: set[str],
+    *,
+    delay: float,
+    dest_path: Path | None = None,
+) -> Counter:
     import build_press_pdf
 
     stats: Counter = Counter()
-    path = RECORDS / f"{source_id}.jsonl"
+    path = dest_path or (RECORDS / f"{source_id}.jsonl")
+    path.parent.mkdir(parents=True, exist_ok=True)
     ns = argparse.Namespace(referer=None, jina_fallback=True)
     for i, url in enumerate(urls, start=1):
         n = _norm(url)

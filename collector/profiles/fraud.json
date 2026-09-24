@@ -17,7 +17,15 @@
     "lottery scam",
     "grandparent scam",
     "mail fraud",
-    "bank fraud"
+    "bank fraud",
+    "securities fraud",
+    "ponzi",
+    "cryptocurrency fraud",
+    "phishing",
+    "identity theft",
+    "mortgage fraud",
+    "health care fraud",
+    "fraud scheme"
   ],
   "require": "fraud|scam|embezzl|swindle|scheme to defraud|pig butcher|business email|wire fraud|romance",
   "exclude": "\\b(?:scam alert|consumer alert|how to avoid|tips for (?:avoiding|spotting)|awareness month|civil settlement|assurance of voluntary compliance)\\b",
