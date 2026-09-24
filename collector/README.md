@@ -1,7 +1,9 @@
 # CaseNoesis collector — personal collecting suite
 
 **CaseLinker** (public): ICAC / CSEA press corpus, hosted demo, public MCP.  
-**CaseNoesis** (this tree): personal super-engine for thousands of **heterogeneous** press releases and court records (fraud, trafficking, cyber, CSEA). NHSR **#8252**. 
+**CaseNoesis** (this tree): personal super-engine for thousands of **heterogeneous** press releases and court records (fraud, trafficking, cyber, CSEA). NHSR **#8252**.
+
+Collection is **frozen** (23 Sep 2026, 11:37 PM ET): **45,159** distinct press URLs and **738** court cases (**820** free RECAP PDFs). Shareable map, counts, and what not to commit: [`data/collected/README.md`](../data/collected/README.md). Do not start another harvest unless you mean to resume past that snapshot. 
 
 Railway may host the CaseNoesis **website**. Collection and MCP stay **on your machine**. Outputs: `data/collected/{press_releases,recap,manifests}/<domain>/`. Nothing auto-ingests.
 
@@ -30,6 +32,8 @@ CourtListener ─► court_records.py ──► data/collected/recap/  (free, ne
 | `court_records.py` | Free RECAP search + download. Refuses PACER/ECF |
 | `pacer/` | Paid-PACER opt-in: corpus eligibility, CourtListener fetch, cost log, facts→graphs. Writes `data/collected/PACER/` |
 | `run_bulk.py` | Sequential harvest to a press/court quota. Never purchases PACER. |
+| `harvest_fraud_study.py` | Fraud-study press, state feeds, and year-sweep RECAP. See `data/collected/README.md`. |
+| `press_to_recap.py` | Press docket number → one CourtListener lookup → free RECAP PDF. |
 | `filter_merged_pdf.py` / `remove_pdf_pages_by_text.py` / `check_expand_novelty.py` | Quality gates |
 | `PRESS_RELEASE_COLLECTION.md` | Extractors, DOJ API quirks, when to stop |
 

@@ -85,6 +85,10 @@ data/collected/press_releases/*
 # The public reproduce lists are data/collected/public/*.jsonl.
 data/collected/recap/fraud/fraud_study.jsonl
 data/collected/recap/fraud/fraud_study_status.json
+data/collected/recap/fraud/press_docket_queue.jsonl
+data/collected/recap/fraud/from_press.jsonl
+data/collected/recap/fraud/from_press_tried.jsonl
+data/collected/recap/fraud/from_press_status.json
 data/collected/recap/bulk/court_manifest.json
 # Case Studies authored content (read by the /case-studies tab and the /api/case-studies
 # endpoint). Must ship with the deploy or Railway shows "No content yet."

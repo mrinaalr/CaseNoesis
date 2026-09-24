@@ -114,7 +114,7 @@ Collection keeps documents and cases distinct. Counts are not interchangeable:
 | Sources bundled (ICAC lineage) | 56 |
 | Bundled pages | 4,860 |
 | Largest bundle | `SCAG_ICAC_All.pdf` — 633 pages |
-| NHSR #8252 harvest | Press lookup for 13,047 releases, and a CourtListener link manifest for 500+ free RECAP filings (trafficking and forced labor). Article text and PDFs are local only. |
+| NHSR #8252 harvest | Frozen 23 Sep 2026, 11:37 PM ET, then cleaned. **45,159** distinct press URLs (fraud study 40,958 of those) and **738** court cases (**820** free RECAP PDFs). Article text and PDFs stay local. Map: [`data/collected/README.md`](data/collected/README.md). |
 
 The collection layer is crime-type agnostic. A new topic is a new profile (`title_terms`, `court_queries`), not a new pipeline. Bulk collection runs through `collector/run_bulk.py`.
 
