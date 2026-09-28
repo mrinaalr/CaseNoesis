@@ -81,6 +81,19 @@ Create the token at [CourtListener's API help page](https://www.courtlistener.co
 
 `run_bulk.py` never purchases PACER. Search terms live in `collector/profiles/<domain>.json` (`title_terms` for press, `court_queries` for CourtListener). Copy a profile to point the same engine at a new topic. A default token is rate-limited (about 5/minute, 125/day). Only filings already in free RECAP can be downloaded.
 
+## Transcripts
+
+`transcripts.py` sweeps held dockets for transcript entries, then downloads only what is already free in RECAP. Buying is a separate command. It does not run unless you pass `--charge-pacer` and `--max-spend`. Transcripts are $0.10 a page with no $3 cap. An unknown page count is refused on the paid path. Duplicate rows and non-criminal dockets are refused on both paths. `--key-docs` still skips transcript entries unless you pass `--transcripts`.
+
+```bash
+python3 collector/pacer/transcripts.py sweep
+env -u PACER_USERNAME -u PACER_PASSWORD python3 collector/pacer/transcripts.py fetch-free
+# Capped pilot example. Not yet run.
+python3 collector/pacer/transcripts.py fetch --approval-tag pilot --download --charge-pacer --max-records 10 --max-spend 100
+```
+
+`fetch` without `--download` is a dry run. The paid fetch also refuses sealed, restricted, unclear, and trial rows. A failed purchase counts against the cap. Free PDFs go to `data/collected/recap/transcripts/<domain>/` with a provenance sidecar. The manifest is `data/collected/PACER/transcripts/transcript_manifest.csv`. PDFs are not ingested and are gitignored.
+
 Python 3.14 in `.venv` currently breaks `pyexpat` (`pypdf`). Harvest JSON and RECAP downloads still work. PDF merge uses `runtime.py` to pick a working interpreter.
 
 ## When to stop and ask a human

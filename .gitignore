@@ -160,3 +160,10 @@ data/PACER/BULK_FOLDER/**/processed/
 data/PACER/BULK_FOLDER/outside/
 # EXTENSION OCR sidecars — local only, not the collector harvest catalog.
 data/PACER/EXTENSION/**/extracted-content.json
+# Transcript PDFs, sweep cache, provenance sidecars, and pull ledgers stay local.
+data/collected/PACER/transcripts/**/*.pdf
+data/collected/PACER/transcripts/_cache/
+data/collected/PACER/transcripts/pull_ledger.csv
+data/collected/recap/transcripts/**/*.pdf
+data/collected/recap/transcripts/**/*.pdf.provenance.json
+data/collected/recap/transcripts/pull_ledger.csv

@@ -178,17 +178,15 @@ def search_free(
 
 
 def download_free_pdf(url: str, dest: Path) -> dict[str, Any]:
-    """Download a storage.courtlistener.com PDF. Refuses PACER/ecf hosts."""
+    """Download a storage.courtlistener.com PDF. Exact host, no redirects."""
     parsed = urlparse(url)
-    host = (parsed.netloc or "").lower()
-    if "storage.courtlistener.com" not in host and "courtlistener.com" not in host:
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme != "https" or host != "storage.courtlistener.com":
         return {
             "ok": False,
-            "error": f"refusing non-CourtListener host {host} (no PACER purchases)",
+            "error": f"refusing host {host or '(none)'} (storage.courtlistener.com only)",
             "cost": "blocked",
         }
-    if "pacer" in host or "ecf." in host:
-        return {"ok": False, "error": "refusing PACER/ECF host", "cost": "blocked"}
     dest.parent.mkdir(parents=True, exist_ok=True)
     headers = {"User-Agent": USER_AGENT, "Accept": "application/pdf,*/*"}
     token = (os.getenv("COURTLISTENER_API_TOKEN") or "").strip()
@@ -198,15 +196,16 @@ def download_free_pdf(url: str, dest: Path) -> dict[str, Any]:
     wait = MIN_DELAY - (time.monotonic() - _last_call)
     if wait > 0:
         time.sleep(wait)
-    resp = requests.get(url, headers=headers, timeout=DEFAULT_TIMEOUT, stream=True)
+    resp = requests.get(url, headers=headers, timeout=DEFAULT_TIMEOUT, stream=True, allow_redirects=False)
     _last_call = time.monotonic()
+    if resp.status_code in {301, 302, 303, 307, 308} or resp.is_redirect:
+        return {"ok": False, "error": "redirect refused", "cost": "blocked"}
     resp.raise_for_status()
-    ctype = (resp.headers.get("Content-Type") or "").lower()
     data = resp.content
-    if "pdf" not in ctype and not data.startswith(b"%PDF"):
+    if not data.startswith(b"%PDF"):
         return {
             "ok": False,
-            "error": f"not a PDF (content-type={ctype})",
+            "error": "not a PDF (missing %PDF header)",
             "bytes": len(data),
         }
     dest.write_bytes(data)

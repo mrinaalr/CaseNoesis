@@ -10,5 +10,6 @@ Scripts live in [`collector/pacer/`](../../../collector/pacer/):
 |---|---|
 | `corpus2pacer.py` | Corpus → likely federal dockets (`pacer_cases.json` here) |
 | `cases2records.py` | CourtListener/RECAP fetch; PACER purchase only with `--charge-pacer` |
+| `transcripts.py` | Transcript sweep ($0) and later approved fetch. See `collector/README.md` |
 | `pacer_cost.py` | Append rows to `BULK_FOLDER/pacer_cost.csv` |
 | `build_facts_graphs.py` | Facts files → CASE/UCO graphs |

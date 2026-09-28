@@ -74,3 +74,21 @@ def estimate_pacer_pdf_cost(page_count: Optional[int] = None) -> float:
     if page_count and page_count > 0:
         return min(page_count * 0.10, 3.00)
     return 3.00  # conservative default when pages unknown
+
+
+def estimate_transcript_pacer_cost(page_count: Optional[int] = None) -> Optional[float]:
+    """Transcript PDFs: $0.10/page with no $3 document cap.
+
+    Returns None when the page count is unknown. Do not substitute the $3
+    default from estimate_pacer_pdf_cost — transcripts are often longer than
+    30 pages, so that cap understates the charge.
+    """
+    if page_count is None:
+        return None
+    try:
+        pages = int(page_count)
+    except (TypeError, ValueError):
+        return None
+    if pages <= 0:
+        return None
+    return round(pages * 0.10, 2)
