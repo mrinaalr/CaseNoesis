@@ -48,7 +48,7 @@ Commit only enough for someone else to **rebuild** the corpus. Do not commit nar
 | `recap/bulk/manifests/recap_links.jsonl` — URL index for the 506 trafficking / forced-labor RECAP PDFs | Every `*.pdf` |
 | Collector commands below | `press_releases/fraud/eji/` and `manifests/` |
 | | `PACER/` |
-| | `hyletic_data/` — wayback, litigation, statutes, calibration captures |
+| | `hyletic_data/` — reference records: wayback, statutes, calibration, platform civil filings |
 
 A public row is a pointer. The article text and the court PDF are fetched again from the URL.
 
@@ -122,15 +122,15 @@ data/collected/                         about 1.3 GB, frozen 23 Sep 2026 11:37 P
     trafficking/  cyber/  csea/         first-batch court PDFs
   manifests/                            first-batch per-record JSON, full text, local only
   PACER/                                already-purchased filings. Not produced here
-  hyletic_data/                         later packet. Not part of the 23 Sep freeze. Local only
+  hyletic_data/                         reference records. Not part of the 23 Sep freeze. Local only
     wayback/  litigation/  statutes/  calibration/
 ```
 
 `case_studies.json` is next to this folder, at `data/case_studies.json`. It is not part of the harvest.
 
-## Hyletic packet
+## Reference records
 
-Not part of the 23 Sep freeze. Nothing here is ingested. Files stay on this machine. Seeds that rebuild them live in `collector/profiles/`. One CLI: `python3 -m collector.hyletic`. Map and commands: `collector/README.md`.
+Not part of the 23 Sep freeze. Nothing here is ingested. Files stay on this machine. Seeds that rebuild them live in `collector/profiles/`. Commands: `python3 -m collector.hyletic`. Map: `collector/README.md`.
 
 ```
 data/collected/hyletic_data/

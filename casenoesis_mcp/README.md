@@ -1,6 +1,6 @@
 # CaseNoesis MCP
 
-Local stdio server for agents. It exposes corpus tools against a FastAPI process on this machine, and the collector suite (press, free court records, hyletic packets).
+Local stdio server for agents. It exposes corpus tools against a FastAPI process on this machine, and the collector: press, court (CourtListener and free RECAP), and reference records.
 
 There is no hosted MCP. Railway may serve the website. It does not serve this process.
 
@@ -79,7 +79,7 @@ Copy [`mcp.json.example`](mcp.json.example) to `.cursor/mcp.json` and reload MCP
 
 Press: `harvest_doj_press_topic`, `fetch_press_listing_urls`, `resolve_press_urls`, `build_press_pdf`, `collect_case_dual_path`, `collect_record`, `collect_bulk`, `download_free_recap`.
 
-Hyletic: `fetch_seed_docs`, `harvest_wayback_policy`, `harvest_platform_litigation`, `harvest_statutes`, `harvest_calibration`.
+Reference records: `fetch_seed_docs`, `harvest_wayback_policy`, `harvest_platform_litigation`, `harvest_statutes`, `harvest_calibration`.
 
 `collect_record` pulls one new press record, or one free RECAP PDF. `collect_bulk` defaults to 1 press and 0 court so the client does not time out. The 1000/50 fill is the CLI:
 

@@ -12,7 +12,7 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (corpus graphs) | **8** | `tree_traversal`, `list_sources`, `case2cac`, four graph tools, `export_case_graph_ttl` |
 | MCP-only (free public records) | **4** | DOJ press search + CourtListener/RECAP (`public_records.py`) |
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
-| MCP-only (collector WRITE) | **13** | Press, free RECAP, and hyletic. Disk only. No sqlite ingest |
+| MCP-only (collector WRITE) | **13** | Press, free RECAP, and reference records. Disk only. No sqlite ingest |
 | **Total (local stdio, writes on)** | **55** | **42** when `MCP_COLLECTOR_WRITE=0` |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
