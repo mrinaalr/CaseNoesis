@@ -27,6 +27,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
+PRESS = HERE / "press_releases"
+if str(PRESS) not in sys.path:
+    sys.path.insert(0, str(PRESS))
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 

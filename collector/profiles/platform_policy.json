@@ -1,0 +1,23 @@
+{
+  "collection": "wayback",
+  "seeds": [
+    {
+      "slug": "discord-terms",
+      "title": "Discord Terms of Service",
+      "kind": "tos",
+      "url": "https://discord.com/terms"
+    },
+    {
+      "slug": "discord-guidelines",
+      "title": "Discord Community Guidelines",
+      "kind": "community",
+      "url": "https://discord.com/guidelines"
+    },
+    {
+      "slug": "meta-community-standards",
+      "title": "Meta Community Standards",
+      "kind": "community",
+      "url": "https://transparency.meta.com/policies/community-standards/"
+    }
+  ]
+}

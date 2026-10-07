@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-REPO = Path(__file__).resolve().parents[1]
+REPO = Path(__file__).resolve().parents[2]
 PROCESSING = REPO / "src" / "Processing Layer"
 
 DEFAULT_NEAR_DUP = 0.88

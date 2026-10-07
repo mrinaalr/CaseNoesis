@@ -1,4 +1,6 @@
-# Press release → structured PDF (collector guide)
+# Press release → structured PDF
+
+Scripts in this directory. From the repo root: `python3 collector/press_releases/harvest_doj_press.py`. Profiles stay in `collector/profiles/`.
 
 This document is for **agents and humans** who add or refresh **press-release sources** for **CaseNoesis** (ported from CaseLinker). It covers:
 
@@ -347,22 +349,17 @@ python3 build_press_pdf.py --url-file <(echo 'https://...') --out-dir /tmp/colle
 ## File organization (recommended)
 
 ```
-collector/
-  build_press_pdf.py              # HTML/PDF / --doj-file → per-article PDF → merge
-  resolve_press_urls.py              # known justice.gov URLs → resolved JSON
-  harvest_doj_press.py         # DOJ API discovery (PSC defaults; any topic via flags)
-  fetch_source_urls.py       # listing pages → url list
-  urls.txt                     # optional: active run list (often copied from sources/)
+collector/press_releases/
+  build_press_pdf.py          # HTML/PDF / --doj-file → per-article PDF → merge
+  resolve_press_urls.py       # known justice.gov URLs → resolved JSON
+  harvest_doj_press.py        # DOJ API discovery
+  fetch_source_urls.py        # listing pages → url list
+  filter_merged_pdf.py
+  remove_pdf_pages_by_text.py
+  check_expand_novelty.py
   sources/
-    urls.txt                   # active run list (resolve_press_urls.py / build_press_pdf.py input)
-    osceola_icac_urls.txt
-    example_trafficking_urls.txt
-  patterns/                    # optional: require/exclude line files for fetch_source_urls
-    example_require.txt
-    example_exclude.txt
-  state/                       # optional: weekly automation manifests (see below)
-    osceola_icac_last_urls.txt
-    osceola_icac_last_run.txt
+    urls.txt
+collector/profiles/             # title terms and court queries, shared with run_bulk.py
 ```
 
 Naming merged outputs: `{AGENCY}_{TOPIC}_All.pdf` at repo root or under `collector_output/` (gitignored). Example: `OSCEOLASO_ICAC_All.pdf`.

@@ -1676,6 +1676,75 @@ if _COLLECTOR_WRITE_ENABLED:
             logger.exception("download_free_recap failed")
             return {"error": str(e), "write": True}
 
+    @mcp.tool()
+    async def fetch_seed_docs(seeds: str, out_dir: str = "", limit: int = 0) -> dict[str, Any]:
+        """WRITE (local MCP only). Download a public-document seed into data/collected/hyletic_data/.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import fetch_seed_docs as _fetch
+
+            return await asyncio.to_thread(_fetch, seeds=seeds, out_dir=out_dir, limit=limit)
+        except Exception as e:
+            logger.exception("fetch_seed_docs failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def harvest_wayback_policy(
+        profile: str = "",
+        out_dir: str = "",
+        limit: int = 1,
+        snapshots: int = 1,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Dated Wayback snapshot of a platform policy page."""
+        try:
+            from casenoesis_mcp.collector_tools import harvest_wayback_policy as _harvest
+
+            return await asyncio.to_thread(
+                _harvest, profile=profile, out_dir=out_dir, limit=limit, snapshots=snapshots
+            )
+        except Exception as e:
+            logger.exception("harvest_wayback_policy failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def harvest_platform_litigation(
+        profile: str = "",
+        out_dir: str = "",
+        max_docs: int = 1,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). One free RECAP platform-litigation filing. Never PACER."""
+        try:
+            from casenoesis_mcp.collector_tools import harvest_platform_litigation as _harvest
+
+            return await asyncio.to_thread(
+                _harvest, profile=profile, out_dir=out_dir, max_docs=max_docs
+            )
+        except Exception as e:
+            logger.exception("harvest_platform_litigation failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def harvest_statutes(profile: str = "", out_dir: str = "", limit: int = 1) -> dict[str, Any]:
+        """WRITE (local MCP only). OLRC section HTML for citations in the statute profile."""
+        try:
+            from casenoesis_mcp.collector_tools import harvest_statutes as _harvest
+
+            return await asyncio.to_thread(_harvest, profile=profile, out_dir=out_dir, limit=limit)
+        except Exception as e:
+            logger.exception("harvest_statutes failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def harvest_calibration(profile: str = "", out_dir: str = "", limit: int = 1) -> dict[str, Any]:
+        """WRITE (local MCP only). Public calibration reports. Not raw CyberTipline cases."""
+        try:
+            from casenoesis_mcp.collector_tools import harvest_calibration as _harvest
+
+            return await asyncio.to_thread(_harvest, profile=profile, out_dir=out_dir, limit=limit)
+        except Exception as e:
+            logger.exception("harvest_calibration failed")
+            return {"error": str(e), "write": True}
+
 
 if __name__ == "__main__":
     # CaseNoesis MCP is a private local agent host (stdio). It is not a public

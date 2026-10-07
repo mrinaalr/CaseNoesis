@@ -17,7 +17,8 @@
     "ransomware",
     "business email compromise",
     "pig butchering",
-    "human trafficking"
+    "human trafficking",
+    "super intelligence"
   ],
   "require": "fraud|scam|embezzl|traffick|forced labou?r|ransomware|business email|pig butcher|wire fraud|romance|peonage|involuntary servitude|child pornograph|child sexual|\\bCSAM\\b|child exploitation|enticement of a minor|sextortion|\\bICAC\\b",
   "court_queries": [
@@ -26,6 +27,7 @@
     "child exploitation",
     "ransomware",
     "romance scam",
-    "business email compromise"
+    "business email compromise",
+    "super intelligence"
   ]
 }

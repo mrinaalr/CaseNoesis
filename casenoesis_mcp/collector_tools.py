@@ -52,6 +52,7 @@ _T = TypeVar("_T")
 _REPO = Path(__file__).resolve().parent.parent
 # On-disk path: repo-root collector/.
 _COLLECTOR = _REPO / "collector"
+_PRESS = _COLLECTOR / "press_releases"
 _DEFAULT_OUT = _REPO / "data" / "collected"
 
 
@@ -106,7 +107,7 @@ def probe_press_url(url: str, *, jina_fallback: bool = True) -> dict[str, Any]:
     if not url.startswith("http"):
         return {"error": "url must be an http(s) URL", "write": False}
 
-    resolve_mod = _load_module("resolve_press_urls_mcp", _COLLECTOR / "resolve_press_urls.py")
+    resolve_mod = _load_module("resolve_press_urls_mcp", _PRESS / "resolve_press_urls.py")
     if resolve_mod.is_justice_gov_url(url):
         rec = resolve_mod.resolve_justice_gov_url(url)
         return {
@@ -122,7 +123,7 @@ def probe_press_url(url: str, *, jina_fallback: bool = True) -> dict[str, Any]:
             "note": "justice.gov must use DOJ API. Live HTML hits Akamai.",
         }
 
-    pdf_mod = _load_module("build_press_pdf_mcp", _COLLECTOR / "build_press_pdf.py")
+    pdf_mod = _load_module("build_press_pdf_mcp", _PRESS / "build_press_pdf.py")
 
     ns = argparse.Namespace(
         referer=None,
@@ -182,7 +183,7 @@ def harvest_doj_press_topic(
 
     cmd = [
         sys.executable,
-        str(_COLLECTOR / "harvest_doj_press.py"),
+        str(_PRESS / "harvest_doj_press.py"),
         "--slug",
         slug_s,
         "--skip-cac",
@@ -273,7 +274,7 @@ def fetch_press_listing_urls(
 
     cmd = [
         sys.executable,
-        str(_COLLECTOR / "fetch_source_urls.py"),
+        str(_PRESS / "fetch_source_urls.py"),
         "--url",
         listing_url,
         "-o",
@@ -358,7 +359,7 @@ def resolve_press_urls(
     if not ordered:
         return {"error": "Provide urls[] and/or url_file with http(s) lines", "write": True}
 
-    resolve_mod = _load_module("resolve_press_urls_mcp", _COLLECTOR / "resolve_press_urls.py")
+    resolve_mod = _load_module("resolve_press_urls_mcp", _PRESS / "resolve_press_urls.py")
     records = resolve_mod.build_records(ordered)
     out_path = out / (out_name if out_name.endswith(".json") else f"{_safe_slug(out_name)}.json")
     out_path.write_text(json.dumps(records, indent=2), encoding="utf-8")
@@ -406,7 +407,7 @@ def build_press_pdf(
 
     cmd = [
         sys.executable,
-        str(_COLLECTOR / "build_press_pdf.py"),
+        str(_PRESS / "build_press_pdf.py"),
         "--out-dir",
         str(out),
         "--out-name",
@@ -699,3 +700,85 @@ def download_free_recap(
         "pacer_purchases": 0,
         **result,
     }
+
+
+def _run_hyletic(command: str, args: list[str], *, timeout: int = 180) -> dict[str, Any]:
+    """Run one hyletic subcommand. Default output is data/collected/hyletic_data/."""
+    if not collector_disk_write_enabled():
+        return _write_disabled_error()
+    cmd = [sys.executable, "-m", "collector.hyletic", command, *args]
+    proc = subprocess.run(cmd, cwd=str(_REPO), capture_output=True, text=True, timeout=timeout)
+    summary: dict[str, Any] = {}
+    tail = (proc.stdout or "").strip().splitlines()
+    if tail:
+        try:
+            summary = json.loads(tail[-1])
+        except json.JSONDecodeError:
+            summary = {"stdout_tail": tail[-1][:500]}
+    return {
+        "write": True,
+        "tool_kind": "WRITE",
+        "ok": proc.returncode == 0,
+        "exit_code": proc.returncode,
+        "pacer_purchases": 0,
+        "summary": summary,
+        "stderr_tail": (proc.stderr or "")[-800:],
+    }
+
+
+def _hyletic_args(out_dir: str, extra: list[str]) -> list[str]:
+    args = list(extra)
+    if out_dir:
+        args.extend(["--out-dir", out_dir])
+    return args
+
+
+def fetch_seed_docs(*, seeds: str, out_dir: str = "", limit: int = 0) -> dict[str, Any]:
+    """WRITE: download a public-document seed into data/collected/hyletic_data/."""
+    extra = ["--seeds", seeds]
+    if limit:
+        extra.extend(["--limit", str(int(limit))])
+    return _run_hyletic("seed", _hyletic_args(out_dir, extra), timeout=300)
+
+
+def harvest_wayback_policy(
+    *,
+    profile: str = "",
+    out_dir: str = "",
+    limit: int = 1,
+    snapshots: int = 1,
+) -> dict[str, Any]:
+    """WRITE: one Wayback capture of a platform policy URL."""
+    extra = ["--limit", str(max(1, int(limit))), "--snapshots", str(max(1, int(snapshots)))]
+    if profile:
+        extra.extend(["--profile", profile])
+    return _run_hyletic("wayback", _hyletic_args(out_dir, extra))
+
+
+def harvest_platform_litigation(
+    *,
+    profile: str = "",
+    out_dir: str = "",
+    max_docs: int = 1,
+) -> dict[str, Any]:
+    """WRITE: one free RECAP filing for a platform-litigation query. Never PACER."""
+    extra = ["--max-docs", str(max(1, int(max_docs)))]
+    if profile:
+        extra.extend(["--profile", profile])
+    return _run_hyletic("litigation", _hyletic_args(out_dir, extra), timeout=240)
+
+
+def harvest_statutes(*, profile: str = "", out_dir: str = "", limit: int = 1) -> dict[str, Any]:
+    """WRITE: GovInfo text for the first N citations in the statute profile."""
+    extra = ["--limit", str(max(1, int(limit)))]
+    if profile:
+        extra.extend(["--profile", profile])
+    return _run_hyletic("statutes", _hyletic_args(out_dir, extra))
+
+
+def harvest_calibration(*, profile: str = "", out_dir: str = "", limit: int = 1) -> dict[str, Any]:
+    """WRITE: public calibration PDFs. Not raw CyberTipline case reports."""
+    extra = ["--limit", str(max(1, int(limit)))]
+    if profile:
+        extra.extend(["--profile", profile])
+    return _run_hyletic("calibration", _hyletic_args(out_dir, extra), timeout=240)

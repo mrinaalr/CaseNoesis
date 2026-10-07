@@ -26,6 +26,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
+PRESS = HERE / "press_releases"
 
 NHSR = "UMass HRPO NHSR #8252 (16 Sep 2026)"
 NHSR_TITLE = "On the Mechanics of Exploitation: State-Machine Modeling of Public Exploitation-Related Case Records"
@@ -92,7 +93,7 @@ def harvest_one(
     one_dir.mkdir(parents=True, exist_ok=True)
     cmd = [
         python,
-        str(HERE / "harvest_doj_press.py"),
+        str(PRESS / "harvest_doj_press.py"),
         "--profile",
         profile_name,
         "--max-keep",
@@ -149,7 +150,7 @@ def harvest_many(
     batch_dir.mkdir(parents=True, exist_ok=True)
     cmd = [
         python,
-        str(HERE / "harvest_doj_press.py"),
+        str(PRESS / "harvest_doj_press.py"),
         "--profile",
         profile_name,
         "--max-keep",
@@ -340,7 +341,7 @@ def build_pdf(*, python: str, doj_file: Path, out_dir: Path, out_name: str, limi
     pdf_py = python_with_pypdf() or python
     cmd = [
         pdf_py,
-        str(HERE / "build_press_pdf.py"),
+        str(PRESS / "build_press_pdf.py"),
         "--doj-file",
         str(doj_file),
         "--out-dir",
@@ -512,7 +513,7 @@ def main() -> None:
     ap.add_argument(
         "--domains",
         default=",".join(DEFAULT_DOMAINS),
-        help="Comma-separated domain profiles (fraud,trafficking,cyber,csea).",
+        help="Comma-separated domain profiles (fraud,trafficking,cyber,csea,ai).",
     )
     ap.add_argument(
         "--out-dir",

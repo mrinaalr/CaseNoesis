@@ -103,8 +103,13 @@ def search_free(
     *,
     search_type: str = "r",
     max_results: int = 10,
+    on_topic: bool = True,
 ) -> list[dict[str, Any]]:
-    """Search CourtListener; keep only RECAP-available ($0) documents."""
+    """Search CourtListener; keep only RECAP-available ($0) documents.
+
+    on_topic keeps the criminal exploitation gate used by the press/court harvest.
+    Platform-litigation search passes on_topic=False.
+    """
     query = (query or "").strip()
     if not query:
         return []
@@ -169,7 +174,7 @@ def search_free(
             "observed": True,
             "inferred": False,
         }
-        if not _on_topic(rec):
+        if on_topic and not _on_topic(rec):
             continue
         out.append(rec)
         if len(out) >= max_results:

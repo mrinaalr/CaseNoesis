@@ -1,0 +1,30 @@
+{
+  "collection": "calibration",
+  "note": "Public reports only. Not raw CyberTipline case exports. CCRC here is the Crimes Against Children Research Center at the University of New Hampshire.",
+  "documents": [
+    {
+      "slug": "weprotect-gta-2025",
+      "filename": "GTA-2025_EN.pdf",
+      "title": "WeProtect Global Threat Assessment 2025",
+      "catalog_role": "calibration_report",
+      "version_pin": "GTA-2025",
+      "url": "https://www.weprotect.org/wp-content/uploads/GTA-2025_EN.pdf"
+    },
+    {
+      "slug": "ncmec-cybertipline-2024-esp",
+      "filename": "2024-reports-by-esp.pdf",
+      "title": "NCMEC 2024 CyberTipline reports by electronic service provider",
+      "catalog_role": "calibration_report",
+      "version_pin": "2024-esp",
+      "url": "https://www.missingkids.org/content/dam/missingkids/pdfs/cybertiplinedata2024/2024-reports-by-esp.pdf"
+    },
+    {
+      "slug": "ccrc-unh",
+      "filename": "index.html",
+      "title": "Crimes Against Children Research Center, University of New Hampshire",
+      "catalog_role": "calibration_index",
+      "version_pin": "fetched",
+      "url": "https://www.unh.edu/ccrc/"
+    }
+  ]
+}

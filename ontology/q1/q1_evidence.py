@@ -107,6 +107,8 @@ ALIASES: Dict[str, Tuple[str, ...]] = {
         "gen ai",
         "ai-generated",
         "artificial intelligence",
+        "super intelligence",
+        "superintelligence",
         "generative intelligence",
         "generated ai",
         "ai csam",

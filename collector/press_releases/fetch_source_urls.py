@@ -28,7 +28,7 @@ Squarespace Universal site search **search page** URL (Anchorage PD, etc.).
 The listing HTML only exposes a first slice; pagination uses GET
 ``/api/search/GeneralSearch?q=…&p=…``::
 
-    python3 collector/fetch_source_urls.py \\
+    python3 collector/press_releases/fetch_source_urls.py \\
         --squarespace-search-page 'https://www.anchoragepolice.com/search?q=child' \\
         --path-prefix /news/ \\
         -o collector/anchorage_pd_child_search_urls.txt
@@ -37,7 +37,7 @@ deps: pip install requests beautifulsoup4
 
 WordPress REST (sites whose HTML listing is empty / Next.js)::
 
-    python3 collector/fetch_source_urls.py \\
+    python3 collector/press_releases/fetch_source_urls.py \\
         --wordpress-rest 'https://wp.kentuckystatepolice.ky.gov/wp-json/wp/v2/posts' \\
         --wp-search 'child sexual' \\
         --wp-public-host www.kentuckystatepolice.ky.gov \\

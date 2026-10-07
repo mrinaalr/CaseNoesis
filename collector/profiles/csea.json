@@ -20,12 +20,22 @@
     "sextortion",
     "production of child",
     "possessing child",
-    "possession of child"
+    "possession of child",
+    "super intelligence",
+    "artificial intelligence",
+    "AI-generated",
+    "AI generated",
+    "generative AI",
+    "using AI",
+    "obscene visual"
   ],
-  "require": "child pornograph|child sexual|\\bCSAM\\b|enticement of a minor|child exploitation|child sex trafficking|sex trafficking of a (child|minor)|sextortion|illicit sexual conduct|Internet Crimes Against Children|\\bICAC\\b",
+  "require": "child pornograph|child sexual|\\bCSAM\\b|enticement of a minor|child exploitation|child sex trafficking|sex trafficking of a (child|minor)|sextortion|illicit sexual conduct|Internet Crimes Against Children|\\bICAC\\b|obscene.{0,80}(?:child(?:ren)?|minors?)|(?:child(?:ren)?|minors?).{0,80}obscene|AI[- ]generated.{0,80}(?:child(?:ren)?|minors?)",
   "court_queries": [
     "child exploitation",
     "child pornography",
-    "enticement of a minor"
+    "enticement of a minor",
+    "super intelligence",
+    "AI-generated child sexual",
+    "obscene visual child"
   ]
 }

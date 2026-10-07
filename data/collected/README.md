@@ -19,7 +19,7 @@ Local harvest for **UMass HRPO NHSR #8252** (16 Sep 2026), *On the Mechanics of 
 
 The fraud study file inside that index is **40,958** full-text criminal-fraud records (`press_releases/fraud/study_records.jsonl`). 38,042 of those are a charge, plea, or sentence. The other fraud-tagged index rows are earlier bulk and state pages, not a second copy of the study file.
 
-CSEA in the index is 670 DOJ prosecutions. 400 of those were added in this freeze from the DOJ News API (`bulk/records/doj_csea.jsonl`: 223 sentenced, 93 guilty pleas or convictions, 84 charged or indicted). Another 15 are child-sexual-abuse prosecutions that had been tagged trafficking because the headline said "trafficking" images or files. CaseLinker was not copied in.
+CSEA in the index is 670 DOJ prosecutions. 400 of those were added in this freeze from the DOJ News API (`bulk/records/doj_csea.jsonl`: 223 sentenced, 93 guilty pleas or convictions, 84 charged or indicted). Another 15 are child-sexual-abuse prosecutions that had been tagged trafficking because the headline said "trafficking" images or files. The earlier ICAC press corpus was not copied into this index.
 
 Trafficking in the index is 3,140 sex-trafficking, labor-trafficking, and human-trafficking prosecutions. A title search on the word "traffick" had also saved drug cases, firearms cases, stolen-human-remains cases, and a few program pages. Those 52 rows are removed. A case that is both sex trafficking and a drug charge stays. The court set in `recap/bulk/` is the charging-document counterpart (sex trafficking, forced labor, labor trafficking only).
 
@@ -48,6 +48,7 @@ Commit only enough for someone else to **rebuild** the corpus. Do not commit nar
 | `recap/bulk/manifests/recap_links.jsonl` — URL index for the 506 trafficking / forced-labor RECAP PDFs | Every `*.pdf` |
 | Collector commands below | `press_releases/fraud/eji/` and `manifests/` |
 | | `PACER/` |
+| | `hyletic_data/` — wayback, litigation, statutes, calibration captures |
 
 A public row is a pointer. The article text and the court PDF are fetched again from the URL.
 
@@ -57,7 +58,7 @@ From the repo root. Python packages: `requests`, `beautifulsoup4`, `reportlab`. 
 
 These commands are how this snapshot was built. Collection is frozen; running them again resumes harvest.
 
-Details of extractors and the DOJ API: `collector/PRESS_RELEASE_COLLECTION.md`. Suite map: `collector/README.md`.
+Details of extractors and the DOJ API: `collector/press_releases/PRESS_RELEASE_COLLECTION.md`. Suite map: `collector/README.md`.
 
 ### Fraud study (this pass)
 
@@ -82,7 +83,7 @@ Prompt you can hand an agent:
 
 > Reproduce the CaseNoesis fraud study under NHSR #8252. Use `collector/harvest_fraud_study.py` for press and `collector/press_to_recap.py` to join a press docket number to a free RECAP PDF. Press full text goes to `data/collected/press_releases/fraud/study_records.jsonl`. Free RECAP PDFs go to `data/collected/recap/fraud/`. Keep criminal prosecutions only (indictment, plea, sentence, or charge). Do not purchase PACER. Do not commit article text or PDFs. Refresh `data/collected/public/fraud_press_lookup.jsonl` and `fraud_court_lookup.jsonl` with the body and local PDF path removed.
 
-The public press lookup is the input list of URLs. To rebuild text for one known `justice.gov` URL, `collector/resolve_press_urls.py` reads the DOJ API. Do not scrape `justice.gov` HTML. State and other hosts use `collector/build_press_pdf.py` / `fetch_source_urls.py`.
+The public press lookup is the input list of URLs. To rebuild text for one known `justice.gov` URL, `collector/press_releases/resolve_press_urls.py` reads the DOJ API. Do not scrape `justice.gov` HTML. State and other hosts use `collector/press_releases/build_press_pdf.py` and `fetch_source_urls.py`.
 
 ### Earlier mixed corpus (already on disk)
 
@@ -96,7 +97,7 @@ python3 collector/run_bulk.py --press-count 1000 --court-count 50 \
 
 `run_source_bulk.py --phase recap` searches trafficking and forced labor, not generic fraud.
 
-The CSEA and trafficking additions in this freeze used `collector/harvest_doj_press.py` with an absolute `--skip-url-file` pointing at URLs already in `press_lookup.jsonl`, then appended only new prosecutions into `bulk/records/` and the index.
+The CSEA and trafficking additions in this freeze used `collector/press_releases/harvest_doj_press.py` with an absolute `--skip-url-file` pointing at URLs already in `press_lookup.jsonl`, then appended only new prosecutions into `bulk/records/` and the index.
 
 ## Folder tour
 
@@ -121,9 +122,25 @@ data/collected/                         about 1.3 GB, frozen 23 Sep 2026 11:37 P
     trafficking/  cyber/  csea/         first-batch court PDFs
   manifests/                            first-batch per-record JSON, full text, local only
   PACER/                                already-purchased filings. Not produced here
+  hyletic_data/                         later packet. Not part of the 23 Sep freeze. Local only
+    wayback/  litigation/  statutes/  calibration/
 ```
 
 `case_studies.json` is next to this folder, at `data/case_studies.json`. It is not part of the harvest.
+
+## Hyletic packet
+
+Not part of the 23 Sep freeze. Nothing here is ingested. Files stay on this machine. Seeds that rebuild them live in `collector/profiles/`. One CLI: `python3 -m collector.hyletic`. Map and commands: `collector/README.md`.
+
+```
+data/collected/hyletic_data/
+  wayback/          dated platform-policy snapshots
+  litigation/       free RECAP filings. pacer_purchases 0
+  statutes/         GovInfo copies of cited U.S. Code sections
+  calibration/      public reports (WeProtect, NCMEC, CCRC). Not raw CyberTipline cases
+```
+
+Each saved object is the bytes plus `<filename>.provenance.json`: source URL, retrieval time, sha256. A `manifest.jsonl` in each folder is the log. Re-runs skip a file when the URL and the hash already match. `catalog_role` on a sidecar is a filing label for a later CASE-UCO load. It is not an observed fact.
 
 First-batch press PDFs (21 Sep), separate from the study JSONL: fraud 515, trafficking 530, cyber 538, CSEA 501. Many of those are short merged pages, which is why the PDF count is high and the megabytes are small.
 

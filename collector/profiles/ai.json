@@ -1,0 +1,25 @@
+{
+  "id": "ai",
+  "domain": "ai",
+  "slug": "doj_ai",
+  "source": "DOJ CaseNoesis AI",
+  "skip_cac": true,
+  "keep_early": true,
+  "title_terms": [
+    "artificial intelligence",
+    "AI-generated",
+    "AI generated",
+    "generative AI",
+    "using AI",
+    "super intelligence",
+    "superintelligence",
+    "obscene visual"
+  ],
+  "require": "artificial intelligence|super[\\s-]?intelligence|AI[- ]generated|generative AI|\\bgenai\\b|using AI",
+  "court_queries": [
+    "artificial intelligence",
+    "super intelligence",
+    "AI-generated child sexual",
+    "obscene visual child"
+  ]
+}

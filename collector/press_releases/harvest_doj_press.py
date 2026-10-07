@@ -40,7 +40,8 @@ from urllib.parse import urlparse
 import requests
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parent
+COLLECTOR = HERE.parent
+REPO = COLLECTOR.parent
 
 DOJ_API_URL = "https://www.justice.gov/api/v1/press_releases.json"
 PAGESIZE = 50
@@ -77,7 +78,7 @@ EXISTING_DOJ_PDFS = (
     REPO / "DOJ_SAFE_CHILDHOOD_All.pdf",
 )
 
-DEFAULT_PROFILE = HERE / "profiles" / "noesis.json"
+DEFAULT_PROFILE = COLLECTOR / "profiles" / "noesis.json"
 
 
 def load_profile(path: Path) -> dict:
@@ -108,6 +109,11 @@ NOISE_RE = re.compile(
 SENTENCED_RE = re.compile(r"\bsentenc", re.I)
 PLEA_RE = re.compile(r"\bplead|\bpleads|\bpleaded|\bguilty|\bconvict", re.I)
 EARLY_RE = re.compile(r"\barrest|\bindict|\bcharg(?:ed|es)\b", re.I)
+
+# DOJ's title API matches substrings, so "super intelligence" also hits
+# "supervisor" + "intelligence". Keep the phrase only.
+SI_TITLE_TERM = "super intelligence"
+SI_PHRASE_RE = re.compile(r"\bsuper[\s-]?intelligence\b", re.I)
 
 
 def _load_resolve_press_urls():
@@ -346,10 +352,10 @@ def main() -> None:
         if DEFAULT_PROFILE.is_file():
             profile_path = DEFAULT_PROFILE
     if profile_path:
-        profile_path = profile_path if profile_path.is_absolute() else (HERE / profile_path)
+        profile_path = profile_path if profile_path.is_absolute() else (COLLECTOR / profile_path)
         if not profile_path.is_file():
-            # allow --profile fraud as shorthand for profiles/fraud.json
-            alt = HERE / "profiles" / f"{profile_path.name}.json"
+            # allow --profile fraud as shorthand for collector/profiles/fraud.json
+            alt = COLLECTOR / "profiles" / f"{Path(profile_path).name}.json"
             if alt.is_file():
                 profile_path = alt
         if not profile_path.is_file():
@@ -465,6 +471,9 @@ def main() -> None:
         novel = norm not in seen_urls
         if not novel:
             stats["already_in_doj_pdf"] += 1
+        flags: list[str] = []
+        if SI_PHRASE_RE.search(blob):
+            flags.append("super_intelligence")
         components = rec.get("component") or []
         agency = ""
         if components and isinstance(components[0], dict):
@@ -481,6 +490,7 @@ def main() -> None:
                 "uuid": uid,
                 "stage": stage,
                 "domain": domain_id,
+                "flags": flags,
                 "observed": True,
                 "inferred": False,
                 "novel_vs_doj_pdfs": novel,
@@ -518,6 +528,11 @@ def main() -> None:
             )
             page_past_until = 0
             for rec in results:
+                if term.strip().lower() == SI_TITLE_TERM and not SI_PHRASE_RE.search(
+                    f"{rec.get('title') or ''}\n{rec.get('body') or ''}"
+                ):
+                    stats["drop_loose_si"] += 1
+                    continue
                 if consider(rec):
                     hit_cap = True
                     break

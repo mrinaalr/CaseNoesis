@@ -89,6 +89,13 @@ data/collected/recap/fraud/press_docket_queue.jsonl
 data/collected/recap/fraud/from_press.jsonl
 data/collected/recap/fraud/from_press_tried.jsonl
 data/collected/recap/fraud/from_press_status.json
+data/collected/recap/*/from_press.jsonl
+data/collected/recap/*/from_press_tried.jsonl
+data/collected/recap/*/from_press_status.json
+data/collected/recap/*/press_docket_queue.jsonl
+data/collected/recap/join_to_1000_status.json
+data/collected/recap/join_to_1000.log
+data/collected/recap/join_to_1000.pid
 data/collected/recap/bulk/court_manifest.json
 # Case Studies authored content (read by the /case-studies tab and the /api/case-studies
 # endpoint). Must ship with the deploy or Railway shows "No content yet."
@@ -167,3 +174,5 @@ data/collected/PACER/transcripts/pull_ledger.csv
 data/collected/recap/transcripts/**/*.pdf
 data/collected/recap/transcripts/**/*.pdf.provenance.json
 data/collected/recap/transcripts/pull_ledger.csv
+# Hyletic captures stay on the machine. Seeds stay in collector/profiles/.
+data/collected/hyletic_data/

@@ -34,6 +34,9 @@ import requests
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
+PRESS = HERE / "press_releases"
+if str(PRESS) not in sys.path:
+    sys.path.insert(0, str(PRESS))
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
@@ -1036,7 +1039,7 @@ def phase_doj() -> None:
         print(f"\n===== DOJ {profile} =====", file=sys.stderr)
         cmd = [
             sys.executable,
-            str(HERE / "harvest_doj_press.py"),
+            str(PRESS / "harvest_doj_press.py"),
             "--profile",
             profile,
             "--max-keep",
@@ -1179,7 +1182,7 @@ def phase_pdf() -> None:
             out_name = f"{domain}_{part:03d}.pdf"
             cmd = [
                 py,
-                str(HERE / "build_press_pdf.py"),
+                str(PRESS / "build_press_pdf.py"),
                 "--doj-file",
                 str(raw),
                 "--out-dir",
@@ -1351,11 +1354,11 @@ def _exploitation_caption(caption: str, desc: str) -> bool:
 
 
 def _wait_for_user_quota(court_records) -> float:
-    """Sleep until the documented user quota has room. Return seconds to pause between calls.
+    """Sleep until the live user quota has room. Return seconds to pause between calls.
 
-    This account is 10/minute, 100/hour, and 250/day (above the public default of
-    5/minute, 50/hour, 125/day). A 429's Retry-After is the reset time. Storage
-    PDF downloads are not API calls and do not spend this quota.
+    The usage payload is the authority. This token currently reports the public
+    default (5/minute, 50/hour, 125/day). Storage PDF downloads are not API calls
+    and do not spend this quota. The usage endpoint itself does not spend it.
     """
     import requests
     from datetime import datetime, timezone
@@ -1372,17 +1375,28 @@ def _wait_for_user_quota(court_records) -> float:
     now = datetime.now(timezone.utc)
     for row in rows:
         remaining = int(row.get("remaining") or 0)
+        if remaining > 0:
+            continue
         reset_raw = row.get("reset_at")
-        if remaining == 0 and reset_raw:
+        if reset_raw:
             reset = datetime.fromisoformat(reset_raw)
             wait = (reset - now).total_seconds() + 3
-            if wait > 0:
-                print(
-                    f"  quota {row.get('rate')} is empty; waiting {int(wait)}s until {reset_raw}",
-                    file=sys.stderr,
-                )
-                time.sleep(min(wait, 3700))
-                return _wait_for_user_quota(court_records)
+        else:
+            rate = str(row.get("rate") or "")
+            if rate.endswith("/day"):
+                wait = 900
+            elif rate.endswith("/hour"):
+                wait = 120
+            else:
+                wait = 20
+        if wait > 0:
+            print(
+                f"  quota {row.get('rate')} is empty; waiting {int(wait)}s"
+                + (f" until {reset_raw}" if reset_raw else " (no reset time)"),
+                file=sys.stderr,
+            )
+            time.sleep(min(wait, 3700))
+            return _wait_for_user_quota(court_records)
     minute = next((row for row in rows if str(row.get("rate") or "").endswith("/min")), None)
     per_min = int(minute["limit"]) if minute else 5
     return max(6.5, (60.0 / max(per_min, 1)) + 0.4)
