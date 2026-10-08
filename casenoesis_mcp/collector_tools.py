@@ -176,7 +176,7 @@ def harvest_doj_press_topic(
     if not title_term:
         return {"error": "title_term is required", "write": True}
 
-    out = _ensure_out(out_dir) if out_dir else (_COLLECTOR / "sources")
+    out = _ensure_out(out_dir) if out_dir else (_PRESS / "sources")
     out.mkdir(parents=True, exist_ok=True)
     slug_s = _safe_slug(slug or f"doj_{title_term}")
     require = require_regex.strip() or re.escape(title_term.split()[0])
@@ -542,128 +542,6 @@ def collect_case_dual_path(
     }
 
 
-def collect_record(
-    *,
-    domains: str = "fraud,trafficking,cyber,csea",
-    out_dir: str = "",
-    no_pdf: bool = False,
-    court: bool = False,
-) -> dict[str, Any]:
-    """WRITE: pull one new press record (or one free RECAP PDF). Never PACER."""
-    if not collector_disk_write_enabled():
-        return _write_disabled_error()
-    out = _ensure_out(out_dir or "data/collected")
-    cmd = [
-        sys.executable,
-        str(_COLLECTOR / "run_bulk.py"),
-        "--domains",
-        domains or "fraud,trafficking,cyber,csea",
-        "--out-dir",
-        str(out),
-        "--one-court" if court else "--one",
-    ]
-    if no_pdf:
-        cmd.append("--no-pdf")
-    proc = subprocess.run(
-        cmd,
-        cwd=str(_REPO),
-        capture_output=True,
-        text=True,
-        timeout=300,
-    )
-    manifest_path = out / "manifests" / "COLLECTION.json"
-    manifest: dict[str, Any] = {}
-    if manifest_path.is_file():
-        try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            manifest = {}
-    record: dict[str, Any] = {}
-    try:
-        record = json.loads(proc.stdout or "{}")
-    except json.JSONDecodeError:
-        record = {}
-    return {
-        "write": True,
-        "tool_kind": "WRITE",
-        "method": "collect_record",
-        "ok": proc.returncode == 0,
-        "exit_code": proc.returncode,
-        "record": record,
-        "press_kept": manifest.get("press_kept"),
-        "court_kept": manifest.get("court_kept"),
-        "pacer_purchases": 0,
-        "cost": "free",
-        "stderr_tail": (proc.stderr or "")[-1200:],
-    }
-
-
-def collect_bulk(
-    *,
-    press_count: int = 1,
-    court_count: int = 0,
-    domains: str = "fraud,trafficking,cyber,csea",
-    out_dir: str = "",
-    skip_court: bool = False,
-    no_pdf: bool = False,
-) -> dict[str, Any]:
-    """WRITE: run collector/run_bulk.py (DOJ press + free RECAP). Never PACER.
-
-    MCP default is 1 press so the tool does not time out. For 1000/50 use the CLI:
-    ``python collector/run_bulk.py --press-count 1000 --court-count 50``.
-    """
-    if not collector_disk_write_enabled():
-        return _write_disabled_error()
-    out = _ensure_out(out_dir or "data/collected")
-    cmd = [
-        sys.executable,
-        str(_COLLECTOR / "run_bulk.py"),
-        "--press-count",
-        str(max(1, int(press_count))),
-        "--court-count",
-        str(max(0, int(court_count))),
-        "--domains",
-        domains or "fraud,trafficking,cyber,csea",
-        "--out-dir",
-        str(out),
-    ]
-    if skip_court:
-        cmd.append("--skip-court")
-    if no_pdf:
-        cmd.append("--no-pdf")
-    timeout = max(600, int(press_count) * 15 + int(court_count) * 30)
-    proc = subprocess.run(
-        cmd,
-        cwd=str(_REPO),
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-    )
-    manifest_path = out / "manifests" / "COLLECTION.json"
-    manifest: dict[str, Any] = {}
-    if manifest_path.is_file():
-        try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            manifest = {}
-    return {
-        "write": True,
-        "tool_kind": "WRITE",
-        "method": "collect_bulk",
-        "ok": proc.returncode == 0,
-        "exit_code": proc.returncode,
-        "out_dir": str(out),
-        "manifest_path": str(manifest_path) if manifest_path.is_file() else None,
-        "press_kept": manifest.get("press_kept"),
-        "court_kept": manifest.get("court_kept"),
-        "cost": manifest.get("cost", "free"),
-        "pacer_purchases": 0,
-        "nhsr": manifest.get("nhsr"),
-        "stdout_tail": (proc.stdout or "")[-1500:],
-        "stderr_tail": (proc.stderr or "")[-1500:],
-    }
-
-
 def download_free_recap(
     *,
     document_id: str = "",
@@ -782,3 +660,34 @@ def harvest_calibration(*, profile: str = "", out_dir: str = "", limit: int = 1)
     if profile:
         extra.extend(["--profile", profile])
     return _run_hyletic("calibration", _hyletic_args(out_dir, extra), timeout=240)
+
+
+def reproduce_from_lookup(
+    *,
+    lookup: str = "",
+    kind: str = "",
+    limit: int = 1,
+    run: bool = False,
+) -> dict[str, Any]:
+    """WRITE: refetch rows from a public JSONL. run=False prints the plan only."""
+    if run and not collector_disk_write_enabled():
+        return _write_disabled_error()
+    if str(_REPO) not in sys.path:
+        sys.path.insert(0, str(_REPO))
+    from collector.reproduce import reproduce
+
+    lookup_path = Path(lookup) if lookup else None
+    if lookup_path is not None and not lookup_path.is_absolute():
+        lookup_path = _REPO / lookup_path
+    summary = reproduce(
+        lookup=lookup_path,
+        public_dir=_REPO / "data" / "collected" / "public",
+        kind=kind,
+        limit=None if limit <= 0 else int(limit),
+        run=run,
+    )
+    summary["write"] = bool(run)
+    summary["tool_kind"] = "WRITE"
+    summary["pacer_purchases"] = 0
+    return summary
+

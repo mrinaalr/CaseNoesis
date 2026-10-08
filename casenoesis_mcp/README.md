@@ -8,7 +8,7 @@ Corpus tools are read-only against the local database. Collector WRITE tools wri
 
 Catalog: [`tool_registry.md`](tool_registry.md). Parameter detail is the docstring on each `@mcp.tool()` in `server.py`.
 
-**55 tools** when collector writes are enabled (local default). **42** when writes are off: the 13 collector WRITE tools are not registered.
+**54 tools** when collector writes are enabled (local default). **42** when writes are off: the 12 collector WRITE tools are not registered.
 
 ## Prerequisites
 
@@ -77,16 +77,13 @@ Copy [`mcp.json.example`](mcp.json.example) to `.cursor/mcp.json` and reload MCP
 
 ### Collector WRITE (local only)
 
-Press: `harvest_doj_press_topic`, `fetch_press_listing_urls`, `resolve_press_urls`, `build_press_pdf`, `collect_case_dual_path`, `collect_record`, `collect_bulk`, `download_free_recap`.
+Press: `harvest_doj_press_topic`, `fetch_press_listing_urls`, `resolve_press_urls`, `build_press_pdf`, `collect_case_dual_path`.
+
+Court: `download_free_recap`. Search first with `search_courtlistener`, `list_free_recap_documents`, and `resolve_free_recap_download`.
 
 Reference records: `fetch_seed_docs`, `harvest_wayback_policy`, `harvest_platform_litigation`, `harvest_statutes`, `harvest_calibration`.
 
-`collect_record` pulls one new press record, or one free RECAP PDF. `collect_bulk` defaults to 1 press and 0 court so the client does not time out. The 1000/50 fill is the CLI:
-
-```bash
-python3 collector/run_bulk.py --press-count 1000 --court-count 50 \
-  --domains fraud,trafficking,cyber,csea --out-dir data/collected
-```
+`reproduce_from_lookup` reads `data/collected/public/*.jsonl` and fetches `source_url`. `run=false` returns the plan. `run=true` fetches `limit` rows (default 1). A docket page is skipped. PACER is never purchased. Same command: `python3 -m collector.reproduce`.
 
 WRITE responses include `"write": true`. Files go to `data/collected/`. Nothing is ingested. PACER is never purchased.
 

@@ -76,8 +76,7 @@ models/*
 !tsconfig.json
 !jsconfig.json
 !data/**/*.json
-# Raw press text, URL caches, and first-batch manifests stay on disk.
-# Public tree keeps data/collected/press_releases/press_lookup.jsonl only.
+# Public tree is data/collected/public/*_lookup.jsonl (one row per record, no article text).
 data/collected/manifests/
 data/collected/press_releases/*
 !data/collected/press_releases/press_lookup.jsonl

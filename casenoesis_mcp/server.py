@@ -1589,65 +1589,6 @@ if _COLLECTOR_WRITE_ENABLED:
             return {"error": str(e), "write": True}
 
     @mcp.tool()
-    async def collect_record(
-        domains: str = "fraud,trafficking,cyber,csea",
-        out_dir: str = "",
-        no_pdf: bool = False,
-        court: bool = False,
-    ) -> dict[str, Any]:
-        """WRITE (local MCP only). Pull one new public record: a DOJ press release, or one free RECAP PDF.
-
-        Picks the domain furthest from its share of fraud,trafficking,cyber,csea.
-        Never purchases PACER. This is not a targeted fetch of a URL you already know.
-        For the 1000/50 fill, use the CLI ``run_bulk.py``.
-        """
-        try:
-            from casenoesis_mcp.collector_tools import collect_record as _record
-
-            return await asyncio.to_thread(
-                _record,
-                domains=domains,
-                out_dir=out_dir,
-                no_pdf=no_pdf,
-                court=court,
-            )
-        except Exception as e:
-            logger.exception("collect_record failed")
-            return {"error": str(e), "write": True}
-
-    @mcp.tool()
-    async def collect_bulk(
-        press_count: int = 1,
-        court_count: int = 0,
-        domains: str = "fraud,trafficking,cyber,csea",
-        out_dir: str = "",
-        skip_court: bool = False,
-        no_pdf: bool = False,
-    ) -> dict[str, Any]:
-        """WRITE (local MCP only). Harvest DOJ press + free RECAP court PDFs.
-
-        Covers fraud, trafficking, cyber, and CSEA (ICAC is one type among those).
-        Drops grant/award/prevention noise, not CSEA cases. Never purchases PACER.
-        Default is 1 press so MCP does not time out. Scale with CLI:
-        python collector/run_bulk.py --press-count 1000 --court-count 50
-        """
-        try:
-            from casenoesis_mcp.collector_tools import collect_bulk as _bulk
-
-            return await asyncio.to_thread(
-                _bulk,
-                press_count=press_count,
-                court_count=court_count,
-                domains=domains,
-                out_dir=out_dir,
-                skip_court=skip_court,
-                no_pdf=no_pdf,
-            )
-        except Exception as e:
-            logger.exception("collect_bulk failed")
-            return {"error": str(e), "write": True}
-
-    @mcp.tool()
     async def download_free_recap(
         document_id: str = "",
         docket_id: str = "",
@@ -1725,7 +1666,7 @@ if _COLLECTOR_WRITE_ENABLED:
 
     @mcp.tool()
     async def harvest_statutes(profile: str = "", out_dir: str = "", limit: int = 1) -> dict[str, Any]:
-        """WRITE (local MCP only). OLRC section HTML for citations in the statute profile."""
+        """WRITE (local MCP only). GovInfo PDF for citations in the statute profile."""
         try:
             from casenoesis_mcp.collector_tools import harvest_statutes as _harvest
 
@@ -1743,6 +1684,24 @@ if _COLLECTOR_WRITE_ENABLED:
             return await asyncio.to_thread(_harvest, profile=profile, out_dir=out_dir, limit=limit)
         except Exception as e:
             logger.exception("harvest_calibration failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
+    async def reproduce_from_lookup(
+        lookup: str = "",
+        kind: str = "",
+        limit: int = 1,
+        run: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Refetch public JSONL rows. run=false returns the plan and does not fetch. Never PACER."""
+        try:
+            from casenoesis_mcp.collector_tools import reproduce_from_lookup as _reproduce
+
+            return await asyncio.to_thread(
+                _reproduce, lookup=lookup, kind=kind, limit=limit, run=run
+            )
+        except Exception as e:
+            logger.exception("reproduce_from_lookup failed")
             return {"error": str(e), "write": True}
 
 

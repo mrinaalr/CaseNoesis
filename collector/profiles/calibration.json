@@ -25,6 +25,62 @@
       "catalog_role": "calibration_index",
       "version_pin": "fetched",
       "url": "https://www.unh.edu/ccrc/"
+    },
+    {
+      "slug": "ic3-annual-2024",
+      "filename": "2024_IC3Report.pdf",
+      "title": "FBI IC3 Internet Crime Report 2024",
+      "catalog_role": "calibration_report",
+      "version_pin": "2024",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2024_IC3Report.pdf"
+    },
+    {
+      "slug": "ic3-annual-2023",
+      "filename": "2023_IC3Report.pdf",
+      "title": "FBI IC3 Internet Crime Report 2023",
+      "catalog_role": "calibration_report",
+      "version_pin": "2023",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2023_IC3Report.pdf"
+    },
+    {
+      "slug": "ic3-annual-2022",
+      "filename": "2022_IC3Report.pdf",
+      "title": "FBI IC3 Internet Crime Report 2022",
+      "catalog_role": "calibration_report",
+      "version_pin": "2022",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2022_IC3Report.pdf"
+    },
+    {
+      "slug": "ic3-annual-2021",
+      "filename": "2021_IC3Report.pdf",
+      "title": "FBI IC3 Internet Crime Report 2021",
+      "catalog_role": "calibration_report",
+      "version_pin": "2021",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2021_IC3Report.pdf"
+    },
+    {
+      "slug": "ic3-annual-2020",
+      "filename": "2020_IC3Report.pdf",
+      "title": "FBI IC3 Internet Crime Report 2020",
+      "catalog_role": "calibration_report",
+      "version_pin": "2020",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2020_IC3Report.pdf"
+    },
+    {
+      "slug": "unodc-glotip-2022",
+      "filename": "GLOTiP_2022_web.pdf",
+      "title": "UNODC Global Report on Trafficking in Persons 2022",
+      "catalog_role": "calibration_report",
+      "version_pin": "2022",
+      "url": "https://www.unodc.org/documents/data-and-analysis/glotip/2022/GLOTiP_2022_web.pdf"
+    },
+    {
+      "slug": "unodc-glotip-2018",
+      "filename": "GLOTiP_2018_BOOK_web_small.pdf",
+      "title": "UNODC Global Report on Trafficking in Persons 2018",
+      "catalog_role": "calibration_report",
+      "version_pin": "2018",
+      "url": "https://www.unodc.org/documents/data-and-analysis/glotip/2018/GLOTiP_2018_BOOK_web_small.pdf"
     }
   ]
 }

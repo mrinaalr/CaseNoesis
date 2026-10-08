@@ -18,6 +18,294 @@
       "title": "Meta Community Standards",
       "kind": "community",
       "url": "https://transparency.meta.com/policies/community-standards/"
+    },
+    {
+      "slug": "tiktok-community-guidelines",
+      "title": "TikTok Community Guidelines",
+      "kind": "community",
+      "url": "https://www.tiktok.com/community-guidelines"
+    },
+    {
+      "slug": "snap-community-guidelines",
+      "title": "Snapchat Community Guidelines",
+      "kind": "community",
+      "url": "https://values.snap.com/privacy/transparency/community-guidelines"
+    },
+    {
+      "slug": "roblox-community-standards",
+      "title": "Roblox Community Standards",
+      "kind": "community",
+      "url": "https://en.help.roblox.com/hc/en-us/articles/203313410-Roblox-Community-Standards"
+    },
+    {
+      "slug": "reddit-user-agreement",
+      "title": "Reddit User Agreement",
+      "kind": "tos",
+      "url": "https://www.redditinc.com/policies/user-agreement"
+    },
+    {
+      "slug": "youtube-community-guidelines",
+      "title": "YouTube Community Guidelines",
+      "kind": "community",
+      "url": "https://www.youtube.com/howyoutubeworks/policies/community-guidelines/"
+    },
+    {
+      "slug": "facebook-terms",
+      "title": "Facebook Terms of Service",
+      "kind": "tos",
+      "url": "https://www.facebook.com/terms.php"
+    },
+    {
+      "slug": "instagram-terms",
+      "title": "Instagram Terms of Use",
+      "kind": "tos",
+      "url": "https://www.instagram.com/legal/terms/"
+    },
+    {
+      "slug": "whatsapp-terms",
+      "title": "WhatsApp Terms of Service",
+      "kind": "tos",
+      "url": "https://www.whatsapp.com/legal/terms-of-service"
+    },
+    {
+      "slug": "x-tos",
+      "title": "X Terms of Service",
+      "kind": "tos",
+      "url": "https://x.com/en/tos"
+    },
+    {
+      "slug": "google-terms",
+      "title": "Google Terms of Service",
+      "kind": "tos",
+      "url": "https://policies.google.com/terms"
+    },
+    {
+      "slug": "apple-terms",
+      "title": "Apple Media Services Terms",
+      "kind": "tos",
+      "url": "https://www.apple.com/legal/internet-services/itunes/us/terms.html"
+    },
+    {
+      "slug": "telegram-tos",
+      "title": "Telegram Terms of Service",
+      "kind": "tos",
+      "url": "https://telegram.org/tos"
+    },
+    {
+      "slug": "twitter-rules",
+      "title": "Twitter Rules",
+      "kind": "community",
+      "url": "https://help.twitter.com/en/rules-and-policies/twitter-rules"
+    },
+    {
+      "slug": "x-rules",
+      "title": "X Rules",
+      "kind": "community",
+      "url": "https://help.x.com/en/rules-and-policies/x-rules"
+    },
+    {
+      "slug": "facebook-community-standards",
+      "title": "Facebook Community Standards",
+      "kind": "community",
+      "url": "https://www.facebook.com/communitystandards/"
+    },
+    {
+      "slug": "instagram-community-guidelines",
+      "title": "Instagram Community Guidelines",
+      "kind": "community",
+      "url": "https://help.instagram.com/477434105621119"
+    },
+    {
+      "slug": "youtube-terms",
+      "title": "YouTube Terms of Service",
+      "kind": "tos",
+      "url": "https://www.youtube.com/t/terms"
+    },
+    {
+      "slug": "reddit-content-policy",
+      "title": "Reddit Content Policy",
+      "kind": "community",
+      "url": "https://www.redditinc.com/policies/content-policy"
+    },
+    {
+      "slug": "discord-safety",
+      "title": "Discord Safety",
+      "kind": "safety",
+      "url": "https://discord.com/safety"
+    },
+    {
+      "slug": "snap-terms",
+      "title": "Snap Terms of Service",
+      "kind": "tos",
+      "url": "https://www.snap.com/terms"
+    },
+    {
+      "slug": "tiktok-terms",
+      "title": "TikTok Terms of Service",
+      "kind": "tos",
+      "url": "https://www.tiktok.com/legal/page/global/terms-of-service/en"
+    },
+    {
+      "slug": "twitch-community-guidelines",
+      "title": "Twitch Community Guidelines",
+      "kind": "community",
+      "url": "https://www.twitch.tv/p/en/legal/community-guidelines/"
+    },
+    {
+      "slug": "steam-subscriber-agreement",
+      "title": "Steam Subscriber Agreement",
+      "kind": "tos",
+      "url": "https://store.steampowered.com/subscriber_agreement/"
+    },
+    {
+      "slug": "microsoft-services-agreement",
+      "title": "Microsoft Services Agreement",
+      "kind": "tos",
+      "url": "https://www.microsoft.com/en-us/servicesagreement"
+    },
+    {
+      "slug": "linkedin-user-agreement",
+      "title": "LinkedIn User Agreement",
+      "kind": "tos",
+      "url": "https://www.linkedin.com/legal/user-agreement"
+    },
+    {
+      "slug": "pinterest-community-guidelines",
+      "title": "Pinterest Community Guidelines",
+      "kind": "community",
+      "url": "https://policy.pinterest.com/en/community-guidelines"
+    },
+    {
+      "slug": "tumblr-community-guidelines",
+      "title": "Tumblr Community Guidelines",
+      "kind": "community",
+      "url": "https://www.tumblr.com/policy/en/community"
+    },
+    {
+      "slug": "imgur-community-rules",
+      "title": "Imgur Community Rules",
+      "kind": "community",
+      "url": "https://imgur.com/rules"
+    },
+    {
+      "slug": "4chan-rules",
+      "title": "4chan Rules",
+      "kind": "community",
+      "url": "https://www.4chan.org/rules"
+    },
+    {
+      "slug": "xbox-community-standards",
+      "title": "Xbox Community Standards",
+      "kind": "community",
+      "url": "https://www.xbox.com/en-US/legal/community-standards"
+    },
+    {
+      "slug": "playstation-terms",
+      "title": "PlayStation Network Terms of Service",
+      "kind": "tos",
+      "url": "https://www.playstation.com/en-us/legal/psn-terms-of-service/"
+    },
+    {
+      "slug": "minecraft-usage-guidelines",
+      "title": "Minecraft Usage Guidelines",
+      "kind": "community",
+      "url": "https://www.minecraft.net/en-us/usage-guidelines"
+    },
+    {
+      "slug": "ea-community-guidelines",
+      "title": "EA Community Guidelines",
+      "kind": "community",
+      "url": "https://www.ea.com/commitments/positive-play/community-guidelines"
+    },
+    {
+      "slug": "kik-standards",
+      "title": "Kik Community Standards",
+      "kind": "community",
+      "url": "https://kik.com/standards/"
+    },
+    {
+      "slug": "omegle-terms",
+      "title": "Omegle Terms of Service",
+      "kind": "tos",
+      "url": "https://www.omegle.com/static/terms.html"
+    },
+    {
+      "slug": "craigslist-prohibited",
+      "title": "Craigslist Prohibited Content",
+      "kind": "community",
+      "url": "https://www.craigslist.org/about/prohibited"
+    },
+    {
+      "slug": "backpage-home",
+      "title": "Backpage",
+      "kind": "tos",
+      "url": "https://www.backpage.com/"
+    },
+    {
+      "slug": "myspace-terms",
+      "title": "Myspace Terms of Use",
+      "kind": "tos",
+      "url": "https://myspace.com/pages/terms"
+    },
+    {
+      "slug": "askfm-safety",
+      "title": "ASKfm Safety",
+      "kind": "safety",
+      "url": "https://about.ask.fm/safety/"
+    },
+    {
+      "slug": "onlyfans-terms",
+      "title": "OnlyFans Terms of Service",
+      "kind": "tos",
+      "url": "https://onlyfans.com/terms"
+    },
+    {
+      "slug": "pornhub-terms",
+      "title": "Pornhub Terms of Service",
+      "kind": "tos",
+      "url": "https://www.pornhub.com/information/terms"
+    },
+    {
+      "slug": "tinder-community-guidelines",
+      "title": "Tinder Community Guidelines",
+      "kind": "community",
+      "url": "https://policies.tinder.com/community-guidelines"
+    },
+    {
+      "slug": "bumble-terms",
+      "title": "Bumble Terms",
+      "kind": "tos",
+      "url": "https://bumble.com/terms"
+    },
+    {
+      "slug": "grindr-community-guidelines",
+      "title": "Grindr Community Guidelines",
+      "kind": "community",
+      "url": "https://www.grindr.com/community-guidelines"
+    },
+    {
+      "slug": "yubo-safety",
+      "title": "Yubo Safety",
+      "kind": "safety",
+      "url": "https://www.yubo.live/safety"
+    },
+    {
+      "slug": "dropbox-terms",
+      "title": "Dropbox Terms of Service",
+      "kind": "tos",
+      "url": "https://www.dropbox.com/terms"
+    },
+    {
+      "slug": "mega-terms",
+      "title": "MEGA Terms of Service",
+      "kind": "tos",
+      "url": "https://mega.nz/terms"
+    },
+    {
+      "slug": "signal-terms",
+      "title": "Signal Terms of Service",
+      "kind": "tos",
+      "url": "https://signal.org/legal/"
     }
   ]
 }

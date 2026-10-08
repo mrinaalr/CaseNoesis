@@ -31,6 +31,8 @@ AI_CSAM_TOPIC_RE = re.compile(
     | \bexploitative\s+images?\b[^.]{0,40}\bai[- ]generated\b
     | \bai[- ]generated\b[^.]{0,40}\bexploitative\s+images?\b
     | \bmachine\s+learning\s+models?\b[^.]{0,60}\b(?:child|minor|csam|sexual|pornograph)\b
+    | \bsuper[\s-]?intelligence\b.*\b(?:child|minor|pornograph|csam|sexual\s+abuse\s+material|exploitative)\b
+    | \b(?:child|minor|pornograph|csam|sexual\s+abuse\s+material|exploitative).*\bsuper[\s-]?intelligence\b
     | \bartificial\s+intelligence[- ]generated\s+child\s+sexual\s+abuse\s+material\b
     | \bchild\s+erotic\s+material\s+generated\s+using\b
     | \bcomputer[- ]generated\s+or\s+animated\s+content\s+showing\s+children\b
@@ -46,10 +48,14 @@ AI_CSAM_TOPIC_RE = re.compile(
     re.IGNORECASE | re.VERBOSE,
 )
 
+# DOJ press label for the AI tool. Phrase, not the loose "super" + "intelligence" substrings.
+SUPER_INTELLIGENCE_RE = re.compile(r"\bsuper[\s-]?intelligence\b", re.IGNORECASE)
+
 # Gen AI tool (platforms_used: Gen AI)
 GEN_AI_TOOL_RE = re.compile(
     r"""
-    \bgenerative\s+(?:artificial\s+)?intelligence\b
+    \bsuper[\s-]?intelligence\b
+    | \bgenerative\s+(?:artificial\s+)?intelligence\b
     | \bgen\s*ai\b
     | \bai\s+chatbots?\b
     | \bartificial\s+intelligence\s+chatbots?\b
@@ -64,7 +70,7 @@ GEN_AI_TOOL_RE = re.compile(
 
 AI_CSAM_IMPLIES_TOOL_RE = re.compile(
     r"""
-    \b(?:artificial\s+intelligence|\bai\b)\b
+    \b(?:artificial\s+intelligence|\bai\b|super[\s-]?intelligence)\b
     | \bgenerative\s+(?:artificial\s+)?intelligence\b
     | \bgen\s*ai\b
     | \bchatgpt\b

@@ -177,9 +177,41 @@ def save_bytes(
     manifest = collection_dir(collection, root) / "manifest.jsonl"
     with manifest.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+    _append_public(record)
     record["ok"] = True
     record["skipped"] = ""
     return record
+
+
+_PUBLIC_KIND = {
+    "wayback": "wayback",
+    "statutes": "statute",
+    "calibration": "calibration",
+    "litigation": "litigation",
+}
+
+
+def _append_public(record: dict[str, Any]) -> None:
+    kind = _PUBLIC_KIND.get(str(record.get("collection") or ""))
+    if not kind:
+        return
+    import sys
+
+    collector = Path(__file__).resolve().parents[1]
+    if str(collector) not in sys.path:
+        sys.path.insert(0, str(collector))
+    import public_lookup
+
+    extra = record.get("extra") if isinstance(record.get("extra"), dict) else {}
+    original = str(extra.get("original_url") or record.get("source_url") or "")
+    public_lookup.append_lookup(
+        kind,
+        domain=str(record.get("slug") or record.get("catalog_role") or ""),
+        agency=public_lookup._host(original),
+        title=str(record.get("title") or ""),
+        pub_date=str(record.get("version_pin") or record.get("retrieved_at") or ""),
+        source_url=str(record.get("source_url") or ""),
+    )
 
 
 def save_failure(

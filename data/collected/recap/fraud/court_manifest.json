@@ -533,5 +533,1774 @@
       "observed": true,
       "inferred": false
     }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Yoon",
+    "docket_number": "3:26-mj-00245",
+    "court": "District Court, D. Oregon",
+    "date_filed": "2026-09-15",
+    "docket_id": 74792922,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/74792922/united-states-v-yoon/",
+    "free_nested_documents": [
+      {
+        "id": 493675928,
+        "description": "Documents Received From Other Court",
+        "filepath_local": "recap/gov.uscourts.ord.196528/gov.uscourts.ord.196528.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196528/gov.uscourts.ord.196528.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/74792922/1/united-states-v-yoon/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 493675928,
+      "description": "Documents Received From Other Court",
+      "filepath_local": "recap/gov.uscourts.ord.196528/gov.uscourts.ord.196528.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196528/gov.uscourts.ord.196528.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/74792922/1/united-states-v-yoon/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/493675928.pdf",
+      "bytes": 1504201,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196528/gov.uscourts.ord.196528.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:17Z",
+      "content_sha256": "52e9edbd970ec95813ef5da75e28b7a78bc68795a9ecfe9421575ec99c05be10",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Yoon",
+    "docket_number": "3:26-mj-00245",
+    "court": "District Court, D. Oregon",
+    "date_filed": "2026-09-15",
+    "docket_id": 74792790,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/74792790/united-states-v-yoon/",
+    "free_nested_documents": [
+      {
+        "id": 493696608,
+        "description": "Documents Received From Other Court as to Daniel Yoon from Northern District of Texas (Wichita Falls) Case No: 7:26-mj-042. (kts) (Entered: 09/15/2026)",
+        "filepath_local": "recap/gov.uscourts.ord.196527/gov.uscourts.ord.196527.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196527/gov.uscourts.ord.196527.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/74792790/1/united-states-v-yoon/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 493696608,
+      "description": "Documents Received From Other Court as to Daniel Yoon from Northern District of Texas (Wichita Falls) Case No: 7:26-mj-042. (kts) (Entered: 09/15/2026)",
+      "filepath_local": "recap/gov.uscourts.ord.196527/gov.uscourts.ord.196527.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196527/gov.uscourts.ord.196527.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/74792790/1/united-states-v-yoon/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/493696608.pdf",
+      "bytes": 1504201,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.196527/gov.uscourts.ord.196527.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:24Z",
+      "content_sha256": "52e9edbd970ec95813ef5da75e28b7a78bc68795a9ecfe9421575ec99c05be10",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Zou",
+    "docket_number": "1:26-mj-00176",
+    "court": "District Court, E.D. New York",
+    "date_filed": "2026-09-15",
+    "docket_id": 74795331,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/74795331/united-states-v-zou/",
+    "free_nested_documents": [
+      {
+        "id": 493789166,
+        "description": "Notice to Receiving District of Criminal Case Transfer",
+        "filepath_local": "recap/gov.uscourts.nyed.551235/gov.uscourts.nyed.551235.10.0_1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551235/gov.uscourts.nyed.551235.10.0_1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/74795331/10/united-states-v-zou/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 493789166,
+      "description": "Notice to Receiving District of Criminal Case Transfer",
+      "filepath_local": "recap/gov.uscourts.nyed.551235/gov.uscourts.nyed.551235.10.0_1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551235/gov.uscourts.nyed.551235.10.0_1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/74795331/10/united-states-v-zou/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/493789166.pdf",
+      "bytes": 6874597,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551235/gov.uscourts.nyed.551235.10.0_1.pdf",
+      "retrieved_at": "2026-10-08T01:20:32Z",
+      "content_sha256": "c192c62df2959572ed63625b8413fb060391610419d49933309047565b4e0ebe",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Kudrovskyi",
+    "docket_number": "3:25-mj-00207",
+    "court": "District Court, W.D. North Carolina",
+    "date_filed": "2025-08-10",
+    "docket_id": 71076001,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71076001/united-states-v-kudrovskyi/",
+    "free_nested_documents": [
+      {
+        "id": 448626255,
+        "description": "D/SC Indictment and Warrant as to Ivan Kudrovskyi (Attachments: # 1 Order for a bench warrant, # 2 Warrant, # 3 Warrant Page Identifier)(mga) (Entered: 08/10/2025)",
+        "filepath_local": "recap/gov.uscourts.ncwd.120594/gov.uscourts.ncwd.120594.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ncwd.120594/gov.uscourts.ncwd.120594.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71076001/1/united-states-v-kudrovskyi/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 448626255,
+      "description": "D/SC Indictment and Warrant as to Ivan Kudrovskyi (Attachments: # 1 Order for a bench warrant, # 2 Warrant, # 3 Warrant Page Identifier)(mga) (Entered: 08/10/2025)",
+      "filepath_local": "recap/gov.uscourts.ncwd.120594/gov.uscourts.ncwd.120594.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ncwd.120594/gov.uscourts.ncwd.120594.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71076001/1/united-states-v-kudrovskyi/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/448626255.pdf",
+      "bytes": 601151,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.ncwd.120594/gov.uscourts.ncwd.120594.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:38Z",
+      "content_sha256": "0a35f9662651c1edf385b60c13f4cb389d4da0444e5ed25b6900d22fb198c001",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. PALMER",
+    "docket_number": "1:25-cr-00152",
+    "court": "District Court, S.D. Indiana",
+    "date_filed": "2025-07-22",
+    "docket_id": 70905249,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/70905249/united-states-v-palmer/",
+    "free_nested_documents": [
+      {
+        "id": 487113627,
+        "description": "SENTENCING MEMORANDUM by USA as to TERESA PALMER (1) (Eakman, Adam) (Entered: 07/22/2026)",
+        "filepath_local": "recap/gov.uscourts.insd.223202/gov.uscourts.insd.223202.31.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.insd.223202/gov.uscourts.insd.223202.31.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/70905249/31/united-states-v-palmer/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 487113627,
+      "description": "SENTENCING MEMORANDUM by USA as to TERESA PALMER (1) (Eakman, Adam) (Entered: 07/22/2026)",
+      "filepath_local": "recap/gov.uscourts.insd.223202/gov.uscourts.insd.223202.31.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.insd.223202/gov.uscourts.insd.223202.31.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/70905249/31/united-states-v-palmer/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/487113627.pdf",
+      "bytes": 180892,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.insd.223202/gov.uscourts.insd.223202.31.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:45Z",
+      "content_sha256": "4833ec1a933f76038e79d1e8116b7921cf3d5bb346e325eff55c8e34cb804261",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Zou",
+    "docket_number": "1:26-mj-00176",
+    "court": "District Court, E.D. New York",
+    "date_filed": "2026-09-15",
+    "docket_id": 74795341,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/74795341/united-states-v-zou/",
+    "free_nested_documents": [
+      {
+        "id": 494071414,
+        "description": "Notice to the Northern District of Texas of a Rule 5 or Rule 32 Initial Appearance as to Hong Zou, Qing Zou. Your case number is: 26 MJ 42. Docket sheet and documents attached. The [Financial Department - NYED] finance office will transmit the bond and/or passport collected. (If you require certified copies of any documents, please send a request to [InterDistrictTransfer_NYED@nyed.uscourts.gov]. If you wish to designate a different email address for future transfers, send your request to InterDistrictTransfer_TXND@txnd.uscourts.gov.) (Attachments: # 1 Affidavit, # 2 Affidavit) (FC) (Entered: 09/16/2026)",
+        "filepath_local": "recap/gov.uscourts.nyed.551234/gov.uscourts.nyed.551234.10.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551234/gov.uscourts.nyed.551234.10.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/74795341/10/united-states-v-zou/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 494071414,
+      "description": "Notice to the Northern District of Texas of a Rule 5 or Rule 32 Initial Appearance as to Hong Zou, Qing Zou. Your case number is: 26 MJ 42. Docket sheet and documents attached. The [Financial Department - NYED] finance office will transmit the bond and/or passport collected. (If you require certified copies of any documents, please send a request to [InterDistrictTransfer_NYED@nyed.uscourts.gov]. If you wish to designate a different email address for future transfers, send your request to InterDistrictTransfer_TXND@txnd.uscourts.gov.) (Attachments: # 1 Affidavit, # 2 Affidavit) (FC) (Entered: 09/16/2026)",
+      "filepath_local": "recap/gov.uscourts.nyed.551234/gov.uscourts.nyed.551234.10.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551234/gov.uscourts.nyed.551234.10.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/74795341/10/united-states-v-zou/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/494071414.pdf",
+      "bytes": 6874597,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.551234/gov.uscourts.nyed.551234.10.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:53Z",
+      "content_sha256": "bfe3dfb2eafb3d3f74552892abc7377cd0181f835a9c31d868a7bb467731e35c",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Approximately 127,271 bitcoin (BTC) previously stored at the virtual currency addresses listed in Attachment A, and all proceeds traceable thereto",
+    "docket_number": "1:25-cv-05745",
+    "court": "District Court, E.D. New York",
+    "date_filed": "2025-10-14",
+    "docket_id": 71639393,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71639393/united-states-v-approximately-127271-bitcoin-btc-previously-stored-at/",
+    "free_nested_documents": [
+      {
+        "id": 462056613,
+        "description": "MOTION to Seal and Proceed Under Pseudonyms by HLF Claimants. (Attachments: # 1 Proposed Order Proposed Order) (Hoda, Marshal) (Entered: 12/15/2025)",
+        "filepath_local": "recap/gov.uscourts.nyed.537552/gov.uscourts.nyed.537552.22.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.537552/gov.uscourts.nyed.537552.22.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71639393/22/united-states-v-approximately-127271-bitcoin-btc-previously-stored-at/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 462056613,
+      "description": "MOTION to Seal and Proceed Under Pseudonyms by HLF Claimants. (Attachments: # 1 Proposed Order Proposed Order) (Hoda, Marshal) (Entered: 12/15/2025)",
+      "filepath_local": "recap/gov.uscourts.nyed.537552/gov.uscourts.nyed.537552.22.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.537552/gov.uscourts.nyed.537552.22.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71639393/22/united-states-v-approximately-127271-bitcoin-btc-previously-stored-at/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/462056613.pdf",
+      "bytes": 283850,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.537552/gov.uscourts.nyed.537552.22.0.pdf",
+      "retrieved_at": "2026-10-08T01:20:59Z",
+      "content_sha256": "a2df1fc3b4970ba4b730d4aa13ea400cd7c9150af62b696fd3bdc92c268b2af7",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Singh",
+    "docket_number": "4:26-cr-00466",
+    "court": "District Court, E.D. Missouri",
+    "date_filed": "2026-09-23",
+    "docket_id": 74841486,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/74841486/united-states-v-singh/",
+    "free_nested_documents": [
+      {
+        "id": 494937061,
+        "description": "MOTION for Pretrial Detention and Hearing by USA as to Jashanpreet Singh. (DLB) [4:26-mj-06166-PLC] (Entered: 09/17/2026)",
+        "filepath_local": "recap/gov.uscourts.moed.231538/gov.uscourts.moed.231538.4.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.231538/gov.uscourts.moed.231538.4.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/74841486/4/united-states-v-singh/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 494937061,
+      "description": "MOTION for Pretrial Detention and Hearing by USA as to Jashanpreet Singh. (DLB) [4:26-mj-06166-PLC] (Entered: 09/17/2026)",
+      "filepath_local": "recap/gov.uscourts.moed.231538/gov.uscourts.moed.231538.4.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.231538/gov.uscourts.moed.231538.4.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/74841486/4/united-states-v-singh/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/494937061.pdf",
+      "bytes": 123219,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.231538/gov.uscourts.moed.231538.4.0.pdf",
+      "retrieved_at": "2026-10-08T01:21:06Z",
+      "content_sha256": "a7a5aeb199c5c8051b9240b300d1d3430ca37f857965efd95b5cfc9d1336d0f9",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. SEALED",
+    "docket_number": "1:24-sw-00642",
+    "court": "District Court, E.D. Virginia",
+    "date_filed": "2024-09-13",
+    "docket_id": 69453218,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69453218/united-states-v-sealed/",
+    "free_nested_documents": [
+      {
+        "id": 423436666,
+        "description": "Application and Affidavit for a Search Warrant as to INTERNAL BANK OF AMERICA ACCOUNT HOLDING THE BALANCE OF #435048231338 (Attachments: # 1 Affidavit)(kgall) (Entered: 09/13/2024)",
+        "filepath_local": "recap/gov.uscourts.vaed.559977/gov.uscourts.vaed.559977.1.1_3.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.559977/gov.uscourts.vaed.559977.1.1_3.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69453218/1/1/united-states-v-sealed/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 423436666,
+      "description": "Application and Affidavit for a Search Warrant as to INTERNAL BANK OF AMERICA ACCOUNT HOLDING THE BALANCE OF #435048231338 (Attachments: # 1 Affidavit)(kgall) (Entered: 09/13/2024)",
+      "filepath_local": "recap/gov.uscourts.vaed.559977/gov.uscourts.vaed.559977.1.1_3.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.559977/gov.uscourts.vaed.559977.1.1_3.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69453218/1/1/united-states-v-sealed/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/423436666.pdf",
+      "bytes": 655871,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.559977/gov.uscourts.vaed.559977.1.1_3.pdf",
+      "retrieved_at": "2026-10-08T01:21:13Z",
+      "content_sha256": "0f46560b6fd5c4ebe1f742ba3f3cb01c8666c253415a8a7fa273b8458cc012cd",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. SEALED",
+    "docket_number": "1:24-sw-00640",
+    "court": "District Court, E.D. Virginia",
+    "date_filed": "2024-09-13",
+    "docket_id": 69521567,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69521567/united-states-v-sealed/",
+    "free_nested_documents": [
+      {
+        "id": 426311543,
+        "description": "Application and Affidavit for a Search Warrant as to Internal TD Bank Account Holding the Balance of #4408454356. (Attachments: # 1 Affidavit)(jlan) (Entered: 09/23/2024)",
+        "filepath_local": "recap/gov.uscourts.vaed.560497/gov.uscourts.vaed.560497.1.1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560497/gov.uscourts.vaed.560497.1.1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69521567/1/1/united-states-v-sealed/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 426311543,
+      "description": "Application and Affidavit for a Search Warrant as to Internal TD Bank Account Holding the Balance of #4408454356. (Attachments: # 1 Affidavit)(jlan) (Entered: 09/23/2024)",
+      "filepath_local": "recap/gov.uscourts.vaed.560497/gov.uscourts.vaed.560497.1.1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560497/gov.uscourts.vaed.560497.1.1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69521567/1/1/united-states-v-sealed/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/426311543.pdf",
+      "bytes": 433009,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560497/gov.uscourts.vaed.560497.1.1.pdf",
+      "retrieved_at": "2026-10-08T01:21:20Z",
+      "content_sha256": "a19f3a4e4cef740c9ae8e17518eb63fddcf9ab240a787571c4894fa6872d675d",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Internal Truist Account Holding the Balance of 1470014663126",
+    "docket_number": "1:24-sw-00643",
+    "court": "District Court, E.D. Virginia",
+    "date_filed": "2024-09-13",
+    "docket_id": 69248782,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69248782/united-states-v-internal-truist-account-holding-the-balance-of/",
+    "free_nested_documents": [
+      {
+        "id": 415650328,
+        "description": "Application and Affidavit for a Search Warrant as to Internal Truist Account Holding the Balance of #1470014663126, et al (Attachments: # 1 Affidavit)(dzir) (Entered: 09/18/2024)",
+        "filepath_local": "recap/gov.uscourts.vaed.560113/gov.uscourts.vaed.560113.1.1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560113/gov.uscourts.vaed.560113.1.1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69248782/1/1/united-states-v-internal-truist-account-holding-the-balance-of/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 415650328,
+      "description": "Application and Affidavit for a Search Warrant as to Internal Truist Account Holding the Balance of #1470014663126, et al (Attachments: # 1 Affidavit)(dzir) (Entered: 09/18/2024)",
+      "filepath_local": "recap/gov.uscourts.vaed.560113/gov.uscourts.vaed.560113.1.1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560113/gov.uscourts.vaed.560113.1.1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69248782/1/1/united-states-v-internal-truist-account-holding-the-balance-of/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/415650328.pdf",
+      "bytes": 432995,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560113/gov.uscourts.vaed.560113.1.1.pdf",
+      "retrieved_at": "2026-10-08T01:21:27Z",
+      "content_sha256": "7715d5d222a6d61e9cb48ca35860e58c363d445c37c728e4146b03e3f6c53ffc",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Verdzekov",
+    "docket_number": "2:25-cr-00123",
+    "court": "District Court, C.D. California",
+    "date_filed": "2025-02-21",
+    "docket_id": 69686051,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69686051/united-states-v-verdzekov/",
+    "free_nested_documents": [
+      {
+        "id": 431530316,
+        "description": "SEALED INDICTMENT filed as to Sylas Nyuydzene Verdzekov (1) count(s) 1, Mustapha Nkachiwouo Selly Yamie (2) count(s) 1, Lovert Che (3) count(s) 1. Offense occurred in Los Angeles. (jb) (Entered: 02/27/2025)",
+        "filepath_local": "recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.1.0_1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.1.0_1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69686051/1/united-states-v-verdzekov/"
+      },
+      {
+        "id": 441151382,
+        "description": "PLEA AGREEMENT filed by Plaintiff USA as to Defendant Sylas Nyuydzene Verdzekov (Marmaro, Gregg) (Entered: 05/30/2025)",
+        "filepath_local": "recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.62.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.62.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69686051/62/united-states-v-verdzekov/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 431530316,
+      "description": "SEALED INDICTMENT filed as to Sylas Nyuydzene Verdzekov (1) count(s) 1, Mustapha Nkachiwouo Selly Yamie (2) count(s) 1, Lovert Che (3) count(s) 1. Offense occurred in Los Angeles. (jb) (Entered: 02/27/2025)",
+      "filepath_local": "recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.1.0_1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.1.0_1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69686051/1/united-states-v-verdzekov/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/431530316.pdf",
+      "bytes": 263699,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959666/gov.uscourts.cacd.959666.1.0_1.pdf",
+      "retrieved_at": "2026-10-08T01:21:34Z",
+      "content_sha256": "325b9c1f3445bcc6c9faf1371d0bebaaf69f661a4ccfa745d868ea11287d999b",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Islam",
+    "docket_number": "1:24-mj-09305",
+    "court": "District Court, N.D. Ohio",
+    "date_filed": "2024-11-21",
+    "docket_id": 69399801,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69399801/united-states-v-islam/",
+    "free_nested_documents": [
+      {
+        "id": 421174728,
+        "description": "Rule 40 Warrant received as to Mazharul Islam (1) (Attachments: # 1 Complaint)(K,L) (Entered: 11/21/2024)",
+        "filepath_local": "recap/gov.uscourts.ohnd.311663/gov.uscourts.ohnd.311663.1.1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ohnd.311663/gov.uscourts.ohnd.311663.1.1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69399801/1/1/united-states-v-islam/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 421174728,
+      "description": "Rule 40 Warrant received as to Mazharul Islam (1) (Attachments: # 1 Complaint)(K,L) (Entered: 11/21/2024)",
+      "filepath_local": "recap/gov.uscourts.ohnd.311663/gov.uscourts.ohnd.311663.1.1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ohnd.311663/gov.uscourts.ohnd.311663.1.1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69399801/1/1/united-states-v-islam/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/421174728.pdf",
+      "bytes": 210173,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.ohnd.311663/gov.uscourts.ohnd.311663.1.1.pdf",
+      "retrieved_at": "2026-10-08T01:21:41Z",
+      "content_sha256": "6b35628d637d0735563b4305463ad78c91ad530d8e95636af938a2523fb859c8",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. SATHAWANE",
+    "docket_number": "1:25-cr-00012",
+    "court": "District Court, N.D. Florida",
+    "date_filed": "2025-05-27",
+    "docket_id": 71849539,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71849539/united-states-v-sathawane/",
+    "free_nested_documents": [
+      {
+        "id": 466570120,
+        "description": "Government's MOTION in Limine by USA as to ATHARVA SATHAWANE. (HAPNER, ADAM) Modified on 9/26/2025 to edit title (kdm). (Entered: 09/25/2025)",
+        "filepath_local": "recap/gov.uscourts.flnd.531521/gov.uscourts.flnd.531521.48.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.flnd.531521/gov.uscourts.flnd.531521.48.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71849539/48/united-states-v-sathawane/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 466570120,
+      "description": "Government's MOTION in Limine by USA as to ATHARVA SATHAWANE. (HAPNER, ADAM) Modified on 9/26/2025 to edit title (kdm). (Entered: 09/25/2025)",
+      "filepath_local": "recap/gov.uscourts.flnd.531521/gov.uscourts.flnd.531521.48.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.flnd.531521/gov.uscourts.flnd.531521.48.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71849539/48/united-states-v-sathawane/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/466570120.pdf",
+      "bytes": 191646,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.flnd.531521/gov.uscourts.flnd.531521.48.0.pdf",
+      "retrieved_at": "2026-10-08T01:21:48Z",
+      "content_sha256": "ca6efed738f5cc1476cbae951bafdf8bb8f3763ed8bef3b22a24c58a3b6c3609",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. All funds Being Held in an Internal Citibank Account 9250974043",
+    "docket_number": "1:24-sw-00639",
+    "court": "District Court, E.D. Virginia",
+    "date_filed": "2024-09-13",
+    "docket_id": 69285540,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69285540/united-states-v-all-funds-being-held-in-an-internal-citibank-account/",
+    "free_nested_documents": [
+      {
+        "id": 416885705,
+        "description": "Application and Affidavit for a Search Warrant as to All funds Being Held in an Internal Citibank Account 9250974043, et al. Signed by Magistrate Judge Lindsey R. Vaala on 9/13/2024. (Attachments: # 1 Affidavit) (lgue, ) (Entered: 09/19/2024)",
+        "filepath_local": "recap/gov.uscourts.vaed.560214/gov.uscourts.vaed.560214.1.1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560214/gov.uscourts.vaed.560214.1.1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69285540/1/1/united-states-v-all-funds-being-held-in-an-internal-citibank-account/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 416885705,
+      "description": "Application and Affidavit for a Search Warrant as to All funds Being Held in an Internal Citibank Account 9250974043, et al. Signed by Magistrate Judge Lindsey R. Vaala on 9/13/2024. (Attachments: # 1 Affidavit) (lgue, ) (Entered: 09/19/2024)",
+      "filepath_local": "recap/gov.uscourts.vaed.560214/gov.uscourts.vaed.560214.1.1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560214/gov.uscourts.vaed.560214.1.1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69285540/1/1/united-states-v-all-funds-being-held-in-an-internal-citibank-account/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/416885705.pdf",
+      "bytes": 656449,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.560214/gov.uscourts.vaed.560214.1.1.pdf",
+      "retrieved_at": "2026-10-08T01:21:55Z",
+      "content_sha256": "6e61dcc57f781de0ba465db59ce6c589d9f2d90f3e8ba1c6a0c936a6f8ef3873",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Zhu",
+    "docket_number": "3:25-cr-00421",
+    "court": "District Court, N.D. California",
+    "date_filed": "2025-12-12",
+    "docket_id": 72073977,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/72073977/united-states-v-zhu/",
+    "free_nested_documents": [
+      {
+        "id": 463036910,
+        "description": "Memorandum in Support",
+        "filepath_local": "recap/gov.uscourts.cand.461174/gov.uscourts.cand.461174.5.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.461174/gov.uscourts.cand.461174.5.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/72073977/5/united-states-v-zhu/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 463036910,
+      "description": "Memorandum in Support",
+      "filepath_local": "recap/gov.uscourts.cand.461174/gov.uscourts.cand.461174.5.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.461174/gov.uscourts.cand.461174.5.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/72073977/5/united-states-v-zhu/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/463036910.pdf",
+      "bytes": 604785,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.461174/gov.uscourts.cand.461174.5.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:02Z",
+      "content_sha256": "e14df6ca761b66bc6cebf7bbe9ecd044d3e25c65297fe4b6ac26966d0f26aa8b",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Jiang",
+    "docket_number": "1:24-cr-00117",
+    "court": "District Court, D. New Hampshire",
+    "date_filed": "2024-12-11",
+    "docket_id": 69505556,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69505556/united-states-v-jiang/",
+    "free_nested_documents": [
+      {
+        "id": 425555545,
+        "description": "INFORMATION as to Mengying Jiang (1) count 1. (de) (Entered: 12/30/2024)",
+        "filepath_local": "recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69505556/1/united-states-v-jiang/"
+      },
+      {
+        "id": 437439473,
+        "description": "SENTENCING MEMORANDUM redacted by Mengying Jiang. (Sakellarios, Olivier) (Entered: 04/24/2025)",
+        "filepath_local": "recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.16.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.16.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69505556/16/united-states-v-jiang/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 437439473,
+      "description": "SENTENCING MEMORANDUM redacted by Mengying Jiang. (Sakellarios, Olivier) (Entered: 04/24/2025)",
+      "filepath_local": "recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.16.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.16.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69505556/16/united-states-v-jiang/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/437439473.pdf",
+      "bytes": 265945,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.64809/gov.uscourts.nhd.64809.16.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:09Z",
+      "content_sha256": "fc5314f0505a2c92a867b2264115a937b29a78d2a803412ab3174e590ffe9c40",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Piao",
+    "docket_number": "1:25-mj-00340",
+    "court": "District Court, E.D. Virginia",
+    "date_filed": "2025-06-03",
+    "docket_id": 70532972,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/70532972/united-states-v-piao/",
+    "free_nested_documents": [
+      {
+        "id": 442669518,
+        "description": "AFFIDAVIT, filed by USA as to Changlin Piao in re 1 COMPLAINT. (Dest) (Entered: 06/04/2025)",
+        "filepath_local": "recap/gov.uscourts.vaed.575383/gov.uscourts.vaed.575383.2.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.575383/gov.uscourts.vaed.575383.2.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/70532972/2/united-states-v-piao/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 442669518,
+      "description": "AFFIDAVIT, filed by USA as to Changlin Piao in re 1 COMPLAINT. (Dest) (Entered: 06/04/2025)",
+      "filepath_local": "recap/gov.uscourts.vaed.575383/gov.uscourts.vaed.575383.2.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.575383/gov.uscourts.vaed.575383.2.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/70532972/2/united-states-v-piao/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/442669518.pdf",
+      "bytes": 345531,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.vaed.575383/gov.uscourts.vaed.575383.2.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:16Z",
+      "content_sha256": "410b57d68a67e7a428ddae8c2e85d25a0849696ce20310bc3e1f605e3951f650",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Verdzekov",
+    "docket_number": "2:25-cr-00123",
+    "court": "District Court, C.D. California",
+    "date_filed": "2025-02-21",
+    "docket_id": 69686052,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69686052/united-states-v-verdzekov/",
+    "free_nested_documents": [
+      {
+        "id": 431530317,
+        "description": "Indictment (Sealed)",
+        "filepath_local": "recap/gov.uscourts.cacd.959667/gov.uscourts.cacd.959667.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959667/gov.uscourts.cacd.959667.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69686052/1/united-states-v-verdzekov/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 431530317,
+      "description": "Indictment (Sealed)",
+      "filepath_local": "recap/gov.uscourts.cacd.959667/gov.uscourts.cacd.959667.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959667/gov.uscourts.cacd.959667.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69686052/1/united-states-v-verdzekov/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/431530317.pdf",
+      "bytes": 263697,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959667/gov.uscourts.cacd.959667.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:23Z",
+      "content_sha256": "7dd683272d1abb952a5f58eb0e44d2145fe63c1a404b3a8ea54604985dc664bd",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Verdzekov",
+    "docket_number": "2:25-cr-00123",
+    "court": "District Court, C.D. California",
+    "date_filed": "2025-02-21",
+    "docket_id": 69686053,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69686053/united-states-v-verdzekov/",
+    "free_nested_documents": [
+      {
+        "id": 431530318,
+        "description": "Indictment (Sealed)",
+        "filepath_local": "recap/gov.uscourts.cacd.959668/gov.uscourts.cacd.959668.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959668/gov.uscourts.cacd.959668.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69686053/1/united-states-v-verdzekov/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 431530318,
+      "description": "Indictment (Sealed)",
+      "filepath_local": "recap/gov.uscourts.cacd.959668/gov.uscourts.cacd.959668.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959668/gov.uscourts.cacd.959668.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69686053/1/united-states-v-verdzekov/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/431530318.pdf",
+      "bytes": 263697,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.cacd.959668/gov.uscourts.cacd.959668.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:30Z",
+      "content_sha256": "7dd683272d1abb952a5f58eb0e44d2145fe63c1a404b3a8ea54604985dc664bd",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. McDonagh",
+    "docket_number": "2:24-cr-00120",
+    "court": "District Court, W.D. Washington",
+    "date_filed": "2024-07-17",
+    "docket_id": 68956406,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/68956406/united-states-v-mcdonagh/",
+    "free_nested_documents": [
+      {
+        "id": 423293580,
+        "description": "SENTENCING MEMORANDUM by Matthew McDonagh (Attachments: # 1 SEALED Exhibit A through G)(Staniar, Lauren) Modified to seal exhibits (Dkt. # 57-1) on 12/13/2024 (MJV). (Entered: 12/09/2024)",
+        "filepath_local": "recap/gov.uscourts.wawd.337276/gov.uscourts.wawd.337276.57.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.wawd.337276/gov.uscourts.wawd.337276.57.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/68956406/57/united-states-v-mcdonagh/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 423293580,
+      "description": "SENTENCING MEMORANDUM by Matthew McDonagh (Attachments: # 1 SEALED Exhibit A through G)(Staniar, Lauren) Modified to seal exhibits (Dkt. # 57-1) on 12/13/2024 (MJV). (Entered: 12/09/2024)",
+      "filepath_local": "recap/gov.uscourts.wawd.337276/gov.uscourts.wawd.337276.57.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.wawd.337276/gov.uscourts.wawd.337276.57.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/68956406/57/united-states-v-mcdonagh/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/423293580.pdf",
+      "bytes": 482937,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.wawd.337276/gov.uscourts.wawd.337276.57.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:37Z",
+      "content_sha256": "b341b7f1791c5ea9b375690b2640a72358e752d25c654c4924f3794cefd51fa0",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Various cryptocurrency seized from Binance user id 61886539 in the name of [Person A]",
+    "docket_number": "2:25-cv-12945",
+    "court": "District Court, E.D. Michigan",
+    "date_filed": "2025-09-17",
+    "docket_id": 71367237,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71367237/united-states-v-various-cryptocurrency-seized-from-binance-user-id/",
+    "free_nested_documents": [
+      {
+        "id": 464781309,
+        "description": "[STRICKEN] REPLY to Response re 8 MOTION to Seal filed by Zack Glaza. (MarW) Modified on 1/22/2026 (MarW). (Entered: 01/12/2026)",
+        "filepath_local": "recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.13.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.13.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71367237/13/united-states-v-various-cryptocurrency-seized-from-binance-user-id/"
+      },
+      {
+        "id": 472983661,
+        "description": "MOTION To Proceed Under Pseudonyms and File Verified Claims Under Seal re 20 Claim by Claimants 1-6. (Attachments: # 1 Exhibit) (Barnett, Richard) (Entered: 03/20/2026)",
+        "filepath_local": "recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.21.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.21.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71367237/21/united-states-v-various-cryptocurrency-seized-from-binance-user-id/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 464781309,
+      "description": "[STRICKEN] REPLY to Response re 8 MOTION to Seal filed by Zack Glaza. (MarW) Modified on 1/22/2026 (MarW). (Entered: 01/12/2026)",
+      "filepath_local": "recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.13.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.13.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71367237/13/united-states-v-various-cryptocurrency-seized-from-binance-user-id/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/464781309.pdf",
+      "bytes": 419669,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.mied.388542/gov.uscourts.mied.388542.13.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:44Z",
+      "content_sha256": "e444e6f30f44603872756275aecfa604b65440d7c8a3ae1fcffb3aa3a683c528",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Approximately 2,769,378.81 USDT from Tron Blockchain Address",
+    "docket_number": "3:25-cv-09318",
+    "court": "District Court, N.D. California",
+    "date_filed": "2025-10-29",
+    "docket_id": 71803473,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71803473/united-states-v-approximately-276937881-usdt-from-tron-blockchain/",
+    "free_nested_documents": [
+      {
+        "id": 457117551,
+        "description": "COMPLAINT (Verified Complaint for Civil Forfeiture in Rem) against 1,400,058.194019 USDT, 1,331,857.9667 DODO, and 1,445.2634 People From Binance Account, Approximately 2,769,378.81 USDT from Tron Blockchain Address. Filed by United States of America. (Attachments: # 1 Civil Cover Sheet)(Pastor, Daniel) (Filed on 10/29/2025) (Entered: 10/29/2025)",
+        "filepath_local": "recap/gov.uscourts.cand.458866/gov.uscourts.cand.458866.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.458866/gov.uscourts.cand.458866.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71803473/1/united-states-v-approximately-276937881-usdt-from-tron-blockchain/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 457117551,
+      "description": "COMPLAINT (Verified Complaint for Civil Forfeiture in Rem) against 1,400,058.194019 USDT, 1,331,857.9667 DODO, and 1,445.2634 People From Binance Account, Approximately 2,769,378.81 USDT from Tron Blockchain Address. Filed by United States of America. (Attachments: # 1 Civil Cover Sheet)(Pastor, Daniel) (Filed on 10/29/2025) (Entered: 10/29/2025)",
+      "filepath_local": "recap/gov.uscourts.cand.458866/gov.uscourts.cand.458866.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.458866/gov.uscourts.cand.458866.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71803473/1/united-states-v-approximately-276937881-usdt-from-tron-blockchain/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/457117551.pdf",
+      "bytes": 266590,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.cand.458866/gov.uscourts.cand.458866.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:51Z",
+      "content_sha256": "638060b572b4824846922e22c34c60cefb1b3a83c0ea32b918c2a2696cd7f3c0",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Dolisi",
+    "docket_number": "4:25-cr-00513",
+    "court": "District Court, E.D. Missouri",
+    "date_filed": "2025-10-01",
+    "docket_id": 71584311,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/71584311/united-states-v-dolisi/",
+    "free_nested_documents": [
+      {
+        "id": 480215310,
+        "description": "ACCEPTANCE TO PRESENTENCE INVESTIGATION REPORT by USA as to Sharon Dolisi and Notice as to Witnesses, Sentencing Recommendation (Carroll, Gwendolyn) (Entered: 05/22/2026)",
+        "filepath_local": "recap/gov.uscourts.moed.223647/gov.uscourts.moed.223647.48.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.223647/gov.uscourts.moed.223647.48.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/71584311/48/united-states-v-dolisi/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 480215310,
+      "description": "ACCEPTANCE TO PRESENTENCE INVESTIGATION REPORT by USA as to Sharon Dolisi and Notice as to Witnesses, Sentencing Recommendation (Carroll, Gwendolyn) (Entered: 05/22/2026)",
+      "filepath_local": "recap/gov.uscourts.moed.223647/gov.uscourts.moed.223647.48.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.223647/gov.uscourts.moed.223647.48.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/71584311/48/united-states-v-dolisi/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/480215310.pdf",
+      "bytes": 126863,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.223647/gov.uscourts.moed.223647.48.0.pdf",
+      "retrieved_at": "2026-10-08T01:22:58Z",
+      "content_sha256": "4e21816f769cb420bf7938f0fea4b216a8dd61466a02cc4be5d6ca392096f06d",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Lambert",
+    "docket_number": "4:24-cr-00299",
+    "court": "District Court, E.D. Missouri",
+    "date_filed": "2024-06-12",
+    "docket_id": 69220267,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69220267/united-states-v-lambert/",
+    "free_nested_documents": [
+      {
+        "id": 417324768,
+        "description": "MOTION for Pretrial Detention and Hearing by USA as to Chintankumar Parekh. (JWD) (Entered: 10/03/2024)",
+        "filepath_local": "recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.33.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.33.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69220267/33/united-states-v-lambert/"
+      },
+      {
+        "id": 417324769,
+        "description": "MOTION for Pretrial Detention and Hearing by USA as to Mehulkumar Darji. (JWD) (Entered: 10/03/2024)",
+        "filepath_local": "recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.34.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.34.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69220267/34/united-states-v-lambert/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 417324768,
+      "description": "MOTION for Pretrial Detention and Hearing by USA as to Chintankumar Parekh. (JWD) (Entered: 10/03/2024)",
+      "filepath_local": "recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.33.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.33.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69220267/33/united-states-v-lambert/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/417324768.pdf",
+      "bytes": 129967,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.212691/gov.uscourts.moed.212691.33.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:05Z",
+      "content_sha256": "5e7845bcb939db16446f96539c0ec973045379a6177fe69bcae9a387bd135d2a",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Assorted Apple Electronics",
+    "docket_number": "1:26-cv-00011",
+    "court": "District Court, D. New Hampshire",
+    "date_filed": "2026-01-09",
+    "docket_id": 72126018,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/72126018/united-states-v-assorted-apple-electronics/",
+    "free_nested_documents": [
+      {
+        "id": 478857261,
+        "description": "MOTION to Stay (Memorandum of Law Incorporated) filed by USA.Follow up on Objection on 5/26/2026. The court only follow up date DOES NOT include 3 additional days that may apply per FRCP 6(d) and FRCrP 45(c). (Attachments: # 1 Proposed Order Proposed Order)(Davidson, Bridget) (Entered: 05/11/2026)",
+        "filepath_local": "recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.10.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.10.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/72126018/10/united-states-v-assorted-apple-electronics/"
+      },
+      {
+        "id": 473637109,
+        "description": "AMENDED COMPLAINT against Assorted Apple Electronics with jury demand filed by USA. (Attachments: # 1 Exhibit Attachment 1, # 2 Summons - Waiver)(Katz, Raphael) (Entered: 03/26/2026)",
+        "filepath_local": "recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.4.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.4.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/72126018/4/united-states-v-assorted-apple-electronics/"
+      },
+      {
+        "id": 464647422,
+        "description": "NEW CASE/FORFEITURE COMPLAINT with Jury Demand (No fee paid, USA or IFP) filed by USA. (Attachments: # 1 Attachment 1, # 2 Civil Cover Sheet, # 3 Summons - Waiver)(Katz, Raphael) (Entered: 01/09/2026)",
+        "filepath_local": "recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/72126018/1/united-states-v-assorted-apple-electronics/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 478857261,
+      "description": "MOTION to Stay (Memorandum of Law Incorporated) filed by USA.Follow up on Objection on 5/26/2026. The court only follow up date DOES NOT include 3 additional days that may apply per FRCP 6(d) and FRCrP 45(c). (Attachments: # 1 Proposed Order Proposed Order)(Davidson, Bridget) (Entered: 05/11/2026)",
+      "filepath_local": "recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.10.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.10.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/72126018/10/united-states-v-assorted-apple-electronics/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/478857261.pdf",
+      "bytes": 219787,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nhd.66953/gov.uscourts.nhd.66953.10.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:12Z",
+      "content_sha256": "99173385675d1069cc08d2d19ae0b4023fab9635f4c54721330bf4f84178fae0",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Gibbs",
+    "docket_number": "7:25-cr-00322",
+    "court": "District Court, S.D. New York",
+    "date_filed": "2025-07-18",
+    "docket_id": 70835454,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/70835454/united-states-v-gibbs/",
+    "free_nested_documents": [
+      {
+        "id": 463130845,
+        "description": "Sentencing Letter by Ricki Rickaline Gibbs addressed to Hon. Kenneth M. Karas from Howard E. Tanner, Esq. dated 12/26/2025 re: Corrected Defense Sentencing Letter. (Attachments: # 1 Supplement Corrected Defense Sentencing Letter, # 2 Exhibit Ex. A - Redacted, # 3 Exhibit Ex. B - Redacted, # 4 Exhibit Ex. C - Letters in Support, # 5 Exhibit Ex. D - Defendant Letter to Court)(Tanner, Howard) (Entered: 12/26/2025)",
+        "filepath_local": "recap/gov.uscourts.nysd.645979/gov.uscourts.nysd.645979.69.1.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.645979/gov.uscourts.nysd.645979.69.1.pdf",
+        "page_url": "https://www.courtlistener.com/docket/70835454/69/1/united-states-v-gibbs/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 463130845,
+      "description": "Sentencing Letter by Ricki Rickaline Gibbs addressed to Hon. Kenneth M. Karas from Howard E. Tanner, Esq. dated 12/26/2025 re: Corrected Defense Sentencing Letter. (Attachments: # 1 Supplement Corrected Defense Sentencing Letter, # 2 Exhibit Ex. A - Redacted, # 3 Exhibit Ex. B - Redacted, # 4 Exhibit Ex. C - Letters in Support, # 5 Exhibit Ex. D - Defendant Letter to Court)(Tanner, Howard) (Entered: 12/26/2025)",
+      "filepath_local": "recap/gov.uscourts.nysd.645979/gov.uscourts.nysd.645979.69.1.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.645979/gov.uscourts.nysd.645979.69.1.pdf",
+      "page_url": "https://www.courtlistener.com/docket/70835454/69/1/united-states-v-gibbs/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/463130845.pdf",
+      "bytes": 433730,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.645979/gov.uscourts.nysd.645979.69.1.pdf",
+      "retrieved_at": "2026-10-08T01:23:19Z",
+      "content_sha256": "0e5df21b0e5c2c16ea9964b75d543c299cc10471c8bdb6d14c6376f01f8ec1b6",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. APPROXIMATELY 225,364,961 USDT",
+    "docket_number": "1:25-cv-01907",
+    "court": "District Court, District of Columbia",
+    "date_filed": "2025-06-18",
+    "docket_id": 70571294,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/70571294/united-states-v-approximately-225364961-usdt/",
+    "free_nested_documents": [
+      {
+        "id": 454424212,
+        "description": "MOTION Motion to Seal and Proceed Under Pseudonyms by CLAIMANTS 1-118. (Burshteyn, Michael) Modified filer on 10/6/2025 (znmw). (Entered: 10/03/2025)",
+        "filepath_local": "recap/gov.uscourts.dcd.281742/gov.uscourts.dcd.281742.15.0_2.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.281742/gov.uscourts.dcd.281742.15.0_2.pdf",
+        "page_url": "https://www.courtlistener.com/docket/70571294/15/united-states-v-approximately-225364961-usdt/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 454424212,
+      "description": "MOTION Motion to Seal and Proceed Under Pseudonyms by CLAIMANTS 1-118. (Burshteyn, Michael) Modified filer on 10/6/2025 (znmw). (Entered: 10/03/2025)",
+      "filepath_local": "recap/gov.uscourts.dcd.281742/gov.uscourts.dcd.281742.15.0_2.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.281742/gov.uscourts.dcd.281742.15.0_2.pdf",
+      "page_url": "https://www.courtlistener.com/docket/70571294/15/united-states-v-approximately-225364961-usdt/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/454424212.pdf",
+      "bytes": 179524,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.dcd.281742/gov.uscourts.dcd.281742.15.0_2.pdf",
+      "retrieved_at": "2026-10-08T01:23:25Z",
+      "content_sha256": "dde49a370897ca64975cccee3c056dc3cf680d6685b8e6d3950600b73a5a312e",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Patel",
+    "docket_number": "1:25-cr-00173",
+    "court": "District Court, S.D. New York",
+    "date_filed": "2025-04-15",
+    "docket_id": 69899488,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69899488/united-states-v-patel/",
+    "free_nested_documents": [
+      {
+        "id": 473799638,
+        "description": " ORDER  as to Sunil Patel, Ratansha Vakil, Lakhmichand Lohani: ORDERED that the  motion of defendant Sunil Patel (\"Patel\") to suppress all evidence seized  pursuant to a March 17, 2025, warrant and compel discovery (Dkt. No. 44) is  DENIED;  and it is further ORDERED that the motion of defendant Ratansha Vakil (\"Vakil\") to suppress all  evidence seized pursuant to a March 14, 2025, warrant (Dkt. No. 47) is DENIED.     (Signed by Judge Victor Marrero on 3/27/2026) (See ORDER set forth) (ap)",
+        "filepath_local": "recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.51.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.51.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69899488/51/united-states-v-patel/"
+      },
+      {
+        "id": 459895643,
+        "description": "SEALED COMPLAINT as to Sunil Patel (1), Ratansha Vakil (2), Lakhmichand Lohani (3). Violations of 18 U.S.C. \u00a7\u00a7 1344, 1349, 1956, and 2. (Signed by Magistrate Judge Robert W. Lehrburger) (job) [1:25-mj-00802-UA] (Entered: 03/18/2025)",
+        "filepath_local": "recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69899488/1/united-states-v-patel/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 473799638,
+      "description": " ORDER  as to Sunil Patel, Ratansha Vakil, Lakhmichand Lohani: ORDERED that the  motion of defendant Sunil Patel (\"Patel\") to suppress all evidence seized  pursuant to a March 17, 2025, warrant and compel discovery (Dkt. No. 44) is  DENIED;  and it is further ORDERED that the motion of defendant Ratansha Vakil (\"Vakil\") to suppress all  evidence seized pursuant to a March 14, 2025, warrant (Dkt. No. 47) is DENIED.     (Signed by Judge Victor Marrero on 3/27/2026) (See ORDER set forth) (ap)",
+      "filepath_local": "recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.51.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.51.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69899488/51/united-states-v-patel/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/473799638.pdf",
+      "bytes": 351942,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nysd.640649/gov.uscourts.nysd.640649.51.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:32Z",
+      "content_sha256": "d676ab4814a80f432b834517194b2c90c29d5d83095722e7993405c1878459e9",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. GODFREY",
+    "docket_number": "2:23-cr-00302",
+    "court": "District Court, E.D. Pennsylvania",
+    "date_filed": "2023-07-13",
+    "docket_id": 67613197,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/67613197/united-states-v-godfrey/",
+    "free_nested_documents": [
+      {
+        "id": 440378909,
+        "description": "SENTENCING MEMORANDUM Certificate of Service by USA as to JOWAYNE C. GODFREY (EVE, ANITA) (Entered: 05/22/2025)",
+        "filepath_local": "recap/gov.uscourts.paed.611487/gov.uscourts.paed.611487.111.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611487/gov.uscourts.paed.611487.111.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/67613197/111/united-states-v-godfrey/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 440378909,
+      "description": "SENTENCING MEMORANDUM Certificate of Service by USA as to JOWAYNE C. GODFREY (EVE, ANITA) (Entered: 05/22/2025)",
+      "filepath_local": "recap/gov.uscourts.paed.611487/gov.uscourts.paed.611487.111.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611487/gov.uscourts.paed.611487.111.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/67613197/111/united-states-v-godfrey/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/440378909.pdf",
+      "bytes": 220626,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611487/gov.uscourts.paed.611487.111.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:39Z",
+      "content_sha256": "0f475a644ca61e042aad1edbd0693757cc2bd04786572771dc490786c5ecaf81",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. SEALED",
+    "docket_number": "6:25-cr-00118",
+    "court": "District Court, E.D. Texas",
+    "date_filed": "2025-10-15",
+    "docket_id": 73387803,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/73387803/united-states-v-sealed/",
+    "free_nested_documents": [
+      {
+        "id": 492688424,
+        "description": "MOTION for Detention by USA as to Dixitkumar Kishorbhai Patel. (Attachments: # 1 Proposed Order)(Mikkelsen, Emil) (Entered: 08/31/2026)",
+        "filepath_local": "recap/gov.uscourts.txed.241153/gov.uscourts.txed.241153.422.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.txed.241153/gov.uscourts.txed.241153.422.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/73387803/422/united-states-v-sealed/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 492688424,
+      "description": "MOTION for Detention by USA as to Dixitkumar Kishorbhai Patel. (Attachments: # 1 Proposed Order)(Mikkelsen, Emil) (Entered: 08/31/2026)",
+      "filepath_local": "recap/gov.uscourts.txed.241153/gov.uscourts.txed.241153.422.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.txed.241153/gov.uscourts.txed.241153.422.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/73387803/422/united-states-v-sealed/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/492688424.pdf",
+      "bytes": 157218,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.txed.241153/gov.uscourts.txed.241153.422.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:46Z",
+      "content_sha256": "28a26591c4d30681485d155f656af33bbdeffd71885f9c1746cdd456fac9150a",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Chen",
+    "docket_number": "4:24-cr-00596",
+    "court": "District Court, E.D. Missouri",
+    "date_filed": "2024-11-13",
+    "docket_id": 69379378,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69379378/united-states-v-chen/",
+    "free_nested_documents": [
+      {
+        "id": 420348249,
+        "description": "MOTION for Pretrial Detention and Hearing by USA as to Ping Ouyang. (Ladendorf, Justin) (Entered: 11/14/2024)",
+        "filepath_local": "recap/gov.uscourts.moed.216162/gov.uscourts.moed.216162.13.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.216162/gov.uscourts.moed.216162.13.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69379378/13/united-states-v-chen/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 420348249,
+      "description": "MOTION for Pretrial Detention and Hearing by USA as to Ping Ouyang. (Ladendorf, Justin) (Entered: 11/14/2024)",
+      "filepath_local": "recap/gov.uscourts.moed.216162/gov.uscourts.moed.216162.13.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.216162/gov.uscourts.moed.216162.13.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69379378/13/united-states-v-chen/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/420348249.pdf",
+      "bytes": 114300,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.216162/gov.uscourts.moed.216162.13.0.pdf",
+      "retrieved_at": "2026-10-08T01:23:53Z",
+      "content_sha256": "a368aa50a65d627f978de719005a84e0f5d163bc5a4e456962fb3b3965275f25",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Lin",
+    "docket_number": "3:24-mj-00215",
+    "court": "District Court, D. Oregon",
+    "date_filed": "2024-10-05",
+    "docket_id": 69231143,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/69231143/united-states-v-lin/",
+    "free_nested_documents": [
+      {
+        "id": 415030112,
+        "description": "Motion for Detention filed by USA as to Defendant Biao Lin. (Kerin, Scott) (Entered: 10/07/2024)",
+        "filepath_local": "recap/gov.uscourts.ord.182390/gov.uscourts.ord.182390.3.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.182390/gov.uscourts.ord.182390.3.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/69231143/3/united-states-v-lin/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 415030112,
+      "description": "Motion for Detention filed by USA as to Defendant Biao Lin. (Kerin, Scott) (Entered: 10/07/2024)",
+      "filepath_local": "recap/gov.uscourts.ord.182390/gov.uscourts.ord.182390.3.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.182390/gov.uscourts.ord.182390.3.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/69231143/3/united-states-v-lin/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/415030112.pdf",
+      "bytes": 264332,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.ord.182390/gov.uscourts.ord.182390.3.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:00Z",
+      "content_sha256": "a96150b7a7763a9efb8718eb9f189d68b87918bb605a360dc5685da8f2b80e07",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Miqui-Castillo",
+    "docket_number": "4:23-cr-00665",
+    "court": "District Court, E.D. Missouri",
+    "date_filed": "2023-11-29",
+    "docket_id": 68048306,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/68048306/united-states-v-miqui-castillo/",
+    "free_nested_documents": [
+      {
+        "id": 379434839,
+        "description": "MOTION for Pretrial Detention and Hearing by USA as to Andy R. Miqui-Castillo. (JKL) [4:23-mj-01413-JMB] (Entered: 11/20/2023)",
+        "filepath_local": "recap/gov.uscourts.moed.207851/gov.uscourts.moed.207851.4.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.207851/gov.uscourts.moed.207851.4.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/68048306/4/united-states-v-miqui-castillo/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 379434839,
+      "description": "MOTION for Pretrial Detention and Hearing by USA as to Andy R. Miqui-Castillo. (JKL) [4:23-mj-01413-JMB] (Entered: 11/20/2023)",
+      "filepath_local": "recap/gov.uscourts.moed.207851/gov.uscourts.moed.207851.4.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.207851/gov.uscourts.moed.207851.4.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/68048306/4/united-states-v-miqui-castillo/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/379434839.pdf",
+      "bytes": 161427,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.moed.207851/gov.uscourts.moed.207851.4.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:07Z",
+      "content_sha256": "c31f1de7b3ee617800fc1d656f576c507efc9b0c643fa903e7ba51d6d2f9f9dc",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. GODFREY",
+    "docket_number": "2:23-cr-00302",
+    "court": "District Court, E.D. Pennsylvania",
+    "date_filed": "2023-07-13",
+    "docket_id": 67613991,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/67613991/united-states-v-godfrey/",
+    "free_nested_documents": [
+      {
+        "id": 476829195,
+        "description": "SENTENCING MEMORANDUM CERTIFICATE OF SERVICE by USA as to ARIEL S. BAGALUE (JONES, BRITTANY) (Entered: 04/20/2026)",
+        "filepath_local": "recap/gov.uscourts.paed.611486/gov.uscourts.paed.611486.163.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611486/gov.uscourts.paed.611486.163.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/67613991/163/united-states-v-godfrey/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 476829195,
+      "description": "SENTENCING MEMORANDUM CERTIFICATE OF SERVICE by USA as to ARIEL S. BAGALUE (JONES, BRITTANY) (Entered: 04/20/2026)",
+      "filepath_local": "recap/gov.uscourts.paed.611486/gov.uscourts.paed.611486.163.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611486/gov.uscourts.paed.611486.163.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/67613991/163/united-states-v-godfrey/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/476829195.pdf",
+      "bytes": 246607,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611486/gov.uscourts.paed.611486.163.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:14Z",
+      "content_sha256": "d7510eaf40fdaaa5088901585aee93d739835e30ac02fb852454bc0f45daad2a",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Watson",
+    "docket_number": "1:21-mj-02322",
+    "court": "District Court, S.D. Florida",
+    "date_filed": "2021-02-19",
+    "docket_id": 59303415,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/59303415/united-states-v-watson/",
+    "free_nested_documents": [
+      {
+        "id": 161209012,
+        "description": "COMPLAINT as to Johnny Watson (1). (mdc) (Entered: 02/19/2021)",
+        "filepath_local": "recap/gov.uscourts.flsd.587310/gov.uscourts.flsd.587310.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.587310/gov.uscourts.flsd.587310.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/59303415/1/united-states-v-watson/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 161209012,
+      "description": "COMPLAINT as to Johnny Watson (1). (mdc) (Entered: 02/19/2021)",
+      "filepath_local": "recap/gov.uscourts.flsd.587310/gov.uscourts.flsd.587310.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.587310/gov.uscourts.flsd.587310.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/59303415/1/united-states-v-watson/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/161209012.pdf",
+      "bytes": 2493710,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.flsd.587310/gov.uscourts.flsd.587310.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:21Z",
+      "content_sha256": "36d7334b0f17e1ac3b1f6acf4c0f71520f982674db07f371bcb0bcf913e506f2",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. 162 ETHEREUM AND 32 BITCOIN MAINTAINED IN OR ON BEHALF OF ACCOUNT ID ENDING IN 0564 AT CRYPTOCURRENCY EXCHANGE BINANCE",
+    "docket_number": "2:24-cv-00975",
+    "court": "District Court, W.D. Pennsylvania",
+    "date_filed": "2024-07-05",
+    "docket_id": 68918555,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/68918555/united-states-v-162-ethereum-and-32-bitcoin-maintained-in-or-on-behalf-of/",
+    "free_nested_documents": [
+      {
+        "id": 404716479,
+        "description": "COMPLAINT against 162 ETHEREUM AND 32 BITCOIN MAINTAINED IN OR ON BEHALF OF ACCOUNT ID ENDING IN 0564 AT CRYPTOCURRENCY EXCHANGE BINANCE ( Filing fee, including Administrative fee, $405, ), filed by UNITED STATES OF AMERICA. (Attachments: # 1 Civil Cover Sheet) (Locnikar, Jill) (Entered: 07/05/2024)",
+        "filepath_local": "recap/gov.uscourts.pawd.310766/gov.uscourts.pawd.310766.1.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.pawd.310766/gov.uscourts.pawd.310766.1.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/68918555/1/united-states-v-162-ethereum-and-32-bitcoin-maintained-in-or-on-behalf-of/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 404716479,
+      "description": "COMPLAINT against 162 ETHEREUM AND 32 BITCOIN MAINTAINED IN OR ON BEHALF OF ACCOUNT ID ENDING IN 0564 AT CRYPTOCURRENCY EXCHANGE BINANCE ( Filing fee, including Administrative fee, $405, ), filed by UNITED STATES OF AMERICA. (Attachments: # 1 Civil Cover Sheet) (Locnikar, Jill) (Entered: 07/05/2024)",
+      "filepath_local": "recap/gov.uscourts.pawd.310766/gov.uscourts.pawd.310766.1.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.pawd.310766/gov.uscourts.pawd.310766.1.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/68918555/1/united-states-v-162-ethereum-and-32-bitcoin-maintained-in-or-on-behalf-of/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/404716479.pdf",
+      "bytes": 173342,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.pawd.310766/gov.uscourts.pawd.310766.1.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:28Z",
+      "content_sha256": "3af7bbe1a2d419d8f60c0f7d8f0fdc6e78f190f6cea8ab81168b020f0dd3811b",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Kaplan",
+    "docket_number": "2:23-cr-00293",
+    "court": "District Court, E.D. New York",
+    "date_filed": "2023-07-18",
+    "docket_id": 67636354,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/67636354/united-states-v-kaplan/",
+    "free_nested_documents": [
+      {
+        "id": 448445514,
+        "description": "Letter MOTION to Unseal Document by Newsday as to Adam Kaplan, Daniel Kaplan. (GO) (Entered: 08/07/2025)",
+        "filepath_local": "recap/gov.uscourts.nyed.500398/gov.uscourts.nyed.500398.239.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500398/gov.uscourts.nyed.500398.239.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/67636354/239/united-states-v-kaplan/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 448445514,
+      "description": "Letter MOTION to Unseal Document by Newsday as to Adam Kaplan, Daniel Kaplan. (GO) (Entered: 08/07/2025)",
+      "filepath_local": "recap/gov.uscourts.nyed.500398/gov.uscourts.nyed.500398.239.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500398/gov.uscourts.nyed.500398.239.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/67636354/239/united-states-v-kaplan/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/448445514.pdf",
+      "bytes": 76923,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500398/gov.uscourts.nyed.500398.239.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:35Z",
+      "content_sha256": "64ac2e9bd2bc4459a0c3620750be2ec491f7536ee523388538ade0ab4e4b5ae2",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. Kaplan",
+    "docket_number": "2:23-cr-00293",
+    "court": "District Court, E.D. New York",
+    "date_filed": "2023-07-18",
+    "docket_id": 67633702,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/67633702/united-states-v-kaplan/",
+    "free_nested_documents": [
+      {
+        "id": 448425433,
+        "description": "Letter MOTION to Unseal Document by Newsday as to Adam Kaplan, Daniel Kaplan. (GO) (Entered: 08/07/2025)",
+        "filepath_local": "recap/gov.uscourts.nyed.500400/gov.uscourts.nyed.500400.239.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500400/gov.uscourts.nyed.500400.239.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/67633702/239/united-states-v-kaplan/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 448425433,
+      "description": "Letter MOTION to Unseal Document by Newsday as to Adam Kaplan, Daniel Kaplan. (GO) (Entered: 08/07/2025)",
+      "filepath_local": "recap/gov.uscourts.nyed.500400/gov.uscourts.nyed.500400.239.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500400/gov.uscourts.nyed.500400.239.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/67633702/239/united-states-v-kaplan/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/448425433.pdf",
+      "bytes": 76923,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.nyed.500400/gov.uscourts.nyed.500400.239.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:42Z",
+      "content_sha256": "64ac2e9bd2bc4459a0c3620750be2ec491f7536ee523388538ade0ab4e4b5ae2",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
+  },
+  {
+    "search_type": "r",
+    "case_name": "United States v. GODFREY",
+    "docket_number": "2:23-cr-00302",
+    "court": "District Court, E.D. Pennsylvania",
+    "date_filed": "2023-07-13",
+    "docket_id": 67613198,
+    "document_id": null,
+    "filepath_local": null,
+    "download_url": null,
+    "absolute_url": "https://www.courtlistener.com/docket/67613198/united-states-v-godfrey/",
+    "free_nested_documents": [
+      {
+        "id": 476379105,
+        "description": "Sentencing Memorandum",
+        "filepath_local": "recap/gov.uscourts.paed.611489/gov.uscourts.paed.611489.163.0.pdf",
+        "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611489/gov.uscourts.paed.611489.163.0.pdf",
+        "page_url": "https://www.courtlistener.com/docket/67613198/163/united-states-v-godfrey/"
+      }
+    ],
+    "query": "\"elder fraud\"",
+    "cost": "free",
+    "observed": true,
+    "inferred": false,
+    "chosen_document": {
+      "id": 476379105,
+      "description": "Sentencing Memorandum",
+      "filepath_local": "recap/gov.uscourts.paed.611489/gov.uscourts.paed.611489.163.0.pdf",
+      "download_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611489/gov.uscourts.paed.611489.163.0.pdf",
+      "page_url": "https://www.courtlistener.com/docket/67613198/163/united-states-v-godfrey/"
+    },
+    "download": {
+      "ok": true,
+      "path": "data/collected/recap/fraud/476379105.pdf",
+      "bytes": 246607,
+      "source_url": "https://storage.courtlistener.com/recap/gov.uscourts.paed.611489/gov.uscourts.paed.611489.163.0.pdf",
+      "retrieved_at": "2026-10-08T01:24:49Z",
+      "content_sha256": "d7510eaf40fdaaa5088901585aee93d739835e30ac02fb852454bc0f45daad2a",
+      "cost": "free",
+      "observed": true,
+      "inferred": false
+    }
   }
 ]

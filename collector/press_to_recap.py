@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Join a fraud press release to free RECAP PDFs when the release names a case.
+"""Join a press release to free RECAP PDFs when the release names a case.
+
+``--domain`` picks the press folder and the recap folder. Fraud is the default.
 
 A storage.courtlistener.com path is
 ``recap/gov.uscourts.{court}.{pacer_case_id}/...pdf``.
@@ -46,6 +48,50 @@ MANIFEST = RECAP_DIR / "from_press.jsonl"
 TRIED = RECAP_DIR / "from_press_tried.jsonl"
 STATUS = RECAP_DIR / "from_press_status.json"
 PRIOR_LOG = RECAP_DIR / "fraud_study.jsonl"
+
+
+def _public_recap(source_url: str, title: str, pub_date: str) -> None:
+    if str(HERE) not in sys.path:
+        sys.path.insert(0, str(HERE))
+    import public_lookup
+
+    public_lookup.append_lookup(
+        "recap",
+        domain=RECAP_DIR.name,
+        agency="",
+        title=title,
+        pub_date=pub_date,
+        source_url=source_url,
+    )
+
+
+def configure(domain: str) -> None:
+    """Point the join at one press profile. Fraud keeps the files already on disk."""
+    global STUDY, RECAP_DIR, PDF_DIR, QUEUE, MANIFEST, TRIED, STATUS, PRIOR_LOG
+    name = (domain or "fraud").strip().lower()
+    STUDY = REPO / "data" / "collected" / "press_releases" / name / "study_records.jsonl"
+    RECAP_DIR = REPO / "data" / "collected" / "recap" / name
+    PDF_DIR = RECAP_DIR / "from_press"
+    QUEUE = RECAP_DIR / "press_docket_queue.jsonl"
+    MANIFEST = RECAP_DIR / "from_press.jsonl"
+    TRIED = RECAP_DIR / "from_press_tried.jsonl"
+    STATUS = RECAP_DIR / "from_press_status.json"
+    PRIOR_LOG = RECAP_DIR / ("fraud_study.jsonl" if name == "fraud" else "prior.jsonl")
+
+
+def _file_provenance(dest: Path, source_url: str, result: dict | None = None) -> dict:
+    if result and result.get("content_sha256") and result.get("retrieved_at"):
+        return {
+            "source_url": result.get("source_url") or source_url,
+            "retrieved_at": result.get("retrieved_at"),
+            "content_sha256": result.get("content_sha256"),
+        }
+    data = dest.read_bytes()
+    return {
+        "source_url": source_url,
+        "retrieved_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "content_sha256": hashlib.sha256(data).hexdigest(),
+    }
 
 MAX_DOCS = 4
 MIN_PDF_BYTES = 8000
@@ -293,7 +339,8 @@ def _dockets(text: str) -> list[tuple[str, str, int]]:
     return out
 
 
-def extract_queue(src: Path = STUDY) -> dict:
+def extract_queue(src: Path | None = None) -> dict:
+    src = src or STUDY
     grouped: dict[tuple[str, str], dict] = {}
     rows = 0
     with_docket = 0
@@ -405,8 +452,12 @@ def _queue_rank(seed: dict) -> tuple[int, int]:
     return (1, -year)
 
 
-def _worthy_text(pdf: Path) -> str:
-    """Return 'pass', 'fail', or 'skipped' from the first pages. Does not store the text."""
+def _worthy_text(pdf: Path, extra: re.Pattern[str] | None = None) -> str:
+    """Return 'pass', 'fail', or 'skipped' from the first pages. Does not store the text.
+
+    ``extra`` is an optional domain pattern (trafficking, forced labor, CSEA).
+    Fraud joins leave it unset, so the fraud gate is unchanged.
+    """
     try:
         proc = subprocess.run(
             ["pdftotext", "-f", "1", "-l", "3", "-layout", str(pdf), "-"],
@@ -421,9 +472,10 @@ def _worthy_text(pdf: Path) -> str:
     text = proc.stdout.decode("utf-8", errors="replace")
     if len(text) < MIN_TEXT_CHARS:
         return "fail"
-    if SHEET_RE.search(text) and not MECHANICS_RE.search(text):
+    ok = MECHANICS_RE.search(text) or (extra.search(text) if extra else None)
+    if SHEET_RE.search(text) and not ok:
         return "fail"
-    if not MECHANICS_RE.search(text):
+    if not ok:
         return "fail"
     return "pass"
 
@@ -489,6 +541,7 @@ def pull_linked_pdfs() -> int:
                     "cost": "free",
                     "pacer_purchases": 0,
                     "via": "press_pdf_link",
+                    **_file_provenance(dest, url),
                     "press_url": rec.get("source_url"),
                     "press_title": str(rec.get("title") or "")[:240],
                     "download_url": url,
@@ -497,6 +550,7 @@ def pull_linked_pdfs() -> int:
                     "text_check": verdict,
                 },
             )
+            _public_recap(url, str(rec.get("title") or "")[:240], "")
             kept += 1
             print(f"  linked pdf {kept} {url[:90]}", file=sys.stderr)
     return kept
@@ -504,7 +558,6 @@ def pull_linked_pdfs() -> int:
 
 def pull(max_calls: int) -> None:
     import court_records
-    import run_source_bulk as bulk
 
     if not QUEUE.is_file():
         extract_queue()
@@ -547,9 +600,8 @@ def pull(max_calls: int) -> None:
             f'"{core}" AND (indictment OR "plea agreement" OR '
             f'"sentencing memorandum" OR "factual basis" OR "criminal complaint")'
         )
-        gap = bulk._wait_for_user_quota(court_records)
-        resp = bulk._cl_get(
-            court_records,
+        gap = court_records.wait_for_user_quota()
+        resp = court_records.cl_get(
             court_records.COURTLISTENER_SEARCH,
             {"q": query, "type": "rd", "court": court},
             gap,
@@ -600,11 +652,10 @@ def pull(max_calls: int) -> None:
                 skipped["path"] += 1
                 continue
             dest = PDF_DIR / f"{doc_id}.pdf"
+            storage_url = f"https://storage.courtlistener.com/{str(fp).lstrip('/')}"
+            result = None
             if not (dest.is_file() and dest.stat().st_size > 1000):
-                result = court_records.download_free_pdf(
-                    f"https://storage.courtlistener.com/{str(fp).lstrip('/')}",
-                    dest,
-                )
+                result = court_records.download_free_pdf(storage_url, dest)
                 if not result.get("ok") or int(result.get("bytes") or 0) < MIN_PDF_BYTES:
                     dest.unlink(missing_ok=True)
                     skipped["thin"] += 1
@@ -629,6 +680,7 @@ def pull(max_calls: int) -> None:
                     "cost": "free",
                     "pacer_purchases": 0,
                     "via": "docket_lookup",
+                    **_file_provenance(dest, storage_url, result),
                     "press_url": seed.get("press_url"),
                     "press_title": seed.get("press_title"),
                     "press_date": seed.get("press_date"),
@@ -645,6 +697,7 @@ def pull(max_calls: int) -> None:
                     "text_check": verdict,
                 },
             )
+            _public_recap(storage_url, desc[:300], str(item.get("entry_date_filed") or item.get("dateFiled") or ""))
             print(f"  join {kept} {court} {core} {desc[:70]}", file=sys.stderr)
         if saved == 0:
             misses += 1
@@ -662,8 +715,10 @@ def pull(max_calls: int) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", choices=("extract", "pull"))
+    parser.add_argument("--domain", default="fraud", help="Press profile folder. Fraud is the default.")
     parser.add_argument("--max-calls", type=int, default=200)
     args = parser.parse_args()
+    configure(args.domain)
     if args.phase == "extract":
         extract_queue()
     else:

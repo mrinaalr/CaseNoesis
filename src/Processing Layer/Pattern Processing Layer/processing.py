@@ -440,6 +440,7 @@ from ai_extraction_patterns import (
     AI_CSAM_TOPIC_RE,
     GEN_AI_TOOL_RE,
     SEXTORTION_TOPIC_RE,
+    SUPER_INTELLIGENCE_RE,
 )
 
 _AI_CSAM_TOPIC_RE = AI_CSAM_TOPIC_RE
@@ -2519,6 +2520,10 @@ def extract_topics(case: Dict[str, Any]) -> List[str]:
     # AI-CSAM offense product (tool is Gen AI in platforms_used)
     if _AI_CSAM_TOPIC_RE.search(case_text):
         topics.append('ai_csam')
+
+    # DOJ press wording for the AI tool, including non-CSAM crimes.
+    if SUPER_INTELLIGENCE_RE.search(case_text):
+        topics.append('super_intelligence')
 
     if SEXTORTION_TOPIC_RE.search(case_text):
         topics.append('sextortion')

@@ -1,6 +1,6 @@
 # CaseNoesis MCP tool registry (local stdio)
 
-**55 tools** when collector writes are on, **42** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
+**54 tools** when collector writes are on, **42** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
 
 Authoritative implementation: `casenoesis_mcp/server.py`.
 
@@ -12,8 +12,8 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (corpus graphs) | **8** | `tree_traversal`, `list_sources`, `case2cac`, four graph tools, `export_case_graph_ttl` |
 | MCP-only (free public records) | **4** | DOJ press search + CourtListener/RECAP (`public_records.py`) |
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
-| MCP-only (collector WRITE) | **13** | Press, free RECAP, and reference records. Disk only. No sqlite ingest |
-| **Total (local stdio, writes on)** | **55** | **42** when `MCP_COLLECTOR_WRITE=0` |
+| MCP-only (collector WRITE) | **12** | Press, free RECAP, reference records, and reproduce-from-lookup. Disk only. No sqlite ingest |
+| **Total (local stdio, writes on)** | **54** | **42** when `MCP_COLLECTOR_WRITE=0` |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
 
@@ -37,14 +37,13 @@ On disk: repo-root `collector/`. WRITE tools create files under `data/collected/
 | `fetch_press_listing_urls` | WRITE local | Listing → url-file |
 | `resolve_press_urls` | WRITE local | URL-path resolve JSON |
 | `build_press_pdf` | WRITE local | Merged PDF |
-| `collect_case_dual_path` | WRITE local | A+B dual collect |
-| `collect_record` | WRITE local | One new press record, or one free RECAP PDF (`run_bulk.py --one`) |
-| `collect_bulk` | WRITE local | N press + M free court (`run_bulk.py`); MCP default 1 / 0 so it does not time out |
+| `collect_case_dual_path` | WRITE local | A+B dual collect for one press topic |
 | `fetch_seed_docs` | WRITE local | URL seed → `data/collected/hyletic_data/<collection>/` |
 | `harvest_wayback_policy` | WRITE local | One dated Wayback snapshot of a policy URL |
 | `harvest_platform_litigation` | WRITE local | One free RECAP filing for a platform-litigation query |
 | `harvest_statutes` | WRITE local | GovInfo copy of a profile citation |
 | `harvest_calibration` | WRITE local | One public calibration report from the seed list |
+| `reproduce_from_lookup` | WRITE local | Read `data/collected/public/*.jsonl` and refetch `source_url`. `run=false` is the plan |
 
 `POST /api/llm/chat` exposes an internal `query_cases_database` function-calling tool to the LLM; that helper is **not** a separate MCP tool. MCP clients use `llm_chat` instead.
 
@@ -58,7 +57,7 @@ Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`.
 |----------|------:|---------|
 | Public (trusted key irrelevant) | **32** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
-| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ and 13 collector WRITE for the local total of **55**. |
+| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ and 12 collector WRITE for the local total of **54**. |
 
 ## Public tier (32 tools)
 

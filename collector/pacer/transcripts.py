@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -221,7 +222,7 @@ def load_inventory() -> Dict[int, Dict[str, Any]]:
     for path, domain in (
         (COLLECTED / "recap" / "fraud" / "fraud_study.jsonl", "fraud"),
         (COLLECTED / "recap" / "fraud" / "from_press.jsonl", "fraud"),
-        (COLLECTED / "public" / "fraud_court_lookup.jsonl", "fraud"),
+        (COLLECTED / "public" / "press_lookup.jsonl", "fraud"),
     ):
         if not path.is_file():
             continue
@@ -229,12 +230,12 @@ def load_inventory() -> Dict[int, Dict[str, Any]]:
             if not line.strip():
                 continue
             rec = json.loads(line)
-            did = rec.get("docket_id") or _docket_id_from_url(rec.get("absolute_url") or "")
+            did = rec.get("docket_id") or _docket_id_from_url(rec.get("absolute_url") or rec.get("source_url") or "")
             _remember(
                 index,
                 did,
                 {
-                    "domain": domain,
+                    "domain": rec.get("domain") or domain,
                     "case_caption": rec.get("case_name") or "",
                     "court": rec.get("court") or "",
                     "docket_number": rec.get("docket_number") or "",
@@ -1066,7 +1067,6 @@ def _held_sources() -> Iterable[tuple]:
         COLLECTED / "recap" / "fraud" / "fraud_study.jsonl",
         COLLECTED / "recap" / "fraud" / "from_press.jsonl",
         COLLECTED / "recap" / "bulk" / "manifests" / "recap_links.jsonl",
-        COLLECTED / "public" / "fraud_court_lookup.jsonl",
     ):
         if not path.is_file():
             continue
@@ -1760,7 +1760,7 @@ def write_discovery_report(
             "",
             "## Proposed pilot",
             "",
-            "Key-doc preference uses PDFs on disk in the fraud study, press-joined RECAP files, trafficking RECAP links, and court manifests. A magistrate and criminal docket pair count as one case when the court, office, year, and sequence match.",
+            "Key-doc preference uses fraud press PDFs on disk, press-joined RECAP files, trafficking RECAP links, and court manifests. A magistrate and criminal docket pair count as one case when the court, office, year, and sequence match.",
             "",
         ]
     )
@@ -1949,8 +1949,11 @@ def _pdf_ready(path: Path) -> bool:
 
 
 def _write_provenance(pdf: Path, row: Dict[str, Any], *, storage: str, pages: Any, nbytes: int) -> None:
+    data = pdf.read_bytes() if pdf.is_file() else b""
     payload = {
+        "source_url": storage,
         "storage_url": storage,
+        "content_sha256": hashlib.sha256(data).hexdigest(),
         "docket_number": row.get("docket_number") or "",
         "docket_id": row.get("docket_id") or "",
         "docket_entry_number": row.get("docket_entry_number") or "",

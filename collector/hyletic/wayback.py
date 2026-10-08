@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -31,15 +32,19 @@ def _ext(mime: str) -> str:
     return "html"
 
 
-def cdx_rows(url: str, *, snapshots: int) -> list[dict]:
+def cdx_rows(url: str, *, snapshots: int, yearly: bool = False) -> list[dict]:
     params = {
         "url": url,
         "output": "json",
         "fl": "timestamp,original,statuscode,digest,mimetype,length",
         "filter": "statuscode:200",
-        "limit": str(-max(1, snapshots)),
+        "limit": "20" if yearly else str(-max(1, snapshots)),
     }
-    resp = requests.get(CDX, params=params, headers={"User-Agent": store.USER_AGENT}, timeout=60)
+    if yearly:
+        params["from"] = "20080101"
+        params["to"] = "20261231"
+        params["collapse"] = "timestamp:4"
+    resp = requests.get(CDX, params=params, headers={"User-Agent": store.USER_AGENT}, timeout=90)
     resp.raise_for_status()
     payload = resp.json()
     if not isinstance(payload, list) or len(payload) < 2:
@@ -48,7 +53,7 @@ def cdx_rows(url: str, *, snapshots: int) -> list[dict]:
     return [dict(zip(header, row)) for row in payload[1:]]
 
 
-def harvest(profile: dict, *, root: Path, limit: int, snapshots: int) -> list[dict]:
+def harvest(profile: dict, *, root: Path, limit: int, snapshots: int, yearly: bool = False) -> list[dict]:
     seeds = list(profile.get("seeds") or [])[: max(0, limit)]
     saved: list[dict] = []
     for seed in seeds:
@@ -56,8 +61,9 @@ def harvest(profile: dict, *, root: Path, limit: int, snapshots: int) -> list[di
         slug = str(seed.get("slug") or urlparse(original).netloc or "policy")
         title = str(seed.get("title") or slug)
         kind = str(seed.get("kind") or "policy")
+        time.sleep(1.2)
         try:
-            rows = cdx_rows(original, snapshots=snapshots)
+            rows = cdx_rows(original, snapshots=snapshots, yearly=yearly)
         except (requests.RequestException, ValueError) as exc:
             saved.append(store.save_failure(
                 collection="wayback", slug=slug, source_url=original, error=str(exc),
@@ -115,9 +121,12 @@ def main() -> int:
     parser.add_argument("--out-dir", type=Path, default=store.DEFAULT_ROOT)
     parser.add_argument("--limit", type=int, default=1, help="How many seed URLs.")
     parser.add_argument("--snapshots", type=int, default=1, help="Captures per URL, newest first.")
+    parser.add_argument("--yearly", action="store_true", help="One capture per year, 2008 through 2026.")
     args = parser.parse_args()
     profile = json.loads(args.profile.read_text(encoding="utf-8"))
-    rows = harvest(profile, root=args.out_dir, limit=args.limit, snapshots=args.snapshots)
+    rows = harvest(
+        profile, root=args.out_dir, limit=args.limit, snapshots=args.snapshots, yearly=args.yearly
+    )
     ok = sum(1 for row in rows if row.get("content_sha256"))
     print(json.dumps({"collection": "wayback", "tried": len(rows), "saved": ok, "pacer_purchases": 0}))
     return 0 if ok else 1

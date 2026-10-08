@@ -27,6 +27,7 @@ usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import re
@@ -481,6 +482,8 @@ def main() -> None:
         kept.append(
             {
                 "source_url": url,
+                "retrieved_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "content_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
                 "mode": "resolved",
                 "title": title,
                 "byline": pub_date.strftime("%B %d, %Y") if pub_date else "",
@@ -565,6 +568,20 @@ def main() -> None:
     resolved_path.write_text(json.dumps(kept, indent=2), encoding="utf-8")
     novel_path.write_text(json.dumps(novel, indent=2), encoding="utf-8")
     urls_path.write_text("\n".join(r["source_url"] for r in kept) + "\n", encoding="utf-8")
+
+    if str(COLLECTOR) not in sys.path:
+        sys.path.insert(0, str(COLLECTOR))
+    import public_lookup
+
+    for rec in kept:
+        public_lookup.append_lookup(
+            "press",
+            domain=str(rec.get("domain") or domain_id or ""),
+            agency=str(rec.get("agency") or ""),
+            title=str(rec.get("title") or ""),
+            pub_date=str(rec.get("pub_date") or ""),
+            source_url=str(rec.get("source_url") or ""),
+        )
 
     years = Counter((r.get("pub_date") or "unknown")[:4] for r in kept)
     summary = {

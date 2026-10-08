@@ -2,11 +2,27 @@
 
 Local harvest for **UMass HRPO NHSR #8252** (16 Sep 2026), *On the Mechanics of Exploitation*. Nothing in this folder is auto-ingested. The collector does not purchase PACER. `recap/` is only filings already free in RECAP. `PACER/` is an older paid folder that was already on disk; it is not this harvest.
 
-**Snapshot below:** as of **23 Sep 2026, 11:37 PM ET**. Press and court jobs are stopped. Counts below are the snapshot to share. They will not grow until someone starts a collector again.
+**Snapshot below:** the 23 Sep 2026 freeze, 11:37 PM ET. Later harvests append to `public/`. The bytes stay on this machine.
 
 ## Share this number
 
-**45,159 distinct press URLs.** One row per URL in `press_releases/press_lookup.jsonl`. No article text in that file. No duplicate URLs.
+**46,230 public rows** across six lookup files. One row per record. No article text. No PDF path. Fields: `kind`, `domain`, `agency`, `title`, `pub_date`, `source_url`, `nhsr`.
+
+| File | Rows | What a row points at |
+|---|---:|---|
+| `public/press_lookup.jsonl` | 45,200 | A press URL |
+| `public/recap_lookup.jsonl` | 962 | A free RECAP filing |
+| `public/wayback_lookup.jsonl` | 38 | A dated platform-policy capture |
+| `public/statute_lookup.jsonl` | 17 | A GovInfo statute |
+| `public/calibration_lookup.jsonl` | 10 | A public report |
+| `public/litigation_lookup.jsonl` | 3 | A free platform-civil filing |
+| **Total** | **46,230** | |
+
+Press rows by domain tag: fraud 41,073, trafficking 3,184, CSEA 665, forced labor 197, cyber 81. The CSEA press and court folders were removed from this machine. Those 665 URLs are still in `press_lookup.jsonl`.
+
+## 23 Sep 2026 freeze
+
+**45,159 distinct press URLs** was the count in the index that night.
 
 | Domain tag | Press URLs |
 |---|---:|
@@ -17,7 +33,7 @@ Local harvest for **UMass HRPO NHSR #8252** (16 Sep 2026), *On the Mechanics of 
 | Cyber | 65 |
 | **Total** | **45,159** |
 
-The fraud study file inside that index is **40,958** full-text criminal-fraud records (`press_releases/fraud/study_records.jsonl`). 38,042 of those are a charge, plea, or sentence. The other fraud-tagged index rows are earlier bulk and state pages, not a second copy of the study file.
+Fraud press inside that index is **40,958** full-text criminal-fraud records (`press_releases/fraud/study_records.jsonl`). 38,042 of those are a charge, plea, or sentence. The other fraud-tagged index rows are earlier bulk and state pages, not a second copy of that file.
 
 CSEA in the index is 670 DOJ prosecutions. 400 of those were added in this freeze from the DOJ News API (`bulk/records/doj_csea.jsonl`: 223 sentenced, 93 guilty pleas or convictions, 84 charged or indicted). Another 15 are child-sexual-abuse prosecutions that had been tagged trafficking because the headline said "trafficking" images or files. The earlier ICAC press corpus was not copied into this index.
 
@@ -42,62 +58,38 @@ Commit only enough for someone else to **rebuild** the corpus. Do not commit nar
 | Ship in git | Stay on the machine |
 |---|---|
 | This README | Full press text (`body`) |
-| `public/fraud_press_lookup.jsonl` — 40,958 fraud case records: title, date, agency, source URL, type tag, stage. No article text. One row per URL | `press_releases/fraud/study_records.jsonl` and `state_records.jsonl` |
-| `public/fraud_court_lookup.jsonl` — 264 fraud court documents: court URL, docket, description, year. No PDF path | `recap/fraud/*.pdf`, `fraud_study.jsonl`, `from_press.jsonl` |
-| `press_releases/press_lookup.jsonl` — mixed-domain URL index, **45,159** rows, one URL each, no article text | `press_releases/bulk/records/*.jsonl` |
-| `recap/bulk/manifests/recap_links.jsonl` — URL index for the 506 trafficking / forced-labor RECAP PDFs | Every `*.pdf` |
+| `public/*_lookup.jsonl` — one row per record, no article text, no PDF path | `press_releases/fraud/study_records.jsonl` and `state_records.jsonl` |
+| | `recap/**/*.pdf`, `fraud_study.jsonl`, `from_press.jsonl` |
+| | `recap/bulk/manifests/recap_links.jsonl` — local log for the 506-PDF batch. The public court list is `public/recap_lookup.jsonl` |
 | Collector commands below | `press_releases/fraud/eji/` and `manifests/` |
 | | `PACER/` |
 | | `hyletic_data/` — reference records: wayback, statutes, calibration, platform civil filings |
 
-A public row is a pointer. The article text and the court PDF are fetched again from the URL.
+A public row is a pointer. Rebuild from it with `python3 -m collector.reproduce` (plan only) or `--run --limit N` (fetch). Map: [`collector/README.md`](../../collector/README.md).
 
 ## Reproduce
 
 From the repo root. Python packages: `requests`, `beautifulsoup4`, `reportlab`. Court downloads need a free CourtListener token in `.env` as `COURTLISTENER_API_TOKEN` ([API help](https://www.courtlistener.com/help/api/rest/)). Do not commit the token. DOJ press uses the public News API (no key, about 3 requests/second). This token is about 10 CourtListener calls/minute, 100/hour, 250/day. Storage PDF downloads do not spend that quota. Never point the collector at PACER or ECF.
 
-These commands are how this snapshot was built. Collection is frozen; running them again resumes harvest.
+These commands are how the 23 Sep snapshot was built. Running them again resumes harvest and appends new URLs to `public/`.
 
 Details of extractors and the DOJ API: `collector/press_releases/PRESS_RELEASE_COLLECTION.md`. Suite map: `collector/README.md`.
 
-### Fraud study (this pass)
+### Fraud press
 
-Press case records land in `press_releases/fraud/study_records.jsonl`. Court PDFs from the year sweep and the docket join land in `recap/fraud/`. State prosecution pages land in `press_releases/fraud/state_records.jsonl`. Re-runs skip URLs and document ids already saved.
+Fraud is one press profile, the same path as trafficking, cyber, and CSEA: `collector/press_releases/harvest_doj_press.py --profile fraud`. Full text already on disk is `press_releases/fraud/study_records.jsonl`. Free RECAP joined from those releases is `recap/fraud/`.
 
 ```bash
-# DOJ criminal-fraud press, 2009–2026 (the News API's fraud titles start 2009-01-06).
-python3 -u collector/harvest_fraud_study.py --phase press
-
-# Free RECAP indictments, pleas, sentencing memos. Year sweep.
-python3 -u collector/harvest_fraud_study.py --phase court --court-calls 220
-
-# One lookup per press-release docket, then a free PDF if RECAP already has it.
+python3 collector/press_releases/harvest_doj_press.py --profile fraud
 python3 collector/press_to_recap.py extract
-python3 -u collector/press_to_recap.py pull --max-calls 180
-
-# State AG / federal feed pages. Prosecution gate only.
-python3 -u collector/harvest_fraud_study.py --phase state --state-cap 80
+python3 collector/press_to_recap.py pull --max-calls 180
 ```
-
-Prompt you can hand an agent:
-
-> Reproduce the CaseNoesis fraud study under NHSR #8252. Use `collector/harvest_fraud_study.py` for press and `collector/press_to_recap.py` to join a press docket number to a free RECAP PDF. Press full text goes to `data/collected/press_releases/fraud/study_records.jsonl`. Free RECAP PDFs go to `data/collected/recap/fraud/`. Keep criminal prosecutions only (indictment, plea, sentence, or charge). Do not purchase PACER. Do not commit article text or PDFs. Refresh `data/collected/public/fraud_press_lookup.jsonl` and `fraud_court_lookup.jsonl` with the body and local PDF path removed.
 
 The public press lookup is the input list of URLs. To rebuild text for one known `justice.gov` URL, `collector/press_releases/resolve_press_urls.py` reads the DOJ API. Do not scrape `justice.gov` HTML. State and other hosts use `collector/press_releases/build_press_pdf.py` and `fetch_source_urls.py`.
 
 ### Earlier mixed corpus (already on disk)
 
-```bash
-python3 collector/run_source_bulk.py --phase doj
-python3 collector/run_source_bulk.py --phase agencies
-python3 collector/run_source_bulk.py --phase recap --max-recap 500
-python3 collector/run_bulk.py --press-count 1000 --court-count 50 \
-  --domains fraud,trafficking,cyber,csea --out-dir data/collected
-```
-
-`run_source_bulk.py --phase recap` searches trafficking and forced labor, not generic fraud.
-
-The CSEA and trafficking additions in this freeze used `collector/press_releases/harvest_doj_press.py` with an absolute `--skip-url-file` pointing at URLs already in `press_lookup.jsonl`, then appended only new prosecutions into `bulk/records/` and the index.
+Those rows were gathered with the press and court scripts: `harvest_doj_press.py` for DOJ titles, `fetch_source_urls.py` for agency and state listings, `build_press_pdf.py` for the merged PDFs, and `press_to_recap.py` plus `court_records.py` for free RECAP. The CSEA and trafficking additions used `harvest_doj_press.py` with `--skip-url-file` pointing at URLs already in `public/press_lookup.jsonl`.
 
 ## Folder tour
 
@@ -105,12 +97,15 @@ The CSEA and trafficking additions in this freeze used `collector/press_releases
 data/collected/                         about 1.3 GB, frozen 23 Sep 2026 11:37 PM ET
   README.md                             this map
   public/
-    fraud_press_lookup.jsonl            40,958 fraud case records, one URL each (no article text)
-    fraud_court_lookup.jsonl            264 fraud court documents (URLs only)
+    press_lookup.jsonl                  press URLs, no article text
+    recap_lookup.jsonl                  free RECAP URLs, no PDF
+    wayback_lookup.jsonl                dated platform-policy URLs
+    statute_lookup.jsonl                statute URLs
+    calibration_lookup.jsonl            public report URLs
+    litigation_lookup.jsonl             platform-filing URLs
   press_releases/
-    press_lookup.jsonl                  45,159 distinct URLs, no article text
     fraud/                              study JSONL, state feeds, EJI seeds, first-batch PDFs
-    trafficking/  cyber/  csea/         first-batch press PDFs
+    trafficking/  cyber/              first-batch press PDFs
     bulk/records/                       full-text rows from the bulk expansion plus this freeze
     bulk/doj_raw/                       DOJ API JSON before the domain gate
     bulk/urls/                          listing URLs tried for state and federal feeds
@@ -119,7 +114,7 @@ data/collected/                         about 1.3 GB, frozen 23 Sep 2026 11:37 P
     fraud/from_press/                   164 PDFs joined from a press-release docket
     bulk/                               506 trafficking / forced-labor RECAP PDFs
     bulk/manifests/recap_links.jsonl    public URL index for that court batch
-    trafficking/  cyber/  csea/         first-batch court PDFs
+    trafficking/  cyber/              first-batch court PDFs
   manifests/                            first-batch per-record JSON, full text, local only
   PACER/                                already-purchased filings. Not produced here
   hyletic_data/                         reference records. Not part of the 23 Sep freeze. Local only
@@ -146,7 +141,7 @@ First-batch press PDFs (21 Sep), separate from the study JSONL: fraud 515, traff
 
 ### Press expansion already on disk (22 Sep 2026, plus this freeze)
 
-Full-text rows in `press_releases/bulk/records/`. The fraud study copied the earlier DOJ fraud bulk file forward, so do not add `doj_fraud.jsonl` on top of the 40,958 study records.
+Full-text rows in `press_releases/bulk/records/`. The fraud press file already includes the earlier DOJ fraud bulk file, so do not add `doj_fraud.jsonl` on top of those 40,958 records.
 
 | Bulk file | Rows | Domain mix |
 |---|---:|---|
@@ -159,7 +154,7 @@ Full-text rows in `press_releases/bulk/records/`. The fraud study copied the ear
 | `doj_forced_labor.jsonl` | 30 | forced labor (2 older rows plus 28 new at this freeze) |
 | State and local feeds | the rest | mostly trafficking or forced labor, a few rows each |
 
-## Fraud study tour
+## Fraud press on disk
 
 Press for scale. Court filings for the close read of how a fraud runs (wire, elder, romance, business-email compromise, crypto, tech support).
 

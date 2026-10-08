@@ -359,7 +359,7 @@ collector/press_releases/
   check_expand_novelty.py
   sources/
     urls.txt
-collector/profiles/             # title terms and court queries, shared with run_bulk.py
+collector/profiles/             # title terms and court queries
 ```
 
 Naming merged outputs: `{AGENCY}_{TOPIC}_All.pdf` at repo root or under `collector_output/` (gitignored). Example: `OSCEOLASO_ICAC_All.pdf`.

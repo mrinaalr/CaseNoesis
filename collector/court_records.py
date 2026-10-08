@@ -3,11 +3,13 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -104,81 +106,89 @@ def search_free(
     search_type: str = "r",
     max_results: int = 10,
     on_topic: bool = True,
+    max_pages: int = 1,
 ) -> list[dict[str, Any]]:
     """Search CourtListener; keep only RECAP-available ($0) documents.
 
     on_topic keeps the criminal exploitation gate used by the press/court harvest.
-    Platform-litigation search passes on_topic=False.
+    Platform-litigation search passes on_topic=False. max_pages walks the
+    result list. The default is one page.
     """
     query = (query or "").strip()
     if not query:
         return []
     search_type = (search_type or "r").strip().lower()
-    params = {"q": query, "type": search_type, "order_by": "score desc"}
-    try:
-        resp = _get(COURTLISTENER_SEARCH, params)
-    except requests.RequestException as exc:
-        print(f"  [courtlistener] search failed: {exc}", file=sys.stderr)
-        return []
-    if resp is None:
-        return []
-    payload = resp.json()
+    params: dict[str, Any] | None = {"q": query, "type": search_type, "order_by": "score desc"}
+    url: str | None = COURTLISTENER_SEARCH
     out: list[dict[str, Any]] = []
-    for item in payload.get("results") or []:
-        if not isinstance(item, dict):
-            continue
-        nested = item.get("recap_documents") or []
-        free_nested = []
-        for doc in nested if isinstance(nested, list) else []:
-            if not isinstance(doc, dict):
-                continue
-            fp = doc.get("filepath_local")
-            if not (doc.get("is_available") and fp):
-                continue
-            free_nested.append(
-                {
-                    "id": doc.get("id"),
-                    "description": doc.get("description") or doc.get("short_description"),
-                    "filepath_local": fp,
-                    "download_url": f"{COURTLISTENER_STORAGE}/{fp}",
-                    "page_url": (
-                        f"https://www.courtlistener.com{doc['absolute_url']}"
-                        if doc.get("absolute_url") and not str(doc["absolute_url"]).startswith("http")
-                        else doc.get("absolute_url")
-                    ),
-                }
-            )
-        fp = item.get("filepath_local")
-        available = bool(item.get("is_available") and fp)
-        if search_type == "rd" and not available:
-            continue
-        if search_type in {"r", "d"} and not free_nested and not available:
-            continue
-        abs_url = item.get("docket_absolute_url") or item.get("absolute_url") or ""
-        if abs_url and not str(abs_url).startswith("http"):
-            abs_url = f"https://www.courtlistener.com{abs_url}"
-        rec = {
-            "search_type": search_type,
-            "case_name": item.get("caseName") or item.get("caseNameFull") or item.get("case_name"),
-            "docket_number": item.get("docketNumber") or item.get("docket_number"),
-            "court": item.get("court"),
-            "date_filed": item.get("dateFiled") or item.get("date_filed"),
-            "docket_id": item.get("docket_id") or (item.get("id") if search_type in ("r", "d") else None),
-            "document_id": item.get("id") if search_type == "rd" else None,
-            "filepath_local": fp if available else None,
-            "download_url": f"{COURTLISTENER_STORAGE}/{fp}" if available else None,
-            "absolute_url": abs_url,
-            "free_nested_documents": free_nested,
-            "query": query,
-            "cost": "free",
-            "observed": True,
-            "inferred": False,
-        }
-        if on_topic and not _on_topic(rec):
-            continue
-        out.append(rec)
-        if len(out) >= max_results:
+    for _page in range(max(1, int(max_pages))):
+        if not url or len(out) >= max_results:
             break
+        try:
+            resp = _get(url, params)
+        except requests.RequestException as exc:
+            print(f"  [courtlistener] search failed: {exc}", file=sys.stderr)
+            break
+        if resp is None:
+            break
+        params = None
+        payload = resp.json()
+        url = payload.get("next")
+        for item in payload.get("results") or []:
+            if not isinstance(item, dict):
+                continue
+            nested = item.get("recap_documents") or []
+            free_nested = []
+            for doc in nested if isinstance(nested, list) else []:
+                if not isinstance(doc, dict):
+                    continue
+                fp = doc.get("filepath_local")
+                if not (doc.get("is_available") and fp):
+                    continue
+                free_nested.append(
+                    {
+                        "id": doc.get("id"),
+                        "description": doc.get("description") or doc.get("short_description"),
+                        "filepath_local": fp,
+                        "download_url": f"{COURTLISTENER_STORAGE}/{fp}",
+                        "page_url": (
+                            f"https://www.courtlistener.com{doc['absolute_url']}"
+                            if doc.get("absolute_url") and not str(doc["absolute_url"]).startswith("http")
+                            else doc.get("absolute_url")
+                        ),
+                    }
+                )
+            fp = item.get("filepath_local")
+            available = bool(item.get("is_available") and fp)
+            if search_type == "rd" and not available:
+                continue
+            if search_type in {"r", "d"} and not free_nested and not available:
+                continue
+            abs_url = item.get("docket_absolute_url") or item.get("absolute_url") or ""
+            if abs_url and not str(abs_url).startswith("http"):
+                abs_url = f"https://www.courtlistener.com{abs_url}"
+            rec = {
+                "search_type": search_type,
+                "case_name": item.get("caseName") or item.get("caseNameFull") or item.get("case_name"),
+                "docket_number": item.get("docketNumber") or item.get("docket_number"),
+                "court": item.get("court"),
+                "date_filed": item.get("dateFiled") or item.get("date_filed"),
+                "docket_id": item.get("docket_id") or (item.get("id") if search_type in ("r", "d") else None),
+                "document_id": item.get("id") if search_type == "rd" else None,
+                "filepath_local": fp if available else None,
+                "download_url": f"{COURTLISTENER_STORAGE}/{fp}" if available else None,
+                "absolute_url": abs_url,
+                "free_nested_documents": free_nested,
+                "query": query,
+                "cost": "free",
+                "observed": True,
+                "inferred": False,
+            }
+            if on_topic and not _on_topic(rec):
+                continue
+            out.append(rec)
+            if len(out) >= max_results:
+                break
     return out
 
 
@@ -214,15 +224,28 @@ def download_free_pdf(url: str, dest: Path) -> dict[str, Any]:
             "bytes": len(data),
         }
     dest.write_bytes(data)
+    retrieved = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     return {
         "ok": True,
         "path": str(dest),
         "bytes": dest.stat().st_size,
         "source_url": url,
+        "retrieved_at": retrieved,
+        "content_sha256": hashlib.sha256(data).hexdigest(),
         "cost": "free",
         "observed": True,
         "inferred": False,
     }
+
+
+def _charging_rank(doc: dict[str, Any]) -> int:
+    desc = str(doc.get("description") or "").lower()
+    for rank, word in enumerate(
+        ("indictment", "criminal complaint", "plea", "sentencing", "factual basis", "information")
+    ):
+        if word in desc:
+            return rank
+    return 9
 
 
 def collect_free_court_records(
@@ -231,6 +254,7 @@ def collect_free_court_records(
     dest_dir: Path,
     max_records: int = 5,
     per_query: int = 5,
+    max_pages: int = 1,
 ) -> list[dict[str, Any]]:
     """Search then download up to max_records free RECAP PDFs."""
     dest_dir.mkdir(parents=True, exist_ok=True)
@@ -239,7 +263,7 @@ def collect_free_court_records(
     for query in queries:
         if len(collected) >= max_records:
             break
-        hits = search_free(query, search_type="r", max_results=per_query)
+        hits = search_free(query, search_type="r", max_results=per_query, max_pages=max_pages)
         if not hits:
             continue
         for hit in hits:
@@ -253,6 +277,7 @@ def collect_free_court_records(
                     }
                 )
             candidates.extend(hit.get("free_nested_documents") or [])
+            candidates.sort(key=_charging_rank)
             for doc in candidates:
                 if len(collected) >= max_records:
                     break
@@ -273,6 +298,18 @@ def collect_free_court_records(
                 }
                 if result.get("ok"):
                     collected.append(record)
+                    if str(Path(__file__).resolve().parent) not in sys.path:
+                        sys.path.insert(0, str(Path(__file__).resolve().parent))
+                    import public_lookup
+
+                    public_lookup.append_lookup(
+                        "recap",
+                        domain=dest_dir.name,
+                        agency=str(hit.get("court") or ""),
+                        title=str(doc.get("description") or hit.get("case_name") or ""),
+                        pub_date=str(hit.get("date_filed") or ""),
+                        source_url=str(result.get("source_url") or url),
+                    )
                     break
     man_path = dest_dir / "court_manifest.json"
     prior: list[dict[str, Any]] = []
@@ -379,7 +416,9 @@ def _write_court_record_manifest(path: Path, rec: dict[str, Any], *, domain: str
         "domain": domain,
         "kind": "court",
         "title": rec.get("case_name") or rec.get("description") or rec.get("title"),
-        "source_url": rec.get("absolute_url") or rec.get("source_url"),
+        "source_url": rec.get("source_url") or rec.get("download_url") or rec.get("absolute_url"),
+        "retrieved_at": rec.get("retrieved_at"),
+        "content_sha256": rec.get("content_sha256"),
         "pub_date": rec.get("date_filed") or rec.get("pub_date"),
         "agency": rec.get("court") or rec.get("agency"),
         "pdf": rec.get("pdf"),
@@ -445,7 +484,19 @@ def download_targeted_recap(
         dest = dest_dir / f"{meta['document_id']}.pdf"
         skipped = dest.is_file() and dest.stat().st_size > 0
         if skipped:
-            result = {"ok": True, "path": str(dest), "bytes": dest.stat().st_size, "skipped": True, "cost": "free"}
+            data = dest.read_bytes()
+            result = {
+                "ok": True,
+                "path": str(dest),
+                "bytes": len(data),
+                "skipped": True,
+                "cost": "free",
+                "source_url": meta.get("download_url"),
+                "retrieved_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "content_sha256": hashlib.sha256(data).hexdigest(),
+                "observed": True,
+                "inferred": False,
+            }
         else:
             result = download_free_pdf(meta["download_url"], dest)
         if not result.get("ok"):
@@ -455,11 +506,26 @@ def download_targeted_recap(
             **meta,
             "domain": domain,
             "pdf": result.get("path"),
+            "source_url": result.get("source_url") or meta.get("absolute_url"),
+            "retrieved_at": result.get("retrieved_at"),
+            "content_sha256": result.get("content_sha256"),
             "download": result,
         }
         slug = re.sub(r"[^a-z0-9\-]+", "-", (rec.get("case_name") or str(doc_id)).lower())[:70].strip("-") or str(doc_id)
         _write_court_record_manifest(
             manifest_dir / f"court_{slug}_{doc_id}.json", rec, domain=domain
+        )
+        if str(Path(__file__).resolve().parent) not in sys.path:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import public_lookup
+
+        public_lookup.append_lookup(
+            "recap",
+            domain=domain,
+            agency=str(rec.get("court") or ""),
+            title=str(rec.get("case_name") or rec.get("description") or ""),
+            pub_date=str(rec.get("date_filed") or ""),
+            source_url=str(result.get("source_url") or rec.get("source_url") or ""),
         )
         saved.append(rec)
     return {
@@ -473,13 +539,65 @@ def download_targeted_recap(
                 "document_id": r.get("document_id"),
                 "title": r.get("case_name") or r.get("description"),
                 "pdf": r.get("pdf"),
-                "source_url": r.get("absolute_url"),
+                "source_url": r.get("source_url") or r.get("absolute_url"),
+                "retrieved_at": r.get("retrieved_at"),
+                "content_sha256": r.get("content_sha256"),
             }
             for r in saved
         ],
         "errors": errors,
         "nhsr": NHSR,
     }
+
+
+def wait_for_user_quota() -> float:
+    """Sleep until the CourtListener user quota has room. Return the pause between calls."""
+    from datetime import datetime, timezone
+
+    url = "https://www.courtlistener.com/api/rest/v4/api-usage/"
+    resp = requests.get(url, headers=_headers(), timeout=30)
+    resp.raise_for_status()
+    rows = [row for row in (resp.json().get("current_usage") or []) if row.get("scope") == "user"]
+    now = datetime.now(timezone.utc)
+    for row in rows:
+        remaining = int(row.get("remaining") or 0)
+        if remaining > 0:
+            continue
+        reset_raw = row.get("reset_at")
+        if reset_raw:
+            reset = datetime.fromisoformat(reset_raw)
+            wait = (reset - now).total_seconds() + 3
+        else:
+            rate = str(row.get("rate") or "")
+            wait = 900 if rate.endswith("/day") else 120 if rate.endswith("/hour") else 20
+        if wait > 0:
+            print(f"  quota {row.get('rate')} is empty; waiting {int(wait)}s", file=sys.stderr)
+            time.sleep(min(wait, 3700))
+            return wait_for_user_quota()
+    minute = next((row for row in rows if str(row.get("rate") or "").endswith("/min")), None)
+    per_min = int(minute["limit"]) if minute else 5
+    return max(6.5, (60.0 / max(per_min, 1)) + 0.4)
+
+
+def cl_get(url: str, params: dict | None, gap: float):
+    """One CourtListener GET. A 429 waits, then retries. Does not purchase PACER."""
+    time.sleep(gap)
+    for _attempt in range(8):
+        try:
+            resp = requests.get(url, params=params, headers=_headers(), timeout=45)
+        except requests.RequestException as exc:
+            print(f"  [courtlistener] request failed: {exc}", file=sys.stderr)
+            time.sleep(30)
+            continue
+        if resp.status_code == 429:
+            print("  [courtlistener] 429; waiting 60s", file=sys.stderr)
+            time.sleep(60)
+            continue
+        if resp.status_code >= 400:
+            print(f"  [courtlistener] HTTP {resp.status_code}", file=sys.stderr)
+            return None
+        return resp
+    return None
 
 
 def main() -> None:
