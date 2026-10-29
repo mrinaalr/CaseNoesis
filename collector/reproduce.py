@@ -106,13 +106,13 @@ def plan(rows: list[dict]) -> dict:
 def _slug(rec: dict, url: str) -> str:
     raw = str(rec.get("domain") or "").strip()
     if raw:
-        return public_lookup._norm(raw).replace("/", "-")[:80] or "doc"
+        return store.safe_slug(public_lookup._norm(raw).replace("/", "-"))
     tail = url.rstrip("/").split("/")[-1]
     return store.safe_slug(tail) or "doc"
 
 
 def _write_press(rec: dict, url: str) -> dict:
-    domain = str(rec.get("domain") or "press")
+    domain = store.safe_slug(str(rec.get("domain") or "press"))
     folder = REPO / "data" / "collected" / "press_releases" / domain / "from_lookup"
     folder.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
@@ -166,8 +166,8 @@ def _write_recap(rec: dict, url: str) -> dict:
         }
     if not _storage_pdf(url):
         return {"ok": False, "kind": "recap", "source_url": url, "error": f"refusing host {_host(url)}"}
-    domain = str(rec.get("domain") or "recap")
-    name = url.rstrip("/").split("/")[-1] or "filing.pdf"
+    domain = store.safe_slug(str(rec.get("domain") or "recap"))
+    name = store.safe_filename(url.rstrip("/").split("/")[-1] or "filing.pdf")
     if not name.endswith(".pdf"):
         name = f"{name}.pdf"
     dest = REPO / "data" / "collected" / "recap" / domain / name
@@ -208,6 +208,7 @@ def _write_reference(rec: dict, url: str) -> dict:
         title=str(rec.get("title") or ""),
         catalog_role=kind,
         version_pin=str(rec.get("pub_date") or ""),
+        public=False,
     )
     row["kind"] = kind
     return row

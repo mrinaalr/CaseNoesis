@@ -16,11 +16,14 @@ Layout::
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import re
+import socket
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urljoin, urlparse
 
 import requests
 
@@ -37,6 +40,7 @@ BLOCKED_HOSTS = {
     "pcl.uscourts.gov",
 }
 MAX_BYTES = 40_000_000
+MAX_REDIRECTS = 5
 
 
 def utcnow() -> str:
@@ -52,6 +56,14 @@ def safe_slug(text: str) -> str:
     return (slug or "doc")[:80]
 
 
+def safe_filename(filename: str) -> str:
+    """Last path component only, on every OS. Never '.', '..', a drive or a separator."""
+    name = re.split(r"[\\/]", filename or "")[-1].strip()
+    if "." not in name or ":" in name or name in {".", ".."} or name.startswith("."):
+        return safe_slug(name)
+    return name[:200]
+
+
 def collection_dir(name: str, root: Path | None = None) -> Path:
     base = Path(root) if root else DEFAULT_ROOT
     if not base.is_absolute():
@@ -62,32 +74,62 @@ def collection_dir(name: str, root: Path | None = None) -> Path:
 
 
 def _host_blocked(url: str) -> str:
-    from urllib.parse import urlparse
-
+    """PACER and ECF hosts (ecf.<court>.uscourts.gov). Free court sites stay allowed."""
     host = (urlparse(url).hostname or "").lower()
-    if host in BLOCKED_HOSTS or host.endswith(".pacer.uscourts.gov"):
+    if host in BLOCKED_HOSTS or "pacer" in host or host.startswith("ecf.") or ".ecf." in host:
         return host
     return ""
 
 
-def fetch_url(url: str, *, timeout: float = 60.0, max_bytes: int = MAX_BYTES) -> dict[str, Any]:
-    """GET one public URL. Returns raw bytes. Refuses PACER hosts."""
-    blocked = _host_blocked(url)
-    if blocked:
-        return {"ok": False, "error": f"refusing host {blocked}", "source_url": url, "pacer_purchases": 0}
+def _address_blocked(url: str) -> str:
+    """Refuse anything that is not http(s) to a public address (no localhost, LAN, metadata)."""
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme not in {"http", "https"} or not host:
+        return url
     try:
-        resp = requests.get(
-            url,
-            headers={"User-Agent": USER_AGENT, "Accept": "*/*"},
-            timeout=timeout,
-            allow_redirects=True,
-        )
-    except requests.RequestException as exc:
-        return {"ok": False, "error": str(exc), "source_url": url, "pacer_purchases": 0}
-    final = resp.url or url
-    blocked = _host_blocked(final)
-    if blocked:
-        return {"ok": False, "error": f"redirect refused {blocked}", "source_url": url, "pacer_purchases": 0}
+        infos = socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80))
+    except (socket.gaierror, UnicodeError, ValueError):
+        return host
+    for info in infos:
+        addr = ipaddress.ip_address(info[4][0].split("%")[0])
+        if not addr.is_global or addr.is_multicast:
+            return host
+    return ""
+
+
+def fetch_url(url: str, *, timeout: float = 60.0, max_bytes: int = MAX_BYTES) -> dict[str, Any]:
+    """GET one public URL. Returns raw bytes. Refuses PACER/ECF and non-public addresses.
+
+    Redirects are followed one hop at a time so each new location is checked.
+    """
+    current = url
+    for _ in range(MAX_REDIRECTS + 1):
+        blocked = _host_blocked(current)
+        if blocked:
+            label = "refusing host" if current == url else "redirect refused"
+            return {"ok": False, "error": f"{label} {blocked}", "source_url": url, "pacer_purchases": 0}
+        blocked = _address_blocked(current)
+        if blocked:
+            label = "refusing non-public address" if current == url else "redirect refused"
+            return {"ok": False, "error": f"{label} {blocked}", "source_url": url, "pacer_purchases": 0}
+        try:
+            resp = requests.get(
+                current,
+                headers={"User-Agent": USER_AGENT, "Accept": "*/*"},
+                timeout=timeout,
+                allow_redirects=False,
+            )
+        except requests.RequestException as exc:
+            return {"ok": False, "error": str(exc), "source_url": url, "pacer_purchases": 0}
+        location = (getattr(resp, "headers", {}) or {}).get("Location")
+        if resp.status_code in {301, 302, 303, 307, 308} and location:
+            current = urljoin(current, location)
+            continue
+        break
+    else:
+        return {"ok": False, "error": "too many redirects", "source_url": url, "pacer_purchases": 0}
+    final = current
     data = resp.content or b""
     if len(data) > max_bytes:
         return {
@@ -132,11 +174,15 @@ def save_bytes(
     catalog_role: str = "",
     see_also: list[str] | None = None,
     extra: dict[str, Any] | None = None,
+    public: bool = True,
 ) -> dict[str, Any]:
-    """Write bytes and a sidecar. Skip when the same hash is already stored."""
+    """Write bytes and a sidecar. Skip when the same hash is already stored.
+
+    public=False keeps the row out of data/collected/public/ (used by reproduce).
+    """
     folder = collection_dir(collection, root) / safe_slug(slug)
     folder.mkdir(parents=True, exist_ok=True)
-    name = safe_slug(filename) if "." not in filename else filename.replace("/", "_")
+    name = safe_filename(filename)
     dest = folder / name
     digest = sha256_bytes(data)
     sidecar_path = Path(str(dest) + ".provenance.json")
@@ -177,7 +223,8 @@ def save_bytes(
     manifest = collection_dir(collection, root) / "manifest.jsonl"
     with manifest.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-    _append_public(record)
+    if public:
+        _append_public(record)
     record["ok"] = True
     record["skipped"] = ""
     return record

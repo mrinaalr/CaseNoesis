@@ -45,7 +45,12 @@ _seen: dict[str, set[str]] = {}
 
 
 def _norm(url: str) -> str:
-    return (url or "").strip().split("?")[0].rstrip("/")
+    """Dedup key. Keeps the query (?p=101 and ?p=202 are different pages); drops utm_* and #fragment."""
+    text = (url or "").strip().split("#")[0]
+    base, _, query = text.partition("?")
+    kept = [part for part in query.split("&") if part and not part.lower().startswith("utm_")]
+    base = base.rstrip("/")
+    return f"{base}?{'&'.join(kept)}" if kept else base
 
 
 def _date(value: str) -> str:

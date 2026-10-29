@@ -1,12 +1,15 @@
 """Run-level limits for transcript pulls. No network on import.
 
 A pull stops when --max-records or --max-spend is reached, whichever comes first.
-Paid rows need a known page count. A POST that fails still counts as spent.
+A paid row with an unknown page count cannot be cost-estimated: its
+row_spend_cap_usd is a planning number, PACER bills the real pages, and the
+run can end above --max-spend. A POST that fails still counts as spent.
 """
 
 from __future__ import annotations
 
 import csv
+import math
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse
@@ -27,6 +30,15 @@ LEDGER_FIELDS = [
 ]
 
 
+def spend_cap_ok(value: Any) -> bool:
+    """A dollar cap must be a finite number >= 0. nan and inf are not caps."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return False
+    return math.isfinite(number) and number >= 0
+
+
 class PullBudget:
     def __init__(self, max_spend: Optional[float], max_records: Optional[int]) -> None:
         self.max_spend = max_spend
@@ -35,6 +47,9 @@ class PullBudget:
         self.records = 0
         self.stop = False
         self.reason = ""
+        if max_spend is not None and not spend_cap_ok(max_spend):
+            self.stop = True
+            self.reason = "bad_cap"
 
     def _hit_records(self) -> bool:
         return self.max_records is not None and self.records >= self.max_records
@@ -124,9 +139,12 @@ def _cap_usd(row: Dict[str, Any]) -> Optional[float]:
     if not text:
         return None
     try:
-        return float(text)
+        cap = float(text)
     except ValueError:
         return None
+    if not math.isfinite(cap) or cap <= 0:
+        return None
+    return cap
 
 
 def _pages(row: Dict[str, Any]) -> Optional[int]:
@@ -149,14 +167,11 @@ def excluded_row_reason(row: Dict[str, Any]) -> str:
 
 def refuse_reason(row: Dict[str, Any]) -> str:
     status = (row.get("status") or "").strip()
-    hearing = (row.get("hearing_type") or "").strip()
     excluded = excluded_row_reason(row)
     if excluded:
         return excluded
     if status in {"SEALED", "RESTRICTED", "UNCLEAR"}:
         return status
-    if hearing == "trial":
-        return "trial"
     if status == "COLLECTED":
         return "collected"
     if not row.get("recap_document_id"):
@@ -213,7 +228,7 @@ def plan_transcript_pull(
             cost = _cap_usd(row)
         if not budget.can_buy(cost):
             break
-        planned.append({**row, "_mode": "buy", "_cost": cost, "_pages": pages})
+        planned.append({**row, "_mode": "buy", "_cost": cost, "_pages": pages, "_unknown_pages": pages is None})
         budget.spent = round(budget.spent + float(cost or 0), 2)
         budget.records += 1
         if budget.max_records is not None and budget.records >= budget.max_records:
@@ -223,6 +238,20 @@ def plan_transcript_pull(
             budget.stop = True
             budget.reason = budget.reason or "max_spend"
     return {"planned": planned, "refused": refused, "budget": budget}
+
+
+def unknown_pages_warning(planned: List[Dict[str, Any]]) -> str:
+    """Loud notice for buys whose page count, and so whose price, is unknown."""
+    unknown = [row for row in planned if row.get("_unknown_pages")]
+    if not unknown:
+        return ""
+    placeholder = sum(float(row.get("_cost") or 0) for row in unknown)
+    return (
+        "WARNING: {n} planned purchase(s) have an UNKNOWN page count and CANNOT be cost-estimated.\n"
+        "  Their ${p:.2f} in the plan is the row_spend_cap_usd placeholder, not a price.\n"
+        "  PACER bills $0.10 per real page with no cap for transcripts.\n"
+        "  The final bill CAN EXCEED --max-spend. A long transcript (e.g. a trial) can run $50-200+."
+    ).format(n=len(unknown), p=placeholder)
 
 
 def run_transcript_pull(

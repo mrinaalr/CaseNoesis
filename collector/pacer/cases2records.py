@@ -1127,7 +1127,9 @@ def fetch_case_records(
                     result.skipped.append(meta)
                     break
                 est_label = f"~${est:.2f}" if est is not None else "page count unknown"
-                posted = False
+                # Counts from the moment the POST is sent: a timeout may still be billed.
+                posted = True
+                committed = False
                 try:
                     print(f"  PACER purchase doc {doc_id} ({cost_action}) est {est_label} …")
                     client.fetch_missing_pdf(
@@ -1135,7 +1137,6 @@ def fetch_case_records(
                         pacer_username=pacer_username,
                         pacer_password=pacer_password,
                     )
-                    posted = True
                     print("  waiting for RECAP …")
                     doc = client.wait_for_recap_document(doc_id)
                     meta["is_available"] = True
@@ -1151,6 +1152,7 @@ def fetch_case_records(
                         actual_cost = est or 0.0
                     meta["pacer_cost"] = actual_cost
                     budget.commit(float(actual_cost), record=False)
+                    committed = True
                     append_ledger(
                         ledger_path,
                         {
@@ -1182,7 +1184,7 @@ def fetch_case_records(
                     result.downloaded.append(meta)
                     continue
                 except Exception as exc:  # noqa: BLE001
-                    if posted:
+                    if posted and not committed:
                         budget.commit(float(est or 0), record=False)
                         append_ledger(
                             ledger_path,
@@ -1393,13 +1395,19 @@ def main() -> int:
         help="BUY missing PDFs via CourtListener recap-fetch (charges your PACER account)",
     )
     parser.add_argument("--pacer-username", default=os.environ.get("PACER_USERNAME"))
-    parser.add_argument("--pacer-password", default=os.environ.get("PACER_PASSWORD"))
+    parser.add_argument(
+        "--pacer-password",
+        default=os.environ.get("PACER_PASSWORD"),
+        help="Prefer PACER_PASSWORD in .env; a flag shows in ps",
+    )
     parser.add_argument(
         "--token",
         default=os.environ.get("COURTLISTENER_API_TOKEN", ""),
         help="CourtListener API token (default: COURTLISTENER_API_TOKEN env)",
     )
     args = parser.parse_args()
+    if any(arg == "--pacer-password" or arg.startswith("--pacer-password=") for arg in sys.argv[1:]):
+        print("warning: --pacer-password is visible in the process list; prefer PACER_PASSWORD in .env", file=sys.stderr)
 
     if args.transcripts and args.manifest:
         from transcripts import fetch_approved
@@ -1407,6 +1415,10 @@ def main() -> int:
         return fetch_approved(args)
     if args.charge_pacer and args.max_spend is None:
         parser.error("--charge-pacer requires --max-spend")
+    from pull_guard import spend_cap_ok
+
+    if args.max_spend is not None and not (spend_cap_ok(args.max_spend) and args.max_spend > 0):
+        parser.error("--max-spend must be a finite dollar amount above 0")
     if not args.preset and not args.batch and not args.defendant:
         parser.error("Provide --preset, --batch recommended, or --defendant with --district")
 

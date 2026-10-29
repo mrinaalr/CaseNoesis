@@ -2,6 +2,8 @@
 
 Paid-PACER **data** only (facts files, jsonld, BULK_FOLDER filings, cost CSV, `pacer_cases.json`).
 
+Only this README and the metadata CSVs (`transcripts/*.csv`, `BULK_FOLDER/pacer_cost.csv`) are in git. Facts, notes, jsonld, extracted text and OCR stay on the machine. The facts and graphs cited in the paper ship in CaseLinker.
+
 This folder is already-purchased PACER. The bulk harvest does not buy more. Free RECAP downloads stay in `data/collected/recap/`.
 
 Scripts live in [`collector/pacer/`](../../../collector/pacer/):

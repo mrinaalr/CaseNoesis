@@ -118,15 +118,15 @@ class PullTests(unittest.TestCase):
         ]
         plan = plan_transcript_pull(rows, approval_tag="pilot", max_spend=100, max_records=10)
         order = [item["recap_document_id"] for item in plan["planned"]]
-        self.assertEqual(order, ["free", "buy10", "buy40", "capped"])
+        self.assertEqual(order, ["free", "trial", "buy10", "buy40", "capped"])
         reasons = {item["recap_document_id"]: item["reason"] for item in plan["refused"]}
         self.assertEqual(reasons["sealed"], "SEALED")
-        self.assertEqual(reasons["trial"], "trial")
+        self.assertNotIn("trial", reasons)
         self.assertEqual(reasons["unknown"], "unknown_pages")
         self.assertNotIn("other", order)
 
         capped = plan_transcript_pull(rows, approval_tag="pilot", max_spend=2.5, max_records=10)
-        self.assertEqual([item["recap_document_id"] for item in capped["planned"]], ["free", "buy10"])
+        self.assertEqual([item["recap_document_id"] for item in capped["planned"]], ["free", "trial", "buy10"])
 
         few = plan_transcript_pull(rows, approval_tag="pilot", max_spend=100, max_records=1)
         self.assertEqual([item["recap_document_id"] for item in few["planned"]], ["free"])

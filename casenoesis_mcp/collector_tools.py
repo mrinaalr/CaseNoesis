@@ -71,10 +71,19 @@ def _safe_slug(text: str) -> str:
     return s.strip("_") or "case"
 
 
-def _ensure_out(out_dir: str | Path | None) -> Path:
-    path = Path(out_dir) if out_dir else _DEFAULT_OUT
+def _inside_repo(out_dir: str | Path) -> Path:
+    """WRITE tools only write inside this repo. Relative paths are taken from the repo root."""
+    path = Path(out_dir)
     if not path.is_absolute():
         path = _REPO / path
+    path = path.resolve()
+    if path != _REPO.resolve() and _REPO.resolve() not in path.parents:
+        raise ValueError(f"out_dir must be inside the repo: {out_dir}")
+    return path
+
+
+def _ensure_out(out_dir: str | Path | None) -> Path:
+    path = _inside_repo(out_dir) if out_dir else _DEFAULT_OUT
     path.mkdir(parents=True, exist_ok=True)
     return path
 
@@ -607,7 +616,7 @@ def _run_hyletic(command: str, args: list[str], *, timeout: int = 180) -> dict[s
 def _hyletic_args(out_dir: str, extra: list[str]) -> list[str]:
     args = list(extra)
     if out_dir:
-        args.extend(["--out-dir", out_dir])
+        args.extend(["--out-dir", str(_inside_repo(out_dir))])
     return args
 
 
@@ -672,6 +681,9 @@ def reproduce_from_lookup(
     """WRITE: refetch rows from a public JSONL. run=False prints the plan only."""
     if run and not collector_disk_write_enabled():
         return _write_disabled_error()
+    if run and int(limit) < 1:
+        # Same rule as the CLI: a full rerun needs `python3 -m collector.reproduce --run --all`.
+        return {"ok": False, "error": "run=true needs limit >= 1", "tool_kind": "WRITE", "pacer_purchases": 0}
     if str(_REPO) not in sys.path:
         sys.path.insert(0, str(_REPO))
     from collector.reproduce import reproduce

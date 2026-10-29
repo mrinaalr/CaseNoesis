@@ -5,6 +5,7 @@ sweep   Free CourtListener metadata for every held docket. No PDFs, no PACER.
 fetch   Reads transcript_manifest.csv. Dry run unless --download.
         Buying also requires --charge-pacer and --max-spend.
         Unknown page counts are refused unless that row has row_spend_cap_usd.
+        Those rows cannot be cost-estimated; the real bill can exceed --max-spend.
         Sealed, still-restricted, and court-reporter orders are refused.
 """
 
@@ -2202,7 +2203,7 @@ def fetch_approved(args: argparse.Namespace) -> int:
     FREE_NOW rows are saved before any BUYABLE_LATER row. Buying stops at
     --max-records or --max-spend, whichever comes first.
     """
-    from pull_guard import PullBudget, plan_transcript_pull, run_transcript_pull
+    from pull_guard import PullBudget, plan_transcript_pull, run_transcript_pull, spend_cap_ok, unknown_pages_warning
 
     path = Path(args.manifest)
     if not path.is_file():
@@ -2213,6 +2214,8 @@ def fetch_approved(args: argparse.Namespace) -> int:
         raise SystemExit("Refusing PACER charge without --download")
     if args.charge_pacer and args.max_spend is None:
         raise SystemExit("Refusing PACER charge: pass --max-spend (dollars, total cap)")
+    if args.max_spend is not None and not (spend_cap_ok(args.max_spend) and args.max_spend > 0):
+        raise SystemExit("Refusing --max-spend: must be a finite dollar amount above 0")
     if args.charge_pacer and (not args.pacer_username or not args.pacer_password):
         raise SystemExit("Refusing PACER charge: PACER username and password are required")
 
@@ -2230,6 +2233,9 @@ def fetch_approved(args: argparse.Namespace) -> int:
     free_n = sum(1 for row in planned if row["_mode"] == "free")
     buy_n = sum(1 for row in planned if row["_mode"] == "buy")
     print(f"Plan: {free_n} free, {buy_n} purchases, estimated ${plan['budget'].spent:.2f}")
+    warning = unknown_pages_warning(planned)
+    if warning:
+        print(warning)
     if not args.download:
         print("Dry run. No downloads and no PACER calls. Pass --download to fetch free rows.")
         return 0
@@ -2305,9 +2311,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     fetch.add_argument("--max-records", type=int, default=None, help="Stop after this many transcripts, free or paid")
     fetch.add_argument("--max-spend", type=float, default=None, help="Total PACER cap in dollars")
     fetch.add_argument("--pacer-username", default="")
-    fetch.add_argument("--pacer-password", default="")
+    fetch.add_argument("--pacer-password", default="", help="Prefer PACER_PASSWORD in .env; a flag shows in ps")
     sub.add_parser("fetch-free", help="Download every FREE_NOW row. Never buys and never POSTs.")
     args = parser.parse_args(argv)
+    if any(arg == "--pacer-password" or arg.startswith("--pacer-password=") for arg in sys.argv[1:]):
+        print("warning: --pacer-password is visible in the process list; prefer PACER_PASSWORD in .env", file=sys.stderr)
     if args.command == "sweep":
         return sweep()
     import os

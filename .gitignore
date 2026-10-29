@@ -92,6 +92,9 @@ data/collected/recap/*/from_press.jsonl
 data/collected/recap/*/from_press_tried.jsonl
 data/collected/recap/*/from_press_status.json
 data/collected/recap/*/press_docket_queue.jsonl
+# Local download logs with PDF paths. The public court list is public/recap_lookup.jsonl.
+data/collected/recap/*/court_manifest.json
+data/collected/recap/bulk/manifests/
 data/collected/recap/join_to_1000_status.json
 data/collected/recap/join_to_1000.log
 data/collected/recap/join_to_1000.pid
@@ -159,13 +162,14 @@ config/
 ontology/cache/
 
 # ---------------------------------------------------------------------------
-# PACER BULK_FOLDER — raw court OCR/screenshots stay local; facts/jsonld ship.
-# PDFs at repo root / BULK_FOLDER are already covered by *.pdf above.
+# PACER — court-derived text, facts, jsonld and OCR stay local (they ship in
+# CaseLinker, not here). Only the README and metadata-only CSVs are tracked.
 # ---------------------------------------------------------------------------
-data/PACER/BULK_FOLDER/**/processed/
-data/PACER/BULK_FOLDER/outside/
-# EXTENSION OCR sidecars — local only, not the collector harvest catalog.
-data/PACER/EXTENSION/**/extracted-content.json
+data/collected/PACER/**
+!data/collected/PACER/**/
+!data/collected/PACER/README.md
+!data/collected/PACER/BULK_FOLDER/pacer_cost.csv
+!data/collected/PACER/transcripts/*.csv
 # Transcript PDFs, sweep cache, provenance sidecars, and pull ledgers stay local.
 data/collected/PACER/transcripts/**/*.pdf
 data/collected/PACER/transcripts/_cache/
