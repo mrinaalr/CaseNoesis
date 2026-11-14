@@ -2046,7 +2046,8 @@ if _COLLECTOR_WRITE_ENABLED:
         """WRITE (local MCP only). Read collected records with the extraction engine.
 
         Runs the readers, the span gate, and the vote, and stores assertions and
-        decisions in data/extracted/noesis.db. Records already read are skipped.
+        decisions in data/extracted/noesis.db. Then relinks cases, links defendants
+        across each case's records, and rebuilds every case's timeline. Records already read are skipped.
         Deterministic; no model unless CASENOESIS_LLM=1 is set on this machine.
         build_graphs also writes and validates a CASE/UCO graph per record and
         loads it into the local triple store.
@@ -2073,6 +2074,13 @@ if _COLLECTOR_WRITE_ENABLED:
                 chosen = entries[: max(1, min(limit, 2000))]
                 out: dict[str, Any] = {"read": pipeline.run(chosen)}
                 out["cases"] = case_layer.build()
+                # People and events are rebuilt from the decisions, so they follow every run.
+                from extraction import events as event_layer
+                from extraction import people as people_layer
+
+                out["people"] = people_layer.build()
+                events_built = event_layer.build()
+                out["events"] = {key: events_built[key] for key in ("cases_with_events", "events", "by_type")}
                 if build_graphs:
                     from extraction import triples
 
