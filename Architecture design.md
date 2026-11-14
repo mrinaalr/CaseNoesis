@@ -4,18 +4,18 @@
 
 | At a glance | |
 |---|---|
-| Collected | **45,534** distinct public records: 44,602 press releases, 864 court filings, 68 reference records |
-| Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation |
-| Read by the engine | **45,534** records, **2,680,858** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
-| Settled | **841,353** values across 15 fields; 352,453 of them by two or more families |
-| Left for review | 43,426 mentions the readers contested or could not settle |
+| Collected | **45,899** distinct public records: 44,602 press releases, 1,229 court filings, 68 reference records. 365 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
+| Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation. Conduct filings also cover extortion, drugs, firearms, corruption, stalking, smuggling, and racketeering |
+| Read by the engine | **45,899** records, **2,726,989** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
+| Settled | **848,811** values across 15 fields; 356,190 of them by two or more families |
+| Left for review | 43,731 mentions the readers contested or could not settle |
 | Measured accuracy | On a 200-record gold set of invented records with known attributes, held-out half: F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants; 0.85 to 0.94 on victim counts, scheme and channel labels. Section 13.1 |
-| Cases | 45,320 cases; 116 join more than one record |
-| People | 60,209 defendants, numbered per case. 148,597 terms, amounts and events placed with a defendant |
-| Events | 107,846 events in 43,856 cases, 62,574 with a date |
-| Process mining | 64,445 defendant traces, 928 distinct paths; a process tree by the Inductive Miner; 2,368 traces flagged for a departure from procedural order |
-| Graphs | 45,533 engine graphs written. 1,255 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
-| Triple store | A local Oxigraph store and one N-Quads file: 1,255 named graphs, 208,243 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
+| Cases | 45,632 cases; 141 join more than one record |
+| People | 60,616 defendants, numbered per case. 148,968 terms, amounts and events placed with a defendant |
+| Events | 108,529 events in 44,144 cases, 62,998 with a date |
+| Process mining | 64,833 defendant traces, 947 distinct paths; a process tree by the Inductive Miner; 2,390 traces flagged for a departure from procedural order |
+| Graphs | 45,898 engine graphs written. 1,620 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
+| Triple store | A local Oxigraph store and one N-Quads file: 1,620 named graphs, 249,313 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
 | Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
 | Names in derived data | None stored. People are numbered nodes with a role |
 | Agents | 74 local MCP tools, 17 of them over the engine and its event log |
@@ -158,7 +158,7 @@ What is built and what is not:
 | Process mining: variants, discovered model, conformance, OCEL 2.0 export | Built. Run on every defendant trace |
 | Gold set: 200 invented records with known attributes, and a scorer | Built. Section 13.1 |
 | Dependency-parse and NER readers | Built, off by default. Measured on the gold set; not yet run on the collected corpus |
-| Engine graphs through the SDK builder and gate | Built. Written for 45,533 records; 1,255 validated so far (863 of 864 court records, 68 of 68 reference records, and 324 press records) |
+| Engine graphs through the SDK builder and gate | Built. Written for 45,898 records; 1,620 validated so far (1,228 of 1,229 court records, 68 of 68 reference records, and 324 press records) |
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy on real records, against hand labels | **Not done.** The gold set is invented text. It measures the readers on the phrasings its author wrote and does not replace a labelled sample of collected records |
@@ -190,7 +190,11 @@ What is built and what is not:
 | Court | CourtListener search, filings already in free RECAP. PACER purchase only with `--charge-pacer --max-spend N` | PDFs under `data/collected/recap/<domain>/`, with a manifest row per filing: court, docket number, the press release it was followed from |
 | Reference | GovInfo statutes, Wayback snapshots of platform policy pages, platform litigation, calibration reports | Files under `data/collected/hyletic_data/`, each with a provenance sidecar: address and retrieval time |
 
-`data/collected/public/*_lookup.jsonl` is the public index, 46,230 rows, and the only collected data in the repository. `python3 -m collector.reproduce` refetches from it. Hand-off: [`collector/README.md`](collector/README.md).
+**Filings that narrate the offense.** A press release announces a prosecution and a judgment records its result. What the defendant did is told in three kinds of filing: a statement of offense or of facts, a factual basis (also called a factual resume or proffer), and a criminal complaint with the agent's affidavit. [`conduct_documents.py`](collector/conduct_documents.py) collects them by searching CourtListener at the document level for docket entries whose own description names the filing, narrowed by full text to an offense domain, and only where RECAP already holds the document. It keeps the filing itself and drops motions and orders that mention one. Every download is a file from the free archive; the code cannot reach PACER.
+
+One pass, one results page per kind per domain, brought in 411 files, 365 of them distinct: 109 statements of offense, 146 factual bases and 156 complaint affidavits by docket name, 3,797 pages, across twelve domains. The archive holds far more (about 2,700 for fraud alone); the limit is a search quota of 50 calls an hour. The engine read all 365 and settled a document type for 338. 147 of them state three or more dates for the conduct, which is what a sequence of offense events needs. The engine does not yet read that conduct as events; section 17 lists it.
+
+`data/collected/public/*_lookup.jsonl` is the public index, 46,641 rows, and the only collected data in the repository. `python3 -m collector.reproduce` refetches from it. Hand-off: [`collector/README.md`](collector/README.md).
 
 ---
 
@@ -204,10 +208,10 @@ What is built and what is not:
 | Court | `ct-` + hash of the bytes | One record per distinct file |
 | Reference | `rf-` + hash of the bytes | One record per distinct file |
 
-- **One file, several domains.** The same filing is often collected for two topics. It is one record, and `domains` lists every folder it was found in, so `--domain fraud` finds it whichever folder sorts first. 141 of the 864 court records are in more than one domain folder or were collected more than once.
+- **One file, several domains.** The same filing is often collected for two topics. It is one record, and `domains` lists every folder it was found in, so `--domain fraud` finds it whichever folder sorts first. Of the first 864 court records, 141 are in more than one domain folder or were collected more than once; the 411 conduct filings collected later are 365 distinct files.
 - **The index checks itself.** Press rows are read back by byte offset. `index.meta.json` records each press file's size and modification time and the count of court and reference files; `load_index` rebuilds when any of that has changed, so a collector run cannot leave the engine reading the wrong bytes.
-- **46,230 against 45,534.** The lookup has 46,230 rows. After removing repeated addresses and byte-identical files, 45,534 distinct records remain.
-- **Where a court filing came from.** 662 of 864 court records have a public address in the collector's logs. The others were collected before the manifest recorded one; they carry a content hash and no address.
+- **46,641 against 45,899.** The lookup has 46,641 rows. After removing repeated addresses and byte-identical files, 45,899 distinct records remain.
+- **Where a court filing came from.** Every conduct filing has a public address. Of the 864 court records collected before them, 662 have a public address in the collector's logs. The others were collected before the manifest recorded one; they carry a content hash and no address.
 
 ---
 
@@ -347,7 +351,7 @@ A graph without the defendant is not a case graph. A graph with the defendant's 
 - **Officials are votes, not values.** A judge, a prosecutor, or an agent gets the role `official`, which is never stored. It is there so a reader can stop another from calling the U.S. Attorney a defendant.
 - **Record text shown to anyone is masked.** A review window from the CLI or an MCP tool passes through `names.scrub` first.
 - **An attribution holds offsets, not names.** A reader asserts the character spans of the people a value belongs to. `_number_people` replaces them with the record's person numbers before anything is stored.
-- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted. That happened for 1 of 45,534 records; its values are in the store and it has no graph.
+- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted. That happened for 1 of 45,899 records; its values are in the store and it has no graph.
 
 **Audit.** For 600 records drawn at random, every name the rules find in the record's text was searched for in that record's stored assertions, decisions, review rows, attributions, people rows and events, and in its engine graph. 596 of the records had names. No stored row contained one.
 
@@ -369,41 +373,41 @@ Measured 2026-11-14, with `python -m extraction status`. Rules only: the parser,
 
 | | |
 |---|---|
-| Records read | 44,602 press, 864 court, 68 reference |
-| Text source | 1,232 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
-| Assertions | 2,680,858 |
-| Finals | 841,353 |
-| Review queue | 43,426: 13,387 contested, 30,039 weak, 0 self-contradicting |
+| Records read | 44,602 press, 1,229 court, 68 reference |
+| Text source | 1,597 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
+| Assertions | 2,726,989 |
+| Finals | 848,811 |
+| Review queue | 43,731: 13,450 contested, 30,281 weak, 0 self-contradicting |
 
 Assertions by family:
 
 | Family | Assertions | With a supported span |
 |---|---:|---:|
-| `surface_pattern` | 1,417,087 | 1,417,018 |
-| `clause` | 1,140,695 | 1,140,496 |
-| `metadata` | 71,342 | none by design |
-| `sdk_rule` | 37,475 | 36,757 |
-| `lookup` | 14,259 | 14,259 |
+| `surface_pattern` | 1,440,971 | 1,440,898 |
+| `clause` | 1,154,531 | 1,154,331 |
+| `metadata` | 72,072 | none by design |
+| `sdk_rule` | 44,313 | 43,475 |
+| `lookup` | 15,102 | 15,102 |
 
 Settled values by field, and how many were settled by two or more families:
 
 | Field | Settled | By two or more families | Contested | Weak |
 |---|---:|---:|---:|---:|
-| `sentence` | 80,133 | 68,486 | 1,608 | 0 |
-| `money` | 72,912 | 49,424 | 1,678 | 17,056 |
-| `statute` | 14,641 | 6,274 | 0 | 0 |
-| `case_number` | 2,618 | 919 | 0 | 0 |
-| `date` | 80,971 | 43,277 | 1,365 | 0 |
-| `victim_count` | 5,817 | 4,201 | 1 | 0 |
-| `party` | 60,390 | 49,984 | 87 | 0 |
-| `event` | 80,577 | 78,758 | 8,554 | 0 |
-| `attribution` | 186,182 | 0 | 0 | 12,795 |
-| `stage` | 73,921 | 43,925 | 56 | 163 |
-| `document_type` | 671 | 194 | 0 | 25 |
-| `offense` | 86,781 | 4,605 | 0 | 0 |
-| `scheme` | 57,981 | 2,371 | 38 | 0 |
-| `channel` | 33,564 | 35 | 0 | 0 |
-| `platform` | 4,194 | 0 | 0 | 0 |
+| `sentence` | 80,288 | 68,542 | 1,613 | 0 |
+| `money` | 73,216 | 49,514 | 1,685 | 17,229 |
+| `statute` | 15,757 | 7,092 | 0 | 0 |
+| `case_number` | 2,997 | 1,262 | 0 | 0 |
+| `date` | 82,625 | 44,398 | 1,390 | 0 |
+| `victim_count` | 5,842 | 4,221 | 1 | 0 |
+| `party` | 60,845 | 50,423 | 88 | 0 |
+| `event` | 80,881 | 79,053 | 8,579 | 0 |
+| `attribution` | 186,388 | 0 | 0 | 12,801 |
+| `stage` | 74,299 | 44,031 | 56 | 223 |
+| `document_type` | 1,008 | 480 | 0 | 28 |
+| `offense` | 87,323 | 4,761 | 0 | 0 |
+| `scheme` | 58,501 | 2,371 | 38 | 0 |
+| `channel` | 34,326 | 42 | 0 | 0 |
+| `platform` | 4,515 | 0 | 0 | 0 |
 
 The review queue is larger than before this work because two fields were added to it: contested `event` triggers, where one reader takes the words for a report of something done and another for something planned or possible, and `attribution` votes below the confidence line, where the owner was carried over from the sentence before.
 
@@ -516,7 +520,7 @@ A record id names one document. A case is a docket: the release that announced i
 
 A docket number alone is not a link. Federal districts number their cases independently, so `1:23-cr-00123` exists in many courts. Two records that share only a number are written to `case_candidates` for a person to confirm.
 
-Result: 45,320 cases over 45,534 records. 116 join more than one record, the largest joins 14, and 948 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
+Result: 45,632 cases over 45,899 records. 141 join more than one record, the largest joins 17, and 997 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
 
 ### 7.1 People
 
@@ -532,12 +536,12 @@ Measured on the collected corpus, rules only:
 
 | | |
 |---|---|
-| Defendants | 60,209, in 37,394 records that name at least one |
-| Records naming more than one defendant | 12,408 |
-| Defendants found in more than one record of their case | 143 |
-| Terms placed with a defendant | 24,538 by vote, 10,346 as the sole defendant's |
-| Amounts placed with a defendant | 12,427 by vote, 6,062 as the sole defendant's |
-| Events placed with a defendant | 59,730 by vote, 35,494 as the sole defendant's |
+| Defendants | 60,616, in 37,635 records that name at least one |
+| Records naming more than one defendant | 12,516 |
+| Defendants found in more than one record of their case | 170 |
+| Terms placed with a defendant | 24,540 by vote, 10,391 as the sole defendant's |
+| Amounts placed with a defendant | 12,427 by vote, 6,135 as the sole defendant's |
+| Events placed with a defendant | 59,751 by vote, 35,724 as the sole defendant's |
 
 With the parser off, a vote here is the `clause` family alone. On the gold set that reader placed 97% of what it placed correctly (section 13.1).
 
@@ -567,18 +571,18 @@ Measured on the collected corpus:
 
 | Kind | Events | With a date | To the day | To the month |
 |---|---:|---:|---:|---:|
-| `plea` | 29,461 | 16,950 | 14,049 | 2,901 |
-| `sentencing` | 22,628 | 12,788 | 12,013 | 775 |
-| `offense` | 19,353 | 19,353 | 3,263 | 16,090 |
-| `indictment` | 11,414 | 5,741 | 4,689 | 1,052 |
-| `charge` | 8,609 | 468 | 432 | 36 |
-| `arrest` | 8,023 | 4,467 | 3,698 | 769 |
-| `verdict` | 4,492 | 1,912 | 1,430 | 482 |
-| `conviction` | 2,897 | 699 | 544 | 155 |
-| `complaint` | 504 | 126 | 110 | 16 |
-| `information` | 465 | 70 | 69 | 1 |
+| `plea` | 29,559 | 16,954 | 14,053 | 2,901 |
+| `sentencing` | 22,660 | 12,795 | 12,020 | 775 |
+| `offense` | 19,596 | 19,596 | 3,367 | 16,229 |
+| `indictment` | 11,452 | 5,773 | 4,720 | 1,053 |
+| `charge` | 8,628 | 468 | 432 | 36 |
+| `arrest` | 8,119 | 4,484 | 3,713 | 771 |
+| `verdict` | 4,502 | 1,913 | 1,431 | 482 |
+| `conviction` | 2,924 | 700 | 545 | 155 |
+| `complaint` | 622 | 244 | 228 | 16 |
+| `information` | 467 | 71 | 70 | 1 |
 
-107,846 events in 43,856 cases; 62,574 have a date. Of the reports behind them, 41,573 were dated by a stated date, 24,354 by "today" or "yesterday", 464 by a filing date, and 92,392 had no date. 189 events are reported by more than one record.
+108,529 events in 44,144 cases; 62,998 have a date. Of the reports behind them, 41,869 were dated by a stated date, 24,354 by "today" or "yesterday", 620 by a filing date, and 92,909 had no date. 223 events are reported by more than one record.
 
 ---
 
@@ -624,7 +628,7 @@ SELECT ?g ?amount WHERE {
 SELECT ?g WHERE { GRAPH ?g { ?r uco-core:tag "scheme:romance", "channel:cryptocurrency" } }
 ```
 
-Loaded now: 1,255 named graphs, 208,243 quads.
+Loaded now: 1,620 named graphs, 249,313 quads.
 
 ---
 
@@ -704,26 +708,26 @@ Measured on the collected corpus, procedural steps only (the `offense` event lef
 
 | | |
 |---|---|
-| Traces | 64,445 defendants in 43,058 cases |
-| Events | 119,944; 60,350 with a date |
-| Trace length | 26,477 of one event, 25,452 of two, 12,516 of three or more |
-| Traces ordered by dates alone | 23,004 |
-| Distinct paths | 928; 451 when only dated events are kept |
+| Traces | 64,833 defendants in 43,294 cases |
+| Events | 120,657; 60,661 with a date |
+| Trace length | 26,684 of one event, 25,559 of two, 12,590 of three or more |
+| Traces ordered by dates alone | 23,125 |
+| Distinct paths | 947; 457 when only dated events are kept |
 
 Most common paths:
 
 | Path | Traces | Share |
 |---|---:|---:|
-| plea | 11,417 | 17.7% |
-| plea → sentencing | 11,215 | 17.4% |
-| sentencing | 5,608 | 8.7% |
-| indictment | 3,944 | 6.1% |
-| charge | 2,207 | 3.4% |
-| indictment → charge | 1,580 | 2.5% |
-| arrest | 1,526 | 2.4% |
-| indictment → plea | 1,521 | 2.4% |
+| plea | 11,502 | 17.7% |
+| plea → sentencing | 11,226 | 17.3% |
+| sentencing | 5,610 | 8.7% |
+| indictment | 3,964 | 6.1% |
+| charge | 2,214 | 3.4% |
+| indictment → charge | 1,581 | 2.4% |
+| arrest | 1,548 | 2.4% |
+| indictment → plea | 1,525 | 2.4% |
 
-The model mined at noise 0.2 replays the log with fitness 0.942; 85.6% of traces fit it exactly. It allows 68 paths, with loops bounded, of which 65 were observed.
+The model mined at noise 0.2 replays the log with fitness 0.943; 85.7% of traces fit it exactly. It allows 84 paths, with loops bounded, of which 75 were observed.
 
 ```text
 sequence
@@ -734,8 +738,10 @@ sequence
         sequence
           one of
             (skip)
-            arrest
             complaint
+          one of
+            (skip)
+            arrest
           one of
             (skip)
             indictment
@@ -762,16 +768,16 @@ Days between consecutive steps, where both are dated to the day:
 
 | From | To | Traces | Timed | Median days |
 |---|---|---:|---:|---:|
-| plea | sentencing | 17,294 | 3,905 | 145 |
-| indictment | plea | 4,039 | 782 | 135 |
-| indictment | charge | 3,426 | 83 | 0 |
-| charge | plea | 3,374 | 58 | 129 |
-| arrest | indictment | 2,942 | 733 | 0 |
-| verdict | sentencing | 2,614 | 338 | 151 |
-| arrest | charge | 2,285 | 80 | 0 |
-| arrest | plea | 2,228 | 423 | 287 |
+| plea | sentencing | 17,324 | 3,905 | 145 |
+| indictment | plea | 4,047 | 782 | 135 |
+| indictment | charge | 3,432 | 83 | 0 |
+| charge | plea | 3,385 | 58 | 129 |
+| arrest | indictment | 2,957 | 733 | 0 |
+| verdict | sentencing | 2,617 | 338 | 151 |
+| arrest | charge | 2,291 | 80 | 0 |
+| arrest | plea | 2,257 | 423 | 287 |
 
-Departures from procedural order: 2,368 traces in 1,957 cases. 841 `order`, 904 `repeat`, 948 `plea_and_verdict`. None of these has been reviewed by a person; each is a place where either the case or the reading of it is unusual.
+Departures from procedural order: 2,390 traces in 1,967 cases. 850 `order`, 917 `repeat`, 954 `plea_and_verdict`. None of these has been reviewed by a person; each is a place where either the case or the reading of it is unusual.
 
 **What this describes.** Prosecuted conduct, as the offices that prosecuted it chose to report it. A sentencing release is written to announce a sentence and mentions earlier steps in passing, so short paths are common and are a fact about releases. The model is a description of how these records report prosecutions. It is not a model of offending, and section 16 says why.
 
@@ -1023,6 +1029,7 @@ New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a
 
 In the order they unblock the science:
 
+1. **Conduct events.** Reading the acts a statement of offense or an affidavit narrates as dated events, per domain, so the offense can be mined the way the prosecution is in section 10.1. The filings are collected; the event kinds and their readers are not written.
 1. **A labelled sample of collected records.** A few hundred, each field checked against the text by a person, stratified by domain and record kind. The gold set shows the engine works on records of known shape; this shows how far real records depart from that shape.
 2. **Joining the press releases of one prosecution.** Same office, same defendants, compatible dates. It needs a rule strict enough not to merge two people with one name, and it would turn one-record timelines into full ones.
 3. **Phase fields.** One tag field per domain phase scheme, with readers, so a settled phase becomes a `traj:PhaseAssertion`.
