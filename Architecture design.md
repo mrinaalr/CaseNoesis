@@ -14,8 +14,8 @@
 | People | 60,209 defendants, numbered per case. 148,597 terms, amounts and events placed with a defendant |
 | Events | 107,846 events in 43,856 cases, 62,574 with a date |
 | Process mining | 64,445 defendant traces, 928 distinct paths; a process tree by the Inductive Miner; 2,368 traces flagged for a departure from procedural order |
-| Graphs | One engine graph per record, with each term and amount linked to its defendant. They are being rewritten and revalidated against CASE/UCO SDK `v1.33.0` for this engine version; the counts are added when that run completes. The 1,232 SDK record graphs are unchanged and all validate |
-| Triple store | A local Oxigraph store and one N-Quads file, SPARQL from the CLI, MCP, or `127.0.0.1`. Reloaded when the graph run completes |
+| Graphs | 45,533 engine graphs written. 1,255 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
+| Triple store | A local Oxigraph store and one N-Quads file: 1,255 named graphs, 208,243 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
 | Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
 | Names in derived data | None stored. People are numbered nodes with a role |
 | Agents | 74 local MCP tools, 17 of them over the engine and its event log |
@@ -158,7 +158,7 @@ What is built and what is not:
 | Process mining: variants, discovered model, conformance, OCEL 2.0 export | Built. Run on every defendant trace |
 | Gold set: 200 invented records with known attributes, and a scorer | Built. Section 13.1 |
 | Dependency-parse and NER readers | Built, off by default. Measured on the gold set; not yet run on the collected corpus |
-| Engine graphs through the SDK builder and gate | Built. Being rewritten and revalidated for this engine version |
+| Engine graphs through the SDK builder and gate | Built. Written for 45,533 records; 1,255 validated so far (863 of 864 court records, 68 of 68 reference records, and 324 press records) |
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy on real records, against hand labels | **Not done.** The gold set is invented text. It measures the readers on the phrasings its author wrote and does not replace a labelled sample of collected records |
@@ -347,9 +347,9 @@ A graph without the defendant is not a case graph. A graph with the defendant's 
 - **Officials are votes, not values.** A judge, a prosecutor, or an agent gets the role `official`, which is never stored. It is there so a reader can stop another from calling the U.S. Attorney a defendant.
 - **Record text shown to anyone is masked.** A review window from the CLI or an MCP tool passes through `names.scrub` first.
 - **An attribution holds offsets, not names.** A reader asserts the character spans of the people a value belongs to. `_number_people` replaces them with the record's person numbers before anything is stored.
-- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted.
+- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted. That happened for 1 of 45,534 records; its values are in the store and it has no graph.
 
-**Audit.** For 600 records drawn at random, every name the rules find in the record's text was searched for in that record's stored assertions, decisions, review rows, attributions, people rows and events. 596 of the records had names. No stored row contained one.
+**Audit.** For 600 records drawn at random, every name the rules find in the record's text was searched for in that record's stored assertions, decisions, review rows, attributions, people rows and events, and in its engine graph. 596 of the records had names. No stored row contained one.
 
 An earlier pass of the same audit found one that did, and it was a fault in the previous version of the engine as well. The SDK anchors a charge on the whole sentence that states it, and the engine stored that sentence, names included, as the assertion's span text. The pipeline now removes names from every span text before it is stored; the offsets still point at the source. After the fix, all 17,668 span texts longer than 25 characters in the 1,186 records with SDK anchors were checked, and none contained a name the rules find.
 
@@ -624,7 +624,7 @@ SELECT ?g ?amount WHERE {
 SELECT ?g WHERE { GRAPH ?g { ?r uco-core:tag "scheme:romance", "channel:cryptocurrency" } }
 ```
 
-The store is reloaded when the graph run for this engine version completes.
+Loaded now: 1,255 named graphs, 208,243 quads.
 
 ---
 
@@ -723,7 +723,7 @@ Most common paths:
 | arrest | 1,526 | 2.4% |
 | indictment → plea | 1,521 | 2.4% |
 
-The model mined at noise 0.2 replays the log with fitness 0.943; 85.7% of traces fit it exactly. It allows 84 paths, with loops bounded, of which 74 were observed.
+The model mined at noise 0.2 replays the log with fitness 0.942; 85.6% of traces fit it exactly. It allows 68 paths, with loops bounded, of which 65 were observed.
 
 ```text
 sequence
@@ -734,10 +734,8 @@ sequence
         sequence
           one of
             (skip)
-            complaint
-          one of
-            (skip)
             arrest
+            complaint
           one of
             (skip)
             indictment
