@@ -132,7 +132,7 @@ What is built and what is not:
 | SDK record graphs, names removed, validated | Built. All court and reference records; a 300-record press sample |
 | Extraction engine: fields, readers, gate, vote, review queue | Built. Run on every collected record |
 | Case linking | Built |
-| Engine graphs through the SDK builder and gate | Built. Written for 45,533 records; 1,255 validated so far (every court and reference record, and a press sample) |
+| Engine graphs through the SDK builder and gate | Built. Written for 45,533 records; 1,255 validated so far (863 of 864 court records, all 68 reference records, and 324 press records) |
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy measured against hand labels | **Not done.** No labelled sample exists yet |
