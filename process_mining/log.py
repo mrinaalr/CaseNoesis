@@ -72,13 +72,16 @@ def build(db: sqlite3.Connection, *, dated_only: bool = False, domain: str | Non
         if dated_only and not row["date"]:
             continue
         named = json.loads(row["people"])
+        # An event that names no one in a case with several defendants is shared: it is in each
+        # defendant's trace, and it is not known to be that defendant's own.
+        own = bool(named) or len(people.get(case_id, ())) <= 1
         for person in named or people.get(case_id) or ["all"]:
             trace = traces.setdefault((case_id, person), Trace(case_id, person, attributes={
                 "domain": domains.get(case_id), "schemes": sorted(schemes.get(case_id, ())),
             }))
             trace.events.append({
                 "type": row["type"], "date": row["date"], "precision": row["precision"],
-                "order_basis": row["order_basis"], "status": row["status"], "event_id": row["event_id"],
+                "order_basis": row["order_basis"], "status": row["status"], "event_id": row["event_id"], "own": own,
             })
     return [trace for _, trace in sorted(traces.items())]
 

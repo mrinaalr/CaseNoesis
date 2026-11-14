@@ -26,6 +26,10 @@ that no record mentioned it, and is never counted. What is counted:
     plea_and_verdict the same defendant both pleaded guilty and was convicted
                      at trial
 
+Only a defendant's own events are checked. An event that a record gives to no
+one in particular is in every co-defendant's trace and is left out of these
+checks.
+
 Each of these is either something that happened in the case or an error in a
 record or in the reading of it. The check does not say which. It says where
 to look.
@@ -116,8 +120,13 @@ def fitness(log: discover.Log, tree: discover.Tree, max_loop: int = 3) -> dict[s
 
 
 def check_order(trace: Trace) -> list[dict[str, Any]]:
-    """Departures from procedural order among a trace's dated events."""
-    dated = [event for event in trace.events if event["date"]]
+    """Departures from procedural order among a trace's own events.
+
+    An event shared by every defendant of a case because its record named no
+    one is left out: one co-defendant's plea and another's verdict are not one
+    person's plea and verdict."""
+    own = [event for event in trace.events if event.get("own", True)]
+    dated = [event for event in own if event["date"]]
     found: list[dict[str, Any]] = []
     for earlier_kinds, later_kinds, why in ORDER_RULES:
         earlier = [event for event in dated if event["type"] in earlier_kinds]
@@ -141,7 +150,7 @@ def check_order(trace: Trace) -> list[dict[str, Any]]:
         if kind != "offense" and len(separate) > 1:
             found.append({"kind": "repeat", "rule": REPEATABLE_NOTE.get(kind, "the same step on two dates"),
                           "detail": f"{kind} dated {' and '.join(separate)}"})
-    kinds = {event["type"] for event in trace.events}
+    kinds = {event["type"] for event in own}
     if {"plea", "verdict"} <= kinds:
         found.append({"kind": "plea_and_verdict", "rule": "a defendant is convicted by plea or by verdict",
                       "detail": "the records report both a guilty plea and a trial verdict for this defendant"})
