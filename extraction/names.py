@@ -54,6 +54,8 @@ _HINTED = tuple((hint, re.compile(p, re.MULTILINE)) for hint, p in (
     ("defendant", rf"\b(?:Defendant|defendant|Co-defendant|co-defendant)\s+(?P<n>{_NAME})"),
     # A verb a release puts right after the person prosecuted
     ("defendant", rf"(?P<n>{_NAME})(?:,\s+(?:age[d]?\s+)?\d{{2}})?(?:,\s+(?:of|from)\s+[A-Z][\w .]+?(?:,\s+[A-Z][\w .]+?)?)?,?\s+(?:{_PROSECUTION})\b"),
+    # Names joined before the same verbs: "A and B are charged", "A, B and C pleaded guilty"
+    ("defendant", rf"(?P<n>{_NAME})(?=(?:,\s+{_NAME}){{0,4}},?\s+and\s+{_NAME}(?:,[^.;]{{0,60}}?,)?\s+(?:{_PROSECUTION})\b)"),
     # Captions and forms: every defendant line above "Defendants.", the line under "v.", "DEFENDANT: NAME"
     ("defendant", rf"^[ \t]*(?P<n>{_CAPS_LINE})[ \t]*,(?:[ \t]*and)?[ \t]*\n(?=(?:[ \t]*{_CAPS_LINE}[ \t]*,(?:[ \t]*and)?[ \t]*\n){{0,6}}[ \t]*Defendants?\b)"),
     ("defendant", rf"^[ \t]*[vV][sS]?\.[ \t]*\n[ \t]*(?P<n>{_CAPS_LINE})(?=[ \t]+Case\s+N|[ \t]*,?[ \t]*\n)"),

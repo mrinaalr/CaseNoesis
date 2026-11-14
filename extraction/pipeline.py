@@ -123,12 +123,30 @@ def _number_people(text: str, gated: list[dict[str, Any]]) -> None:
         item["role"] = "+".join(f"person-{n}" for n in numbers) if numbers else "unknown"
 
 
+def _mask_span_text(text: str, gated: list[dict[str, Any]]) -> None:
+    """Remove names from the span text of every assertion, in place.
+
+    A span is usually a number, a citation or a cue word. It can also be a
+    whole sentence: the SDK anchors a charge on the sentence that states it,
+    and that sentence names the people charged. The stored span text is for
+    reading a decision back without the source; it must not carry a name. The
+    offsets are unchanged and still point at the source text."""
+    known = {text[a["span_start"]: a["span_end"]] for a in gated if a["field"] == "party" and a["span_ok"]}
+    pattern = name_rules.mask_pattern(name_rules.find_names(text, known))
+    if pattern is None:
+        return
+    for item in gated:
+        if item["field"] != "party" and item.get("span_text"):
+            item["span_text"] = name_rules.scrub(item["span_text"], pattern)
+
+
 def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str, Any]:
     """Readers, gate, vote, over a `Doc` already in memory."""
     raw: list[dict[str, Any]] = []
     for reader in readers_for(doc.kind):
         raw.extend(reader.fn(doc))
     gated = [fields.gate_assertion(doc.text, item) for item in raw]
+    _mask_span_text(doc.text, gated)
     _number_people(doc.text, gated)
     for index, item in enumerate(gated):
         item["seq"] = -(index + 1)
@@ -140,6 +158,7 @@ def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str
             for entry in resolution["review"] if entry["spans"]
         ]
         extra = [fields.gate_assertion(doc.text, item) for item in llm.ask(doc, open_mentions, llm_transport)]
+        _mask_span_text(doc.text, extra)
         _number_people(doc.text, gated + extra)
         if extra:
             for index, item in enumerate(extra, start=len(gated)):

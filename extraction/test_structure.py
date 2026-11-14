@@ -128,6 +128,22 @@ class FormTests(unittest.TestCase):
         self.assertNotIn("SAMPLE", stored.replace("JANE ROE SAMPLE Case", ""))
 
 
+class SpanTextTests(unittest.TestCase):
+    def test_a_long_span_is_stored_without_the_names_in_it(self) -> None:
+        text = "In an indictment, Jane Roe Sample and Ravi Placeholder are charged with two counts of bank fraud."
+        doc = Doc("ct-test000000000009", "court", "fraud", text, {}, [
+            {"start": 0, "end": len(text), "label": "", "class": "uco-action:Action", "event_types": ["criminal charge"]},
+        ])
+        result = pipeline.read_doc(doc)
+        stored = [a for a in result["assertions"] if a["method"] == "sdk_processor" and a["field"] == "stage"]
+        self.assertEqual(len(stored), 1)
+        self.assertEqual((stored[0]["span_start"], stored[0]["span_end"]), (0, len(text)), "the offsets still point at the source")
+        self.assertNotIn("Sample", stored[0]["span_text"])
+        self.assertNotIn("Placeholder", stored[0]["span_text"])
+        self.assertIn("[name]", stored[0]["span_text"])
+        self.assertIn("are charged with two counts of bank fraud", stored[0]["span_text"])
+
+
 class PenaltyListTests(unittest.TestCase):
     def test_every_item_of_a_statutory_list_is_exposure(self) -> None:
         text = ("Defendant understands that the statutory maximum sentence that the Court can impose for a violation of "
