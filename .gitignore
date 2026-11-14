@@ -179,3 +179,9 @@ data/collected/recap/transcripts/**/*.pdf.provenance.json
 data/collected/recap/transcripts/pull_ledger.csv
 # Hyletic captures stay on the machine. Seeds stay in collector/profiles/.
 data/collected/hyletic_data/
+
+# SDK encoding output: graphs and the text they were read from. Local only.
+data/encoded/
+
+# Extraction engine output: the assertion store and the resolved graphs. Local only.
+data/extracted/

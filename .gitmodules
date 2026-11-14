@@ -1,0 +1,4 @@
+[submodule "vendor/CASE-UCO-SDK"]
+	path = vendor/CASE-UCO-SDK
+	url = https://github.com/vulnmaster/CASE-UCO-SDK.git
+	shallow = true

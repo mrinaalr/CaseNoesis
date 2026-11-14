@@ -1705,6 +1705,304 @@ if _COLLECTOR_WRITE_ENABLED:
             return {"error": str(e), "write": True}
 
 
+# ---------------------------------------------------------------------------
+# SDK encoding: collected record -> CASE/UCO graph, on the pinned SDK.
+# See docs/sdk-encoding.md.
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+async def encoding_status() -> dict[str, Any]:
+    """READ. The pinned SDK, and counts of collected and encoded records."""
+    try:
+        from encoding import records as record_layer
+
+        return await asyncio.to_thread(record_layer.status)
+    except Exception as e:
+        logger.exception("encoding_status failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def gate_graph(graph_path: str) -> dict[str, Any]:
+    """READ. Validate one graph under data/encoded/ with the pinned SDK.
+
+    SHACL plus the closed-world concept check. Returns the receipt; files nothing.
+    """
+    try:
+        from encoding import corpus, sdk
+
+        resolved = Path(graph_path).expanduser().resolve()
+        if not resolved.is_relative_to(corpus.ENCODED.resolve()):
+            return {"error": f"Path must be under {corpus.ENCODED}", "write": False}
+        return await asyncio.to_thread(sdk.gate, resolved)
+    except Exception as e:
+        logger.exception("gate_graph failed")
+        return {"error": str(e), "write": False}
+
+
+if _COLLECTOR_WRITE_ENABLED:
+
+    @mcp.tool()
+    async def encoding_process_records(
+        kind: str = "",
+        domain: str = "",
+        limit: int = 25,
+        record_ids: list[str] | None = None,
+        gate: bool = True,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Run the SDK document processor over collected records.
+
+        Rule-based, no model. Writes a CASE/UCO graph per record under
+        data/encoded/records/, removes names from it, and validates it. Records
+        already encoded are skipped; a record that failed before is tried again.
+        At most 200 per call.
+        """
+        try:
+            from encoding import corpus
+            from encoding import records as record_layer
+
+            def _run() -> dict[str, Any]:
+                entries = corpus.load_index()
+                if record_ids:
+                    wanted = set(record_ids)
+                    entries = [e for e in entries if e["record_id"] in wanted]
+                else:
+                    if kind:
+                        entries = [e for e in entries if e["kind"] == kind]
+                    if domain:
+                        entries = [e for e in entries if corpus.in_domain(e, domain)]
+                    entries = [
+                        e for e in entries
+                        if (record_layer.read_status(e["record_id"]) or {}).get("status") != "encoded"
+                    ]
+                return record_layer.run(entries[: max(1, min(limit, 200))], gate=gate)
+
+            return await asyncio.to_thread(_run)
+        except Exception as e:
+            logger.exception("encoding_process_records failed")
+            return {"error": str(e), "write": True}
+
+
+# ---------------------------------------------------------------------------
+# Extraction engine: readers, span gate, family vote, review queue, cases.
+# Every tool answers from stored assertions and decisions. None calls a model
+# and none writes a value. Record text in a result has names masked.
+# See Architecture design.md, section 5.
+# ---------------------------------------------------------------------------
+
+
+async def _explore(name: str, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from extraction import explore
+
+        return await asyncio.to_thread(getattr(explore, name), *args, **kwargs)
+    except Exception as e:
+        logger.exception("extraction %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_status() -> dict[str, Any]:
+    """READ. The extraction engine at a glance.
+
+    Records read, assertions by reader family, decisions by field and status,
+    the review queue by field and state, cases, and graphs built and validated.
+    """
+    return await _explore("status")
+
+
+@mcp.tool()
+async def extraction_fields() -> dict[str, Any]:
+    """READ. The field registry: every field, its roles, and its labels.
+
+    Call this first to learn what `extraction_search` and `extraction_count`
+    accept. Also lists the readers and which evidence family each belongs to.
+    """
+    try:
+        from extraction import fields, profiles
+        from extraction.readers import FAMILY, reader_versions
+
+        return {
+            "fields": {
+                spec.name: {
+                    "shape": spec.shape,
+                    "roles": list(spec.roles),
+                    "never_stored": list(spec.excluded_roles),
+                    "labels": list(spec.vocabulary)
+                    or (list(profiles.labels(spec.name)) if spec.name in ("scheme", "channel", "platform") else []),
+                    "description": spec.description,
+                }
+                for spec in fields.all_fields()
+            },
+            "readers": reader_versions(),
+            "families": FAMILY,
+        }
+    except Exception as e:
+        logger.exception("extraction_fields failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_record(record_id: str) -> dict[str, Any]:
+    """READ. One record: every settled value, which families settled it, and what is open.
+
+    Each open mention comes with the sentence around it, the mention marked
+    ⟦like this⟧ and names masked. People appear as person-1, person-2.
+    """
+    return await _explore("record", record_id)
+
+
+@mcp.tool()
+async def extraction_review_queue(
+    field: str = "", state: str = "", kind: str = "", limit: int = 25
+) -> dict[str, Any]:
+    """READ. Mentions the vote left open, for a person to decide.
+
+    state: contested (two families disagree), weak (one family, low
+    confidence), or self_contradiction (one family said two things).
+    A verdict goes in config/extraction_overrides.json; no tool writes one.
+    """
+    return await _explore("review_queue", field, state, kind, limit)
+
+
+@mcp.tool()
+async def extraction_search(
+    field: str,
+    value: str = "",
+    role: str = "",
+    kind: str = "",
+    domain: str = "",
+    status: str = "",
+    minimum: float | None = None,
+    maximum: float | None = None,
+    limit: int = 50,
+) -> dict[str, Any]:
+    """READ. A cohort: records with a settled value for a field.
+
+    Examples: field="scheme", value="romance", domain="fraud";
+    field="money", role="loss", minimum=1000000;
+    field="sentence", role="imposed", minimum=120 (months).
+    status="agreed" keeps only values two reader families settled together.
+    """
+    return await _explore("search", field, value, role, kind, domain, status, minimum, maximum, limit)
+
+
+@mcp.tool()
+async def extraction_count(field: str, by: str = "value", kind: str = "", domain: str = "", limit: int = 40) -> dict[str, Any]:
+    """READ. How many records settled each label (by="value") or role (by="role") of a field."""
+    return await _explore("distribution", field, kind, domain, by, limit)
+
+
+@mcp.tool()
+async def extraction_case(case_or_record_id: str) -> dict[str, Any]:
+    """READ. A case: the records in it, why each was linked, and what each settled.
+
+    Also lists candidate links: records that share only a docket number, which
+    is not enough to merge them.
+    """
+    return await _explore("case", case_or_record_id)
+
+
+@mcp.tool()
+async def graph_sparql(query: str, limit: int = 200) -> dict[str, Any]:
+    """READ. SPARQL over the local triple store of engine graphs.
+
+    One named graph per record: urn:casenoesis:record:<record-id>. The default
+    graph is the union of all of them. Prefixes uco-core, uco-identity,
+    uco-observable, uco-role, uco-action, case-investigation, legalproc, and
+    xsd are added for you. Settled labels are tags on the record node:
+    "scheme:romance", "channel:cryptocurrency", "stage:sentenced".
+    Read-only; updates are refused. No names are in the store.
+
+    Example: SELECT ?g ?amount WHERE { GRAPH ?g { ?o a legalproc:RestitutionOrder ;
+    legalproc:monetaryAmount ?amount . FILTER(?amount >= 1000000) } }
+    """
+    try:
+        from extraction import triples
+
+        return await asyncio.to_thread(triples.query, query, limit)
+    except Exception as e:
+        logger.exception("graph_sparql failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def graph_store_status() -> dict[str, Any]:
+    """READ. The local triple store: how many record graphs and quads, where it is, and example queries."""
+    try:
+        from extraction import triples
+
+        return {**await asyncio.to_thread(triples.status), "examples": triples.EXAMPLES}
+    except Exception as e:
+        logger.exception("graph_store_status failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_agreement() -> dict[str, Any]:
+    """READ. How the reader families compare, per field.
+
+    Counts of mentions two families settled together, one family settled, and
+    families contested. This measures agreement between readers. It is not an
+    accuracy figure; no labelled sample exists yet.
+    """
+    return await _explore("agreement")
+
+
+if _COLLECTOR_WRITE_ENABLED:
+
+    @mcp.tool()
+    async def extraction_run(
+        kind: str = "",
+        domain: str = "",
+        limit: int = 200,
+        record_ids: list[str] | None = None,
+        build_graphs: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Read collected records with the extraction engine.
+
+        Runs the readers, the span gate, and the vote, and stores assertions and
+        decisions in data/extracted/noesis.db. Records already read are skipped.
+        Deterministic; no model unless CASENOESIS_LLM=1 is set on this machine.
+        build_graphs also writes and validates a CASE/UCO graph per record and
+        loads it into the local triple store.
+        At most 2,000 records per call.
+        """
+        try:
+            from encoding import corpus
+            from extraction import cases as case_layer
+            from extraction import graph as graph_layer
+            from extraction import pipeline, store
+
+            def _run() -> dict[str, Any]:
+                entries = corpus.load_index()
+                if record_ids:
+                    wanted = set(record_ids)
+                    entries = [e for e in entries if e["record_id"] in wanted]
+                else:
+                    if kind:
+                        entries = [e for e in entries if e["kind"] == kind]
+                    if domain:
+                        entries = [e for e in entries if corpus.in_domain(e, domain)]
+                    known = store.known_text_hashes(store.connect())
+                    entries = [e for e in entries if e["record_id"] not in known]
+                chosen = entries[: max(1, min(limit, 2000))]
+                out: dict[str, Any] = {"read": pipeline.run(chosen)}
+                out["cases"] = case_layer.build()
+                if build_graphs:
+                    from extraction import triples
+
+                    out["graphs"] = graph_layer.build([e["record_id"] for e in chosen], gate=True)
+                    out["triple_store"] = triples.load()
+                return out
+
+            return await asyncio.to_thread(_run)
+        except Exception as e:
+            logger.exception("extraction_run failed")
+            return {"error": str(e), "write": True}
+
+
 if __name__ == "__main__":
     # CaseNoesis MCP is a private local agent host (stdio). It is not a public
     # CaseLinker-style SSE/HTTP service. Opt in to local HTTP only with
