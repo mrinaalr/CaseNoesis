@@ -167,6 +167,8 @@ def _tags(doc: Doc, field_name: str, vocabulary: dict[str, re.Pattern[str]], *, 
         for match in cue.finditer(text):
             if check_boilerplate:
                 s, e = sp.sentence_at(doc.text, match.start(), match.end())
+                # Bounded: a page with no sentence breaks is one "sentence" of any length.
+                s, e = max(s, match.start() - 600), min(e, match.end() + 600)
                 if profiles.BOILERPLATE.search(doc.text[s:e]):
                     boiler.append(match)
                     continue
