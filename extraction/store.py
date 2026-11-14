@@ -7,6 +7,9 @@
     finals        resolved values, flattened for cohort queries
     review_queue  mentions the vote left open
     cases         records grouped into cases, with the basis for each link
+    people        each defendant of a case, and which numbered person that is in each record
+    attributions  whose each term, amount, and event is, per record
+    events        what happened in each case, in order, with the records that say so
 
 Assertions are never updated. A record read again gets new assertion rows
 under a new run, and `records.run_id` moves to that run. Resolution reads the
@@ -115,6 +118,40 @@ CREATE TABLE IF NOT EXISTS graphs (
     conforms INTEGER,
     built_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS people (
+    case_id TEXT NOT NULL,
+    person TEXT NOT NULL,
+    record_id TEXT NOT NULL,
+    record_person TEXT NOT NULL,
+    basis TEXT NOT NULL,
+    PRIMARY KEY (record_id, record_person)
+);
+CREATE INDEX IF NOT EXISTS people_case ON people(case_id, person);
+CREATE TABLE IF NOT EXISTS attributions (
+    record_id TEXT NOT NULL,
+    field TEXT NOT NULL,
+    role TEXT NOT NULL,
+    value TEXT,
+    span_start INTEGER NOT NULL,
+    span_end INTEGER NOT NULL,
+    people TEXT NOT NULL,
+    status TEXT NOT NULL,
+    basis TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS attributions_record ON attributions(record_id);
+CREATE TABLE IF NOT EXISTS events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    case_id TEXT NOT NULL,
+    position INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    date TEXT,
+    precision TEXT NOT NULL,
+    people TEXT NOT NULL,
+    status TEXT NOT NULL,
+    order_basis TEXT NOT NULL,
+    evidence TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS events_case ON events(case_id, position);
 CREATE TABLE IF NOT EXISTS case_candidates (
     record_a TEXT NOT NULL,
     record_b TEXT NOT NULL,

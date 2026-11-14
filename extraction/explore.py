@@ -61,6 +61,13 @@ def status() -> dict[str, Any]:
         "review_queue": review,
         "cases": {**cases, "with_more_than_one_record": multi,
                   "candidate_links": q("SELECT COUNT(*) n FROM case_candidates")[0]["n"]},
+        "people": q("SELECT COUNT(*) n FROM (SELECT DISTINCT case_id, person FROM people)")[0]["n"],
+        "attributions": {row["basis"]: row["n"] for row in q("SELECT basis, COUNT(*) n FROM attributions GROUP BY basis")},
+        "events": {
+            "total": q("SELECT COUNT(*) n FROM events")[0]["n"],
+            "with_a_date": q("SELECT COUNT(*) n FROM events WHERE date IS NOT NULL")[0]["n"],
+            "by_kind": {row["type"]: row["n"] for row in q("SELECT type, COUNT(*) n FROM events GROUP BY type ORDER BY n DESC")},
+        },
         "graphs": graphs,
         "last_run": ({**last_run[0], "readers": json.loads(last_run[0]["readers"])} if last_run else None),
     }
@@ -210,6 +217,34 @@ def case(case_or_record_id: str) -> dict[str, Any]:
     marks = ",".join("?" * len(ids))
     candidates = store.rows(db, f"SELECT * FROM case_candidates WHERE record_a IN ({marks}) OR record_b IN ({marks})", ids + ids)
     return {"case_id": case_id, "records": members, "candidate_links": candidates}
+
+
+def timeline(case_or_record_id: str) -> dict[str, Any]:
+    """One case's events in order: what happened, when, to which defendant,
+    which records say so, and whether each date was stated, read from "today",
+    or taken from a filing date. Defendants are `p1`, `p2`; no names."""
+    from extraction import events as events_layer
+
+    db = _db()
+    row = db.execute("SELECT case_id FROM cases WHERE case_id = ? OR record_id = ? LIMIT 1", (case_or_record_id, case_or_record_id)).fetchone()
+    if row is None:
+        return {"error": f"{case_or_record_id} is in no case. Run: python -m extraction cases"}
+    case_id = row["case_id"]
+    people = store.rows(db, "SELECT person, record_id, record_person, basis FROM people WHERE case_id = ? ORDER BY person, record_id", [case_id])
+    owned = store.rows(
+        db,
+        "SELECT a.record_id, a.field, a.role, a.value, a.people, a.status, a.basis FROM attributions a JOIN cases c ON c.record_id = a.record_id "
+        "WHERE c.case_id = ? AND a.field IN ('sentence', 'money') ORDER BY a.record_id, a.span_start", [case_id],
+    )
+    for item in owned:
+        item["people"] = json.loads(item["people"])
+    return {
+        "case_id": case_id,
+        "records": [r["record_id"] for r in store.rows(db, "SELECT record_id FROM cases WHERE case_id = ? ORDER BY record_id", [case_id])],
+        "defendants": people,
+        "events": events_layer.timeline(db, case_id),
+        "terms_and_amounts": owned,
+    }
 
 
 def agreement() -> dict[str, Any]:

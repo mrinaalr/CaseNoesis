@@ -40,6 +40,9 @@ class FieldSpec:
     support: Callable[[str, int, int, dict[str, Any]], Support] | None = None
     # Closed vocabulary for a tag field. Empty means the profile supplies it.
     vocabulary: tuple[str, ...] = ()
+    # True when the role is not from a fixed list: an attribution's role is the
+    # person it points at.
+    open_roles: bool = False
     description: str = ""
     extras: dict[str, Any] = dataclass_field(default_factory=dict)
 
@@ -125,7 +128,10 @@ def iter_duration(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
         yield start, end, value, {
             "months": months,
             "approx": bool(match.group("approx")),
-            "range_low": match.group("low") is not None,
+            # "twenty-five years" has two number words and is one number, not a range.
+            "range_low": match.group("low") is not None and not (
+                match.group("low").lower() in sp._TENS and text[match.end("low"): match.start("n")].strip() == "-"
+            ),
         }
     for match in sp.LIFE_RE.finditer(text):
         if any(s <= match.start() < e for s, e in taken):
@@ -140,7 +146,9 @@ STATUTE_RE = re.compile(
     # "18 U.S.C. § 1343", "18 U.S.C. §§ 1343 and 1349", and the charging-document
     # form "Title 18, United States Code, Section 1343".
     rf"(?:\b(?P<title>\d{{1,2}})\s*U\.?\s?S\.?\s?C\.?(?:\s?A\.?)?\s*,?\s*(?P<mark>§+|Sections?|Secs?\.|Subsections?)?"
-    rf"|\bTitle\s+(?P<title2>\d{{1,2}})\s*,?\s+United\s+States\s+Code\s*,?\s+(?P<mark2>§+|Sections?))\s*"
+    rf"|\bTitle\s+(?P<title2>\d{{1,2}})\s*,?\s+United\s+States\s+Code\s*,?\s+(?P<mark2>§+|Sections?)"
+    # The judgment form's "Title & Section" column: "18:1343", "21:841(a)(1)".
+    rf"|(?<![\d:.-])(?P<title3>\d{{1,2}}):(?=\d{{3,4}}[A-Za-z]?(?![\d:-])))\s*"
     rf"(?P<list>{_SECTION}{_SUBSECTION}(?:\s*(?:,\s*and|,|and|&)\s*{_SECTION}{_SUBSECTION})*)",
     re.IGNORECASE,
 )
@@ -154,7 +162,7 @@ def statute_value(title: str, section: str, sub: str = "") -> str:
 def iter_statute(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
     """One hit per section. "18 U.S.C. §§ 1343 and 1349" is two citations."""
     for match in STATUTE_RE.finditer(text):
-        title = match.group("title") or match.group("title2")
+        title = match.group("title") or match.group("title2") or match.group("title3")
         mark = (match.group("mark") or match.group("mark2") or "").lower()
         base = match.start("list")
         plural = mark.startswith("§§") or mark.endswith("s")
@@ -202,7 +210,9 @@ DATE_RE = re.compile(
     rf"\b(?P<mname>{_MONTH_NAME})\s+(?P<mday>\d{{1,2}})(?:st|nd|rd|th)?,?\s+(?P<myear>(?:19|20)\d{{2}})\b"
     rf"|\b(?P<dday>\d{{1,2}})\s+(?P<dname>{_MONTH_NAME})\s+(?P<dyear>(?:19|20)\d{{2}})\b"
     r"|(?<![\d/-])(?P<iyear>(?:19|20)\d{2})-(?P<imonth>\d{2})-(?P<iday>\d{2})(?![\d-])"
-    r"|(?<![\d/])(?P<smonth>\d{1,2})/(?P<sday>\d{1,2})/(?P<syear>\d{2}(?:\d{2})?)(?![\d/])",
+    r"|(?<![\d/])(?P<smonth>\d{1,2})/(?P<sday>\d{1,2})/(?P<syear>\d{2}(?:\d{2})?)(?![\d/])"
+    # A month and a year with no day: "in March 2024". Tried last, so a full date wins.
+    rf"|\b(?P<pname>{_MONTH_NAME})\s+(?:of\s+)?(?P<pyear>(?:19|20)\d{{2}})\b(?!\s*[-–]\s*\d)",
     re.IGNORECASE,
 )
 
@@ -217,6 +227,12 @@ def _iso(year: int, month: int, day: int) -> str | None:
 
 def iter_date(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
     for match in DATE_RE.finditer(text):
+        if match["pname"]:
+            # "may 2024 reports" is a verb. A month name is capitalized.
+            month = _MONTHS[match["pname"].lower().rstrip(".")]
+            if text[match.start()].isupper() and not re.search(r"\d{1,2}(?:st|nd|rd|th)?\s+(?:of\s+)?$", text[max(0, match.start() - 8): match.start()]):
+                yield match.start(), match.end(), f"{int(match['pyear']):04d}-{month:02d}", {"precision": "month"}
+            continue
         if match["mname"]:
             parts = (int(match["myear"]), _MONTHS[match["mname"].lower().rstrip(".")], int(match["mday"]))
         elif match["dname"]:
@@ -262,7 +278,34 @@ def iter_count(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
         yield match.start("n"), match.end("n"), value, extras
 
 
+# What a record says happened in the case. The value is the kind of trigger;
+# a reader decides which event it reports, or that it reports none.
+EVENT_TRIGGERS: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
+    (name, re.compile(pattern, re.IGNORECASE))
+    for name, pattern in (
+        ("sentence", r"\b(?:re-?)?sentenced\b|\bimposed\s+(?:the|a)\s+sentence\b|\bDate\s+of\s+Imposition\s+of\s+Judgment\b"),
+        ("plead", r"\b(?:pleaded|pled|pleads|plead)\s+guilty\b|\bentered\s+(?:a|the|his|her|their)\s+(?:guilty\s+)?pleas?\b|\bguilty\s+pleas?\b"),
+        ("convict", r"\bconvicted\b|\bfound\s+guilty\b|\bguilty\s+verdicts?\b"),
+        ("indict", r"\bindicted\b|\b(?:returned|unsealed|handed\s+(?:up|down))\s+an?\s+(?:[\w-]+\s+){0,3}indictment\b|\bindictment\s+(?:was\s+)?(?:returned|unsealed)\b"),
+        ("charge", r"\bcharged\b"),
+        ("arrest", r"\barrested\b|\btaken\s+into\s+(?:federal\s+)?custody\b"),
+    )
+)
+
+
+def iter_event(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
+    hits: list[tuple[int, int, str]] = []
+    for name, pattern in EVENT_TRIGGERS:
+        hits += [(match.start(), match.end(), name) for match in pattern.finditer(text)]
+    last_end = -1
+    for start, end, name in sorted(hits):
+        if start >= last_end:  # "found guilty" inside a longer trigger is one trigger
+            last_end = end
+            yield start, end, name, {}
+
+
 ITERATORS: dict[str, Callable[[str], Iterator[tuple[int, int, Any, dict[str, Any]]]]] = {
+    "event": iter_event,
     "money": iter_money,
     "sentence": iter_duration,
     "statute": iter_statute,
@@ -310,6 +353,31 @@ def _party_support(text: str, start: int, end: int, assertion: dict[str, Any]) -
     return True, "person_name", start, end, "person", {}
 
 
+ATTRIBUTABLE = ("sentence", "money", "event")
+
+
+def _attribution_support(text: str, start: int, end: int, assertion: dict[str, Any]) -> Support:
+    """An attribution says a value belongs to a person. Both ends must be in
+    the text: the span must hold a value of the field it names, and every
+    person span must be a name. The pipeline then replaces the names with the
+    record's person numbers, and that is the role the vote is on."""
+    from extraction import names
+
+    extras = assertion.get("extras") or {}
+    of = str(extras.get("of") or "")
+    if of not in ATTRIBUTABLE:
+        return False, "attribution_of_unknown_field", start, end, None, {}
+    ok, _, s, e, _, _ = _REGISTRY[of].support(text, start, end, assertion)
+    if not ok:
+        return False, f"attributed_span_is_not_a_{of}", start, end, None, {}
+    people = extras.get("people") or []
+    if not people or not all(
+        isinstance(a, int) and isinstance(b, int) and 0 <= a < b <= len(text) and names.is_name(text[a:b]) for a, b in people
+    ):
+        return False, "attributed_person_is_not_a_name", start, end, None, {}
+    return True, "attribution", s, e, f"{of}:{s}-{e}", {}
+
+
 def _tag_support(text: str, start: int, end: int, assertion: dict[str, Any]) -> Support:
     """Support check for a tag field: the cue must be real text, and a reader
     that claims a cue pattern must have matched it at that span."""
@@ -349,9 +417,9 @@ register(FieldSpec(
 ))
 register(FieldSpec(
     "date", "mention",
-    roles=("published", "filed", "sentencing", "offense", "arrest", "plea", "indictment", "verdict"),
+    roles=("published", "filed", "sentencing", "offense", "arrest", "plea", "indictment", "verdict", "scheduled"),
     support=_typed_support("date"),
-    description="A calendar date. The role says what happened on it.",
+    description="A calendar date, or a month and year. The role says what happened on it. `scheduled` is a date something is set for.",
 ))
 register(FieldSpec(
     "victim_count", "mention", roles=("victims", "not_victims"), excluded_roles=("not_victims",),
@@ -359,9 +427,28 @@ register(FieldSpec(
     description="A count of people or firms harmed.",
 ))
 register(FieldSpec(
-    "party", "mention", roles=("defendant", "official", "victim"), excluded_roles=("official", "victim"),
+    "party", "mention", roles=("defendant", "official", "victim", "not_person"),
+    excluded_roles=("official", "victim", "not_person"),
     support=_party_support,
     description="A person the record names, by number. The role says who they are in the case. The name is not stored.",
+))
+register(FieldSpec(
+    "event", "mention",
+    roles=("arrest", "complaint", "indictment", "information", "charge", "plea", "verdict", "conviction", "sentencing",
+           "scheduled", "not_event"),
+    excluded_roles=("scheduled", "not_event"),
+    support=_typed_support("event"),
+    description=(
+        "Something the record says happened in the case, anchored on the words that say it. `conviction` is a "
+        "conviction the record does not say came by plea or by verdict. `scheduled` and `not_event` are never stored."
+    ),
+))
+register(FieldSpec(
+    "attribution", "mention", roles=(), open_roles=True, support=_attribution_support,
+    description=(
+        "Whose a term, an amount, or an event is. The span is the value's span; the role is the record's person "
+        "number, or several joined by '+' when the text gives the value to several people."
+    ),
 ))
 for _name, _vocabulary, _description in (
     ("stage", ("arrested", "charged", "plea", "convicted", "sentenced"), "A procedural stage the record reports."),
@@ -395,7 +482,7 @@ def gate_assertion(text: str, assertion: dict[str, Any]) -> dict[str, Any]:
     ok, reason = False, "bad_offsets"
     if spec is None:
         reason = "unknown_field"
-    elif assertion.get("role") not in (None, "unknown", *spec.roles):
+    elif not spec.open_roles and assertion.get("role") not in (None, "unknown", *spec.roles):
         reason = "role_not_in_field"
     elif start is None and end is None:
         reason = "no_span"

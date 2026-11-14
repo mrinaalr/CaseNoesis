@@ -20,6 +20,6 @@ PROFILE = Profile(
         "travel": r"travel(?:ed|ing)?\s+(?:\w+\s+){0,6}to\s+engage\s+in\s+(?:illicit\s+)?sex\w*",
         "undercover_operation": r"undercover\s+(?:officer|agent|operation|investigator|detective)|posing\s+as\s+a\s+(?:minor|child|\d{1,2}[-\s]year[-\s]old)",
         "ai_generated": r"AI[-\s]generated|artificial\s+intelligence|deepfakes?|morphed\s+images",
-        "hands_on": r"sexual(?:ly)?\s+(?:abus\w+|assault\w*)|molest\w+|hands[-\s]on",
+        "hands_on": r"sexual(?:ly)?\s+(?:abus\w+(?!\s+material)|assault\w*)|molest\w+|hands[-\s]on",
     },
 )

@@ -60,10 +60,12 @@ def _docket_numbers(db: sqlite3.Connection, record_id: str, entry: dict[str, Any
     return numbers
 
 
-def build(db: sqlite3.Connection | None = None) -> dict[str, Any]:
+def build(db: sqlite3.Connection | None = None, source: Any = None) -> dict[str, Any]:
     """Rebuild the `cases` and `case_candidates` tables from scratch."""
+    from extraction.source import CorpusSource
+
     db = db or store.connect()
-    index = {entry["record_id"]: entry for entry in corpus.load_index()}
+    index = {entry["record_id"]: entry for entry in (source or CorpusSource()).entries()}
     record_ids = store.record_ids(db)
     sets = _Sets()
     basis: dict[str, set[str]] = defaultdict(set)

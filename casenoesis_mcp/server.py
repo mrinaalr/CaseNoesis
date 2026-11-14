@@ -1792,6 +1792,9 @@ if _COLLECTOR_WRITE_ENABLED:
 # ---------------------------------------------------------------------------
 
 
+MAX_ROWS_PROCESS = 200
+
+
 async def _explore(name: str, *args: Any, **kwargs: Any) -> dict[str, Any]:
     try:
         from extraction import explore
@@ -1902,6 +1905,86 @@ async def extraction_case(case_or_record_id: str) -> dict[str, Any]:
     is not enough to merge them.
     """
     return await _explore("case", case_or_record_id)
+
+
+@mcp.tool()
+async def case_timeline(case_or_record_id: str) -> dict[str, Any]:
+    """READ. One case's events in order, with its defendants and whose each term and amount is.
+
+    Each event has a kind (arrest, complaint, indictment, information, charge,
+    plea, verdict, conviction, sentencing, offense), a date where a record
+    gives one, the defendants it applies to (p1, p2; no names), the records
+    that report it, and how its date was read: stated in the text, read from
+    "today" against the publication date, or taken from a filing date. An
+    event with no date is placed by where its kind falls in a prosecution, and
+    `order_basis` says so.
+    """
+    return await _explore("timeline", case_or_record_id)
+
+
+async def _process(name: str, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from process_mining import views
+
+        return await asyncio.to_thread(getattr(views, name), **kwargs)
+    except Exception as e:
+        logger.exception("process mining %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def process_log() -> dict[str, Any]:
+    """READ. The event log process mining runs on: traces (one per defendant per case),
+    events by kind, how many events have a date, and how long traces are."""
+    return await _process("log_summary")
+
+
+@mcp.tool()
+async def process_variants(level: str = "detailed", dated_only: bool = False, domain: str = "", limit: int = 20) -> dict[str, Any]:
+    """READ. The paths cases take, most common first, each with its share of traces.
+
+    level "coarse" folds complaint, indictment and information into "charge"
+    and plea, verdict and conviction into "disposition". dated_only keeps only
+    events with a date, so no order in the result is assumed.
+    Records report what they report: a path of "plea > sentencing" means the
+    records of that case mention those two steps, not that nothing else happened.
+    """
+    return await _process("variants", level=level, dated_only=dated_only, domain=domain, limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def process_model(level: str = "detailed", noise: float = 0.2, dated_only: bool = False, domain: str = "") -> dict[str, Any]:
+    """READ. The process model discovered from the event log by the Inductive Miner.
+
+    Returns the process tree (sequence, one-of, any-order, loop), how well the
+    log replays on it, and the directly-follows graph with the median days
+    between steps where both are dated to the day. noise in [0, 1]: 0 keeps
+    every behaviour seen, higher values drop rare orderings from the model.
+    The model describes prosecuted cases as their public records report them.
+    """
+    return await _process("model", level=level, noise=max(0.0, min(noise, 1.0)), dated_only=dated_only, domain=domain)
+
+
+@mcp.tool()
+async def process_conformance(domain: str = "", limit: int = 20) -> dict[str, Any]:
+    """READ. Traces that depart from the order of a federal prosecution.
+
+    Three kinds: `order` (two dated events in an order procedure does not
+    allow, such as a sentencing dated before the plea), `repeat` (the same
+    step on two dates: a resentencing, a superseding indictment), and
+    `plea_and_verdict`. A missing step is never counted: records are
+    incomplete. A departure is either something that happened in the case or
+    an error in a record or in the reading of it. This says where to look.
+    """
+    return await _process("conformance", domain=domain, limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def process_case(case_or_record_id: str) -> dict[str, Any]:
+    """READ. One case against the discovered model and against procedure: its timeline,
+    each defendant's path aligned with the closest path the model allows, and any
+    departure from procedural order."""
+    return await _process("case", case_id=case_or_record_id)
 
 
 @mcp.tool()

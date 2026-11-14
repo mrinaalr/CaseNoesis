@@ -106,6 +106,22 @@ def _number_people(text: str, gated: list[dict[str, Any]]) -> None:
         item["value"] = f"person-{number}"
         item["span_text"] = name_rules.MASK
 
+    def number_of(start: int, end: int) -> int | None:
+        surname, given = name_rules.person_key(text[start:end])
+        for number, (known_surname, known_given) in enumerate(people, start=1):
+            initial = min(len(given), len(known_given)) == 1 and given[:1] == known_given[:1]
+            if surname == known_surname and (not given or not known_given or given == known_given or initial):
+                return number
+        return None
+
+    # An attribution points at person spans. Its role becomes the numbers of
+    # those people; a span that is not one of the record's parties is dropped.
+    for item in gated:
+        if item["field"] != "attribution" or not item["span_ok"] or item.get("role") not in (None, "unknown"):
+            continue
+        numbers = sorted({n for n in (number_of(a, b) for a, b in item["extras"].get("people") or []) if n is not None})
+        item["role"] = "+".join(f"person-{n}" for n in numbers) if numbers else "unknown"
+
 
 def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str, Any]:
     """Readers, gate, vote, over a `Doc` already in memory."""

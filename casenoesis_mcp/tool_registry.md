@@ -1,6 +1,6 @@
 # CaseNoesis MCP tool registry (local stdio)
 
-**68 tools** when local writes are on, **54** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
+**74 tools** when local writes are on, **60** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
 
 Authoritative implementation: `casenoesis_mcp/server.py`.
 
@@ -14,8 +14,8 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
 | MCP-only (collector WRITE) | **12** | Press, free RECAP, reference records, and reproduce-from-lookup. Disk only. No sqlite ingest |
 | MCP-only (SDK encoding) | **3** | `encoding_status`, `gate_graph` (READ); `encoding_process_records` (WRITE local, under `data/encoded/`). See `docs/sdk-encoding.md` |
-| MCP-only (extraction engine) | **11** | Eight READ tools over the assertion store, two over the local triple store (`graph_sparql`, `graph_store_status`), and `extraction_run` (WRITE local, under `data/extracted/`). See `Architecture design.md`, sections 5, 8, and 11 |
-| **Total (local stdio, writes on)** | **68** | **54** when `MCP_COLLECTOR_WRITE=0` |
+| MCP-only (extraction engine) | **17** | Nine READ tools over the assertion store and its timelines, five over the event log (`process_*`), two over the local triple store (`graph_sparql`, `graph_store_status`), and `extraction_run` (WRITE local, under `data/extracted/`). See `Architecture design.md`, sections 5, 7, 8, 10 and 11 |
+| **Total (local stdio, writes on)** | **74** | **60** when `MCP_COLLECTOR_WRITE=0` |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
 
@@ -65,6 +65,12 @@ On disk: repo-root `extraction/`. Every READ tool answers from stored assertions
 | `extraction_count` | READ | How many records settled each label or role of a field |
 | `extraction_case` | READ | A case: its records, the basis for each link, candidate links |
 | `extraction_agreement` | READ | Reader agreement per field. Not accuracy |
+| `case_timeline` | READ | One case: defendants (`p1`, `p2`), events in order with how each date was read, and whose each term and amount is |
+| `process_log` | READ | The event log: one trace per defendant per case, events by kind, how many are dated |
+| `process_variants` | READ | The paths cases take, most common first. `level="coarse"` folds charge kinds and dispositions; `dated_only` assumes no order |
+| `process_model` | READ | The process tree found by the Inductive Miner, replay fitness, and the directly-follows graph with median days between steps |
+| `process_conformance` | READ | Traces that depart from procedural order: `order`, `repeat`, `plea_and_verdict`. A missing step is never counted |
+| `process_case` | READ | One case against the discovered model and against procedure |
 | `graph_sparql` | READ | SPARQL over the local Oxigraph store of validated engine graphs. One named graph per record. Updates refused |
 | `graph_store_status` | READ | Named graphs, quads, store location, example queries |
 | `extraction_run` | WRITE local | Read records, link cases, optionally build and validate graphs and load them into the triple store. At most 2,000 per call |
@@ -77,7 +83,7 @@ Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`.
 |----------|------:|---------|
 | Public (trusted key irrelevant) | **32** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
-| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 12 collector WRITE, 3 SDK encoding tools, and 11 extraction tools for the local total of **68**. |
+| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 12 collector WRITE, 3 SDK encoding tools, and 17 extraction tools for the local total of **74**. |
 
 ## Public tier (32 tools)
 

@@ -234,6 +234,9 @@ def duration_months(match: re.Match) -> Optional[float]:
     n = parse_number(match.group("n"))
     if n is None:
         return None
+    low = match.group("low")
+    if low and low.lower() in _TENS and n < 10 and re.fullmatch(r"\s*-\s*", match.string[match.end("low"): match.start("n")]):
+        n += _TENS[low.lower()]  # "twenty-five years" is 25, not a range from twenty to five
     unit = match.group("unit").lower().rstrip("s")
     if unit in ("week", "day"):
         return round(n / (4.345 if unit == "week" else 30.44), 2)
@@ -303,14 +306,14 @@ _SENTENCED_TO_UP_TO = re.compile(
 # Hyphenated compounds ("post-incarceration") count as one word; "releases" (sic) is still release.
 _SUPERVISED_AFTER = re.compile(r"^\W{0,3}(?:[\w-]+\W+){0,3}?(?:supervised\s+releases?|supervision)\b", re.IGNORECASE)
 _PROBATION_NEAR = re.compile(r"^\W{0,3}(?:\w+\W+){0,2}?probation\b", re.IGNORECASE)
-_PROBATION_BEFORE = re.compile(r"\bprobation\s+for\s+(?:a\s+(?:term|period)\s+of\s+)?$", re.IGNORECASE)
+_PROBATION_BEFORE = re.compile(r"\bprobation\s+for\s+(?:a\s+(?:term|period)\s+of\s*:?\s+)?$", re.IGNORECASE)
 # UK "six years on licence" / "five years on an extended licence" is supervision, not a prison term.
 _LICENCE_AFTER = re.compile(
     r"^\W{0,8}on\s+(?:an?\s+)?(?:extended\s+)?licen[cs]e\b",
     re.IGNORECASE,
 )
 _SUPERVISED_BEFORE = re.compile(
-    r"\bsupervised\s+releases?\s+(?:for\s+|of\s+)?(?:a\s+(?:term|period)\s+of\s+)?(?:between\s+|at\s+least\s+|up\s+to\s+)?$",
+    r"\bsupervised\s+releases?\s+(?:for\s+|of\s+)?(?:a\s+(?:term|period)\s+of\s*:?\s+)?(?:between\s+|at\s+least\s+|up\s+to\s+)?$",
     re.IGNORECASE,
 )
 _FINE_CUES = re.compile(r"\bfine[ds]?\b|\bassessments?\b|\brestitution\b|\bforfeit\w*\b|\bpenalty\b|\bto\s+pay\b|\bpay\b", re.IGNORECASE)
@@ -321,7 +324,9 @@ _NOT_SENTENCE_BEFORE = re.compile(
     r"(?:\beligible\s+for\s+parole\s+after|\bparole\s+(?:eligibility|ineligibility)\s+(?:of|after)"
     r"|\bretained\s+jurisdiction\b[^.]{0,40}|(?<!not\s)\b(?:less|younger|older)\s+than|\bunder\s+the\s+age\s+of"
     r"|\bover\s+the\s+course\s+of|\bfor\s+the\s+(?:past|last)|\b(?:a\s+)?(?:period|span)\s+of|\blasting|\bspanning"
-    r"|\blife\s+(?:term|sentence)\s+(?:of|with\s+a\s+minimum(?:\s+term)?\s+of))"
+    r"|\blife\s+(?:term|sentence)\s+(?:of|with\s+a\s+minimum(?:\s+term)?\s+of)"
+    # A deadline: "must notify the United States attorney within 30 days of any change of name"
+    r"|\bwithin|\bno\s+later\s+than|\bto\s+commence)"
     r"\s+(?:at\s+least\s+|about\s+|approximately\s+|nearly\s+|more\s+than\s+|up\s+to\s+)?$",
     re.IGNORECASE,
 )
@@ -352,6 +357,50 @@ def _is_activity_duration(text: str, start: int, end: int) -> bool:
 
 
 _REGISTRATION_AFTER = re.compile(r"^[^.]{0,30}\bas\s+a\s+result\b|register", re.IGNORECASE)
+
+
+# A list of what a statute allows, items set off by semicolons: "the statutory maximum sentence
+# that the Court can impose is: 20 years' imprisonment; a three-year period of supervised
+# release; a fine of $250,000". Every item is exposure, though only the first shares a clause
+# with the words that say so.
+_PENALTY_LIST = re.compile(
+    r"\b(?:statutory\s+)?(?:maximum|mandatory\s+minimum)\s+(?:sentence|penalt(?:y|ies)|punishment|term)s?\b[^.]{0,160}?"
+    r"(?:\bis\b|\bare\b|\binclude[s]?\b|:)",
+    re.IGNORECASE,
+)
+
+
+PENALTY_LIST_REACH = 900
+
+
+def in_penalty_list(text: str, start: int) -> bool:
+    """True when the value sits in a sentence that lists what a statute allows."""
+    s, _ = sentence_at(text, start, start + 1)
+    # A page with no sentence breaks is one "sentence" of any length. Look back a bounded way.
+    lead = text[max(s, start - PENALTY_LIST_REACH): start]
+    return bool(_PENALTY_LIST.search(lead)) and not re.search(r"\bwas\s+sentenced\b|\bsentenced\s+\w+\s+to\b", lead, re.I)
+
+
+_TOTALS_ROW = re.compile(r"^[ \t]*TOTALS?\b[^\n]*$", re.MULTILINE)
+_COLUMN = re.compile(r"(?:AVAA|JVTA)\s+Assessment|Assessment|Restitution|Fine|Forfeiture", re.IGNORECASE)
+_COLUMN_ROLE = {"assessment": "special_assessment", "restitution": "restitution", "fine": "fine", "forfeiture": "forfeiture"}
+
+
+def totals_row(text: str, start: int) -> tuple[int, int] | None:
+    """The span of the "TOTALS" line of a monetary-penalties table holding `start`, if it is on one."""
+    line_start = text.rfind("\n", 0, start) + 1
+    match = _TOTALS_ROW.match(text, line_start)
+    return (match.start(), match.end()) if match and match.end() >= start else None
+
+
+def totals_columns(text: str, row_start: int) -> list[str | None]:
+    """Roles of the table's columns, read from the nearest header line above the row.
+    A column this engine has no role for (an AVAA or JVTA assessment) is None."""
+    for line in reversed(text[max(0, row_start - 400): row_start].splitlines()):
+        names = [m.group(0).lower() for m in _COLUMN.finditer(line)]
+        if len(names) >= 2:
+            return [None if " " in " ".join(name.split()) else _COLUMN_ROLE[name] for name in names]
+    return []
 
 
 def sentence_kind(text: str, start: int, end: int) -> str:
@@ -386,6 +435,8 @@ def sentence_kind(text: str, start: int, end: int) -> str:
         or re.search(r"\b(?:please\s+visit|for\s+more\s+information\s+about)\b", before, re.I)
     ):
         return "not_sentence"
+    if in_penalty_list(text, start):
+        return "exposure"
     if _EXPOSURE_CUES.search(clause) and (_CONDITIONAL_SENTENCING.search(clause) or not _SENTENCED_TO_UP_TO.search(clause)):
         # "up to" only signals exposure when no imposed anchor precedes it in the clause.
         only_up_to = all(m.group(0).lower().startswith("up to") for m in _EXPOSURE_CUES.finditer(clause))

@@ -24,12 +24,19 @@ MASK = "[name]"
 _PART = r"[A-Z][a-zA-Z'’\-]+"
 _INITIAL = r"[A-Z]\."
 _NAME = rf"{_PART}(?:\s+(?:{_INITIAL}|{_PART})){{1,3}}(?:,?\s+(?:Jr|Sr|II|III|IV)\.?)?"
-_CAPS_NAME = r"[A-Z][A-Z'’\-]+(?:\s+(?:[A-Z]\.|[A-Z][A-Z'’\-]+)){1,3}(?:,?\s+(?:JR|SR|II|III|IV)\.?)?"
+_CAPS_NAME = r"[A-Z][A-Z'’\-]+(?:\s+(?:[A-Z][A-Z'’\-]+|[A-Z]\.?(?![A-Za-z]))){1,3}(?:,?\s+(?:JR|SR|II|III|IV)\.?)?"
+# What may stand between two names of one list: ", 44, of Tampa, Florida, and ".
+LIST_GAP = re.compile(
+    r"^(?:,\s+(?:age[d]?\s+)?\d{2})?(?:,\s+(?:of|from)\s+[A-Z][\w.' -]+?(?:,\s+[A-Z][\w.' -]+?)?)?\s*,?\s*(?:and\s+|both\s+of\s+)?$"
+)
 
 _PROSECUTION = (
-    r"pleaded|pled|pleads|was\s+(?:sentenced|convicted|charged|indicted|arrested|ordered|found\s+guilty|extradited)|"
-    r"were\s+(?:sentenced|convicted|charged|indicted|arrested)|admitted|is\s+(?:charged|accused)|faces|agreed\s+to\s+plead"
+    r"pleaded|pled|pleads|was\s+(?:sentenced|resentenced|convicted|charged|indicted|arrested|ordered|found\s+guilty|extradited)|"
+    r"were\s+(?:sentenced|convicted|charged|indicted|arrested|found\s+guilty|ordered)|admitted|(?:is|are)\s+(?:charged|accused)|"
+    r"faces|agreed\s+to\s+plead|entered\s+(?:a|the|his|her|their)\s+(?:guilty\s+)?pleas?"
 )
+# A name in capitals on one line of a caption or a form.
+_CAPS_LINE = r"[A-Z][A-Z'’\-]+(?:[ \t]+(?:[A-Z][A-Z'’\-]+|[A-Z]\.?(?![A-Za-z]))){1,3}(?:,?[ \t]+(?:JR|SR|II|III|IV)\.?)?"
 _OFFICIAL_TITLE = (
     r"Judge|Justice|Attorney|Attorneys|Agent|Agents|Officer|Detective|Inspector|Sheriff|Chief|Director|Trooper|Sergeant|"
     r"Lieutenant|Captain|Counsel|Prosecutor|Investigator|Deputy|Marshal|Magistrate|Clerk|Reporter|Foreperson|Secretary|"
@@ -38,13 +45,19 @@ _OFFICIAL_TITLE = (
 
 # (hint, pattern). The hint is what the phrasing itself says about the person:
 # "defendant", "official", or "person" when it says nothing.
-_HINTED = tuple((hint, re.compile(p)) for hint, p in (
+_HINTED = tuple((hint, re.compile(p, re.MULTILINE)) for hint, p in (
     # United States v. NAME / NAME, Defendant
     ("defendant", rf"(?:UNITED\s+STATES(?:\s+OF\s+AMERICA)?|United\s+States(?:\s+of\s+America)?|USA|U\.S\.)\s*,?\s+(?:v|vs|V|VS)\.?\s+(?P<n>{_CAPS_NAME}|{_NAME})"),
-    ("defendant", rf"(?P<n>{_CAPS_NAME})\s*,?\s*\n?\s*(?:Defendant|DEFENDANT)s?\b"),
+    ("defendant", rf"(?P<n>{_CAPS_NAME})\s*,?\s*\n?\s*(?:Defendant|DEFENDANT)s?\b(?!['’])"),
+    # The judgment form prints counsel's name above the words "Defendant's Attorney".
+    ("official", rf"(?P<n>{_CAPS_LINE}|{_NAME})[ \t]*\n[ \t]*Defendant['’]s\s+Attorney"),
     ("defendant", rf"\b(?:Defendant|defendant|Co-defendant|co-defendant)\s+(?P<n>{_NAME})"),
     # A verb a release puts right after the person prosecuted
-    ("defendant", rf"(?P<n>{_NAME})(?:,\s+(?:age[d]?\s+)?\d{{2}},(?:\s+(?:of|from)\s+[A-Z][\w .]+?,(?:\s+[A-Z][\w.]+,)?)?)?\s+(?:{_PROSECUTION})\b"),
+    ("defendant", rf"(?P<n>{_NAME})(?:,\s+(?:age[d]?\s+)?\d{{2}})?(?:,\s+(?:of|from)\s+[A-Z][\w .]+?(?:,\s+[A-Z][\w .]+?)?)?,?\s+(?:{_PROSECUTION})\b"),
+    # Captions and forms: every defendant line above "Defendants.", the line under "v.", "DEFENDANT: NAME"
+    ("defendant", rf"^[ \t]*(?P<n>{_CAPS_LINE})[ \t]*,(?:[ \t]*and)?[ \t]*\n(?=(?:[ \t]*{_CAPS_LINE}[ \t]*,(?:[ \t]*and)?[ \t]*\n){{0,6}}[ \t]*Defendants?\b)"),
+    ("defendant", rf"^[ \t]*[vV][sS]?\.[ \t]*\n[ \t]*(?P<n>{_CAPS_LINE})(?=[ \t]+Case\s+N|[ \t]*,?[ \t]*\n)"),
+    ("defendant", rf"\bDEFENDANT(?:'S\s+NAME|\s+NAME)?[ \t]*:[ \t]+(?P<n>{_CAPS_LINE})"),
     # A bare surname before the same verbs: "Sample faces a maximum penalty of"
     ("defendant", rf"(?P<n>{_PART})\s+(?:{_PROSECUTION})\b"),
     # Officials
@@ -124,7 +137,32 @@ def iter_people(text: str) -> list[tuple[int, int, str]]:
             span = match.span("n")
             if span not in best or rank[hint] < rank[best[span]]:
                 best[span] = hint
-    return [(start, end, hint) for (start, end), hint in sorted(best.items())]
+    people = [[start, end, hint] for (start, end), hint in sorted(best.items())]
+    # "A, 38, of X, B, 61, of Y, and C, 35, of Z, are charged": what the phrasing
+    # says of the last name in a list, it says of every name in it.
+    for index in range(len(people) - 2, -1, -1):
+        here, after = people[index], people[index + 1]
+        if here[2] == "person" and after[2] == "defendant" and here[1] <= after[0] and LIST_GAP.match(text[here[1]: after[0]]):
+            here[2] = "defendant"
+    return [(start, end, hint) for start, end, hint in people]
+
+
+def iter_mentions(text: str, known: Iterable[str] = ()) -> list[tuple[int, int, str]]:
+    """Every place a person the record names is mentioned again, by full name
+    or by surname: `(start, end, surname)`. The surname is lower case and is
+    only ever held in memory, to tell one person's mentions from another's."""
+    found = find_names(text, known)
+    surnames = {person_key(name)[0] for name in found if " " in name}
+    pattern = mask_pattern(found)
+    if pattern is None:
+        return []
+    out = []
+    for match in pattern.finditer(text):
+        surface = re.sub(r"['’]s$", "", match.group(0))
+        surname = person_key(surface)[0]
+        if surname in surnames and surface[:1].isupper():
+            out.append((match.start(), match.start() + len(surface), surname))
+    return out
 
 
 def is_name(value: str) -> bool:
