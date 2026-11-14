@@ -94,6 +94,7 @@ data/collected/recap/*/from_press_status.json
 data/collected/recap/*/press_docket_queue.jsonl
 # Local download logs with PDF paths. The public court list is public/recap_lookup.jsonl.
 data/collected/recap/*/court_manifest.json
+data/collected/recap/*/conduct_documents.jsonl
 data/collected/recap/bulk/manifests/
 data/collected/recap/join_to_1000_status.json
 data/collected/recap/join_to_1000.log
