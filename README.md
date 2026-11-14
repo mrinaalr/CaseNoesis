@@ -17,9 +17,11 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 ## Status
 
-45,534 distinct public records are collected (46,230 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 2,002,093 span-anchored assertions, 533,935 settled values, 21,127 mentions left for a person. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
+45,534 distinct public records are collected (46,230 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 2,680,858 span-anchored assertions, 841,353 settled values, 43,426 mentions left for a person. Defendants are linked across the records of a case, and each term and amount is placed with its defendant. What happened in each case is ordered into a dated timeline: 107,846 events in 43,856 cases. Process mining over those timelines finds the paths prosecutions take and flags cases that depart from procedural order. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
 
-Not done: no sample has been checked by hand, so there is no accuracy figure. State machines for the new offense types are not built. No public data release yet.
+Accuracy is measured on a gold set of 200 invented records written from known answers ([`gold/`](gold/)). On its held-out half the engine scores F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants, and 0.85 to 0.94 on victim counts and scheme and channel labels.
+
+Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. State machines for the new offense types are not built. No public data release yet.
 
 ## Architecture
 
@@ -39,20 +41,25 @@ flowchart TD
     IDX --> ENG
     SDK -->|"text + anchors"| ENG["EXTRACTION ENGINE <br/> readers → span gate → vote by family <br/> review queue · domain profiles"]
 
-    ENG --> STORE["STORE <br/> assertions · decisions · cases"]
+    ENG --> STORE["STORE <br/> assertions · decisions · cases <br/> people · events"]
+    STORE --> PM["PROCESS MINING <br/> timelines per defendant · variants <br/> Inductive Miner · conformance"]
+    GOLD["GOLD SET <br/> 200 invented records, known answers"] -.->|"scores"| ENG
     STORE --> KG["ENGINE GRAPH <br/> CASE/UCO + legalproc <br/> defendants · charges · terms · amounts <br/> SHACL gate"]
 
     KG -.-> ESM["FORMAL MODELING (not built) <br/> M = (S, A, T, R_G, s₀, F) <br/> φ / η / ψ · L* · intervention points"]
     ESM -.-> AN["ANALYSIS (not built) <br/> Laws 1–4 · backbone · affordance structure"]
 
     KG --> OX["LOCAL TRIPLE STORE <br/> Oxigraph + graphs.nq · SPARQL"]
-    STORE --> API["python -m extraction · local stdio MCP · SPARQL on 127.0.0.1"]
+    STORE --> API["python -m extraction · python -m process_mining <br/> local stdio MCP · SPARQL on 127.0.0.1"]
+    PM --> API
     OX --> API
 ```
 
 **Three collection paths.** Press for scale. Free RECAP for court filings; PACER only with a spend cap. Reference records for platform rules, statutes, and calibration. They meet at processing. See [Collection](#collection).
 
 **How a value gets stored.** Each reader writes its own assertion with a character span. One gate checks the span and re-reads the value from the text. Readers vote by evidence family: two families that agree settle a value, two that disagree veto it, and the rest goes to a review queue. The core knows fields and votes; fraud, trafficking, forced labor, cyber, and CSEA are vocabulary files. Code: [`extraction/`](extraction/).
+
+**People, events, paths.** Readers also vote on whose each term and amount is and on what each record says happened. Defendants are linked across a case's records, events are dated and ordered per defendant, and [`process_mining/`](process_mining/) mines the common paths and checks each case against procedural order. Code: [`extraction/people.py`](extraction/people.py), [`extraction/events.py`](extraction/events.py).
 
 **No names.** Source text stays on the machine. Assertions, graphs, and tool output carry no person's name. A defendant is `Defendant 1` with a role, linked to charges and terms.
 
