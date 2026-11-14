@@ -90,10 +90,10 @@ Checked 2026-11-13 on the 23 Sep 2026 collection.
 | Step | Result |
 |---|---|
 | Index | 44,602 press records, 864 court filings (1,083 PDFs, 219 of them byte-identical copies), 68 reference records |
-| Court | All 864 encoded. 31,013 extracted entities. 608 of 864 graphs validate after redaction |
+| Court | All 864 encoded. 31,593 extracted entities. 864 of 864 graphs validate after redaction |
 | Press | 300-record sample. 300 encoded, 300 of 300 validate |
-| Reference | All 68 encoded. 0 of 68 validate. The 39 HTML pages carry no extracted entities |
-| Names | 697 people renamed, 110 addresses cut, 0 records failing the name check |
+| Reference | All 68 encoded. 68 of 68 validate. The 39 HTML pages carry no extracted entities |
+| Names | 1,032 people renamed, 110 addresses cut, 0 records failing the name check |
 | Tests | `python -m unittest encoding.test_encoding`: 6 pass, on invented text. Redaction is tested in `extraction.test_extraction` |
 
 The press corpus has not been run in full. It needs about 1.8 GB of disk.

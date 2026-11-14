@@ -6,12 +6,12 @@
 |---|---|
 | Collected | **45,534** distinct public records: 44,602 press releases, 864 court filings, 68 reference records |
 | Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation |
-| Read by the engine | **45,530** records, **2,000,663** span-anchored assertions from 5 reader families |
-| Settled | **533,803** values across 13 fields; 246,953 of them by two or more families |
-| Left for review | 21,124 mentions the readers contested or could not settle |
-| Cases | 45,316 cases; 116 join more than one record |
-| Graphs | 908 SDK record graphs and 24 engine graphs, each validated against CASE/UCO SDK `v1.33.0` |
-| Triple store | A local Oxigraph store and one N-Quads file: 24 named graphs, 2,427 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
+| Read by the engine | **45,534** records, **2,002,093** span-anchored assertions from 5 reader families |
+| Settled | **533,935** values across 13 fields; 247,017 of them by two or more families |
+| Left for review | 21,127 mentions the readers contested or could not settle |
+| Cases | 45,320 cases; 116 join more than one record |
+| Graphs | 45,533 engine graphs written. 1,255 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
+| Triple store | A local Oxigraph store and one N-Quads file: 1,255 named graphs, 195,546 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
 | Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
 | Names in derived data | None stored. People are numbered nodes with a role |
 | Agents | 68 local MCP tools, 11 of them over the engine |
@@ -132,7 +132,7 @@ What is built and what is not:
 | SDK record graphs, names removed, validated | Built. All court and reference records; a 300-record press sample |
 | Extraction engine: fields, readers, gate, vote, review queue | Built. Run on every collected record |
 | Case linking | Built |
-| Engine graphs through the SDK builder and gate | Built. Written and validated for 24 records |
+| Engine graphs through the SDK builder and gate | Built. Written for 45,533 records; 1,255 validated so far (every court and reference record, and a press sample) |
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy measured against hand labels | **Not done.** No labelled sample exists yet |
@@ -263,7 +263,7 @@ Three points about what these families are and are not:
 
 This is where the SDK's amount bug stops. The processor anchors `$1.97` in "$1.97 million". The gate widens the span to `$1.97 million` and reads 1,970,000.
 
-The gate rejects a span with no typed token in it, a role the field does not have, and a tag whose cue pattern does not match the text at its span. A rejected assertion is stored with its reason and without its span, and takes no part in the vote. In the run reported below, 592 of 1,929,321 spanned assertions were rejected.
+The gate rejects a span with no typed token in it, a role the field does not have, and a tag whose cue pattern does not match the text at its span. A rejected assertion is stored with its reason and without its span, and takes no part in the vote. In the run reported below, 786 of 1,930,751 spanned assertions were rejected.
 
 ### 5.4 Resolution
 
@@ -312,7 +312,9 @@ A graph without the defendant is not a case graph. A graph with the defendant's 
 - **The value is a number.** After the gate, `pipeline._number_people` numbers the people in a record by first appearance, merging a full name with a later mention that shares the surname. Each assertion's value becomes `person-N` and its stored span text becomes `[name]`. The character offsets still point at the name in the local source text.
 - **Officials are votes, not values.** A judge, a prosecutor, or an agent gets the role `official`, which is never stored. It is there so a reader can stop another from calling the U.S. Attorney a defendant.
 - **Record text shown to anyone is masked.** A review window from the CLI or an MCP tool passes through `names.scrub` first.
-- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted.
+- **Graphs are checked.** Before an engine graph is kept, it is searched for every name found in the record's text. A graph that contains one is deleted. That happened for 1 of 45,534 records, a court filing; its values are in the store and it has no graph.
+
+**Audit.** For 600 records drawn at random, every name the rules find in the record's text was searched for in that record's stored assertions, decisions, and engine graph. 595 of the records had names. None appeared in a graph. Seven stored rows matched, all of them the words "tax evasion" or "false tax return" from a title-case headline that a name rule had also matched: offense cues, not people.
 
 Name-finding is rule-based and tuned to over-mask. A capitalized phrase it wrongly takes for a name costs a redacted word. A name no rule recognizes can survive in the SDK's record graph; it cannot enter the engine graph, which has no free text.
 
@@ -330,39 +332,39 @@ Measured 2026-11-13, with `python -m extraction status`.
 
 | | |
 |---|---|
-| Records read | 44,602 press, 860 court, 68 reference |
-| Text source | 1,228 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
-| Assertions | 2,000,663 |
-| Finals | 533,803 |
-| Review queue | 21,124: 3,662 contested, 17,462 weak, 0 self-contradicting |
+| Records read | 44,602 press, 864 court, 68 reference |
+| Text source | 1,232 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
+| Assertions | 2,002,093 |
+| Finals | 533,935 |
+| Review queue | 21,127: 3,663 contested, 17,464 weak, 0 self-contradicting |
 
 Assertions by family:
 
 | Family | Assertions | With a supported span |
 |---|---:|---:|
-| `surface_pattern` | 1,186,151 | 1,186,082 |
-| `clause` | 692,059 | 692,059 |
-| `lookup` | 14,252 | 14,252 |
-| `sdk_rule` | 36,859 | 36,336 |
+| `surface_pattern` | 1,186,667 | 1,186,598 |
+| `clause` | 692,294 | 692,294 |
+| `lookup` | 14,315 | 14,315 |
+| `sdk_rule` | 37,475 | 36,758 |
 | `metadata` | 71,342 | none by design |
 
 Settled values by field, and how many were settled by two or more families:
 
 | Field | Settled | By two or more families | Contested | Weak |
 |---|---:|---:|---:|---:|
-| `sentence` | 80,165 | 68,369 | 1,676 | 0 |
-| `money` | 72,204 | 49,080 | 1,661 | 17,275 |
-| `statute` | 14,581 | 6,234 | 0 | 0 |
-| `case_number` | 2,615 | 916 | 0 | 0 |
-| `date` | 38,794 | 21,637 | 156 | 0 |
+| `sentence` | 80,171 | 68,369 | 1,676 | 0 |
+| `money` | 72,213 | 49,085 | 1,662 | 17,276 |
+| `statute` | 14,629 | 6,274 | 0 | 0 |
+| `case_number` | 2,618 | 919 | 0 | 0 |
+| `date` | 38,806 | 21,646 | 156 | 0 |
 | `victim_count` | 5,690 | 4,197 | 1 | 0 |
-| `party` | 53,788 | 45,322 | 74 | 0 |
-| `stage` | 73,918 | 43,923 | 56 | 162 |
-| `document_type` | 668 | 193 | 0 | 25 |
-| `offense` | 95,440 | 4,676 | 0 | 0 |
-| `scheme` | 58,070 | 2,371 | 38 | 0 |
-| `channel` | 33,689 | 35 | 0 | 0 |
-| `platform` | 4,181 | 0 | 0 | 0 |
+| `party` | 53,789 | 45,322 | 74 | 0 |
+| `stage` | 73,921 | 43,925 | 56 | 163 |
+| `document_type` | 671 | 194 | 0 | 25 |
+| `offense` | 95,455 | 4,680 | 0 | 0 |
+| `scheme` | 58,089 | 2,371 | 38 | 0 |
+| `channel` | 33,700 | 35 | 0 | 0 |
+| `platform` | 4,183 | 0 | 0 | 0 |
 
 **These are agreement figures, not accuracy figures.** They say how often the readers settled a mention and how often two of them settled it together. Nobody has checked a sample of finals against the text by hand. Until that is done, a `resolved` value is one rule reader's reading at confidence 0.7 or more, and should be treated as that.
 
@@ -397,7 +399,7 @@ The processor writes what it reads, so [`redact.py`](encoding/redact.py) runs be
 | Any other address whose path spells a name | The host, tagged with the SHA-256 of the full address |
 | Names anywhere else in a string | `[name]` |
 
-Then every name found in the record is searched for in the graph and the anchors. Across 908 records: 697 people renamed, 110 addresses cut, 0 records failing the check.
+Then every name found in the record is searched for in the graph and the anchors. Across 1,232 records: 1,032 people renamed, 110 addresses cut, 0 records failing the check.
 
 This graph is the engine's input, not its output. It holds what the SDK's rules found: statutes, amounts, dates, docket numbers, organizations, accounts. It says a person is named and does not say who they are in the case.
 
@@ -454,7 +456,7 @@ A record id names one document. A case is a docket: the release that announced i
 
 A docket number alone is not a link. Federal districts number their cases independently, so `1:23-cr-00123` exists in many courts. Two records that share only a number are written to `case_candidates` for a person to confirm.
 
-Result: 45,316 cases over 45,530 records. 116 join more than one record, the largest joins 14, and 948 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
+Result: 45,320 cases over 45,534 records. 116 join more than one record, the largest joins 14, and 948 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
 
 Defendants are numbered within a record. `Defendant 1` in the release and `Defendant 1` in the indictment are not yet known to be the same person.
 
@@ -499,7 +501,7 @@ SELECT ?g ?amount WHERE {
 SELECT ?g WHERE { GRAPH ?g { ?r uco-core:tag "scheme:romance", "channel:cryptocurrency" } }
 ```
 
-Loaded now: 24 named graphs, 2,427 quads.
+Loaded now: 1,255 named graphs, 195,546 quads.
 
 ---
 

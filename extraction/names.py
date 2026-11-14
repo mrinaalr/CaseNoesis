@@ -78,6 +78,7 @@ prosecutors agents investigators officers victims victim company companies it it
 while although according also additionally today yesterday instead however further finally then there here what which
 another others some many most several former current individual individuals person persons man woman men women
 investigation office bureau agency police sheriff trooper officials authorities everyone anyone nobody someone
+tax evasion false return returns statement statements health care medicare medicaid securities bank
 """.split())
 
 

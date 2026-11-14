@@ -17,7 +17,7 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 ## Status
 
-45,534 distinct public records are collected (46,230 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 2,000,663 span-anchored assertions, 533,803 settled values, 21,124 mentions left for a person. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
+45,534 distinct public records are collected (46,230 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 2,002,093 span-anchored assertions, 533,935 settled values, 21,127 mentions left for a person. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
 
 Not done: no sample has been checked by hand, so there is no accuracy figure. State machines for the new offense types are not built. No public data release yet.
 
