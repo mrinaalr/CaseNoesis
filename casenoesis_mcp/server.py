@@ -1589,6 +1589,31 @@ if _COLLECTOR_WRITE_ENABLED:
             return {"error": str(e), "write": True}
 
     @mcp.tool()
+    async def collect_conduct_documents(
+        domain: str = "fraud", max_docs: int = 40, pages: int = 1, kind: str = "", search_only: bool = False
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Collect the filings that narrate an offense. Free RECAP only; never PACER.
+
+        Three kinds: statement_of_offense (statements of offense and of facts),
+        factual_basis (factual bases, resumes, proffers, stipulated facts), and
+        complaint_affidavit (criminal complaints with the agent's affidavit).
+        Searches CourtListener at the document level for filings RECAP already
+        holds, in one offense domain: fraud, trafficking, forced_labor, cyber,
+        csea, extortion, drugs, firearms, corruption, stalking, smuggling,
+        racketeering, a comma-separated list, or all. Saves PDFs under
+        data/collected/recap/<domain>/. search_only reports how many are free
+        and downloads nothing. Each search page is one API call against a quota
+        of 50 an hour; at most 300 documents and 3 pages per call.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import collect_conduct_documents as _collect
+
+            return await asyncio.to_thread(_collect, domain=domain, max_docs=max_docs, pages=pages, kind=kind, search_only=search_only)
+        except Exception as e:
+            logger.exception("collect_conduct_documents failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
     async def download_free_recap(
         document_id: str = "",
         docket_id: str = "",

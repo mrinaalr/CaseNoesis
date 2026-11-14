@@ -124,7 +124,7 @@ _DOCUMENT = {
     "information": r"(?:SUPERSEDING\s+)?(?:CRIMINAL\s+)?INFORMATION",
     "complaint": r"CRIMINAL\s+COMPLAINT|AFFIDAVIT\s+IN\s+SUPPORT\s+OF\s+(?:AN?\s+)?(?:CRIMINAL\s+)?COMPLAINT",
     "sentencing_memorandum": r"SENTENCING\s+MEMORANDUM|MEMORANDUM\s+IN\s+AID\s+OF\s+SENTENCING",
-    "factual_basis": r"FACTUAL\s+BASIS|STATEMENT\s+OF\s+(?:FACTS|THE\s+OFFENSE|OFFENSE)|FACTUAL\s+RESUME",
+    "factual_basis": r"FACTUAL\s+BASIS|STATEMENT\s+OF\s+(?:FACTS|THE\s+OFFENSE|OFFENSE)|FACTUAL\s+RESUME|FACTUAL\s+PROFFER|STIPULAT(?:ION\s+OF|ED)\s+FACTS",
     "verdict": r"VERDICT(?:\s+FORM)?",
     "transcript": r"TRANSCRIPT\s+OF|REPORTER'S\s+TRANSCRIPT",
     "docket": r"CRIMINAL\s+DOCKET\s+FOR\s+CASE",

@@ -589,6 +589,25 @@ def download_free_recap(
     }
 
 
+def collect_conduct_documents(*, domain: str = "fraud", max_docs: int = 40, pages: int = 1,
+                              kind: str = "", search_only: bool = False) -> dict[str, Any]:
+    """WRITE: collect statements of offense, factual bases and complaint affidavits. Free RECAP only."""
+    module = _load_module("conduct_documents_mcp", _COLLECTOR / "conduct_documents.py")
+    domains = list(module.DOMAINS) if domain.strip().lower() == "all" else [d.strip().lower() for d in domain.split(",") if d.strip()]
+    unknown = [d for d in domains if d not in module.DOMAINS]
+    if unknown or not domains:
+        return {"error": f"domain must be one of {sorted(module.DOMAINS)}, a comma-separated list, or all", "write": not search_only}
+    if kind and kind not in module.KINDS:
+        return {"error": f"kind must be one of {sorted(module.KINDS)}", "write": not search_only}
+    if not search_only and not collector_disk_write_enabled():
+        return _write_disabled_error()
+    result = module.collect(
+        domains, max_docs=max(1, min(int(max_docs), 300)), pages=max(1, min(int(pages), 3)),
+        search_only=search_only, kinds=[kind] if kind else None,
+    )
+    return {"write": not search_only, "tool_kind": "READ" if search_only else "WRITE", "method": "collect_conduct_documents", **result}
+
+
 def _run_hyletic(command: str, args: list[str], *, timeout: int = 180) -> dict[str, Any]:
     """Run one hyletic subcommand. Default output is data/collected/hyletic_data/."""
     if not collector_disk_write_enabled():

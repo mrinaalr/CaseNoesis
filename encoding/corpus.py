@@ -19,7 +19,7 @@ COLLECTED = REPO_ROOT / "data" / "collected"
 ENCODED = REPO_ROOT / "data" / "encoded"
 INDEX_PATH = ENCODED / "index.jsonl"
 INDEX_META_PATH = ENCODED / "index.meta.json"
-INDEX_SCHEMA = "noesis-index/2"
+INDEX_SCHEMA = "noesis-index/3"
 
 PRESS = COLLECTED / "press_releases"
 RECAP = COLLECTED / "recap"
@@ -125,6 +125,7 @@ def _court_metadata() -> dict[str, dict[str, Any]]:
                     docket_number=row.get("docket_number"),
                     filed=row.get("entry_date"),
                     press_url=row.get("press_url"),
+                    collected_as=row.get("document_kind"),
                 )
     return found
 
@@ -155,6 +156,7 @@ def _iter_court() -> Iterator[dict[str, Any]]:
             "pub_date": extra.get("filed"),
             "docket_number": extra.get("docket_number"),
             "press_url": extra.get("press_url"),
+            "collected_as": extra.get("collected_as"),
             "file": path.relative_to(REPO_ROOT).as_posix(),
             "sha256": digest,
             "bytes": path.stat().st_size,

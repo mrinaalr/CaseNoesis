@@ -13,7 +13,7 @@ from typing import Any
 from extraction import fields, profiles
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "collector_index_1.0"
+VERSION = "collector_index_1.1"
 METHOD = "collector_metadata"
 
 # The collector's press stage, set from the release title when it was collected.
@@ -42,6 +42,11 @@ def read(doc: Doc) -> list[dict[str, Any]]:
     scheme = profiles.bucket_label(doc.domain, entry.get("bucket"))
     if scheme:
         out.append(assertion("scheme", scheme, "present", METHOD, VERSION, 0.7, None, None, source="bucket"))
+    # What the collector searched for when it fetched this filing: the docket's own name for it.
+    filed_as = {"statement_of_offense": "factual_basis", "factual_basis": "factual_basis", "complaint_affidavit": "complaint"}.get(
+        str(entry.get("collected_as") or ""))
+    if doc.kind == "court" and filed_as:
+        out.append(assertion("document_type", filed_as, "present", METHOD, VERSION, 0.8, None, None, source="collected_as"))
     if doc.kind == "court" and "transcripts" in (entry.get("domains") or [entry.get("domain")]):
         out.append(assertion("document_type", "transcript", "present", METHOD, VERSION, 0.8, None, None, source="folder"))
     return out

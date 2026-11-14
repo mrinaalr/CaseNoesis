@@ -8,7 +8,7 @@ Corpus tools are read-only against the local database. Collector WRITE tools wri
 
 Catalog: [`tool_registry.md`](tool_registry.md). Parameter detail is the docstring on each `@mcp.tool()` in `server.py`.
 
-**74 tools** when local writes are enabled (the default). **60** when writes are off: the 12 collector WRITE tools, `encoding_process_records`, and `extraction_run` are not registered.
+**75 tools** when local writes are enabled (the default). **60** when writes are off: the 13 collector WRITE tools, `encoding_process_records`, and `extraction_run` are not registered.
 
 ## Prerequisites
 

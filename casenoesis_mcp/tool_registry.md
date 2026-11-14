@@ -1,6 +1,6 @@
 # CaseNoesis MCP tool registry (local stdio)
 
-**74 tools** when local writes are on, **60** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
+**75 tools** when local writes are on, **60** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
 
 Authoritative implementation: `casenoesis_mcp/server.py`.
 
@@ -12,10 +12,10 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (corpus graphs) | **8** | `tree_traversal`, `list_sources`, `case2cac`, four graph tools, `export_case_graph_ttl` |
 | MCP-only (free public records) | **4** | DOJ press search + CourtListener/RECAP (`public_records.py`) |
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
-| MCP-only (collector WRITE) | **12** | Press, free RECAP, reference records, and reproduce-from-lookup. Disk only. No sqlite ingest |
+| MCP-only (collector WRITE) | **13** | Press, free RECAP, conduct filings (`collect_conduct_documents`), reference records, and reproduce-from-lookup. Disk only. No sqlite ingest |
 | MCP-only (SDK encoding) | **3** | `encoding_status`, `gate_graph` (READ); `encoding_process_records` (WRITE local, under `data/encoded/`). See `docs/sdk-encoding.md` |
 | MCP-only (extraction engine) | **17** | Nine READ tools over the assertion store and its timelines, five over the event log (`process_*`), two over the local triple store (`graph_sparql`, `graph_store_status`), and `extraction_run` (WRITE local, under `data/extracted/`). See `Architecture design.md`, sections 5, 7, 8, 10 and 11 |
-| **Total (local stdio, writes on)** | **74** | **60** when `MCP_COLLECTOR_WRITE=0` |
+| **Total (local stdio, writes on)** | **75** | **60** when `MCP_COLLECTOR_WRITE=0` |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
 
@@ -83,7 +83,7 @@ Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`.
 |----------|------:|---------|
 | Public (trusted key irrelevant) | **32** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
-| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 12 collector WRITE, 3 SDK encoding tools, and 17 extraction tools for the local total of **74**. |
+| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 13 collector WRITE, 3 SDK encoding tools, and 17 extraction tools for the local total of **75**. |
 
 ## Public tier (32 tools)
 
