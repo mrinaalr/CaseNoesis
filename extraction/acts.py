@@ -12,14 +12,16 @@ comparison across offense types needs.
     deception    said or submitted something false: posed as, misrepresented, forged
     demand       asked for or required something of value
     threat       threatened harm, exposure, arrest or deportation
-    transfer     value passed from the person harmed: wired, paid, sent, deposited
-    movement     the offender moved or changed the value: laundered, withdrew, converted
+    transfer     value passed from the person harmed: wired, paid, sent, deposited. The payer must
+                 be the person harmed; see `settle`
+    movement     the offender moved or changed the value: laundered, withdrew, converted, or wired
+                 or deposited it themselves
     access       got into a computer or an account without authority; deployed or ran code on it
     recruit      drew a person in: recruited, enticed, lured, groomed
     transport    moved a person or travelled to one
     control      held a person: took documents, confined, assaulted, coerced
     exploit      used the person: commercial sex, compelled labor, produced or traded abuse material
-    supply       sold, shipped or delivered contraband or a weapon
+    supply       sold, shipped or delivered contraband or a weapon, and the buyer's payment for it
     concealment  hid the act afterwards: deleted, destroyed, lied to investigators
     detection    what investigators did: an undercover contact, a search, a seizure
 
@@ -42,12 +44,16 @@ KINDS = ("setup", "contact", "deception", "demand", "threat", "transfer", "movem
 
 # The same acts one level up: where each falls in the course of an offense. This is the
 # stage structure of a crime script (Cornish, 1994), kept to five stages so that offenses
-# of different kinds can be laid side by side.
+# of different kinds can be laid side by side. It agrees with the roles the state machine
+# gives each act: entering a system is an approach, as contacting a person is; moving a
+# person is leverage over them.
 PHASE = {
     "setup": "preparation",
     "contact": "approach", "recruit": "approach",
     "deception": "leverage", "demand": "leverage", "threat": "leverage", "control": "leverage",
-    "transfer": "harm", "access": "harm", "exploit": "harm", "supply": "harm", "transport": "harm",
+    "access": "approach",
+    "transport": "leverage",
+    "transfer": "harm", "exploit": "harm", "supply": "harm",
     "movement": "exit", "concealment": "exit",
     "detection": "detection",
 }
@@ -69,7 +75,7 @@ _VERBS: tuple[tuple[str, str], ...] = (
                r"instructed\s+" + _WHOM + r"to|directed\s+" + _WHOM + r"to"),
     ("movement", r"laundered|withdrew|converted|cashed\s+out|structured|moved\s+the\s+(?:funds|money|proceeds)|transferred\s+the\s+(?:funds|money|proceeds)|"
                  r"wired\s+the\s+(?:funds|money|proceeds)|dissipated|spent\s+the\s+(?:funds|money|proceeds)"),
-    ("transfer", r"wired|(?<!was\s)(?<!were\s)(?<!been\s)paid(?=\s+[\w$])|sent\s+(?:approximately\s+|about\s+|more\s+than\s+|a\s+total\s+of\s+)?\$|transferred\s+(?:approximately\s+|about\s+)?\$|deposited|mailed\s+(?:cash|a\s+check|checks)|"
+    ("transfer", r"wired|(?<!was\s)(?<!were\s)(?<!been\s)(?<!be\s)paid(?=\s+[\w$])|sent\s+(?:approximately\s+|about\s+|more\s+than\s+|a\s+total\s+of\s+)?\$|transferred\s+(?:approximately\s+|about\s+)?\$|deposited|mailed\s+(?:cash|a\s+check|checks)|"
                  r"purchased\s+(?:\w+\s+)?gift\s+cards|lost\s+(?:approximately\s+|about\s+)?\$"),
     ("access", r"accessed|logged\s+in(?:to)?|hacked|breached|gained\s+(?:unauthorized\s+)?access|deployed|installed|encrypted|exfiltrated|compromised"),
     ("exploit", r"caused\s+" + _WHOM + r"to\s+engage|engaged\s+in\s+(?:a\s+)?commercial\s+sex|posted\s+(?:online\s+)?advertisements?|advertised|"
@@ -151,7 +157,10 @@ def by_verb(trigger: str, after: str, before: str = "") -> str | None:
         if found == "setup":
             return "setup"
         if found in ("transfer", "movement"):
-            return "transfer" if _TAKES_VALUE.match(trigger) else None
+            if _TAKES_VALUE.match(trigger):
+                return "transfer"
+            # "purchased gift cards worth $9,000": the purchase is how the value leaves the payer.
+            return "transfer" if re.match(r"purchased\s+(?:\w+\s+)?gift\s+cards", trigger + after[:30], re.IGNORECASE) else None
         return None
     if SELLS.match(trigger) and not re.match(r"distributed\s+(?:child|images|videos|files)", trigger + after[:20], re.IGNORECASE):
         return "supply" if by_object(after[:REACH]) == "supply" else None
@@ -175,3 +184,48 @@ def by_object(after: str) -> str | None:
         if match and (best is None or match.start() < best[0]):
             best = (match.start(), kind)
     return best[1] if best else None
+
+
+# Who paid, read from the words before a transfer verb in its clause.
+_VICTIM = re.compile(
+    r"\bvictims?\b|\bV-?\d+\b|\bVictim[-\s]\w+|\bCompany\s+[A-Z0-9]\b|\binvestors?\b|\blenders?\b|\bthe\s+lender\b|\bclients?\b|"
+    r"\bpatients?\b|\bthe\s+banks?\b|\binsurers?\b|\bthe\s+(?:company|business|employer|program|agency)\b|\bresidents?\b|"
+    r"\bseniors?\b|\belderly\b|\bwidow\b|\bfamil(?:y|ies)\b|\bminors?\b|\bdonors?\b|\bhomeowners?\b|\bpolicyholders?\b",
+    re.IGNORECASE)
+_BUYER = re.compile(r"\bbuyers?\b|\bpurchasers?\b|\bthe\s+CS\b|\bCHS\b|\bthe\s+CI\b|\bconfidential\s+(?:source|informant)s?\b|\bundercover\b|\bthe\s+UC\b", re.IGNORECASE)
+_OFFENDER = re.compile(r"\b(?:defendants?|co-?defendants?|co-?conspirators?|he|she|they|his\s+\w+|her\s+\w+)\s*$|\b[A-Z][A-Za-z'’-]+\s*$|\[name\]\s*$")
+_CLAUSE_START = re.compile(r"(?:[.;:]|,\s+(?:and|then|after\s+which)\b|\band\s+then\b|\band\b|,)\s*")
+_CAUSED = re.compile(r"\b(?:caused|induced|directed|instructed|told|persuaded|convinced|asked)\s+(?:\S+\s+){1,4}to\s*$", re.IGNORECASE)
+
+
+def payer(before: str) -> str:
+    """Who a transfer verb's subject is: `victim`, `buyer`, `offender` or `unknown`."""
+    tail = _CLAUSE_START.split(before)[-1] if before else ""
+    if _BUYER.search(tail):
+        return "buyer"
+    if _VICTIM.search(tail):
+        return "victim"
+    if _CAUSED.search(before):
+        return "victim"
+    if tail.strip() and _OFFENDER.search(tail.strip()):
+        return "offender"
+    return "unknown"
+
+
+def settle(kind: str | None, before: str, after: str) -> str | None:
+    """A transfer, given who paid. Value passes from the person harmed only when they are the payer.
+
+    A buyer's payment for contraband is part of the sale: `supply`. The offender wiring or depositing
+    money is the offender moving it: `movement`. A transfer whose payer the clause does not name
+    stays a transfer only when the sentence names a person harmed."""
+    if kind != "transfer":
+        return kind
+    who = payer(before)
+    contraband = by_object(after[:REACH]) == "supply" or bool(re.search(r"\bfor\s+(?:the\s+|a\s+|an\s+)?(?:\w+\s+){0,3}(?:fentanyl|methamphetamine|cocaine|heroin|pills|firearms?|pistols?|rifles?|guns?|drugs)\b", after[:REACH], re.IGNORECASE))
+    if who == "buyer" or contraband:
+        return "supply"
+    if who == "offender":
+        return "movement"
+    if who == "unknown" and not (_VICTIM.search(before) or _VICTIM.search(after[:REACH])):
+        return "movement"
+    return "transfer"

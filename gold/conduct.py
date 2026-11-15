@@ -96,7 +96,8 @@ SCRIPTS: dict[str, dict[str, Any]] = {
     "drug_sale": {"domain": "drugs", "offense": ("distribution of a controlled substance", "21 U.S.C. § 841"), "steps": [
         ("setup", {"channel": ["darkweb"]}, "{D} opened a vendor account on a dark web marketplace", "{D} set up as a vendor on a dark web marketplace"),
         ("supply", {"channel": ["mail"]}, "{D} shipped pills containing fentanyl to buyers through the U.S. mail", "{D} sent pills containing fentanyl to buyers through the U.S. mail"),
-        ("transfer", {"channel": ["cryptocurrency"]}, "Buyers paid {D} in cryptocurrency", "{D} took payment from buyers in cryptocurrency"),
+        # A buyer's payment for contraband is part of the sale, not value taken from a person harmed.
+        ("supply", {"channel": ["cryptocurrency"]}, "Buyers paid {D} in cryptocurrency", "{D} took payment from buyers in cryptocurrency"),
         ("movement", {}, "{D} laundered the proceeds through accounts held in other names", "{D} ran the proceeds through accounts held in other names"),
     ]},
 }

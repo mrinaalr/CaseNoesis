@@ -17,7 +17,7 @@ from typing import Any
 from extraction import acts, fields, names, spans as sp
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "clause_1.2"
+VERSION = "clause_1.3"
 METHOD = "clause_cue"
 
 _MONEY_CUES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
@@ -200,6 +200,7 @@ def read(doc: Doc) -> list[dict[str, Any]]:
                 role = acts.by_object(text[start:ce])
             else:
                 role = None
+            role = acts.settle(role, text[max(cs, start - 160): start], text[end:ce])
             out.append(assertion("conduct", value, role, METHOD, VERSION, 0.7 if role else 0.5, start, end))
 
     parties: list[list[Any]] = []
