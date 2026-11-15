@@ -119,7 +119,14 @@ The claim: domains share states, and technology enters through the actions. If s
 | acts | The act taken at each state, $(s, a)$ |
 | means | The act and its technology at each state, $(s, a[\text{means}])$ |
 
-For each level, the mean Jensen-Shannon divergence between domains (bits) is set beside the divergence with domain labels shuffled. Domains are subsampled to equal size, 50 times, so a large domain does not look distinct only by being large. At the milestone layer the claim predicts little excess at the state level and clear excess at the other two. At the track layer, excess at the state level says that domains reach the same milestones by different routes, and does not contradict the claim.
+For each level, the mean Jensen-Shannon divergence between domains (bits) is set beside the divergence with domain labels shuffled, on equal-size subsamples, so a large domain does not look distinct only by being large.
+
+Setting the levels beside one another does not test the claim. States are computed by grouping acts, and a coarser grouping of any data diverges less than a finer one: random act sequences, with no order and no backbone, give the same ordering of levels. Tracks are a finer grouping than milestones and diverge more for the same reason. Two nulls test it, each scored on the same equal-size subsample as the observed value, 200 times:
+
+| Null | What changes | The claim predicts |
+|---|---|---|
+| Grouping | Act kinds reassigned to roles at random, keeping how many kinds each role has | The scheme's grouping leaves less state-level divergence between domains than a random grouping |
+| Order | Each record's acts shuffled | Observed state-level divergence below that with order shuffled, if it comes from how domains move through states and not only from which acts they use |
 
 ## Decision model
 
@@ -134,9 +141,9 @@ $$
 | `uniform` | 1 per act, 0 for `(stop)` | "Offenders are direct" |
 | `declared` | 1 plus the mean of four friction levels in `config/esm_costs.json` (template: [`esm_costs.example.json`](esm_costs.example.json)) | "Offenders take the easiest path", with ease set by the researcher |
 
-Value iteration ($\gamma = 0.95$) gives $Q^*$, the optimal policy, and $L^*$, at either layer. Tests:
+Value iteration ($\gamma = 0.95$) gives $Q^*$, the optimal policy, and $L^*$, at either layer. The model is fitted to walks told from preparation or contact. A telling that begins at the payment, as many releases do, would put a taking act among the first moves and make a one-act path to the goal feasible by construction; those walks are reported beside, not tested. Tests:
 
-- **Rationality.** $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$, $\beta$ fitted to every observed choice among two or more options, compared with $\beta = 0$ and with 200 random cost models.
+- **Rationality.** $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$, $\beta$ fitted over $[-20, 20]$ to every observed choice among two or more options, compared with $\beta = 0$ and with 200 random cost models. A negative $\beta$ means choices lean away from the optimum. A random model counts as fitting better only when strictly better; ties, which every pair of models at $\beta = 0$ produces, are reported apart.
 - **Agreement.** Share of choices that are the optimal action, beside always taking each state's most common action.
 - **Sensitivity.** All results under nine feasibility cutoffs.
 

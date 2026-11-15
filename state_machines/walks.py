@@ -121,3 +121,14 @@ def predicate(walk: Walk, scheme: Scheme) -> str:
     if all(f is False for f in said):
         return "fails"
     return "unspecified"
+
+
+def from_start(walks: list[Walk], scheme: Scheme, *, layer: str = "milestone") -> list[Walk]:
+    """Walks whose telling begins before the goal: at preparation or at contact."""
+    first = {scheme.roles.get("preparation"), scheme.roles.get("contact")} - {None}
+    out = []
+    for walk in walks:
+        walked = steps(walk, scheme, layer)
+        if walked and scheme.at(walked[0][2], "milestone") in first:
+            out.append(walk)
+    return out

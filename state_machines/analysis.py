@@ -13,20 +13,45 @@ from typing import Any
 from state_machines import coverage, invariance, machine as m, mdp, readers
 from state_machines import scheme as sc
 from state_machines.scheme import Scheme
-from state_machines.walks import Walk, path, predicate, unplaced
+from state_machines.walks import Walk, from_start, path, predicate, unplaced
 
 # Court folders that hold filings of every kind, not one offense domain.
 MIXED = ("bulk", "transcripts")
 LAYERS = ("milestone", "track")
 
 
-def load(*, kind: str = "", domain: str = "", db=None, scheme: Scheme | None = None) -> tuple[list[Walk], Scheme]:
+def records(*, kind: str = "", domain: str = "", db=None) -> list[dict[str, Any]]:
+    """Each record's acts, in order, for the offense domains."""
     from extraction import store
     from process_mining import trajectory as trajectories_layer
 
-    scheme = scheme or sc.load()
     found = trajectories_layer.build(db or store.connect(), kind=kind, domain=domain, with_detection=True)
-    return [readers.from_conduct(t, scheme) for t in found if t["domain"] not in MIXED], scheme
+    return [t for t in found if t["domain"] not in MIXED]
+
+
+def load(*, kind: str = "", domain: str = "", db=None, scheme: Scheme | None = None) -> tuple[list[Walk], Scheme]:
+    scheme = scheme or sc.load()
+    return [readers.from_conduct(t, scheme) for t in records(kind=kind, domain=domain, db=db)], scheme
+
+
+def nulls_of(found: list[dict[str, Any]], scheme: Scheme, *, minimum: int = 80, draws: int = 200, large: int = 1000) -> dict[str, Any]:
+    """The grouping and order nulls for the state level, at both layers, on the same domain sets as `invariance_of`."""
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for t in found:
+        if t["acts"]:
+            grouped[t["domain"]].append(t)
+    read = lambda t: readers.from_conduct(t, scheme)  # noqa: E731
+    kinds = sorted(readers.ROLE)
+    out: dict[str, Any] = {}
+    for label, threshold, size in (("all_domains", minimum, None), ("large_domains", large, 1500)):
+        sets = {d: v for d, v in grouped.items() if len(v) >= threshold}
+        if len(sets) < 2:
+            continue
+        cap = min(size or 10**9, min(len(v) for v in sets.values()))
+        out[label] = {layer: invariance.nulls(sets, scheme, read, kinds=kinds, layer=layer, size=cap,
+                                              draws=draws if label == "all_domains" else max(20, draws // 5))
+                      for layer in LAYERS}
+    return out
 
 
 def by_domain(walks: list[Walk], minimum: int) -> dict[str, list[Walk]]:
@@ -62,18 +87,30 @@ def invariance_of(walks: list[Walk], scheme: Scheme, *, minimum: int = 80, repea
     return out
 
 
-def invariance_report(*, kind: str = "", minimum: int = 80, repeats: int = 50, db=None) -> dict[str, Any]:
-    walks, scheme = load(kind=kind, db=db)
-    return invariance_of(walks, scheme, minimum=minimum, repeats=repeats)
+def invariance_report(*, kind: str = "", minimum: int = 80, repeats: int = 50, draws: int = 0, db=None) -> dict[str, Any]:
+    """The comparison of domains, and with `draws` the grouping and order nulls that test it."""
+    scheme = sc.load()
+    found = records(kind=kind, db=db)
+    out = invariance_of([readers.from_conduct(t, scheme) for t in found], scheme, minimum=minimum, repeats=repeats)
+    if draws:
+        out["nulls"] = nulls_of(found, scheme, minimum=minimum, draws=draws)
+    return out
 
 
-def decision_of(walks: list[Walk], scheme: Scheme, *, layer: str = "milestone", nulls: int = 100, sensitivity: bool = True) -> dict[str, Any]:
+def decision_of(walks: list[Walk], scheme: Scheme, *, layer: str = "milestone", nulls: int = 100, sensitivity: bool = True,
+                complete_only: bool = True) -> dict[str, Any]:
+    """The decision model and its tests. By default on walks told from preparation or contact: a telling that
+    begins at the payment would make a one-act path to the goal feasible by construction."""
+    every = walks
+    if complete_only:
+        walks = from_start(walks, scheme, layer=layer)
     fitted = m.fit(walks, scheme, layer=layer)
     models = [mdp.uniform()]
     researcher = mdp.declared()
     if researcher is not None:
         models.append(researcher)
-    out: dict[str, Any] = {"layer": layer, "goal": sorted(scheme.goal), "trajectories": fitted.trajectories, "cost_models": []}
+    out: dict[str, Any] = {"layer": layer, "goal": sorted(scheme.goal), "walks_told_from_start_only": complete_only,
+                           "trajectories": fitted.trajectories, "of_all_walks": len(every), "cost_models": []}
     for costs in models:
         solution = mdp.solve(fitted, costs)
         out["cost_models"].append({"name": costs.name, "paths": mdp.paths(walks, fitted, solution),
@@ -122,18 +159,21 @@ def external(source: str, *, domain: str = "", layer: str = "milestone") -> dict
     return out
 
 
-def full(*, nulls: int = 100, repeats: int = 50, db=None) -> dict[str, Any]:
+def full(*, nulls: int = 100, repeats: int = 50, draws: int = 200, db=None) -> dict[str, Any]:
     from extraction import store
 
     db = db or store.connect()
     scheme = sc.load()
     out: dict[str, Any] = {"scheme": f"{scheme.name} {scheme.version}"}
     for label, kind in (("all_records", ""), ("court_filings", "court")):
-        walks, _ = load(kind=kind, db=db, scheme=scheme)
+        found = records(kind=kind, db=db)
+        walks = [readers.from_conduct(t, scheme) for t in found]
         out[label] = {"machine": {layer: machine_of(walks, scheme, layer=layer) for layer in LAYERS},
                       "invariance": invariance_of(walks, scheme, minimum=80 if not kind else 40, repeats=repeats),
+                      "invariance_nulls": nulls_of(found, scheme, minimum=80 if not kind else 40, draws=draws),
                       "decision": {layer: decision_of(walks, scheme, layer=layer, nulls=nulls, sensitivity=not kind and layer == "milestone")
                                    for layer in LAYERS},
+                      "decision_all_walks": decision_of(walks, scheme, nulls=max(20, nulls // 4), sensitivity=False, complete_only=False),
                       "laws": laws_of(walks, scheme, minimum=15 if kind == "court" else 25)}
     return out
 

@@ -2,7 +2,7 @@
 
     python -m state_machines scheme --gate                 the states, their hierarchy and crosswalk; writes schemes/esm.ttl
     python -m state_machines machine --kind court          the fitted machine: action space, policy, T with counts (--layer track)
-    python -m state_machines invariance                    same states, different acts? domains compared at each level and layer
+    python -m state_machines invariance --draws 200        domains compared at each level and layer, and the nulls that test it
     python -m state_machines decide --domain fraud         L*, observed paths beside it, the rationality test, cutoff sensitivity
     python -m state_machines laws --kind court             coverage, laws, tracks, the exploitation predicate
     python -m state_machines read graph.ttl                any traj graph or JSON walks, through the same analyses
@@ -43,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     scope(inv, domain=False)
     inv.add_argument("--min-trajectories", type=int, default=80)
     inv.add_argument("--repeats", type=int, default=50)
+    inv.add_argument("--draws", type=int, default=0, help="also run the grouping and order nulls, with this many paired draws")
     decide = commands.add_parser("decide", help="the goal-conditioned decision model and its tests")
     scope(decide)
     decide.add_argument("--layer", choices=["milestone", "track"], default="milestone")
@@ -53,6 +54,7 @@ def main(argv: list[str] | None = None) -> int:
     report.add_argument("--out", default="data/extracted/esm/report.json")
     report.add_argument("--nulls", type=int, default=100)
     report.add_argument("--repeats", type=int, default=50)
+    report.add_argument("--draws", type=int, default=200)
     graphs = commands.add_parser("graphs", help="write trajectory and model graphs in the trajectories and means extensions")
     scope(graphs, domain=False)
     graphs.add_argument("--gate", action="store_true", help="validate every graph with the SDK gate")
@@ -73,13 +75,13 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "machine":
         out = analysis.machine_report(kind=args.kind, domain=args.domain, layer=args.layer, level=args.level)
     elif args.command == "invariance":
-        out = analysis.invariance_report(kind=args.kind, minimum=args.min_trajectories, repeats=args.repeats)
+        out = analysis.invariance_report(kind=args.kind, minimum=args.min_trajectories, repeats=args.repeats, draws=args.draws)
     elif args.command == "decide":
         out = analysis.decision_report(kind=args.kind, domain=args.domain, layer=args.layer, nulls=args.nulls)
     elif args.command == "laws":
         out = analysis.laws_report(kind=args.kind)
     elif args.command == "report":
-        out = analysis.full(nulls=args.nulls, repeats=args.repeats)
+        out = analysis.full(nulls=args.nulls, repeats=args.repeats, draws=args.draws)
         path = Path(args.out)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(out, indent=1, default=str) + "\n", encoding="utf-8")

@@ -14,7 +14,7 @@ from pathlib import Path
 from state_machines import coverage, invariance, machine as m, mdp, readers
 from state_machines import scheme as sc
 from state_machines.scheme import START, STOP
-from state_machines.walks import Event, Walk, path, predicate, steps
+from state_machines.walks import Event, Walk, from_start, path, predicate, steps
 
 S = sc.load()
 
@@ -193,7 +193,26 @@ class DecisionTests(unittest.TestCase):
         drawn = self.sample(fitted, mdp.solve(fitted, mdp.uniform())["q"], 2.0, 400, 3)
         result = mdp.rationality(drawn, fitted, mdp.uniform(), nulls=20)
         self.assertGreater(result["beta"], 1.0)
-        self.assertLess(result["random_cost_models_fitting_at_least_as_well"], 0.05)
+        self.assertLess(result["random_fitting_better"], 0.05)
+
+    def test_an_actor_avoiding_the_optimum_gives_a_negative_beta(self) -> None:
+        base = [walk("x", *p) for p in (["contact", "transfer"], ["setup", "contact", "transfer"], ["deception", "transfer"],
+                                        ["contact", "deception", "transfer"], ["setup", "deception", "demand", "transfer"])] * 20
+        fitted = m.fit(base, S)
+        drawn = self.sample(fitted, mdp.solve(fitted, mdp.uniform())["q"], -2.0, 400, 4)
+        self.assertLess(mdp.rationality(drawn, fitted, mdp.uniform(), nulls=5)["beta"], -0.5)
+
+    def test_ties_are_not_counted_as_fitting_better(self) -> None:
+        rng = random.Random(5)
+        kinds = ["contact", "setup", "deception", "demand", "transfer", "movement", "recruit"]
+        drawn = [walk("x", *rng.sample(kinds, rng.randint(2, 5))) for _ in range(400)]
+        result = mdp.rationality(drawn, m.fit(drawn, S), mdp.uniform(), nulls=10)
+        self.assertLessEqual(result["random_fitting_better"] + result["random_fitting_as_well"], 1.0)
+        self.assertIn("random_fitting_as_well", result)
+
+    def test_tellings_from_the_start(self) -> None:
+        log = [walk("x", "contact", "transfer"), walk("x", "transfer", "movement"), walk("x", "setup", "transfer")]
+        self.assertEqual(len(from_start(log, S)), 2)
 
     def test_rationality_finds_nothing_in_an_indifferent_actor(self) -> None:
         rng = random.Random(5)
@@ -237,6 +256,42 @@ class InvarianceTests(unittest.TestCase):
         levels = self.compare(a, b)
         self.assertLess(levels["acts"]["excess_bits"], 0.01)
         self.assertGreater(levels["means"]["excess_bits"], 0.5)
+
+
+class NullTests(unittest.TestCase):
+    """The tests of the claim itself: does the scheme's grouping, or the order of acts, explain the state level?"""
+
+    @staticmethod
+    def records(name: str, paths: list[list[str]], n: int, seed: int) -> list[dict]:
+        rng = random.Random(seed)
+        return [traj(name, *rng.choice(paths), record=f"{name}{i}") for i in range(n)]
+
+    def run_nulls(self, a: list[dict], b: list[dict]) -> dict:
+        return invariance.nulls({"a": a, "b": b}, S, lambda t: readers.from_conduct(t, S), kinds=sorted(readers.ROLE),
+                                draws=12, shuffles=5)
+
+    def test_a_grouping_that_captures_shared_states_beats_random_groupings(self) -> None:
+        a = self.records("a", [["contact", "deception", "transfer"]], 200, 1)
+        b = self.records("b", [["recruit", "threat", "exploit"]], 200, 2)
+        self.assertGreater(self.run_nulls(a, b)["share_of_draws_observed_below_random_grouping"], 0.8)
+
+    def test_on_random_acts_the_grouping_null_is_calibrated(self) -> None:
+        """With no structure, the scheme's grouping is one grouping among many: over several datasets it
+        beats a random grouping about half the time. A single dataset can land anywhere."""
+        kinds = sorted(readers.ROLE)
+        shares = []
+        for seed in range(6):
+            rng = random.Random(seed)
+            weights = {d: [rng.random() for _ in kinds] for d in "ab"}
+            groups = {d: [traj(d, *rng.choices(kinds, weights[d], k=rng.randint(2, 6)), record=f"{d}{i}") for i in range(150)] for d in "ab"}
+            shares.append(self.run_nulls(groups["a"], groups["b"])["share_of_draws_observed_below_random_grouping"])
+        self.assertGreater(sum(shares) / len(shares), 0.2)
+        self.assertLess(sum(shares) / len(shares), 0.8)
+
+    def test_order_that_differs_between_domains_is_seen(self) -> None:
+        a = self.records("a", [["contact", "deception", "transfer"]], 200, 1)
+        b = self.records("b", [["transfer", "deception", "contact"]], 200, 2)
+        self.assertEqual(self.run_nulls(a, b)["share_of_draws_observed_below_shuffled_order"], 0.0)
 
 
 class LawTests(unittest.TestCase):

@@ -20,10 +20,18 @@ The claim predicts little excess divergence at the state level and clear
 excess at the act and means levels. Excess at the state level means the
 domains move between states differently.
 
-Run at the milestone layer, this tests the claim. Run at the track layer,
-it asks whether domains specialize below the milestones: whether fraud
-conditions by deception and trafficking by coercion, say. Excess there
-is expected and does not contradict the claim.
+Comparing the levels with one another does not test the claim. States are
+computed from acts by grouping them, and a coarser grouping of any data
+diverges less than a finer one: random act sequences with no order give
+the same ordering of levels. Two nulls test it instead, each on the same
+equal-size subsamples as the observed value:
+
+    grouping   act kinds reassigned to roles at random, keeping how many kinds each
+               role has. The claim predicts that the grouping the scheme uses leaves
+               less divergence between domains than a random grouping does.
+    order      each record's acts shuffled. If the observed state-level divergence is
+               no lower than with shuffled order, it reflects which acts domains use,
+               not the order they move through states in.
 """
 
 from __future__ import annotations
@@ -114,3 +122,59 @@ def state_transitions(by_domain: dict[str, list[Walk]], scheme: Scheme, *, layer
                 counts[s][n] += 1
         out[d] = {f"{s} -> {n}": round(c / sum(row.values()), 3) for s, row in sorted(counts.items()) for n, c in row.most_common()}
     return out
+
+
+def _relabel(trajectory: dict[str, Any], mapping: dict[str, str]) -> dict[str, Any]:
+    return {**trajectory, "acts": [{**a, "kind": mapping.get(a["kind"], a["kind"])} for a in trajectory["acts"]]}
+
+
+def _reorder(trajectory: dict[str, Any], rng: random.Random) -> dict[str, Any]:
+    """The record's acts in a random order; detection stays where it was told."""
+    acts = trajectory["acts"]
+    movable = [a for a in acts if a["kind"] != "detection"]
+    rng.shuffle(movable)
+    it = iter(movable)
+    return {**trajectory, "acts": [a if a["kind"] == "detection" else next(it) for a in acts]}
+
+
+def nulls(by_domain: dict[str, list[dict[str, Any]]], scheme: Scheme, read, *, kinds: list[str], layer: str = "milestone",
+          size: int | None = None, draws: int = 200, shuffles: int = 10, seed: int = 8252) -> dict[str, Any]:
+    """State-level excess divergence, observed, under random groupings of acts, and under shuffled order.
+
+    `by_domain` holds records with their acts; `read` turns one into a walk. Each draw takes one
+    equal-size subsample of every domain and scores it three ways, so the comparisons are paired."""
+    rng = random.Random(seed)
+    size = size or min(len(items) for items in by_domain.values())
+    rows = {"observed": [], "grouping": [], "order": []}
+    lower_than_grouping = lower_than_order = 0
+    for draw in range(draws):
+        sample = {d: rng.sample(items, size) for d, items in by_domain.items()}
+        perm = list(kinds)
+        rng.shuffle(perm)
+        mapping = dict(zip(kinds, perm))
+
+        def excess(groups: dict[str, list[dict[str, Any]]]) -> float:
+            walks = {d: [read(t) for t in items] for d, items in groups.items()}
+            return test(walks, scheme, layer=layer, size=size, repeats=1, shuffles=shuffles, seed=seed + draw)["levels"]["states"]["excess_bits"]
+
+        observed = excess(sample)
+        grouped = excess({d: [_relabel(t, mapping) for t in items] for d, items in sample.items()})
+        order_rng = random.Random(seed * 7 + draw)
+        shuffled = excess({d: [_reorder(t, order_rng) for t in items] for d, items in sample.items()})
+        rows["observed"].append(observed)
+        rows["grouping"].append(grouped)
+        rows["order"].append(shuffled)
+        lower_than_grouping += observed < grouped
+        lower_than_order += observed < shuffled
+
+    def summary(values: list[float]) -> dict[str, float]:
+        ordered = sorted(values)
+        return {"mean": round(sum(values) / len(values), 4), "p05": round(ordered[int(0.05 * (len(ordered) - 1))], 4),
+                "p50": round(ordered[len(ordered) // 2], 4), "p95": round(ordered[int(0.95 * (len(ordered) - 1))], 4)}
+
+    return {"layer": layer, "domains": {d: len(v) for d, v in sorted(by_domain.items())}, "subsample_size": size, "draws": draws,
+            "observed_state_excess_bits": summary(rows["observed"]),
+            "random_grouping_state_excess_bits": summary(rows["grouping"]),
+            "shuffled_order_state_excess_bits": summary(rows["order"]),
+            "share_of_draws_observed_below_random_grouping": round(lower_than_grouping / draws, 3),
+            "share_of_draws_observed_below_shuffled_order": round(lower_than_order / draws, 3)}

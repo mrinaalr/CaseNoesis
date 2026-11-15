@@ -14,6 +14,14 @@ once, on first arrival; the decision state carries whether it has been reached.
 Tests: `rationality` fits beta in P(a | x) proportional to exp(beta Q*(x, a)) to the observed choices and
 compares it with indifference and with random cost models; `agreement` is the share of choices that are
 the optimal action; `paths` sets L* beside observed walks; `sensitivity` repeats them under nine cutoffs.
+
+beta is fitted over [-20, 20]. A negative beta means choices lean away from what the cost model calls
+optimal. A random cost model is counted as fitting better only when its fit is strictly better; one that
+fits exactly as well is a tie, and ties are reported apart, since two models at beta = 0 always tie.
+
+A walk whose telling starts at exploitation (a release that begins at the payment) makes a one-act path
+to the goal look feasible from `start`. `from_start` keeps the walks told from preparation or contact, so
+the test is of choices made from the beginning of an offense.
 """
 
 from __future__ import annotations
@@ -159,7 +167,8 @@ def _log_likelihood(choices: Counter, q: dict[State, dict[str, float]], beta: fl
 
 
 def _fit_beta(choices: Counter, q: dict[State, dict[str, float]]) -> tuple[float, float, int]:
-    low, high = 0.0, 20.0
+    """The log-likelihood is concave in beta, so a golden-section search finds its maximum."""
+    low, high = -20.0, 20.0
     for _ in range(80):
         a, b = low + (high - low) * 0.382, low + (high - low) * 0.618
         if _log_likelihood(choices, q, a)[0] < _log_likelihood(choices, q, b)[0]:
@@ -177,10 +186,15 @@ def rationality(walks: list[Walk], machine: m.Machine, costs: CostModel, *, null
     beta, fitted, used = _fit_beta(choices, q)
     indifferent, _ = _log_likelihood(choices, q, 0.0)
     null = [_fit_beta(choices, solve(machine, random_costs(costs, machine.actions, seed + i))["q"])[1] for i in range(nulls)]
+    tolerance = 1e-6 * max(1.0, abs(fitted))
+    better = sum(1 for v in null if v > fitted + tolerance)
+    tied = sum(1 for v in null if abs(v - fitted) <= tolerance)
     return {
         "cost_model": costs.name, "choices": used, "beta": round(beta, 3),
         "bits_per_choice_over_indifferent": round((fitted - indifferent) / used / math.log(2), 4) if used else None,
-        "random_cost_models_fitting_at_least_as_well": round(sum(1 for v in null if v >= fitted) / len(null), 3) if null else None,
+        "random_cost_models": len(null),
+        "random_fitting_better": round(better / len(null), 3) if null else None,
+        "random_fitting_as_well": round(tied / len(null), 3) if null else None,
     }
 
 
@@ -221,6 +235,7 @@ def sensitivity(walks: list[Walk], scheme: Scheme, costs: CostModel, *, layer: s
             result = rationality(walks, fitted, costs, nulls=nulls)
             rows.append({"min_count": min_count, "min_share": min_share,
                          "optimal_path": " -> ".join(s["action"] for s in optimal_path(fitted, solution)),
-                         "beta": result["beta"], "random_fitting_at_least_as_well": result["random_cost_models_fitting_at_least_as_well"],
+                         "beta": result["beta"], "random_fitting_better": result["random_fitting_better"],
+                         "random_fitting_as_well": result["random_fitting_as_well"],
                          "action_space_at_start": len(fitted.available(START)) - 1})
     return rows

@@ -2122,17 +2122,20 @@ async def esm_read(path: str, domain: str = "", layer: str = "milestone") -> dic
 
 
 @mcp.tool()
-async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50) -> dict[str, Any]:
+async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50, draws: int = 0) -> dict[str, Any]:
     """READ. Do domains share states while differing in acts and technology?
 
     Jensen-Shannon divergence between domains at three levels (transitions
     between states; the act taken at each state; the act and its technology),
     each beside the divergence with domain labels shuffled, on equal-size
-    subsamples, at the milestone layer and at the track layer. The claim that
-    states hold while actions vary predicts little excess at the milestone state
-    level and clear excess at the other two.
+    subsamples, at the milestone layer and at the track layer. Levels are not
+    compared with each other: a coarser grouping of any data diverges less.
+    With draws > 0, the test of the claim: the observed state-level excess beside
+    the excess under random groupings of acts into roles and under shuffled act
+    order, on the same paired subsamples. Slow; draws of 50 take minutes.
     """
-    return await _esm("invariance_report", kind=kind, minimum=max(20, int(min_trajectories)), repeats=max(5, min(int(repeats), 200)))
+    return await _esm("invariance_report", kind=kind, minimum=max(20, int(min_trajectories)), repeats=max(5, min(int(repeats), 200)),
+                      draws=max(0, min(int(draws), 500)))
 
 
 @mcp.tool()
