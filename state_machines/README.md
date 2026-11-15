@@ -1,7 +1,5 @@
 # Exploitation State Machine
 
-The acts CaseNoesis reads from public records, fitted as a state machine and tested. Every part of the formal model that a record can supply is estimated here; the part a record cannot supply, the reward, is a declared assumption that the tests can reject. The claims the model was built around are treated as hypotheses. Where the data disagree with them, the disagreement is reported.
-
 | | |
 |---|---|
 | Input | The `conduct` table: each record's acts in order, with dates and means ([`extraction/conduct.py`](../extraction/conduct.py)) |
@@ -11,7 +9,7 @@ The acts CaseNoesis reads from public records, fitted as a state machine and tes
 | Graphs | `data/extracted/esm/records/`, `data/extracted/esm/models/`, in the SDK's `trajectories` and `means` extensions |
 | Tests | [`test_state_machines.py`](test_state_machines.py), 16 tests on synthetic trajectories with planted structure |
 
-**Contents:** [Machine](#the-machine) · [Trajectories](#trajectories) · [Transition function](#transition-function) · [States](#states-are-a-hypothesis) · [Decision model](#decision-model) · [Backbone and intervention](#backbone-and-intervention) · [Ontology](#ontology) · [Capability](#capability) · [Results](#results) · [Limits](#limits) · [Code map](#code-map)
+**Contents:** [Machine](#the-machine) · [Trajectories](#trajectories) · [Transition function](#transition-function) · [States](#states) · [Decision model](#decision-model) · [Backbone and intervention](#backbone-and-intervention) · [Ontology](#ontology) · [Capability](#capability) · [Results](#results) · [Limits](#limits) · [Code map](#code-map)
 
 ## The machine
 
@@ -27,8 +25,6 @@ $$
 | $R_G$ | Goal-indexed rewards | **Not estimated.** A declared cost model ([below](#decision-model)) |
 | $s_0$ | Initial state | `start` |
 | $F$ | Terminal states | `completed` (the actor stops, or the telling ends) and `disrupted` (the record narrates detection next) |
-
-Every case in the corpus was prosecuted, so every offense in it was disrupted in fact. `disrupted` means the record narrates the detection. `completed` means it does not. The split describes the telling.
 
 ## Trajectories
 
@@ -52,13 +48,11 @@ $$
 
 defined for the pairs the corpus observes, and reported with $n(s, a, \cdot)$. Because $s' = \phi(a)$ except for detection, $\hat{T}$ is close to deterministic, and its information is in $P(\text{disrupted} \mid s, a)$: how often a record narrates detection right after an act.
 
-**Action space.** $A(s)$ is the set of actions taken at $s$ at least 5 times and in at least 1% of departures from $s$, plus `(stop)`. An action seen once at a state is not evidence that it is open there.
+**Action space.** $A(s)$ is the set of actions taken at $s$ at least 5 times and in at least 1% of departures from $s$, plus `(stop)`.
 
-**Observed policy.** $\hat{\pi}(a \mid s) = n(s, a, \cdot) / n(s, \cdot, \cdot)$. It records what offenders in these records did, not a rule they followed.
+**Observed policy.** $\hat{\pi}(a \mid s) = n(s, a, \cdot) / n(s, \cdot, \cdot)$.
 
-## States are a hypothesis
-
-The framework this model serves holds that states stay roughly fixed across domains while actions change. That is tested, not assumed.
+## States
 
 **Learning states.** A state alphabet is a partition of the kinds of act. For a partition $\phi$, the class model is
 
@@ -73,15 +67,15 @@ and the partition is found by agglomeration: start with every act in its own cla
 - *Borrowing cost*: held-out bits per step on $A$ under $B$'s learned states, minus under $A$'s own.
 - *Agreement*: adjusted Rand index between the two partitions, over the acts both use.
 
-Each is set beside a floor from bootstrap resamples of $A$ alone: what borrowing costs, and how far partitions disagree, when nothing but sampling differs. Domains differ in their states to the extent that a pair's cost exceeds every resample's, and its agreement falls below every resample's.
+Each is compared with a floor from bootstrap resamples of $A$ alone. A pair differs when its cost exceeds every resample's and its agreement falls below every resample's.
 
-The test is run on synthetic data with planted structure in [`test_state_machines.py`](test_state_machines.py): it recovers a planted partition, finds two domains with the same structure invariant, and finds two with different structures different.
+Checked on planted structure in [`test_state_machines.py`](test_state_machines.py).
 
 ## Decision model
 
-The fitted machine says what followed what. The decision model asks whether observed choices look like those of an actor pursuing a goal, under a stated account of cost. [`mdp.py`](mdp.py).
+[`mdp.py`](mdp.py).
 
-**State.** $(s, r)$ with $r \in \lbrace 0, 1 \rbrace$ whether the goal has been reached, so that the goal pays once. Without $r$, a loop through the goal state pays on every pass.
+**State.** $(s, r)$ with $r \in \lbrace 0, 1 \rbrace$ whether the goal has been reached, so the goal pays once.
 
 **Reward.** For a cost model $\kappa$ with goal states $G$:
 
@@ -98,35 +92,33 @@ $$
 
 **Tests.**
 
-- *Rationality.* Assume $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$. $\beta = 0$ is indifference to the model's values. $\beta$ is fitted by maximum likelihood to every observed choice made among two or more options, and the fit is compared with indifference and with 200 random cost models ($c(a) \sim U[0, 2]$). A cost model that fits the choices no better than random costs does not describe them.
+- *Rationality.* Assume $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$. $\beta = 0$ is indifference to the model's values. $\beta$ is fitted by maximum likelihood to every observed choice made among two or more options, and the fit is compared with indifference and with 200 random cost models ($c(a) \sim U[0, 2]$).
 - *Agreement.* The share of observed choices that are the optimal action, beside the share reached by always taking each state's most common action.
 - *Paths.* $L^*$ beside the observed trajectories: length, and whether they reach $G$.
 
-The rationality test is checked in [`test_state_machines.py`](test_state_machines.py) on trajectories drawn from a planted goal-directed actor ($\beta = 2$, recovered above 1 and beating 95% of random costs) and from an indifferent one (gain below 0.05 bits per choice).
-
-**Release.** $L^*$ and $Q^*$ are computed over kinds of stage and kinds of act, from closed public cases, and are published only at that level. Neither is written into the ontology: the `means` extension records no reward and no value by design.
+Checked on a planted goal-directed actor ($\beta = 2$) and an indifferent one in [`test_state_machines.py`](test_state_machines.py).
 
 ## Backbone and intervention
 
-Most records tell part of an offense, so an intersection of states across trajectories is empty for reasons about the records. Coverage is used instead. [`coverage.py`](coverage.py).
+[`coverage.py`](coverage.py).
 
 $$
 \mathrm{cov}_d(s) = \frac{\left|\lbrace c \in C_d : s \in \sigma_c \rbrace\right|}{|C_d|}, \qquad \mathcal{B}_\theta = \lbrace s : \mathrm{cov}_d(s) \ge \theta \ \ \forall d \rbrace
 $$
 
-$\mathcal{B}_\theta$ is reported at $\theta \in \lbrace 0.9, 0.75, 0.5, 0.25, 0.1 \rbrace$, so a reader sees where states drop out.
+Reported at $\theta \in \lbrace 0.9, 0.75, 0.5, 0.25, 0.1 \rbrace$.
 
-Removing a state $b$ is measured on the recorded paths that reach the goal:
+Share of goal-reaching paths that avoid state $b$:
 
 $$
 \kappa_d(b) = \frac{\left|\lbrace c \in C^G_d : b \notin \sigma_c \rbrace\right|}{|C^G_d|}
 $$
 
-$\kappa_d(b) = 0$ means every recorded path to the goal in domain $d$ went through $b$. It is a statement about recorded paths and does not predict how an offender would reroute.
+$\kappa_d(b) = 0$: every recorded path to the goal in domain $d$ went through $b$.
 
 ## Ontology
 
-[`ontology.py`](ontology.py) writes trajectories and fitted machines in the SDK's `trajectories` (0.3.1) and `means` (0.1.0) extensions. Every graph is validated by the SDK gate: SHACL and the closed-world concept check.
+[`ontology.py`](ontology.py) writes trajectories and fitted machines in the SDK's `trajectories` (0.3.1) and `means` (0.1.0) extensions. Every graph is validated by the SDK gate.
 
 | Object | Class | Carries |
 |---|---|---|
@@ -140,11 +132,11 @@ $\kappa_d(b) = 0$ means every recorded path to the goal in domain $d$ went throu
 | The ability to use it | `means:OffenderCapability` | Evidenced by its use in the record |
 | Fitted machine | `traj:StateMachineModel` | The trajectories it was learned from, its transitions, and one `traj:TransitionEstimate` per $(s, a, s')$ with $\hat{T}$ and its counts, generated by an analysis run of this code |
 
-Not written: a reward, a value, or a policy; `means:Selection`, because a record shows the option taken and not the menu it was taken from; `means:OptionAssessment`, because frictions are a researcher's reading and not in a record.
+Not written: reward, value, policy (`means` records none by design); `means:Selection` (a record shows the option taken, not the menu); `means:OptionAssessment` (frictions are not in a record).
 
 ## Capability
 
-[`capability/`](capability/) is a sketch of the Capability class proposed in [UCO issue 682](https://github.com/ucoProject/UCO/issues/682), for review before it is offered upstream.
+[`capability/`](capability/): a sketch of the Capability class proposed in [UCO issue 682](https://github.com/ucoProject/UCO/issues/682), to offer upstream.
 
 | File | Holds |
 |---|---|
@@ -153,13 +145,13 @@ Not written: a reward, a value, or a policy; `means:Selection`, because a record
 | `capability-exemplar.ttl` | One capability from a gold statement of offense, written both ways: the stand-in the engine writes today, and the proposal's form with a `hasCapability` relationship |
 | `capability-invalid-exemplar.ttl` | Must fail its shapes |
 
-The proposal's Module and Parser classes describe forensic software and are left out. The exemplar passes the SDK gate with `capability.ttl` as a local ontology (marked not publishable, as a local term must be) and passes its own shapes; the invalid exemplar fails them. If UCO adopts the class, `cap:Capability` becomes the UCO class and this folder is retired.
+Module and Parser, which describe forensic software, are left out. The exemplar passes the SDK gate with `capability.ttl` as a local ontology, and its own shapes; the invalid exemplar fails them.
 
 ## Results
 
-Measured 2026-11-14 on the collected corpus, rules only, offense domains (the mixed `bulk` and `transcripts` court folders left out). Full figures in `report.json`.
+2026-11-14, collected corpus, rules only, offense domains. Full figures in `report.json`.
 
-**Machine.** 20,813 trajectories, 78,069 steps. 1,675 end in narrated detection. The action space holds 10 to 13 kinds of act at every state: in these records most kinds of act follow most states.
+**Machine.** 20,813 trajectories, 78,069 steps. 1,675 end in narrated detection. The action space holds 10 to 13 kinds of act at every state.
 
 **States.** Learned per domain, all records:
 
@@ -178,7 +170,7 @@ Measured 2026-11-14 on the collected corpus, rules only, offense domains (the mi
 | Mean agreement between domains | 0.04 |
 | Mean agreement between resamples of one domain | 0.36 |
 
-In the two large domains the result is clearest. Fraud's states cost trafficking 0.095 bits per step and trafficking's cost fraud 0.128, against resampling floors of 0.010 and 0.001, and the two partitions agree at −0.12. In every domain the five phases predict held-out trajectories worse than the domain's own learned states.
+Fraud and trafficking, the two large domains: fraud's states cost trafficking 0.095 bits per step and trafficking's cost fraud 0.128, against floors of 0.010 and 0.001; agreement −0.12. In every domain the five phases predict held-out trajectories worse than its own states.
 
 **Decision model**, uniform costs, goal `harm`:
 
@@ -193,30 +185,25 @@ In the two large domains the result is clearest. Fraud's states cost trafficking
 | Optimal action taken | 22% | 12% |
 | Most common action at each state | 32% | 20% |
 
-"Offenders are direct" does not describe the observed choices: the fitted $\beta$ is at or near zero, and most random cost models fit as well. No researcher cost table exists yet, so "offenders take the easiest path" has not been tested.
+Uniform cost does not explain the observed choices: $\beta \approx 0$, and most random cost models fit as well.
 
 **Backbone.** No state is covered by 75% of trajectories in every domain. `harm` is at 50%; `approach` joins at 25%; `leverage` at 10%.
 
 **Graphs.** A fitted machine for each of 11 domains' court filings (590 trajectories) passes the SDK gate with no violation.
 
-### What these results do and do not show
-
-They are measurements over what records narrate, read by rule readers that miss about three acts in ten. They do not by themselves show that offending in different domains has different states. Four things stand between them and that claim:
-
-- **Domain is the collector's search term**, not the charge.
-- **Small domains learn coarse states.** BIC with little data prefers few classes, and a coarse partition agrees poorly with a fine one by construction. The resampling floor guards against sampling noise within a domain; it does not equalize sample size between domains. The fraud and trafficking comparison, where both are large, is the one to weigh.
-- **The fifteen kinds of act** are themselves a choice, and a partition can only be as fine as they are.
-- **Order is the order of telling.**
-
-What they do show is that, at the resolution this engine reads, the data do not ask for one alphabet across domains, and the five phases are not the alphabet they ask for.
-
 ## Limits
 
-- **The reward is not in the data.** A cost model is an assumption to test, and only `uniform` has been tested.
-- **Detection is a property of the telling.** Every case was prosecuted.
-- **A trajectory is one record's telling**, not a case's, and not one person's when a record names several defendants.
-- **Acts are read by a list of verbs.** Paraphrased acts are missed ([`gold/conduct.py`](../gold/conduct.py) measures how often).
-- **No dissections yet.** Hand close-reads mapped onto the same classes would test what the corpus can only count.
+Results are measurements over what records narrate. They are not yet findings about offending.
+
+- **Reward.** Not in the data. Only `uniform` has been tested; "easiest path" needs a researcher's cost table.
+- **Detection.** Every case was prosecuted. `disrupted` means the record narrates detection.
+- **Acts.** Read by a list of verbs; about three in ten are missed ([`gold/conduct.py`](../gold/conduct.py)).
+- **Order.** The order of telling.
+- **Unit.** A trajectory is one record's telling, not a case's or one defendant's.
+- **Domain.** The collector's search term, not the charge.
+- **Small domains.** BIC learns coarse states from little data, and a coarse partition agrees poorly with a fine one by construction. Weigh the fraud and trafficking comparison, where both are large.
+- **Release.** $L^*$ and $Q^*$ are published only at the level of phases and kinds of act, from closed public cases.
+- **Dissections.** None yet. Hand close-reads mapped onto the same classes would test what the corpus can only count.
 
 ## Code map
 
@@ -230,4 +217,4 @@ What they do show is that, at the resolution this engine reads, the data do not 
 | [`analysis.py`](analysis.py) | Each analysis as one call, for the command line and the MCP server |
 | [`capability/`](capability/) | The capability sketch |
 | [`test_state_machines.py`](test_state_machines.py) | Tests on planted structure |
-| `bellman.py`, `compute_lstar.py`, `iris.py`, `lifecycle_api.py`, `sparql_queries.py`, `trajectory.py`, `graphs/`, `data/` | An earlier lifecycle model, still read by the researcher site in `run/`. Not used by anything above. `graphs/` also holds hand-built close-reads (`*_ESM.ttl`, `slavery_*.ttl`, `layered*.ttl`) that belong in the dissection work |
+| `bellman.py`, `compute_lstar.py`, `iris.py`, `lifecycle_api.py`, `sparql_queries.py`, `trajectory.py`, `graphs/`, `data/` | Earlier lifecycle model, read only by the researcher site in `run/`. To be removed |

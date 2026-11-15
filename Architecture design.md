@@ -700,7 +700,7 @@ Loaded now: 1,620 named graphs, 249,313 quads.
 
 ## 9. Formal modeling
 
-The Exploitation State Machine is fitted to the acts of section 7.3 and tested. Code and full method: [`state_machines/`](state_machines/README.md).
+Fitted to the acts of section 7.3. Method and results: [`state_machines/`](state_machines/README.md).
 
 $$
 M = (S, A, T, R_G, s_0, F)
@@ -711,10 +711,10 @@ $$
 | $S$ | A partition of the fifteen kinds of act into states. Default: the five phases of section 7.3. Learned alternatives per domain |
 | $A$ | A kind of act, or an act with the technology its sentence names, plus stopping |
 | $T$ | Counted from trajectories; an act followed by narrated detection leads to `disrupted` |
-| $R_G$ | Not estimated. A declared cost model, which the tests can reject |
+| $R_G$ | Not estimated. A declared cost model |
 | $s_0$, $F$ | `start`; `completed` and `disrupted` |
 
-Three of the framework's claims are tested here rather than assumed:
+Claims tested:
 
 | Claim | Test | Result, 2026-11-14 |
 |---|---|---|
@@ -722,9 +722,9 @@ Three of the framework's claims are tested here rather than assumed:
 | Offenders are direct | Rationality parameter $\beta$ fitted to observed choices under uniform costs, against 200 random cost models | Not supported. $\beta = 0$ over all records; 88% of random cost models fit as well |
 | A backbone recurs across domains | Coverage of each state in every domain, by threshold | `harm` at 50%; no state at 75% |
 
-"Offenders take the easiest path" needs a researcher's friction table and is not yet tested. Each result is a measurement over what records narrate, read by rule readers; [`state_machines/README.md`](state_machines/README.md) says what stands between it and a finding about offending.
+"Offenders take the easiest path" needs a researcher's cost table and is not yet tested. Limits: [`state_machines/README.md`](state_machines/README.md#limits).
 
-Fitted machines are written in the SDK's `trajectories` and `means` extensions and pass the gate: one per domain's court filings, 11 in all. A sketch of the Capability class proposed in UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
+Fitted machines for 11 domains' court filings are written in the SDK's `trajectories` and `means` extensions and pass the gate. A sketch of the Capability class of UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
 
 ---
 
