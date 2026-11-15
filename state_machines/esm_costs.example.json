@@ -1,8 +1,5 @@
 {
-  "_about": "Copy to config/esm_costs.json (config/ is not committed) and set each level to low, moderate, high or not_in_source. A level is the researcher's reading of how hard an act is for an offender: identity friction (exposing who they are), delay burden, detection exposure, and resource cost. An action may also be written with its means, such as \"transfer[gift_card]\". python -m state_machines decide then tests this table against the observed choices.",
-  "goal": [
-    "harm"
-  ],
+  "_about": "Copy to config/esm_costs.json (config/ is not committed) and set each level to low, moderate, high or not_in_source. A level is the researcher's reading of how hard an act is for an offender: identity friction (exposing who they are), delay burden, detection exposure, and resource cost. An action may also be written with its means, such as \"transfer[gift_card]\". The goal is the scheme's (schemes/esm.json). python -m state_machines decide then tests this table against the observed choices.",
   "actions": {
     "setup": {
       "identityFriction": "not_in_source",

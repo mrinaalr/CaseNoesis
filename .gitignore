@@ -132,7 +132,12 @@ state_machines/*
 !state_machines/README.md
 !state_machines/__main__.py
 !state_machines/machine.py
-!state_machines/states.py
+!state_machines/scheme.py
+!state_machines/walks.py
+!state_machines/readers.py
+!state_machines/schemes/
+!state_machines/schemes/*.json
+!state_machines/schemes/esm.ttl
 !state_machines/invariance.py
 !state_machines/mdp.py
 !state_machines/coverage.py

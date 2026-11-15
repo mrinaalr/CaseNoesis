@@ -233,7 +233,12 @@ def score(split: str | None, name: str) -> dict[str, Any]:
     exact = {"all": [0, 0], "plain": [0, 0], "paraphrased": [0, 0]}
     phase_exact = [0, 0]
     similarity = []
-    from state_machines import states as st
+    from state_machines import readers, scheme as esm_scheme, walks as esm_walks
+
+    scheme = esm_scheme.load()
+
+    def as_walk(acts: list[dict[str, Any]]):
+        return readers.from_conduct({"record_id": "", "acts": acts}, scheme)
 
     state_exact = {"all": [0, 0], "plain": [0, 0], "paraphrased": [0, 0]}
     terminal_exact, predicate_exact = [0, 0], [0, 0]
@@ -264,13 +269,14 @@ def score(split: str | None, name: str) -> dict[str, Any]:
         phases = lambda path: conduct_layer.path([{"kind": act_rules.PHASE[k]} for k in path])  # noqa: E731
         phase_exact[0] += int(phases(want_path) == phases(have_path))
         phase_exact[1] += 1
-        truth_states, read_states = st.path({"acts": want}), st.path({"acts": have})
+        truth_walk, read_walk = as_walk(want), as_walk(have)
+        truth_states, read_states = esm_walks.path(truth_walk, scheme), esm_walks.path(read_walk, scheme)
         for bucket in ("all", "paraphrased" if record["paraphrased"] else "plain"):
             state_exact[bucket][0] += int(truth_states == read_states)
             state_exact[bucket][1] += 1
         terminal_exact[0] += int(truth_states[-1:] == read_states[-1:])
         terminal_exact[1] += 1
-        predicate_exact[0] += int(st.predicate({"acts": want}) == st.predicate({"acts": have}))
+        predicate_exact[0] += int(esm_walks.predicate(truth_walk, scheme) == esm_walks.predicate(read_walk, scheme))
         predicate_exact[1] += 1
 
     def report(tp: int, fp: int, fn: int) -> dict[str, Any]:

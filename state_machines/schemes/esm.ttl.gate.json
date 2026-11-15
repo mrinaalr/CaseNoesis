@@ -1,0 +1,38 @@
+{
+  "schema": "noesis-gate-receipt/1",
+  "graph": "esm.ttl",
+  "graph_sha256": "0d8eca343852610e373937aee4d5d37f33afb7f6ac667b6e80f0e0c1e688833b",
+  "checked_at": "2026-11-15T02:35:35+00:00",
+  "conforms": true,
+  "publishable": true,
+  "violation_count": 0,
+  "verification_status": "complete",
+  "stages": {
+    "bundle_resolution": "complete",
+    "shacl_execution": "complete",
+    "shacl_conformance": "conforms",
+    "coverage_execution": "complete",
+    "coverage_conformance": "ok"
+  },
+  "sdk": {
+    "repo": "https://github.com/vulnmaster/CASE-UCO-SDK",
+    "tag": "v1.33.0",
+    "commit": "a2dc8bc96f5001c58af63e587593dbf6385b24cf",
+    "pinned": true,
+    "case_uco": "1.33.0",
+    "case_utils": "0.18.0",
+    "pyshacl": "0.31.0",
+    "rdflib": "7.6.0"
+  },
+  "extensions": {
+    "means": "0.1.0",
+    "trajectories": "0.3.1",
+    "layered": "0.2.0"
+  },
+  "profiles": [
+    "prov-o",
+    "time"
+  ],
+  "bundle_fingerprint": "2c375ef6db92a4d6999825babc68b281bb5c73f05efda49107d46171a2d0a601",
+  "local_ontology_graphs": []
+}

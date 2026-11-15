@@ -1,13 +1,15 @@
 """Command line for the Exploitation State Machine.
 
-    python -m state_machines machine --kind court          the fitted machine: action space, policy, T with counts
-    python -m state_machines invariance                    same states, different acts? domains compared at each level
+    python -m state_machines scheme --gate                 the states, their hierarchy and crosswalk; writes schemes/esm.ttl
+    python -m state_machines machine --kind court          the fitted machine: action space, policy, T with counts (--layer track)
+    python -m state_machines invariance                    same states, different acts? domains compared at each level and layer
     python -m state_machines decide --domain fraud         L*, observed paths beside it, the rationality test, cutoff sensitivity
-    python -m state_machines laws --kind court             backbone coverage, contact primacy, maintenance, the exploitation predicate
+    python -m state_machines laws --kind court             coverage, laws, tracks, the exploitation predicate
+    python -m state_machines read graph.ttl                any traj graph or JSON walks, through the same analyses
     python -m state_machines report                        every analysis, to data/extracted/esm/report.json
-    python -m state_machines graphs --kind court --gate    trajectory graphs per record, and a fitted model per domain
+    python -m state_machines graphs --kind court --gate    trajectory graphs per record, and fitted models per domain and layer
 
-Run `python -m extraction conduct` first: the machine is fitted to its acts.
+Run `python -m extraction conduct` first for the corpus commands: they read its acts.
 """
 
 from __future__ import annotations
@@ -27,15 +29,23 @@ def main(argv: list[str] | None = None) -> int:
         if domain:
             sub.add_argument("--domain", default="")
 
+    sch = commands.add_parser("scheme", help="the states, their hierarchy and crosswalk")
+    sch.add_argument("--gate", action="store_true", help="write schemes/esm.ttl and validate it with the SDK gate")
     machine = commands.add_parser("machine", help="the fitted machine")
     scope(machine)
+    machine.add_argument("--layer", choices=["milestone", "track"], default="milestone")
     machine.add_argument("--level", choices=["act", "means"], default="act")
+    read = commands.add_parser("read", help="a traj graph (.ttl) or JSON walks, through the same analyses")
+    read.add_argument("path")
+    read.add_argument("--domain", default="")
+    read.add_argument("--layer", choices=["milestone", "track", "source"], default="milestone")
     inv = commands.add_parser("invariance", help="same states, different acts? domains compared at each level")
     scope(inv, domain=False)
     inv.add_argument("--min-trajectories", type=int, default=80)
     inv.add_argument("--repeats", type=int, default=50)
     decide = commands.add_parser("decide", help="the goal-conditioned decision model and its tests")
     scope(decide)
+    decide.add_argument("--layer", choices=["milestone", "track"], default="milestone")
     decide.add_argument("--nulls", type=int, default=100)
     laws = commands.add_parser("laws", help="backbone, contact primacy, maintenance, the exploitation predicate")
     scope(laws, domain=False)
@@ -52,12 +62,20 @@ def main(argv: list[str] | None = None) -> int:
 
     from state_machines import analysis
 
-    if args.command == "machine":
-        out = analysis.machine_report(kind=args.kind, domain=args.domain, level=args.level)
+    if args.command == "scheme":
+        out = analysis.scheme_report()
+        if args.gate:
+            from state_machines import ontology
+
+            out = {"written": ontology.scheme_graph(check=True), "states": len(out["states"])}
+    elif args.command == "read":
+        out = analysis.external(args.path, domain=args.domain, layer=args.layer)
+    elif args.command == "machine":
+        out = analysis.machine_report(kind=args.kind, domain=args.domain, layer=args.layer, level=args.level)
     elif args.command == "invariance":
         out = analysis.invariance_report(kind=args.kind, minimum=args.min_trajectories, repeats=args.repeats)
     elif args.command == "decide":
-        out = analysis.decision_report(kind=args.kind, domain=args.domain, nulls=args.nulls)
+        out = analysis.decision_report(kind=args.kind, domain=args.domain, layer=args.layer, nulls=args.nulls)
     elif args.command == "laws":
         out = analysis.laws_report(kind=args.kind)
     elif args.command == "report":
@@ -88,7 +106,10 @@ def _graphs(args: argparse.Namespace) -> dict:
 
     from state_machines import analysis, ontology
 
-    found = analysis.load(kind=args.kind)
+    from process_mining import trajectory as trajectories_layer
+    from extraction import store
+
+    found = [t for t in trajectories_layer.build(store.connect(), kind=args.kind, with_detection=True) if t["domain"] not in analysis.MIXED]
     jobs = [(t, args.gate) for t in found]
     if args.workers > 1:
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
@@ -101,9 +122,15 @@ def _graphs(args: argparse.Namespace) -> dict:
         if "conforms" in row:
             out["records"]["conforming" if row["conforms"] else "not_conforming"] += 1
     label = args.kind or "all"
-    for domain, items in analysis.by_domain(found, args.min_model_trajectories).items():
-        result = ontology.model_graph(items, f"{domain}-{label}", check=args.gate)
-        out["models"].append({k: v for k, v in result.items() if k not in ("path", "sha256")})
+    grouped: dict[str, list[dict]] = {}
+    for t in found:
+        grouped.setdefault(t["domain"], []).append(t)
+    for domain, items in sorted(grouped.items()):
+        if len(items) < args.min_model_trajectories:
+            continue
+        for layer in analysis.LAYERS:
+            result = ontology.model_graph(items, f"{domain}-{label}", layer=layer, check=args.gate)
+            out["models"].append({k: v for k, v in result.items() if k not in ("path", "sha256")})
     out["records"] = dict(out["records"])
     return out
 

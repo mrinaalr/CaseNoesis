@@ -19,6 +19,11 @@ so that a large domain does not look more distinct only by being large.
 The claim predicts little excess divergence at the state level and clear
 excess at the act and means levels. Excess at the state level means the
 domains move between states differently.
+
+Run at the milestone layer, this tests the claim. Run at the track layer,
+it asks whether domains specialize below the milestones: whether fraud
+conditions by deception and trafficking by coercion, say. Excess there
+is expected and does not contradict the claim.
 """
 
 from __future__ import annotations
@@ -29,15 +34,16 @@ from collections import Counter, defaultdict
 from itertools import combinations
 from typing import Any
 
-from state_machines import states as st
+from state_machines.scheme import DETECTED, STOP, Scheme
+from state_machines.walks import Walk, steps
 
 LEVELS = ("states", "acts", "means")
 
 
-def features(trajectory: dict[str, Any]) -> dict[str, list]:
-    walked = st.steps(trajectory, level="means")
+def features(walk: Walk, scheme: Scheme, layer: str = "milestone") -> dict[str, list]:
+    walked = steps(walk, scheme, layer, "means")
     moves = [(s, n) for s, a, n in walked if n != s]
-    acts = [(s, a.split("[", 1)[0]) for s, a, _ in walked if a not in (st.STOP, st.DETECTED)]
+    acts = [(s, a.split("[", 1)[0]) for s, a, _ in walked if a not in (STOP, DETECTED)]
     means = [(s, a) for s, a, _ in walked if "[" in a]
     return {"states": moves, "acts": acts, "means": means}
 
@@ -61,10 +67,10 @@ def _mean_pairwise(groups: dict[str, list[dict[str, list]]], level: str) -> floa
     return sum(values) / len(values) if values else float("nan")
 
 
-def test(by_domain: dict[str, list[dict[str, Any]]], *, size: int | None = None, repeats: int = 50, shuffles: int = 20, seed: int = 8252) -> dict[str, Any]:
+def test(by_domain: dict[str, list[Walk]], scheme: Scheme, *, layer: str = "milestone", size: int | None = None, repeats: int = 50, shuffles: int = 20, seed: int = 8252) -> dict[str, Any]:
     """Observed and shuffled divergence at each level, on equal-size subsamples of each domain."""
     rng = random.Random(seed)
-    feats = {d: [features(t) for t in items] for d, items in by_domain.items()}
+    feats = {d: [features(w, scheme, layer) for w in items] for d, items in by_domain.items()}
     feats = {d: [f for f in items if f["acts"]] for d, items in feats.items()}
     size = size or min(len(items) for items in feats.values())
     results: dict[str, dict[str, list[float]]] = {level: {"observed": [], "shuffled": [], "beats_all_shuffles": []} for level in LEVELS}
@@ -80,7 +86,7 @@ def test(by_domain: dict[str, list[dict[str, Any]]], *, size: int | None = None,
             results[level]["observed"].append(observed)
             results[level]["shuffled"].append(sum(nulls) / len(nulls))
             results[level]["beats_all_shuffles"].append(float(observed > max(nulls)))
-    out: dict[str, Any] = {"domains": {d: len(items) for d, items in sorted(feats.items())}, "subsample_size": size, "repeats": repeats, "levels": {}}
+    out: dict[str, Any] = {"layer": layer, "domains": {d: len(items) for d, items in sorted(feats.items())}, "subsample_size": size, "repeats": repeats, "levels": {}}
     for level in LEVELS:
         r = results[level]
         observed, shuffled = sum(r["observed"]) / repeats, sum(r["shuffled"]) / repeats
@@ -90,20 +96,21 @@ def test(by_domain: dict[str, list[dict[str, Any]]], *, size: int | None = None,
     return out
 
 
-def pairs(by_domain: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
-    """Divergence for every pair of domains at each level, on all their trajectories."""
-    dists = {d: {level: Counter(x for t in items for x in features(t)[level]) for level in LEVELS} for d, items in by_domain.items()}
+def pairs(by_domain: dict[str, list[Walk]], scheme: Scheme, *, layer: str = "milestone") -> list[dict[str, Any]]:
+    """Divergence for every pair of domains at each level, on all their walks."""
+    feats = {d: [features(w, scheme, layer) for w in items] for d, items in by_domain.items()}
+    dists = {d: {level: Counter(x for f in items for x in f[level]) for level in LEVELS} for d, items in feats.items()}
     return [{"domains": f"{a} / {b}", **{level: round(_jsd(dists[a][level], dists[b][level]), 4) for level in LEVELS}}
             for a, b in combinations(sorted(dists), 2)]
 
 
-def state_transitions(by_domain: dict[str, list[dict[str, Any]]]) -> dict[str, dict[str, float]]:
+def state_transitions(by_domain: dict[str, list[Walk]], scheme: Scheme, *, layer: str = "milestone") -> dict[str, dict[str, float]]:
     """P(s' | s) between states for each domain: the state-level process the comparison is about."""
     out: dict[str, dict[str, float]] = {}
     for d, items in sorted(by_domain.items()):
         counts: dict[str, Counter] = defaultdict(Counter)
-        for t in items:
-            for s, n in features(t)["states"]:
+        for w in items:
+            for s, n in features(w, scheme, layer)["states"]:
                 counts[s][n] += 1
         out[d] = {f"{s} -> {n}": round(c / sum(row.values()), 3) for s, row in sorted(counts.items()) for n, c in row.most_common()}
     return out

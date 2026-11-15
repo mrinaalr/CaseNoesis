@@ -1,2 +1,2 @@
-"""The Exploitation State Machine: states, actions, transitions and a decision model, fitted to the
-acts CaseNoesis reads from records and tested against them. See README.md in this folder."""
+"""The Exploitation State Machine: states as data in layers (schemes/), walks read from any source,
+and a fitted machine, decision model and tests that run over them. See README.md in this folder."""

@@ -92,7 +92,7 @@ flowchart TD
   end
 
   subgraph FM["Formal modeling · state_machines/"]
-    ESM["milestone states · fitted machine<br/>invariance · decision model · laws"]
+    ESM["layered states · fitted machine<br/>invariance · decision model · laws"]
   end
 
   subgraph TS["Triple store · data/extracted/"]
@@ -159,7 +159,7 @@ What is built and what is not:
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy on real records, against hand labels | **Not done.** The gold set is invented text. It measures the readers on the phrasings its author wrote and does not replace a labelled sample of collected records |
-| Exploitation State Machine: milestone states, fitted machine, invariance test, decision model, laws, graphs | Built. Run on every trajectory. Section 9 |
+| Exploitation State Machine: layered states, readers for any source, fitted machine, invariance test, decision model, laws, graphs | Built. Run on every trajectory. Section 9 |
 
 ---
 
@@ -708,24 +708,24 @@ $$
 
 | Term | Here |
 |---|---|
-| $S$ | Milestones reached: Preparation, InitialContact, Conditioning, Exploitation, Maintenance. The last four close-match the CAC grooming phases |
+| $S$ | The states of one layer. Milestones: Preparation, InitialContact, Conditioning, Exploitation, Maintenance, Exit; the backbone four close-match the CAC grooming phases. Tracks beneath them say how each was reached |
 | $A$ | A kind of act, or an act with its technology, plus stopping |
 | $T$ | Counted from trajectories; detection narrated after an act is its outcome |
 | $R_G$ | Not estimated. A declared cost model |
 | $s_0$, $F$ | `start`; Completed, Disrupted, Unresolved |
 
-States are read from what the offense has reached, so they are separate from the acts that move it. The five phases of section 7.3 are script stages of single acts; they are not these states.
+States are data ([`state_machines/schemes/`](state_machines/schemes/)), in two layers linked by `skos:broader`. The SDK's domain alphabets and CAC's phases are placed under them by a crosswalk, so a walk in any alphabet, read from the corpus, a hand-built graph or another extractor, runs through the same machine and tests. The five phases of section 7.3 are script stages of single acts; they are not these states.
 
 | Claim | Test | Result, 2026-11-14 |
 |---|---|---|
-| States hold while actions vary | Divergence between domains at the state, act and technology levels, against shuffled labels on equal-size subsamples | Domains differ at every level, least in their state transitions (fraud and trafficking: 0.06 bits above shuffled) and most in acts (0.42) and technology (0.52) |
-| Offenders are direct | Rationality $\beta$ under uniform costs, against 200 random cost models, under nine feasibility cutoffs | Not supported: $\beta = 0$ under every cutoff |
-| A backbone recurs | Coverage of each state in every domain; contact primacy and maintenance on court filings | No state in half of trajectories in every domain; maintenance follows exploitation in 53 to 63% of court narratives |
-| The exploitation predicate separates exploitation from other harm | Whether Exploitation is reached by taking from a victim | Drugs 32% and firearms 12% reach it only by supply; every other domain 0 to 2% |
+| States hold while actions vary | Divergence between domains at the state, act and technology levels, at each layer, against shuffled labels on equal-size subsamples | At the milestone layer, domains differ least in their state transitions (fraud and trafficking: 0.07 bits above shuffled) and most in acts (0.42) and technology (0.51). At the track layer they differ in states too (0.49): fraud conditions by deception (79%), trafficking by coercion (51%) |
+| Offenders are direct | Rationality $\beta$ under uniform costs, against 200 random cost models, under nine feasibility cutoffs, at both layers | Not supported: $\beta = 0$ under every cutoff |
+| A backbone recurs | Coverage of each milestone in every domain; contact primacy and maintenance on court filings | No milestone in half of walks in every domain; maintenance follows exploitation in 53 to 63% of court narratives |
+| The exploitation predicate separates exploitation from other harm | Whether the goal state reached says the victim is the source | Drugs 32% and firearms 15% reach exploitation only by supply; every other domain 0 to 2% |
 
 "Offenders take the easiest path" needs a researcher's cost table. Limits: [`state_machines/README.md`](state_machines/README.md#limits).
 
-Trajectories and fitted machines for court filings are written in the SDK's `trajectories` and `means` extensions and pass the gate. A sketch of the Capability class of UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
+The scheme is written as a SKOS concept scheme ([`schemes/esm.ttl`](state_machines/schemes/esm.ttl)) and passes the gate as publishable. Trajectories and fitted machines for court filings are written in the SDK's `trajectories` and `means` extensions and pass the gate. A sketch of the Capability class of UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
 
 ---
 
@@ -1037,7 +1037,7 @@ export DYLD_LIBRARY_PATH=/opt/homebrew/opt/expat/lib       # macOS, for the vali
 | The Inductive Miner on the papers' running example, a loop, a skipped step, replay with no noise filter, noise filtering, alignments, every procedural check | `process_mining.test_process` |
 | Acts in order from a narrative; a recital of the statute is not conduct; ambiguous verbs decided by their object; three levels of one trajectory; transition frequencies and entropy; domains that differ only in means are alike above that level | `process_mining.test_trajectory` |
 | How a docket entry is classified; only the free archive is ever downloaded from | `collector.test_conduct_documents` |
-| States as milestones, the same act moving different states, loops, how a trajectory ends, the predicate, CAC alignment; detection as an outcome; feasibility; the goal paid once; rationality recovers a planted goal-directed actor and finds nothing in an indifferent one; invariance sees same states with different acts, different states, and same acts with different technology; laws; graphs pass the gate | `state_machines.test_state_machines` |
+| The scheme refuses a broken hierarchy; leverage after the goal is maintenance; SDK alphabets place under ESM states; acts, graphs and JSON read into walks; the same act moves different states; detection as an outcome; feasibility; the goal paid once, including when detection follows it; rationality recovers a planted goal-directed actor and finds nothing in an indifferent one; invariance sees shared milestones with different tracks and acts, different milestones, and same acts with different technology; laws, and a scheme without a role; scheme, trajectory and model graphs pass the gate | `state_machines.test_state_machines` |
 | The committed gold corpus is what the generator writes; every typed token in it is claimed or listed; development-split scores stay above their floors | `gold.test_gold` |
 
 What the tests do not show: that the readers are right on real records. That needs a hand-labelled sample of collected records, which does not exist.
@@ -1127,7 +1127,7 @@ The readers are precise and incomplete. A plain telling is read whole. A paraphr
 | `vendor/CASE-UCO-SDK` | The pinned SDK, a submodule |
 | [`docs/sdk-encoding.md`](docs/sdk-encoding.md) | The SDK path in detail |
 | `config/extraction_overrides.json` | Human verdicts. Optional; absent until a person writes one |
-| [`state_machines/`](state_machines/) | **The Exploitation State Machine**: milestone states, the fitted machine, the invariance test, the decision model, laws, and graphs in the `trajectories` and `means` extensions. Its earlier lifecycle modules are listed in its README |
+| [`state_machines/`](state_machines/) | **The Exploitation State Machine**: layered states and the crosswalk, readers for any source, the fitted machine, the invariance test, the decision model, laws, and graphs in the `trajectories` and `means` extensions. Its earlier lifecycle modules are listed in its README |
 | `src/`, `ontology/`, `visualization/`, `run/`, `models/`, `scripts/` | **Earlier ICAC code**, from before the engine. `run/` serves the researcher site from it. The engine does not import any of it, and it is to be removed |
 
 ---
