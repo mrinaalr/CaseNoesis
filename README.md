@@ -21,7 +21,7 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 Accuracy is measured on a gold set of 200 invented records written from known answers ([`gold/`](gold/)). On its held-out half the engine scores F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants, and 0.85 to 0.94 on victim counts and scheme and channel labels.
 
-The Exploitation State Machine is fitted to the acts read from records and tested, not assumed: states learned per domain are checked for invariance across domains, and a goal-conditioned decision model is checked against observed choices. See [`state_machines/`](state_machines/README.md).
+The Exploitation State Machine is fitted to the acts read from records and tested, not assumed: states are milestones aligned to the CAC backbone, domains are compared at the state, act and technology levels, and a goal-conditioned decision model is checked against observed choices. See [`state_machines/`](state_machines/README.md).
 
 Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. No public data release yet.
 
@@ -48,7 +48,7 @@ flowchart TD
     GOLD["GOLD SET <br/> 200 invented records, known answers"] -.->|"scores"| ENG
     STORE --> KG["ENGINE GRAPH <br/> CASE/UCO + legalproc <br/> defendants · charges · terms · amounts <br/> SHACL gate"]
 
-    STORE --> ESM["STATE MACHINE <br/> M = (S, A, T, R_G, s₀, F) <br/> learned states · invariance test · decision model · coverage"]
+    STORE --> ESM["STATE MACHINE <br/> M = (S, A, T, R_G, s₀, F) <br/> milestone states · invariance · decision model · laws"]
     ESM --> KG
 
     KG --> OX["LOCAL TRIPLE STORE <br/> Oxigraph + graphs.nq · SPARQL"]

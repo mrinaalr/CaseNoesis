@@ -2082,12 +2082,12 @@ async def _esm(name: str, **kwargs: Any) -> dict[str, Any]:
 async def esm_machine(kind: str = "", domain: str = "", level: str = "act") -> dict[str, Any]:
     """READ. The Exploitation State Machine fitted to the acts read from records.
 
-    States are the five phases (preparation, approach, leverage, harm, exit), an
-    action is a kind of act (or an act with its technology at level "means"),
-    and T(s'|s,a) is counted from trajectories, with `disrupted` where a record
-    narrates detection after an act. Returns the action space at each state
-    (actions taken there at least 5 times and in 1% of departures), the
-    observed policy, and every transition estimate with its counts.
+    States are milestones the offense has reached: Preparation, InitialContact,
+    Conditioning, Exploitation, Maintenance (the last four close to the CAC
+    grooming phases). Actions are kinds of act, or acts with their technology at
+    level "means". Returns the action space at each state, the observed policy,
+    and every T(s'|s,a) estimate with its counts. Terminal: Completed (exploitation
+    reached), Disrupted (detection narrated first), Unresolved.
     """
     if level not in ("act", "means"):
         return {"error": "level must be act or means", "write": False}
@@ -2095,39 +2095,43 @@ async def esm_machine(kind: str = "", domain: str = "", level: str = "act") -> d
 
 
 @mcp.tool()
-async def esm_states(kind: str = "", min_trajectories: int = 50, resamples: int = 20) -> dict[str, Any]:
-    """READ. States learned from each domain's trajectories, and whether they hold across domains.
+async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50) -> dict[str, Any]:
+    """READ. Do domains share states while differing in acts and technology?
 
-    For each domain: the states found by agglomerative class induction with the
-    number chosen by BIC, held-out bits per step under its own states, the five
-    theory phases, states pooled over all domains, and no states. For each pair
-    of domains: the held-out cost of borrowing the other's states and the
-    agreement between partitions, each beside a floor from resampling the same
-    domain. Tests the claim that states are fixed across domains; does not assume it.
+    Jensen-Shannon divergence between domains at three levels (transitions
+    between states; the act taken at each state; the act and its technology),
+    each beside the divergence with domain labels shuffled, on equal-size
+    subsamples. The claim that states hold while actions vary predicts little
+    excess at the state level and clear excess at the other two.
     """
-    return await _esm("states_report", kind=kind, min_trajectories=max(10, int(min_trajectories)), resamples=max(2, min(int(resamples), 50)))
+    return await _esm("invariance_report", kind=kind, minimum=max(20, int(min_trajectories)), repeats=max(5, min(int(repeats), 200)))
 
 
 @mcp.tool()
-async def esm_decide(kind: str = "", domain: str = "", goal: str = "harm", nulls: int = 100) -> dict[str, Any]:
-    """READ. The goal-conditioned decision model and its tests.
+async def esm_decide(kind: str = "", domain: str = "", nulls: int = 100) -> dict[str, Any]:
+    """READ. The goal-conditioned decision model (goal: Exploitation) and its tests.
 
-    Rewards are a declared assumption: `uniform` (every act costs the same, so
-    the optimum is the shortest feasible path to the goal), and the
-    researcher's friction table when config/esm_costs.json exists. For each:
-    L*, how observed paths compare, the share of observed choices that are
-    optimal, and a fitted rationality parameter beta compared with indifference
-    and with random cost models. Published at the level of phases and kinds of act only.
+    Rewards are declared, not estimated: `uniform`, and the researcher's
+    friction table when config/esm_costs.json exists. For each: L*, observed
+    paths beside it, the share of choices that are optimal, a fitted
+    rationality beta against random cost models, and the same results under
+    nine feasibility cutoffs. Published at the level of states and kinds of act only.
     """
-    return await _esm("decision_report", kind=kind, domain=domain, goal=tuple(g for g in goal.split(",") if g), nulls=max(10, min(int(nulls), 500)))
+    return await _esm("decision_report", kind=kind, domain=domain, nulls=max(10, min(int(nulls), 500)))
 
 
 @mcp.tool()
-async def esm_coverage(kind: str = "", goal: str = "harm") -> dict[str, Any]:
-    """READ. How many of each domain's trajectories pass through each state, the states every
-    domain shares at each coverage threshold (the backbone), and for each state the share of
-    goal-reaching trajectories that avoid it (what removing it would leave untouched)."""
-    return await _esm("coverage_report", kind=kind, goal=tuple(g for g in goal.split(",") if g))
+async def esm_laws(kind: str = "") -> dict[str, Any]:
+    """READ. Backbone and laws read off observed trajectories, per domain.
+
+    Coverage of each state and the backbone at each threshold; contact primacy
+    (InitialContact before Exploitation); conditioning before exploitation;
+    maintenance after it; Exploitation-Maintenance loops; what avoiding each
+    pre-exploitation state would leave; and the exploitation predicate (the
+    victim is the source of what is taken). Use kind="court" for narratives
+    told from the start.
+    """
+    return await _esm("laws_report", kind=kind)
 
 
 @mcp.tool()

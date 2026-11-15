@@ -2,14 +2,13 @@
 
 | | |
 |---|---|
-| Input | The `conduct` table: each record's acts in order, with dates and means ([`extraction/conduct.py`](../extraction/conduct.py)) |
-| Command line | `python -m state_machines {machine, states, decide, coverage, report, graphs}` |
-| MCP | `esm_machine`, `esm_states`, `esm_decide`, `esm_coverage` |
-| Report | `data/extracted/esm/report.json` |
-| Graphs | `data/extracted/esm/records/`, `data/extracted/esm/models/`, in the SDK's `trajectories` and `means` extensions |
-| Tests | [`test_state_machines.py`](test_state_machines.py), 16 tests on synthetic trajectories with planted structure |
+| Input | Each record's acts in order, with dates and means ([`extraction/conduct.py`](../extraction/conduct.py)) |
+| Command line | `python -m state_machines {machine, invariance, decide, laws, report, graphs}` |
+| MCP | `esm_machine`, `esm_invariance`, `esm_decide`, `esm_laws` |
+| Output | `data/extracted/esm/report.json`; graphs in `data/extracted/esm/` |
+| Tests | [`test_state_machines.py`](test_state_machines.py): 20 tests on planted structure |
 
-**Contents:** [Machine](#the-machine) · [Trajectories](#trajectories) · [Transition function](#transition-function) · [States](#states) · [Decision model](#decision-model) · [Backbone and intervention](#backbone-and-intervention) · [Ontology](#ontology) · [Capability](#capability) · [Results](#results) · [Limits](#limits) · [Code map](#code-map)
+**Contents:** [Machine](#the-machine) · [States](#states) · [Transitions](#transitions) · [Invariance](#invariance) · [Decision model](#decision-model) · [Backbone and laws](#backbone-and-laws) · [Exploitation predicate](#exploitation-predicate) · [Ontology](#ontology) · [Capability](#capability) · [Results](#results) · [Limits](#limits) · [Code map](#code-map)
 
 ## The machine
 
@@ -17,120 +16,115 @@ $$
 \mathcal{M} = (S,\ A,\ T,\ R_G,\ s_0,\ F)
 $$
 
-| Symbol | Definition | Here |
+| Symbol | Here |
+|---|---|
+| $S$ | Preparation, InitialContact, Conditioning, Exploitation, Maintenance ([below](#states)) |
+| $A$ | A kind of act (`transfer`), or an act with the technology its sentence names (`transfer[gift_card]`), plus `(stop)` |
+| $T$ | $\hat{T}(s' \mid s, a)$, counted from trajectories |
+| $R_G$ | Not estimated. A declared cost model ([below](#decision-model)) |
+| $s_0$ | `start` |
+| $F$ | Completed (Exploitation reached), Disrupted (detection narrated before it), Unresolved (the telling ends before it) |
+
+## States
+
+A state is a milestone the offense has reached, read from the acts before it. States and actions are separate: the same act can leave different states and lead to different ones.
+
+| State | Reached when | CAC |
 |---|---|---|
-| $S$ | Finite set of states | A partition of the fifteen kinds of act. Default: five phases (`preparation`, `approach`, `leverage`, `harm`, `exit`). Learned alternatives from [`states.py`](states.py) |
-| $A$ | Actions | A kind of act (`transfer`), or an act with the technology its sentence names (`transfer[gift_card]`), plus `(stop)` |
-| $T$ | $T : S \times A \to \Delta(S)$ | Counted from trajectories ([below](#transition-function)) |
-| $R_G$ | Goal-indexed rewards | **Not estimated.** A declared cost model ([below](#decision-model)) |
-| $s_0$ | Initial state | `start` |
-| $F$ | Terminal states | `completed` (the actor stops, or the telling ends) and `disrupted` (the record narrates detection next) |
+| Preparation | Means set up, no victim yet | |
+| InitialContact | A victim, a person or a system, is reached | `cac-grooming:InitialContactPhase` |
+| Conditioning | Leverage is held: deception, a demand, a threat, control | `cac-grooming:ConditioningPhase` |
+| Exploitation | Value or a person is taken, or the offense's harm delivered | `cac-grooming:ExploitationPhase` |
+| Maintenance | Leverage is renewed after exploitation | `cac-grooming:MaintenancePhase` |
 
-## Trajectories
+The four backbone states are aligned to CAC by `skos:closeMatch`, not `exactMatch`: CAC defines them for child exploitation, and here they apply to every domain.
 
-A record's acts, in the order it tells them, become steps:
+Acts move states by their role:
 
-$$
-\sigma = \big((s_0, a_0, s_1),\ (s_1, a_1, s_2),\ \dots\big), \qquad s_{t+1} = \begin{cases} \text{disrupted} & \text{if detection is narrated right after } a_t \\ \phi(a_t) & \text{otherwise} \end{cases}
-$$
+| Role | Acts | Move |
+|---|---|---|
+| prepare | setup | `start` → Preparation |
+| reach | contact, recruit, access | `start`, Preparation → InitialContact |
+| leverage | deception, demand, threat, control, transport | → Conditioning before exploitation; → Maintenance after |
+| extract | transfer, exploit | → Exploitation, including from Maintenance (a renewed extraction) |
+| deliver | supply | → Exploitation |
+| after | movement, concealment | no change |
 
-where $\phi$ maps a kind of act to its state. A trajectory that does not end in detection ends with $(s_T, \texttt{(stop)}, \text{completed})$. A repeat of the same action into the same state is one step. Steps are counted over all trajectories:
+Exploitation ⇄ Maintenance is a loop: extortion that demands again, trafficking that keeps control.
 
-$$
-n(s, a, s') = \left|\lbrace (s, a, s') \text{ in } \sigma_c : c \in C \rbrace\right|
-$$
-
-## Transition function
+## Transitions
 
 $$
 \hat{T}(s' \mid s, a) = \frac{n(s, a, s')}{n(s, a, \cdot)}
 $$
 
-defined for the pairs the corpus observes, and reported with $n(s, a, \cdot)$. Because $s' = \phi(a)$ except for detection, $\hat{T}$ is close to deterministic, and its information is in $P(\text{disrupted} \mid s, a)$: how often a record narrates detection right after an act.
+reported with $n(s, a, \cdot)$. Detection narrated right after an act is that act's outcome: Completed if exploitation had been reached by then, Disrupted if not.
 
-**Action space.** $A(s)$ is the set of actions taken at $s$ at least 5 times and in at least 1% of departures from $s$, plus `(stop)`.
+**Action space.** $A(s)$: acts taken at $s$ at least 5 times and in at least 1% of departures, plus `(stop)`. The cutoff changes no result: see [Results](#results).
 
-**Observed policy.** $\hat{\pi}(a \mid s) = n(s, a, \cdot) / n(s, \cdot, \cdot)$.
+## Invariance
 
-## States
+The claim: domains share states, and technology enters through the actions. If so, domains should look alike in how they move between states, and differ in which acts, and which technologies, they use to do it. [`invariance.py`](invariance.py).
 
-**Learning states.** A state alphabet is a partition of the kinds of act. For a partition $\phi$, the class model is
+| Level | Distribution per domain |
+|---|---|
+| states | Transitions between states, $s \to s'$ with $s' \ne s$ |
+| acts | The act taken at each state, $(s, a)$ |
+| means | The act and its technology at each state, $(s, a[\text{means}])$ |
 
-$$
-P(x_{t+1} \mid x_t) = P\big(\phi(x_{t+1}) \mid \phi(x_t)\big)\ P\big(x_{t+1} \mid \phi(x_{t+1})\big)
-$$
-
-and the partition is found by agglomeration: start with every act in its own class and repeatedly merge the pair whose merging costs the least likelihood (Brown et al., 1992). The number of states is chosen by BIC. Every comparison is on held-out trajectories, five folds.
-
-**Testing invariance.** For each pair of domains $(A, B)$:
-
-- *Borrowing cost*: held-out bits per step on $A$ under $B$'s learned states, minus under $A$'s own.
-- *Agreement*: adjusted Rand index between the two partitions, over the acts both use.
-
-Each is compared with a floor from bootstrap resamples of $A$ alone. A pair differs when its cost exceeds every resample's and its agreement falls below every resample's.
-
-Checked on planted structure in [`test_state_machines.py`](test_state_machines.py).
+For each level, the mean Jensen-Shannon divergence between domains (bits) is set beside the divergence with domain labels shuffled. Domains are subsampled to equal size, 50 times, so a large domain does not look distinct only by being large. The claim predicts little excess at the state level and clear excess at the other two.
 
 ## Decision model
 
-[`mdp.py`](mdp.py).
-
-**State.** $(s, r)$ with $r \in \lbrace 0, 1 \rbrace$ whether the goal has been reached, so the goal pays once.
-
-**Reward.** For a cost model $\kappa$ with goal states $G$:
+[`mdp.py`](mdp.py). The state carries whether the goal, Exploitation, has been reached, so it pays once.
 
 $$
-R\big((s, r), a, s'\big) = -c_\kappa(a) \;+\; v_G\,[s' \in G \wedge r = 0] \;-\; d\,[s' = \text{disrupted}]
+R\big((s, r), a, s'\big) = -c_\kappa(a) \;+\; v\,[s' = \text{Exploitation} \wedge r = 0] \;-\; d\,[s' = \text{Disrupted}]
 $$
 
 | Cost model | $c(a)$ | Encodes |
 |---|---|---|
-| `uniform` | 1 for every act, 0 for `(stop)` | "Offenders are direct." $L^*$ is the shortest feasible path to $G$ |
-| `declared` | 1 plus the mean of four friction levels from `config/esm_costs.json` (template: [`esm_costs.example.json`](esm_costs.example.json)) | "Offenders take the easiest path", with "easy" set by the researcher. Not present until a researcher writes the table |
+| `uniform` | 1 per act, 0 for `(stop)` | "Offenders are direct" |
+| `declared` | 1 plus the mean of four friction levels in `config/esm_costs.json` (template: [`esm_costs.example.json`](esm_costs.example.json)) | "Offenders take the easiest path", with ease set by the researcher |
 
-**Solution.** Value iteration on $V^*(x) = \max_{a \in A(x)} \sum_{x'} \hat{T}(x' \mid x, a)\,[R + \gamma V^*(x')]$, $\gamma = 0.95$, giving $Q^*$, the optimal policy, and $L^*$, its most probable path from `start`.
+Value iteration ($\gamma = 0.95$) gives $Q^*$, the optimal policy, and $L^*$. Tests:
 
-**Tests.**
+- **Rationality.** $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$, $\beta$ fitted to every observed choice among two or more options, compared with $\beta = 0$ and with 200 random cost models.
+- **Agreement.** Share of choices that are the optimal action, beside always taking each state's most common action.
+- **Sensitivity.** All results under nine feasibility cutoffs.
 
-- *Rationality.* Assume $P(a \mid x) \propto \exp(\beta\, Q^*(x, a))$. $\beta = 0$ is indifference to the model's values. $\beta$ is fitted by maximum likelihood to every observed choice made among two or more options, and the fit is compared with indifference and with 200 random cost models ($c(a) \sim U[0, 2]$).
-- *Agreement.* The share of observed choices that are the optimal action, beside the share reached by always taking each state's most common action.
-- *Paths.* $L^*$ beside the observed trajectories: length, and whether they reach $G$.
+## Backbone and laws
 
-Checked on a planted goal-directed actor ($\beta = 2$) and an indifferent one in [`test_state_machines.py`](test_state_machines.py).
+[`coverage.py`](coverage.py). Each law is measured on trajectories that reach Exploitation.
 
-## Backbone and intervention
+| Measure | Definition |
+|---|---|
+| Backbone at $\theta$ | States occupied by at least $\theta$ of trajectories in every domain |
+| Contact primacy | InitialContact before Exploitation |
+| Full backbone | InitialContact and Conditioning both before Exploitation |
+| Maintenance | Maintenance after Exploitation |
+| Loop | Exploitation re-entered after Maintenance |
+| $\kappa_d(b)$ | Share of completed trajectories that avoid state $b$. 0: every completed path went through $b$ |
 
-[`coverage.py`](coverage.py).
+## Exploitation predicate
 
-$$
-\mathrm{cov}_d(s) = \frac{\left|\lbrace c \in C_d : s \in \sigma_c \rbrace\right|}{|C_d|}, \qquad \mathcal{B}_\theta = \lbrace s : \mathrm{cov}_d(s) \ge \theta \ \ \forall d \rbrace
-$$
-
-Reported at $\theta \in \lbrace 0.9, 0.75, 0.5, 0.25, 0.1 \rbrace$.
-
-Share of goal-reaching paths that avoid state $b$:
-
-$$
-\kappa_d(b) = \frac{\left|\lbrace c \in C^G_d : b \notin \sigma_c \rbrace\right|}{|C^G_d|}
-$$
-
-$\kappa_d(b) = 0$: every recorded path to the goal in domain $d$ went through $b$.
+A trajectory is exploitative when the victim is the source of what the offender takes: it reaches Exploitation by `extract` (transfer, exploit). `passes`, `fails` (reached only by `deliver`: contraband supplied, no victim as source), or `not_reached`.
 
 ## Ontology
 
-[`ontology.py`](ontology.py) writes trajectories and fitted machines in the SDK's `trajectories` (0.3.1) and `means` (0.1.0) extensions. Every graph is validated by the SDK gate.
+[`ontology.py`](ontology.py) writes in the SDK's `trajectories` (0.3.1) and `means` (0.1.0) extensions. Every graph passes the SDK gate.
 
-| Object | Class | Carries |
-|---|---|---|
-| State | `traj:State` | One per state of an alphabet; the same IRI in every graph |
-| Act | `traj:PhaseAssertion` | The state it occupies, its place in the telling, the interval its paragraph dates it to (open when undated), a confidence from how it was settled, and the record it was read from |
-| Last act before narrated detection | `traj:PhaseAssertion` | `isTerminal true`, `terminalPolarity "disrupted"` |
-| Record's telling | `traj:Trajectory` | Its assertions |
-| Step | `traj:Transition` | Triggered by and enacting a `uco-action:Action` for the act, with the technology as `uco-action:instrument` |
-| Goal | `means:Goal` | Reaching the goal state, pursued by the record's offender |
-| Act by a named technology | `means:Option` | One per technology: the instrument, the state it was taken from, the transition it enacted |
-| The ability to use it | `means:OffenderCapability` | Evidenced by its use in the record |
-| Fitted machine | `traj:StateMachineModel` | The trajectories it was learned from, its transitions, and one `traj:TransitionEstimate` per $(s, a, s')$ with $\hat{T}$ and its counts, generated by an analysis run of this code |
+| Object | Class |
+|---|---|
+| State | `traj:State`, with `skos:closeMatch` to CAC |
+| Act | `traj:PhaseAssertion`: the state it moved the offense to, its place, its interval, its confidence, its record |
+| Last act | `isTerminal`, `terminalPolarity` "completed" or "disrupted"; none when unresolved |
+| Telling | `traj:Trajectory` |
+| Step | `traj:Transition`, enacting a `uco-action:Action` with the technology as `uco-action:instrument` |
+| Goal | `means:Goal`: reach Exploitation |
+| Act by a technology | `means:Option`, one per technology |
+| Ability to use it | `means:OffenderCapability`, evidenced by use |
+| Fitted machine | `traj:StateMachineModel` with one `traj:TransitionEstimate` per $(s, a, s')$ |
 
 Not written: reward, value, policy (`means` records none by design); `means:Selection` (a record shows the option taken, not the menu); `means:OptionAssessment` (frictions are not in a record).
 
@@ -140,81 +134,80 @@ Not written: reward, value, policy (`means` records none by design); `means:Sele
 
 | File | Holds |
 |---|---|
-| `capability.ttl` | `cap:Capability` (a `uco-core:UcoObject`), `cap:structuredCharacterization` to a `uco-action:ActionPattern`, `cap:capabilityScope`. A bridge re-parents `means:OffenderCapability` onto it, as that class's own comment asks |
+| `capability.ttl` | `cap:Capability`, `cap:structuredCharacterization` to a `uco-action:ActionPattern`, `cap:capabilityScope`; re-parents `means:OffenderCapability` onto it |
 | `capability-shapes.ttl` | At most one characterization, and it is an action pattern |
-| `capability-exemplar.ttl` | One capability from a gold statement of offense, written both ways: the stand-in the engine writes today, and the proposal's form with a `hasCapability` relationship |
+| `capability-exemplar.ttl` | One capability from a gold statement of offense, as the stand-in and as the proposal's form |
 | `capability-invalid-exemplar.ttl` | Must fail its shapes |
-
-Module and Parser, which describe forensic software, are left out. The exemplar passes the SDK gate with `capability.ttl` as a local ontology, and its own shapes; the invalid exemplar fails them.
 
 ## Results
 
 2026-11-14, collected corpus, rules only, offense domains. Full figures in `report.json`.
 
-**Machine.** 20,813 trajectories, 78,069 steps. 1,675 end in narrated detection. The action space holds 10 to 13 kinds of act at every state.
+**Machine.** 20,813 trajectories, 85,166 steps. Ends: 10,676 Completed, 917 Disrupted, 9,220 Unresolved.
 
-**States.** Learned per domain, all records:
+**Invariance.** Excess divergence over shuffled labels, bits:
 
-| Domain | Trajectories | States learned | Held-out bits per step: own states | five phases | states pooled over all domains | Agreement with the five phases |
-|---|---:|---:|---:|---:|---:|---:|
-| fraud | 14,849 | 10 | 2.973 | 3.064 | 2.970 | 0.26 |
-| trafficking | 1,556 | 7 | 2.975 | 3.100 | 2.986 | −0.02 |
-| forced labor | 139 | 4 | 2.837 | 3.038 | 3.045 | 0.05 |
-| cyber | 91 | 4 | 3.295 | 3.385 | 3.295 | −0.03 |
-| child exploitation | 90 | 3 | 3.104 | 3.241 | 3.444 | −0.02 |
+| | States | Acts | Means |
+|---|---:|---:|---:|
+| Five domains, 97 trajectories each | 0.074 | 0.303 | 0.107 |
+| Fraud and trafficking, 1,500 each | 0.061 | 0.417 | 0.518 |
+| Court filings, three domains, 72 each | 0.024 | 0.165 | 0.125 |
 
-| Invariance, 20 ordered pairs of domains | |
-|---|---:|
-| Borrowing another domain's states costs more than every resample of the same domain | 15 of 20 |
-| Partitions agree less than every resample of the same domain | 11 of 20 |
-| Mean agreement between domains | 0.04 |
-| Mean agreement between resamples of one domain | 0.36 |
+Every level differs from shuffled in every subsample, except states in court filings (78% of subsamples). Domains differ least in how they move between states, and most in which acts and technologies they use. At 97 trajectories the means distribution is too sparse to separate domains from shuffled well (shuffled 0.84 bits); at 1,500 it is the largest difference.
 
-Fraud and trafficking, the two large domains: fraud's states cost trafficking 0.095 bits per step and trafficking's cost fraud 0.128, against floors of 0.010 and 0.001; agreement −0.12. In every domain the five phases predict held-out trajectories worse than its own states.
-
-**Decision model**, uniform costs, goal `harm`:
+**Decision model**, uniform costs:
 
 | | All records | Court filings |
 |---|---:|---:|
-| $L^*$ | `start` → `transfer` → `harm`, then stop | `start` → `transport` → `harm`, then stop |
-| Observed median length | 2 acts | 3 acts |
-| Observed trajectories reaching `harm` | 62% | 82% |
-| Fitted $\beta$ | 0.000 | 0.099 |
-| Gain over indifference, bits per choice | 0.000 | 0.011 |
-| Random cost models fitting at least as well | 88% | 68% |
-| Optimal action taken | 22% | 12% |
-| Most common action at each state | 32% | 20% |
+| $L^*$ | `transfer` → Exploitation | `exploit` → Exploitation |
+| Observed median length | 3 acts | 4 acts |
+| $\beta$ | 0.000 | 0.000 |
+| Random cost models fitting at least as well | 83% | 71% |
+| Optimal action taken | 19% | 10% |
 
-Uniform cost does not explain the observed choices: $\beta \approx 0$, and most random cost models fit as well.
+Under all nine cutoffs (`min_count` 1, 5, 20 × `min_share` 0, 1%, 5%), $L^*$ is the same and $\beta = 0$.
 
-**Backbone.** No state is covered by 75% of trajectories in every domain. `harm` is at 50%; `approach` joins at 25%; `leverage` at 10%.
+**Laws**, court filings, trajectories reaching Exploitation:
 
-**Graphs.** A fitted machine for each of 11 domains' court filings (590 trajectories) passes the SDK gate with no violation.
+| | Fraud (172) | Trafficking (51) | Cyber (53) |
+|---|---:|---:|---:|
+| Contact primacy | 33% | 24% | 49% |
+| Full backbone | 17% | 18% | 19% |
+| Maintenance | 53% | 63% | 62% |
+| Loop | 41% | 27% | 43% |
+
+No state is occupied by half of trajectories in every domain.
+
+**Exploitation predicate.** Share of trajectories reaching Exploitation only by supply: drugs 32%, firearms 12%, every other domain 0 to 2%.
+
+**Graphs.** Per-record trajectories and per-domain fitted machines for court filings pass the SDK gate.
+
+**Gold statements** (held-out half): state paths exact for 19 of 22 plain tellings and 1 of 18 paraphrased; predicate correct for 25 of 40.
 
 ## Limits
 
-Results are measurements over what records narrate. They are not yet findings about offending.
+These are measurements over what records narrate.
 
-- **Reward.** Not in the data. Only `uniform` has been tested; "easiest path" needs a researcher's cost table.
-- **Detection.** Every case was prosecuted. `disrupted` means the record narrates detection.
-- **Acts.** Read by a list of verbs; about three in ten are missed ([`gold/conduct.py`](../gold/conduct.py)).
+- **Reward.** Only `uniform` has been tested; "easiest path" needs a researcher's cost table.
+- **Telling.** A record often begins at the payment, so missing early states (low contact primacy) can be states the telling skipped. Court filings tell more and are reported separately.
+- **Acts.** Read by a list of verbs; about three in ten are missed, and paraphrased tellings are rarely read whole.
 - **Order.** The order of telling.
-- **Unit.** A trajectory is one record's telling, not a case's or one defendant's.
+- **Unit.** One record's telling, not a case's or one defendant's.
 - **Domain.** The collector's search term, not the charge.
-- **Small domains.** BIC learns coarse states from little data, and a coarse partition agrees poorly with a fine one by construction. Weigh the fraud and trafficking comparison, where both are large.
-- **Release.** $L^*$ and $Q^*$ are published only at the level of phases and kinds of act, from closed public cases.
-- **Dissections.** None yet. Hand close-reads mapped onto the same classes would test what the corpus can only count.
+- **Levels.** Divergences at different levels have different numbers of categories; compare each with its own shuffled baseline, not with each other directly.
+- **Release.** $L^*$ and $Q^*$ are published only at the level of states and kinds of act, from closed public cases.
+- **Dissections.** None yet.
 
 ## Code map
 
 | File | What it does |
 |---|---|
-| [`machine.py`](machine.py) | Trajectories as steps; the fitted machine: counts, $\hat{T}$, action space, observed policy |
-| [`states.py`](states.py) | State induction, held-out evaluation, the invariance test |
-| [`mdp.py`](mdp.py) | Cost models, value iteration, $L^*$, rationality, agreement |
-| [`coverage.py`](coverage.py) | Coverage, backbone, intervention |
-| [`ontology.py`](ontology.py) | Trajectory and model graphs in the `trajectories` and `means` extensions; the gate |
+| [`states.py`](states.py) | States, roles, steps, paths, the exploitation predicate, CAC alignment |
+| [`machine.py`](machine.py) | The fitted machine: counts, $\hat{T}$, action space, observed policy |
+| [`invariance.py`](invariance.py) | Domains compared at the state, act and means levels against shuffled labels |
+| [`mdp.py`](mdp.py) | Cost models, value iteration, $L^*$, rationality, agreement, cutoff sensitivity |
+| [`coverage.py`](coverage.py) | Backbone, laws, intervention, predicate by domain |
+| [`ontology.py`](ontology.py) | Trajectory and model graphs; the gate |
 | [`analysis.py`](analysis.py) | Each analysis as one call, for the command line and the MCP server |
 | [`capability/`](capability/) | The capability sketch |
-| [`test_state_machines.py`](test_state_machines.py) | Tests on planted structure |
 | `bellman.py`, `compute_lstar.py`, `iris.py`, `lifecycle_api.py`, `sparql_queries.py`, `trajectory.py`, `graphs/`, `data/` | Earlier lifecycle model, read only by the researcher site in `run/`. To be removed |

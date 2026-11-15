@@ -4,12 +4,14 @@ Two kinds of graph, both validated by the SDK gate before they are kept.
 
 **A record's trajectory** (`data/extracted/esm/records/<record>.ttl`):
 
-    traj:State              one per state of the alphabet, shared across graphs (same IRI everywhere)
-    traj:PhaseAssertion     one per act: the state it occupies, its place in the telling, the interval
-                            the record dates it to (open when the record gives no date), a confidence
-                            from how the act was settled, and the record it was read from
+    traj:State              one per state, the same IRI in every graph; the four backbone states carry
+                            skos:closeMatch to the CAC grooming phase of the same name
+    traj:PhaseAssertion     one per act: the state the act moved the offense to, its place in the
+                            telling, the interval the record dates it to (open when undated), a
+                            confidence from how the act was settled, and the record it was read from
     traj:Trajectory         the record's assertions, in order. The last carries terminalPolarity
-                            "disrupted" when the record narrates detection after it
+                            "completed" when exploitation was reached, "disrupted" when detection is
+                            narrated first; an unresolved telling makes no terminal claim
     traj:Transition         one per step, triggered by and enacting a uco-action:Action for the act,
                             with the technology its sentence names as uco-action:instrument
     means:Goal              reaching the goal state, pursued by the record's offender
@@ -39,7 +41,7 @@ from rdflib import BNode, Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, XSD
 
 from extraction import store
-from state_machines import machine as m
+from state_machines import machine as m, states as st
 
 ESM = store.EXTRACTED / "esm"
 TRAJ = Namespace("http://example.org/ontology/trajectories/")
@@ -52,6 +54,8 @@ TOOL = Namespace("https://ontology.unifiedcyberontology.org/uco/tool/")
 ANALYSIS = Namespace("https://ontology.unifiedcyberontology.org/uco/analysis/")
 PROV = Namespace("http://www.w3.org/ns/prov#")
 TIME = Namespace("http://www.w3.org/2006/time#")
+SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
+ALPHABET = "backbone"
 CONFIDENCE = {"agreed": 90, "human": 95, "resolved": 75}
 
 
@@ -64,16 +68,17 @@ def iri(*parts: Any) -> URIRef:
 def _graph() -> Graph:
     g = Graph()
     for prefix, ns in (("traj", TRAJ), ("means", MEANS), ("uco-core", CORE), ("uco-action", ACTION), ("uco-identity", IDENTITY),
-                       ("uco-observable", OBSERVABLE), ("uco-tool", TOOL), ("uco-analysis", ANALYSIS), ("prov", PROV), ("time", TIME)):
+                       ("uco-observable", OBSERVABLE), ("uco-tool", TOOL), ("uco-analysis", ANALYSIS), ("prov", PROV), ("time", TIME), ("skos", SKOS)):
         g.bind(prefix, ns)
     return g
 
 
-def state_node(g: Graph, alphabet: str, state: str) -> URIRef:
-    node = iri("state", alphabet, state)
+def state_node(g: Graph, state: str) -> URIRef:
+    node = iri("state", ALPHABET, state)
     g.add((node, RDF.type, TRAJ.State))
     g.add((node, CORE.name, Literal(state)))
-    g.add((node, CORE.description, Literal(f"State '{state}' of the '{alphabet}' alphabet.")))
+    if state in st.CAC_MATCH:
+        g.add((node, SKOS.closeMatch, URIRef(st.CAC_MATCH[state])))
     return node
 
 
@@ -99,15 +104,20 @@ def _instrument(g: Graph, label: str) -> URIRef:
     return node
 
 
-def add_trajectory(g: Graph, trajectory: dict[str, Any], *, alphabet: str = "phase", states: m.StateMap = m.phase_state,
-                   goal: tuple[str, ...] = ("harm",)) -> URIRef | None:
+def add_trajectory(g: Graph, trajectory: dict[str, Any]) -> URIRef | None:
     """Add one record's trajectory to `g`. Returns the trajectory node, or None when it has no offender act."""
     record_id = trajectory["record_id"]
-    acts = [a for a in trajectory["acts"] if a["kind"] != "detection"]
+    acts = []
+    for act in trajectory["acts"]:
+        if act["kind"] == "detection":
+            if acts:
+                break
+            continue
+        acts.append(act)
     if not acts:
         return None
-    walked = m.steps(trajectory, states=states)
-    disrupted = bool(walked) and walked[-1][2] == m.DISRUPTED
+    end = st.steps(trajectory)[-1][2]
+    polarity = {st.COMPLETED: "completed", st.DISRUPTED: "disrupted"}.get(end)
     record = iri("record", record_id)
     g.add((record, RDF.type, OBSERVABLE.ObservableObject))
     g.add((record, CORE.name, Literal(f"Record {record_id}")))
@@ -115,18 +125,19 @@ def add_trajectory(g: Graph, trajectory: dict[str, Any], *, alphabet: str = "pha
     g.add((actor, RDF.type, IDENTITY.Person))
     g.add((actor, CORE.name, Literal("Offender")))
     g.add((actor, CORE.description, Literal("The offender whose acts the record narrates. No name is held.")))
-    goal_node = iri("goal", record_id, *goal)
+    goal_node = iri("goal", record_id, st.EXPLOITATION)
     g.add((goal_node, RDF.type, MEANS.Goal))
-    g.add((goal_node, CORE.name, Literal(f"Reach {' or '.join(goal)}")))
+    g.add((goal_node, CORE.name, Literal(f"Reach {st.EXPLOITATION}")))
     g.add((goal_node, MEANS.pursuedBy, actor))
 
+    alphabet = ALPHABET
     trajectory_node = iri("trajectory", record_id, alphabet)
     g.add((trajectory_node, RDF.type, TRAJ.Trajectory))
-    g.add((trajectory_node, CORE.name, Literal(f"Trajectory of {record_id} ({alphabet} states)")))
-    previous_state = state_node(g, alphabet, m.START)
+    g.add((trajectory_node, CORE.name, Literal(f"Trajectory of {record_id}")))
+    previous_state, cursor = state_node(g, st.START), st.START
     for index, act in enumerate(acts):
-        here = states(act)
-        state = state_node(g, alphabet, here)
+        cursor = st.next_state(cursor, act["kind"])
+        state = state_node(g, cursor)
         assertion = iri("assertion", record_id, alphabet, index)
         g.add((assertion, RDF.type, TRAJ.PhaseAssertion))
         g.add((assertion, CORE.name, Literal(f"Act {index}: {act['kind']}")))
@@ -138,9 +149,9 @@ def add_trajectory(g: Graph, trajectory: dict[str, Any], *, alphabet: str = "pha
         g.add((facet, RDF.type, CORE.ConfidenceFacet))
         g.add((facet, CORE.confidence, Literal(CONFIDENCE.get(act.get("status"), 70), datatype=XSD.nonNegativeInteger)))
         g.add((assertion, CORE.hasFacet, facet))
-        if index == len(acts) - 1 and disrupted:
+        if index == len(acts) - 1 and polarity:
             g.add((assertion, TRAJ.isTerminal, Literal(True)))
-            g.add((assertion, TRAJ.terminalPolarity, Literal("disrupted")))
+            g.add((assertion, TRAJ.terminalPolarity, Literal(polarity)))
         g.add((trajectory_node, TRAJ.hasPhaseAssertion, assertion))
 
         action = iri("action", record_id, index)
@@ -179,7 +190,7 @@ def add_trajectory(g: Graph, trajectory: dict[str, Any], *, alphabet: str = "pha
     return trajectory_node
 
 
-def add_model(g: Graph, fitted: m.Machine, trajectory_nodes: list[URIRef], *, name: str, alphabet: str = "phase") -> URIRef:
+def add_model(g: Graph, fitted: m.Machine, trajectory_nodes: list[URIRef], *, name: str, alphabet: str = ALPHABET) -> URIRef:
     """Add a fitted machine: transitions, estimates with counts, and the model node."""
     from extraction import ENGINE_VERSION
 
@@ -197,11 +208,11 @@ def add_model(g: Graph, fitted: m.Machine, trajectory_nodes: list[URIRef], *, na
     g.add((model, RDF.type, ANALYSIS.AnalyticResult))
     g.add((model, CORE.name, Literal(f"State machine: {name} ({alphabet} states, {fitted.level} actions)")))
     g.add((model, PROV.wasGeneratedBy, run))
-    g.add((model, TRAJ.initialState, state_node(g, alphabet, m.START)))
+    g.add((model, TRAJ.initialState, state_node(g, st.START)))
     for node in trajectory_nodes:
         g.add((model, TRAJ.learnedFrom, node))
     for row in fitted.estimates():
-        if row["to"] in m.TERMINAL:
+        if row["to"] in st.TERMINAL:
             continue  # terminal outcomes are on the assertions, not states of the alphabet
         trigger = iri("model-action", name, row["action"])
         g.add((trigger, RDF.type, ACTION.Action))
@@ -209,8 +220,8 @@ def add_model(g: Graph, fitted: m.Machine, trajectory_nodes: list[URIRef], *, na
         transition = iri("model-transition", name, alphabet, row["from"], row["action"], row["to"])
         g.add((transition, RDF.type, TRAJ.Transition))
         g.add((transition, CORE.name, Literal(f"{row['from']} -[{row['action']}]-> {row['to']}")))
-        g.add((transition, TRAJ.fromState, state_node(g, alphabet, row["from"])))
-        g.add((transition, TRAJ.toState, state_node(g, alphabet, row["to"])))
+        g.add((transition, TRAJ.fromState, state_node(g, row["from"])))
+        g.add((transition, TRAJ.toState, state_node(g, row["to"])))
         g.add((transition, TRAJ.trigger, trigger))
         g.add((model, TRAJ.hasTransition, transition))
         estimate = iri("estimate", name, alphabet, row["from"], row["action"], row["to"])

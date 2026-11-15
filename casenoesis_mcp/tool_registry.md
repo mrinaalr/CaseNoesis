@@ -77,10 +77,10 @@ On disk: repo-root `extraction/`. Every READ tool answers from stored assertions
 | `conduct_transitions` | READ | From each step, how often each step follows, with entropy |
 | `conduct_compare` | READ | Divergence between offense domains at each level, beside a shuffled baseline |
 | `conduct_means` | READ | Which technology is named at which act, per domain |
-| `esm_machine` | READ | The fitted machine: action space per state, observed policy, T(s'\|s,a) with counts |
-| `esm_states` | READ | States learned per domain, and whether they hold across domains against a resampling floor |
-| `esm_decide` | READ | The goal-conditioned decision model under declared costs: L\*, agreement, fitted rationality against random costs |
-| `esm_coverage` | READ | Backbone by coverage threshold, and what removing each state would leave untouched |
+| `esm_machine` | READ | The fitted machine over milestone states: action space, observed policy, T(s'\|s,a) with counts |
+| `esm_invariance` | READ | Whether domains share states while differing in acts and technology, against shuffled labels |
+| `esm_decide` | READ | The goal-conditioned decision model under declared costs: L\*, agreement, rationality, cutoff sensitivity |
+| `esm_laws` | READ | Backbone coverage, contact primacy, maintenance and loops, the exploitation predicate |
 | `graph_sparql` | READ | SPARQL over the local Oxigraph store of validated engine graphs. One named graph per record. Updates refused |
 | `graph_store_status` | READ | Named graphs, quads, store location, example queries |
 | `extraction_run` | WRITE local | Read records, link cases, optionally build and validate graphs and load them into the triple store. At most 2,000 per call |

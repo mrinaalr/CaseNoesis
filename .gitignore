@@ -133,6 +133,7 @@ state_machines/*
 !state_machines/__main__.py
 !state_machines/machine.py
 !state_machines/states.py
+!state_machines/invariance.py
 !state_machines/mdp.py
 !state_machines/coverage.py
 !state_machines/ontology.py
