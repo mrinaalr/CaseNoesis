@@ -191,8 +191,11 @@ def read(doc: Doc) -> list[dict[str, Any]]:
             cs, ce = sp.clause_at(text, start, end)
             ss, se = sp.sentence_at(text, start, end)
             cs, ss, ce = max(cs, start - 300), max(ss, start - 300), min(ce, end + 200)
-            if acts.RECITAL.search(text[ss:start]) or acts.RECITAL.search(text[end:ce]):
+            if acts.RECITAL.search(text[ss:start]) or acts.RECITAL.search(text[end:ce]) or acts.in_verb_list(text[ss:ce], start - ss, end - ss):
                 role: str | None = "not_conduct"
+            elif acts.GENERAL.match(text[start:end]) or acts.SELLS.match(text[start:end]):
+                # These verbs name an act only through their object; this reader reads the same object.
+                role = acts.by_verb(text[start:end], text[end:ce], text[max(0, start - 20): start])
             elif acts.AMBIGUOUS.match(text[start:end]):
                 role = acts.by_object(text[start:ce])
             else:

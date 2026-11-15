@@ -256,7 +256,11 @@ def read(doc: Doc) -> list[dict[str, Any]]:
         for start, end, value, _ in fields.iter_conduct(text):
             ss, se = sp.sentence_at(text, start, end)
             after = text[end: min(se, end + 160)]
-            role = "not_conduct" if acts.RECITAL.search(text[max(ss, start - 300): start]) else acts.by_verb(text[start:end], after)
+            ss = max(ss, start - 300)
+            if acts.RECITAL.search(text[ss:start]) or acts.in_verb_list(text[ss: min(se, end + 200)], start - ss, end - ss):
+                role = "not_conduct"
+            else:
+                role = acts.by_verb(text[start:end], after, text[max(0, start - 20): start])
             out.append(assertion("conduct", value, role, METHOD, VERSION, 0.8 if role else 0.5, start, end))
 
     for start, end, hint in names.iter_people(text):

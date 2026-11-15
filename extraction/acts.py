@@ -75,11 +75,13 @@ _VERBS: tuple[tuple[str, str], ...] = (
     ("exploit", r"caused\s+" + _WHOM + r"to\s+engage|engaged\s+in\s+(?:a\s+)?commercial\s+sex|posted\s+(?:online\s+)?advertisements?|advertised|"
                 r"produced|received\s+(?:and\s+possessed\s+)?(?:child|images|videos|files)|distributed\s+(?:child|images|videos|files)|required\s+" + _WHOM + r"to\s+work|"
                 r"compelled|kept\s+the\s+(?:money|proceeds|earnings)"),
-    ("control", r"confiscated|took\s+(?:her|his|their|the\s+\w+['’]s)\s+(?:passports?|phones?|identification|documents)|withheld|locked|confined|beat|assaulted|struck|forced|coerced|isolated"),
+    ("control", r"confiscated|took\s+(?:her|his|their|the\s+\w+['’]s)\s+(?:passports?|phones?|identification|documents)|"
+                r"withheld\s+(?:her|his|their|the\s+\w+['’]s)\s+(?:pay|wages|passports?|documents|identification)|locked\s+(?:her|him|them|the\s+\w+)\s+in|confined|"
+                r"beat\s+(?:her|him|them|the\s+victims?)|assaulted|forced|coerced|isolated"),
     ("transport", r"transported|drove|travel(?:ed|led)|flew|brought\s+" + _WHOM + r"to|smuggled"),
     ("recruit", r"recruited|enticed|lured|persuaded|induced|groomed|solicited"),
     ("supply", r"sold|shipped|delivered|supplied|distributed|dispensed|exported|trafficked"),
-    ("contact", r"contacted|messaged|e-?mailed|texted|called|telephoned|approached|met\s+(?:with\s+)?(?:her|him|them|the\s+victims?|a\s+\w+)|began\s+communicating|"
+    ("contact", r"contacted|messaged|e-?mailed|texted|called\s+(?:the\s+)?(?:victims?|her|him|them|individuals|people|customers|residents|seniors)|telephoned|approached|met\s+(?:with\s+)?(?:her|him|them|the\s+victims?|a\s+\w+)|began\s+communicating|"
                 r"initiated\s+contact|sent\s+(?:a\s+|an\s+|several\s+|numerous\s+|\w+\s+)?(?:messages?|e-?mails?|texts?|letters?|friend\s+requests?)|communicated\s+with|responded\s+to"),
     ("setup", r"created|registered|opened|set\s+up|established|incorporated|rented|leased|obtained|acquired|purchased|recruited\s+money\s+mules"),
 )
@@ -98,21 +100,32 @@ OBJECTS: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
         ("threat", r"\bthreat\w*\b|\bharm\b|\bkill\b|\bexpose\b|\barrest(?:ed)?\s+unless\b|\bdeport\w*\b|\bpublish\b|\brelease\s+the\s+(?:images|photos|videos)\b"),
         ("exploit", r"\bcommercial\s+sex\b|\bsex\s+acts?\b|\badvertisements?\b|\bchild\s+(?:pornography|sexual\s+abuse\s+material)\b|\bsexually\s+explicit\b|\bto\s+work\b|\bwithout\s+pay\b|\bearnings\b"),
         ("control", r"\bpassports?\b|\bidentification\b|\bimmigration\s+documents?\b|\bnot\s+allowed\s+to\s+leave\b|\bdebts?\b|\bphysical\w*\b"),
-        ("access", r"\bcomputers?\b|\bnetworks?\b|\bservers?\b|\bcredentials\b|\bransomware\b|\bmalware\b|\be-?mail\s+accounts?\s+of\b|\bwithout\s+authorization\b|\bfiles\b"),
+        ("access", r"\bcomputers?\b|\bnetworks?\b|\bservers?\b|\bransomware\b|\bmalware\b|\be-?mail\s+accounts?\s+of\b|\bwithout\s+authorization\b|\bfiles\b"),
         ("supply", r"\bfentanyl\b|\bmethamphetamine\b|\bcocaine\b|\bheroin\b|\bpills\b|\bfirearms?\b|\bpistols?\b|\brifles?\b|\bmachineguns?\b|\bkilograms?\b|\bgrams\b|\bcontrolled\s+substances?\b"),
         ("transport", r"\bacross\s+state\s+lines\b|\bto\s+(?:a\s+)?(?:hotel|motel|residence|apartment)\b|\bfrom\s+\w+\s+to\s+\w+\b|\binto\s+the\s+United\s+States\b|\bairport\b"),
         ("recruit", r"\bpromis\w+\b|\bjobs?\b|\bemployment\b|\bmodeling\b|\ba\s+better\s+life\b|\bminor\b|\bto\s+meet\b"),
         ("demand", r"\bto\s+(?:send|pay|wire|transfer|buy|purchase)\b|\bfees?\b|\btaxes\b|\bcustoms\b|\bbail\b"),
         ("contact", r"\bmessages?\b|\be-?mails?\b|\bphone\b|\btelephone\b|\bsocial\s+media\b|\bdating\b|\bprofile\s+of\b|\bWhatsApp\b|\bTelegram\b|\bSnapchat\b|\bFacebook\b|\bInstagram\b"),
-        ("setup", r"\baccounts?\b|\bprofiles?\b|\bdomains?\b|\bcompan(?:y|ies)\b|\bLLC\b|\bwebsites?\b|\bSIM\b|\bphones?\b|\bmailbox\b|\bapplications?\b"),
+        ("setup", r"\baccounts?\b|\bprofiles?\b|\bdomains?\b|\bcompan(?:y|ies)\b|\bLLC\b|\bcorporations?\b|\bentit(?:y|ies)\b|\bwebsites?\b|\bSIM\b|\bphones?\b|"
+              r"\bmailbox(?:es)?\b|\bP\.?O\.?\s+box(?:es)?\b|\bcredentials\b|\bidentities\b|\bskimm\w+\b|\bdevices?\b|\bsoftware\b|\bequipment\b"),
     )
 )
+
+# Verbs too general to name an act: "obtained a loan", "obtained a phone", "the agency created a
+# list". Each counts only with an object that says what was done, read from the words after it.
+GENERAL = re.compile(r"(?:obtained|acquired|purchased|created|established|opened|set\s+up|rented|leased|registered|incorporated)\b", re.IGNORECASE)
+_TAKES_VALUE = re.compile(r"(?:obtained|acquired)\b", re.IGNORECASE)
+SELLS = re.compile(r"(?:sold|shipped|delivered|supplied|distributed|dispensed|exported|trafficked)\b", re.IGNORECASE)
+# "fraudulently obtained proceeds", "illegally-obtained checks": a description of a thing, not a report of an act.
+_DESCRIBES = re.compile(r"^\s+(?!(?:a|an|the|his|her|their|its|more|over|approximately|about|at\s+least|nearly|\$|\d)\b)[a-z]+\b", re.IGNORECASE)
+# The verbs of a statute in a row: "knowingly recruited, enticed, harbored, transported, or obtained".
+VERB_LIST = re.compile(r"(?:\b\w+(?:ed|t),\s+){2,}(?:and\s+|or\s+)?\w+(?:ed|t)\b", re.IGNORECASE)
+REACH = 90
 
 # Verbs whose kind depends on what they act on. The clause reader votes on these and
 # abstains on the rest, where the verb alone says what was done.
 AMBIGUOUS = re.compile(
-    r"(?:sent|transferred|distributed|received|created|opened|delivered|paid|deposited|"
-    r"called|forced|produced|sold|shipped|supplied|registered|established|set\s+up|accessed|installed|converted)\b",
+    r"(?:sent|transferred|received|paid|deposited|forced|produced|accessed|installed|converted)\b",
     re.IGNORECASE,
 )
 
@@ -125,13 +138,33 @@ RECITAL = re.compile(
 )
 
 
-def by_verb(trigger: str, after: str) -> str | None:
-    """The kind a trigger's own words name. `after` is the text that follows it."""
+def by_verb(trigger: str, after: str, before: str = "") -> str | None:
+    """The kind a trigger's own words name. `after` and `before` are the text around it.
+
+    A general verb names an act only through its object: something set up
+    (an account, a company), or value taken. A verb of selling names a supply
+    only when what is sold is contraband or a weapon."""
+    if GENERAL.match(trigger):
+        if re.search(r"ly[-\s]$", before) and _DESCRIBES.match(after):
+            return None
+        found = by_object(after[:REACH])
+        if found == "setup":
+            return "setup"
+        if found in ("transfer", "movement"):
+            return "transfer" if _TAKES_VALUE.match(trigger) else None
+        return None
+    if SELLS.match(trigger) and not re.match(r"distributed\s+(?:child|images|videos|files)", trigger + after[:20], re.IGNORECASE):
+        return "supply" if by_object(after[:REACH]) == "supply" else None
     probe = trigger + after[:40]
     for kind, pattern in VERBS:
         if pattern.match(probe):
             return kind
     return None
+
+
+def in_verb_list(sentence: str, start: int, end: int) -> bool:
+    """True when the trigger at `[start, end)` of `sentence` is one of a row of statutory verbs."""
+    return any(match.start() <= start and end <= match.end() for match in VERB_LIST.finditer(sentence))
 
 
 def by_object(after: str) -> str | None:
