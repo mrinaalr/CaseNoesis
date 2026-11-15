@@ -6,19 +6,19 @@
 |---|---|
 | Collected | **45,877** distinct public records: 44,602 press releases, 1,207 court filings, 68 reference records. 343 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
 | Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation. Conduct filings also cover extortion, drugs, firearms, corruption, stalking, smuggling, and racketeering |
-| Read by the engine | **45,899** records, **3,135,844** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
-| Settled | **992,716** values across 16 fields; 372,118 of them by two or more families |
-| Left for review | 59,881 mentions the readers contested or could not settle |
+| Read by the engine | **45,877** records, **3,126,758** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
+| Settled | **992,008** values across 16 fields; 372,415 of them by two or more families |
+| Left for review | 58,583 mentions the readers contested or could not settle |
 | Measured accuracy | On a 200-record gold set of invented records with known attributes, held-out half: F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants; 0.85 to 0.94 on victim counts, scheme and channel labels. Section 13.1 |
-| Cases | 45,632 cases; 141 join more than one record |
-| People | 60,616 defendants, numbered per case. 209,248 terms, amounts and events placed with a defendant |
-| Events | 108,771 events in 44,156 cases, 63,238 with a date |
+| Cases | 45,626 cases; 140 join more than one record |
+| People | 60,553 defendants, numbered per case. 208,674 terms, amounts and events placed with a defendant |
+| Events | 108,740 events in 44,152 cases, 63,231 with a date |
 | Process mining | 64,833 defendant traces, 946 distinct paths; a process tree by the Inductive Miner; 2,390 traces flagged for a departure from procedural order |
 | Graphs | 45,898 engine graphs written. 1,620 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
 | Triple store | A local Oxigraph store and one N-Quads file: 1,620 named graphs, 249,313 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
 | Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
 | Names in derived data | None stored. People are numbered nodes with a role |
-| Conduct | 100,173 acts of offenses read from 32,673 records; 20,560 offense trajectories of two or more acts, at three levels of abstraction |
+| Conduct | 98,980 acts of offenses read from 32,503 records; 20,314 offense trajectories of two or more acts, at three levels of abstraction |
 | Agents | 81 local MCP tools, 23 of them over the engine, its event log and its trajectories |
 | Tests | 114 tests on invented text |
 
@@ -379,9 +379,9 @@ Measured 2026-11-14, with `python -m extraction status`. Rules only: the parser,
 |---|---|
 | Records read | 44,602 press, 1,229 court, 68 reference |
 | Text source | 1,597 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
-| Assertions | 3,135,844 |
-| Finals | 992,716 |
-| Review queue | 59,881: 24,112 contested, 35,769 weak, 0 self-contradicting |
+| Assertions | 3,126,758 |
+| Finals | 992,008 |
+| Review queue | 58,583: 22,890 contested, 35,693 weak, 0 self-contradicting |
 
 Assertions by family:
 
@@ -524,7 +524,7 @@ A record id names one document. A case is a docket: the release that announced i
 
 A docket number alone is not a link. Federal districts number their cases independently, so `1:23-cr-00123` exists in many courts. Two records that share only a number are written to `case_candidates` for a person to confirm.
 
-Result: 45,632 cases over 45,899 records. 141 join more than one record, the largest joins 17, and 997 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
+Result: 45,626 cases over 45,877 records. 140 join more than one record, the largest joins 14, and 997 candidate pairs wait for confirmation. Most press releases stand alone because no filing was collected for them.
 
 ### 7.1 People
 
@@ -540,7 +540,7 @@ Measured on the collected corpus, rules only:
 
 | | |
 |---|---|
-| Defendants | 60,616, in 37,635 records that name at least one |
+| Defendants | 60,553, in 37,635 records that name at least one |
 | Records naming more than one defendant | 12,516 |
 | Defendants found in more than one record of their case | 170 |
 | Terms placed with a defendant | 24,540 by vote, 10,391 as the sole defendant's |
@@ -586,7 +586,7 @@ Measured on the collected corpus:
 | `complaint` | 622 | 244 | 228 | 16 |
 | `information` | 467 | 71 | 70 | 1 |
 
-108,771 events in 44,156 cases; 63,238 have a date. Of the reports behind them, 42,110 were dated by a stated date, 24,354 by "today" or "yesterday", 620 by a filing date, and 92,913 had no date. 223 events are reported by more than one record.
+108,740 events in 44,152 cases; 63,231 have a date. Of the reports behind them, 42,110 were dated by a stated date, 24,354 by "today" or "yesterday", 620 by a filing date, and 92,913 had no date. 223 events are reported by more than one record.
 
 ### 7.3 Conduct: the acts of an offense
 
@@ -601,12 +601,12 @@ Sections 7.1 and 7.2 follow the prosecution. This one follows the offense. A sta
 | `demand` | Asked for or required something of value | leverage |
 | `threat` | Threatened harm, exposure, arrest or deportation | leverage |
 | `control` | Held a person: took documents, confined, assaulted, coerced | leverage |
-| `transfer` | Value passed from the person harmed | harm |
-| `access` | Got into a computer or account without authority, or ran code on it | harm |
+| `transfer` | Value passed from the person harmed, who is the payer | harm |
+| `access` | Got into a computer or account without authority, or ran code on it | approach |
 | `exploit` | Used the person: commercial sex, compelled labor, abuse material | harm |
-| `supply` | Sold, shipped or delivered contraband or a weapon | harm |
-| `transport` | Moved a person or travelled to one | harm |
-| `movement` | The offender moved or changed the value: laundered, withdrew, converted | exit |
+| `supply` | Sold, shipped or delivered contraband or a weapon, and the buyer's payment for it | harm |
+| `transport` | Moved a person or travelled to one | leverage |
+| `movement` | The offender moved or changed the value: laundered, withdrew, converted, or wired or deposited it | exit |
 | `concealment` | Hid the act afterwards | exit |
 | `detection` | What investigators did: an undercover contact, a search | detection |
 
@@ -620,34 +620,38 @@ The kinds are few and are not tied to one offense, so that offenses of different
 
 **General verbs need an object.** "Obtained", "purchased", "created", "opened" and the like name an act only when what follows says what was set up or taken: "opened a bank account" is a `setup`, "obtained $2.9 million" is a `transfer`, "fraudulently obtained proceeds" is a description and no act. Verbs of selling are a `supply` only when what is sold is contraband or a weapon. A row of a statute's verbs ("recruited, enticed, harbored, transported, or obtained") is a recital. These rules came from reading a random sample of acts on collected records after the first corpus pass, which had read "obtained" as a setup 11,425 times.
 
+**Who paid decides a transfer.** A transfer is value from the person harmed, so the payer must be the person harmed: a victim, an investor, a lender, or an institution a fraud takes from (Medicare, an insurer, a bank, a program). The payer is read from the words before the verb in its clause. A buyer paying for contraband is part of the sale (`supply`); the offender paying or depositing is `movement`; a person harmed named only after the verb is who was paid ("paid the victims back"). A random sample of 60 payments on collected records, read by the developer: the direction is right for 43 of the 48 that are payments, where reading by the verb alone was right for about 20. 7 of the 60 are not payments ("had paid", recitals), which this does not address.
+
 **The unit is the record.** Two records of one case tell the same acts in different words, and joining them would mean deciding which sentences describe one act. That is not attempted. A statement of offense tells the whole offense once.
 
 Measured on the collected corpus, rules only:
 
 | | |
 |---|---|
-| Records with at least one act | 32,673: 31,625 press releases, 1,048 court filings |
-| Acts | 100,173; 19,390 settled by both readers |
-| Acts with a date | 5,948 |
-| Acts with a technology named in their sentence | 13,685 |
+| Records with at least one act | 32,503: 31,471 press releases, 1,032 court filings |
+| Acts | 98,980; 18,848 settled by both readers |
+| Acts with a date | 5,916 |
+| Acts with a technology named in their sentence | 13,732 |
 
 | Kind | Acts |
 |---|---:|
-| `deception` | 21,623 |
-| `transfer` | 19,412 |
+| `deception` | 21,615 |
+| `movement` | 18,196 |
 | `recruit` | 9,588 |
-| `contact` | 6,066 |
-| `setup` | 5,943 |
-| `transport` | 5,711 |
-| `movement` | 5,137 |
-| `demand` | 5,026 |
-| `detection` | 4,802 |
-| `concealment` | 4,732 |
-| `control` | 4,053 |
-| `exploit` | 3,003 |
-| `access` | 2,840 |
-| `threat` | 1,833 |
-| `supply` | 404 |
+| `contact` | 6,046 |
+| `setup` | 5,940 |
+| `transport` | 5,710 |
+| `transfer` | 5,102 |
+| `demand` | 5,020 |
+| `detection` | 4,800 |
+| `concealment` | 4,721 |
+| `control` | 4,042 |
+| `exploit` | 2,996 |
+| `access` | 2,839 |
+| `threat` | 1,830 |
+| `supply` | 535 |
+
+Before the payer rule, 19,412 acts were read as `transfer` and 5,137 as `movement`. Most of the difference is payments that press releases report by the offender, or with no payer named.
 
 ---
 
@@ -770,7 +774,7 @@ Code: [`process_mining/`](process_mining/). It answers two questions: what paths
 
 A missing step is never counted. The records are incomplete, and a path of "plea, sentencing" means the records mention those two steps. A month is compared as its whole span, so a plea "in March 2024" and a sentencing on March 20 are not out of order. A departure is either something that happened in the case or an error in a record or in the reading of it. The check does not say which. It says where to look.
 
-Measured on the collected corpus, procedural steps only (the `offense` event left out):
+Measured on the collected corpus, procedural steps only (the `offense` event left out). These figures were taken on 45,899 records, before 22 civil filings were set aside (section 3); the event log has since lost 31 of its 108,771 events.
 
 | | |
 |---|---|
@@ -857,7 +861,7 @@ Departures from procedural order: 2,390 traces in 1,967 cases. 850 `order`, 917 
 | `act` | The act alone | `contact` |
 | `phase` | The stage of the offense | `approach` |
 
-The levels exist because the research question is about levels. If technology enters an offense through its actions and leaves its stages alone, offenses of different kinds should look alike at the phase level and differ at the means level.
+The levels exist because the research question is about levels. Setting them beside one another does not test it: a coarser level of any data diverges less, even above its shuffled baseline, because it is a grouping of the finer one. Section 9 tests the question against nulls that can fail it.
 
 | View | What it gives |
 |---|---|
@@ -873,38 +877,40 @@ Measured on the collected corpus:
 
 | Records | Trajectories of two or more acts | Median steps | With four or more steps |
 |---|---:|---:|---:|
-| Court filings | 880 | 4 | 504 |
-| Press releases | 19,680 | 2 | 4,248 |
+| Court filings | 867 | 4 | 498 |
+| Press releases | 19,447 | 2 | 4,188 |
 
 Most common paths at the phase level, court filings:
 
 | Path | Trajectories | Share |
 |---|---:|---:|
-| harm | 149 | 16.9% |
-| harm → leverage | 38 | 4.3% |
-| leverage → harm | 38 | 4.3% |
-| approach → harm | 33 | 3.8% |
-| harm → approach → harm | 29 | 3.3% |
-| leverage | 21 | 2.4% |
+| leverage → exit | 51 | 5.9% |
+| leverage | 44 | 5.1% |
+| approach → leverage | 41 | 4.7% |
+| exit | 30 | 3.5% |
+| approach | 21 | 2.4% |
+| leverage → approach | 20 | 2.3% |
 
 Most common paths at the phase level, press releases:
 
 | Path | Trajectories | Share |
 |---|---:|---:|
-| leverage | 1,943 | 9.9% |
-| harm | 1,591 | 8.1% |
-| leverage → harm | 1,480 | 7.5% |
-| harm → leverage | 983 | 5.0% |
-| approach → harm | 857 | 4.3% |
-| approach → leverage | 753 | 3.8% |
+| leverage | 2,451 | 12.6% |
+| leverage → exit | 1,483 | 7.6% |
+| exit | 1,228 | 6.3% |
+| approach → leverage | 1,122 | 5.8% |
+| exit → leverage | 909 | 4.7% |
+| approach → exit | 610 | 3.1% |
 
-Divergence between offense domains, all records (bulk 274, csea 112, cyber 95, forced_labor 156, fraud 18,038, smuggling 28, stalking 26, trafficking 1,720 trajectories):
+Harm is rarer than before the payer rule: many payments are now read as the offender moving money, and a release that tells only how proceeds were moved has no harm step.
+
+Divergence between offense domains, all records (bulk 272, csea 115, cyber 95, forced_labor 156, fraud 17,795, smuggling 26, stalking 25, trafficking 1,720 trajectories):
 
 | Level | Categories | Steps: observed | shuffled | above shuffled | Transitions: observed | shuffled | above shuffled |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `phase` | 5 | 0.036 | 0.006 | 0.030 | 0.139 | 0.048 | 0.091 |
-| `act` | 14 | 0.234 | 0.033 | 0.201 | 0.493 | 0.194 | 0.299 |
-| `means` | 916 | 0.315 | 0.122 | 0.193 | 0.591 | 0.343 | 0.248 |
+| `phase` | 5 | 0.067 | 0.009 | 0.058 | 0.191 | 0.054 | 0.136 |
+| `act` | 14 | 0.242 | 0.040 | 0.202 | 0.495 | 0.210 | 0.285 |
+| `means` | 909 | 0.326 | 0.130 | 0.196 | 0.597 | 0.356 | 0.241 |
 
 Divergences are in bits, from 0 (identical) to 1 (nothing shared), averaged over pairs of domains.
 
