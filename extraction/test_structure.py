@@ -300,6 +300,14 @@ class PayerTests(unittest.TestCase):
         self.assertEqual(self.settle("SAMPLE ", "deposited", " $40,000 in proceeds into an account he controlled."), "movement")
         self.assertEqual(self.settle("SAMPLE ", "paid", " a straw purchaser $300 to buy the rifle."), "movement")
 
+    def test_an_institution_paying_is_a_transfer(self) -> None:
+        self.assertEqual(self.settle("Based on those claims, Medicare ", "paid", " the agencies approximately $31 million."), "transfer")
+        self.assertEqual(self.settle("In reliance on the bill of sale, the investor ", "wired", " the $83,200 to his account."), "transfer")
+
+    def test_a_person_harmed_named_after_the_verb_was_paid_not_paying(self) -> None:
+        self.assertEqual(self.settle("He ", "paid", " the victims back using funds taken from other victims."), "movement")
+        self.assertEqual(self.settle("Khan and the marketers in turn ", "paid", " kickbacks to Medicaid recipients."), "movement")
+
     def test_phases_agree_with_the_roles_of_the_state_machine(self) -> None:
         from extraction import acts
 

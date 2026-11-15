@@ -75,7 +75,7 @@ _VERBS: tuple[tuple[str, str], ...] = (
                r"instructed\s+" + _WHOM + r"to|directed\s+" + _WHOM + r"to"),
     ("movement", r"laundered|withdrew|converted|cashed\s+out|structured|moved\s+the\s+(?:funds|money|proceeds)|transferred\s+the\s+(?:funds|money|proceeds)|"
                  r"wired\s+the\s+(?:funds|money|proceeds)|dissipated|spent\s+the\s+(?:funds|money|proceeds)"),
-    ("transfer", r"wired|(?<!was\s)(?<!were\s)(?<!been\s)(?<!be\s)paid(?=\s+[\w$])|sent\s+(?:approximately\s+|about\s+|more\s+than\s+|a\s+total\s+of\s+)?\$|transferred\s+(?:approximately\s+|about\s+)?\$|deposited|mailed\s+(?:cash|a\s+check|checks)|"
+    ("transfer", r"wired|(?<!was\s)(?<!were\s)(?<!been\s)(?<!be\s)(?<!being\s)(?<!not\s)(?<!never\s)(?<![-\w])paid(?=\s+[\w$])(?!\s+(?:sick|family|leave|time|vacation|holiday|out\b))|sent\s+(?:approximately\s+|about\s+|more\s+than\s+|a\s+total\s+of\s+)?\$|transferred\s+(?:approximately\s+|about\s+)?\$|deposited|mailed\s+(?:cash|a\s+check|checks)|"
                  r"purchased\s+(?:\w+\s+)?gift\s+cards|lost\s+(?:approximately\s+|about\s+)?\$"),
     ("access", r"accessed|logged\s+in(?:to)?|hacked|breached|gained\s+(?:unauthorized\s+)?access|deployed|installed|encrypted|exfiltrated|compromised"),
     ("exploit", r"caused\s+" + _WHOM + r"to\s+engage|engaged\s+in\s+(?:a\s+)?commercial\s+sex|posted\s+(?:online\s+)?advertisements?|advertised|"
@@ -190,10 +190,18 @@ def by_object(after: str) -> str | None:
 _VICTIM = re.compile(
     r"\bvictims?\b|\bV-?\d+\b|\bVictim[-\s]\w+|\bCompany\s+[A-Z0-9]\b|\binvestors?\b|\blenders?\b|\bthe\s+lender\b|\bclients?\b|"
     r"\bpatients?\b|\bthe\s+banks?\b|\binsurers?\b|\bthe\s+(?:company|business|employer|program|agency)\b|\bresidents?\b|"
-    r"\bseniors?\b|\belderly\b|\bwidow\b|\bfamil(?:y|ies)\b|\bminors?\b|\bdonors?\b|\bhomeowners?\b|\bpolicyholders?\b",
+    r"\bseniors?\b|\belderly\b|\bwidow\b|\bfamil(?:y|ies)\b|\bminors?\b|\bdonors?\b|\bhomeowners?\b|\bpolicyholders?\b|"
+    # Institutions a fraud takes from: health programs, tax and loan agencies, banks, insurers, governments.
+    r"\bMedicare\b|\bMedicaid\b|\bTRICARE\b|\bMedi-Cal\b|\bIRS\b|\bInternal\s+Revenue\s+Service\b|\bSBA\b|\bSmall\s+Business\s+Administration\b|"
+    r"\bprograms?\b|\bplans?\b|\binsurance\s+compan(?:y|ies)\b|\binsurers?\b|\bcarriers?\b|\b[A-Z][\w&.]*\s+(?:Bank|Insurance|Mutual|Credit\s+Union)\b|"
+    r"\bwomen\b|\bmen\b|\bpeople\b|\bparents\b|\bborrowers\b|\bpersons\b|\bindividuals\b|\bconsumers\b|\bstudents\b|\bemployees\b|\bmembers\b|\bstrangers\b|"
+    r"\b(?:hospital|medical\s+center|school|university|charity|church|union)\b|"
+    r"\bbanks?\b|\bthe\s+(?:government|United\s+States|state|county|city|Department|Treasury|VA)\b|\bstate\s+agenc(?:y|ies)\b|\bpayors?\b|\bpayers?\b",
     re.IGNORECASE)
 _BUYER = re.compile(r"\bbuyers?\b|\bpurchasers?\b|\bthe\s+CS\b|\bCHS\b|\bthe\s+CI\b|\bconfidential\s+(?:source|informant)s?\b|\bundercover\b|\bthe\s+UC\b", re.IGNORECASE)
-_OFFENDER = re.compile(r"\b(?:defendants?|co-?defendants?|co-?conspirators?|he|she|they|his\s+\w+|her\s+\w+)\s*$|\b[A-Z][A-Za-z'’-]+\s*$|\[name\]\s*$")
+_OFFENDER = re.compile(r"\b(?:defendants?|co-?defendants?|co-?conspirators?|conspirators|marketers|recruiters|he|she|they|his\s+\w+|her\s+\w+)\s*$|\b[A-Z][A-Za-z'’-]+\s*$|\[name\]\s*$")
+# Words between a subject and its verb: "Khan and the marketers in turn paid", "Brock also transferred".
+_ADVERBS = re.compile(r"(?:\s+(?:also|then|in\s+turn|subsequently|allegedly|later|thereafter|knowingly|fraudulently|personally|directly|ultimately|again|each|wire|repeatedly|routinely|typically|often|would|had|have|has))+\s*$", re.IGNORECASE)
 _CLAUSE_START = re.compile(r"(?:[.;:]|,\s+(?:and|then|after\s+which)\b|\band\s+then\b|\band\b|,)\s*")
 _CAUSED = re.compile(r"\b(?:caused|induced|directed|instructed|told|persuaded|convinced|asked)\s+(?:\S+\s+){1,4}to\s*$", re.IGNORECASE)
 
@@ -201,13 +209,14 @@ _CAUSED = re.compile(r"\b(?:caused|induced|directed|instructed|told|persuaded|co
 def payer(before: str) -> str:
     """Who a transfer verb's subject is: `victim`, `buyer`, `offender` or `unknown`."""
     tail = _CLAUSE_START.split(before)[-1] if before else ""
+    if _VICTIM.search(tail):  # "victim-buyers": the person harmed, whatever else they are called
+        return "victim"
     if _BUYER.search(tail):
         return "buyer"
-    if _VICTIM.search(tail):
-        return "victim"
     if _CAUSED.search(before):
         return "victim"
-    if tail.strip() and _OFFENDER.search(tail.strip()):
+    subject = _ADVERBS.sub("", " " + tail).strip()
+    if subject and _OFFENDER.search(subject):
         return "offender"
     return "unknown"
 
@@ -217,15 +226,16 @@ def settle(kind: str | None, before: str, after: str) -> str | None:
 
     A buyer's payment for contraband is part of the sale: `supply`. The offender wiring or depositing
     money is the offender moving it: `movement`. A transfer whose payer the clause does not name
-    stays a transfer only when the sentence names a person harmed."""
+    stays a transfer only when a person harmed is named before the verb."""
     if kind != "transfer":
         return kind
     who = payer(before)
     contraband = by_object(after[:REACH]) == "supply" or bool(re.search(r"\bfor\s+(?:the\s+|a\s+|an\s+)?(?:\w+\s+){0,3}(?:fentanyl|methamphetamine|cocaine|heroin|pills|firearms?|pistols?|rifles?|guns?|drugs)\b", after[:REACH], re.IGNORECASE))
-    if who == "buyer" or contraband:
+    if who == "buyer" or (contraband and who != "victim"):
         return "supply"
     if who == "offender":
         return "movement"
-    if who == "unknown" and not (_VICTIM.search(before) or _VICTIM.search(after[:REACH])):
+    # The payer comes before the verb. A person harmed named only after it is who was paid: "paid the victims back".
+    if who == "unknown" and not _VICTIM.search(before):
         return "movement"
     return "transfer"

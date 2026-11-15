@@ -17,7 +17,7 @@ from typing import Any
 from extraction import acts, fields, names, spans as sp
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "clause_1.3"
+VERSION = "clause_1.4"
 METHOD = "clause_cue"
 
 _MONEY_CUES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(

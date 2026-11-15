@@ -13,7 +13,7 @@ from typing import Any
 from extraction import acts, fields, names, profiles, spans as sp, statutes
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "patterns_1.3"
+VERSION = "patterns_1.4"
 METHOD = "regex"
 
 _A = r"(?:(?:more\s+than|over|nearly|approximately|about|almost|at\s+least|roughly|in\s+excess\s+of|some|a\s+total\s+of|totall?ing)\s+)?"
