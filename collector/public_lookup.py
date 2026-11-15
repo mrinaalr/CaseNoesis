@@ -53,6 +53,42 @@ def _norm(url: str) -> str:
     return f"{base}?{'&'.join(kept)}" if kept else base
 
 
+CAPTION_PLACEHOLDER = "case"
+
+
+def neutral_docket_url(url: str) -> str:
+    """Replace the case caption at the end of a CourtListener docket address.
+
+    CourtListener writes the caption as the last path segment, for example
+    /docket/73715928/104/united-states-v-antonio-michel/. That segment names a
+    party. CourtListener does not use it to find the record: any word in that
+    place opens the same page. It cannot simply be dropped, though, because
+    /docket/73715928/104/ opens the whole docket instead of entry 104, and
+    /docket/5471876/ is a 404. So the caption becomes the fixed word "case".
+
+    Only paths under /docket/ on www.courtlistener.com (or courtlistener.com)
+    change. storage.courtlistener.com PDF addresses and every other host are
+    returned unchanged. The query string is kept; a #fragment is dropped.
+    """
+    text = (url or "").strip()
+    parsed = urlparse(text)
+    host = (parsed.hostname or "").lower()
+    if host not in {"courtlistener.com", "www.courtlistener.com"}:
+        return text
+    segments = [part for part in parsed.path.split("/") if part]
+    if not segments or segments[0] != "docket":
+        return text
+    numbers: list[str] = []
+    for part in segments[1:]:
+        if not part.isdigit():
+            break
+        numbers.append(part)
+    if not numbers:
+        return text
+    path = "/docket/" + "/".join(numbers) + f"/{CAPTION_PLACEHOLDER}/"
+    return parsed._replace(path=path, fragment="").geturl()
+
+
 def _date(value: str) -> str:
     raw = (value or "").strip()
     if len(raw) >= 14 and raw[:14].isdigit() and raw.startswith(("19", "20")):
@@ -75,7 +111,7 @@ def _load_seen(kind: str) -> set[str]:
                 rec = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            url = _norm(str(rec.get("source_url") or ""))
+            url = _norm(neutral_docket_url(str(rec.get("source_url") or "")))
             if url:
                 found.add(url)
     _seen[kind] = found
@@ -91,10 +127,14 @@ def append_lookup(
     pub_date: str = "",
     source_url: str = "",
 ) -> bool:
-    """Append one press_lookup row. Skip a URL already in that file."""
+    """Append one public lookup row. Skip a URL already in that file.
+
+    A CourtListener docket address loses its case caption first (see
+    neutral_docket_url), so no caller can write a party name into source_url.
+    """
     if kind not in FILES:
         raise ValueError(f"unknown public lookup {kind}")
-    url = (source_url or "").strip()
+    url = neutral_docket_url(source_url)
     if not url:
         return False
     seen = _load_seen(kind)
