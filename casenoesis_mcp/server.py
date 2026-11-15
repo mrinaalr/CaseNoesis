@@ -2068,6 +2068,121 @@ async def conduct_means(domain: str = "", kind: str = "") -> dict[str, Any]:
     return await _process("conduct_means", domain=domain, kind=kind)
 
 
+async def _esm(name: str, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from state_machines import analysis
+
+        return await asyncio.to_thread(getattr(analysis, name), **kwargs)
+    except Exception as e:
+        logger.exception("state machine %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def esm_machine(kind: str = "", domain: str = "", layer: str = "milestone", level: str = "act") -> dict[str, Any]:
+    """READ. The Exploitation State Machine fitted to the acts read from records.
+
+    layer "milestone": what the offense has reached (Preparation, InitialContact,
+    Conditioning, Exploitation, Maintenance, Exit). layer "track": how it was
+    reached (Deception or Coercion, ValueTaken or PersonExploited, ...). Actions
+    are kinds of act, or acts with their technology at level "means". Returns the
+    action space at each state, the observed policy, and every T(s'|s,a) estimate
+    with its counts. Terminal: Completed (goal reached), Disrupted (detection
+    narrated first), Unresolved. See esm_scheme for every state's definition.
+    """
+    if level not in ("act", "means") or layer not in ("milestone", "track"):
+        return {"error": "level must be act or means; layer milestone or track", "write": False}
+    return await _esm("machine_report", kind=kind, domain=domain, layer=layer, level=level)
+
+
+@mcp.tool()
+async def esm_scheme() -> dict[str, Any]:
+    """READ. The ESM states as data: each state's layer, broader state, definition,
+    links to CAC and other vocabularies, and the crosswalk placing the SDK's domain
+    alphabets (trafficking, forced labor, elder fraud, extortion, CSEA) under them.
+    """
+    return await _esm("scheme_report")
+
+
+@mcp.tool()
+async def esm_read(path: str, domain: str = "", layer: str = "milestone") -> dict[str, Any]:
+    """READ. Any trajectory graph (.ttl, the SDK trajectories extension, in any state
+    alphabet) or JSON file of walks, run through the same machine, decision model and
+    predicate as the corpus. Reports each walk's path at every layer, which states
+    could not be placed, and where the source's terminal polarity disagrees with
+    whether the goal was reached. The path must be inside the repository.
+    """
+    from pathlib import Path as _Path
+
+    root = _Path(__file__).resolve().parents[1]
+    target = (root / path).resolve() if not _Path(path).is_absolute() else _Path(path).resolve()
+    if root not in target.parents or not target.is_file() or target.suffix not in (".ttl", ".json"):
+        return {"error": "path must be a .ttl or .json file inside the repository", "write": False}
+    return await _esm("external", source=str(target), domain=domain, layer=layer if layer in ("milestone", "track", "source") else "milestone")
+
+
+@mcp.tool()
+async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50, draws: int = 0) -> dict[str, Any]:
+    """READ. How far apart domains are at the ESM scheme's states, its acts, and their technology.
+
+    Jensen-Shannon divergence between domains at three levels (transitions
+    between states; the act taken at each state; the act and its technology),
+    each beside the divergence with domain labels shuffled, on equal-size
+    subsamples, at the milestone layer and at the track layer. Levels are not
+    compared with each other: a coarser grouping of any data diverges less.
+    With draws > 0, the observed state-level excess beside
+    the excess under random groupings of acts into roles and under shuffled act
+    order, on the same paired subsamples. Slow; draws of 50 take minutes.
+    """
+    return await _esm("invariance_report", kind=kind, minimum=max(20, int(min_trajectories)), repeats=max(5, min(int(repeats), 200)),
+                      draws=max(0, min(int(draws), 500)))
+
+
+@mcp.tool()
+async def esm_groupings(kind: str = "", randoms: int = 100) -> dict[str, Any]:
+    """READ. States with no scheme and no goal: groupings of the act kinds, described on equal terms.
+
+    Each act kind its own state, one state, the ESM scheme's milestones, and
+    groupings learned from the data (act kinds merged to keep the most
+    information about the next act, on one half of the records). Each is
+    described by held-out information about the next act, divergence between
+    domains above shuffled labels (and with act order shuffled), coverage per
+    domain, and transitions; each named grouping is placed among random
+    groupings with its own state sizes, as a percentile. Takes about a minute.
+    """
+    return await _esm("groupings_report", kind=kind, randoms=max(10, min(int(randoms), 500)))
+
+
+@mcp.tool()
+async def esm_decide(kind: str = "", domain: str = "", layer: str = "milestone", nulls: int = 100) -> dict[str, Any]:
+    """READ. The decision model. It assumes an actor pursuing the scheme's goal (Exploitation).
+
+    Rewards are declared, not estimated: `uniform`, and the researcher's
+    friction table when config/esm_costs.json exists. For each: L*, observed
+    paths beside it, the share of choices that are optimal, a fitted
+    rationality beta against random cost models, the same results under nine
+    feasibility cutoffs, and beta fitted on the same records with their acts
+    shuffled, which the observed beta is read against. Published at the level
+    of states and kinds of act only.
+    """
+    return await _esm("decision_report", kind=kind, domain=domain, layer=layer if layer in ("milestone", "track") else "milestone",
+                      nulls=max(10, min(int(nulls), 500)))
+
+
+@mcp.tool()
+async def esm_laws(kind: str = "") -> dict[str, Any]:
+    """READ. Backbone and laws read off observed trajectories, per domain.
+
+    Coverage of each state at both layers and the backbone at each threshold;
+    contact primacy (InitialContact before Exploitation); conditioning before it;
+    maintenance and exit after it; re-entry; what avoiding each pre-exploitation
+    state would leave; how each domain reached each milestone (tracks); and the
+    exploitation predicate (the victim is the source of what is taken). Use
+    kind="court" for narratives told from the start.
+    """
+    return await _esm("laws_report", kind=kind)
+
+
 @mcp.tool()
 async def process_case(case_or_record_id: str) -> dict[str, Any]:
     """READ. One case against the discovered model and against procedure: its timeline,

@@ -1,0 +1,54 @@
+# Capability: what an actor is able to do (T-Box). A local sketch of the class
+# proposed in UCO issue 682, for review before it is offered upstream.
+#
+# The proposal defines a general Capability, anchored to its possessor by a
+# uco-core:Relationship of kind "hasCapability", and characterized by a
+# uco-action:ActionPattern. This file defines that much and no more. The
+# proposal's Module and Parser classes describe forensic software and are
+# not needed to describe an offender, so they are left out.
+#
+# The means extension already carries a stand-in, means:OffenderCapability,
+# whose own comment says to re-parent it onto the UCO class once that exists.
+# The bridge at the end of this file does that re-parenting locally.
+#
+# Namespace follows the ESM extensions' convention. If UCO adopts the class,
+# cap:Capability becomes uco-core:Capability (or wherever UCO places it) and
+# this file is retired.
+@prefix cap: <http://example.org/ontology/capability/> .
+@prefix means: <http://example.org/ontology/means/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/capability>
+	a owl:Ontology ;
+	rdfs:label "Capability (sketch of UCO issue 682)"@en ;
+	owl:versionInfo "0.1.0" ;
+	dcterms:source "https://github.com/ucoProject/UCO/issues/682"^^xsd:anyURI ;
+	owl:imports <https://ontology.unifiedcyberontology.org/uco/core/> , <https://ontology.unifiedcyberontology.org/uco/action/> .
+
+cap:Capability
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Capability"@en ;
+	rdfs:comment "The ability of an entity (a tool, a person, an organization, a threat actor) to perform some action or produce some result. Connected to its possessor by a uco-core:Relationship with kindOfRelationship \"hasCapability\". Characterized, when the source allows, by a uco-action:ActionPattern."@en .
+
+cap:structuredCharacterization
+	a owl:ObjectProperty ;
+	rdfs:domain cap:Capability ;
+	rdfs:range uco-action:ActionPattern ;
+	rdfs:label "structured characterization"@en ;
+	rdfs:comment "What the capability entails, as an action pattern: the kind of action, its instruments, its objects and results. When absent, the capability is described by its name and description alone."@en .
+
+cap:capabilityScope
+	a owl:DatatypeProperty ;
+	rdfs:domain cap:Capability ;
+	rdfs:range xsd:string ;
+	rdfs:label "capability scope"@en ;
+	rdfs:comment "The domain of the capability, for filtering without reading the action pattern: \"forensic-parsing\", \"threat-operation\", \"offense-conduct\"."@en .
+
+# Bridge: the means extension's stand-in, re-parented as its comment asks.
+means:OffenderCapability rdfs:subClassOf cap:Capability .

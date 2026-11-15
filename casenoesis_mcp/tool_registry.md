@@ -1,6 +1,6 @@
 # CaseNoesis MCP tool registry (local stdio)
 
-**81 tools** when local writes are on, **67** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
+**88 tools** when local writes are on, **74** when they are off. All of them run on this machine. There is no hosted MCP. WRITE tools register when `collector_disk_write_enabled()` is true (local default).
 
 Authoritative implementation: `casenoesis_mcp/server.py`.
 
@@ -14,8 +14,8 @@ Authoritative implementation: `casenoesis_mcp/server.py`.
 | MCP-only (press collector READ) | **1** | `probe_press_url` — all hosts |
 | MCP-only (collector WRITE) | **13** | Press, free RECAP, conduct filings (`collect_conduct_documents`), reference records, and reproduce-from-lookup. Disk only. No sqlite ingest |
 | MCP-only (SDK encoding) | **3** | `encoding_status`, `gate_graph` (READ); `encoding_process_records` (WRITE local, under `data/encoded/`). See `docs/sdk-encoding.md` |
-| MCP-only (extraction engine) | **23** | Nine READ tools over the assertion store and its timelines, five over the event log (`process_*`), six over offense conduct and trajectories (`conduct_*`), two over the local triple store (`graph_sparql`, `graph_store_status`), and `extraction_run` (WRITE local, under `data/extracted/`). See `Architecture design.md`, sections 5, 7, 8, 10 and 11 |
-| **Total (local stdio, writes on)** | **81** | **67** when `MCP_COLLECTOR_WRITE=0` |
+| MCP-only (extraction engine) | **30** | Nine READ tools over the assertion store and its timelines, five over the event log (`process_*`), six over offense conduct and trajectories (`conduct_*`), seven over the state machine and its states (`esm_*`), two over the local triple store (`graph_sparql`, `graph_store_status`), and `extraction_run` (WRITE local, under `data/extracted/`). See `Architecture design.md`, sections 5, 7, 8, 10 and 11 |
+| **Total (local stdio, writes on)** | **88** | **74** when `MCP_COLLECTOR_WRITE=0` |
 
 There are **32** REST `/api/*` routes in `run/main.py`. **29** have MCP tools; four are intentionally excluded from MCP (admin/write/index): `POST /api/cache/clear`, `POST /api/case-studies/notes/{id}`, `POST /api/ontology/cache/warm`, `GET /api`.
 
@@ -77,6 +77,13 @@ On disk: repo-root `extraction/`. Every READ tool answers from stored assertions
 | `conduct_transitions` | READ | From each step, how often each step follows, with entropy |
 | `conduct_compare` | READ | Divergence between offense domains at each level, beside a shuffled baseline |
 | `conduct_means` | READ | Which technology is named at which act, per domain |
+| `esm_groupings` | READ | States with no scheme and no goal: groupings of the acts, one learned, on the same measures beside random groupings |
+| `esm_machine` | READ | The fitted machine over milestone states: action space, observed policy, T(s'\|s,a) with counts |
+| `esm_invariance` | READ | Divergence between domains at the ESM scheme's states, acts and technology, against shuffled labels, random groupings and shuffled order |
+| `esm_decide` | READ | The decision model, which assumes an actor pursuing the scheme's goal: L\*, agreement, rationality beside shuffled order, cutoff sensitivity |
+| `esm_laws` | READ | Backbone coverage, contact primacy, maintenance and loops, the exploitation predicate |
+| `esm_scheme` | READ | The states as data: layers, hierarchy, definitions, CAC links, the crosswalk from SDK alphabets |
+| `esm_read` | READ | Any trajectory graph or JSON walks through the same machine, decision model and predicate |
 | `graph_sparql` | READ | SPARQL over the local Oxigraph store of validated engine graphs. One named graph per record. Updates refused |
 | `graph_store_status` | READ | Named graphs, quads, store location, example queries |
 | `extraction_run` | WRITE local | Read records, link cases, optionally build and validate graphs and load them into the triple store. At most 2,000 per call |
@@ -89,7 +96,7 @@ Almost every tool is **public** — callable without a trusted `CASELINKER_KEY`.
 |----------|------:|---------|
 | Public (trusted key irrelevant) | **32** | Same behavior with or without trusted key |
 | Trusted-key sensitive | **5** | Blocked or reduced without trusted key |
-| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 13 collector WRITE, 3 SDK encoding tools, and 23 extraction tools for the local total of **81**. |
+| **Total in this split** | **37** | Corpus API surface only. Add 5 collector READ, 13 collector WRITE, 3 SDK encoding tools, and 30 extraction tools for the local total of **88**. |
 
 ## Public tier (32 tools)
 

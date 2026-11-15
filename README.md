@@ -21,7 +21,9 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 Accuracy is measured on a gold set of 200 invented records written from known answers ([`gold/`](gold/)). On its held-out half the engine scores F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants, and 0.85 to 0.94 on victim counts and scheme and channel labels.
 
-Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. State machines for the new offense types are not built. No public data release yet.
+The Exploitation State Machine is fitted to the acts read from records and tested, not assumed. Its states are data in two layers: milestones aligned to the CAC backbone, and tracks beneath them, with the SDK's domain alphabets placed under them, so any trajectory graph runs through the same machine. Domains are compared at each layer and at the act and technology levels, and a goal-conditioned decision model is checked against observed choices. See [`state_machines/`](state_machines/README.md).
+
+Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. No public data release yet.
 
 ## Architecture
 
@@ -46,8 +48,8 @@ flowchart TD
     GOLD["GOLD SET <br/> 200 invented records, known answers"] -.->|"scores"| ENG
     STORE --> KG["ENGINE GRAPH <br/> CASE/UCO + legalproc <br/> defendants · charges · terms · amounts <br/> SHACL gate"]
 
-    KG -.-> ESM["FORMAL MODELING (not built) <br/> M = (S, A, T, R_G, s₀, F) <br/> φ / η / ψ · L* · intervention points"]
-    ESM -.-> AN["ANALYSIS (not built) <br/> Laws 1–4 · backbone · affordance structure"]
+    STORE --> ESM["STATE MACHINE <br/> M = (S, A, T, R_G, s₀, F) <br/> layered states · invariance · decision model · laws"]
+    ESM --> KG
 
     KG --> OX["LOCAL TRIPLE STORE <br/> Oxigraph + graphs.nq · SPARQL"]
     STORE --> API["python -m extraction · python -m process_mining <br/> local stdio MCP · SPARQL on 127.0.0.1"]

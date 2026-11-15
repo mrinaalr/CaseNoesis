@@ -128,6 +128,26 @@ state_machines/*
 !state_machines/graphs/*.jsonld
 !state_machines/data/
 !state_machines/data/lstar_all_cases.json
+# Exploitation State Machine: code, docs, tests, the capability sketch.
+!state_machines/README.md
+!state_machines/__main__.py
+!state_machines/machine.py
+!state_machines/scheme.py
+!state_machines/walks.py
+!state_machines/readers.py
+!state_machines/schemes/
+!state_machines/schemes/*.json
+!state_machines/schemes/esm.ttl
+!state_machines/invariance.py
+!state_machines/mdp.py
+!state_machines/coverage.py
+!state_machines/groupings.py
+!state_machines/ontology.py
+!state_machines/analysis.py
+!state_machines/test_state_machines.py
+!state_machines/esm_costs.example.json
+!state_machines/capability/
+!state_machines/capability/*.ttl
 # Community notes live in the DB on Railway. data/case_study_notes.json, if present,
 # is covered by !data/**/*.json; prefer not to treat it as the production notes store.
 

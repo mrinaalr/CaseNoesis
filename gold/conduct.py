@@ -233,6 +233,15 @@ def score(split: str | None, name: str) -> dict[str, Any]:
     exact = {"all": [0, 0], "plain": [0, 0], "paraphrased": [0, 0]}
     phase_exact = [0, 0]
     similarity = []
+    from state_machines import readers, scheme as esm_scheme, walks as esm_walks
+
+    scheme = esm_scheme.load()
+
+    def as_walk(acts: list[dict[str, Any]]):
+        return readers.from_conduct({"record_id": "", "acts": acts}, scheme)
+
+    state_exact = {"all": [0, 0], "plain": [0, 0], "paraphrased": [0, 0]}
+    terminal_exact, predicate_exact = [0, 0], [0, 0]
     for record in records:
         want = truth[record["record_id"]]["acts"]
         have = conduct_layer.sequence(db, record["record_id"])
@@ -260,6 +269,15 @@ def score(split: str | None, name: str) -> dict[str, Any]:
         phases = lambda path: conduct_layer.path([{"kind": act_rules.PHASE[k]} for k in path])  # noqa: E731
         phase_exact[0] += int(phases(want_path) == phases(have_path))
         phase_exact[1] += 1
+        truth_walk, read_walk = as_walk(want), as_walk(have)
+        truth_states, read_states = esm_walks.path(truth_walk, scheme), esm_walks.path(read_walk, scheme)
+        for bucket in ("all", "paraphrased" if record["paraphrased"] else "plain"):
+            state_exact[bucket][0] += int(truth_states == read_states)
+            state_exact[bucket][1] += 1
+        terminal_exact[0] += int(truth_states[-1:] == read_states[-1:])
+        terminal_exact[1] += 1
+        predicate_exact[0] += int(esm_walks.predicate(truth_walk, scheme) == esm_walks.predicate(read_walk, scheme))
+        predicate_exact[1] += 1
 
     def report(tp: int, fp: int, fn: int) -> dict[str, Any]:
         p, r = (tp / (tp + fp) if tp + fp else None), (tp / (tp + fn) if tp + fn else None)
@@ -272,5 +290,8 @@ def score(split: str | None, name: str) -> dict[str, Any]:
         "by_kind": {kind: report(*counts) for kind, counts in sorted(by_kind.items())},
         "paths_exact": {bucket: f"{hit} of {total}" for bucket, (hit, total) in exact.items()},
         "phase_paths_exact": f"{phase_exact[0]} of {phase_exact[1]}",
+        "state_paths_exact": {bucket: f"{hit} of {total}" for bucket, (hit, total) in state_exact.items()},
+        "terminal_state_exact": f"{terminal_exact[0]} of {terminal_exact[1]}",
+        "exploitation_predicate_exact": f"{predicate_exact[0]} of {predicate_exact[1]}",
         "path_similarity": round(sum(similarity) / len(similarity), 3) if similarity else None,
     }
