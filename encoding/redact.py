@@ -95,7 +95,7 @@ def redact_graph(graph: dict[str, Any], annotations: Any, text: str) -> tuple[di
         if node.get("@id") in people and not _PSEUDONYM.fullmatch(str(node.get("uco-core:name")))
     ]
     found = name_rules.find_names(text, [name for name in known if isinstance(name, str)])
-    pattern = name_rules.mask_pattern(found)
+    pattern = name_rules.mask_pattern(found, name_rules.find_unlabeled(text))
     url_tokens = {token.lower() for token in name_rules.name_tokens(found) if " " not in token and len(token) >= 4}
     # A person stays in the graph as a node with its relationships. Only the
     # name goes: the node is renamed by its order of appearance.
@@ -193,6 +193,9 @@ def redact_graph(graph: dict[str, Any], annotations: Any, text: str) -> tuple[di
 
     serialized = json.dumps(graph, ensure_ascii=False) + json.dumps(annotations, ensure_ascii=False)
     leaks = name_rules.leaks(serialized, found)
+    # A second detector, independent of the rules that found `found`: it can catch a miss.
+    unseen = name_rules.independent_leaks(json.dumps(graph, ensure_ascii=False) + "\n" + json.dumps(annotations, ensure_ascii=False))
+    leaks = sorted(set(leaks) | set(unseen))
     report = {
         "version": REDACTION_VERSION,
         "people_renamed": len(people),
@@ -201,6 +204,7 @@ def redact_graph(graph: dict[str, Any], annotations: Any, text: str) -> tuple[di
         # A count of the graph as it now stands, so a second pass reports the same.
         "addresses_cut": serialized.count("source-url-sha256:"),
         "name_check": "pass" if not leaks else "fail",
+        "independent_check": ("pass" if not unseen else "fail") if name_rules.ner_available() else "not_run",
         "names_remaining": len(leaks),
     }
     return graph, annotations, report

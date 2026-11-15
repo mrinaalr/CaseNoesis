@@ -7,6 +7,10 @@
     finals        resolved values, flattened for cohort queries
     review_queue  mentions the vote left open
     cases         records grouped into cases, with the basis for each link
+    people        each defendant of a case, and which numbered person that is in each record
+    attributions  whose each term, amount, and event is, per record
+    events        what happened in each case, in order, with the records that say so
+    conduct       the acts each record narrates, in the order it tells them
 
 Assertions are never updated. A record read again gets new assertion rows
 under a new run, and `records.run_id` moves to that run. Resolution reads the
@@ -115,6 +119,55 @@ CREATE TABLE IF NOT EXISTS graphs (
     conforms INTEGER,
     built_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS people (
+    case_id TEXT NOT NULL,
+    person TEXT NOT NULL,
+    record_id TEXT NOT NULL,
+    record_person TEXT NOT NULL,
+    basis TEXT NOT NULL,
+    PRIMARY KEY (record_id, record_person)
+);
+CREATE INDEX IF NOT EXISTS people_case ON people(case_id, person);
+CREATE TABLE IF NOT EXISTS attributions (
+    record_id TEXT NOT NULL,
+    field TEXT NOT NULL,
+    role TEXT NOT NULL,
+    value TEXT,
+    span_start INTEGER NOT NULL,
+    span_end INTEGER NOT NULL,
+    people TEXT NOT NULL,
+    status TEXT NOT NULL,
+    basis TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS attributions_record ON attributions(record_id);
+CREATE TABLE IF NOT EXISTS events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    case_id TEXT NOT NULL,
+    position INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    date TEXT,
+    precision TEXT NOT NULL,
+    people TEXT NOT NULL,
+    status TEXT NOT NULL,
+    order_basis TEXT NOT NULL,
+    evidence TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS events_case ON events(case_id, position);
+CREATE TABLE IF NOT EXISTS conduct (
+    record_id TEXT NOT NULL,
+    case_id TEXT,
+    position INTEGER NOT NULL,
+    kind TEXT NOT NULL,
+    date TEXT,
+    precision TEXT NOT NULL,
+    people TEXT NOT NULL,
+    means TEXT NOT NULL,
+    status TEXT NOT NULL,
+    span_start INTEGER NOT NULL,
+    span_end INTEGER NOT NULL,
+    PRIMARY KEY (record_id, position)
+);
+CREATE INDEX IF NOT EXISTS conduct_case ON conduct(case_id);
 CREATE TABLE IF NOT EXISTS case_candidates (
     record_a TEXT NOT NULL,
     record_b TEXT NOT NULL,
@@ -237,6 +290,36 @@ def record_ids(db: sqlite3.Connection, *, kind: str | None = None, domain: str |
 
 def known_text_hashes(db: sqlite3.Connection) -> dict[str, str]:
     return {row[0]: row[1] for row in db.execute("SELECT record_id, text_sha256 FROM records")}
+
+
+def reader_versions_read_with(db: sqlite3.Connection) -> dict[str, dict[str, str]]:
+    """For each record, the reader versions of the run that last read it."""
+    out: dict[str, dict[str, str]] = {}
+    for record_id, readers in db.execute("SELECT r.record_id, u.readers FROM records r JOIN runs u ON u.run_id = r.run_id"):
+        try:
+            out[record_id] = json.loads(readers)
+        except (TypeError, ValueError):
+            out[record_id] = {}
+    return out
+
+
+def drop_records(db: sqlite3.Connection, record_ids: Iterable[str]) -> dict[str, int]:
+    """Remove records that left the corpus, and everything derived from each. Cases, people and
+    events are rebuilt from what remains by their own commands."""
+    ids = sorted(set(record_ids))
+    out: dict[str, int] = {}
+    for table in ("assertions", "resolutions", "finals", "review_queue", "cases", "graphs", "triple_store", "people",
+                  "attributions", "conduct", "records"):
+        removed = 0
+        for record_id in ids:
+            removed += db.execute(f"DELETE FROM {table} WHERE record_id = ?", (record_id,)).rowcount
+        out[table] = removed
+    removed = 0
+    for record_id in ids:
+        removed += db.execute("DELETE FROM case_candidates WHERE record_a = ? OR record_b = ?", (record_id, record_id)).rowcount
+    out["case_candidates"] = removed
+    db.commit()
+    return out
 
 
 def prune(db: sqlite3.Connection) -> int:

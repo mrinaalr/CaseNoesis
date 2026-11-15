@@ -10,3 +10,7 @@ case-utils==0.18.0
 
 # Local triple store for the engine graphs (Oxigraph, SPARQL).
 pyoxigraph==0.5.13
+
+# Optional: the dependency-parse and NER readers (CASENOESIS_SYNTAX=1) use Stanza,
+# which is pinned with torch in requirements-ml.txt. Fetch its English models once:
+#   python -c "import stanza; stanza.download('en', processors='tokenize,pos,lemma,depparse,ner', package='default_fast')"

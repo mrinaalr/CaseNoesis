@@ -106,6 +106,69 @@ def _number_people(text: str, gated: list[dict[str, Any]]) -> None:
         item["value"] = f"person-{number}"
         item["span_text"] = name_rules.MASK
 
+    def number_of(start: int, end: int) -> int | None:
+        surname, given = name_rules.person_key(text[start:end])
+        for number, (known_surname, known_given) in enumerate(people, start=1):
+            initial = min(len(given), len(known_given)) == 1 and given[:1] == known_given[:1]
+            if surname == known_surname and (not given or not known_given or given == known_given or initial):
+                return number
+        return None
+
+    # An attribution points at person spans. Its role becomes the numbers of
+    # those people; a span that is not one of the record's parties is dropped.
+    for item in gated:
+        if item["field"] != "attribution" or not item["span_ok"] or item.get("role") not in (None, "unknown"):
+            continue
+        numbers = sorted({n for n in (number_of(a, b) for a, b in item["extras"].get("people") or []) if n is not None})
+        item["role"] = "+".join(f"person-{n}" for n in numbers) if numbers else "unknown"
+
+
+def _mask_span_text(text: str, gated: list[dict[str, Any]]) -> None:
+    """Remove names from the span text of every assertion, in place.
+
+    A span is usually a number, a citation or a cue word. It can also be a
+    whole sentence: the SDK anchors a charge on the sentence that states it,
+    and that sentence names the people charged. The stored span text is for
+    reading a decision back without the source; it must not carry a name. The
+    offsets are unchanged and still point at the source text."""
+    known = {text[a["span_start"]: a["span_end"]] for a in gated if a["field"] == "party" and a["span_ok"]}
+    pattern = name_rules.masker(text, known)
+    if pattern is None:
+        return
+    for item in gated:
+        if item["field"] != "party" and item.get("span_text"):
+            item["span_text"] = name_rules.scrub(item["span_text"], pattern)
+
+
+def rescrub(db, source, *, record_ids: list[str] | None = None) -> dict[str, int]:
+    """Mask names again in stored span text, from the source text, with the current rules.
+
+    Span text is masked when a record is read. A change to the name rules reaches records already
+    read only through this, without reading them again: offsets are kept, so each span's text is
+    re-cut from the source and masked anew."""
+    ids = record_ids or [r["record_id"] for r in db.execute("SELECT record_id FROM records")]
+    out = {"records": 0, "spans_changed": 0, "records_without_text": 0}
+    for record_id in ids:
+        text = source.text(record_id)
+        if not text:
+            out["records_without_text"] += 1
+            continue
+        rows = db.execute(
+            "SELECT a.id, a.field, a.span_start, a.span_end, a.span_text, a.span_ok FROM assertions a "
+            "JOIN records r ON r.record_id = a.record_id AND r.run_id = a.run_id WHERE a.record_id = ?", (record_id,)).fetchall()
+        known = {text[r["span_start"]: r["span_end"]] for r in rows if r["field"] == "party" and r["span_ok"]}
+        pattern = name_rules.masker(text, known)
+        for row in rows:
+            if row["field"] == "party" or not row["span_text"] or row["span_start"] is None or not row["span_ok"]:
+                continue
+            masked = name_rules.scrub(text[row["span_start"]: row["span_end"]], pattern)
+            if masked != row["span_text"]:
+                db.execute("UPDATE assertions SET span_text = ? WHERE id = ?", (masked, row["id"]))
+                out["spans_changed"] += 1
+        out["records"] += 1
+    db.commit()
+    return out
+
 
 def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str, Any]:
     """Readers, gate, vote, over a `Doc` already in memory."""
@@ -113,6 +176,7 @@ def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str
     for reader in readers_for(doc.kind):
         raw.extend(reader.fn(doc))
     gated = [fields.gate_assertion(doc.text, item) for item in raw]
+    _mask_span_text(doc.text, gated)
     _number_people(doc.text, gated)
     for index, item in enumerate(gated):
         item["seq"] = -(index + 1)
@@ -124,6 +188,7 @@ def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str
             for entry in resolution["review"] if entry["spans"]
         ]
         extra = [fields.gate_assertion(doc.text, item) for item in llm.ask(doc, open_mentions, llm_transport)]
+        _mask_span_text(doc.text, extra)
         _number_people(doc.text, gated + extra)
         if extra:
             for index, item in enumerate(extra, start=len(gated)):
@@ -163,14 +228,15 @@ def _code_revision() -> str | None:
 
 
 def run(entries: list[dict[str, Any]], *, workers: int = 1, force: bool = False, db_path: Path | None = None) -> dict[str, Any]:
-    """Read many records and store the result. A record whose text has not
-    changed since it was last read is skipped unless `force`."""
+    """Read many records and store the result. A record is skipped unless `force`, or unless it has never
+    been read, or the readers that read it have changed version since."""
     from encoding import sdk
 
     use_llm = llm.enabled()
     db = store.connect(db_path)
-    known = {} if force else store.known_text_hashes(db)
-    pending = [entry for entry in entries if entry["record_id"] not in known] if not force else entries
+    current = reader_versions()
+    read_with = {} if force else store.reader_versions_read_with(db)
+    pending = entries if force else [entry for entry in entries if read_with.get(entry["record_id"]) != current]
     summary: dict[str, Any] = {"selected": len(entries), "already_read": len(entries) - len(pending), "read": 0, "skipped": {}}
     if not pending:
         return summary

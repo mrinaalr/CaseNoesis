@@ -128,8 +128,12 @@ def build_record_graph(db: sqlite3.Connection, record_id: str, entry: dict[str, 
                 "target": {"source": text_source, "selector": [{"type": "TextPositionSelector", "start": start, "end": end}]},
             })
 
+    owned: list[tuple[str, str, dict[str, Any]]] = []
+
     def node(key: tuple[Any, ...], types: str, properties: dict[str, Any], final: dict[str, Any]) -> str:
         node_id = _iri(record_id, *key)
+        if key[0] in ("sentence", "money"):
+            owned.append((node_id, key[0], final))
         tags = [f"noesis-record:{record_id}", *_evidence(final), *properties.pop("tags", [])]
         graph.upsert_node(node_id, types=[types], properties={**properties, "uco-core:tag": tags})
         produced.append(node_id)
@@ -275,16 +279,32 @@ def build_record_graph(db: sqlite3.Connection, record_id: str, entry: dict[str, 
             }, final)
             people.append(person)
             produced.append(graph.create_relationship(person, role_node, "Has_Role")["@id"])
-    if len(people) == 1:
-        # With one defendant, the charges and terms in the record are that
-        # person's. With several, the record does not say whose is whose.
-        if charges:
-            graph.add_property(people[0], "legalproc:chargedWith", [{"@id": charge} for charge in charges])
-        for term in terms:
-            produced.append(graph.create_relationship(
-                term, people[0], "Applies_To",
-                description="The record names one defendant, so its terms are linked to that defendant.",
-            )["@id"])
+    if len(people) == 1 and charges:
+        # With one defendant, the charges in the record are that person's.
+        graph.add_property(people[0], "legalproc:chargedWith", [{"@id": charge} for charge in charges])
+    # Whose each term and amount is: what the attribution vote settled, or the
+    # only defendant the record names. A value no one was given stays unlinked.
+    person_node = {final["value"]: node_id for final, node_id in zip(defendants, people)}
+    whose: dict[tuple[str, int, int], tuple[list[str], str]] = {
+        (row["field"], row["span_start"], row["span_end"]): (json.loads(row["people"]), row["basis"])
+        for row in db.execute("SELECT field, span_start, span_end, people, basis FROM attributions WHERE record_id = ?", (record_id,))
+    }
+    for node_id, field_name, final in owned:
+        linked: dict[str, str] = {}
+        for start, end in final["spans"]:
+            for person, basis in ((p, whose[(field_name, start, end)][1]) for p in whose.get((field_name, start, end), ([], ""))[0]):
+                linked.setdefault(person, basis)
+        if not whose and len(people) == 1 and node_id in terms:
+            linked = {defendants[0]["value"]: "sole_defendant"}  # the people layer has not run for this record
+        for person, basis in sorted(linked.items()):
+            if person in person_node:
+                produced.append(graph.create_relationship(
+                    node_id, person_node[person], "Applies_To",
+                    description=(
+                        "The record names one defendant, so this is linked to that defendant." if basis == "sole_defendant"
+                        else "Readers placed this with this defendant from the sentence it is stated in."
+                    ),
+                )["@id"])
     if len(charges) == 1:
         for term in terms:
             graph.add_property(term, "legalproc:appliesTo", [{"@id": charges[0]}])
@@ -335,11 +355,14 @@ def build_record_graph(db: sqlite3.Connection, record_id: str, entry: dict[str, 
     (folder / "annotations.jsonld").write_text(json.dumps(annotations, indent=2) + "\n", encoding="utf-8")
     serialized = graph_path.read_text(encoding="utf-8")
     leaked = name_rules.leaks(serialized, found_names)
+    # A second detector, independent of the rules that found `found_names`: it can catch a miss.
+    unseen = name_rules.independent_leaks(serialized + (graph_path.parent / "annotations.jsonld").read_text(encoding="utf-8"))
     return {
         "record_id": record_id,
         "graph_sha256": hashlib.sha256(serialized.encode("utf-8")).hexdigest(),
         "nodes": len(json.loads(serialized)["@graph"]),
-        "name_check": "pass" if not leaked else "fail",
+        "name_check": "pass" if not leaked and not unseen else "fail",
+        "independent_check": ("pass" if not unseen else "fail") if name_rules.ner_available() else "not_run",
     }
 
 

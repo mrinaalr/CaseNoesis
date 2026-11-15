@@ -17,7 +17,7 @@ from __future__ import annotations
 import re
 from typing import NamedTuple
 
-TABLE_VERSION = "usc_offenses_2026_11"
+TABLE_VERSION = "usc_offenses_2026_11b"
 
 
 class Statute(NamedTuple):
@@ -32,15 +32,15 @@ LIFE = dict(max_months=None, life=True)
 
 STATUTES: dict[tuple[str, str], Statute] = {
     # Fraud
-    ("18", "1343"): Statute("wire_fraud", r"wire\s+fraud", 240),
-    ("18", "1341"): Statute("mail_fraud", r"mail\s+fraud", 240),
-    ("18", "1344"): Statute("bank_fraud", r"bank\s+fraud", 360),
+    ("18", "1343"): Statute("wire_fraud", r"(?<!commit\s)wire\s+fraud", 240),
+    ("18", "1341"): Statute("mail_fraud", r"(?<!commit\s)mail\s+fraud", 240),
+    ("18", "1344"): Statute("bank_fraud", r"(?<!commit\s)bank\s+fraud", 360),
     ("18", "1349"): Statute("fraud_conspiracy", r"conspir\w+\s+to\s+commit\s+(?:wire|mail|bank|health\s+care|securities)\s+fraud"),
     ("18", "1347"): Statute("health_care_fraud", r"health\s*care\s+fraud", 120),
     ("18", "1348"): Statute("securities_fraud", r"securities\s+fraud", 300),
     ("15", "78J"): Statute("securities_fraud", r"securities\s+fraud", 240),
     ("18", "1028A"): Statute("aggravated_identity_theft", r"aggravated\s+identity\s+theft", 24, 24),
-    ("18", "1028"): Statute("identity_fraud", r"identity\s+(?:theft|fraud)"),
+    ("18", "1028"): Statute("identity_fraud", r"(?<!aggravated\s)identity\s+(?:theft|fraud)"),
     ("18", "1029"): Statute("access_device_fraud", r"access\s+device\s+fraud"),
     ("18", "1030"): Statute("computer_fraud", r"computer\s+(?:fraud|intrusion|hacking)|unauthorized\s+access\s+to\s+a\s+(?:protected\s+)?computer"),
     ("18", "1956"): Statute("money_laundering", r"money\s+laundering|launder(?:ing|ed)\s+(?:the\s+)?(?:money|proceeds|funds)", 240),

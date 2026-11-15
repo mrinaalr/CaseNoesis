@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 from importlib import import_module
 
-PROFILE_VERSION = "profiles_2026_11"
+PROFILE_VERSION = "profiles_2026_11b"
 
 
 @dataclass(frozen=True)

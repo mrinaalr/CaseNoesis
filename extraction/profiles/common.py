@@ -24,7 +24,7 @@ PROFILE = Profile(
         "gift_card": r"gift\s+cards?|prepaid\s+(?:debit\s+)?cards?",
         "payment_app": r"(?:peer[-\s]to[-\s]peer|mobile)\s+payment\s+(?:app\w*|platforms?|services?)|payment\s+app\w*",
         "money_service": r"money\s+(?:transfer|remittance)\s+(?:services?|business\w*)|money\s+orders?|money\s+transmitt\w+",
-        "mail": r"U\.?S\.?\s+mail|by\s+mail|mailed|mailings?|postal\s+service|commercial\s+carriers?|FedEx|UPS\s+(?:package|store)",
+        "mail": r"U\.?S\.?\s+mail|by\s+mail|mailed|mailings?(?!\s+address)|postal\s+service|commercial\s+carriers?|FedEx|UPS\s+(?:package|store)",
         "in_person": r"in\s+person|door[-\s]to[-\s]door|face[-\s]to[-\s]face|couriers?\s+(?:to\s+)?(?:pick|collect)\w*",
         "remote_access": r"remote\s+(?:access|desktop|control)\s*(?:software|tools?|programs?)?|remotely\s+access\w+",
         "spoofing": r"spoof(?:ed|ing)\s+(?:phone\s+|telephone\s+|caller\s+)?(?:numbers?|ID|e-?mails?|domains?|caller)|caller\s+ID\s+spoofing",

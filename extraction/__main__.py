@@ -3,6 +3,10 @@
     python -m extraction run --kind court --workers 6    read records: readers, gate, vote
     python -m extraction resolve                         vote again over stored assertions
     python -m extraction cases                           group records into cases
+    python -m extraction people                          link defendants across a case's records; settle whose each value is
+    python -m extraction events                          date and order what happened in each case
+    python -m extraction conduct                         put the acts each record narrates in order
+    python -m extraction timeline <case-id | record-id>  one case's events in order
     python -m extraction graph --gate --workers 6        write and validate CASE/UCO graphs
     python -m extraction store                           load validated graphs into Oxigraph and graphs.nq
     python -m extraction sparql "SELECT ..."              query the local triple store
@@ -44,11 +48,17 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--seed", type=int, default=8252)
     run.add_argument("--workers", type=int, default=1)
     run.add_argument("--force", action="store_true", help="read records again")
+    run.add_argument("--syntax", action="store_true", help="also run the parser and NER readers (same as CASENOESIS_SYNTAX=1)")
 
     resolve = commands.add_parser("resolve", help="vote again over stored assertions")
     resolve.add_argument("--kind", choices=["press", "court", "reference"])
 
     commands.add_parser("cases", help="group records into cases")
+    commands.add_parser("people", help="link defendants across records and settle attributions")
+    commands.add_parser("events", help="date and order the events of each case")
+    commands.add_parser("conduct", help="put the acts each record narrates in order")
+    timeline = commands.add_parser("timeline", help="one case's events in order")
+    timeline.add_argument("id")
 
     graph = commands.add_parser("graph", help="write CASE/UCO graphs for read records")
     graph.add_argument("ids", nargs="*")
@@ -71,6 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     commands.add_parser("agreement", help="how the reader families compare")
     commands.add_parser("fields", help="the field registry and the readers")
     commands.add_parser("prune", help="drop assertion rows from superseded runs")
+    commands.add_parser("rescrub", help="mask names again in stored span text with the current rules")
 
     show = commands.add_parser("show", help="one record")
     show.add_argument("record_id")
@@ -102,6 +113,10 @@ def main(argv: list[str] | None = None) -> int:
     case.add_argument("id")
 
     args = parser.parse_args(argv)
+    if getattr(args, "syntax", False):
+        import os
+
+        os.environ["CASENOESIS_SYNTAX"] = "1"  # before the readers load; worker processes inherit it
     from extraction import explore
 
     if args.command == "run":
@@ -132,6 +147,20 @@ def main(argv: list[str] | None = None) -> int:
         from extraction import cases
 
         _print(cases.build())
+    elif args.command == "people":
+        from extraction import people
+
+        _print(people.build())
+    elif args.command == "events":
+        from extraction import events
+
+        _print(events.build())
+    elif args.command == "conduct":
+        from extraction import conduct
+
+        _print(conduct.build())
+    elif args.command == "timeline":
+        _print(explore.timeline(args.id))
     elif args.command == "graph":
         from extraction import graph as graph_layer
 
@@ -169,6 +198,11 @@ def main(argv: list[str] | None = None) -> int:
             "readers": reader_versions(),
             "families": FAMILY,
         })
+    elif args.command == "rescrub":
+        from extraction import pipeline, store
+        from extraction.source import CorpusSource
+
+        _print(pipeline.rescrub(store.connect(), CorpusSource()))
     elif args.command == "prune":
         from extraction import store
 

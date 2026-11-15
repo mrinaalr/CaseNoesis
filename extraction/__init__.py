@@ -9,4 +9,4 @@ CASE/UCO graph through the pinned SDK and validated.
 See `Architecture design.md`, section 5.
 """
 
-ENGINE_VERSION = "1.0.0"
+ENGINE_VERSION = "1.1.0"

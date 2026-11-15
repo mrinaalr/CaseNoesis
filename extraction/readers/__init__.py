@@ -7,6 +7,9 @@ method's family is what the resolver counts.
     family            method               what it reads
     surface_pattern   regex                fixed phrasings anchored on the value
     clause            clause_cue           the clause around every typed token
+                      clause_subject       whose a term, an amount, or an event is, from sentence order
+    dependency        dependency_parse     optional; a parse: what governs each value and who its subject is
+    ner               ner_model            optional; entity types: a span is a person, or is not
     lookup            statute_table        a citation, against the statute table
     sdk_rule          sdk_processor        the pinned SDK's document processor
     metadata          collector_metadata   what the collector recorded (no span)
@@ -29,6 +32,9 @@ FAMILY = {
     "clause_cue": "clause",
     "statute_table": "lookup",
     "sdk_processor": "sdk_rule",
+    "clause_subject": "clause",
+    "dependency_parse": "dependency",
+    "ner_model": "ner",
     "collector_metadata": "metadata",
     "llm": "llm",
     "human": "human",
@@ -93,4 +99,4 @@ def _load() -> None:
     if _loaded:
         return
     _loaded = True
-    from extraction.readers import clause, llm, lookup, metadata, overrides, patterns, sdk  # noqa: F401
+    from extraction.readers import attribution, clause, llm, lookup, metadata, overrides, patterns, sdk, syntax  # noqa: F401
