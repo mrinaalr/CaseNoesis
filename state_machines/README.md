@@ -268,7 +268,7 @@ Not written: reward, value, policy (`means` records none by design); `means:Sele
 
 **Other alphabets.** The SDK's layered exemplar (four layers in four alphabets) reads with every state placed. Three of its layers reach exploitation and are marked `disrupted`, for the arrest that ended them; here they end Completed, and the reader reports each disagreement.
 
-{{GRAPHS}}
+**Graphs.** The scheme graph passes the SDK gate as publishable. Trajectory and model graphs for court filings are being validated again after a fix to walks whose first act reaches nothing; this line gives the count when that run ends.
 
 **Gold statements** (held-out half): state paths exact for 19 of 22 plain tellings and 1 of 18 paraphrased; predicate correct for 27 of 40.
 
