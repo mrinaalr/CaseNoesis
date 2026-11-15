@@ -1,0 +1,77 @@
+{
+  "name": "esm",
+  "version": "3.0",
+  "title": "Exploitation State Machine states",
+  "definition": "The condition an offense is in: what it has reached, and the leverage it holds. Milestones are the states of the machine; tracks say how a milestone was reached. Each state is reached from evidence, never from the offense's domain.",
+  "layers": ["milestone", "track"],
+  "start": "start",
+  "goal": ["Exploitation"],
+  "after_goal": {
+    "Conditioning": "Maintenance",
+    "Deception": "RenewedDeception",
+    "Coercion": "RenewedCoercion"
+  },
+  "backbone": ["InitialContact", "Conditioning", "Exploitation", "Maintenance"],
+  "roles": {
+    "preparation": "Preparation",
+    "contact": "InitialContact",
+    "conditioning": "Conditioning",
+    "goal": "Exploitation",
+    "maintenance": "Maintenance",
+    "exit": "Exit"
+  },
+  "terminals": {
+    "Completed": "The goal was reached, whether or not the offense was later detected.",
+    "Disrupted": "Detection is narrated before the goal was reached.",
+    "Unresolved": "The telling ends before the goal, with no detection narrated."
+  },
+  "states": [
+    {"id": "Preparation", "layer": "milestone", "script": "preparation",
+     "definition": "Means are set up: accounts, identities, infrastructure, tools. No victim has been reached."},
+    {"id": "InitialContact", "layer": "milestone", "script": "entry",
+     "definition": "A victim, a person or a system, has been reached.",
+     "matches": [{"relation": "closeMatch", "iri": "https://cacontology.projectvic.org/grooming#InitialContactPhase"}]},
+    {"id": "Conditioning", "layer": "milestone", "script": "instrumental pre-condition",
+     "definition": "The offender holds leverage over the victim before anything is taken: a false belief, a demand, a threat, control.",
+     "matches": [{"relation": "closeMatch", "iri": "https://cacontology.projectvic.org/grooming#ConditioningPhase"}]},
+    {"id": "Exploitation", "layer": "milestone", "script": "doing",
+     "definition": "Value or a person has been taken, or the offense's harm delivered.",
+     "matches": [{"relation": "closeMatch", "iri": "https://cacontology.projectvic.org/grooming#ExploitationPhase"}]},
+    {"id": "Maintenance", "layer": "milestone", "script": "doing, repeated",
+     "definition": "Leverage is held again after exploitation, so the offense can continue.",
+     "matches": [{"relation": "closeMatch", "iri": "https://cacontology.projectvic.org/grooming#MaintenancePhase"}]},
+    {"id": "Exit", "layer": "milestone", "script": "post-condition and exit",
+     "definition": "After exploitation, proceeds are moved or traces concealed."},
+
+    {"id": "Solicitation", "layer": "track", "broader": "InitialContact",
+     "definition": "A person is approached by the offender: a call, a message, a meeting."},
+    {"id": "Recruitment", "layer": "track", "broader": "InitialContact",
+     "definition": "A person is enlisted with an offer: work, travel, a relationship."},
+    {"id": "Intrusion", "layer": "track", "broader": "InitialContact",
+     "definition": "A computer system or account is entered without authority.",
+     "matches": [{"relation": "relatedMatch", "iri": "https://attack.mitre.org/tactics/TA0001/"}]},
+
+    {"id": "Deception", "layer": "track", "broader": "Conditioning",
+     "definition": "The victim cooperates under a false belief the offender induced: a pretext, a false identity, a false promise."},
+    {"id": "Coercion", "layer": "track", "broader": "Conditioning",
+     "definition": "The victim complies under a threat of harm or the offender's control of their movement, documents, money or communication. Once held, coercion is not undone by a later deception."},
+
+    {"id": "ValueTaken", "layer": "track", "broader": "Exploitation", "victim_is_source": true,
+     "definition": "Money, property or data has passed from the victim to the offender."},
+    {"id": "PersonExploited", "layer": "track", "broader": "Exploitation", "victim_is_source": true,
+     "definition": "Labor, sex or images have been taken from the person.",
+     "matches": [{"relation": "relatedMatch", "iri": "https://cacontology.projectvic.org/usa-federal-law#CommercialSexualExploitation"}]},
+    {"id": "ContrabandSupplied", "layer": "track", "broader": "Exploitation", "victim_is_source": false,
+     "definition": "Contraband has been supplied to buyers. Harm is delivered, but no victim is the source of what the offender gains."},
+
+    {"id": "RenewedDeception", "layer": "track", "broader": "Maintenance",
+     "definition": "Deception, held again after exploitation."},
+    {"id": "RenewedCoercion", "layer": "track", "broader": "Maintenance",
+     "definition": "Coercion, held again after exploitation."},
+
+    {"id": "Laundering", "layer": "track", "broader": "Exit",
+     "definition": "Proceeds are moved, converted or placed after exploitation."},
+    {"id": "Concealment", "layer": "track", "broader": "Exit",
+     "definition": "Traces of the offense are hidden or destroyed after exploitation."}
+  ]
+}

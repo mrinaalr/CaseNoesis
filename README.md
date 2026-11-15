@@ -17,37 +17,57 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 ## Status
 
-The collector and the public lookups (`data/collected/public/`) are in this repo. Ingestion architecture and offense-category taxonomy are under active development. No public data release yet.
+45,877 distinct public records are collected (46,619 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 3,126,758 span-anchored assertions, 992,008 settled values, 58,583 mentions left for a person. Defendants are linked across the records of a case, and each term and amount is placed with its defendant. What happened in each case is ordered into a dated timeline: 108,740 events in 44,152 cases. Process mining over those timelines finds the paths prosecutions take and flags cases that depart from procedural order. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
+
+Accuracy is measured on a gold set of 200 invented records written from known answers ([`gold/`](gold/)). On its held-out half the engine scores F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants, and 0.85 to 0.94 on victim counts and scheme and channel labels.
+
+The Exploitation State Machine is fitted to the acts read from records and tested, not assumed. Its states are data in two layers: milestones aligned to the CAC backbone, and tracks beneath them, with the SDK's domain alphabets placed under them, so any trajectory graph runs through the same machine. Domains are compared at each layer and at the act and technology levels, and a goal-conditioned decision model is checked against observed choices. See [`state_machines/`](state_machines/README.md).
+
+Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. No public data release yet.
 
 ## Architecture
 
-The pipeline turns public enforcement records into structured features, knowledge graphs, and state machines. Full design: [`Architecture design.md`](Architecture%20design.md).
+Public enforcement records become span-anchored values, then validated knowledge graphs, then (not yet) state machines. Full design: [`Architecture design.md`](Architecture%20design.md).
 
 ```mermaid
 flowchart TD
     P["PRESS / AGENCY <br/> scale · discovery"]
-    C["PACER / RECAP <br/> lifecycle fidelity"]
+    C["FREE RECAP / PACER <br/> lifecycle fidelity"]
+    F["REFERENCE <br/> statutes · platform policy"]
 
-    P --> ACQ["COLLECTION <br/> harvest → PDF → resolve"]
-    C --> ENR["COURT ENRICHMENT <br/> docket correlate · evidence extraction"]
+    P --> IDX["RECORD INDEX <br/> content-hashed ids · domains"]
+    C --> IDX
+    F --> IDX
 
-    ACQ --> PROC["PROCESSING <br/> case schema · <br/> deterministic extraction"]
-    ENR --> PROC
+    IDX --> SDK["SDK PROCESSOR <br/> pinned CASE/UCO SDK · OCR <br/> record graph, names removed"]
+    IDX --> ENG
+    SDK -->|"text + anchors"| ENG["EXTRACTION ENGINE <br/> readers → span gate → vote by family <br/> review queue · domain profiles"]
 
-    PROC --> ENC["SEMANTIC ENCODING <br/> CASE/UCO + Extensions · trajectories <br/> SHACL gate · observed ≠ inferred"]
-    ENC --> STORE["STORAGE <br/> JSON-LD/TTL · PostgreSQL"]
+    ENG --> STORE["STORE <br/> assertions · decisions · cases <br/> people · events"]
+    STORE --> PM["PROCESS MINING <br/> timelines per defendant · variants <br/> Inductive Miner · conformance"]
+    GOLD["GOLD SET <br/> 200 invented records, known answers"] -.->|"scores"| ENG
+    STORE --> KG["ENGINE GRAPH <br/> CASE/UCO + legalproc <br/> defendants · charges · terms · amounts <br/> SHACL gate"]
 
-    STORE --> ESM["FORMAL MODELING <br/> M = (S, A, T, R_G, s₀, F) <br/> φ / η / ψ · L* <br/> intervention points"]
-    ESM --> AN["ANALYSIS <br/> Laws 1–4 · backbone · affordance structure"]
-    AN --> VIZ["VIEWS <br/> machines · trajectories · case explorers"]
+    STORE --> ESM["STATE MACHINE <br/> M = (S, A, T, R_G, s₀, F) <br/> layered states · invariance · decision model · laws"]
+    ESM --> KG
 
-    STORE -.-> API["local FastAPI · local stdio MCP"]
-    VIZ -.-> API
+    KG --> OX["LOCAL TRIPLE STORE <br/> Oxigraph + graphs.nq · SPARQL"]
+    STORE --> API["python -m extraction · python -m process_mining <br/> local stdio MCP · SPARQL on 127.0.0.1"]
+    PM --> API
+    OX --> API
 ```
 
 **Three collection paths.** Press for scale. Free RECAP for court filings; PACER only with a spend cap. Reference records for platform rules, statutes, and calibration. They meet at processing. See [Collection](#collection).
 
-**Cross domain analysis.** Processing extracts comparable features under a domain-agnostic offense record (domain profiles specialize; they do not redefine the core). Graphs are CASE/UCO + Extensions with the trajectories metamodel; SHACL is a publish gate, and inferred analytics are never typed as observed facts.
+**How a value gets stored.** Each reader writes its own assertion with a character span. One gate checks the span and re-reads the value from the text. Readers vote by evidence family: two families that agree settle a value, two that disagree veto it, and the rest goes to a review queue. The core knows fields and votes; fraud, trafficking, forced labor, cyber, and CSEA are vocabulary files. Code: [`extraction/`](extraction/).
+
+**People, events, paths.** Readers also vote on whose each term and amount is and on what each record says happened. Defendants are linked across a case's records, events are dated and ordered per defendant, and [`process_mining/`](process_mining/) mines the common paths and checks each case against procedural order. Code: [`extraction/people.py`](extraction/people.py), [`extraction/events.py`](extraction/events.py).
+
+**No names.** Source text stays on the machine. Assertions, graphs, and tool output carry no person's name. A defendant is `Defendant 1` with a role, linked to charges and terms.
+
+**All local.** Clone, set up, run. The store is a SQLite file, the graphs load into a local Oxigraph store and one N-Quads file, and the MCP server and SPARQL endpoint run on this machine. Nothing here needs a hosted database.
+
+**Graphs.** CASE/UCO with the SDK's legal-process extension, built and validated with the SDK pinned in this repo. SHACL is a publish gate, and inferred analytics are never typed as observed facts. The SDK path by itself: [`docs/sdk-encoding.md`](docs/sdk-encoding.md).
 
 **What the system is for.** The primary purpose is to build formal models, specifically the *Exploitation State Machine*. Analysis tests Theorem 1 and Laws 1–4 across domains, annotates affordances, and *ranks intervention points*. The local website and stdio MCP expose machines and collection tools to the researcher — not to the public internet. CaseLinker remains the public ICAC collector and query API.
 
@@ -75,4 +95,4 @@ Contributors can help by:
 
 ---
 
-*CaseNoesis builds on ideas developed in [CaseLinker](https://github.com/mrinaalr/CaseLinker), a CSEA-focused case analysis platform. The relationship is one of shared DNA, not shared codebase. CaseNoesis's ingestion and processing layers are being built independently for cross-domain use.*
+*CaseNoesis builds on ideas developed in [CaseLinker](https://github.com/mrinaalr/CaseLinker), a CSEA-focused case analysis platform. The extraction engine keeps CaseLinker's design (one assertion per reader, a span gate, a vote by evidence family) and makes it domain-general. What was carried over and what was not: [`Architecture design.md`](Architecture%20design.md), section 15.*

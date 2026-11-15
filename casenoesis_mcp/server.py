@@ -1589,6 +1589,31 @@ if _COLLECTOR_WRITE_ENABLED:
             return {"error": str(e), "write": True}
 
     @mcp.tool()
+    async def collect_conduct_documents(
+        domain: str = "fraud", max_docs: int = 40, pages: int = 1, kind: str = "", search_only: bool = False
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Collect the filings that narrate an offense. Free RECAP only; never PACER.
+
+        Three kinds: statement_of_offense (statements of offense and of facts),
+        factual_basis (factual bases, resumes, proffers, stipulated facts), and
+        complaint_affidavit (criminal complaints with the agent's affidavit).
+        Searches CourtListener at the document level for filings RECAP already
+        holds, in one offense domain: fraud, trafficking, forced_labor, cyber,
+        csea, extortion, drugs, firearms, corruption, stalking, smuggling,
+        racketeering, a comma-separated list, or all. Saves PDFs under
+        data/collected/recap/<domain>/. search_only reports how many are free
+        and downloads nothing. Each search page is one API call against a quota
+        of 50 an hour; at most 300 documents and 3 pages per call.
+        """
+        try:
+            from casenoesis_mcp.collector_tools import collect_conduct_documents as _collect
+
+            return await asyncio.to_thread(_collect, domain=domain, max_docs=max_docs, pages=pages, kind=kind, search_only=search_only)
+        except Exception as e:
+            logger.exception("collect_conduct_documents failed")
+            return {"error": str(e), "write": True}
+
+    @mcp.tool()
     async def download_free_recap(
         document_id: str = "",
         docket_id: str = "",
@@ -1702,6 +1727,578 @@ if _COLLECTOR_WRITE_ENABLED:
             )
         except Exception as e:
             logger.exception("reproduce_from_lookup failed")
+            return {"error": str(e), "write": True}
+
+
+# ---------------------------------------------------------------------------
+# SDK encoding: collected record -> CASE/UCO graph, on the pinned SDK.
+# See docs/sdk-encoding.md.
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+async def encoding_status() -> dict[str, Any]:
+    """READ. The pinned SDK, and counts of collected and encoded records."""
+    try:
+        from encoding import records as record_layer
+
+        return await asyncio.to_thread(record_layer.status)
+    except Exception as e:
+        logger.exception("encoding_status failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def gate_graph(graph_path: str) -> dict[str, Any]:
+    """READ. Validate one graph under data/encoded/ with the pinned SDK.
+
+    SHACL plus the closed-world concept check. Returns the receipt; files nothing.
+    """
+    try:
+        from encoding import corpus, sdk
+
+        resolved = Path(graph_path).expanduser().resolve()
+        if not resolved.is_relative_to(corpus.ENCODED.resolve()):
+            return {"error": f"Path must be under {corpus.ENCODED}", "write": False}
+        return await asyncio.to_thread(sdk.gate, resolved)
+    except Exception as e:
+        logger.exception("gate_graph failed")
+        return {"error": str(e), "write": False}
+
+
+if _COLLECTOR_WRITE_ENABLED:
+
+    @mcp.tool()
+    async def encoding_process_records(
+        kind: str = "",
+        domain: str = "",
+        limit: int = 25,
+        record_ids: list[str] | None = None,
+        gate: bool = True,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Run the SDK document processor over collected records.
+
+        Rule-based, no model. Writes a CASE/UCO graph per record under
+        data/encoded/records/, removes names from it, and validates it. Records
+        already encoded are skipped; a record that failed before is tried again.
+        At most 200 per call.
+        """
+        try:
+            from encoding import corpus
+            from encoding import records as record_layer
+
+            def _run() -> dict[str, Any]:
+                entries = corpus.load_index()
+                if record_ids:
+                    wanted = set(record_ids)
+                    entries = [e for e in entries if e["record_id"] in wanted]
+                else:
+                    if kind:
+                        entries = [e for e in entries if e["kind"] == kind]
+                    if domain:
+                        entries = [e for e in entries if corpus.in_domain(e, domain)]
+                    entries = [
+                        e for e in entries
+                        if (record_layer.read_status(e["record_id"]) or {}).get("status") != "encoded"
+                    ]
+                return record_layer.run(entries[: max(1, min(limit, 200))], gate=gate)
+
+            return await asyncio.to_thread(_run)
+        except Exception as e:
+            logger.exception("encoding_process_records failed")
+            return {"error": str(e), "write": True}
+
+
+# ---------------------------------------------------------------------------
+# Extraction engine: readers, span gate, family vote, review queue, cases.
+# Every tool answers from stored assertions and decisions. None calls a model
+# and none writes a value. Record text in a result has names masked.
+# See Architecture design.md, section 5.
+# ---------------------------------------------------------------------------
+
+
+MAX_ROWS_PROCESS = 200
+
+
+async def _explore(name: str, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from extraction import explore
+
+        return await asyncio.to_thread(getattr(explore, name), *args, **kwargs)
+    except Exception as e:
+        logger.exception("extraction %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_status() -> dict[str, Any]:
+    """READ. The extraction engine at a glance.
+
+    Records read, assertions by reader family, decisions by field and status,
+    the review queue by field and state, cases, and graphs built and validated.
+    """
+    return await _explore("status")
+
+
+@mcp.tool()
+async def extraction_fields() -> dict[str, Any]:
+    """READ. The field registry: every field, its roles, and its labels.
+
+    Call this first to learn what `extraction_search` and `extraction_count`
+    accept. Also lists the readers and which evidence family each belongs to.
+    """
+    try:
+        from extraction import fields, profiles
+        from extraction.readers import FAMILY, reader_versions
+
+        return {
+            "fields": {
+                spec.name: {
+                    "shape": spec.shape,
+                    "roles": list(spec.roles),
+                    "never_stored": list(spec.excluded_roles),
+                    "labels": list(spec.vocabulary)
+                    or (list(profiles.labels(spec.name)) if spec.name in ("scheme", "channel", "platform") else []),
+                    "description": spec.description,
+                }
+                for spec in fields.all_fields()
+            },
+            "readers": reader_versions(),
+            "families": FAMILY,
+        }
+    except Exception as e:
+        logger.exception("extraction_fields failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_record(record_id: str) -> dict[str, Any]:
+    """READ. One record: every settled value, which families settled it, and what is open.
+
+    Each open mention comes with the sentence around it, the mention marked
+    ⟦like this⟧ and names masked. People appear as person-1, person-2.
+    """
+    return await _explore("record", record_id)
+
+
+@mcp.tool()
+async def extraction_review_queue(
+    field: str = "", state: str = "", kind: str = "", limit: int = 25
+) -> dict[str, Any]:
+    """READ. Mentions the vote left open, for a person to decide.
+
+    state: contested (two families disagree), weak (one family, low
+    confidence), or self_contradiction (one family said two things).
+    A verdict goes in config/extraction_overrides.json; no tool writes one.
+    """
+    return await _explore("review_queue", field, state, kind, limit)
+
+
+@mcp.tool()
+async def extraction_search(
+    field: str,
+    value: str = "",
+    role: str = "",
+    kind: str = "",
+    domain: str = "",
+    status: str = "",
+    minimum: float | None = None,
+    maximum: float | None = None,
+    limit: int = 50,
+) -> dict[str, Any]:
+    """READ. A cohort: records with a settled value for a field.
+
+    Examples: field="scheme", value="romance", domain="fraud";
+    field="money", role="loss", minimum=1000000;
+    field="sentence", role="imposed", minimum=120 (months).
+    status="agreed" keeps only values two reader families settled together.
+    """
+    return await _explore("search", field, value, role, kind, domain, status, minimum, maximum, limit)
+
+
+@mcp.tool()
+async def extraction_count(field: str, by: str = "value", kind: str = "", domain: str = "", limit: int = 40) -> dict[str, Any]:
+    """READ. How many records settled each label (by="value") or role (by="role") of a field."""
+    return await _explore("distribution", field, kind, domain, by, limit)
+
+
+@mcp.tool()
+async def extraction_case(case_or_record_id: str) -> dict[str, Any]:
+    """READ. A case: the records in it, why each was linked, and what each settled.
+
+    Also lists candidate links: records that share only a docket number, which
+    is not enough to merge them.
+    """
+    return await _explore("case", case_or_record_id)
+
+
+@mcp.tool()
+async def case_timeline(case_or_record_id: str) -> dict[str, Any]:
+    """READ. One case's events in order, with its defendants and whose each term and amount is.
+
+    Each event has a kind (arrest, complaint, indictment, information, charge,
+    plea, verdict, conviction, sentencing, offense), a date where a record
+    gives one, the defendants it applies to (p1, p2; no names), the records
+    that report it, and how its date was read: stated in the text, read from
+    "today" against the publication date, or taken from a filing date. An
+    event with no date is placed by where its kind falls in a prosecution, and
+    `order_basis` says so.
+    """
+    return await _explore("timeline", case_or_record_id)
+
+
+async def _process(name: str, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from process_mining import views
+
+        return await asyncio.to_thread(getattr(views, name), **kwargs)
+    except Exception as e:
+        logger.exception("process mining %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def process_log() -> dict[str, Any]:
+    """READ. The event log process mining runs on: traces (one per defendant per case),
+    events by kind, how many events have a date, and how long traces are."""
+    return await _process("log_summary")
+
+
+@mcp.tool()
+async def process_variants(level: str = "detailed", dated_only: bool = False, domain: str = "", limit: int = 20) -> dict[str, Any]:
+    """READ. The paths cases take, most common first, each with its share of traces.
+
+    level "coarse" folds complaint, indictment and information into "charge"
+    and plea, verdict and conviction into "disposition". dated_only keeps only
+    events with a date, so no order in the result is assumed.
+    Records report what they report: a path of "plea > sentencing" means the
+    records of that case mention those two steps, not that nothing else happened.
+    """
+    return await _process("variants", level=level, dated_only=dated_only, domain=domain, limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def process_model(level: str = "detailed", noise: float = 0.2, dated_only: bool = False, domain: str = "") -> dict[str, Any]:
+    """READ. The process model discovered from the event log by the Inductive Miner.
+
+    Returns the process tree (sequence, one-of, any-order, loop), how well the
+    log replays on it, and the directly-follows graph with the median days
+    between steps where both are dated to the day. noise in [0, 1]: 0 keeps
+    every behaviour seen, higher values drop rare orderings from the model.
+    The model describes prosecuted cases as their public records report them.
+    """
+    return await _process("model", level=level, noise=max(0.0, min(noise, 1.0)), dated_only=dated_only, domain=domain)
+
+
+@mcp.tool()
+async def process_conformance(domain: str = "", limit: int = 20) -> dict[str, Any]:
+    """READ. Traces that depart from the order of a federal prosecution.
+
+    Three kinds: `order` (two dated events in an order procedure does not
+    allow, such as a sentencing dated before the plea), `repeat` (the same
+    step on two dates: a resentencing, a superseding indictment), and
+    `plea_and_verdict`. A missing step is never counted: records are
+    incomplete. A departure is either something that happened in the case or
+    an error in a record or in the reading of it. This says where to look.
+    """
+    return await _process("conformance", domain=domain, limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def conduct_summary() -> dict[str, Any]:
+    """READ. The acts read from records: how many, by kind, how many carry a date or name a technology.
+
+    An act is a step of the offense itself: setup, contact, deception, demand,
+    threat, transfer, movement, access, recruit, transport, control, exploit,
+    supply, concealment, and detection (what investigators did). Acts are read
+    by rule readers that know a fixed set of verbs; a filing that tells the
+    same act in other words is missed.
+    """
+    return await _process("conduct_summary")
+
+
+@mcp.tool()
+async def conduct_record(record_id: str) -> dict[str, Any]:
+    """READ. One record's acts in the order it tells them: kind, phase, date, the technology
+    named in the act's sentence, and the path at the means, act and phase levels. No names, no text."""
+    return await _process("conduct_record", record_id=record_id)
+
+
+@mcp.tool()
+async def conduct_paths(level: str = "act", domain: str = "", kind: str = "", noise: float = 0.2, limit: int = 15) -> dict[str, Any]:
+    """READ. The paths offenses take, at one level of abstraction.
+
+    level: "means" (the act with its technology, such as contact[whatsapp]),
+    "act" (the act alone), or "phase" (preparation, approach, leverage, harm,
+    exit). kind: "court" keeps filings such as statements of offense, "press"
+    keeps releases. Returns the most common paths and, for act and phase, the
+    process tree the Inductive Miner finds with how well the paths replay on it.
+    """
+    if level not in ("means", "act", "phase"):
+        return {"error": "level must be means, act or phase", "write": False}
+    return await _process("conduct_paths", level=level, domain=domain, kind=kind, noise=max(0.0, min(noise, 1.0)), limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def conduct_transitions(level: str = "act", domain: str = "", kind: str = "") -> dict[str, Any]:
+    """READ. A first-order transition model of offenses: from each step, how often each step follows,
+    with counts, and the entropy of what follows. The observed side of a Markov model."""
+    if level not in ("means", "act", "phase"):
+        return {"error": "level must be means, act or phase", "write": False}
+    return await _process("conduct_transitions", level=level, domain=domain, kind=kind)
+
+
+@mcp.tool()
+async def conduct_compare(kind: str = "", min_trajectories: int = 25) -> dict[str, Any]:
+    """READ. How far apart the offense domains are at the phase, act and means levels.
+
+    Jensen-Shannon divergence between each pair of domains, over steps and over
+    transitions, beside the same figure with domain labels shuffled. Read the
+    gap above the shuffled figure, not the raw number: a coarser level has
+    fewer categories and that alone lowers a divergence. This is a measurement
+    over what records narrate, read by rule readers. It is not a test result.
+    """
+    return await _process("conduct_compare", kind=kind, min_trajectories=max(2, int(min_trajectories)))
+
+
+@mcp.tool()
+async def conduct_means(domain: str = "", kind: str = "") -> dict[str, Any]:
+    """READ. Which technology is named at which act, per domain: at what step of an offense
+    each channel or platform is used."""
+    return await _process("conduct_means", domain=domain, kind=kind)
+
+
+async def _esm(name: str, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from state_machines import analysis
+
+        return await asyncio.to_thread(getattr(analysis, name), **kwargs)
+    except Exception as e:
+        logger.exception("state machine %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def esm_machine(kind: str = "", domain: str = "", layer: str = "milestone", level: str = "act") -> dict[str, Any]:
+    """READ. The Exploitation State Machine fitted to the acts read from records.
+
+    layer "milestone": what the offense has reached (Preparation, InitialContact,
+    Conditioning, Exploitation, Maintenance, Exit). layer "track": how it was
+    reached (Deception or Coercion, ValueTaken or PersonExploited, ...). Actions
+    are kinds of act, or acts with their technology at level "means". Returns the
+    action space at each state, the observed policy, and every T(s'|s,a) estimate
+    with its counts. Terminal: Completed (goal reached), Disrupted (detection
+    narrated first), Unresolved. See esm_scheme for every state's definition.
+    """
+    if level not in ("act", "means") or layer not in ("milestone", "track"):
+        return {"error": "level must be act or means; layer milestone or track", "write": False}
+    return await _esm("machine_report", kind=kind, domain=domain, layer=layer, level=level)
+
+
+@mcp.tool()
+async def esm_scheme() -> dict[str, Any]:
+    """READ. The ESM states as data: each state's layer, broader state, definition,
+    links to CAC and other vocabularies, and the crosswalk placing the SDK's domain
+    alphabets (trafficking, forced labor, elder fraud, extortion, CSEA) under them.
+    """
+    return await _esm("scheme_report")
+
+
+@mcp.tool()
+async def esm_read(path: str, domain: str = "", layer: str = "milestone") -> dict[str, Any]:
+    """READ. Any trajectory graph (.ttl, the SDK trajectories extension, in any state
+    alphabet) or JSON file of walks, run through the same machine, decision model and
+    predicate as the corpus. Reports each walk's path at every layer, which states
+    could not be placed, and where the source's terminal polarity disagrees with
+    whether the goal was reached. The path must be inside the repository.
+    """
+    from pathlib import Path as _Path
+
+    root = _Path(__file__).resolve().parents[1]
+    target = (root / path).resolve() if not _Path(path).is_absolute() else _Path(path).resolve()
+    if root not in target.parents or not target.is_file() or target.suffix not in (".ttl", ".json"):
+        return {"error": "path must be a .ttl or .json file inside the repository", "write": False}
+    return await _esm("external", source=str(target), domain=domain, layer=layer if layer in ("milestone", "track", "source") else "milestone")
+
+
+@mcp.tool()
+async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50, draws: int = 0) -> dict[str, Any]:
+    """READ. How far apart domains are at the ESM scheme's states, its acts, and their technology.
+
+    Jensen-Shannon divergence between domains at three levels (transitions
+    between states; the act taken at each state; the act and its technology),
+    each beside the divergence with domain labels shuffled, on equal-size
+    subsamples, at the milestone layer and at the track layer. Levels are not
+    compared with each other: a coarser grouping of any data diverges less.
+    With draws > 0, the observed state-level excess beside
+    the excess under random groupings of acts into roles and under shuffled act
+    order, on the same paired subsamples. Slow; draws of 50 take minutes.
+    """
+    return await _esm("invariance_report", kind=kind, minimum=max(20, int(min_trajectories)), repeats=max(5, min(int(repeats), 200)),
+                      draws=max(0, min(int(draws), 500)))
+
+
+@mcp.tool()
+async def esm_groupings(kind: str = "", randoms: int = 100) -> dict[str, Any]:
+    """READ. States with no scheme and no goal: groupings of the act kinds, described on equal terms.
+
+    Each act kind its own state, one state, the ESM scheme's milestones, and
+    groupings learned from the data (act kinds merged to keep the most
+    information about the next act, on one half of the records). Each is
+    described by held-out information about the next act, divergence between
+    domains above shuffled labels (and with act order shuffled), coverage per
+    domain, and transitions; each named grouping is placed among random
+    groupings with its own state sizes, as a percentile. Takes about a minute.
+    """
+    return await _esm("groupings_report", kind=kind, randoms=max(10, min(int(randoms), 500)))
+
+
+@mcp.tool()
+async def esm_decide(kind: str = "", domain: str = "", layer: str = "milestone", nulls: int = 100) -> dict[str, Any]:
+    """READ. The decision model. It assumes an actor pursuing the scheme's goal (Exploitation).
+
+    Rewards are declared, not estimated: `uniform`, and the researcher's
+    friction table when config/esm_costs.json exists. For each: L*, observed
+    paths beside it, the share of choices that are optimal, a fitted
+    rationality beta against random cost models, the same results under nine
+    feasibility cutoffs, and beta fitted on the same records with their acts
+    shuffled, which the observed beta is read against. Published at the level
+    of states and kinds of act only.
+    """
+    return await _esm("decision_report", kind=kind, domain=domain, layer=layer if layer in ("milestone", "track") else "milestone",
+                      nulls=max(10, min(int(nulls), 500)))
+
+
+@mcp.tool()
+async def esm_laws(kind: str = "") -> dict[str, Any]:
+    """READ. Backbone and laws read off observed trajectories, per domain.
+
+    Coverage of each state at both layers and the backbone at each threshold;
+    contact primacy (InitialContact before Exploitation); conditioning before it;
+    maintenance and exit after it; re-entry; what avoiding each pre-exploitation
+    state would leave; how each domain reached each milestone (tracks); and the
+    exploitation predicate (the victim is the source of what is taken). Use
+    kind="court" for narratives told from the start.
+    """
+    return await _esm("laws_report", kind=kind)
+
+
+@mcp.tool()
+async def process_case(case_or_record_id: str) -> dict[str, Any]:
+    """READ. One case against the discovered model and against procedure: its timeline,
+    each defendant's path aligned with the closest path the model allows, and any
+    departure from procedural order."""
+    return await _process("case", case_id=case_or_record_id)
+
+
+@mcp.tool()
+async def graph_sparql(query: str, limit: int = 200) -> dict[str, Any]:
+    """READ. SPARQL over the local triple store of engine graphs.
+
+    One named graph per record: urn:casenoesis:record:<record-id>. The default
+    graph is the union of all of them. Prefixes uco-core, uco-identity,
+    uco-observable, uco-role, uco-action, case-investigation, legalproc, and
+    xsd are added for you. Settled labels are tags on the record node:
+    "scheme:romance", "channel:cryptocurrency", "stage:sentenced".
+    Read-only; updates are refused. No names are in the store.
+
+    Example: SELECT ?g ?amount WHERE { GRAPH ?g { ?o a legalproc:RestitutionOrder ;
+    legalproc:monetaryAmount ?amount . FILTER(?amount >= 1000000) } }
+    """
+    try:
+        from extraction import triples
+
+        return await asyncio.to_thread(triples.query, query, limit)
+    except Exception as e:
+        logger.exception("graph_sparql failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def graph_store_status() -> dict[str, Any]:
+    """READ. The local triple store: how many record graphs and quads, where it is, and example queries."""
+    try:
+        from extraction import triples
+
+        return {**await asyncio.to_thread(triples.status), "examples": triples.EXAMPLES}
+    except Exception as e:
+        logger.exception("graph_store_status failed")
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def extraction_agreement() -> dict[str, Any]:
+    """READ. How the reader families compare, per field.
+
+    Counts of mentions two families settled together, one family settled, and
+    families contested. This measures agreement between readers. It is not an
+    accuracy figure; no labelled sample exists yet.
+    """
+    return await _explore("agreement")
+
+
+if _COLLECTOR_WRITE_ENABLED:
+
+    @mcp.tool()
+    async def extraction_run(
+        kind: str = "",
+        domain: str = "",
+        limit: int = 200,
+        record_ids: list[str] | None = None,
+        build_graphs: bool = False,
+    ) -> dict[str, Any]:
+        """WRITE (local MCP only). Read collected records with the extraction engine.
+
+        Runs the readers, the span gate, and the vote, and stores assertions and
+        decisions in data/extracted/noesis.db. Then relinks cases, links defendants
+        across each case's records, and rebuilds every case's timeline. Records already read are skipped.
+        Deterministic; no model unless CASENOESIS_LLM=1 is set on this machine.
+        build_graphs also writes and validates a CASE/UCO graph per record and
+        loads it into the local triple store.
+        At most 2,000 records per call.
+        """
+        try:
+            from encoding import corpus
+            from extraction import cases as case_layer
+            from extraction import graph as graph_layer
+            from extraction import pipeline, store
+
+            def _run() -> dict[str, Any]:
+                entries = corpus.load_index()
+                if record_ids:
+                    wanted = set(record_ids)
+                    entries = [e for e in entries if e["record_id"] in wanted]
+                else:
+                    if kind:
+                        entries = [e for e in entries if e["kind"] == kind]
+                    if domain:
+                        entries = [e for e in entries if corpus.in_domain(e, domain)]
+                    known = store.known_text_hashes(store.connect())
+                    entries = [e for e in entries if e["record_id"] not in known]
+                chosen = entries[: max(1, min(limit, 2000))]
+                out: dict[str, Any] = {"read": pipeline.run(chosen)}
+                out["cases"] = case_layer.build()
+                # People and events are rebuilt from the decisions, so they follow every run.
+                from extraction import events as event_layer
+                from extraction import people as people_layer
+
+                out["people"] = people_layer.build()
+                from extraction import conduct as conduct_layer
+
+                built = conduct_layer.build()
+                out["conduct"] = {key: built[key] for key in ("records_with_acts", "acts", "with_a_date")}
+                events_built = event_layer.build()
+                out["events"] = {key: events_built[key] for key in ("cases_with_events", "events", "by_type")}
+                if build_graphs:
+                    from extraction import triples
+
+                    out["graphs"] = graph_layer.build([e["record_id"] for e in chosen], gate=True)
+                    out["triple_store"] = triples.load()
+                return out
+
+            return await asyncio.to_thread(_run)
+        except Exception as e:
+            logger.exception("extraction_run failed")
             return {"error": str(e), "write": True}
 
 

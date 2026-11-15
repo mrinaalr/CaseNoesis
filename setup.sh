@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# CaseLinker Setup Script
+# CaseNoesis setup script
 # Creates virtual environment and installs all dependencies
 
 set -e  # Exit on error
 
 echo "============================================================"
-echo "CaseLinker - Environment Setup"
+echo "CaseNoesis - Environment Setup"
 echo "============================================================"
 
 # Check if Python 3 is available

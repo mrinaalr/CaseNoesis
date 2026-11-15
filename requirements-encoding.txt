@@ -1,0 +1,16 @@
+# Semantic encoding (local research machine). Install after requirements.txt:
+#
+#   git submodule update --init vendor/CASE-UCO-SDK
+#   pip install -r requirements-encoding.txt
+#
+# case-uco is not on PyPI. It installs from the pinned submodule, so the package
+# version always matches the commit in encoding/sdk.py.
+-e vendor/CASE-UCO-SDK/python
+case-utils==0.18.0
+
+# Local triple store for the engine graphs (Oxigraph, SPARQL).
+pyoxigraph==0.5.13
+
+# Optional: the dependency-parse and NER readers (CASENOESIS_SYNTAX=1) use Stanza,
+# which is pinned with torch in requirements-ml.txt. Fetch its English models once:
+#   python -c "import stanza; stanza.download('en', processors='tokenize,pos,lemma,depparse,ner', package='default_fast')"

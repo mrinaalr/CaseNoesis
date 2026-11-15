@@ -1,0 +1,20 @@
+@prefix cap: <http://example.org/ontology/capability/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+cap:Capability-shape
+	a sh:NodeShape ;
+	sh:targetClass cap:Capability ;
+	sh:property [
+		sh:path cap:structuredCharacterization ;
+		sh:class uco-action:ActionPattern ;
+		sh:maxCount 1 ;
+		sh:nodeKind sh:IRI ;
+		sh:message "A capability has at most one structured characterization, and it is a uco-action:ActionPattern."@en ;
+	] ;
+	sh:property [
+		sh:path cap:capabilityScope ;
+		sh:datatype xsd:string ;
+		sh:message "capabilityScope is a string."@en ;
+	] .

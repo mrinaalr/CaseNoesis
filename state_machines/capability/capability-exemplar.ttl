@@ -1,0 +1,47 @@
+# One capability, read from an invented statement of offense in gold/corpus: the
+# offender demanded payment in gift cards and the victim sent the codes. The
+# offender's capability to receive value through gift cards is evidenced by its use.
+# The same capability is written twice: once with the means extension's stand-in
+# (what the engine writes today) and once with the general class and a
+# hasCapability relationship (what the proposal would allow).
+@prefix cap: <http://example.org/ontology/capability/> .
+@prefix means: <http://example.org/ontology/means/> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/kb/> .
+
+ex:offender a uco-identity:Person ; uco-core:name "Offender" .
+ex:record a uco-core:UcoObject ; uco-core:name "Invented statement of offense (gold corpus)" .
+ex:gift-card a uco-core:UcoObject ; uco-core:name "gift_card" .
+ex:leverage a traj:State ; uco-core:name "leverage" .
+ex:harm a traj:State ; uco-core:name "harm" .
+ex:act a uco-action:Action ; uco-core:name "transfer" ; uco-action:instrument ex:gift-card .
+ex:transition a traj:Transition ; uco-core:name "transfer" ; traj:fromState ex:leverage ; traj:toState ex:harm ; traj:trigger ex:act ; traj:enactsAction ex:act .
+ex:goal a means:Goal ; uco-core:name "Reach harm" ; means:pursuedBy ex:offender .
+ex:option a means:Option ; uco-core:name "transfer by gift_card" ;
+	means:servesGoal ex:goal ; means:availableAt ex:leverage ; means:usesInstrument ex:gift-card ;
+	means:enactedTransition ex:transition ; prov:wasDerivedFrom ex:record .
+
+ex:pattern a uco-action:ActionPattern ;
+	uco-core:name "Receive value as gift-card codes" ;
+	uco-action:instrument ex:gift-card .
+
+# Today: the stand-in, which the bridge makes a cap:Capability.
+ex:capability-standin a means:OffenderCapability ;
+	uco-core:name "Can receive value by gift_card" ;
+	means:possessedBy ex:offender ; means:enablesOption ex:option ; prov:wasDerivedFrom ex:record ;
+	cap:structuredCharacterization ex:pattern ;
+	cap:capabilityScope "offense-conduct" .
+
+# The proposal's form: a general capability anchored by a relationship.
+ex:capability a cap:Capability ;
+	uco-core:name "Can receive value by gift_card" ;
+	cap:structuredCharacterization ex:pattern ;
+	cap:capabilityScope "offense-conduct" .
+ex:has-capability a uco-core:Relationship ;
+	uco-core:source ex:offender ; uco-core:target ex:capability ;
+	uco-core:kindOfRelationship "hasCapability" ; uco-core:isDirectional true .

@@ -8,7 +8,7 @@ Corpus tools are read-only against the local database. Collector WRITE tools wri
 
 Catalog: [`tool_registry.md`](tool_registry.md). Parameter detail is the docstring on each `@mcp.tool()` in `server.py`.
 
-**54 tools** when collector writes are enabled (local default). **42** when writes are off: the 12 collector WRITE tools are not registered.
+**88 tools** when local writes are enabled (the default). **74** when writes are off: the 13 collector WRITE tools, `encoding_process_records`, and `extraction_run` are not registered.
 
 ## Prerequisites
 
@@ -86,6 +86,14 @@ Reference records: `fetch_seed_docs`, `harvest_wayback_policy`, `harvest_platfor
 `reproduce_from_lookup` reads `data/collected/public/*.jsonl` and fetches `source_url`. `run=false` returns the plan. `run=true` fetches `limit` rows (default 1). A docket page is skipped. PACER is never purchased. Same command: `python3 -m collector.reproduce`.
 
 WRITE responses include `"write": true`. Files go to `data/collected/`. Nothing is ingested. PACER is never purchased.
+
+### SDK encoding
+
+`encoding_status` and `gate_graph` (READ), `encoding_process_records` (WRITE, local only). They run the pinned CASE/UCO SDK over collected records, remove names from the graphs, and validate them. Files go to `data/encoded/`. See [`docs/sdk-encoding.md`](../docs/sdk-encoding.md).
+
+### Extraction engine
+
+Eight READ tools and one WRITE tool over the engine's store: `extraction_status`, `extraction_fields`, `extraction_record`, `extraction_review_queue`, `extraction_search`, `extraction_count`, `extraction_case`, `extraction_agreement`, and `extraction_run` (local only). `case_timeline` returns a case's defendants and its events in order. Seven `esm_*` tools read the Exploitation State Machine: `esm_groupings` (states with no scheme: groupings of the acts, one learned), `esm_scheme` (its states), `esm_machine`, `esm_invariance`, `esm_decide` and `esm_laws` over the corpus, and `esm_read` over any trajectory graph or file of walks (see [`state_machines/README.md`](../state_machines/README.md)). Six `conduct_*` tools read the acts of offenses and their trajectories: `conduct_summary`, `conduct_record`, `conduct_paths`, `conduct_transitions`, `conduct_compare`, and `conduct_means`. Five `process_*` tools read the event log: `process_log`, `process_variants`, `process_model`, `process_conformance`, and `process_case`. `graph_sparql` and `graph_store_status` query the local Oxigraph store of validated engine graphs. They answer from stored assertions and decisions. None calls a model, and record text in a result has names masked. Files go to `data/extracted/`. See [`Architecture design.md`](../Architecture%20design.md), sections 5 and 11.
 
 ### Corpus
 

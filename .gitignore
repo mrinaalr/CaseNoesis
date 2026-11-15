@@ -94,6 +94,7 @@ data/collected/recap/*/from_press_status.json
 data/collected/recap/*/press_docket_queue.jsonl
 # Local download logs with PDF paths. The public court list is public/recap_lookup.jsonl.
 data/collected/recap/*/court_manifest.json
+data/collected/recap/*/conduct_documents.jsonl
 data/collected/recap/bulk/manifests/
 data/collected/recap/join_to_1000_status.json
 data/collected/recap/join_to_1000.log
@@ -127,6 +128,26 @@ state_machines/*
 !state_machines/graphs/*.jsonld
 !state_machines/data/
 !state_machines/data/lstar_all_cases.json
+# Exploitation State Machine: code, docs, tests, the capability sketch.
+!state_machines/README.md
+!state_machines/__main__.py
+!state_machines/machine.py
+!state_machines/scheme.py
+!state_machines/walks.py
+!state_machines/readers.py
+!state_machines/schemes/
+!state_machines/schemes/*.json
+!state_machines/schemes/esm.ttl
+!state_machines/invariance.py
+!state_machines/mdp.py
+!state_machines/coverage.py
+!state_machines/groupings.py
+!state_machines/ontology.py
+!state_machines/analysis.py
+!state_machines/test_state_machines.py
+!state_machines/esm_costs.example.json
+!state_machines/capability/
+!state_machines/capability/*.ttl
 # Community notes live in the DB on Railway. data/case_study_notes.json, if present,
 # is covered by !data/**/*.json; prefer not to treat it as the production notes store.
 
@@ -179,3 +200,9 @@ data/collected/recap/transcripts/**/*.pdf.provenance.json
 data/collected/recap/transcripts/pull_ledger.csv
 # Hyletic captures stay on the machine. Seeds stay in collector/profiles/.
 data/collected/hyletic_data/
+
+# SDK encoding output: graphs and the text they were read from. Local only.
+data/encoded/
+
+# Extraction engine output: the assertion store and the resolved graphs. Local only.
+data/extracted/
