@@ -85,6 +85,28 @@ python3 collector/pacer/transcripts.py fetch-free
 
 Free PDFs: `data/collected/recap/`. Paid PDFs: `data/collected/PACER/`. CourtListener token: `COURTLISTENER_API_TOKEN` in `.env`. Do not commit it.
 
+### Filings that narrate the offense
+
+A press release announces a prosecution and a judgment records its result. What the defendant did is told in three kinds of filing, and `conduct_documents.py` collects them:
+
+| Kind | Docket names |
+|---|---|
+| `statement_of_offense` | Statement of Offense, Statement of Facts |
+| `factual_basis` | Factual Basis, Factual Resume, Factual Proffer, Stipulation of Facts |
+| `complaint_affidavit` | Criminal Complaint, Affidavit in Support of Criminal Complaint |
+
+It searches CourtListener at the document level for entries whose own description names the filing, narrowed by the archive's full text to an offense domain, and only for documents RECAP already holds. Every download is a file from `storage.courtlistener.com`. It cannot reach PACER.
+
+```bash
+python collector/conduct_documents.py --domain fraud --search-only        # how many are free; downloads nothing
+python collector/conduct_documents.py --domain fraud --max-docs 100
+python collector/conduct_documents.py --domain all --pages 1 --max-docs 1200
+```
+
+Domains: `fraud`, `trafficking`, `forced_labor`, `cyber`, `csea`, `extortion`, `drugs`, `firearms`, `corruption`, `stalking`, `smuggling`, `racketeering`. To add one, add a row of full-text terms to `DOMAINS`.
+
+Each search page is one API call. The account quota is 5 a minute and 50 an hour, and the collector waits for it. A page gives 20 entries, of which about two thirds are the filing itself and the rest are motions and orders that mention one. Files go to `data/collected/recap/<domain>/<document id>.pdf` with a row in `conduct_documents.jsonl` beside them. The public lookup row carries the kind of filing, the court and the date, and no party name.
+
 ## Reference records
 
 Not a press release and not a criminal docket. Dated platform rules, the statutes those cases cite, public calibration reports, and civil complaints against platforms. One command, five subcommands. The module path is `collector.hyletic`.

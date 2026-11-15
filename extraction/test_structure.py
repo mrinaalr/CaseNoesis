@@ -279,6 +279,42 @@ class EventOrderTests(unittest.TestCase):
         self.assertEqual([(e["type"], e["date"]) for e in merged], [("offense", "2019-03")])
 
 
+class PayerTests(unittest.TestCase):
+    """A transfer is value from the person harmed. Who paid decides it."""
+
+    def settle(self, before: str, trigger: str, after: str):
+        from extraction import acts
+
+        return acts.settle(acts.by_verb(trigger, after, before[-20:]), before, after)
+
+    def test_a_victim_paying_is_a_transfer(self) -> None:
+        self.assertEqual(self.settle("Victim-1 ", "wired", " $9,000 to an account SAMPLE controlled."), "transfer")
+        self.assertEqual(self.settle("SAMPLE caused Victim-1 to ", "sent", " $5,000"), "transfer")
+        self.assertEqual(self.settle("The lender ", "deposited", " $96,300 into the company's account"), "transfer")
+
+    def test_a_buyer_paying_for_contraband_is_part_of_the_sale(self) -> None:
+        self.assertEqual(self.settle("The CS ", "paid", " SAMPLE $800 for the pistol."), "supply")
+        self.assertEqual(self.settle("The buyer ", "paid", " SAMPLE $1,200 for 50 fentanyl pills."), "supply")
+
+    def test_the_offender_paying_or_depositing_is_movement(self) -> None:
+        self.assertEqual(self.settle("SAMPLE ", "deposited", " $40,000 in proceeds into an account he controlled."), "movement")
+        self.assertEqual(self.settle("SAMPLE ", "paid", " a straw purchaser $300 to buy the rifle."), "movement")
+
+    def test_an_institution_paying_is_a_transfer(self) -> None:
+        self.assertEqual(self.settle("Based on those claims, Medicare ", "paid", " the agencies approximately $31 million."), "transfer")
+        self.assertEqual(self.settle("In reliance on the bill of sale, the investor ", "wired", " the $83,200 to his account."), "transfer")
+
+    def test_a_person_harmed_named_after_the_verb_was_paid_not_paying(self) -> None:
+        self.assertEqual(self.settle("He ", "paid", " the victims back using funds taken from other victims."), "movement")
+        self.assertEqual(self.settle("Khan and the marketers in turn ", "paid", " kickbacks to Medicaid recipients."), "movement")
+
+    def test_phases_agree_with_the_roles_of_the_state_machine(self) -> None:
+        from extraction import acts
+
+        self.assertEqual(acts.PHASE["access"], acts.PHASE["contact"])
+        self.assertEqual(acts.PHASE["transport"], acts.PHASE["control"])
+
+
 class NameListTests(unittest.TestCase):
     def test_a_list_of_names_shares_what_is_said_of_the_last(self) -> None:
         text = "Jane Roe Sample, 45, of Exampleton, Ravi Placeholder, 39, of Exampleton, and Lee Standin, 51, of Exampleton, are charged in an indictment."
