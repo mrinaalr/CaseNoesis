@@ -355,11 +355,14 @@ def build_record_graph(db: sqlite3.Connection, record_id: str, entry: dict[str, 
     (folder / "annotations.jsonld").write_text(json.dumps(annotations, indent=2) + "\n", encoding="utf-8")
     serialized = graph_path.read_text(encoding="utf-8")
     leaked = name_rules.leaks(serialized, found_names)
+    # A second detector, independent of the rules that found `found_names`: it can catch a miss.
+    unseen = name_rules.independent_leaks(serialized + (graph_path.parent / "annotations.jsonld").read_text(encoding="utf-8"))
     return {
         "record_id": record_id,
         "graph_sha256": hashlib.sha256(serialized.encode("utf-8")).hexdigest(),
         "nodes": len(json.loads(serialized)["@graph"]),
-        "name_check": "pass" if not leaked else "fail",
+        "name_check": "pass" if not leaked and not unseen else "fail",
+        "independent_check": ("pass" if not unseen else "fail") if name_rules.ner_available() else "not_run",
     }
 
 

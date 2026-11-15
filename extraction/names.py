@@ -10,8 +10,17 @@ does: no graph, no stored assertion, no tool output. Two mechanisms:
 
 `find_names` is rule-based: case captions, the "Name, 45, of City" phrasing
 of a press release, honorifics and role words, and the names the SDK tagged.
-It is tuned to over-mask. A capitalized phrase it wrongly takes for a name
-costs a redacted word; a name it misses is a leak.
+`find_unlabeled` adds, for masking only, any run of two to four capitalized
+words inside a sentence: a name with no label before it ("told Maria Lopez",
+"an account held by Robert Chen"). Such a phrase is masked whole and as
+written, never word by word, so "Child Exploitation Unit" does not mask the
+word "child". It is tuned to over-mask. A capitalized
+phrase it wrongly takes for a name costs a redacted word; a name it misses is
+a leak.
+
+`person_entities` is a second, independent detector: Stanza's named-entity
+model, when it is installed. The final check of anything that leaves the
+engine runs both, so a name the rules miss is still caught.
 """
 
 from __future__ import annotations
@@ -74,6 +83,9 @@ _HINTED = tuple((hint, re.compile(p, re.MULTILINE)) for hint, p in (
     ("person", rf"\b(?:President|CEO|Founder|Owner)\s+(?P<n>{_NAME})"),
 ))
 _PATTERNS = tuple(pattern for _, pattern in _HINTED)
+# Two to four capitalized words inside a sentence, after a lower-case word or a comma: a name the
+# phrasing gives no label. Used for masking only, never to find the people a record is about.
+_UNLABELED = re.compile(rf"(?<=[a-z,;:)] )(?P<n>{_PART}(?:\s+(?:{_INITIAL}|{_PART})){{1,3}})")
 _NAME_SHAPED = re.compile(rf"(?:{_NAME}|{_CAPS_NAME}|{_PART})")
 
 # Capitalized words that open a phrase the patterns would take for a name.
@@ -94,6 +106,12 @@ while although according also additionally today yesterday instead however furth
 another others some many most several former current individual individuals person persons man woman men women
 investigation office bureau agency police sheriff trooper officials authorities everyone anyone nobody someone
 tax evasion false return returns statement statements health care medicare medicaid securities bank
+sex trafficking child children minor minors exploitation abuse sexual pornography material enticement coercion
+production possession receipt distribution transportation business email compromise romance investment scam scams
+elder fraud extortion sextortion kidnapping robbery firearm firearms weapon weapons drug drugs controlled substance
+substances unit center centre program programs network crimes crime cyber computer intrusion access device devices
+racketeering corrupt organizations influenced travel act forced labor labour smuggling alien aliens human
+economic injury disaster loan loans relief cash app venmo zelle paypal western union moneygram bitcoin crypto
 """.split())
 
 
@@ -124,6 +142,17 @@ def find_names(text: str, known: Iterable[str] = ()) -> set[str]:
             cleaned = _clean(match.group("n"))
             if cleaned:
                 found.add(cleaned)
+    return found
+
+
+def find_unlabeled(text: str) -> set[str]:
+    """Capitalized runs of two to four words inside a sentence, after a lower-case word or a comma:
+    names the phrasing gives no label. Too loose to say who a record is about; right for masking."""
+    found: set[str] = set()
+    for match in _UNLABELED.finditer(text):
+        cleaned = _clean(match.group("n"))
+        if cleaned and " " in cleaned:
+            found.add(cleaned)
     return found
 
 
@@ -195,14 +224,23 @@ def name_tokens(names: Iterable[str]) -> set[str]:
     return tokens
 
 
-def mask_pattern(names: Iterable[str]) -> re.Pattern[str] | None:
+def mask_pattern(names: Iterable[str], whole: Iterable[str] = ()) -> re.Pattern[str] | None:
+    """One pattern for every name: `names` with each distinctive part, in any case; `whole` only as
+    written."""
     tokens = sorted(name_tokens(names), key=len, reverse=True)
-    if not tokens:
+    phrases = sorted(set(whole) - set(tokens), key=len, reverse=True)
+    if not tokens and not phrases:
         return None
-    body = "|".join(r"\s+".join(re.escape(part) for part in token.split()) for token in tokens)
+    join = lambda items: "|".join(r"\s+".join(re.escape(part) for part in item.split()) for item in items)  # noqa: E731
+    body = "|".join(([f"(?i:{join(tokens)})"] if tokens else []) + ([join(phrases)] if phrases else []))
     # Bounded by anything that is not a letter or digit, so a short surname
     # cannot match inside a hash or an identifier.
-    return re.compile(rf"(?<![A-Za-z0-9])(?:{body})(?:['’]s)?(?![A-Za-z0-9])", re.IGNORECASE)
+    return re.compile(rf"(?<![A-Za-z0-9])(?:{body})(?:['’]s)?(?![A-Za-z0-9])")
+
+
+def masker(text: str, known: Iterable[str] = ()) -> re.Pattern[str] | None:
+    """The pattern that masks every name in `text`: labeled names and their parts, unlabeled ones whole."""
+    return mask_pattern(find_names(text, known), find_unlabeled(text))
 
 
 def scrub(value: str, pattern: re.Pattern[str] | None) -> str:
@@ -215,7 +253,7 @@ def scrub(value: str, pattern: re.Pattern[str] | None) -> str:
 
 def scrub_text(text: str, known: Iterable[str] = ()) -> str:
     """Convenience: find the names in `text` and mask them in it."""
-    return scrub(text, mask_pattern(find_names(text, known)))
+    return scrub(text, masker(text, known))
 
 
 def leaks(value: str, names: Iterable[str]) -> list[str]:
@@ -229,3 +267,66 @@ def leaks(value: str, names: Iterable[str]) -> list[str]:
         if re.search(rf"(?<![A-Za-z0-9]){body}(?![A-Za-z0-9])", value, re.IGNORECASE):
             remaining.append(name)
     return sorted(remaining)
+
+
+_NER = None
+
+
+def person_entities(text: str) -> list[str]:
+    """Person names in `text` by Stanza's named-entity model: a detector independent of the rules
+    above. Empty when Stanza or its English model is not installed."""
+    global _NER
+    if not text.strip():
+        return []
+    if _NER is None:
+        try:
+            import stanza
+
+            _NER = stanza.Pipeline("en", processors="tokenize,ner", device="cpu", verbose=False, download_method=None)
+        except Exception:  # not installed: the rules stand alone
+            _NER = False
+    if _NER is False:
+        return []
+    found = []
+    for entity in _NER(text).ents:
+        if entity.type == "PERSON" and MASK not in entity.text and _clean(entity.text) is not None:
+            found.append(entity.text)
+    return sorted(set(found))
+
+
+def ner_available() -> bool:
+    person_entities("Jane Roe wrote.")
+    return bool(_NER)
+
+
+def text_values(serialized: str) -> str:
+    """The free text in a serialized graph: every JSON string with a space in it, one per line."""
+    import json
+
+    out: list[str] = []
+
+    def walk(node) -> None:
+        if isinstance(node, str):
+            if " " in node and any(c.isalpha() for c in node):
+                out.append(node)
+        elif isinstance(node, dict):
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    decoder, index = json.JSONDecoder(), 0
+    while index < len(serialized):
+        while index < len(serialized) and serialized[index].isspace():
+            index += 1
+        if index >= len(serialized):
+            break
+        node, index = decoder.raw_decode(serialized, index)
+        walk(node)
+    return "\n".join(out)
+
+
+def independent_leaks(serialized: str) -> list[str]:
+    """Person names Stanza finds in a serialized graph's free text, after masking."""
+    return person_entities(text_values(serialized))

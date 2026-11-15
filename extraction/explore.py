@@ -89,7 +89,7 @@ def _windows(record_id: str, spans: list[tuple[int, int]]) -> dict[tuple[int, in
     if loaded is None:
         return {}
     text = loaded[0].text
-    pattern = name_rules.mask_pattern(name_rules.find_names(text))
+    pattern = name_rules.masker(text)
     out = {}
     for start, end in spans:
         s, e = sp.sentence_at(text, start, end)

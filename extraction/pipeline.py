@@ -132,12 +132,42 @@ def _mask_span_text(text: str, gated: list[dict[str, Any]]) -> None:
     reading a decision back without the source; it must not carry a name. The
     offsets are unchanged and still point at the source text."""
     known = {text[a["span_start"]: a["span_end"]] for a in gated if a["field"] == "party" and a["span_ok"]}
-    pattern = name_rules.mask_pattern(name_rules.find_names(text, known))
+    pattern = name_rules.masker(text, known)
     if pattern is None:
         return
     for item in gated:
         if item["field"] != "party" and item.get("span_text"):
             item["span_text"] = name_rules.scrub(item["span_text"], pattern)
+
+
+def rescrub(db, source, *, record_ids: list[str] | None = None) -> dict[str, int]:
+    """Mask names again in stored span text, from the source text, with the current rules.
+
+    Span text is masked when a record is read. A change to the name rules reaches records already
+    read only through this, without reading them again: offsets are kept, so each span's text is
+    re-cut from the source and masked anew."""
+    ids = record_ids or [r["record_id"] for r in db.execute("SELECT record_id FROM records")]
+    out = {"records": 0, "spans_changed": 0, "records_without_text": 0}
+    for record_id in ids:
+        text = source.text(record_id)
+        if not text:
+            out["records_without_text"] += 1
+            continue
+        rows = db.execute(
+            "SELECT a.id, a.field, a.span_start, a.span_end, a.span_text, a.span_ok FROM assertions a "
+            "JOIN records r ON r.record_id = a.record_id AND r.run_id = a.run_id WHERE a.record_id = ?", (record_id,)).fetchall()
+        known = {text[r["span_start"]: r["span_end"]] for r in rows if r["field"] == "party" and r["span_ok"]}
+        pattern = name_rules.masker(text, known)
+        for row in rows:
+            if row["field"] == "party" or not row["span_text"] or row["span_start"] is None or not row["span_ok"]:
+                continue
+            masked = name_rules.scrub(text[row["span_start"]: row["span_end"]], pattern)
+            if masked != row["span_text"]:
+                db.execute("UPDATE assertions SET span_text = ? WHERE id = ?", (masked, row["id"]))
+                out["spans_changed"] += 1
+        out["records"] += 1
+    db.commit()
+    return out
 
 
 def read_doc(doc: Doc, *, use_llm: bool = False, llm_transport=None) -> dict[str, Any]:

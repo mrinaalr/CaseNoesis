@@ -195,6 +195,32 @@ class NameTests(unittest.TestCase):
         self.assertIn("Ponzi scheme", masked)
         self.assertIn("U.S. Attorney", masked)
 
+    def test_scrub_masks_a_name_with_no_label_before_it(self) -> None:
+        for sentence, name in (("Sample told Maria Lopez that her grandson was in jail.", "Maria Lopez"),
+                               ("The funds went to an account held by Robert Chen.", "Robert Chen"),
+                               ("He met with Ana-Maria O'Neil, who wired the funds.", "O'Neil")):
+            self.assertNotIn(name, names.scrub_text(sentence))
+
+    def test_a_name_with_no_label_masks_but_is_not_a_person_of_the_record(self) -> None:
+        text = "Sample told Maria Lopez that her grandson was in jail."
+        self.assertIn("Maria Lopez", names.find_unlabeled(text))
+        self.assertNotIn("Maria Lopez", names.find_names(text))
+
+    def test_an_unlabeled_phrase_is_masked_whole_and_as_written(self) -> None:
+        masked = names.scrub_text("He worked with the Child Exploitation Unit. He possessed child pornography.")
+        self.assertIn("child pornography", masked)
+
+    def test_institutions_in_running_text_are_not_names(self) -> None:
+        masked = names.scrub_text("The victim sent money through Western Union to the United States District Court.")
+        self.assertIn("Western Union", masked)
+        self.assertIn("United States District Court", masked)
+
+    def test_the_independent_check_finds_a_name_the_rules_missed(self) -> None:
+        if not names.ner_available():
+            self.skipTest("Stanza's English model is not installed")
+        self.assertIn("Maria Lopez", " ".join(names.independent_leaks(json.dumps({"text": "Then Maria Lopez called the bank."}))))
+        self.assertEqual(names.independent_leaks(json.dumps({"text": "Then [name] called the bank."})), [])
+
     def test_redaction_keeps_the_person_and_drops_the_name(self) -> None:
         source = {
             "@graph": [

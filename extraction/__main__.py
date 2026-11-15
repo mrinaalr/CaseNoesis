@@ -79,6 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     commands.add_parser("agreement", help="how the reader families compare")
     commands.add_parser("fields", help="the field registry and the readers")
     commands.add_parser("prune", help="drop assertion rows from superseded runs")
+    commands.add_parser("rescrub", help="mask names again in stored span text with the current rules")
 
     show = commands.add_parser("show", help="one record")
     show.add_argument("record_id")
@@ -191,6 +192,11 @@ def main(argv: list[str] | None = None) -> int:
             "readers": reader_versions(),
             "families": FAMILY,
         })
+    elif args.command == "rescrub":
+        from extraction import pipeline, store
+        from extraction.source import CorpusSource
+
+        _print(pipeline.rescrub(store.connect(), CorpusSource()))
     elif args.command == "prune":
         from extraction import store
 

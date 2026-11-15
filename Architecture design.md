@@ -353,7 +353,7 @@ A graph without the defendant is not a case graph. A graph with the defendant's 
 
 An earlier pass of the same audit found one that did, and it was a fault in the previous version of the engine as well. The SDK anchors a charge on the whole sentence that states it, and the engine stored that sentence, names included, as the assertion's span text. The pipeline now removes names from every span text before it is stored; the offsets still point at the source. After the fix, all 17,668 span texts longer than 25 characters in the 1,186 records with SDK anchors were checked, and none contained a name the rules find.
 
-Name-finding is rule-based and tuned to over-mask. A capitalized phrase it wrongly takes for a name costs a redacted word. A name no rule recognizes can survive in the SDK's record graph; it cannot enter the engine graph, which has no free text.
+Name-finding is rule-based and tuned to over-mask. A capitalized phrase it wrongly takes for a name costs a redacted word. For masking, any run of two to four capitalized words inside a sentence is also taken, whole and as written, which catches a name with no label before it. The final check of every graph adds a second detector, Stanza's named-entity model, independent of the rules, so a name they miss is still found. `python -m extraction rescrub` masks stored span text again when the rules change.
 
 ### 5.8 The LLM, used narrowly
 
@@ -1009,7 +1009,7 @@ New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a
 - **Dates.** "Today" is read against the publication date, which is the release's date and can be a day after the event. An event with no date is ordered by its kind, which is an assumption, and is marked as one.
 - **The process model describes records.** It is mined from what prosecuted, announced cases report. A step no record mentions is absent from the trace, and the common paths are short for that reason.
 - **The parser has not been run on the corpus.** Its effect is measured on the gold set only. It reads at most 14,000 characters of a record.
-- **Name-finding is rule-based.** It over-masks by design and can still miss a name written in a form no rule covers. That affects the SDK record graph, masked windows, and the stored text of a long span. It cannot affect the engine graph, which holds no text from the record. The audit searches for the names the rules find, so it cannot see a name they miss.
+- **Name-finding is rule-based, checked by a model.** It over-masks by design and can still miss a name written in a form no rule covers, such as a single unlabeled name. The final check runs Stanza's named-entity model over every graph's free text, independent of the rules; where Stanza is not installed, that check reports `not_run`. The engine graph holds no text from the record.
 - **The SDK path is partial for press.** Only a 300-record sample has an SDK graph. For the rest the engine reads the collector's text and the `sdk_rule` family is silent.
 - **HTML reference pages.** The SDK's HTML reader keeps script and style text and extracts no entities. Archived policy pages are hashed and recorded, and read poorly.
 - **Prosecutorial artifacts.** A charging document says what was charged, not everything that happened. A press release says what an office chose to announce.
