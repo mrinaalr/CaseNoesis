@@ -228,14 +228,15 @@ def _code_revision() -> str | None:
 
 
 def run(entries: list[dict[str, Any]], *, workers: int = 1, force: bool = False, db_path: Path | None = None) -> dict[str, Any]:
-    """Read many records and store the result. A record whose text has not
-    changed since it was last read is skipped unless `force`."""
+    """Read many records and store the result. A record is skipped unless `force`, or unless it has never
+    been read, or the readers that read it have changed version since."""
     from encoding import sdk
 
     use_llm = llm.enabled()
     db = store.connect(db_path)
-    known = {} if force else store.known_text_hashes(db)
-    pending = [entry for entry in entries if entry["record_id"] not in known] if not force else entries
+    current = reader_versions()
+    read_with = {} if force else store.reader_versions_read_with(db)
+    pending = entries if force else [entry for entry in entries if read_with.get(entry["record_id"]) != current]
     summary: dict[str, Any] = {"selected": len(entries), "already_read": len(entries) - len(pending), "read": 0, "skipped": {}}
     if not pending:
         return summary

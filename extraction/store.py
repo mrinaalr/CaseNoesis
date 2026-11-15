@@ -292,6 +292,17 @@ def known_text_hashes(db: sqlite3.Connection) -> dict[str, str]:
     return {row[0]: row[1] for row in db.execute("SELECT record_id, text_sha256 FROM records")}
 
 
+def reader_versions_read_with(db: sqlite3.Connection) -> dict[str, dict[str, str]]:
+    """For each record, the reader versions of the run that last read it."""
+    out: dict[str, dict[str, str]] = {}
+    for record_id, readers in db.execute("SELECT r.record_id, u.readers FROM records r JOIN runs u ON u.run_id = r.run_id"):
+        try:
+            out[record_id] = json.loads(readers)
+        except (TypeError, ValueError):
+            out[record_id] = {}
+    return out
+
+
 def drop_records(db: sqlite3.Connection, record_ids: Iterable[str]) -> dict[str, int]:
     """Remove records that left the corpus, and everything derived from each. Cases, people and
     events are rebuilt from what remains by their own commands."""
