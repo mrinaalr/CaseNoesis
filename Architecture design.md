@@ -6,20 +6,21 @@
 |---|---|
 | Collected | **45,877** distinct public records: 44,602 press releases, 1,207 court filings, 68 reference records. 343 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
 | Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation. Conduct filings also cover extortion, drugs, firearms, corruption, stalking, smuggling, and racketeering |
-| Read by the engine | **45,899** records, **2,726,989** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
-| Settled | **848,811** values across 15 fields; 356,190 of them by two or more families |
-| Left for review | 43,731 mentions the readers contested or could not settle |
+| Read by the engine | **45,899** records, **3,135,844** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
+| Settled | **992,716** values across 16 fields; 372,118 of them by two or more families |
+| Left for review | 59,881 mentions the readers contested or could not settle |
 | Measured accuracy | On a 200-record gold set of invented records with known attributes, held-out half: F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants; 0.85 to 0.94 on victim counts, scheme and channel labels. Section 13.1 |
 | Cases | 45,632 cases; 141 join more than one record |
-| People | 60,616 defendants, numbered per case. 148,968 terms, amounts and events placed with a defendant |
-| Events | 108,529 events in 44,144 cases, 62,998 with a date |
-| Process mining | 64,833 defendant traces, 947 distinct paths; a process tree by the Inductive Miner; 2,390 traces flagged for a departure from procedural order |
+| People | 60,616 defendants, numbered per case. 209,248 terms, amounts and events placed with a defendant |
+| Events | 108,771 events in 44,156 cases, 63,238 with a date |
+| Process mining | 64,833 defendant traces, 946 distinct paths; a process tree by the Inductive Miner; 2,390 traces flagged for a departure from procedural order |
 | Graphs | 45,898 engine graphs written. 1,620 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
 | Triple store | A local Oxigraph store and one N-Quads file: 1,620 named graphs, 249,313 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
 | Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
 | Names in derived data | None stored. People are numbered nodes with a role |
-| Agents | 74 local MCP tools, 17 of them over the engine and its event log |
-| Tests | 91 tests on invented text |
+| Conduct | 100,173 acts of offenses read from 32,673 records; 20,560 offense trajectories of two or more acts, at three levels of abstraction |
+| Agents | 81 local MCP tools, 23 of them over the engine, its event log and its trajectories |
+| Tests | 114 tests on invented text |
 
 Counts were measured on 2026-11-14. Section 5.10 says what was run and what was not.
 
@@ -156,6 +157,8 @@ What is built and what is not:
 | People: defendants linked across a case's records; terms, amounts and events placed with a defendant | Built. Run on every case |
 | Events and timelines | Built. Run on every case |
 | Process mining: variants, discovered model, conformance, OCEL 2.0 export | Built. Run on every defendant trace |
+| Conduct: the acts of an offense, each with its date and the technology named with it | Built, with rule readers. Run on every record. Misses acts told in words outside its vocabulary |
+| Offense trajectories at the means, act and phase levels; transition models; divergence between domains; export | Built. Run on every record that narrates two or more acts |
 | Gold set: 200 invented records with known attributes, and a scorer | Built. Section 13.1 |
 | Dependency-parse and NER readers | Built, off by default. Measured on the gold set; not yet run on the collected corpus |
 | Engine graphs through the SDK builder and gate | Built. Written for 45,898 records; 1,620 validated so far (1,228 of 1,229 court records, 68 of 68 reference records, and 324 press records) |
@@ -258,7 +261,8 @@ Two shapes. In a **mention** field the value is read from the span and the reade
 | `victim_count` | mention | A count | `victims`; `not_victims` is never stored |
 | `party` | mention | A person, by number | `defendant`; `official`, `victim` and `not_person` are never stored |
 | `event` | mention | The words that report a step: "was sentenced", "pleaded guilty" | `arrest`, `complaint`, `indictment`, `information`, `charge`, `plea`, `verdict`, `conviction`, `sentencing`; `scheduled` and `not_event` are never stored |
-| `attribution` | mention | The span of a term, an amount or an event | The record's person number, or several joined by `+` |
+| `conduct` | mention | The words that report an act of the offense: "wired", "posed as", "confiscated" | Fifteen kinds of act (section 7.3); `not_conduct` is never stored |
+| `attribution` | mention | The span of a term, an amount, an event or an act | The record's person number, or several joined by `+` |
 | `stage` | tag | `arrested`, `charged`, `plea`, `convicted`, `sentenced` | `present` |
 | `document_type` | tag | `indictment`, `plea_agreement`, `judgment`, … | `present` |
 | `offense` | tag | A label from the statute table | `present` |
@@ -375,16 +379,16 @@ Measured 2026-11-14, with `python -m extraction status`. Rules only: the parser,
 |---|---|
 | Records read | 44,602 press, 1,229 court, 68 reference |
 | Text source | 1,597 from the SDK's extraction, with anchors; 44,302 press records from the collector's own row, where the `sdk_rule` family has nothing to say |
-| Assertions | 2,726,989 |
-| Finals | 848,811 |
-| Review queue | 43,731: 13,450 contested, 30,281 weak, 0 self-contradicting |
+| Assertions | 3,135,844 |
+| Finals | 992,716 |
+| Review queue | 59,881: 24,112 contested, 35,769 weak, 0 self-contradicting |
 
 Assertions by family:
 
 | Family | Assertions | With a supported span |
 |---|---:|---:|
-| `surface_pattern` | 1,440,971 | 1,440,898 |
-| `clause` | 1,154,531 | 1,154,331 |
+| `surface_pattern` | 1,608,934 | 1,608,861 |
+| `clause` | 1,395,423 | 1,395,201 |
 | `metadata` | 72,072 | none by design |
 | `sdk_rule` | 44,313 | 43,475 |
 | `lookup` | 15,102 | 15,102 |
@@ -397,13 +401,13 @@ Settled values by field, and how many were settled by two or more families:
 | `money` | 73,216 | 49,514 | 1,685 | 17,229 |
 | `statute` | 15,757 | 7,092 | 0 | 0 |
 | `case_number` | 2,997 | 1,262 | 0 | 0 |
-| `date` | 82,625 | 44,398 | 1,390 | 0 |
+| `date` | 83,744 | 46,031 | 1,373 | 0 |
 | `victim_count` | 5,842 | 4,221 | 1 | 0 |
 | `party` | 60,845 | 50,423 | 88 | 0 |
 | `event` | 80,881 | 79,053 | 8,579 | 0 |
-| `attribution` | 186,388 | 0 | 0 | 12,801 |
+| `attribution` | 253,814 | 0 | 0 | 18,289 |
 | `stage` | 74,299 | 44,031 | 56 | 223 |
-| `document_type` | 1,008 | 480 | 0 | 28 |
+| `document_type` | 1,016 | 480 | 0 | 28 |
 | `offense` | 87,323 | 4,761 | 0 | 0 |
 | `scheme` | 58,501 | 2,371 | 38 | 0 |
 | `channel` | 34,326 | 42 | 0 | 0 |
@@ -573,16 +577,77 @@ Measured on the collected corpus:
 |---|---:|---:|---:|---:|
 | `plea` | 29,559 | 16,954 | 14,053 | 2,901 |
 | `sentencing` | 22,660 | 12,795 | 12,020 | 775 |
-| `offense` | 19,596 | 19,596 | 3,367 | 16,229 |
+| `offense` | 19,839 | 19,839 | 3,321 | 16,518 |
 | `indictment` | 11,452 | 5,773 | 4,720 | 1,053 |
 | `charge` | 8,628 | 468 | 432 | 36 |
-| `arrest` | 8,119 | 4,484 | 3,713 | 771 |
+| `arrest` | 8,118 | 4,482 | 3,713 | 769 |
 | `verdict` | 4,502 | 1,913 | 1,431 | 482 |
-| `conviction` | 2,924 | 700 | 545 | 155 |
+| `conviction` | 2,924 | 699 | 545 | 154 |
 | `complaint` | 622 | 244 | 228 | 16 |
 | `information` | 467 | 71 | 70 | 1 |
 
-108,529 events in 44,144 cases; 62,998 have a date. Of the reports behind them, 41,869 were dated by a stated date, 24,354 by "today" or "yesterday", 620 by a filing date, and 92,909 had no date. 223 events are reported by more than one record.
+108,771 events in 44,156 cases; 63,238 have a date. Of the reports behind them, 42,110 were dated by a stated date, 24,354 by "today" or "yesterday", 620 by a filing date, and 92,913 had no date. 223 events are reported by more than one record.
+
+### 7.3 Conduct: the acts of an offense
+
+Sections 7.1 and 7.2 follow the prosecution. This one follows the offense. A statement of offense, a factual basis, or an agent's affidavit tells what was done as a series of acts, and a press release often tells a shorter version. [`acts.py`](extraction/acts.py) names the kinds of act and [`conduct.py`](extraction/conduct.py) puts each record's acts in order.
+
+| Kind | What it is | Phase |
+|---|---|---|
+| `setup` | Prepared the means: opened an account, registered a domain or a company | preparation |
+| `contact` | Reached a person: messaged, called, approached | approach |
+| `recruit` | Drew a person in: recruited, enticed, lured | approach |
+| `deception` | Said or submitted something false | leverage |
+| `demand` | Asked for or required something of value | leverage |
+| `threat` | Threatened harm, exposure, arrest or deportation | leverage |
+| `control` | Held a person: took documents, confined, assaulted, coerced | leverage |
+| `transfer` | Value passed from the person harmed | harm |
+| `access` | Got into a computer or account without authority, or ran code on it | harm |
+| `exploit` | Used the person: commercial sex, compelled labor, abuse material | harm |
+| `supply` | Sold, shipped or delivered contraband or a weapon | harm |
+| `transport` | Moved a person or travelled to one | harm |
+| `movement` | The offender moved or changed the value: laundered, withdrew, converted | exit |
+| `concealment` | Hid the act afterwards | exit |
+| `detection` | What investigators did: an undercover contact, a search | detection |
+
+The kinds are few and are not tied to one offense, so that offenses of different types can be laid side by side. The phase column is the same acts one level up, the stage structure of a crime script (Cornish, 1994).
+
+**How an act is read.** `conduct` is a field like any other. Its span is the words that report the act. Two readers vote on the kind. The pattern reader goes by the verb. The clause reader goes by what the verb acts on, and only for verbs whose kind depends on it: "sent" is a contact when a message follows and a transfer when an amount does. A filing also recites what the statute requires, in the same verbs ("that the defendant recruited, enticed or transported a person"). A trigger inside such a recital is `not_conduct`, a role that is voted and never stored.
+
+**Each act carries its means.** The channel and platform labels whose cue is in the act's own sentence, within its numbered paragraph, are stored with the act. "Contacted the victim on WhatsApp" is a `contact` by `whatsapp`. A record-level label says a platform appears somewhere in a case. This says at which step, which is what a claim about technology and the action space needs.
+
+**Order is the order of telling.** A narrative of facts is told in the order things happened and most of its sentences carry no date. Each act keeps the date its paragraph gives, where it gives one, and `told_in_date_order` reports whether the telling follows the dates.
+
+**General verbs need an object.** "Obtained", "purchased", "created", "opened" and the like name an act only when what follows says what was set up or taken: "opened a bank account" is a `setup`, "obtained $2.9 million" is a `transfer`, "fraudulently obtained proceeds" is a description and no act. Verbs of selling are a `supply` only when what is sold is contraband or a weapon. A row of a statute's verbs ("recruited, enticed, harbored, transported, or obtained") is a recital. These rules came from reading a random sample of acts on collected records after the first corpus pass, which had read "obtained" as a setup 11,425 times.
+
+**The unit is the record.** Two records of one case tell the same acts in different words, and joining them would mean deciding which sentences describe one act. That is not attempted. A statement of offense tells the whole offense once.
+
+Measured on the collected corpus, rules only:
+
+| | |
+|---|---|
+| Records with at least one act | 32,673: 31,625 press releases, 1,048 court filings |
+| Acts | 100,173; 19,390 settled by both readers |
+| Acts with a date | 5,948 |
+| Acts with a technology named in their sentence | 13,685 |
+
+| Kind | Acts |
+|---|---:|
+| `deception` | 21,623 |
+| `transfer` | 19,412 |
+| `recruit` | 9,588 |
+| `contact` | 6,066 |
+| `setup` | 5,943 |
+| `transport` | 5,711 |
+| `movement` | 5,137 |
+| `demand` | 5,026 |
+| `detection` | 4,802 |
+| `concealment` | 4,732 |
+| `control` | 4,053 |
+| `exploit` | 3,003 |
+| `access` | 2,840 |
+| `threat` | 1,833 |
+| `supply` | 404 |
 
 ---
 
@@ -601,6 +666,7 @@ Measured on the collected corpus:
 | `cases`, `case_candidates` | Case membership with the basis for each link; unconfirmed pairs |
 | `people` | Each defendant of a case, and which numbered person that is in each record |
 | `attributions` | Whose each term, amount and event is, per record, with the basis: a vote or the sole defendant |
+| `conduct` | The acts each record narrates, in order: kind, date, defendants, and the technology named in the act's sentence |
 | `events` | What happened in each case, in order: kind, date, precision, defendants, and the records and spans that report it |
 | `graphs` | Per record: graph hash, node count, name check, gate result |
 
@@ -709,10 +775,10 @@ Measured on the collected corpus, procedural steps only (the `offense` event lef
 | | |
 |---|---|
 | Traces | 64,833 defendants in 43,294 cases |
-| Events | 120,657; 60,661 with a date |
+| Events | 120,654; 60,655 with a date |
 | Trace length | 26,684 of one event, 25,559 of two, 12,590 of three or more |
-| Traces ordered by dates alone | 23,125 |
-| Distinct paths | 947; 457 when only dated events are kept |
+| Traces ordered by dates alone | 23,123 |
+| Distinct paths | 946; 457 when only dated events are kept |
 
 Most common paths:
 
@@ -781,7 +847,70 @@ Departures from procedural order: 2,390 traces in 1,967 cases. 850 `order`, 917 
 
 **What this describes.** Prosecuted conduct, as the offices that prosecuted it chose to report it. A sentencing release is written to announce a sentence and mentions earlier steps in passing, so short paths are common and are a fact about releases. The model is a description of how these records report prosecutions. It is not a model of offending, and section 16 says why.
 
-### 10.2 Not built
+### 10.2 Offense trajectories
+
+[`trajectory.py`](process_mining/trajectory.py) builds one trajectory per record from the acts of section 7.3 and reads it at three levels:
+
+| Level | A step is | Example |
+|---|---|---|
+| `means` | The act and the technology its sentence names | `contact[whatsapp]` |
+| `act` | The act alone | `contact` |
+| `phase` | The stage of the offense | `approach` |
+
+The levels exist because the research question is about levels. If technology enters an offense through its actions and leaves its stages alone, offenses of different kinds should look alike at the phase level and differ at the means level.
+
+| View | What it gives |
+|---|---|
+| Paths | The distinct paths at a level, and the process tree the Inductive Miner finds for them |
+| Transitions | From each step, how often each step follows, with counts, and the entropy of what follows. The observed side of a Markov model |
+| Means by act | Which channel or platform is named at which act, per domain |
+| Compare | How far apart the offense domains are at each level |
+| Export | Every trajectory as a plain row: acts with kind, phase, date and means, and the path at each level. No text and no name |
+
+**Compare, and how to read it.** For each pair of domains with enough trajectories, the Jensen-Shannon divergence between their distributions of steps, and of transitions, is computed at each level. A coarser level has fewer categories, and fewer categories alone lower a divergence, so every figure is reported beside the same figure with the domain labels shuffled. What a level shows is the gap above the shuffled figure.
+
+Measured on the collected corpus:
+
+| Records | Trajectories of two or more acts | Median steps | With four or more steps |
+|---|---:|---:|---:|
+| Court filings | 880 | 4 | 504 |
+| Press releases | 19,680 | 2 | 4,248 |
+
+Most common paths at the phase level, court filings:
+
+| Path | Trajectories | Share |
+|---|---:|---:|
+| harm | 149 | 16.9% |
+| harm → leverage | 38 | 4.3% |
+| leverage → harm | 38 | 4.3% |
+| approach → harm | 33 | 3.8% |
+| harm → approach → harm | 29 | 3.3% |
+| leverage | 21 | 2.4% |
+
+Most common paths at the phase level, press releases:
+
+| Path | Trajectories | Share |
+|---|---:|---:|
+| leverage | 1,943 | 9.9% |
+| harm | 1,591 | 8.1% |
+| leverage → harm | 1,480 | 7.5% |
+| harm → leverage | 983 | 5.0% |
+| approach → harm | 857 | 4.3% |
+| approach → leverage | 753 | 3.8% |
+
+Divergence between offense domains, all records (bulk 274, csea 112, cyber 95, forced_labor 156, fraud 18,038, smuggling 28, stalking 26, trafficking 1,720 trajectories):
+
+| Level | Categories | Steps: observed | shuffled | above shuffled | Transitions: observed | shuffled | above shuffled |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `phase` | 5 | 0.036 | 0.006 | 0.030 | 0.139 | 0.048 | 0.091 |
+| `act` | 14 | 0.234 | 0.033 | 0.201 | 0.493 | 0.194 | 0.299 |
+| `means` | 916 | 0.315 | 0.122 | 0.193 | 0.591 | 0.343 | 0.248 |
+
+Divergences are in bits, from 0 (identical) to 1 (nothing shared), averaged over pairs of domains.
+
+**What this is not.** It is not a test of the framework. The figures come from rule readers that miss acts told in words outside their vocabulary, the domain of a filing is the search term it was collected under, and the corpus is prosecuted conduct as prosecutors narrate it. The comparison is the instrument a test would use. A test needs the readers checked on real filings, domains assigned by charge and not by search term, and a model that predicts what the divergences should be.
+
+### 10.3 Not built
 
 **The primary outputs are tests of the apparatus.** None is computed yet for the new domains.
 
@@ -826,14 +955,24 @@ python -m process_mining conform                     # departures from procedura
 python -m process_mining case <case-id | record-id>
 python -m process_mining ocel data/extracted/events.ocel.json
 
+python -m extraction conduct                         # put the acts each record narrates in order
+python -m process_mining conduct summary
+python -m process_mining conduct paths --level phase --kind court
+python -m process_mining conduct transitions --domain fraud
+python -m process_mining conduct compare             # how far apart the domains are at each level
+python -m process_mining conduct means --domain fraud
+python -m process_mining conduct record <record-id>
+python -m process_mining conduct export data/extracted/trajectories.jsonl
+
 python -m gold build                                 # write the gold corpus from its generator
 python -m gold score --split test                    # run the engine on it and score every layer
+python -m gold conduct score --split test            # the acts read from the gold statements of offense
 CASENOESIS_SYNTAX=1 python -m gold score --split test   # with the parser and NER readers on
 ```
 
 `python -m extraction run --syntax` turns the parser and NER readers on for a run.
 
-**MCP.** [`casenoesis_mcp/`](casenoesis_mcp/) is a local stdio server. There is no hosted MCP. 17 tools are over the engine and its event log:
+**MCP.** [`casenoesis_mcp/`](casenoesis_mcp/) is a local stdio server. There is no hosted MCP. 23 tools are over the engine, its event log and its trajectories:
 
 | Tool | Kind | Answers |
 |---|---|---|
@@ -851,6 +990,12 @@ CASENOESIS_SYNTAX=1 python -m gold score --split test   # with the parser and NE
 | `process_model` | READ | The discovered process tree, how well the log replays on it, and the days between steps |
 | `process_conformance` | READ | Traces that depart from procedural order, by kind |
 | `process_case` | READ | One case against the model and against procedure |
+| `conduct_summary` | READ | The acts read from records, by kind |
+| `conduct_record` | READ | One record's acts in order, with the path at each level |
+| `conduct_paths` | READ | The paths offenses take at the means, act or phase level, and the model mined from them |
+| `conduct_transitions` | READ | From each step, how often each step follows, with entropy |
+| `conduct_compare` | READ | Divergence between offense domains at each level, against a shuffled baseline |
+| `conduct_means` | READ | Which technology is named at which act, per domain |
 | `graph_sparql` | READ | SPARQL over the local triple store. Updates refused |
 | `graph_store_status` | READ | Named graphs, quads, where the store is, example queries |
 | `extraction_run` | WRITE, local | Read records, link cases, optionally build and validate graphs and load them into the triple store |
@@ -885,13 +1030,13 @@ A sealed label on a docket entry that reached free RECAP is a label from before 
 
 ```bash
 export DYLD_LIBRARY_PATH=/opt/homebrew/opt/expat/lib       # macOS, for the validator
-.venv/bin/python -m unittest encoding.test_encoding extraction.test_extraction extraction.test_structure process_mining.test_process gold.test_gold
+.venv/bin/python -m unittest encoding.test_encoding extraction.test_extraction extraction.test_structure process_mining.test_process process_mining.test_trajectory gold.test_gold collector.test_conduct_documents
 .venv/bin/python -m encoding pin        # exits non-zero when the SDK is not the pin
 .venv/bin/python -m encoding status
 .venv/bin/python -m extraction status
 ```
 
-91 tests, all on invented text; no collected record is read.
+114 tests, all on invented text; no collected record is read.
 
 | Covered | By |
 |---|---|
@@ -905,6 +1050,8 @@ export DYLD_LIBRARY_PATH=/opt/homebrew/opt/expat/lib       # macOS, for the vali
 | The SDK pin, the gate on a valid and an invalid fixture, record encoding | `encoding.test_encoding` |
 | Month dates, hyphenated numbers, the judgment form (terms, the penalties table, dates, counsel, checkboxes), statutory lists, event moods, attribution with two defendants, the sole-defendant rule, one defendant across a release and a judgment, event merging and ordering | `extraction.test_structure` |
 | The Inductive Miner on the papers' running example, a loop, a skipped step, replay with no noise filter, noise filtering, alignments, every procedural check | `process_mining.test_process` |
+| Acts in order from a narrative; a recital of the statute is not conduct; ambiguous verbs decided by their object; three levels of one trajectory; transition frequencies and entropy; domains that differ only in means are alike above that level | `process_mining.test_trajectory` |
+| How a docket entry is classified; only the free archive is ever downloaded from | `collector.test_conduct_documents` |
 | The committed gold corpus is what the generator writes; every typed token in it is claimed or listed; development-split scores stay above their floors | `gold.test_gold` |
 
 What the tests do not show: that the readers are right on real records. That needs a hand-labelled sample of collected records, which does not exist.
@@ -961,6 +1108,22 @@ Structure and process mining, on the same split:
 
 Reports are committed under [`gold/results/`](gold/results/).
 
+**Conduct.** [`gold/conduct.py`](gold/conduct.py) adds 80 invented statements of offense, each written from a script of acts with known kinds, dates and means, across nine kinds of offense. Each script is told two ways: one in the verbs a reader would expect, one paraphrased, sometimes in words the readers' vocabulary does not hold. The documents also recite the elements of the offense in the statute's verbs, which must not be read as acts.
+
+| Measure, held-out split (40 statements) | Precision | Recall | F1 |
+|---|---:|---:|---:|
+| An act and its kind, in order | 1.000 | 0.715 | 0.834 |
+| The act with its date | 0.989 | 0.707 | 0.824 |
+| The act with the technology named in its sentence | 0.994 | 0.711 | 0.829 |
+
+| Whole path exactly right | Held-out | Development |
+|---|---:|---:|
+| Plain tellings | 17 of 22 | 18 of 18 |
+| Paraphrased tellings | 1 of 18 | 1 of 22 |
+| Path at the phase level, all tellings | 20 of 40 | 19 of 40 |
+
+The readers are precise and incomplete. A plain telling is read whole. A paraphrased one almost never is: "parted with $42,000" is a transfer and "ran ransomware on the servers" is an access, and neither phrase is in the vocabulary. The vocabulary was not extended with the paraphrases, because both splits share them and that would be fitting the test. This is the measured limit of reading conduct by a list of verbs, and it is the case for a reader that understands a sentence it has not seen: the parser family, or the quoting LLM witness of section 5.8.
+
 **What these numbers are and are not.** They are exact counts against known truth, reproducible from the seed. They are not accuracy on collected records. The documents were written by the author of the readers, from the same understanding of how such records are phrased, and `dev` and `test` come from the same generator, so `test` measures generalization across cases and wordings the generator can produce and not across wordings it cannot. A real record phrased in a way neither the readers nor the templates anticipated is missed by both. The gold set shows that the engine does what it is designed to do on well-formed records of the kinds it was built for, catches regressions, and found the faults listed in section 5.10. A labelled sample of collected records is still the missing measurement.
 
 ---
@@ -971,8 +1134,8 @@ Reports are committed under [`gold/results/`](gold/results/).
 |---|---|
 | [`collector/`](collector/) | Collection: press, court, reference. Profiles under `collector/profiles/` |
 | [`encoding/`](encoding/) | Record index, SDK processor, name redaction, SDK pin and gate |
-| [`extraction/`](extraction/) | **The engine.** `fields.py`, `spans.py`, `resolve.py`, `readers/`, `profiles/`, `statutes.py`, `names.py`, `pipeline.py`, `store.py`, `cases.py`, `people.py`, `events.py`, `source.py`, `graph.py`, `triples.py`, `explore.py` |
-| [`process_mining/`](process_mining/) | Process mining over the engine's events: `log.py` (traces, OCEL 2.0), `discover.py` (variants, Inductive Miner), `conform.py` (alignments, procedural order), `views.py` |
+| [`extraction/`](extraction/) | **The engine.** `fields.py`, `spans.py`, `resolve.py`, `readers/`, `profiles/`, `statutes.py`, `names.py`, `pipeline.py`, `store.py`, `cases.py`, `people.py`, `events.py`, `acts.py`, `conduct.py`, `source.py`, `graph.py`, `triples.py`, `explore.py` |
+| [`process_mining/`](process_mining/) | Process mining over the engine's events: `log.py` (traces, OCEL 2.0), `discover.py` (variants, Inductive Miner), `conform.py` (alignments, procedural order), `trajectory.py` (offense trajectories, transitions, comparison, export), `views.py` |
 | [`gold/`](gold/) | The gold set: `world.py` (invented cases), `render.py` (documents and their truth), `build.py`, `score.py`, `corpus/` (the 200 records), `results/` |
 | [`casenoesis_mcp/`](casenoesis_mcp/) | Local stdio MCP server |
 | `vendor/CASE-UCO-SDK` | The pinned SDK, a submodule |
@@ -1014,6 +1177,10 @@ New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a
 - **Press releases of one prosecution are not joined to each other.** A charging release and a sentencing release are one case only when a collected filing links them. Most timelines therefore come from one record and are short.
 - **Dates.** "Today" is read against the publication date, which is the release's date and can be a day after the event. An event with no date is ordered by its kind, which is an assumption, and is marked as one.
 - **The process model describes records.** It is mined from what prosecuted, announced cases report. A step no record mentions is absent from the trace, and the common paths are short for that reason.
+- **Conduct is read from a list of verbs.** It is precise and it misses an act told in other words: on the gold statements, about seven in ten acts are found and a paraphrased telling is almost never read whole. Short trajectories on real records are partly this.
+- **A trajectory is one record's telling.** Acts are not joined across the records of a case, and an undated act is placed by where it is told.
+- **Means are by sentence.** A technology named in the sentence before the act is not attached to it.
+- **Domain is the collector's.** A filing is in the domain whose search terms it matched, and the comparison between domains inherits that.
 - **The parser has not been run on the corpus.** Its effect is measured on the gold set only. It reads at most 14,000 characters of a record.
 - **Name-finding is rule-based, checked by a model.** It over-masks by design and can still miss a name written in a form no rule covers, such as a single unlabeled name. The final check runs Stanza's named-entity model over every graph's free text, independent of the rules; where Stanza is not installed, that check reports `not_run`. The engine graph holds no text from the record.
 - **The SDK path is partial for press.** Only a 300-record sample has an SDK graph. For the rest the engine reads the collector's text and the `sdk_rule` family is silent.
@@ -1029,7 +1196,8 @@ New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a
 
 In the order they unblock the science:
 
-1. **Conduct events.** Reading the acts a statement of offense or an affidavit narrates as dated events, per domain, so the offense can be mined the way the prosecution is in section 10.1. The filings are collected; the event kinds and their readers are not written.
+1. **A reader for conduct that is not a word list.** The dependency family, or the quoting LLM witness, voting on acts beside the two rule readers, so that a paraphrased act is found. The gold statements measure the gap it has to close.
+1. **The Exploitation State Machine and its decision model.** The trajectories, transition frequencies and means of section 10.2 are what such a model is fitted to and tested against. States, an action space, and a goal are not defined here.
 1. **A labelled sample of collected records.** A few hundred, each field checked against the text by a person, stratified by domain and record kind. The gold set shows the engine works on records of known shape; this shows how far real records depart from that shape.
 2. **Joining the press releases of one prosecution.** Same office, same defendants, compatible dates. It needs a rule strict enough not to merge two people with one name, and it would turn one-record timelines into full ones.
 3. **Phase fields.** One tag field per domain phase scheme, with readers, so a settled phase becomes a `traj:PhaseAssertion`.

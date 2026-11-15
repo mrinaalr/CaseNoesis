@@ -8,7 +8,7 @@ Corpus tools are read-only against the local database. Collector WRITE tools wri
 
 Catalog: [`tool_registry.md`](tool_registry.md). Parameter detail is the docstring on each `@mcp.tool()` in `server.py`.
 
-**75 tools** when local writes are enabled (the default). **60** when writes are off: the 13 collector WRITE tools, `encoding_process_records`, and `extraction_run` are not registered.
+**81 tools** when local writes are enabled (the default). **67** when writes are off: the 13 collector WRITE tools, `encoding_process_records`, and `extraction_run` are not registered.
 
 ## Prerequisites
 
@@ -93,7 +93,7 @@ WRITE responses include `"write": true`. Files go to `data/collected/`. Nothing 
 
 ### Extraction engine
 
-Eight READ tools and one WRITE tool over the engine's store: `extraction_status`, `extraction_fields`, `extraction_record`, `extraction_review_queue`, `extraction_search`, `extraction_count`, `extraction_case`, `extraction_agreement`, and `extraction_run` (local only). `case_timeline` returns a case's defendants and its events in order. Five `process_*` tools read the event log: `process_log`, `process_variants`, `process_model`, `process_conformance`, and `process_case`. `graph_sparql` and `graph_store_status` query the local Oxigraph store of validated engine graphs. They answer from stored assertions and decisions. None calls a model, and record text in a result has names masked. Files go to `data/extracted/`. See [`Architecture design.md`](../Architecture%20design.md), sections 5 and 11.
+Eight READ tools and one WRITE tool over the engine's store: `extraction_status`, `extraction_fields`, `extraction_record`, `extraction_review_queue`, `extraction_search`, `extraction_count`, `extraction_case`, `extraction_agreement`, and `extraction_run` (local only). `case_timeline` returns a case's defendants and its events in order. Six `conduct_*` tools read the acts of offenses and their trajectories: `conduct_summary`, `conduct_record`, `conduct_paths`, `conduct_transitions`, `conduct_compare`, and `conduct_means`. Five `process_*` tools read the event log: `process_log`, `process_variants`, `process_model`, `process_conformance`, and `process_case`. `graph_sparql` and `graph_store_status` query the local Oxigraph store of validated engine graphs. They answer from stored assertions and decisions. None calls a model, and record text in a result has names masked. Files go to `data/extracted/`. See [`Architecture design.md`](../Architecture%20design.md), sections 5 and 11.
 
 ### Corpus
 
