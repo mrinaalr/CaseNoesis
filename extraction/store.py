@@ -276,6 +276,25 @@ def known_text_hashes(db: sqlite3.Connection) -> dict[str, str]:
     return {row[0]: row[1] for row in db.execute("SELECT record_id, text_sha256 FROM records")}
 
 
+def drop_records(db: sqlite3.Connection, record_ids: Iterable[str]) -> dict[str, int]:
+    """Remove records that left the corpus, and everything derived from each. Cases, people and
+    events are rebuilt from what remains by their own commands."""
+    ids = sorted(set(record_ids))
+    out: dict[str, int] = {}
+    for table in ("assertions", "resolutions", "finals", "review_queue", "cases", "graphs", "triple_store", "people",
+                  "attributions", "conduct", "records"):
+        removed = 0
+        for record_id in ids:
+            removed += db.execute(f"DELETE FROM {table} WHERE record_id = ?", (record_id,)).rowcount
+        out[table] = removed
+    removed = 0
+    for record_id in ids:
+        removed += db.execute("DELETE FROM case_candidates WHERE record_a = ? OR record_b = ?", (record_id, record_id)).rowcount
+    out["case_candidates"] = removed
+    db.commit()
+    return out
+
+
 def prune(db: sqlite3.Connection) -> int:
     """Drop assertion rows from runs a record has since been read again under."""
     cursor = db.execute(

@@ -136,8 +136,10 @@ def _iter_court() -> Iterator[dict[str, Any]]:
     metadata = _court_metadata()
     seen: dict[str, dict[str, Any]] = {}
     for path in sorted(RECAP.rglob("*.pdf")):
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
         folder = path.relative_to(RECAP).parts[0]
+        if folder.startswith("_"):  # set aside by the collector, such as filings from civil cases
+            continue
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest in seen:
             # The same bytes filed under another domain folder: one record, in
             # every domain it was collected for.

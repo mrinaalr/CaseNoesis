@@ -40,6 +40,13 @@ class ClassifyTests(unittest.TestCase):
         self.assertTrue(cd._CRIMINAL_PATH.match("recap/gov.uscourts.ncwd.124787/gov.uscourts.ncwd.124787.3.0.pdf"))
         self.assertFalse(cd._CRIMINAL_PATH.match("recap/gov.uscourts.ca9.1234/x.pdf"))
 
+    def test_only_a_prosecution_counts(self) -> None:
+        self.assertTrue(cd.is_criminal("https://www.courtlistener.com/docket/1/12/united-states-v-doe/"))
+        self.assertTrue(cd.is_criminal("https://www.courtlistener.com/docket/1/3/usa-v-roe/"))
+        self.assertTrue(cd.is_criminal("https://www.courtlistener.com/docket/1/3/in-re-sealed/", "1:23-cr-00045"))
+        self.assertFalse(cd.is_criminal("https://www.courtlistener.com/docket/1/40/gino-v-president-and-fellows-of-harvard-college/"))
+        self.assertFalse(cd.is_criminal("https://www.courtlistener.com/docket/1/40/acme-llc-v-kao/", "8:22-cv-01234"))
+
     def test_every_download_address_is_the_free_archive(self) -> None:
         self.assertEqual(cd.cr.COURTLISTENER_STORAGE, "https://storage.courtlistener.com")
         self.assertFalse(cd.cr.download_free_pdf("https://ecf.dcd.uscourts.gov/doc1/123", Path("/tmp/never.pdf"))["ok"])

@@ -53,7 +53,8 @@ KINDS: dict[str, tuple[str, ...]] = {
 }
 # Full-text terms that place a filing in an offense domain.
 DOMAINS: dict[str, tuple[str, ...]] = {
-    "fraud": ("wire fraud", "bank fraud", "mail fraud", "health care fraud", "money laundering", "investment fraud"),
+    # Not "money laundering": drug and firearm cases charge it too, and fraud is searched first.
+    "fraud": ("wire fraud", "bank fraud", "mail fraud", "health care fraud", "investment fraud", "securities fraud"),
     "trafficking": ("sex trafficking", "commercial sex act"),
     "forced_labor": ("forced labor", "labor trafficking", "involuntary servitude"),
     "cyber": ("ransomware", "unauthorized access to a protected computer", "computer intrusion", "business email compromise"),
@@ -66,8 +67,21 @@ DOMAINS: dict[str, tuple[str, ...]] = {
     "smuggling": ("alien smuggling", "bringing in and harboring", "smuggling of goods", "export control"),
     "racketeering": ("racketeering conspiracy", "RICO", "murder for hire", "kidnapping"),
 }
-# The filing is in a criminal case. A civil "statement of facts" is a different thing.
+# The filing is in a district court. A civil "statement of facts" is filed there too, so the case
+# itself must also be criminal: see `is_criminal`.
 _CRIMINAL_PATH = re.compile(r"^recap/gov\.uscourts\.[a-z]+d\.\d+/")
+_PROSECUTION_CAPTION = re.compile(r"^(?:united-states(?:-of-america)?|usa|us)-v-")
+_CRIMINAL_DOCKET = re.compile(r"(?:^|[:\-])cr(?:im)?[\-:]|\bcr\b", re.IGNORECASE)
+
+
+def caption_slug(absolute_url: str) -> str:
+    """The case caption CourtListener puts at the end of a docket address: `united-states-v-...`."""
+    return (absolute_url or "").rstrip("/").rsplit("/", 1)[-1].lower()
+
+
+def is_criminal(absolute_url: str, docket_number: str = "") -> bool:
+    """A federal prosecution: the caption is "United States v.", or the docket number is a criminal one."""
+    return bool(_PROSECUTION_CAPTION.match(caption_slug(absolute_url))) or bool(docket_number and _CRIMINAL_DOCKET.search(docket_number))
 _NOT_THE_FILING = re.compile(
     r"\b(?:motion|order|notice|response|reply|opposition|objection|memorandum|transcript|minute\s+entry|waiver|"
     r"exhibit\s+list|appeal|judgment|certificate|summons|warrant)\b",
@@ -123,13 +137,15 @@ def search(kind: str, domain: str, *, pages: int, gap: float) -> tuple[list[dict
             path = str(item.get("filepath_local") or "")
             if not (item.get("is_available") and path and _CRIMINAL_PATH.match(path)):
                 continue
+            absolute = str(item.get("absolute_url") or "")
+            if not is_criminal(absolute, str(item.get("docketNumber") or item.get("docket_number") or "")):
+                continue
             found = classify(str(item.get("description") or ""), str(item.get("short_description") or ""))
             if found is None:
                 continue
             page_count = int(item.get("page_count") or 0)
             if page_count > MAX_PAGES_PER_DOCUMENT:
                 continue
-            absolute = str(item.get("absolute_url") or "")
             hits.append({
                 "document_id": int(item["id"]), "docket_id": item.get("docket_id"), "document_kind": found,
                 "searched_as": kind, "domain": domain, "court": court_of(path), "entry_date": item.get("entry_date_filed"),
@@ -213,6 +229,55 @@ def collect(domains: list[str], *, max_docs: int, pages: int, search_only: bool 
     return summary
 
 
+def exclude_civil(out_root: Path = RECAP) -> dict[str, Any]:
+    """Take filings from civil cases out of a collection made before `is_criminal`: each one's row moves
+    to `conduct_documents.civil.jsonl`, its file to `<root>/_civil/<domain>/`, and its public lookup row
+    is dropped. Nothing is deleted."""
+    moved: list[dict[str, Any]] = []
+    for log in sorted(out_root.glob(f"*/{LOG_NAME}")):
+        rows = [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
+        keep = [r for r in rows if is_criminal(r.get("absolute_url", ""), r.get("docket_number", ""))]
+        civil = [r for r in rows if r not in keep]
+        if not civil:
+            continue
+        aside = out_root / "_civil" / log.parent.name
+        aside.mkdir(parents=True, exist_ok=True)
+        for row in civil:
+            pdf = log.parent / row["pdf"]
+            if pdf.is_file():
+                pdf.rename(aside / row["pdf"])
+        with (log.parent / "conduct_documents.civil.jsonl").open("a", encoding="utf-8") as handle:
+            for row in civil:
+                handle.write(json.dumps(row) + "\n")
+        log.write_text("".join(json.dumps(r) + "\n" for r in keep), encoding="utf-8")
+        moved += civil
+    urls = {r["download_url"] for r in moved}
+    lookup = REPO / "data" / "collected" / "public" / "recap_lookup.jsonl"
+    dropped = 0
+    if urls and lookup.is_file():
+        lines = lookup.read_text(encoding="utf-8").splitlines()
+        kept = [line for line in lines if not (line.strip() and json.loads(line).get("source_url") in urls)]
+        dropped = len(lines) - len(kept)
+        lookup.write_text("".join(line + "\n" for line in kept), encoding="utf-8")
+    return {"civil_filings_moved": len(moved), "lookup_rows_dropped": dropped,
+            "cases": sorted({caption_slug(r.get("absolute_url", ""))[:40] for r in moved})}
+
+
+def move_filing(pdf: str, source: str, target: str, out_root: Path = RECAP) -> bool:
+    """Move one collected filing, file and row, from one domain folder to another."""
+    src, dst = out_root / source, out_root / target
+    rows = [json.loads(line) for line in (src / LOG_NAME).read_text(encoding="utf-8").splitlines() if line.strip()]
+    row = next((r for r in rows if r["pdf"] == pdf), None)
+    if row is None or not (src / pdf).is_file():
+        return False
+    dst.mkdir(parents=True, exist_ok=True)
+    (src / pdf).rename(dst / pdf)
+    (src / LOG_NAME).write_text("".join(json.dumps(r) + "\n" for r in rows if r is not row), encoding="utf-8")
+    with (dst / LOG_NAME).open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({**row, "domain": target, "moved_from": source}) + "\n")
+    return True
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Collect statements of offense, factual bases and complaint affidavits. Free RECAP only.")
     ap.add_argument("--domain", default="fraud", help="one of the domains in DOMAINS, a comma-separated list of them, or all")
@@ -220,7 +285,11 @@ def main() -> None:
     ap.add_argument("--pages", type=int, default=1, help="result pages per search (20 results a page; each page is one API call)")
     ap.add_argument("--kind", action="append", choices=sorted(KINDS), help="limit to one kind of filing; repeatable")
     ap.add_argument("--search-only", action="store_true", help="report what is free in the archive and download nothing")
+    ap.add_argument("--exclude-civil", action="store_true", help="move filings from civil cases out of an earlier collection, then stop")
     args = ap.parse_args()
+    if args.exclude_civil:
+        print(json.dumps(exclude_civil(), indent=2))
+        return
     domains = list(DOMAINS) if args.domain == "all" else [d.strip() for d in args.domain.split(",") if d.strip()]
     for domain in domains:
         if domain not in DOMAINS:

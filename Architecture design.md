@@ -4,7 +4,7 @@
 
 | At a glance | |
 |---|---|
-| Collected | **45,899** distinct public records: 44,602 press releases, 1,229 court filings, 68 reference records. 365 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
+| Collected | **45,877** distinct public records: 44,602 press releases, 1,207 court filings, 68 reference records. 343 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
 | Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation. Conduct filings also cover extortion, drugs, firearms, corruption, stalking, smuggling, and racketeering |
 | Read by the engine | **45,899** records, **2,726,989** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
 | Settled | **848,811** values across 15 fields; 356,190 of them by two or more families |
@@ -190,11 +190,11 @@ What is built and what is not:
 | Court | CourtListener search, filings already in free RECAP. PACER purchase only with `--charge-pacer --max-spend N` | PDFs under `data/collected/recap/<domain>/`, with a manifest row per filing: court, docket number, the press release it was followed from |
 | Reference | GovInfo statutes, Wayback snapshots of platform policy pages, platform litigation, calibration reports | Files under `data/collected/hyletic_data/`, each with a provenance sidecar: address and retrieval time |
 
-**Filings that narrate the offense.** A press release announces a prosecution and a judgment records its result. What the defendant did is told in three kinds of filing: a statement of offense or of facts, a factual basis (also called a factual resume or proffer), and a criminal complaint with the agent's affidavit. [`conduct_documents.py`](collector/conduct_documents.py) collects them by searching CourtListener at the document level for docket entries whose own description names the filing, narrowed by full text to an offense domain, and only where RECAP already holds the document. It keeps the filing itself and drops motions and orders that mention one. Every download is a file from the free archive; the code cannot reach PACER.
+**Filings that narrate the offense.** A press release announces a prosecution and a judgment records its result. What the defendant did is told in three kinds of filing: a statement of offense or of facts, a factual basis (also called a factual resume or proffer), and a criminal complaint with the agent's affidavit. [`conduct_documents.py`](collector/conduct_documents.py) collects them by searching CourtListener at the document level for docket entries whose own description names the filing, narrowed by full text to an offense domain, and only where RECAP already holds the document. It keeps the filing itself and drops motions and orders that mention one. A civil case files a "statement of facts" too, so the case must be a prosecution: a "United States v." caption or a criminal docket number. Every download is a file from the free archive; the code cannot reach PACER.
 
-One pass, one results page per kind per domain, brought in 411 files, 365 of them distinct: 109 statements of offense, 146 factual bases and 156 complaint affidavits by docket name, 3,797 pages, across twelve domains. The archive holds far more (about 2,700 for fraud alone); the limit is a search quota of 50 calls an hour. The engine read all 365 and settled a document type for 338. 147 of them state three or more dates for the conduct, which is what a sequence of offense events needs. The engine does not yet read that conduct as events; section 17 lists it.
+One pass, one results page per kind per domain, brought in 411 files, 365 of them distinct. 22 of those came from six civil cases, before the caption check existed; `--exclude-civil` set them aside, leaving 343. Of the 365 as first collected: 109 statements of offense, 146 factual bases and 156 complaint affidavits by docket name, 3,797 pages, across twelve domains. The archive holds far more (about 2,700 for fraud alone); the limit is a search quota of 50 calls an hour. The engine read all 365 and settled a document type for 338. 147 of them state three or more dates for the conduct, which is what a sequence of offense events needs. The engine does not yet read that conduct as events; section 17 lists it.
 
-`data/collected/public/*_lookup.jsonl` is the public index, 46,641 rows, and the only collected data in the repository. `python3 -m collector.reproduce` refetches from it. Hand-off: [`collector/README.md`](collector/README.md).
+`data/collected/public/*_lookup.jsonl` is the public index, 46,619 rows, and the only collected data in the repository. `python3 -m collector.reproduce` refetches from it. Hand-off: [`collector/README.md`](collector/README.md).
 
 ---
 
@@ -208,9 +208,9 @@ One pass, one results page per kind per domain, brought in 411 files, 365 of the
 | Court | `ct-` + hash of the bytes | One record per distinct file |
 | Reference | `rf-` + hash of the bytes | One record per distinct file |
 
-- **One file, several domains.** The same filing is often collected for two topics. It is one record, and `domains` lists every folder it was found in, so `--domain fraud` finds it whichever folder sorts first. Of the first 864 court records, 141 are in more than one domain folder or were collected more than once; the 411 conduct filings collected later are 365 distinct files.
+- **One file, several domains.** The same filing is often collected for two topics. It is one record, and `domains` lists every folder it was found in, so `--domain fraud` finds it whichever folder sorts first. Of the first 864 court records, 141 are in more than one domain folder or were collected more than once; the 411 conduct filings collected later are 365 distinct files, 343 once filings from civil cases were set aside. A folder whose name starts with `_` is not indexed.
 - **The index checks itself.** Press rows are read back by byte offset. `index.meta.json` records each press file's size and modification time and the count of court and reference files; `load_index` rebuilds when any of that has changed, so a collector run cannot leave the engine reading the wrong bytes.
-- **46,641 against 45,899.** The lookup has 46,641 rows. After removing repeated addresses and byte-identical files, 45,899 distinct records remain.
+- **46,619 against 45,877.** The lookup has 46,619 rows. After removing repeated addresses and byte-identical files, 45,877 distinct records remain.
 - **Where a court filing came from.** Every conduct filing has a public address. Of the 864 court records collected before them, 662 have a public address in the collector's logs. The others were collected before the manifest recorded one; they carry a content hash and no address.
 
 ---
