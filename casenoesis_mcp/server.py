@@ -2005,6 +2005,70 @@ async def process_conformance(domain: str = "", limit: int = 20) -> dict[str, An
 
 
 @mcp.tool()
+async def conduct_summary() -> dict[str, Any]:
+    """READ. The acts read from records: how many, by kind, how many carry a date or name a technology.
+
+    An act is a step of the offense itself: setup, contact, deception, demand,
+    threat, transfer, movement, access, recruit, transport, control, exploit,
+    supply, concealment, and detection (what investigators did). Acts are read
+    by rule readers that know a fixed set of verbs; a filing that tells the
+    same act in other words is missed.
+    """
+    return await _process("conduct_summary")
+
+
+@mcp.tool()
+async def conduct_record(record_id: str) -> dict[str, Any]:
+    """READ. One record's acts in the order it tells them: kind, phase, date, the technology
+    named in the act's sentence, and the path at the means, act and phase levels. No names, no text."""
+    return await _process("conduct_record", record_id=record_id)
+
+
+@mcp.tool()
+async def conduct_paths(level: str = "act", domain: str = "", kind: str = "", noise: float = 0.2, limit: int = 15) -> dict[str, Any]:
+    """READ. The paths offenses take, at one level of abstraction.
+
+    level: "means" (the act with its technology, such as contact[whatsapp]),
+    "act" (the act alone), or "phase" (preparation, approach, leverage, harm,
+    exit). kind: "court" keeps filings such as statements of offense, "press"
+    keeps releases. Returns the most common paths and, for act and phase, the
+    process tree the Inductive Miner finds with how well the paths replay on it.
+    """
+    if level not in ("means", "act", "phase"):
+        return {"error": "level must be means, act or phase", "write": False}
+    return await _process("conduct_paths", level=level, domain=domain, kind=kind, noise=max(0.0, min(noise, 1.0)), limit=max(1, min(limit, MAX_ROWS_PROCESS)))
+
+
+@mcp.tool()
+async def conduct_transitions(level: str = "act", domain: str = "", kind: str = "") -> dict[str, Any]:
+    """READ. A first-order transition model of offenses: from each step, how often each step follows,
+    with counts, and the entropy of what follows. The observed side of a Markov model."""
+    if level not in ("means", "act", "phase"):
+        return {"error": "level must be means, act or phase", "write": False}
+    return await _process("conduct_transitions", level=level, domain=domain, kind=kind)
+
+
+@mcp.tool()
+async def conduct_compare(kind: str = "", min_trajectories: int = 25) -> dict[str, Any]:
+    """READ. How far apart the offense domains are at the phase, act and means levels.
+
+    Jensen-Shannon divergence between each pair of domains, over steps and over
+    transitions, beside the same figure with domain labels shuffled. Read the
+    gap above the shuffled figure, not the raw number: a coarser level has
+    fewer categories and that alone lowers a divergence. This is a measurement
+    over what records narrate, read by rule readers. It is not a test result.
+    """
+    return await _process("conduct_compare", kind=kind, min_trajectories=max(2, int(min_trajectories)))
+
+
+@mcp.tool()
+async def conduct_means(domain: str = "", kind: str = "") -> dict[str, Any]:
+    """READ. Which technology is named at which act, per domain: at what step of an offense
+    each channel or platform is used."""
+    return await _process("conduct_means", domain=domain, kind=kind)
+
+
+@mcp.tool()
 async def process_case(case_or_record_id: str) -> dict[str, Any]:
     """READ. One case against the discovered model and against procedure: its timeline,
     each defendant's path aligned with the closest path the model allows, and any
@@ -2104,6 +2168,10 @@ if _COLLECTOR_WRITE_ENABLED:
                 from extraction import people as people_layer
 
                 out["people"] = people_layer.build()
+                from extraction import conduct as conduct_layer
+
+                built = conduct_layer.build()
+                out["conduct"] = {key: built[key] for key in ("records_with_acts", "acts", "with_a_date")}
                 events_built = event_layer.build()
                 out["events"] = {key: events_built[key] for key in ("cases_with_events", "events", "by_type")}
                 if build_graphs:

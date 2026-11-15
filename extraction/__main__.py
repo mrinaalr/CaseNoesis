@@ -5,6 +5,7 @@
     python -m extraction cases                           group records into cases
     python -m extraction people                          link defendants across a case's records; settle whose each value is
     python -m extraction events                          date and order what happened in each case
+    python -m extraction conduct                         put the acts each record narrates in order
     python -m extraction timeline <case-id | record-id>  one case's events in order
     python -m extraction graph --gate --workers 6        write and validate CASE/UCO graphs
     python -m extraction store                           load validated graphs into Oxigraph and graphs.nq
@@ -55,6 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     commands.add_parser("cases", help="group records into cases")
     commands.add_parser("people", help="link defendants across records and settle attributions")
     commands.add_parser("events", help="date and order the events of each case")
+    commands.add_parser("conduct", help="put the acts each record narrates in order")
     timeline = commands.add_parser("timeline", help="one case's events in order")
     timeline.add_argument("id")
 
@@ -153,6 +155,10 @@ def main(argv: list[str] | None = None) -> int:
         from extraction import events
 
         _print(events.build())
+    elif args.command == "conduct":
+        from extraction import conduct
+
+        _print(conduct.build())
     elif args.command == "timeline":
         _print(explore.timeline(args.id))
     elif args.command == "graph":

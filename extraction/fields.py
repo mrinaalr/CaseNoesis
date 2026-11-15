@@ -304,7 +304,16 @@ def iter_event(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
             yield start, end, name, {}
 
 
+def iter_conduct(text: str) -> Iterator[tuple[int, int, Any, dict[str, Any]]]:
+    """Words that may report an act of the offense. The value is the words, lower case."""
+    from extraction import acts
+
+    for match in acts.TRIGGER.finditer(text):
+        yield match.start(), match.end(), re.sub(r"\s+", " ", match.group(0).lower()), {}
+
+
 ITERATORS: dict[str, Callable[[str], Iterator[tuple[int, int, Any, dict[str, Any]]]]] = {
+    "conduct": iter_conduct,
     "event": iter_event,
     "money": iter_money,
     "sentence": iter_duration,
@@ -353,7 +362,7 @@ def _party_support(text: str, start: int, end: int, assertion: dict[str, Any]) -
     return True, "person_name", start, end, "person", {}
 
 
-ATTRIBUTABLE = ("sentence", "money", "event")
+ATTRIBUTABLE = ("sentence", "money", "event", "conduct")
 
 
 def _attribution_support(text: str, start: int, end: int, assertion: dict[str, Any]) -> Support:
@@ -441,6 +450,17 @@ register(FieldSpec(
     description=(
         "Something the record says happened in the case, anchored on the words that say it. `conviction` is a "
         "conviction the record does not say came by plea or by verdict. `scheduled` and `not_event` are never stored."
+    ),
+))
+register(FieldSpec(
+    "conduct", "mention",
+    roles=("setup", "contact", "deception", "demand", "threat", "transfer", "movement", "access", "recruit", "transport",
+           "control", "exploit", "supply", "concealment", "detection", "not_conduct"),
+    excluded_roles=("not_conduct",),
+    support=_typed_support("conduct"),
+    description=(
+        "An act of the offense, anchored on the words that report it. The role is the kind of act. "
+        "`not_conduct` is a recital of what a statute requires, which uses the same verbs."
     ),
 ))
 register(FieldSpec(

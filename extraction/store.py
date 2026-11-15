@@ -10,6 +10,7 @@
     people        each defendant of a case, and which numbered person that is in each record
     attributions  whose each term, amount, and event is, per record
     events        what happened in each case, in order, with the records that say so
+    conduct       the acts each record narrates, in the order it tells them
 
 Assertions are never updated. A record read again gets new assertion rows
 under a new run, and `records.run_id` moves to that run. Resolution reads the
@@ -152,6 +153,21 @@ CREATE TABLE IF NOT EXISTS events (
     evidence TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS events_case ON events(case_id, position);
+CREATE TABLE IF NOT EXISTS conduct (
+    record_id TEXT NOT NULL,
+    case_id TEXT,
+    position INTEGER NOT NULL,
+    kind TEXT NOT NULL,
+    date TEXT,
+    precision TEXT NOT NULL,
+    people TEXT NOT NULL,
+    means TEXT NOT NULL,
+    status TEXT NOT NULL,
+    span_start INTEGER NOT NULL,
+    span_end INTEGER NOT NULL,
+    PRIMARY KEY (record_id, position)
+);
+CREATE INDEX IF NOT EXISTS conduct_case ON conduct(case_id);
 CREATE TABLE IF NOT EXISTS case_candidates (
     record_a TEXT NOT NULL,
     record_b TEXT NOT NULL,

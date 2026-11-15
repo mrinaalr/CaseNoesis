@@ -14,10 +14,10 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from extraction import fields, names, spans as sp
+from extraction import acts, fields, names, spans as sp
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "clause_1.1"
+VERSION = "clause_1.2"
 METHOD = "clause_cue"
 
 _MONEY_CUES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
@@ -46,7 +46,7 @@ _DATE_CUES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
         ("indictment", r"\bindict\w+\b"),
         ("plea", r"\bple(?:aded|d|a)\b"),
         ("verdict", r"\bconvicted\b|\bverdict\b|\bfound\s+guilty\b"),
-        ("offense", r"\bon\s+or\s+about\b|\bbetween\b|\bbeginning\b|\bcontinuing\b|\bthrough\b|\buntil\b"),
+        ("offense", r"\b(?:on|in)\s+or\s+(?:about|around)\b|\bbetween\b|\bbeginning\b|\bcontinuing\b|\bthrough\b|\buntil\b"),
     )
 )
 
@@ -184,6 +184,20 @@ def read(doc: Doc) -> list[dict[str, Any]]:
         elif kind == "plead" and re.match(r"\s+(?:agreement|hearing|negotiations|offer)\b", text[end:end + 20], re.I):
             role = None
         out.append(assertion("event", kind, role, METHOD, VERSION, 0.75 if role else 0.5, start, end))
+
+    if doc.kind != "reference":
+        for start, end, value, _ in fields.iter_conduct(text):
+            # What the verb acts on, read from the rest of its clause.
+            cs, ce = sp.clause_at(text, start, end)
+            ss, se = sp.sentence_at(text, start, end)
+            cs, ss, ce = max(cs, start - 300), max(ss, start - 300), min(ce, end + 200)
+            if acts.RECITAL.search(text[ss:start]) or acts.RECITAL.search(text[end:ce]):
+                role: str | None = "not_conduct"
+            elif acts.AMBIGUOUS.match(text[start:end]):
+                role = acts.by_object(text[start:ce])
+            else:
+                role = None
+            out.append(assertion("conduct", value, role, METHOD, VERSION, 0.7 if role else 0.5, start, end))
 
     parties: list[list[Any]] = []
     for start, end, _hint in names.iter_people(text):

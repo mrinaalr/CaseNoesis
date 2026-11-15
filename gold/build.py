@@ -49,6 +49,8 @@ def _unclaimed(rec: render.Rec) -> list[dict[str, Any]]:
     claimed = {(item["field"], _norm(item["field"], item["value"])) for item in (*rec.values, *rec.optional)}
     found = []
     for name, iterate in fields.ITERATORS.items():
+        if name == "conduct":
+            continue  # acts are measured on the statements of offense in gold/conduct.py, not here
         for start, end, value, extras in iterate(rec.text):
             shown = ("life" if extras.get("life") else extras.get("months")) if name == "sentence" else value
             key = (name, _norm(name, shown))
