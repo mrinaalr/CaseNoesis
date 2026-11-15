@@ -842,7 +842,7 @@ Departures from procedural order: 2,390 traces in 1,967 cases. 850 `order`, 917 
 | `act` | The act alone | `contact` |
 | `phase` | The stage of the offense | `approach` |
 
-The levels exist because the research question is about levels. Setting them beside one another does not test it: a coarser level of any data diverges less, even above its shuffled baseline, because it is a grouping of the finer one. Section 9 tests the question against nulls that can fail it.
+The levels exist because the research question is about levels. Setting them beside one another does not test it: a coarser level of any data diverges less, even above its shuffled baseline, because it is a grouping of the finer one. The phase level is the script stage of single acts; section 9 tests whether states hold across domains, against nulls that can fail it.
 
 | View | What it gives |
 |---|---|
