@@ -184,7 +184,9 @@ def add_trajectory(g: Graph, walk: Walk, scheme: Scheme, *, statuses: list[str] 
     previous_state = state_node(g, scheme, START)
     reached = False
     for index, event in enumerate(walk.events):
-        recorded = scheme.project(event.state, scheme.layers[-1] if scheme.states[event.state].iri else "track", reached)
+        # An act that reaches nothing before any state (money moved before a victim is reached) stays at `start`.
+        own = scheme.states.get(event.state)
+        recorded = scheme.project(event.state, scheme.layers[-1] if own is not None and own.iri else "track", reached)
         reached = reached or scheme.is_goal(event.state)
         state = state_node(g, scheme, recorded)
         assertion = iri("assertion", record_id, scheme.name, index)

@@ -331,6 +331,10 @@ class OntologyTests(unittest.TestCase):
             text = Path(record["path"]).read_text()
         for result in (record, model, scheme):
             self.assertTrue(result["conforms"], result)
+        early = {**t, "record_id": "ct-test0000000000ac", "acts": [act("movement"), act("contact"), act("transfer")]}
+        with tempfile.TemporaryDirectory() as folder:
+            ontology.ESM = Path(folder)
+            self.assertTrue(ontology.record_graph(early, check=True)["conforms"])
         self.assertIn("grooming#MaintenancePhase", text)
         self.assertIn("skos:broader", text)
         self.assertIn('"completed"', text)
