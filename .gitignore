@@ -141,6 +141,7 @@ state_machines/*
 !state_machines/invariance.py
 !state_machines/mdp.py
 !state_machines/coverage.py
+!state_machines/groupings.py
 !state_machines/ontology.py
 !state_machines/analysis.py
 !state_machines/test_state_machines.py

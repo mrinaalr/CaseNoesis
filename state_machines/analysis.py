@@ -2,6 +2,11 @@
 
 Each takes walks from any reader. `load` reads the corpus's acts; `external` reads a graph or a
 JSON file of walks, so a hand-built close-read is analyzed by the same code as the corpus.
+
+`groupings_report` describes states with no scheme and no goal: several groupings of the acts,
+one of them learned from the data, on equal terms. The ESM analyses read the same acts through the
+ESM scheme. The decision model assumes an actor pursuing the scheme's goal; it runs only when asked
+for, and its rationality is reported beside the same fit on records whose acts were shuffled.
 """
 
 from __future__ import annotations
@@ -10,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from state_machines import coverage, invariance, machine as m, mdp, readers
+from state_machines import coverage, groupings, invariance, machine as m, mdp, readers
 from state_machines import scheme as sc
 from state_machines.scheme import Scheme
 from state_machines.walks import Walk, from_start, path, predicate, unplaced
@@ -54,6 +59,68 @@ def nulls_of(found: list[dict[str, Any]], scheme: Scheme, *, minimum: int = 80, 
     return out
 
 
+def groupings_report(*, kind: str = "", randoms: int = 100, repeats: int = 20, db=None, found=None) -> dict[str, Any]:
+    """States with no scheme and no goal: groupings of the acts described on the same measures."""
+    found = found if found is not None else records(kind=kind, db=db)
+    return groupings.compare(found, minimum=80 if not kind else 40, randoms=randoms, repeats=repeats)
+
+
+def beta_on_shuffled(found: list[dict[str, Any]], scheme: Scheme, *, draws: int = 20, layer: str = "milestone", seed: int = 8252) -> dict[str, Any]:
+    """The rationality fit on the same records with each record's acts in a random order: what beta is
+    when the order carries nothing. The observed beta is read against this, not against zero."""
+    import random
+
+    betas = []
+    for draw in range(draws):
+        rng = random.Random(seed + draw)
+        walks = from_start([readers.from_conduct(invariance._reorder(t, rng), scheme) for t in found], scheme, layer=layer)
+        fitted = m.fit(walks, scheme, layer=layer)
+        betas.append(mdp.rationality(walks, fitted, mdp.uniform(), nulls=0)["beta"])
+    ordered = sorted(betas)
+    n = len(ordered)
+    return {"draws": n, "beta_mean": round(sum(betas) / n, 3), "beta_p05": ordered[int(0.05 * (n - 1))],
+            "beta_p95": ordered[int(0.95 * (n - 1))], "betas": betas}
+
+
+def without_payer_rule(found: list[dict[str, Any]], *, db=None, source=None) -> list[dict[str, Any]]:
+    """The same records with each payment act read as the verb alone reads it, before #8's payer rule:
+    a payment verb is a `transfer` whoever paid. Rebuilt from each act's stored span."""
+    from extraction import acts as act_rules, store
+    from extraction.source import CorpusSource
+
+    db = db or store.connect()
+    source = source or CorpusSource()
+    wanted = {t["record_id"] for t in found}
+    old: dict[str, list[str]] = defaultdict(list)
+    current, text = None, ""
+    for row in db.execute("SELECT record_id, kind, span_start, span_end FROM conduct ORDER BY record_id, position"):
+        if row["record_id"] not in wanted:
+            continue
+        if row["record_id"] != current:
+            current, text = row["record_id"], source.text(row["record_id"]) or ""
+        kind, s, e = row["kind"], row["span_start"], row["span_end"]
+        if kind in ("supply", "movement") and act_rules.by_verb(text[s:e], text[e:e + 400], text[max(0, s - 20):s]) == "transfer":
+            kind = "transfer"
+        old[row["record_id"]].append(kind)
+    out = []
+    for t in found:
+        kinds = old.get(t["record_id"], [])
+        if len(kinds) != len(t["acts"]):
+            out.append(t)
+            continue
+        out.append({**t, "acts": [{**a, "kind": k} for a, k in zip(t["acts"], kinds)]})
+    return out
+
+
+def predicate_by_payer_rule(found: list[dict[str, Any]], scheme: Scheme, *, db=None, minimum: int = 15) -> dict[str, Any]:
+    """The exploitation predicate by domain, with and without the payer rule, so it is visible how much
+    of the separation the rule makes."""
+    before = without_payer_rule(found, db=db)
+    count = lambda rows: sum(1 for t in rows for a in t["acts"] if a["kind"] == "transfer")  # noqa: E731
+    return {"with_payer_rule": {"transfers": count(found), "by_domain": coverage.predicate([readers.from_conduct(t, scheme) for t in found], scheme, minimum=minimum)},
+            "without_payer_rule": {"transfers": count(before), "by_domain": coverage.predicate([readers.from_conduct(t, scheme) for t in before], scheme, minimum=minimum)}}
+
+
 def by_domain(walks: list[Walk], minimum: int) -> dict[str, list[Walk]]:
     grouped: dict[str, list[Walk]] = defaultdict(list)
     for w in walks:
@@ -88,7 +155,7 @@ def invariance_of(walks: list[Walk], scheme: Scheme, *, minimum: int = 80, repea
 
 
 def invariance_report(*, kind: str = "", minimum: int = 80, repeats: int = 50, draws: int = 0, db=None) -> dict[str, Any]:
-    """The comparison of domains, and with `draws` the grouping and order nulls that test it."""
+    """The comparison of domains, and with `draws` the grouping and order nulls beside it."""
     scheme = sc.load()
     found = records(kind=kind, db=db)
     out = invariance_of([readers.from_conduct(t, scheme) for t in found], scheme, minimum=minimum, repeats=repeats)
@@ -99,7 +166,7 @@ def invariance_report(*, kind: str = "", minimum: int = 80, repeats: int = 50, d
 
 def decision_of(walks: list[Walk], scheme: Scheme, *, layer: str = "milestone", nulls: int = 100, sensitivity: bool = True,
                 complete_only: bool = True) -> dict[str, Any]:
-    """The decision model and its tests. By default on walks told from preparation or contact: a telling that
+    """The decision model and its fit. By default on walks told from preparation or contact: a telling that
     begins at the payment would make a one-act path to the goal feasible by construction."""
     every = walks
     if complete_only:
@@ -123,9 +190,14 @@ def decision_of(walks: list[Walk], scheme: Scheme, *, layer: str = "milestone", 
     return out
 
 
-def decision_report(*, kind: str = "", domain: str = "", layer: str = "milestone", nulls: int = 100, sensitivity: bool = True, db=None) -> dict[str, Any]:
-    walks, scheme = load(kind=kind, domain=domain, db=db)
-    return decision_of(walks, scheme, layer=layer, nulls=nulls, sensitivity=sensitivity)
+def decision_report(*, kind: str = "", domain: str = "", layer: str = "milestone", nulls: int = 100, sensitivity: bool = True,
+                    baseline: int = 20, db=None) -> dict[str, Any]:
+    scheme = sc.load()
+    found = records(kind=kind, domain=domain, db=db)
+    out = decision_of([readers.from_conduct(t, scheme) for t in found], scheme, layer=layer, nulls=nulls, sensitivity=sensitivity)
+    if baseline:
+        out["beta_on_shuffled_order"] = beta_on_shuffled(found, scheme, draws=baseline, layer=layer)
+    return out
 
 
 def laws_of(walks: list[Walk], scheme: Scheme, *, minimum: int = 25) -> dict[str, Any]:
@@ -159,7 +231,9 @@ def external(source: str, *, domain: str = "", layer: str = "milestone") -> dict
     return out
 
 
-def full(*, nulls: int = 100, repeats: int = 50, draws: int = 200, db=None) -> dict[str, Any]:
+def full(*, nulls: int = 100, repeats: int = 50, draws: int = 200, decision: bool = False, db=None) -> dict[str, Any]:
+    """Every description, for all records and for court filings. With `decision`, also the decision
+    model, which assumes an actor pursuing the scheme's goal."""
     from extraction import store
 
     db = db or store.connect()
@@ -168,12 +242,19 @@ def full(*, nulls: int = 100, repeats: int = 50, draws: int = 200, db=None) -> d
     for label, kind in (("all_records", ""), ("court_filings", "court")):
         found = records(kind=kind, db=db)
         walks = [readers.from_conduct(t, scheme) for t in found]
-        out[label] = {"machine": {layer: machine_of(walks, scheme, layer=layer) for layer in LAYERS},
-                      "invariance": invariance_of(walks, scheme, minimum=80 if not kind else 40, repeats=repeats),
-                      "invariance_nulls": nulls_of(found, scheme, minimum=80 if not kind else 40, draws=draws),
-                      "decision": {layer: decision_of(walks, scheme, layer=layer, nulls=nulls, sensitivity=not kind and layer == "milestone")
-                                   for layer in LAYERS},
-                      "decision_all_walks": decision_of(walks, scheme, nulls=max(20, nulls // 4), sensitivity=False, complete_only=False),
-                      "laws": laws_of(walks, scheme, minimum=15 if kind == "court" else 25)}
+        row: dict[str, Any] = {
+            "groupings": groupings_report(kind=kind, found=found, randoms=nulls),
+            "esm": {"machine": {layer: machine_of(walks, scheme, layer=layer) for layer in LAYERS},
+                    "invariance": invariance_of(walks, scheme, minimum=80 if not kind else 40, repeats=repeats),
+                    "invariance_nulls": nulls_of(found, scheme, minimum=80 if not kind else 40, draws=draws),
+                    "laws": laws_of(walks, scheme, minimum=15 if kind == "court" else 25),
+                    "predicate_by_payer_rule": predicate_by_payer_rule(found, scheme, db=db, minimum=15 if kind == "court" else 25)}}
+        if decision:
+            row["decision"] = {"assumes": f"an actor pursuing {sorted(scheme.goal)}, under the uniform cost model unless a table is declared",
+                               **{layer: decision_of(walks, scheme, layer=layer, nulls=nulls, sensitivity=not kind and layer == "milestone")
+                                  for layer in LAYERS},
+                               "all_walks": decision_of(walks, scheme, nulls=max(20, nulls // 4), sensitivity=False, complete_only=False),
+                               "beta_on_shuffled_order": beta_on_shuffled(found, scheme, draws=20)}
+        out[label] = row
     return out
 

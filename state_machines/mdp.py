@@ -1,17 +1,19 @@
-"""A goal-conditioned decision model over the fitted machine, and tests of it.
+"""A goal-conditioned decision model over the fitted machine, and measures of its fit.
+
+It assumes an actor pursuing the scheme's goal. Nothing else in the package does.
 
     L_obs   observed walks
     L*      the path an actor pursuing the goal takes through the fitted machine under a declared cost model
 
 The reward is not in the records; a `CostModel` declares it and every result carries its name.
 
-    uniform    every act costs 1. L* is the shortest feasible path to the goal ("offenders are direct")
-    declared   a researcher's friction table, config/esm_costs.json ("offenders take the easiest path")
+    uniform    every act costs 1. L* is the shortest feasible path to the goal
+    declared   a researcher's friction table, config/esm_costs.json
 
 The goal is the scheme's goal at the machine's layer: any state at or under a goal state. It pays
 once, on first arrival; the decision state carries whether it has been reached.
 
-Tests: `rationality` fits beta in P(a | x) proportional to exp(beta Q*(x, a)) to the observed choices and
+Measures: `rationality` fits beta in P(a | x) proportional to exp(beta Q*(x, a)) to the observed choices and
 compares it with indifference and with random cost models; `agreement` is the share of choices that are
 the optimal action; `paths` sets L* beside observed walks; `sensitivity` repeats them under nine cutoffs.
 
@@ -21,7 +23,7 @@ fits exactly as well is a tie, and ties are reported apart, since two models at 
 
 A walk whose telling starts at exploitation (a release that begins at the payment) makes a one-act path
 to the goal look feasible from `start`. `from_start` keeps the walks told from preparation or contact, so
-the test is of choices made from the beginning of an offense.
+the fit is to choices made from the beginning of an offense.
 """
 
 from __future__ import annotations

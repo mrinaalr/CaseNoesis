@@ -13,8 +13,8 @@ How CaseNoesis turns public enforcement records into structured values, validate
 | Offense acts | 98,980, from 32,503 records |
 | State machine | Fitted and tested across domains ([§9](#9-formal-modeling)) |
 | Graphs | 1,620 validated against CASE/UCO SDK `v1.33.0` |
-| Interfaces | Command line, local MCP (87 tools), local SPARQL |
-| Tests | 162 |
+| Interfaces | Command line, local MCP (88 tools), local SPARQL |
+| Tests | 168 |
 
 Measured 2026-11-14. Section 5.10 gives the full counts.
 
@@ -714,18 +714,20 @@ $$
 | $R_G$ | Not estimated. A declared cost model |
 | $s_0$, $F$ | `start`; Completed, Disrupted, Unresolved |
 
-States are data ([`state_machines/schemes/`](state_machines/schemes/)), in two layers linked by `skos:broader`. The SDK's domain alphabets and CAC's phases are placed under them by a crosswalk, so a walk in any alphabet, read from the corpus, a hand-built graph or another extractor, runs through the same machine and tests. The five phases of section 7.3 are script stages of single acts; they are not these states.
+States are data ([`state_machines/schemes/`](state_machines/schemes/)), in two layers linked by `skos:broader`. The SDK's domain alphabets and CAC's phases are placed under them by a crosswalk, so a walk in any alphabet, read from the corpus, a hand-built graph or another extractor, runs through the same machine and measures. The five phases of section 7.3 are script stages of single acts; they are not these states.
 
-| Claim | Test | Result, 2026-11-14 |
-|---|---|---|
-| States hold while actions vary | State-level divergence between domains against random groupings of acts into roles, and against shuffled act order, on 200 paired subsamples | Not separable from a random grouping: the scheme's grouping does better in 0.50 to 0.88 of draws, within what random data gives. Fraud and trafficking differ in how they move between states more than their act mix explains, which is evidence against shared states |
-| Offenders are direct | Rationality $\beta$ under uniform costs on walks told from the start, against 200 random cost models, under nine feasibility cutoffs | Not supported: $\beta = -0.10$; positive only under the strictest cutoff |
-| A backbone recurs | Coverage of each milestone in every domain; contact primacy and maintenance on court filings | No milestone in half of walks in every domain; maintenance follows exploitation in 52 to 81% of court narratives that reach it |
-| The exploitation predicate separates exploitation from other harm | Of walks reaching exploitation, the share reached only by supply | Drugs 58% and firearms 83%, on 24 and 26 walks; every other domain 2 to 6% |
+The models describe; they do not test the framework for or against. The ESM scheme is one grouping of acts into states among several run on the same measures: every act its own state, one state, a grouping learned from the data (act kinds merged to keep the most information about the next act, fitted on half the records and scored on the other), and random groupings of the same sizes. A goal and a reward are used only by the decision model, which runs when asked for. Figures, 2026-11-15:
 
-Setting the state, act and technology levels beside one another is not a test: states group acts, and a coarser grouping of any data diverges less.
+| Grouping, five states | Information about the next act | Percentile among random groupings | Divergence between domains above shuffled labels |
+|---|---:|---:|---:|
+| ESM milestones | 0.082 bits | 0.39 | 0.167 bits |
+| Learned | 0.156 bits | 1.00 | 0.321 bits |
+| Learned, domains weighted equally | 0.111 bits | 0.88 | 0.290 bits |
+| Random, mean (5th to 95th percentile) | 0.088 (0.064 to 0.114) | | 0.188 (0.116 to 0.253) |
 
-"Offenders take the easiest path" needs a researcher's cost table. Limits: [`state_machines/README.md`](state_machines/README.md#limits).
+The decision model's rationality $\beta$ under uniform costs is −0.096 on walks told from the start, against −0.109 to −0.103 on the same records with their acts shuffled. The exploitation predicate is reported with and without the payer rule of section 7.3, with the counts behind each share. Method, all figures and limits: [`state_machines/README.md`](state_machines/README.md).
+
+Setting the state, act and technology levels beside one another measures nothing about them: states group acts, and a coarser grouping of any data diverges less.
 
 The scheme is written as a SKOS concept scheme ([`schemes/esm.ttl`](state_machines/schemes/esm.ttl)) and passes the gate as publishable. Trajectories and fitted machines for court filings are written in the SDK's `trajectories` and `means` extensions and pass the gate. A sketch of the Capability class of UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
 
@@ -733,7 +735,7 @@ The scheme is written as a SKOS concept scheme ([`schemes/esm.ttl`](state_machin
 
 ## 10. Analysis: process mining
 
-The engine extracts and stores. Analysis reads what it stored. One analysis is built: process mining over the events of section 7.2. The tests of the framework in section 9 are not.
+The engine extracts and stores. Analysis reads what it stored. One analysis is built: process mining over the events of section 7.2. The models of section 9 are described there.
 
 ### 10.1 Process mining
 

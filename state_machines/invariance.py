@@ -1,9 +1,4 @@
-"""Are the states the same across domains while the actions differ?
-
-The claim: offenses of different kinds pass through the same states, and
-technology enters through the actions. If that holds, domains should look
-alike when compared on how they move between states, and differ when
-compared on which acts, and which technologies, they use to do it.
+"""How far apart domains are at a scheme's states, its acts, and their technology.
 
 Three distributions per domain:
 
@@ -16,22 +11,19 @@ over pairs) is compared with the same divergence after shuffling domain
 labels. Domains are subsampled to the same number of trajectories, repeated,
 so that a large domain does not look more distinct only by being large.
 
-The claim predicts little excess divergence at the state level and clear
-excess at the act and means levels. Excess at the state level means the
-domains move between states differently.
+Excess at the state level means the domains move between states
+differently, as the scheme reads them.
 
-Comparing the levels with one another does not test the claim. States are
-computed from acts by grouping them, and a coarser grouping of any data
-diverges less than a finer one: random act sequences with no order give
-the same ordering of levels. Two nulls test it instead, each on the same
-equal-size subsamples as the observed value:
+Levels are not compared with one another. States are computed from acts by
+grouping them, and a coarser grouping of any data diverges less than a finer
+one: random act sequences with no order give the same ordering of levels.
+The state level is set beside two nulls instead, each on the same equal-size
+subsamples as the observed value:
 
     grouping   act kinds reassigned to roles at random, keeping how many kinds each
-               role has. The claim predicts that the grouping the scheme uses leaves
-               less divergence between domains than a random grouping does.
-    order      each record's acts shuffled. If the observed state-level divergence is
-               no lower than with shuffled order, it reflects which acts domains use,
-               not the order they move through states in.
+               role has: where the scheme's grouping falls among random ones.
+    order      each record's acts shuffled: how much of the state-level divergence
+               comes from the order of acts, not only from which acts domains use.
 """
 
 from __future__ import annotations

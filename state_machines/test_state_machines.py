@@ -11,7 +11,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from state_machines import coverage, invariance, machine as m, mdp, readers
+from state_machines import analysis, coverage, groupings, invariance, machine as m, mdp, readers
 from state_machines import scheme as sc
 from state_machines.scheme import START, STOP
 from state_machines.walks import Event, Walk, from_start, path, predicate, steps
@@ -227,7 +227,7 @@ class DecisionTests(unittest.TestCase):
 
 
 class InvarianceTests(unittest.TestCase):
-    """The claim predicts: same states, different acts. Plant each case and check the test sees it."""
+    """Same states with different acts, and different states: plant each case and check the comparison sees it."""
 
     @staticmethod
     def domain(name: str, paths: list[list[str]], n: int, seed: int, means: dict | None = None) -> list[Walk]:
@@ -259,7 +259,7 @@ class InvarianceTests(unittest.TestCase):
 
 
 class NullTests(unittest.TestCase):
-    """The tests of the claim itself: does the scheme's grouping, or the order of acts, explain the state level?"""
+    """Does the scheme's grouping, or the order of acts, account for the state level?"""
 
     @staticmethod
     def records(name: str, paths: list[list[str]], n: int, seed: int) -> list[dict]:
@@ -297,6 +297,65 @@ class NullTests(unittest.TestCase):
         a = self.records("a", [["contact", "deception", "transfer"]], 200, 1)
         b = self.records("b", [["transfer", "deception", "contact"]], 200, 2)
         self.assertEqual(self.run_nulls(a, b)["share_of_draws_observed_below_shuffled_order"], 0.0)
+
+
+PLANTED = {"a": ["setup", "contact", "recruit", "access"], "b": ["deception", "threat", "control", "demand", "transport"],
+           "c": ["transfer", "exploit", "supply"], "d": ["movement", "concealment"]}
+NEXT = {"(start)": "a", "a": "b", "b": "c", "c": "d", "d": None}
+
+
+def planted_sequences(n: int, seed: int, domain: str = "x") -> list[dict]:
+    """Records whose acts follow a chain of groups; act kinds within a group are interchangeable."""
+    rng = random.Random(seed)
+    out = []
+    for i in range(n):
+        kinds, group = [], NEXT["(start)"]
+        while group is not None:
+            kinds.append(rng.choice(PLANTED[group]))
+            group = NEXT[group] if rng.random() < 0.85 else None
+        out.append(traj(domain, *kinds, record=f"{domain}{seed}-{i}"))
+    return out
+
+
+class GroupingTests(unittest.TestCase):
+    """States with no scheme: groupings of acts learned or dealt, described on the same measures."""
+
+    def test_learning_recovers_a_planted_grouping(self) -> None:
+        seqs = groupings.sequences(planted_sequences(3000, 1))
+        found = groupings.learned(seqs, 4)
+        self.assertEqual(sorted(sorted(k for k, s in found.items() if s == g) for g in set(found.values())),
+                         sorted(sorted(v) for v in PLANTED.values()))
+
+    def test_random_acts_carry_no_information_about_the_next(self) -> None:
+        rng = random.Random(3)
+        records = [traj("x", *rng.choices(groupings.KINDS, k=rng.randint(2, 6)), record=f"r{i}") for i in range(4000)]
+        seqs = groupings.sequences(records)
+        train, test = seqs[::2], seqs[1::2]
+        base = groupings.next_act_bits(train, test, groupings.one())
+        for k in (2, 5, 14):
+            self.assertLess(base - groupings.next_act_bits(train, test, groupings.learned(train, k)), 0.02)
+
+    def test_a_planted_grouping_sits_above_random_groupings(self) -> None:
+        records = planted_sequences(400, 1, "x") + planted_sequences(400, 2, "y")
+        out = groupings.compare(records, randoms=20, repeats=3, ks=(4,))
+        learned = out["groupings"]["learned"]
+        self.assertEqual(learned["random_same_sizes"]["information_percentile"], 1.0)
+        self.assertGreater(learned["information_bits"], out["groupings"]["one"]["information_bits"])
+        self.assertNotIn("random_same_sizes", out["groupings"]["acts"])
+
+    def test_balanced_weights_every_domain_the_same(self) -> None:
+        big = [traj("big", "contact", "transfer", record=f"b{i}") for i in range(900)]
+        small = [traj("small", "contact", "exploit", record=f"s{i}") for i in range(100)]
+        pairs = groupings._pairs(groupings.sequences(big + small), groupings.acts(), balanced=True)
+        self.assertAlmostEqual(pairs[("contact", "transfer")], pairs[("contact", "exploit")])
+
+
+class BaselineTests(unittest.TestCase):
+    def test_beta_on_shuffled_order_is_reported_per_draw(self) -> None:
+        found = [traj("x", "setup", "contact", "deception", "transfer", record=f"r{i}") for i in range(60)]
+        out = analysis.beta_on_shuffled(found, S, draws=3)
+        self.assertEqual(out["draws"], 3)
+        self.assertEqual(len(out["betas"]), 3)
 
 
 class LawTests(unittest.TestCase):

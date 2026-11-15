@@ -2123,14 +2123,14 @@ async def esm_read(path: str, domain: str = "", layer: str = "milestone") -> dic
 
 @mcp.tool()
 async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: int = 50, draws: int = 0) -> dict[str, Any]:
-    """READ. Do domains share states while differing in acts and technology?
+    """READ. How far apart domains are at the ESM scheme's states, its acts, and their technology.
 
     Jensen-Shannon divergence between domains at three levels (transitions
     between states; the act taken at each state; the act and its technology),
     each beside the divergence with domain labels shuffled, on equal-size
     subsamples, at the milestone layer and at the track layer. Levels are not
     compared with each other: a coarser grouping of any data diverges less.
-    With draws > 0, the test of the claim: the observed state-level excess beside
+    With draws > 0, the observed state-level excess beside
     the excess under random groupings of acts into roles and under shuffled act
     order, on the same paired subsamples. Slow; draws of 50 take minutes.
     """
@@ -2139,14 +2139,31 @@ async def esm_invariance(kind: str = "", min_trajectories: int = 80, repeats: in
 
 
 @mcp.tool()
+async def esm_groupings(kind: str = "", randoms: int = 100) -> dict[str, Any]:
+    """READ. States with no scheme and no goal: groupings of the act kinds, described on equal terms.
+
+    Each act kind its own state, one state, the ESM scheme's milestones, and
+    groupings learned from the data (act kinds merged to keep the most
+    information about the next act, on one half of the records). Each is
+    described by held-out information about the next act, divergence between
+    domains above shuffled labels (and with act order shuffled), coverage per
+    domain, and transitions; each named grouping is placed among random
+    groupings with its own state sizes, as a percentile. Takes about a minute.
+    """
+    return await _esm("groupings_report", kind=kind, randoms=max(10, min(int(randoms), 500)))
+
+
+@mcp.tool()
 async def esm_decide(kind: str = "", domain: str = "", layer: str = "milestone", nulls: int = 100) -> dict[str, Any]:
-    """READ. The goal-conditioned decision model (goal: Exploitation) and its tests.
+    """READ. The decision model. It assumes an actor pursuing the scheme's goal (Exploitation).
 
     Rewards are declared, not estimated: `uniform`, and the researcher's
     friction table when config/esm_costs.json exists. For each: L*, observed
     paths beside it, the share of choices that are optimal, a fitted
-    rationality beta against random cost models, and the same results under
-    nine feasibility cutoffs. Published at the level of states and kinds of act only.
+    rationality beta against random cost models, the same results under nine
+    feasibility cutoffs, and beta fitted on the same records with their acts
+    shuffled, which the observed beta is read against. Published at the level
+    of states and kinds of act only.
     """
     return await _esm("decision_report", kind=kind, domain=domain, layer=layer if layer in ("milestone", "track") else "milestone",
                       nulls=max(10, min(int(nulls), 500)))

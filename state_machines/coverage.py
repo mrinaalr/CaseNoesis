@@ -91,7 +91,7 @@ def predicate(walks: list[Walk], scheme: Scheme, *, minimum: int = 15) -> dict[s
 
 def tracks(walks: list[Walk], scheme: Scheme, *, minimum: int = 25) -> dict[str, Any]:
     """For each domain, how each milestone it reached was reached: the share of its walks at each
-    track state beneath it. The milestone-level claim says nothing about these."""
+    track state beneath it."""
     grouped = _by_domain(walks, scheme, "track", minimum)
     out: dict[str, Any] = {}
     for d, paths in grouped.items():
