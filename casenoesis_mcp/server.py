@@ -2068,6 +2068,68 @@ async def conduct_means(domain: str = "", kind: str = "") -> dict[str, Any]:
     return await _process("conduct_means", domain=domain, kind=kind)
 
 
+async def _esm(name: str, **kwargs: Any) -> dict[str, Any]:
+    try:
+        from state_machines import analysis
+
+        return await asyncio.to_thread(getattr(analysis, name), **kwargs)
+    except Exception as e:
+        logger.exception("state machine %s failed", name)
+        return {"error": str(e), "write": False}
+
+
+@mcp.tool()
+async def esm_machine(kind: str = "", domain: str = "", level: str = "act") -> dict[str, Any]:
+    """READ. The Exploitation State Machine fitted to the acts read from records.
+
+    States are the five phases (preparation, approach, leverage, harm, exit), an
+    action is a kind of act (or an act with its technology at level "means"),
+    and T(s'|s,a) is counted from trajectories, with `disrupted` where a record
+    narrates detection after an act. Returns the action space at each state
+    (actions taken there at least 5 times and in 1% of departures), the
+    observed policy, and every transition estimate with its counts.
+    """
+    if level not in ("act", "means"):
+        return {"error": "level must be act or means", "write": False}
+    return await _esm("machine_report", kind=kind, domain=domain, level=level)
+
+
+@mcp.tool()
+async def esm_states(kind: str = "", min_trajectories: int = 50, resamples: int = 20) -> dict[str, Any]:
+    """READ. States learned from each domain's trajectories, and whether they hold across domains.
+
+    For each domain: the states found by agglomerative class induction with the
+    number chosen by BIC, held-out bits per step under its own states, the five
+    theory phases, states pooled over all domains, and no states. For each pair
+    of domains: the held-out cost of borrowing the other's states and the
+    agreement between partitions, each beside a floor from resampling the same
+    domain. Tests the claim that states are fixed across domains; does not assume it.
+    """
+    return await _esm("states_report", kind=kind, min_trajectories=max(10, int(min_trajectories)), resamples=max(2, min(int(resamples), 50)))
+
+
+@mcp.tool()
+async def esm_decide(kind: str = "", domain: str = "", goal: str = "harm", nulls: int = 100) -> dict[str, Any]:
+    """READ. The goal-conditioned decision model and its tests.
+
+    Rewards are a declared assumption: `uniform` (every act costs the same, so
+    the optimum is the shortest feasible path to the goal), and the
+    researcher's friction table when config/esm_costs.json exists. For each:
+    L*, how observed paths compare, the share of observed choices that are
+    optimal, and a fitted rationality parameter beta compared with indifference
+    and with random cost models. Published at the level of phases and kinds of act only.
+    """
+    return await _esm("decision_report", kind=kind, domain=domain, goal=tuple(g for g in goal.split(",") if g), nulls=max(10, min(int(nulls), 500)))
+
+
+@mcp.tool()
+async def esm_coverage(kind: str = "", goal: str = "harm") -> dict[str, Any]:
+    """READ. How many of each domain's trajectories pass through each state, the states every
+    domain shares at each coverage threshold (the backbone), and for each state the share of
+    goal-reaching trajectories that avoid it (what removing it would leave untouched)."""
+    return await _esm("coverage_report", kind=kind, goal=tuple(g for g in goal.split(",") if g))
+
+
 @mcp.tool()
 async def process_case(case_or_record_id: str) -> dict[str, Any]:
     """READ. One case against the discovered model and against procedure: its timeline,

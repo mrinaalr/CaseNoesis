@@ -1,0 +1,8 @@
+# Must fail: a capability characterized by something that is not an action pattern, twice.
+@prefix cap: <http://example.org/ontology/capability/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix ex: <http://example.org/kb/> .
+ex:not-a-pattern a uco-core:UcoObject ; uco-core:name "A note" .
+ex:other a uco-core:UcoObject ; uco-core:name "Another note" .
+ex:capability a cap:Capability ; uco-core:name "Bad" ;
+	cap:structuredCharacterization ex:not-a-pattern , ex:other .

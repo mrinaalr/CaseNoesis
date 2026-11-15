@@ -1,28 +1,22 @@
 # CaseNoesis Architecture
 
-> **CaseNoesis** reads public enforcement records across offense types, turns each one into span-anchored, vote-resolved structured values and a validated CASE/UCO graph, orders what happened in each case into a dated timeline per defendant, and mines the paths prosecutions take. It is built to model exploitation as state machines. It exists to test one claim: that the Exploitation State Machine from *Affordances for Harm*, derived from child-exploitation cases, describes technology-mediated exploitation in general. The architecture is an instrument built to break its own framework.
+How CaseNoesis turns public enforcement records into structured values, validated CASE/UCO graphs, and a fitted state machine. Everything runs on one machine.
 
 | At a glance | |
 |---|---|
-| Collected | **45,877** distinct public records: 44,602 press releases, 1,207 court filings, 68 reference records. 343 of the court filings narrate an offense: statements of offense, factual bases, and complaint affidavits |
-| Domains | Fraud, sex trafficking, forced labor, cyber, child exploitation. Conduct filings also cover extortion, drugs, firearms, corruption, stalking, smuggling, and racketeering |
-| Read by the engine | **45,877** records, **3,126,758** span-anchored assertions from 5 reader families. Two more families, a dependency parse and NER, are built and optional |
-| Settled | **992,008** values across 16 fields; 372,415 of them by two or more families |
-| Left for review | 58,583 mentions the readers contested or could not settle |
-| Measured accuracy | On a 200-record gold set of invented records with known attributes, held-out half: F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants; 0.85 to 0.94 on victim counts, scheme and channel labels. Section 13.1 |
-| Cases | 45,626 cases; 140 join more than one record |
-| People | 60,553 defendants, numbered per case. 208,674 terms, amounts and events placed with a defendant |
-| Events | 108,740 events in 44,152 cases, 63,231 with a date |
-| Process mining | 64,833 defendant traces, 946 distinct paths; a process tree by the Inductive Miner; 2,390 traces flagged for a departure from procedural order |
-| Graphs | 45,898 engine graphs written. 1,620 of them, and 1,232 SDK record graphs, validated against CASE/UCO SDK `v1.33.0`; none failed |
-| Triple store | A local Oxigraph store and one N-Quads file: 1,620 named graphs, 249,313 quads, SPARQL from the CLI, MCP, or `127.0.0.1` |
-| Where it runs | One machine. Clone, set up, run. No hosted database and no remote service |
-| Names in derived data | None stored. People are numbered nodes with a role |
-| Conduct | 98,980 acts of offenses read from 32,503 records; 20,314 offense trajectories of two or more acts, at three levels of abstraction |
-| Agents | 81 local MCP tools, 23 of them over the engine, its event log and its trajectories |
-| Tests | 114 tests on invented text |
+| Records | 45,877: press releases, court filings, reference documents |
+| Offense types | 12 federal domains |
+| Values extracted | 992,008, each traced to a span of its record |
+| Accuracy | F1 0.98 to 1.00 on core fields, on a held-out gold set ([§13.1](#131-the-gold-set)) |
+| Cases and defendants | 45,626 cases, 60,553 defendants, no names |
+| Timelines | 108,740 dated or ordered events |
+| Offense acts | 98,980, from 32,503 records |
+| State machine | Fitted and tested across domains ([§9](#9-formal-modeling)) |
+| Graphs | 1,620 validated against CASE/UCO SDK `v1.33.0` |
+| Interfaces | Command line, local MCP (85 tools), local SPARQL |
+| Tests | 130 |
 
-Counts were measured on 2026-11-14. Section 5.10 says what was run and what was not.
+Measured 2026-11-14. Section 5.10 gives the full counts.
 
 ## Contents
 
@@ -40,9 +34,8 @@ Counts were measured on 2026-11-14. Section 5.10 says what was run and what was 
 12. [Data policy](#12-data-policy)
 13. [Verification](#13-verification)
 14. [Repository map](#14-repository-map)
-15. [What came from CaseLinker](#15-what-came-from-caselinker)
-16. [Limitations](#16-limitations)
-17. [Not built](#17-not-built)
+15. [Limitations](#15-limitations)
+16. [Not built](#16-not-built)
 
 ---
 
@@ -98,8 +91,8 @@ flowchart TD
     GATE["SDK gate<br/>SHACL + closed-world concept check"]
   end
 
-  subgraph FM["Formal modeling (designed, not built here)"]
-    ESM["phase assertions → state machines → L*"]
+  subgraph FM["Formal modeling · state_machines/"]
+    ESM["fitted machine · learned states<br/>decision model · coverage"]
   end
 
   subgraph TS["Triple store · data/extracted/"]
@@ -132,7 +125,8 @@ flowchart TD
   OX --> CLI
   OX --> MCP
   OX --> HTTP
-  GATE -.-> ESM
+  DB --> ESM
+  ESM --> GATE
 ```
 
 **Everything runs on one machine.** Clone the repository, run setup, and the collector, the engine, the stores, and the servers are all local. There is no Postgres, no hosted graph database, and no remote MCP. A Railway deployment exists for demonstrating the site; the corpus and the engine are not on it.
@@ -165,7 +159,7 @@ What is built and what is not:
 | Local triple store with SPARQL | Built. Holds every validated engine graph |
 | MCP tools over the engine | Built |
 | Accuracy on real records, against hand labels | **Not done.** The gold set is invented text. It measures the readers on the phrasings its author wrote and does not replace a labelled sample of collected records |
-| Phase assertions, state machines, L\*, cross-domain tests | **Not built** for the new domains. Section 9 is the design |
+| Exploitation State Machine: fitted machine, learned states and invariance test, decision model, coverage, graphs | Built. Run on every trajectory. Section 9 |
 
 ---
 
@@ -195,7 +189,7 @@ What is built and what is not:
 
 **Filings that narrate the offense.** A press release announces a prosecution and a judgment records its result. What the defendant did is told in three kinds of filing: a statement of offense or of facts, a factual basis (also called a factual resume or proffer), and a criminal complaint with the agent's affidavit. [`conduct_documents.py`](collector/conduct_documents.py) collects them by searching CourtListener at the document level for docket entries whose own description names the filing, narrowed by full text to an offense domain, and only where RECAP already holds the document. It keeps the filing itself and drops motions and orders that mention one. A civil case files a "statement of facts" too, so the case must be a prosecution: a "United States v." caption or a criminal docket number. Every download is a file from the free archive; the code cannot reach PACER.
 
-One pass, one results page per kind per domain, brought in 411 files, 365 of them distinct. 22 of those came from six civil cases, before the caption check existed; `--exclude-civil` set them aside, leaving 343. Of the 365 as first collected: 109 statements of offense, 146 factual bases and 156 complaint affidavits by docket name, 3,797 pages, across twelve domains. The archive holds far more (about 2,700 for fraud alone); the limit is a search quota of 50 calls an hour. The engine read all 365 and settled a document type for 338. 147 of them state three or more dates for the conduct, which is what a sequence of offense events needs. The engine does not yet read that conduct as events; section 17 lists it.
+One pass, one results page per kind per domain, brought in 411 files, 365 of them distinct. 22 of those came from six civil cases, before the caption check existed; `--exclude-civil` set them aside, leaving 343. Of the 365 as first collected: 109 statements of offense, 146 factual bases and 156 complaint affidavits by docket name, 3,797 pages, across twelve domains. The archive holds far more (about 2,700 for fraud alone); the limit is a search quota of 50 calls an hour. The engine read all 365 and settled a document type for 338. 147 of them state three or more dates for the conduct, which is what a sequence of offense events needs. The engine does not yet read that conduct as events; section 16 lists it.
 
 `data/collected/public/*_lookup.jsonl` is the public index, 46,619 rows, and the only collected data in the repository. `python3 -m collector.reproduce` refetches from it. Hand-off: [`collector/README.md`](collector/README.md).
 
@@ -281,7 +275,7 @@ A reader takes a record and returns assertions. It never sees another reader's o
 | Reader | Method | Family | What it reads |
 |---|---|---|---|
 | [`patterns.py`](extraction/readers/patterns.py) | `regex` | `surface_pattern` | Fixed phrasings that touch the value: "sentenced to", "in restitution", "defrauded … of". Profile cues for tag fields |
-| [`clause.py`](extraction/readers/clause.py) | `clause_cue` | `clause` | Every typed token, and which cue is nearest it inside its clause. The sentence logic is CaseLinker's clause classifier |
+| [`clause.py`](extraction/readers/clause.py) | `clause_cue` | `clause` | Every typed token, and which cue is nearest it inside its clause. |
 | [`attribution.py`](extraction/readers/attribution.py) | `clause_subject` | `clause` | Whose a term, an amount or an event is, from the order of the sentence: the nearest person named before it, the people joined with that one, or the person the sentence before was about. Never an official |
 | [`syntax.py`](extraction/readers/syntax.py) | `dependency_parse` | `dependency` | Off unless `CASENOESIS_SYNTAX=1`. A Stanza parse: what governs each value, the mood of each trigger, and the grammatical subject or object a value belongs to |
 | [`syntax.py`](extraction/readers/syntax.py) | `ner_model` | `ner` | Off unless `CASENOESIS_SYNTAX=1`. Entity types only: a person is named here, or a phrase a name rule matched is an organization or a place |
@@ -309,7 +303,7 @@ The gate rejects a span with no typed token in it, a role the field does not hav
 
 ### 5.4 Resolution
 
-[`resolve.py`](extraction/resolve.py), rule set `noesis_resolve_v1.0`, after CaseLinker's `resolve_v3.0`. A mention is a span for a mention field and a label for a tag field.
+[`resolve.py`](extraction/resolve.py), rule set `noesis_resolve_v1.0`. A mention is a span for a mention field and a label for a tag field.
 
 1. A human verdict wins.
 2. `unknown` is an abstention, never a competing role.
@@ -494,7 +488,7 @@ Every node is tagged with how it was settled (`resolution:agreed`, `family:claus
 
 **Events are not in the graph yet.** They are in the store and in the OCEL export. Writing them as CASE/UCO actions is a later step.
 
-**Not in the graph**: phases, transitions, trajectories. See section 9.
+**Not in the record graph**: phases, transitions, trajectories. Those are written by the state machine layer in the trajectories and means extensions. See section 9.
 
 ### 6.3 The gate and the pins
 
@@ -706,47 +700,31 @@ Loaded now: 1,620 named graphs, 249,313 quads.
 
 ## 9. Formal modeling
 
-**Designed. Not built for the new domains.** The engine above produces the observed facts this layer needs. It produces no phase and no transition.
-
-Each case, or typology, is to be instantiated as an exploitation state machine:
+The Exploitation State Machine is fitted to the acts of section 7.3 and tested. Code and full method: [`state_machines/`](state_machines/README.md).
 
 $$
 M = (S, A, T, R_G, s_0, F)
 $$
 
-**State space $S$**: finite offense-phase classes from the ontology spine and domain vocabularies. Backbone invariant $B$:
+| Term | Here |
+|---|---|
+| $S$ | A partition of the fifteen kinds of act into states. Default: the five phases of section 7.3. Learned alternatives per domain |
+| $A$ | A kind of act, or an act with the technology its sentence names, plus stopping |
+| $T$ | Counted from trajectories; an act followed by narrated detection leads to `disrupted` |
+| $R_G$ | Not estimated. A declared cost model, which the tests can reject |
+| $s_0$, $F$ | `start`; `completed` and `disrupted` |
 
-$$
-B = \{\mathrm{InitialContactPhase},\ \mathrm{ConditioningPhase},\ \mathrm{ExploitationPhase},\ \mathrm{MaintenancePhase}\}
-$$
+Three of the framework's claims are tested here rather than assumed:
 
-Terminal set $F \subseteq S$ holds completed or disrupted terminal phase instances. $s_0 = \mathrm{InitialContactPhase}$ for trajectories that document contact-onset exploitation.
+| Claim | Test | Result, 2026-11-14 |
+|---|---|---|
+| States hold across domains | States learned per domain; the cost of borrowing another domain's states, and the agreement between partitions, each against a resampling floor | Not supported at this resolution. In 15 of 20 domain pairs borrowing costs more than any resample, and the five phases predict held-out trajectories worse than each domain's own states |
+| Offenders are direct | Rationality parameter $\beta$ fitted to observed choices under uniform costs, against 200 random cost models | Not supported. $\beta = 0$ over all records; 88% of random cost models fit as well |
+| A backbone recurs across domains | Coverage of each state in every domain, by threshold | `harm` at 50%; no state at 75% |
 
-**Transitions**: offender actions between phases. Affordance-enabled transitions carry misuse annotations. Channel migration is a first-class transition-adjacent object when the record supports it.
+"Offenders take the easiest path" needs a researcher's friction table and is not yet tested. Each result is a measurement over what records narrate, read by rule readers; [`state_machines/README.md`](state_machines/README.md) says what stands between it and a finding about offending.
 
-**Transition function $T$**: empirical edge frequencies over the lifecycle-resolved sample. It is not a population transition law and is not robust to selection effects. Small per-domain $n$ yields weak $T$.
-
-**Objective**: goal-conditioned rewards $R_g(s)$. $L^*_{g,A}$ is the Bellman-optimal path from $s_0$ toward $F$ under affordance environment $A$:
-
-$$
-L^{*}_{g,A} = \arg\max_{L \in \mathrm{Seq}(A)} \mathbb{E}\big[U_g(L)\big]
-$$
-
-**Affordance annotation**: φ maps a trajectory to an exploitation type, η maps a type to victim-facing harms $H$, ψ maps an affordance class to harms across the trajectories it appears in.
-
-**Intervention counterfactuals**: remove or add friction to a transition or phase and recompute $L^*$ and $V^*(s_0)$. The yield is a ranked set of intervention points, not a deployed control.
-
-Falsifiable targets carried from AfH:
-
-- **Theorem 1 (Closure of $H$)**: the victim-facing harm set is finite and closed
-- **Law 1 (Contact Primacy)**: no exploitation trajectory without an initial contact event
-- **Law 2 (Backbone Invariance)**: $B$ is present in every complete trajectory
-- **Law 3 (Type Invariance)**: a new affordance changes trajectory cost via φ, not exploitation type
-- **Law 4 (Affordance Displacement)**: removing an affordance shifts $L^*$ to the nearest bundle; $g$ is unchanged
-
-**How it attaches to the engine.** The SDK's trajectories extension separates what was observed (`traj:PhaseAssertion`) from what was estimated (`traj:StateMachineModel`, `traj:TransitionEstimate`), in SHACL. A phase is one more field: a tag whose labels are a domain's phase scheme, asserted by readers with spans, gated, and voted on like `scheme` is now. A settled phase becomes a `traj:PhaseAssertion` in the engine graph. The pinned SDK already ships a phase scheme for elder fraud (`ef:InitialContact`, `ef:Conditioning`, `ef:ExtractionInstruction`, `ef:ProceedsCollection`, `ef:Laundering`) and for trafficking.
-
-Thirty ICAC lifecycle machines from CaseLinker are in `state_machines/`. They are the framework's origin sample, built by the earlier pipeline, and are not produced by this engine.
+Fitted machines are written in the SDK's `trajectories` and `means` extensions and pass the gate: one per domain's court filings, 11 in all. A sketch of the Capability class proposed in UCO issue 682 is in [`state_machines/capability/`](state_machines/capability/).
 
 ---
 
@@ -851,7 +829,7 @@ Days between consecutive steps, where both are dated to the day:
 
 Departures from procedural order: 2,390 traces in 1,967 cases. 850 `order`, 917 `repeat`, 954 `plea_and_verdict`. None of these has been reviewed by a person; each is a place where either the case or the reading of it is unusual.
 
-**What this describes.** Prosecuted conduct, as the offices that prosecuted it chose to report it. A sentencing release is written to announce a sentence and mentions earlier steps in passing, so short paths are common and are a fact about releases. The model is a description of how these records report prosecutions. It is not a model of offending, and section 16 says why.
+**What this describes.** Prosecuted conduct, as the offices that prosecuted it chose to report it. A sentencing release is written to announce a sentence and mentions earlier steps in passing, so short paths are common and are a fact about releases. The model is a description of how these records report prosecutions. It is not a model of offending, and section 15 says why.
 
 ### 10.2 Offense trajectories
 
@@ -928,8 +906,6 @@ Divergences are in bits, from 0 (identical) to 1 (nothing shared), averaged over
 - Intervention points under counterfactual transition or phase removal
 
 What the engine also supports today, through the CLI and MCP: cohorts by settled value (`scheme = romance` and `channel = cryptocurrency`; `money / loss ≥ $1M`; `sentence / imposed ≥ 120 months`), label counts per domain, and reader agreement per field. These are corpus descriptions over rule-reader output. They are inputs to the tests above, not results.
-
-ICAC-tuned severity triage from CaseLinker is in the repository and is not part of CaseNoesis's outputs. Its weights are domain semantics and do not transfer.
 
 ---
 
@@ -1012,7 +988,7 @@ Every READ tool answers from stored assertions and decisions. None calls a model
 
 **Local SPARQL.** `python -m extraction serve` is a read-only SPARQL endpoint on `127.0.0.1`. `/` returns the engine and store status with example queries.
 
-**FastAPI.** `python3 run/main.py` serves the researcher site and the corpus tools carried over from CaseLinker, on localhost. It reads the older ICAC case database, not the engine's store.
+**FastAPI.** `python3 run/main.py` serves the researcher site and the earlier corpus tools, on localhost. It reads the older ICAC case database, not the engine's store.
 
 ---
 
@@ -1038,13 +1014,13 @@ A sealed label on a docket entry that reached free RECAP is a label from before 
 
 ```bash
 export DYLD_LIBRARY_PATH=/opt/homebrew/opt/expat/lib       # macOS, for the validator
-.venv/bin/python -m unittest encoding.test_encoding extraction.test_extraction extraction.test_structure process_mining.test_process process_mining.test_trajectory gold.test_gold collector.test_conduct_documents
+.venv/bin/python -m unittest encoding.test_encoding extraction.test_extraction extraction.test_structure process_mining.test_process process_mining.test_trajectory gold.test_gold collector.test_conduct_documents state_machines.test_state_machines
 .venv/bin/python -m encoding pin        # exits non-zero when the SDK is not the pin
 .venv/bin/python -m encoding status
 .venv/bin/python -m extraction status
 ```
 
-114 tests, all on invented text; no collected record is read.
+130 tests, all on invented text and synthetic trajectories; no collected record is read.
 
 | Covered | By |
 |---|---|
@@ -1060,6 +1036,7 @@ export DYLD_LIBRARY_PATH=/opt/homebrew/opt/expat/lib       # macOS, for the vali
 | The Inductive Miner on the papers' running example, a loop, a skipped step, replay with no noise filter, noise filtering, alignments, every procedural check | `process_mining.test_process` |
 | Acts in order from a narrative; a recital of the statute is not conduct; ambiguous verbs decided by their object; three levels of one trajectory; transition frequencies and entropy; domains that differ only in means are alike above that level | `process_mining.test_trajectory` |
 | How a docket entry is classified; only the free archive is ever downloaded from | `collector.test_conduct_documents` |
+| Detection as an outcome; feasibility; the goal paid once; L\* under uniform and risky costs; rationality recovers a planted goal-directed actor and finds nothing in an indifferent one; state induction recovers a planted partition; invariance finds the same structure invariant and different structures different; backbone and intervention; trajectory and model graphs pass the gate | `state_machines.test_state_machines` |
 | The committed gold corpus is what the generator writes; every typed token in it is claimed or listed; development-split scores stay above their floors | `gold.test_gold` |
 
 What the tests do not show: that the readers are right on real records. That needs a hand-labelled sample of collected records, which does not exist.
@@ -1149,32 +1126,12 @@ The readers are precise and incomplete. A plain telling is read whole. A paraphr
 | `vendor/CASE-UCO-SDK` | The pinned SDK, a submodule |
 | [`docs/sdk-encoding.md`](docs/sdk-encoding.md) | The SDK path in detail |
 | `config/extraction_overrides.json` | Human verdicts. Optional; absent until a person writes one |
-| `src/`, `ontology/`, `state_machines/`, `visualization/`, `run/`, `models/`, `scripts/` | **CaseLinker-era code for ICAC**, carried in when this repository was started from CaseLinker. `src/` is an earlier version of CaseLinker's extraction, before its assertion layer. `ontology/features_to_cac.py` is its CAC mapper. The engine does not import any of it |
+| [`state_machines/`](state_machines/) | **The Exploitation State Machine**: the fitted machine, learned states and their invariance test, the decision model, coverage, and graphs in the `trajectories` and `means` extensions. Its earlier lifecycle modules are listed in its README |
+| `src/`, `ontology/`, `visualization/`, `run/`, `models/`, `scripts/` | **Earlier ICAC code**, from before the engine. `run/` serves the researcher site from it. The engine does not import any of it, and it is to be removed |
 
 ---
 
-## 15. What came from CaseLinker
-
-CaseLinker is the public ICAC system: a collector, a corpus, a query API. CaseNoesis is the cross-domain instrument. They share a design and little code.
-
-| From CaseLinker | In CaseNoesis |
-|---|---|
-| Every reader writes its own assertion with a span | Kept |
-| One span gate; the value is read from the text | Kept, and made per-field through a registry instead of one function with a branch per field |
-| Votes by evidence family; disagreement vetoes; review queue; append-only assertions; versioned re-resolution | Kept. `noesis_resolve_v1.0` is `resolve_v3.0` without the age-specific rules, plus the span-less witness rule and never-stored roles |
-| Sentence clause classifier, number and duration parsing, sentence and clause boundaries | Ported unchanged into `spans.py` |
-| Statute lookup for exposure | Kept; the table grew from 9 child-exploitation sections to 48 across domains, and now also names the offense |
-| LLM as a quoting, sub-threshold witness | Kept |
-| Age fields and their gate; CyberTip fields; ICAC severity | Not ported. They belong to a CSEA profile's field set, which is not written |
-| spaCy token and dependency readers, Stanza NER | Rewritten on Stanza alone as two optional families, `dependency` and `ner`. They also vote on events and on whose a value is, which CaseLinker's did not |
-| CAC mapper (`features_to_cac.py`) | Replaced for the new domains by `extraction/graph.py` on the SDK's legal-process extension |
-| No direct identifiers in derived data | Kept, and extended to the SDK's record graphs |
-
-New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a reader, collector metadata as a span-less witness, people as numbered parties, case linking across press and court records, graph write-back through the pinned SDK with a receipt per graph, a triple store that is a local file rather than a hosted service, events and attributions as voted fields, defendants linked across a case's records, dated timelines, process mining, and a gold set built from known answers.
-
----
-
-## 16. Limitations
+## 15. Limitations
 
 - **No accuracy figure on collected records.** The gold set measures the readers on invented records written by their author. Agreement between rule readers on real records is not correctness. Two readers that share a vocabulary can agree and be wrong together.
 - **The readers are rules.** They read phrasings they know. A loss described in a way no pattern covers is an amount with no role, and stays out of the finals.
@@ -1200,7 +1157,7 @@ New in CaseNoesis: the field registry, tag fields, domain profiles, the SDK as a
 
 ---
 
-## 17. Not built
+## 16. Not built
 
 In the order they unblock the science:
 
@@ -1209,9 +1166,9 @@ In the order they unblock the science:
 1. **A labelled sample of collected records.** A few hundred, each field checked against the text by a person, stratified by domain and record kind. The gold set shows the engine works on records of known shape; this shows how far real records depart from that shape.
 2. **Joining the press releases of one prosecution.** Same office, same defendants, compatible dates. It needs a rule strict enough not to merge two people with one name, and it would turn one-record timelines into full ones.
 3. **Phase fields.** One tag field per domain phase scheme, with readers, so a settled phase becomes a `traj:PhaseAssertion`.
-4. **State machines and L\*** for fraud, trafficking, and forced labor, and the cross-domain tests of section 9.
+4. **A researcher's friction table**, so that "offenders take the easiest path" can be tested, and **dissections**: hand close-reads mapped onto the same classes, to test what the corpus can only count.
 5. **Charges per defendant**, and coreference beyond the previous sentence.
 6. **The parser families on the whole corpus**, and a comparison of what they change.
-7. **A CSEA field set.** Ages and their gate, ported from CaseLinker into a profile.
+7. **A CSEA field set.** Ages and their gate, as a profile.
 8. **Validating every press graph.** The engine graph is written for every record read. Validation takes about three seconds a graph, so the press corpus is several hours of gate time; `python -m extraction graph --kind press --gate --workers 6` does it, and `store` then loads them. SDK record graphs for the full press corpus are a separate 1.8 GB.
-9. **Removing the CaseLinker-era code**, or moving it behind an ICAC profile, once nothing local depends on it.
+9. **Removing the earlier ICAC code** once the researcher site no longer reads it.
