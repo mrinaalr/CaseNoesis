@@ -288,6 +288,11 @@ class NullTests(unittest.TestCase):
         self.assertGreater(sum(shares) / len(shares), 0.2)
         self.assertLess(sum(shares) / len(shares), 0.8)
 
+    def test_records_without_a_step_are_left_out(self) -> None:
+        a = self.records("a", [["contact", "deception", "transfer"]], 50, 1) + [traj("a", "detection", record="a-only")] * 10
+        b = self.records("b", [["recruit", "threat", "exploit"]], 50, 2)
+        self.assertEqual(self.run_nulls(a, b)["subsample_size"], 50)
+
     def test_order_that_differs_between_domains_is_seen(self) -> None:
         a = self.records("a", [["contact", "deception", "transfer"]], 200, 1)
         b = self.records("b", [["transfer", "deception", "contact"]], 200, 2)

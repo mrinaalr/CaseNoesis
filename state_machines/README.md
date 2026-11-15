@@ -7,7 +7,7 @@
 | Command line | `python -m state_machines {scheme, machine, invariance, decide, laws, read, report, graphs}` |
 | MCP | `esm_scheme`, `esm_machine`, `esm_invariance`, `esm_decide`, `esm_laws`, `esm_read` |
 | Output | `data/extracted/esm/report.json`; graphs in `data/extracted/esm/` |
-| Tests | [`test_state_machines.py`](test_state_machines.py): 29 tests on planted structure |
+| Tests | [`test_state_machines.py`](test_state_machines.py): 37 tests on planted structure, including the calibration of the nulls |
 
 **Contents:** [Machine](#the-machine) · [States](#states) · [Other alphabets](#other-alphabets) · [Readers](#readers) · [Transitions](#transitions) · [Invariance](#invariance) · [Decision model](#decision-model) · [Backbone and laws](#backbone-and-laws) · [Exploitation predicate](#exploitation-predicate) · [Ontology](#ontology) · [Capability](#capability) · [Results](#results) · [Limits](#limits) · [Code map](#code-map)
 
@@ -199,66 +199,78 @@ Not written: reward, value, policy (`means` records none by design); `means:Sele
 
 ## Results
 
-2026-11-14, collected corpus, rules only, offense domains. Full figures in `report.json`.
+2026-11-14, collected corpus (45,877 records), rules only, offense domains. Full figures in `report.json`.
 
-**Machine.** 20,813 walks, 87,156 steps at the milestone layer. Ends: 10,676 Completed, 917 Disrupted, 9,220 Unresolved.
+**What the claims come to.** No claim is supported yet. Each is set against a null that could fail it:
 
-**Invariance.** Excess divergence over shuffled labels, bits:
+| Claim | Test | Result |
+|---|---|---|
+| States hold while actions vary | State-level divergence between domains against random groupings of acts into roles, on 200 paired subsamples | Not separable from a random grouping. The scheme's grouping leaves less divergence than a random one in 0.88 of draws for five domains, 0.68 for fraud and trafficking, 0.50 for court filings. On random data with no structure this share ranges up to 0.85 (mean 0.50); a share near 0.95 would count |
+| | The same against shuffled act order | Domains differ in how they move between states more than their act mix explains: fraud and trafficking are above shuffled order in every draw. This is evidence against states being shared |
+| Offenders are direct | $\beta$ under uniform costs on walks told from the start, against 200 random cost models | Not supported. $\beta = -0.10$: choices lean slightly away from the shortest path; 27% of random cost models fit better. Under the strictest cutoff (5% of departures) the action space shrinks, $L^*$ is to stop, and $\beta = +0.45$ |
+| A backbone recurs | Coverage of each milestone in every domain | No milestone is in half of walks in every domain. In court filings, only Conditioning is |
+| The exploitation predicate separates exploitation from other harm | Of walks reaching exploitation, the share that fail (reached only by supply) | Drugs 58%, firearms 83%; fraud 4%, trafficking 6%, CSEA, cyber and forced labor 2 to 5%. Drug and firearm figures rest on 24 and 26 walks |
+
+**Machine.** 20,570 walks, 83,901 steps at the milestone layer. Ends: 4,958 Completed, 1,278 Disrupted, 14,334 Unresolved. Most walks never reach exploitation: since a transfer requires the person harmed as payer ([`acts.py`](../extraction/acts.py)), a release that reports only how the offender moved money has no exploitation step.
+
+**Invariance**, excess divergence over shuffled domain labels, bits. Each cell is read against its own baseline, not against the other cells:
 
 | | Layer | States | Acts | Means |
 |---|---|---:|---:|---:|
-| Five domains, 97 walks each | milestone | 0.089 | 0.301 | 0.106 |
-| | track | 0.323 | 0.340 | 0.100 |
-| Fraud and trafficking, 1,500 each | milestone | 0.071 | 0.417 | 0.515 |
-| | track | 0.491 | 0.535 | 0.497 |
-| Court filings, three domains, 72 each | milestone | 0.039 | 0.167 | 0.123 |
-| | track | 0.164 | 0.207 | 0.135 |
+| Five domains, 97 walks each | milestone | 0.106 | 0.305 | 0.109 |
+| | track | 0.312 | 0.327 | 0.098 |
+| Fraud and trafficking, 1,500 each | milestone | 0.117 | 0.429 | 0.526 |
+| | track | 0.488 | 0.541 | 0.501 |
+| Court filings, three domains, 73 each | milestone | 0.063 | 0.170 | 0.126 |
+| | track | 0.208 | 0.224 | 0.129 |
 
-Every cell differs from shuffled in every subsample, except milestones in court filings (94% of subsamples). At the milestone layer, domains differ least in how they move between states and most in which acts and technologies they use. At the track layer they differ as much in states as in acts: they reach the same milestones by different routes. At 97 walks the means distribution is too sparse to separate domains from shuffled well (shuffled 0.84 bits).
+**The nulls**, state-level excess, mean over 200 paired draws (40 for fraud and trafficking):
 
-**How milestones are reached.** Of the walks reaching each milestone, the share reaching it by each track, all records:
+| | Layer | Observed | Random grouping (5th to 95th percentile) | Shuffled order | Draws observed below random grouping | below shuffled order |
+|---|---|---:|---:|---:|---:|---:|
+| Five domains | milestone | 0.106 | 0.154 (0.091 to 0.227) | 0.102 | 0.88 | 0.36 |
+| | track | 0.310 | 0.285 (0.222 to 0.338) | 0.298 | 0.26 | 0.18 |
+| Fraud and trafficking | milestone | 0.116 | 0.159 (0.026 to 0.265) | 0.098 | 0.68 | 0.00 |
+| | track | 0.485 | 0.415 (0.287 to 0.520) | 0.492 | 0.20 | 0.88 |
+| Court filings | milestone | 0.059 | 0.061 (0.019 to 0.112) | 0.035 | 0.50 | 0.06 |
+| | track | 0.205 | 0.168 (0.119 to 0.228) | 0.183 | 0.14 | 0.18 |
+
+**How milestones are reached.** Of the walks reaching each milestone, the share reaching it by each track, all records. This describes the data; it does not test the claim, since tracks are a finer grouping:
 
 | | Fraud | Trafficking | CSEA | Cyber |
 |---|---:|---:|---:|---:|
-| Conditioning by deception | 79% | 3% | 8% | 23% |
-| Conditioning by coercion | 6% | 51% | 38% | 18% |
-| Exploitation by value taken | 94% | 27% | 4% | 83% |
-| Exploitation of a person | 8% | 77% | 94% | 21% |
-| Contact by intrusion | 15% | 1% | 11% | 54% |
-
-A walk can reach a milestone more than once, by different tracks; shares need not sum to 100%. Conditioning reached by a demand alone, with no deception or coercion read, is not counted in either row.
+| Conditioning by deception | 79% | 3% | 8% | 20% |
+| Conditioning by coercion | 6% | 52% | 36% | 27% |
+| Exploitation by value taken | 80% | 9% | 2% | 68% |
+| Exploitation of a person | 20% | 87% | 96% | 30% |
+| Contact by intrusion | 15% | 1% | 11% | 56% |
 
 **Decision model**, uniform costs:
 
-| | All records | Court filings |
-|---|---:|---:|
-| $L^*$ | `transfer` → Exploitation | `transfer` → Exploitation |
-| Observed median length | 3 acts | 4 acts |
-| $\beta$, milestone and track layers | 0.000 | 0.000, 0.008 |
-| Random cost models fitting at least as well | 66% | 69% |
-| Optimal action taken | 22% | 12% |
-
-Under all nine cutoffs (`min_count` 1, 5, 20 × `min_share` 0, 1%, 5%), $L^*$ is the same and $\beta = 0$.
+| | Told from the start | All walks | Court filings, from the start |
+|---|---:|---:|---:|
+| Walks | 6,824 | 20,570 | 234 |
+| $L^*$ | `recruit` → `transfer` | `transfer` | `recruit` → `transfer` |
+| Observed median length | 3 acts | 3 acts | 4 acts |
+| $\beta$ | −0.096 | −0.158 | −0.032 |
+| Random cost models fitting better | 27% | 26% | 62% |
+| Optimal action taken | 18% | 9% | 8% |
 
 **Laws**, court filings, walks reaching Exploitation:
 
-| | Fraud (172) | Trafficking (51) | Cyber (53) |
+| | Fraud (94) | Trafficking (32) | Cyber (37) |
 |---|---:|---:|---:|
-| Contact primacy | 33% | 24% | 49% |
-| Full backbone | 17% | 18% | 19% |
-| Maintenance | 53% | 63% | 62% |
-| Re-entry | 45% | 27% | 53% |
-| Exit | 28% | 14% | 38% |
-
-No milestone is occupied by half of walks in every domain.
-
-**Exploitation predicate.** Share of walks reaching Exploitation only by supply: drugs 32%, firearms 15%, every other domain 0 to 2%.
+| Contact primacy | 35% | 22% | 62% |
+| Full backbone | 20% | 13% | 32% |
+| Maintenance | 52% | 81% | 62% |
+| Re-entry | 31% | 28% | 41% |
+| Exit | 70% | 34% | 76% |
 
 **Other alphabets.** The SDK's layered exemplar (four layers in four alphabets) reads with every state placed. Three of its layers reach exploitation and are marked `disrupted`, for the arrest that ended them; here they end Completed, and the reader reports each disagreement.
 
 {{GRAPHS}}
 
-**Gold statements** (held-out half): state paths exact for 19 of 22 plain tellings and 1 of 18 paraphrased; predicate correct for 25 of 40.
+**Gold statements** (held-out half): state paths exact for 19 of 22 plain tellings and 1 of 18 paraphrased; predicate correct for 27 of 40.
 
 ## Limits
 
@@ -266,7 +278,8 @@ These are measurements over what records narrate.
 
 - **Reward.** Only `uniform` has been tested; "easiest path" needs a researcher's cost table.
 - **Telling.** A record often begins at the payment, so missing early states (low contact primacy) can be states the telling skipped. Court filings tell more and are reported separately.
-- **Acts.** Read by a list of verbs; about three in ten are missed, and paraphrased tellings are rarely read whole. Tracks inherit this. `recruit` also reads the enlisting of accomplices, so Recruitment is overcounted where offenders recruit each other, as in fraud.
+- **Acts.** Read by a list of verbs; about three in ten are missed, and paraphrased tellings are rarely read whole. Tracks inherit this. `recruit` also reads the enlisting of accomplices, so Recruitment is overcounted where offenders recruit each other, as in fraud. A payment's direction is read from the words before its verb: right for 43 of 48 payments in a developer's audit of 60, and 7 of the 60 were not payments.
+- **Nulls.** A single comparison against random groupings can land anywhere between 0 and 0.85 on data with no structure; only a share near 0.95 counts as evidence for a grouping.
 - **Placements.** The act roles and the crosswalk are modeling choices, stated in one file each, and every result depends on them.
 - **Order.** The order of telling.
 - **Unit.** One record's telling, not a case's or one defendant's.

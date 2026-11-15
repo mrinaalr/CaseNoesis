@@ -13,8 +13,8 @@ How CaseNoesis turns public enforcement records into structured values, validate
 | Offense acts | 98,980, from 32,503 records |
 | State machine | Fitted and tested across domains ([§9](#9-formal-modeling)) |
 | Graphs | 1,620 validated against CASE/UCO SDK `v1.33.0` |
-| Interfaces | Command line, local MCP (85 tools), local SPARQL |
-| Tests | 134 |
+| Interfaces | Command line, local MCP (87 tools), local SPARQL |
+| Tests | 162 |
 
 Measured 2026-11-14. Section 5.10 gives the full counts.
 
@@ -718,10 +718,12 @@ States are data ([`state_machines/schemes/`](state_machines/schemes/)), in two l
 
 | Claim | Test | Result, 2026-11-14 |
 |---|---|---|
-| States hold while actions vary | Divergence between domains at the state, act and technology levels, at each layer, against shuffled labels on equal-size subsamples | At the milestone layer, domains differ least in their state transitions (fraud and trafficking: 0.07 bits above shuffled) and most in acts (0.42) and technology (0.51). At the track layer they differ in states too (0.49): fraud conditions by deception (79%), trafficking by coercion (51%) |
-| Offenders are direct | Rationality $\beta$ under uniform costs, against 200 random cost models, under nine feasibility cutoffs, at both layers | Not supported: $\beta = 0$ under every cutoff |
-| A backbone recurs | Coverage of each milestone in every domain; contact primacy and maintenance on court filings | No milestone in half of walks in every domain; maintenance follows exploitation in 53 to 63% of court narratives |
-| The exploitation predicate separates exploitation from other harm | Whether the goal state reached says the victim is the source | Drugs 32% and firearms 15% reach exploitation only by supply; every other domain 0 to 2% |
+| States hold while actions vary | State-level divergence between domains against random groupings of acts into roles, and against shuffled act order, on 200 paired subsamples | Not separable from a random grouping: the scheme's grouping does better in 0.50 to 0.88 of draws, within what random data gives. Fraud and trafficking differ in how they move between states more than their act mix explains, which is evidence against shared states |
+| Offenders are direct | Rationality $\beta$ under uniform costs on walks told from the start, against 200 random cost models, under nine feasibility cutoffs | Not supported: $\beta = -0.10$; positive only under the strictest cutoff |
+| A backbone recurs | Coverage of each milestone in every domain; contact primacy and maintenance on court filings | No milestone in half of walks in every domain; maintenance follows exploitation in 52 to 81% of court narratives that reach it |
+| The exploitation predicate separates exploitation from other harm | Of walks reaching exploitation, the share reached only by supply | Drugs 58% and firearms 83%, on 24 and 26 walks; every other domain 2 to 6% |
+
+Setting the state, act and technology levels beside one another is not a test: states group acts, and a coarser grouping of any data diverges less.
 
 "Offenders take the easiest path" needs a researcher's cost table. Limits: [`state_machines/README.md`](state_machines/README.md#limits).
 

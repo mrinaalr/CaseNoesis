@@ -144,7 +144,10 @@ def nulls(by_domain: dict[str, list[dict[str, Any]]], scheme: Scheme, read, *, k
     `by_domain` holds records with their acts; `read` turns one into a walk. Each draw takes one
     equal-size subsample of every domain and scores it three ways, so the comparisons are paired."""
     rng = random.Random(seed)
-    size = size or min(len(items) for items in by_domain.values())
+    # Only records the reader makes a walk of: a record whose only act is a detection has no step.
+    by_domain = {d: [t for t in items if read(t).events] for d, items in by_domain.items()}
+    smallest = min(len(items) for items in by_domain.values())
+    size = min(size or smallest, smallest)
     rows = {"observed": [], "grouping": [], "order": []}
     lower_than_grouping = lower_than_order = 0
     for draw in range(draws):
