@@ -1,0 +1,58 @@
+{
+  "scheme": "esm",
+  "definition": "States of other alphabets placed under the ESM states. broadMatch: the source state is narrower than the ESM state. closeMatch: the two can be used interchangeably for analysis. Each placement is a modeling claim, open to revision; the alphabets themselves are not changed.",
+  "alphabets": {
+    "sdk-trafficking": "http://example.org/ontology/trafficking/PhaseScheme",
+    "sdk-forced-labor": "http://example.org/ontology/forced-labor/PhaseScheme",
+    "sdk-elder-fraud":"http://example.org/ontology/elder-fraud/PhaseScheme",
+    "sdk-extortion": "http://example.org/ontology/extortion/PhaseScheme",
+    "sdk-layered-grooming": "http://example.org/ontology/layered/GroomingPhaseScheme",
+    "sdk-layered-cst": "http://example.org/ontology/layered/ChildSexTraffickingPhaseScheme",
+    "sdk-layered-transit": "http://example.org/ontology/layered/TransitHarborPhaseScheme",
+    "cac-grooming": "https://cacontology.projectvic.org/grooming#",
+    "cac-sextortion": "https://cacontology.projectvic.org/sextortion#"
+  },
+  "mappings": [
+    {"iri": "http://example.org/ontology/trafficking/Recruitment", "alphabet": "sdk-trafficking", "relation": "closeMatch", "state": "Recruitment"},
+    {"iri": "http://example.org/ontology/trafficking/Control", "alphabet": "sdk-trafficking", "relation": "broadMatch", "state": "Coercion"},
+    {"iri": "http://example.org/ontology/trafficking/Exploitation", "alphabet": "sdk-trafficking", "relation": "broadMatch", "state": "PersonExploited"},
+    {"iri": "http://example.org/ontology/trafficking/EarningsCollection", "alphabet": "sdk-trafficking", "relation": "broadMatch", "state": "ValueTaken"},
+
+    {"iri": "http://example.org/ontology/forced-labor/Recruitment", "alphabet": "sdk-forced-labor", "relation": "closeMatch", "state": "Recruitment"},
+    {"iri": "http://example.org/ontology/forced-labor/Control", "alphabet": "sdk-forced-labor", "relation": "broadMatch", "state": "Coercion"},
+    {"iri": "http://example.org/ontology/forced-labor/ForcedLabor", "alphabet": "sdk-forced-labor", "relation": "broadMatch", "state": "PersonExploited"},
+
+    {"iri": "http://example.org/ontology/elder-fraud/InitialContact", "alphabet": "sdk-elder-fraud", "relation": "broadMatch", "state": "Solicitation"},
+    {"iri": "http://example.org/ontology/elder-fraud/Conditioning", "alphabet": "sdk-elder-fraud", "relation": "broadMatch", "state": "Deception"},
+    {"iri": "http://example.org/ontology/elder-fraud/ExtractionInstruction", "alphabet": "sdk-elder-fraud", "relation": "broadMatch", "state": "Deception",
+     "note": "Directing the victim to pay, under the pretext already held: the leverage is still the false belief."},
+    {"iri": "http://example.org/ontology/elder-fraud/ProceedsCollection", "alphabet": "sdk-elder-fraud", "relation": "broadMatch", "state": "ValueTaken"},
+    {"iri": "http://example.org/ontology/elder-fraud/Laundering", "alphabet": "sdk-elder-fraud", "relation": "closeMatch", "state": "Laundering"},
+    {"iri": "http://example.org/ontology/elder-fraud/Completed", "alphabet": "sdk-elder-fraud", "relation": "terminal", "state": "Completed"},
+
+    {"iri": "http://example.org/ontology/extortion/InitialAccess", "alphabet": "sdk-extortion", "relation": "closeMatch", "state": "Intrusion"},
+    {"iri": "http://example.org/ontology/extortion/Exfiltration", "alphabet": "sdk-extortion", "relation": "broadMatch", "state": "Coercion",
+     "note": "In an extortion script the stolen copy is held as leverage; the ransom is what is taken. A theft of data for sale would be ValueTaken."},
+    {"iri": "http://example.org/ontology/extortion/Demand", "alphabet": "sdk-extortion", "relation": "broadMatch", "state": "Coercion"},
+    {"iri": "http://example.org/ontology/extortion/LeakThreat", "alphabet": "sdk-extortion", "relation": "broadMatch", "state": "Coercion"},
+
+    {"iri": "http://example.org/ontology/layered/Targeting", "alphabet": "sdk-layered-grooming", "relation": "broadMatch", "state": "Preparation"},
+    {"iri": "http://example.org/ontology/layered/MaterialDependency", "alphabet": "sdk-layered-grooming", "relation": "broadMatch", "state": "Conditioning"},
+    {"iri": "http://example.org/ontology/layered/Sexualization", "alphabet": "sdk-layered-grooming", "relation": "broadMatch", "state": "Conditioning",
+     "note": "Placed as its scheme and CAC place it, under conditioning. Its definition (forced sexual activity) reads as exploitation; revisit if the alphabet is revised."},
+    {"iri": "http://example.org/ontology/layered/CSAMLeverage", "alphabet": "sdk-layered-grooming", "relation": "broadMatch", "state": "PersonExploited",
+     "note": "Images are taken from the child, then held as leverage."},
+    {"iri": "http://example.org/ontology/layered/PlacementControl", "alphabet": "sdk-layered-cst", "relation": "broadMatch", "state": "Coercion"},
+    {"iri": "http://example.org/ontology/layered/ForcedSexualExploitation", "alphabet": "sdk-layered-cst", "relation": "broadMatch", "state": "PersonExploited"},
+    {"iri": "http://example.org/ontology/layered/CrossBorderTransit", "alphabet": "sdk-layered-transit", "relation": "broadMatch", "state": "Conditioning"},
+    {"iri": "http://example.org/ontology/layered/Harboring", "alphabet": "sdk-layered-transit", "relation": "broadMatch", "state": "Coercion"},
+
+    {"iri": "https://cacontology.projectvic.org/grooming#InitialContactPhase", "alphabet": "cac-grooming", "relation": "closeMatch", "state": "InitialContact"},
+    {"iri": "https://cacontology.projectvic.org/grooming#ConditioningPhase", "alphabet": "cac-grooming", "relation": "closeMatch", "state": "Conditioning"},
+    {"iri": "https://cacontology.projectvic.org/grooming#IsolationPhase", "alphabet": "cac-grooming", "relation": "broadMatch", "state": "Conditioning"},
+    {"iri": "https://cacontology.projectvic.org/grooming#SexualizationPhase", "alphabet": "cac-grooming", "relation": "broadMatch", "state": "Conditioning"},
+    {"iri": "https://cacontology.projectvic.org/sextortion#TrustBuildingPhase", "alphabet": "cac-sextortion", "relation": "broadMatch", "state": "Conditioning"},
+    {"iri": "https://cacontology.projectvic.org/grooming#ExploitationPhase", "alphabet": "cac-grooming", "relation": "closeMatch", "state": "Exploitation"},
+    {"iri": "https://cacontology.projectvic.org/grooming#MaintenancePhase", "alphabet": "cac-grooming", "relation": "closeMatch", "state": "Maintenance"}
+  ]
+}

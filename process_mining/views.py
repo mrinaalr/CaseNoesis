@@ -13,7 +13,7 @@ from statistics import median
 from typing import Any
 
 from extraction import events as events_layer, store
-from process_mining import conform, discover, log as log_layer
+from process_mining import conform, discover, log as log_layer, trajectory
 
 # `offense` is when the conduct began, not a step of the prosecution. Models leave it out unless asked.
 PROCEDURAL = ("arrest", "complaint", "indictment", "information", "charge", "plea", "verdict", "conviction", "sentencing")
@@ -88,6 +88,73 @@ def conformance(db: sqlite3.Connection | None = None, *, domain: str = "", limit
     result = conform.check_log(traces)
     result["flagged"] = result["flagged"][:limit]
     return result
+
+
+# ---------------------------------------------------------------------------
+# Conduct: the offense itself
+# ---------------------------------------------------------------------------
+
+def conduct_summary(db: sqlite3.Connection | None = None) -> dict[str, Any]:
+    """What the conduct layer holds: records with acts, acts by kind, how many carry a date or a named technology."""
+    db = _db(db)
+    q = lambda sql: db.execute(sql).fetchone()[0]  # noqa: E731
+    return {
+        "records_with_acts": q("SELECT COUNT(DISTINCT record_id) FROM conduct"),
+        "acts": q("SELECT COUNT(*) FROM conduct"),
+        "acts_with_a_date": q("SELECT COUNT(*) FROM conduct WHERE date IS NOT NULL"),
+        "acts_naming_a_technology": q("SELECT COUNT(*) FROM conduct WHERE means != '{}'"),
+        "acts_settled_by_two_families": q("SELECT COUNT(*) FROM conduct WHERE status = 'agreed'"),
+        "by_kind": {row[0]: row[1] for row in db.execute("SELECT kind, COUNT(*) FROM conduct GROUP BY kind ORDER BY 2 DESC")},
+        "by_record_kind": {row[0]: row[1] for row in db.execute(
+            "SELECT r.kind, COUNT(DISTINCT c.record_id) FROM conduct c JOIN records r ON r.record_id = c.record_id GROUP BY r.kind")},
+        "trajectories_of_two_or_more_acts": len(trajectory.build(db)),
+    }
+
+
+def conduct_paths(db: sqlite3.Connection | None = None, *, level: str = "act", domain: str = "", kind: str = "",
+                  noise: float = 0.2, limit: int = 15) -> dict[str, Any]:
+    """The paths offenses take at one level of abstraction (means, act or phase): the
+    most common paths, and the model the Inductive Miner finds for them."""
+    found = trajectory.build(_db(db), domain=domain, kind=kind)
+    counts = discover.variants(trajectory.path(t, level) for t in found)
+    total = sum(counts.values())
+    out: dict[str, Any] = {
+        "level": level, "trajectories": total, "distinct_paths": len(counts),
+        "paths": [{"path": list(p), "trajectories": n, "share": round(n / total, 4)} for p, n in counts.most_common(limit)],
+    }
+    if total and level != "means":
+        tree = discover.mine(counts, noise)
+        out["tree_text"] = discover.show(tree)
+        try:
+            out["replay"] = {k: v for k, v in conform.fitness(counts, tree).items() if k != "least_fitting"}
+        except discover.TooLarge:
+            out["replay"] = {"note": "the model allows too many paths to list"}
+    return out
+
+
+def conduct_transitions(db: sqlite3.Connection | None = None, *, level: str = "act", domain: str = "", kind: str = "") -> dict[str, Any]:
+    return trajectory.transitions(trajectory.build(_db(db), domain=domain, kind=kind), level)
+
+
+def conduct_compare(db: sqlite3.Connection | None = None, *, kind: str = "", min_trajectories: int = 25) -> dict[str, Any]:
+    return trajectory.compare(trajectory.build(_db(db), kind=kind), min_trajectories=min_trajectories)
+
+
+def conduct_means(db: sqlite3.Connection | None = None, *, domain: str = "", kind: str = "") -> dict[str, Any]:
+    return trajectory.means_by_act(trajectory.build(_db(db), domain=domain, kind=kind, min_acts=1))
+
+
+def conduct_record(record_id: str, db: sqlite3.Connection | None = None) -> dict[str, Any]:
+    """One record's acts in the order it tells them, with the path at each level."""
+    from extraction import conduct as conduct_layer
+
+    db = _db(db)
+    acts = conduct_layer.sequence(db, record_id)
+    if not acts:
+        return {"record_id": record_id, "acts": [], "note": "no settled act; the record may narrate none, or its wording is outside the readers' vocabulary"}
+    shaped = {"acts": [{**act, "phase": trajectory.act_rules.PHASE[act["kind"]]} for act in acts]}
+    return {"record_id": record_id, "acts": shaped["acts"], "told_in_date_order": conduct_layer.in_date_order(acts),
+            "paths": {level: list(trajectory.path(shaped, level)) for level in trajectory.LEVELS}}
 
 
 def case(case_id: str, db: sqlite3.Connection | None = None, *, level: str = "detailed", noise: float = 0.2) -> dict[str, Any]:

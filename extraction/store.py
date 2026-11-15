@@ -10,6 +10,7 @@
     people        each defendant of a case, and which numbered person that is in each record
     attributions  whose each term, amount, and event is, per record
     events        what happened in each case, in order, with the records that say so
+    conduct       the acts each record narrates, in the order it tells them
 
 Assertions are never updated. A record read again gets new assertion rows
 under a new run, and `records.run_id` moves to that run. Resolution reads the
@@ -152,6 +153,21 @@ CREATE TABLE IF NOT EXISTS events (
     evidence TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS events_case ON events(case_id, position);
+CREATE TABLE IF NOT EXISTS conduct (
+    record_id TEXT NOT NULL,
+    case_id TEXT,
+    position INTEGER NOT NULL,
+    kind TEXT NOT NULL,
+    date TEXT,
+    precision TEXT NOT NULL,
+    people TEXT NOT NULL,
+    means TEXT NOT NULL,
+    status TEXT NOT NULL,
+    span_start INTEGER NOT NULL,
+    span_end INTEGER NOT NULL,
+    PRIMARY KEY (record_id, position)
+);
+CREATE INDEX IF NOT EXISTS conduct_case ON conduct(case_id);
 CREATE TABLE IF NOT EXISTS case_candidates (
     record_a TEXT NOT NULL,
     record_b TEXT NOT NULL,
@@ -274,6 +290,17 @@ def record_ids(db: sqlite3.Connection, *, kind: str | None = None, domain: str |
 
 def known_text_hashes(db: sqlite3.Connection) -> dict[str, str]:
     return {row[0]: row[1] for row in db.execute("SELECT record_id, text_sha256 FROM records")}
+
+
+def reader_versions_read_with(db: sqlite3.Connection) -> dict[str, dict[str, str]]:
+    """For each record, the reader versions of the run that last read it."""
+    out: dict[str, dict[str, str]] = {}
+    for record_id, readers in db.execute("SELECT r.record_id, u.readers FROM records r JOIN runs u ON u.run_id = r.run_id"):
+        try:
+            out[record_id] = json.loads(readers)
+        except (TypeError, ValueError):
+            out[record_id] = {}
+    return out
 
 
 def drop_records(db: sqlite3.Connection, record_ids: Iterable[str]) -> dict[str, int]:

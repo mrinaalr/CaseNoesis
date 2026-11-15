@@ -10,10 +10,10 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from extraction import fields, names, profiles, spans as sp, statutes
+from extraction import acts, fields, names, profiles, spans as sp, statutes
 from extraction.readers import Doc, assertion, register_reader
 
-VERSION = "patterns_1.1"
+VERSION = "patterns_1.4"
 METHOD = "regex"
 
 _A = r"(?:(?:more\s+than|over|nearly|approximately|about|almost|at\s+least|roughly|in\s+excess\s+of|some|a\s+total\s+of|totall?ing)\s+)?"
@@ -75,7 +75,7 @@ _DATE: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
         ("indictment", r"(?:indicted|indictment\s+(?:was\s+)?(?:returned|unsealed))\s+(?:on\s+)?$"),
         ("plea", r"(?:pleaded|pled)\s+guilty\s+(?:on\s+)?$"),
         ("verdict", r"(?:convicted|found\s+guilty)\s+(?:on\s+)?$"),
-        ("offense", r"(?:\bfrom|between|beginning|since|starting|through|until)\s+(?:in\s+or\s+(?:about|around)\s+|on\s+or\s+about\s+|at\s+least\s+|approximately\s+|about\s+)?$|on\s+or\s+about\s+$"),
+        ("offense", r"(?:\bfrom|between|beginning|since|starting|through|until)\s+(?:in\s+or\s+(?:about|around)\s+|on\s+or\s+about\s+|at\s+least\s+|approximately\s+|about\s+)?$|\b(?:on|in)\s+or\s+(?:about|around)\s+$"),
     )
 )
 
@@ -251,6 +251,17 @@ def read(doc: Doc) -> list[dict[str, Any]]:
             break
         again = "resentenced" in text[start:end].lower().replace("-", "") or None
         out.append(assertion("event", kind, role, METHOD, VERSION, 0.8 if role else 0.5, start, end, resentencing=again))
+
+    if doc.kind != "reference":
+        for start, end, value, _ in fields.iter_conduct(text):
+            ss, se = sp.sentence_at(text, start, end)
+            after = text[end: min(se, end + 160)]
+            ss = max(ss, start - 300)
+            if acts.RECITAL.search(text[ss:start]) or acts.in_verb_list(text[ss: min(se, end + 200)], start - ss, end - ss):
+                role = "not_conduct"
+            else:
+                role = acts.settle(acts.by_verb(text[start:end], after, text[max(0, start - 20): start]), text[max(ss, start - 160): start], after)
+            out.append(assertion("conduct", value, role, METHOD, VERSION, 0.8 if role else 0.5, start, end))
 
     for start, end, hint in names.iter_people(text):
         if hint == "person":

@@ -1,0 +1,251 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix traj: <http://example.org/ontology/trajectories/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+
+<http://example.org/ontology/elder-fraud/Conditioning> a traj:State ;
+    skos:broadMatch <urn:uuid:53232c1a-94d1-543e-a343-fe49948ee00b> .
+
+<http://example.org/ontology/elder-fraud/ExtractionInstruction> a traj:State ;
+    skos:broadMatch <urn:uuid:53232c1a-94d1-543e-a343-fe49948ee00b> .
+
+<http://example.org/ontology/elder-fraud/InitialContact> a traj:State ;
+    skos:broadMatch <urn:uuid:6891b21b-e3cf-59f4-b3b4-c4ca5294cf82> .
+
+<http://example.org/ontology/elder-fraud/Laundering> a traj:State ;
+    skos:closeMatch <urn:uuid:77812ecc-229d-56f8-84fd-8d947f6e62af> .
+
+<http://example.org/ontology/elder-fraud/ProceedsCollection> a traj:State ;
+    skos:broadMatch <urn:uuid:a2beb12a-7b1a-58a9-b276-7d2421029a58> .
+
+<http://example.org/ontology/extortion/Demand> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/extortion/Exfiltration> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/extortion/InitialAccess> a traj:State ;
+    skos:closeMatch <urn:uuid:59e045f2-2a28-57aa-a743-7a482097c55e> .
+
+<http://example.org/ontology/extortion/LeakThreat> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/forced-labor/Control> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/forced-labor/ForcedLabor> a traj:State ;
+    skos:broadMatch <urn:uuid:db914a9d-feb9-51b5-9ec1-4579d24643e7> .
+
+<http://example.org/ontology/forced-labor/Recruitment> a traj:State ;
+    skos:closeMatch <urn:uuid:3677e649-b78c-5022-b5db-b46bfb5e955b> .
+
+<http://example.org/ontology/layered/CSAMLeverage> a traj:State ;
+    skos:broadMatch <urn:uuid:db914a9d-feb9-51b5-9ec1-4579d24643e7> .
+
+<http://example.org/ontology/layered/CrossBorderTransit> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<http://example.org/ontology/layered/ForcedSexualExploitation> a traj:State ;
+    skos:broadMatch <urn:uuid:db914a9d-feb9-51b5-9ec1-4579d24643e7> .
+
+<http://example.org/ontology/layered/Harboring> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/layered/MaterialDependency> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<http://example.org/ontology/layered/PlacementControl> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/layered/Sexualization> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<http://example.org/ontology/layered/Targeting> a traj:State ;
+    skos:broadMatch <urn:uuid:330cfa8e-131c-5976-9761-51134ff91c17> .
+
+<http://example.org/ontology/trafficking/Control> a traj:State ;
+    skos:broadMatch <urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> .
+
+<http://example.org/ontology/trafficking/EarningsCollection> a traj:State ;
+    skos:broadMatch <urn:uuid:a2beb12a-7b1a-58a9-b276-7d2421029a58> .
+
+<http://example.org/ontology/trafficking/Exploitation> a traj:State ;
+    skos:broadMatch <urn:uuid:db914a9d-feb9-51b5-9ec1-4579d24643e7> .
+
+<http://example.org/ontology/trafficking/Recruitment> a traj:State ;
+    skos:closeMatch <urn:uuid:3677e649-b78c-5022-b5db-b46bfb5e955b> .
+
+<https://cacontology.projectvic.org/grooming#IsolationPhase> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<https://cacontology.projectvic.org/grooming#SexualizationPhase> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<https://cacontology.projectvic.org/sextortion#TrustBuildingPhase> a traj:State ;
+    skos:broadMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<urn:uuid:1d8c80eb-4474-5b07-9bf6-86819d2e31c1> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:a2ba0f9a-455d-590b-a24e-c011c07a8b31> ;
+    skos:definition "Contraband has been supplied to buyers. Harm is delivered, but no victim is the source of what the offender gains."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "ContrabandSupplied"@en ;
+    uco-core:name "ContrabandSupplied" .
+
+<urn:uuid:a780b3a4-7f29-52e8-be27-133fa4515443> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:9fc82bf5-7ed2-58d0-ab64-69b76e155ea4> ;
+    skos:definition "Coercion, held again after exploitation."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "RenewedCoercion"@en ;
+    uco-core:name "RenewedCoercion" .
+
+<urn:uuid:cd0761c4-e0d1-54d7-ad82-1193549604e4> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:87116652-be8e-587f-802b-87af5f63335b> ;
+    skos:definition "Traces of the offense are hidden or destroyed after exploitation."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Concealment"@en ;
+    uco-core:name "Concealment" .
+
+<urn:uuid:ced87d6a-882e-5b01-9b02-b5c6351ad857> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:9fc82bf5-7ed2-58d0-ab64-69b76e155ea4> ;
+    skos:definition "Deception, held again after exploitation."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "RenewedDeception"@en ;
+    uco-core:name "RenewedDeception" .
+
+<https://cacontology.projectvic.org/grooming#ConditioningPhase> a traj:State ;
+    skos:closeMatch <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> .
+
+<https://cacontology.projectvic.org/grooming#ExploitationPhase> a traj:State ;
+    skos:closeMatch <urn:uuid:a2ba0f9a-455d-590b-a24e-c011c07a8b31> .
+
+<https://cacontology.projectvic.org/grooming#InitialContactPhase> a traj:State ;
+    skos:closeMatch <urn:uuid:4e06d78c-348a-5a68-8fd4-833e43a222fb> .
+
+<https://cacontology.projectvic.org/grooming#MaintenancePhase> a traj:State ;
+    skos:closeMatch <urn:uuid:9fc82bf5-7ed2-58d0-ab64-69b76e155ea4> .
+
+<urn:uuid:330cfa8e-131c-5976-9761-51134ff91c17> a traj:State,
+        skos:Concept ;
+    skos:definition "Means are set up: accounts, identities, infrastructure, tools. No victim has been reached."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Preparation"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "Preparation" .
+
+<urn:uuid:59e045f2-2a28-57aa-a743-7a482097c55e> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:4e06d78c-348a-5a68-8fd4-833e43a222fb> ;
+    skos:definition "A computer system or account is entered without authority."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Intrusion"@en ;
+    skos:relatedMatch <https://attack.mitre.org/tactics/TA0001/> ;
+    uco-core:name "Intrusion" .
+
+<urn:uuid:6891b21b-e3cf-59f4-b3b4-c4ca5294cf82> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:4e06d78c-348a-5a68-8fd4-833e43a222fb> ;
+    skos:definition "A person is approached by the offender: a call, a message, a meeting."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Solicitation"@en ;
+    uco-core:name "Solicitation" .
+
+<urn:uuid:77812ecc-229d-56f8-84fd-8d947f6e62af> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:87116652-be8e-587f-802b-87af5f63335b> ;
+    skos:definition "Proceeds are moved, converted or placed after exploitation."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Laundering"@en ;
+    uco-core:name "Laundering" .
+
+<urn:uuid:3677e649-b78c-5022-b5db-b46bfb5e955b> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:4e06d78c-348a-5a68-8fd4-833e43a222fb> ;
+    skos:definition "A person is enlisted with an offer: work, travel, a relationship."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Recruitment"@en ;
+    uco-core:name "Recruitment" .
+
+<urn:uuid:53232c1a-94d1-543e-a343-fe49948ee00b> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> ;
+    skos:definition "The victim cooperates under a false belief the offender induced: a pretext, a false identity, a false promise."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Deception"@en ;
+    uco-core:name "Deception" .
+
+<urn:uuid:87116652-be8e-587f-802b-87af5f63335b> a traj:State,
+        skos:Concept ;
+    skos:definition "After exploitation, proceeds are moved or traces concealed."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Exit"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "Exit" .
+
+<urn:uuid:a2beb12a-7b1a-58a9-b276-7d2421029a58> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:a2ba0f9a-455d-590b-a24e-c011c07a8b31> ;
+    skos:definition "Money, property or data has passed from the victim to the offender."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "ValueTaken"@en ;
+    uco-core:name "ValueTaken" .
+
+<urn:uuid:9fc82bf5-7ed2-58d0-ab64-69b76e155ea4> a traj:State,
+        skos:Concept ;
+    skos:closeMatch <https://cacontology.projectvic.org/grooming#MaintenancePhase> ;
+    skos:definition "Leverage is held again after exploitation, so the offense can continue."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Maintenance"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "Maintenance" .
+
+<urn:uuid:4e06d78c-348a-5a68-8fd4-833e43a222fb> a traj:State,
+        skos:Concept ;
+    skos:closeMatch <https://cacontology.projectvic.org/grooming#InitialContactPhase> ;
+    skos:definition "A victim, a person or a system, has been reached."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "InitialContact"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "InitialContact" .
+
+<urn:uuid:a2ba0f9a-455d-590b-a24e-c011c07a8b31> a traj:State,
+        skos:Concept ;
+    skos:closeMatch <https://cacontology.projectvic.org/grooming#ExploitationPhase> ;
+    skos:definition "Value or a person has been taken, or the offense's harm delivered."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Exploitation"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "Exploitation" .
+
+<urn:uuid:db914a9d-feb9-51b5-9ec1-4579d24643e7> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:a2ba0f9a-455d-590b-a24e-c011c07a8b31> ;
+    skos:definition "Labor, sex or images have been taken from the person."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "PersonExploited"@en ;
+    skos:relatedMatch <https://cacontology.projectvic.org/usa-federal-law#CommercialSexualExploitation> ;
+    uco-core:name "PersonExploited" .
+
+<urn:uuid:1d2cce23-b71f-5195-b07d-cb24f40654b4> a traj:State,
+        skos:Concept ;
+    skos:broader <urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> ;
+    skos:definition "The victim complies under a threat of harm or the offender's control of their movement, documents, money or communication. Once held, coercion is not undone by a later deception."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Coercion"@en ;
+    uco-core:name "Coercion" .
+
+<urn:uuid:ab627648-0feb-5e9c-9d65-d39f3940ac49> a traj:State,
+        skos:Concept ;
+    skos:closeMatch <https://cacontology.projectvic.org/grooming#ConditioningPhase> ;
+    skos:definition "The offender holds leverage over the victim before anything is taken: a false belief, a demand, a threat, control."@en ;
+    skos:inScheme <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    skos:prefLabel "Conditioning"@en ;
+    skos:topConceptOf <urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> ;
+    uco-core:name "Conditioning" .
+
+<urn:uuid:f5a76868-05ec-5898-aed9-c303f3a30459> a skos:ConceptScheme ;
+    skos:definition "The condition an offense is in: what it has reached, and the leverage it holds. Milestones are the states of the machine; tracks say how a milestone was reached. Each state is reached from evidence, never from the offense's domain."@en ;
+    skos:prefLabel "Exploitation State Machine states"@en .
+

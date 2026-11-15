@@ -1,0 +1,89 @@
+{
+  "_about": "Copy to config/esm_costs.json (config/ is not committed) and set each level to low, moderate, high or not_in_source. A level is the researcher's reading of how hard an act is for an offender: identity friction (exposing who they are), delay burden, detection exposure, and resource cost. An action may also be written with its means, such as \"transfer[gift_card]\". The goal is the scheme's (schemes/esm.json). python -m state_machines decide then tests this table against the observed choices.",
+  "actions": {
+    "setup": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "contact": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "recruit": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "deception": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "demand": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "threat": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "control": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "transfer": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "access": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "exploit": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "supply": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "transport": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "movement": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    },
+    "concealment": {
+      "identityFriction": "not_in_source",
+      "delayBurden": "not_in_source",
+      "detectionExposure": "not_in_source",
+      "resourceCost": "not_in_source"
+    }
+  }
+}

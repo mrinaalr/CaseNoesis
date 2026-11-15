@@ -29,6 +29,8 @@ PERSONAL = {
     "sentence": ("imposed", "supervised_release", "probation"),
     "money": ("restitution", "forfeiture", "fine", "special_assessment", "bail"),
     "event": ("arrest", "complaint", "indictment", "information", "charge", "plea", "verdict", "conviction", "sentencing"),
+    "conduct": ("setup", "contact", "deception", "demand", "threat", "transfer", "movement", "access", "recruit", "transport",
+                "control", "exploit", "supply", "concealment"),
 }
 
 

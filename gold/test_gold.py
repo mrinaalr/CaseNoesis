@@ -36,7 +36,7 @@ class CorpusTests(unittest.TestCase):
             gold = self.truth[record["record_id"]]
             known = {(item["field"], build._norm(item["field"], item["value"])) for key in ("values", "optional", "distractors") for item in gold[key]}
             for name, iterate in fields.ITERATORS.items():
-                if name == "event":
+                if name in ("event", "conduct"):
                     continue
                 for _, _, value, extras in iterate(record["text"]):
                     shown = ("life" if extras.get("life") else extras.get("months")) if name == "sentence" else value
@@ -64,6 +64,29 @@ class FloorTests(unittest.TestCase):
             self.assertGreaterEqual(report["fields"][name]["f1"], floor, name)
         self.assertGreaterEqual(report["attribution"]["accuracy_when_placed"], 0.97)
         self.assertGreaterEqual(report["traces"]["exact_rate"], 0.9)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+class ConductCorpusTests(unittest.TestCase):
+    def test_the_committed_statements_are_what_the_generator_writes(self) -> None:
+        from gold import conduct
+
+        records, truth = conduct.generate()
+        committed, committed_truth = conduct.load()
+        self.assertEqual(json.dumps(records, sort_keys=True), json.dumps(committed, sort_keys=True))
+        self.assertEqual({t["record_id"]: t for t in json.loads(json.dumps(truth))}, committed_truth)
+        self.assertEqual(len(records), 80)
+
+    def test_plain_tellings_are_read_exactly_on_the_development_split(self) -> None:
+        from gold import conduct
+
+        report = conduct.score("dev", "test-conduct-floor")
+        hit, total = (int(part) for part in report["paths_exact"]["plain"].split(" of "))
+        self.assertEqual(hit, total)
+        self.assertGreaterEqual(report["acts"]["precision"], 0.97)
 
 
 if __name__ == "__main__":

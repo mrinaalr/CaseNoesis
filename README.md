@@ -17,11 +17,13 @@ AfH develops a formal affordance–misuse–harm framework (φ/η/ψ mapping) an
 
 ## Status
 
-45,877 distinct public records are collected (46,619 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 2,726,989 span-anchored assertions, 848,811 settled values, 43,731 mentions left for a person. Defendants are linked across the records of a case, and each term and amount is placed with its defendant. What happened in each case is ordered into a dated timeline: 108,529 events in 44,144 cases. Process mining over those timelines finds the paths prosecutions take and flags cases that depart from procedural order. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
+45,877 distinct public records are collected (46,619 rows in the lookup under `data/collected/public/`, before repeated addresses and identical files are removed). The extraction engine has read all of them: 3,126,758 span-anchored assertions, 992,008 settled values, 58,583 mentions left for a person. Defendants are linked across the records of a case, and each term and amount is placed with its defendant. What happened in each case is ordered into a dated timeline: 108,740 events in 44,152 cases. Process mining over those timelines finds the paths prosecutions take and flags cases that depart from procedural order. All 864 court filings and 68 reference records, and a 300-record press sample, also have a CASE/UCO record graph from the pinned SDK with names removed. The engine writes its own graph per record, with defendants, charges, terms, and amounts, validated against the same SDK.
 
 Accuracy is measured on a gold set of 200 invented records written from known answers ([`gold/`](gold/)). On its held-out half the engine scores F1 of 0.98 to 1.00 on terms, amounts, dates, citations, dockets and defendants, and 0.85 to 0.94 on victim counts and scheme and channel labels.
 
-Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. State machines for the new offense types are not built. No public data release yet.
+The Exploitation State Machine is fitted to the acts read from records and tested, not assumed. Its states are data in two layers: milestones aligned to the CAC backbone, and tracks beneath them, with the SDK's domain alphabets placed under them, so any trajectory graph runs through the same machine. Domains are compared at each layer and at the act and technology levels, and a goal-conditioned decision model is checked against observed choices. See [`state_machines/`](state_machines/README.md).
+
+Not done: no sample of collected records has been checked by hand, so there is no accuracy figure on real records. No public data release yet.
 
 ## Architecture
 
@@ -46,8 +48,8 @@ flowchart TD
     GOLD["GOLD SET <br/> 200 invented records, known answers"] -.->|"scores"| ENG
     STORE --> KG["ENGINE GRAPH <br/> CASE/UCO + legalproc <br/> defendants · charges · terms · amounts <br/> SHACL gate"]
 
-    KG -.-> ESM["FORMAL MODELING (not built) <br/> M = (S, A, T, R_G, s₀, F) <br/> φ / η / ψ · L* · intervention points"]
-    ESM -.-> AN["ANALYSIS (not built) <br/> Laws 1–4 · backbone · affordance structure"]
+    STORE --> ESM["STATE MACHINE <br/> M = (S, A, T, R_G, s₀, F) <br/> layered states · invariance · decision model · laws"]
+    ESM --> KG
 
     KG --> OX["LOCAL TRIPLE STORE <br/> Oxigraph + graphs.nq · SPARQL"]
     STORE --> API["python -m extraction · python -m process_mining <br/> local stdio MCP · SPARQL on 127.0.0.1"]

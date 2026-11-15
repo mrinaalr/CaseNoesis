@@ -17,6 +17,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m gold", description=__doc__.split("\n")[0])
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("build", help="write the corpus")
+    conduct = commands.add_parser("conduct", help="the gold statements of offense: build them, or score the acts the engine reads")
+    conduct.add_argument("action", choices=["build", "score"])
+    conduct.add_argument("--split", choices=["dev", "test"])
+    conduct.add_argument("--out", default="")
     score = commands.add_parser("score", help="run the engine and score it")
     score.add_argument("--split", choices=["dev", "test"])
     score.add_argument("--misses", type=int, default=0, help="list this many misses per field")
@@ -28,6 +32,16 @@ def main(argv: list[str] | None = None) -> int:
         from gold import build
 
         print(json.dumps(build.write(), indent=2))
+        return 0
+
+    if args.command == "conduct":
+        from gold import conduct as gold_conduct
+
+        report = gold_conduct.write() if args.action == "build" else gold_conduct.score(args.split, f"conduct-{args.split or 'all'}")
+        if args.out:
+            with open(args.out, "w", encoding="utf-8") as handle:
+                json.dump(report, handle, indent=1, sort_keys=True)
+        print(json.dumps(report, indent=2))
         return 0
 
     from gold import score as scoring
